@@ -1,0 +1,23 @@
+@import '../../colors';
+
+.portal-header {
+  background-color: $color-background;
+  display: flex;
+  padding: 10px 30px;
+  font-size: 3em;
+
+  .title {
+    flex-grow: 1;
+    padding: 20px;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .portal-avatar {
+    margin: 5px;
+    overflow: hidden;
+    border-radius: 100%;
+  }
+}

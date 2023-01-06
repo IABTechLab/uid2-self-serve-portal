@@ -1,0 +1,31 @@
+@import '../../colors';
+
+.side-nav {
+  padding: 0 12px;
+  min-width: 250px;
+  background-color: $color-background;
+
+  a {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: block;
+  }
+
+  .active {
+    font-weight: 700;
+    color: $color-background;
+    background-color: $color-primary;
+  }
+
+  li {
+    display: block;
+    margin: 2px 0;
+    font-size: 1.2em;
+  }
+
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+}

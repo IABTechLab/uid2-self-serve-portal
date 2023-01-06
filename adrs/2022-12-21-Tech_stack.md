@@ -29,10 +29,11 @@ We want to choose a tech stack which supports the following requirements and pri
   - Nothing/minimal additional to learn for developers familiar with the building-blocks of the web.
 - [Radix UI](https://www.radix-ui.com/) for components.
   - Easy to style with no branding to override.
-  - Accessibility is a priority.
-  - A good range of components are available.
+  - Accessibility is a priority and good range of components are available.
+  - Components are listed at the site - install new ones as needed.
+  - Prefer components from Radix over other 3rd-party components, but other libraries or standalone external components are OK if the Radix ones aren't suitable or there's nothing in Radix to meet the need. Ensure when selecting alternative external components that A11y is a priority.
 - [TestingLibrary](https://testing-library.com/) for front-end tests.
   - It's popular and works well with React.
-- [Storybook] for the primary dev experience while working on components.
+- [Storybook](https://storybook.js.org/) for the primary dev experience while working on components.
   - It's popular and allows rapid iteration while developing.
   - It encourages good separation between presentation, state, and data fetching.

@@ -1,0 +1,28 @@
+@import 'colors';
+@import 'shared';
+
+.app {
+  text-align: left;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  color: $color-primary;
+
+  a {
+    color: $color-secondary;
+  }
+
+  .app-panel {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+    background-color: $color-background-light;
+    height: 100%;
+  }
+
+  .content {
+    padding: 12px;
+    flex-grow: 1;
+  }
+}

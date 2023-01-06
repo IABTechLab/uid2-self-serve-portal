@@ -1,0 +1,6 @@
+@mixin action() {
+  color: $color-action-text;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1.2pt;
+}
