@@ -3,7 +3,7 @@
 .side-nav {
   padding: 0 12px;
   min-width: 250px;
-  background-color: $color-background;
+  background-color: var(--theme-background-medium);
 
   a {
     text-decoration: none;
@@ -14,8 +14,8 @@
 
   .active {
     font-weight: 700;
-    color: $color-background;
-    background-color: $color-primary;
+    color: var(--theme-background);
+    background-color: var(--theme-secondary);
   }
 
   li {

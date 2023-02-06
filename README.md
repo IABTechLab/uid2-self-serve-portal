@@ -2,6 +2,12 @@
 
 This is the self-serve portal for UID2 participants. It enables a range of operations for participants around key management, sharing, and so on.
 
+# Getting started
+
+## Database setup and docker
+
+TODO: Add information about this!
+
 ## Tech Choices
 
 - This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

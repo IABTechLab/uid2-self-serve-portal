@@ -1,5 +1,7 @@
 @import '~normalize.css/normalize.css';
 
+/* Base page styling - just the plumbing. Application styling belongs in App.scss or a component scss file! */
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,

@@ -1,0 +1,15 @@
+version: '3.8'
+volumes:
+  postgres-data:
+  postgres-admin:
+
+services:
+  database:
+    container_name: uid2_selfserve_mssql
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "11433:1433"
+    environment:
+      ACCEPT_EULA: "yes"
+      MSSQL_SA_PASSWORD: "example_password_for_development"
+    

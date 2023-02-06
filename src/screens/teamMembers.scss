@@ -7,7 +7,12 @@
   align-items: stretch;
 
   .add-team-member {
-    @include action;
+    span {
+      @include action;
+
+      padding: 10px;
+      border-radius: 10px;
+    }
 
     text-align: end;
     padding: 5px 5px 0;
@@ -16,7 +21,7 @@
   }
 
   .portal-team-table {
-    background-color: $color-table-background;
+    background-color: var(--theme-background-dark);
     border-radius: 10px;
     margin: 30px 30px 0;
     padding: 10px 0;
@@ -24,7 +29,7 @@
     font-size: 1.2em;
     grid-template-columns:
       [name] 1fr
-      [role] 1fr
+      [location] 1fr
       [email] 5fr
       [action] max-content;
 
@@ -40,8 +45,8 @@
       grid-column-start: name;
     }
 
-    .role {
-      grid-column-start: role;
+    .location {
+      grid-column-start: location;
     }
 
     .email {

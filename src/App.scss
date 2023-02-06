@@ -1,5 +1,6 @@
 @import 'colors';
 @import 'shared';
+@import 'theme';
 
 .app {
   text-align: left;
@@ -7,22 +8,23 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  color: $color-primary;
+  color: var(--theme-primary);
 
   a {
-    color: $color-secondary;
+    color: var(--theme-secondary);
   }
 
   .app-panel {
     display: flex;
     align-items: stretch;
     flex-direction: row;
-    background-color: $color-background-light;
+    background-color: var(--theme-background);
     height: 100%;
   }
 
   .content {
     padding: 12px;
     flex-grow: 1;
+    background-color: var(--theme-background-dark);
   }
 }

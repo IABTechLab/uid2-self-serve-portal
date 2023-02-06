@@ -1,8 +1,7 @@
-@import '../../colors';
-
 .portal-header {
-  background-color: $color-background;
+  background-color: var(--theme-background);
   display: flex;
+  align-items: center;
   padding: 10px 30px;
   font-size: 3em;
 
@@ -19,5 +18,41 @@
     margin: 5px;
     overflow: hidden;
     border-radius: 100%;
+  }
+
+  .theme-switch {
+    button {
+      all: unset;
+    }
+
+    color: var(--theme-secondary);
+    font-size: 0.5em;
+    padding-right: 20px;
+
+    .theme-toggle {
+      width: 42px;
+      height: 25px;
+      background-color: gray;
+      border-radius: 9999px;
+      position: relative;
+      margin-left: 10px;
+    }
+
+    .theme-toggle[data-state='checked'] {
+      background-color: 'black';
+    }
+
+    .thumb {
+      display: block;
+      width: 21px;
+      height: 21px;
+      background-color: white;
+      border-radius: 9999px;
+      transform: translateX(2px);
+    }
+
+    .thumb[data-state='checked'] {
+      transform: translateX(19px);
+    }
   }
 }
