@@ -7,7 +7,7 @@ const config: Knex.Config = {
     port: 11433,
     database: 'uid2_selfserve',
     user: 'sa',
-    password: 'example_password_for_development',
+    password: 'D3velopmentP0',
   },
   migrations: {
     directory: './src/database/migrations',

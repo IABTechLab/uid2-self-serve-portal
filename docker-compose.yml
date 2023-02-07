@@ -1,15 +1,19 @@
 version: '3.8'
 volumes:
-  postgres-data:
-  postgres-admin:
+  mssqldata:
 
 services:
   database:
     container_name: uid2_selfserve_mssql
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    # image: mcr.microsoft.com/mssql/server:2022-latest
+    build:
+      context: .
+      dockerfile: sqlServer/SqlServerDockerfile
     ports:
       - "11433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
     environment:
       ACCEPT_EULA: "yes"
-      MSSQL_SA_PASSWORD: "example_password_for_development"
+      MSSQL_SA_PASSWORD: "D3velopmentP0"
     
