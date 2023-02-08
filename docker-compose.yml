@@ -16,4 +16,20 @@ services:
     environment:
       ACCEPT_EULA: "yes"
       MSSQL_SA_PASSWORD: "D3velopmentP0"
-    
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.3
+    environment:
+      KC_DB: mssql
+      KC_DB_URL: jdbc:sqlserver://database:1433;DatabaseName=keycloak;encrypt=true;trustServerCertificate=true;
+      KC_TRANSACTION_XA_ENABLED: "false"
+      KC_DB_USERNAME: sa
+      KC_DB_PASSWORD: D3velopmentP0
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: D3velopmentP0
+    ports:
+      - 8080:8080
+      - 9990:9990
+    depends_on:
+      - database
+    command:
+      - start-dev

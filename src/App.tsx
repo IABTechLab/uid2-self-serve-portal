@@ -1,6 +1,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import { useEffect, useMemo, useRef, useState, StrictMode } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { PortalHeader } from './components/Core/PortalHeader';
@@ -8,6 +9,7 @@ import { SideNav } from './components/Core/SideNav';
 import { SnailTrail } from './components/Core/SnailTrail';
 import { Routes } from './screens/routes';
 import { CurrentUserContext, GetLoggedInUserFromCookie, UserAccount } from './services/userAccount';
+import keycloak from "./Keycloak";
 
 // import { userStore } from './stores/userStore';
 import './App.scss';
@@ -41,17 +43,23 @@ export function App() {
   const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
     .description;
   return (
-    <CurrentUserContext.Provider value={userContext}>
-      <div className='app' ref={rootRef}>
-        <PortalHeader username={LoggedInUser?.email} setDarkMode={setDarkMode} />
-        <div className='app-panel'>
-          <SideNav menu={menu} />
-          <div className='content'>
-            <SnailTrail location={currentLocationDescription} />
-            <Outlet />
+    <ReactKeycloakProvider authClient={keycloak} initOptions={{
+          checkLoginIframe: false,
+            }}>
+      <StrictMode>
+      <CurrentUserContext.Provider value={userContext}>
+        <div className='app' ref={rootRef}>
+          <PortalHeader username={keycloak.idTokenParsed?.email} setDarkMode={setDarkMode} />
+          <div className='app-panel'>
+            <SideNav menu={menu} />
+            <div className='content'>
+              <SnailTrail location={currentLocationDescription} />
+              <Outlet />
+            </div>
           </div>
         </div>
-      </div>
-    </CurrentUserContext.Provider>
+      </CurrentUserContext.Provider>
+      </StrictMode>
+    </ReactKeycloakProvider>
   );
 }

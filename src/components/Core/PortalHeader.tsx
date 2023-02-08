@@ -1,6 +1,7 @@
 import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
 import * as Switch from '@radix-ui/react-switch';
-import { createHash } from 'crypto';
+import { useKeycloak } from "@react-keycloak/web";
+import * as crypto from 'crypto';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +13,7 @@ export type PortalHeaderProps = {
 };
 
 export function PortalHeader({ username, setDarkMode }: PortalHeaderProps) {
-  const emailMd5 = username ? createHash('md5').update(username).digest('hex') : null;
+  const emailMd5 = username ? crypto.createHash('md5').update(username).digest('hex') : null;
   const [darkToggleState, setDarkToggleState] = useState(true);
   const onThemeToggle = () => {
     setDarkToggleState(!darkToggleState);

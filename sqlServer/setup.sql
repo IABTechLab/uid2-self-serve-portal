@@ -1,2 +1,3 @@
-CREATE DATABASE uid2_selfserve
+CREATE DATABASE uid2_selfserve;
+CREATE DATABASE keycloak;
 GO
