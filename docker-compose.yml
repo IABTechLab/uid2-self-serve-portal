@@ -27,8 +27,8 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: D3velopmentP0
     ports:
-      - 8080:8080
-      - 9990:9990
+      - 18080:8080
+      - 19990:9990
     depends_on:
       - database
     command:

@@ -1,0 +1,13 @@
+{
+  "realm": "self-serve-portal",
+  "auth-server-url": "http://localhost:18080/",
+  "ssl-required": "external",
+  "resource": "self-serve-portal-apis",
+  "verify-token-audience": true,
+  "credentials": {
+    "secret": "zI6WZqso9CXY4LLRUjltvVTRR0z4iEln"
+  },
+  "bearer-only":true,
+  "confidential-port": 0,
+  "policy-enforcer": {}
+}
