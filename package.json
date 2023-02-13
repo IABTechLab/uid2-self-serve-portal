@@ -47,6 +47,9 @@
     "web-vitals": "^2.1.4",
     "zod": "^3.20.2"
   },
+  "browser": {
+    "crypto": false
+  },
   "scripts": {
     "dev": "run-p start api",
     "start": "craco start",
