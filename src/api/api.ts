@@ -1,7 +1,6 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
-import session from 'express-session';
 import KeycloakConnect from 'keycloak-connect';
 import { z } from 'zod';
 
@@ -13,17 +12,7 @@ const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
-
-const memoryStore: session.Store = new session.MemoryStore();
-app.use(
-  session({
-    secret: 'some secret',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
-const keycloak = new KeycloakConnect({ store: memoryStore });
+const keycloak = new KeycloakConnect({});
 
 const port = 6540;
 const testDelay = false;
@@ -41,11 +30,7 @@ app.use(async (_req, _res, next) => {
   await next();
 });
 
-app.use(
-  keycloak.middleware({
-    logout: '/logout',
-  })
-);
+app.use(keycloak.middleware({}));
 router.get('/', async (_req, res) => {
   res.json('UID2 Self-serve Portal: Online');
 });

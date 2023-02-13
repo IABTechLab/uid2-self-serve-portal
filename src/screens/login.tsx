@@ -9,12 +9,19 @@ function Login() {
 
   return (
     <div className='uid2-login'>
-      {!keycloak.authenticated && (
+      {!keycloak.authenticated ? (
         <button
           type='button'
           onClick={() => keycloak.login({ redirectUri: 'http://localhost:3000' })}
         >
           Sign in
+        </button>
+      ) : (
+        <button
+          type='button'
+          onClick={() => keycloak.logout({ redirectUri: 'http://localhost:3000' })}
+        >
+          Log out
         </button>
       )}
     </div>
