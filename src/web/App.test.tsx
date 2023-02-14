@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import React from 'react';
 
+import { TestContextProvider } from '../testHelpers/testContextProvider';
 import { App } from './App';
-import { TestContextProvider } from './testHelpers/testContextProvider';
 
 test('renders the header', () => {
   render(
