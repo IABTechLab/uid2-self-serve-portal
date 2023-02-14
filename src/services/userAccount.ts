@@ -1,6 +1,6 @@
-import axios from 'axios';
+import { AxiosInstance } from 'axios';
 import { createContext } from 'react';
-import { getCookie, setCookie } from 'typescript-cookie';
+import { getCookie } from 'typescript-cookie';
 
 export type UserAccount = {
   email: string;
@@ -22,35 +22,26 @@ export const CurrentUserContext = createContext<UserContextWithSetter>({
   },
 });
 
-async function GetUserAccountById(id: string) {
-  const result = await axios.get<UserAccount>(`http://localhost:6540/api/users/${id}`);
+async function GetUserAccountById(apiClient: AxiosInstance | undefined, id: string) {
+  if (!apiClient) throw Error('Unauthorized');
+  const result = await apiClient.get<UserAccount>(`/users/${id}`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not get user account');
 }
 
-export function GetLoggedInUserFromCookie() {
+export function GetLoggedInUserFromCookie(apiClient?: AxiosInstance) {
   const userId = getCookie(userCookie);
-  if (userId) return GetUserAccountById(userId);
+  if (userId) return GetUserAccountById(apiClient, userId);
   return null;
 }
 
-export async function GetAllUsers() {
-  const result = await axios.get<UserAccount[]>(`http://localhost:6540/api/users/`);
+export async function GetAllUsers(apiClient: AxiosInstance | undefined) {
+  if (!apiClient) throw Error('Unauthorized');
+  const result = await apiClient.get<UserAccount[]>(`http://localhost:6540/api/users/`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not load users');
-}
-
-export async function SetLoggedInUserCookie(email: string) {
-  const result = await axios.post<UserAccount>(`http://localhost:6540/api/login`, {
-    email,
-  });
-  console.log('Login response', result);
-  if (result.status === 200) {
-    setCookie(userCookie, result.data.id);
-  }
-  return result.data;
 }

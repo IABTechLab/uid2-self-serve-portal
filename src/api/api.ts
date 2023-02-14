@@ -1,27 +1,20 @@
-import cors from '@koa/cors';
-import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
-import json from 'koa-json';
-import logger from 'koa-logger';
-import Router from 'koa-router';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import express from 'express';
+import KeycloakConnect from 'keycloak-connect';
 import { z } from 'zod';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { User } from './entities/User';
+// import { setupAdminClient } from './kcAdminClient';
 
 Configure();
 
-const app: Koa = new Koa();
-
-const routerOpts: Router.IRouterOptions = {
-  prefix: '/api',
-};
-const router = new Router(routerOpts);
-
+const app = express();
+const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
-app.use(json());
-app.use(logger());
-app.use(bodyParser());
+app.use(bodyParser.json());
+const keycloak = new KeycloakConnect({});
 
 const port = 6540;
 const testDelay = false;
@@ -33,51 +26,70 @@ function delay(time: number) {
   });
 }
 
-app.use(async (ctx, next) => {
+app.use(async (_req, _res, next) => {
   // TODO: Use a logger
-  console.log('Request', ctx.request);
+  // console.log('Request', req);
   await next();
 });
 
-router.get('/', async (ctx: Koa.Context) => {
-  ctx.body = 'UID2 Self-serve Portal: Online';
+app.use(keycloak.middleware({}));
+router.get('/', async (_req, res) => {
+  // const kcAdminClient = await setupAdminClient();
+
+  // // Test adminClient
+  // const users = await kcAdminClient.users.find();
+  // console.log(users);
+  res.json('UID2 Self-serve Portal: Online');
 });
 
 const userIdParser = z.object({
   userid: z.string(),
 });
-router.get('/users/:userid', async (ctx) => {
-  const { userid } = userIdParser.parse(ctx.params);
+router.get('/users/:userid', keycloak.protect(), async (req, res) => {
+  const { userid } = userIdParser.parse(req.params);
   const user = await User.query().findById(userid);
-  ctx.body = user;
+  return res.json(user);
 });
-router.get('/users/', async (ctx) => {
+
+router.get('/users/', keycloak.protect(), async (_req, res) => {
   if (testDelay) await delay(5000);
   const users = await User.query();
-  ctx.body = users;
+  return res.json(users).send();
+});
+
+const protectByAccount = (token: KeycloakConnect.Token, req: express.Request) => {
+  console.log(token.hasRealmRole('TAM'), token.hasRole('api-admin'), token);
+  console.log(req.params.account);
+  return true;
+};
+
+router.get('/:account/test', keycloak.protect(protectByAccount), async (_req, res) => {
+  return res.sendStatus(200);
 });
 
 const loginPostParser = z.object({
   email: z.string(),
 });
-router.post('/login', async (ctx) => {
+router.post('/login', async (req, res) => {
   // TODO: This is a test login route only - it's temporary
-  const { email } = loginPostParser.parse(ctx.request.body);
+  const { email } = loginPostParser.parse(req.body);
   if (!email) {
-    ctx.status = 404;
-    return;
+    return res.sendStatus(404);
   }
 
   const userResult = await User.query().where('email', email);
-  if (userResult.length === 1) [ctx.body] = userResult;
-  else if (userResult.length > 1) {
-    ctx.status = 500;
-    ctx.body = 'Duplicate accounts found, please contact support';
-  } else ctx.status = 404;
+  if (userResult.length === 1) return res.json(userResult);
+  if (userResult.length > 1) {
+    return res.status(500).json('Duplicate accounts found, please contact support');
+  }
+  return res.sendStatus(404);
 });
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+router.all('/*', (req, res) => {
+  res.json({ status: 405, message: `${req.method} not allowed on this route` });
+});
+
+app.use('/api', router);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}.`);

@@ -1,0 +1,8 @@
+{
+  "realm": "self-serve-portal",
+  "auth-server-url": "http://localhost:18080/",
+  "ssl-required": "external",
+  "resource": "self_serve_portal_web",
+  "public-client": true,
+  "confidential-port": 0
+}
