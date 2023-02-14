@@ -2,12 +2,12 @@ import { ReactKeycloakProvider } from '@react-keycloak/web';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { App } from './App';
-import keycloak from './Keycloak';
-import { reportWebVitals } from './reportWebVitals';
-import { Routes } from './screens/routes';
+import { App } from './web/App';
+import keycloak from './web/Keycloak';
+import { reportWebVitals } from './web/reportWebVitals';
+import { Routes } from './web/screens/routes';
 
-import './index.scss';
+import './web/index.scss';
 
 const router = createBrowserRouter([
   {
