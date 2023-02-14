@@ -2,6 +2,12 @@
 
 This is the self-serve portal for UID2 participants. It enables a range of operations for participants around key management, sharing, and so on.
 
+# Getting started
+
+## Database setup and docker
+
+TODO: Add information about this!
+
 ## Tech Choices
 
 - This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -15,6 +21,15 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 All components below the page level should be props-driven - data fetching should only happen at the routing level. This allows use of upcoming React features such as progressive rendering, and also enables rapid-iteration development using Storybook.
 
 When developing new components, you should create new stories in Storybook for the key states to allow easy review of both visuals and functionality.
+
+## Keycloak setup
+
+- Start database and Keycloak serve by run `docker-compose up`
+- Open [http://localhost:18080/admin](http://localhost:18080/admin/) and log in with the username and password which you can find in the `docker-compose.yml`.
+- Click `master` to open the dropdown menue and click `Create Realm`
+- Click `Browser` and select `keycloack/realm-export.json` and then click `Create`
+- Switch to `self-serve-portal` from dropdown menu
+- Go to `Clients - self_serve_portal_apis` and click `Action - Download adapter config`, copy the `secret` from the JSON and update `keycloak.json` under root folder
 
 ## Available Scripts
 

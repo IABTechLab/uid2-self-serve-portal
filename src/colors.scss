@@ -1,8 +1,21 @@
-$color-background: #252526;
-$color-action-text: skyblue;
-$color-primary: #f1f2eb;
-$color-secondary: #b6baad;
-$color-pop: #ff595e;
-$color-highlight: #1982c4;
-$color-background-light: #2b2d2e;
-$color-table-background: slateblue;
+@use "sass:color";
+
+/* 
+Color definitions - this is our database of named brand colors, it's not for giving colors meaning within the UI. 
+If you're looking for meaningful colors you can use (e.g. background, foreground, highlight) try theme.scss.
+*/
+
+$color-olive: #10692e;
+$color-brighter-lime: #78cc00;
+$color-11-oclock: #030a40;
+$color-black: #000;
+$color-gray: #dcdee1;
+$color-dirty-sock: #f2f2f3;
+$color-lemon: #cdf200;
+$color-winter-green: #035959;
+
+// Off-piste colours
+$color-black-lighter: color.adjust($color-black, $lightness: 11%);
+$color-black-light: color.adjust($color-black, $lightness: 6%);
+$color-gray-darker: color.adjust($color-gray, $saturation: 30%);
+$color-gray-dark: color.adjust($color-gray, $saturation: 20%);
