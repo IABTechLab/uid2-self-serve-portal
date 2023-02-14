@@ -2,17 +2,26 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
+    'plugin:react/recommended',
     'airbnb',
     'airbnb/hooks',
     'react-app',
     'react-app/jest',
     'airbnb-typescript',
     'prettier',
+    'plugin:react/jsx-runtime',
   ],
   parserOptions: {
     project: ['./tsconfig.json', './tsconfig.local.json'],
   },
-  plugins: ['promise', '@typescript-eslint', 'import', 'simple-import-sort', 'testing-library'],
+  plugins: [
+    'promise',
+    '@typescript-eslint',
+    'import',
+    'simple-import-sort',
+    'testing-library',
+    'react',
+  ],
   env: {
     node: true,
     jest: true,
@@ -24,6 +33,12 @@ module.exports = {
     $: 'writable',
   },
   rules: {
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        controlComponents: ['Switch.Root'],
+      },
+    ],
     'linebreak-style': ['error', 'unix'],
     'no-var': ['error'],
     'no-mixed-spaces-and-tabs': ['error'],
@@ -69,6 +84,7 @@ module.exports = {
     'arrow-body-style': 'off',
     'function-call-argument-newline': 'off',
     'lines-between-class-members': 'off',
+    '@typescript-eslint/lines-between-class-members': 'off',
     'prefer-arrow-callback': [
       'error',
       {
@@ -81,7 +97,7 @@ module.exports = {
     'import/newline-after-import': 'error',
     'import/no-duplicates': 'error',
     'import/prefer-default-export': 'off',
-    'import/no-default-export': 'error',
+    'import/no-default-export': 'off',
     'simple-import-sort/imports': [
       'error',
       {
@@ -117,7 +133,15 @@ module.exports = {
       files: ['*.spec.*', '*.test.*'],
     },
     {
-      files: ['*.ts'],
+      files: ['*.stories.*'],
+      rules: {
+        'import/no-extraneous-dependencies': 'off',
+        'react/jsx-props-no-spreading': 'off',
+        'react/function-component-definition': 'off',
+      },
+    },
+    {
+      files: ['*.tsx?'],
       rules: {
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [

@@ -1,25 +1,29 @@
+import { useKeycloak } from '@react-keycloak/web';
+
 import { PortalRoute } from './routeTypes';
 
 import './login.scss';
 
 function Login() {
+  const { keycloak } = useKeycloak();
+
   return (
     <div className='uid2-login'>
-      <div className='login-form'>
-        Sign in here!
-        <div className='input-item'>
-          <label htmlFor='username'>
-            Username
-            <input type='text' name='username' />
-          </label>
-        </div>
-        <div className='input-item'>
-          <label htmlFor='password'>
-            Password
-            <input type='password' name='password' />
-          </label>
-        </div>
-      </div>
+      {!keycloak.authenticated ? (
+        <button
+          type='button'
+          onClick={() => keycloak.login({ redirectUri: 'http://localhost:3000' })}
+        >
+          Sign in
+        </button>
+      ) : (
+        <button
+          type='button'
+          onClick={() => keycloak.logout({ redirectUri: 'http://localhost:3000' })}
+        >
+          Log out
+        </button>
+      )}
     </div>
   );
 }
