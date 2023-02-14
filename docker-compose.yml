@@ -32,4 +32,6 @@ services:
     depends_on:
       - database
     command:
-      - start-dev
+      - start-dev --import-realm
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import

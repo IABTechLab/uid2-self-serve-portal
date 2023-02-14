@@ -65,8 +65,7 @@
     "knex:migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback",
     "knex:migrate:make": "knex --knexfile ./knexfile.ts migrate:make",
     "knex:seed:make": "knex --knexfile ./knexfile.ts seed:make",
-    "knex:seed:run": "knex --knexfile ./knexfile.ts seed:run",
-    "devsetup": "ts-node ./src/devSetup.ts"
+    "knex:seed:run": "knex --knexfile ./knexfile.ts seed:run"
   },
   "eslintConfig": {
     "extends": [
