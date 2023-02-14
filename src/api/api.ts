@@ -6,6 +6,8 @@ import { z } from 'zod';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { User } from './entities/User';
+// import { setupAdminClient } from './kcAdminClient';
+
 Configure();
 
 const app = express();
@@ -32,6 +34,11 @@ app.use(async (_req, _res, next) => {
 
 app.use(keycloak.middleware({}));
 router.get('/', async (_req, res) => {
+  // const kcAdminClient = await setupAdminClient();
+
+  // // Test adminClient
+  // const users = await kcAdminClient.users.find();
+  // console.log(users);
   res.json('UID2 Self-serve Portal: Online');
 });
 
@@ -43,10 +50,21 @@ router.get('/users/:userid', keycloak.protect(), async (req, res) => {
   const user = await User.query().findById(userid);
   return res.json(user);
 });
+
 router.get('/users/', keycloak.protect(), async (_req, res) => {
   if (testDelay) await delay(5000);
   const users = await User.query();
   return res.json(users).send();
+});
+
+const protectByAccount = (token: KeycloakConnect.Token, req: express.Request) => {
+  console.log(token.hasRealmRole('TAM'), token.hasRole('api-admin'), token);
+  console.log(req.params.account);
+  return true;
+};
+
+router.get('/:account/test', keycloak.protect(protectByAccount), async (_req, res) => {
+  return res.sendStatus(200);
 });
 
 const loginPostParser = z.object({
@@ -60,12 +78,11 @@ router.post('/login', async (req, res) => {
   }
 
   const userResult = await User.query().where('email', email);
-  if (userResult.length === 1) res.json(userResult);
-  else if (userResult.length > 1) {
+  if (userResult.length === 1) return res.json(userResult);
+  if (userResult.length > 1) {
     return res.status(500).json('Duplicate accounts found, please contact support');
-  } else {
-    return res.sendStatus(404);
   }
+  return res.sendStatus(404);
 });
 
 router.all('/*', (req, res) => {

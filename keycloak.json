@@ -2,9 +2,9 @@
   "realm": "self-serve-portal",
   "auth-server-url": "http://localhost:18080/",
   "ssl-required": "external",
-  "resource": "self-serve-portal-apis",
+  "resource": "self_serve_portal_apis",
   "credentials": {
-    "secret": "zI6WZqso9CXY4LLRUjltvVTRR0z4iEln"
+    "secret": "PUT SECRET HERE"
   },
   "bearer-only":true,
   "confidential-port": 0,
