@@ -55,8 +55,9 @@ export const TeamMembersRoute: PortalRoute = {
   description: 'Team Members',
   element: <TeamMembers />,
   path: '/team',
-  loader: () => {
-    const users = GetAllUsers();
+  loader: () => {},
+  curriedLoader: (apiClient) => () => {
+    const users = GetAllUsers(apiClient);
     return defer({ users });
   },
 };
