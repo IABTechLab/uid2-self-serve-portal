@@ -1,0 +1,26 @@
+@import 'colors';
+
+.app {
+  --theme-primary: black;
+  --theme-secondary: black;
+  --theme-highlight: #{$color-winter-green};
+  --theme-background-header: #fff;
+  --theme-background-sidepanel: rgba(183, 194, 234, 0.2);
+  --theme-background-content: #fff;
+  --theme-background-table-header: #f1f3fb;
+  --theme-table-border: #d9d9d9;
+  --theme-border: #dcdee1;
+  --theme-button-border: #030a40;
+  --theme-action: #0459fd;
+  --theme-underline: #78cc00;
+}
+
+.app.darkmode {
+  --theme-primary: #{$color-gray};
+  --theme-secondary: #{$color-brighter-lime};
+  --theme-highlight: #{$color-lemon};
+  --theme-background-header: #{$color-black-lighter};
+  --theme-background-sidepanel: #{$color-black-light};
+  --theme-background-content: #{$color-black};
+  --theme-border: #dcdee1; // unsure
+}
