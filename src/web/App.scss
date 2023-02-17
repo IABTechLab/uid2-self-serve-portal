@@ -1,6 +1,5 @@
-@import 'colors';
-@import 'shared';
-@import 'theme';
+@import './styles/colors';
+@import './styles/themes';
 
 .app {
   @import 'styles/tables';

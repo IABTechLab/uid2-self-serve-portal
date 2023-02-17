@@ -17,7 +17,6 @@ import { apiClient, Routes } from './screens/routes';
 import { CurrentUserContext, GetLoggedInUserFromCookie, UserAccount } from './services/userAccount';
 
 import './App.scss';
-import './Theme.scss';
 
 library.add(faEllipsisH);
 library.add(faPencil);
