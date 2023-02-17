@@ -1,6 +1,6 @@
 @mixin action() {
-  color: var(--theme-background-dark);
-  text-transform: uppercase;
+  color: var(--theme-background-content);
+  text-transform: capitalize;
   font-weight: 600;
   letter-spacing: 1.2pt;
   background-color: var(--theme-highlight);
