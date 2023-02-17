@@ -141,11 +141,12 @@ module.exports = {
       },
     },
     {
-      files: ['*.tsx?'],
+      files: ['*.tsx', '*.ts'],
       rules: {
+        'react/require-default-props': 'off',
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [
-          'error',
+          'warn',
           {
             args: 'after-used',
             ignoreRestSiblings: true,
@@ -155,6 +156,7 @@ module.exports = {
         ],
         semi: 'off',
         '@typescript-eslint/semi': ['error'],
+        'react/self-closing-comp': 'warn',
       },
     },
     {

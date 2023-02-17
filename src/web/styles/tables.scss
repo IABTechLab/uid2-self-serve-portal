@@ -1,0 +1,35 @@
+table {
+  border-collapse: collapse;
+
+  thead {
+    th:first-of-type {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+    th:last-of-type {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+  th {
+    background-color: var(--theme-background-table-header);
+  }
+  th:first-of-type,
+  td:first-of-type {
+    padding-left: 40px;
+  }
+  th:last-of-type,
+  td:last-of-type {
+    padding-right: 40px;
+  }
+  th,
+  td {
+    padding-top: 10px;
+    padding-bottom: 12px;
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--theme-table-border);
+    }
+  }
+}

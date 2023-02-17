@@ -3,7 +3,7 @@
 .side-nav {
   padding: 10px 12px 0;
   min-width: 250px;
-  background-color: var(--theme-background-medium);
+  background-color: var(--theme-background-sidepanel);
 
   a {
     text-decoration: none;
@@ -14,14 +14,11 @@
 
   .active {
     font-weight: 700;
-    color: var(--theme-background);
-    background-color: var(--theme-secondary);
   }
 
   li {
     display: block;
     margin: 2px 0;
-    font-size: 1.2em;
   }
 
   ul {
