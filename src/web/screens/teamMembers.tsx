@@ -10,14 +10,16 @@ import './teamMembers.scss';
 type TeamMemberProps = { person: UserAccount };
 function TeamMember({ person }: TeamMemberProps) {
   return (
-    <>
-      <div className='name'>{person.name}</div>
-      <div className='location'>{person.location}</div>
-      <div className='email'>{person.email}</div>
-      <div className='action'>
-        <FontAwesomeIcon icon='ellipsis-h' />
-      </div>
-    </>
+    <tr>
+      <td>{person.name}</td>
+      <td>{person.location}</td>
+      <td>{person.email}</td>
+      <td>Admin</td>
+      <td className='action'>
+        <FontAwesomeIcon icon='pencil' />
+        <FontAwesomeIcon icon='trash-can' />
+      </td>
+    </tr>
   );
 }
 
@@ -29,21 +31,35 @@ function TeamMembers() {
   const data = useLoaderData() as { users: UserAccount[] };
   return (
     <div className='portal-team'>
-      <div className='add-team-member'>
-        <span>+ Add team member</span>
-      </div>
+      <h1>Team Members & Contacts</h1>
+      <p>View current team members below and add additional team members to access UID Portal.</p>
+      <h2>Current Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>
           {(users: UserAccount[]) => (
-            <div className='portal-team-table'>
-              <div className='name header-item'>Team Member</div>
-              <div className='location header-item'>Location</div>
-              <div className='email header-item'>Email</div>
-              <div className='action header-item'>Action</div>
-              {users.map((t) => (
-                <TeamMember key={t.email} person={t} />
-              ))}
-            </div>
+            <>
+              <table className='portal-team-table'>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th className='action'>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((t) => (
+                    <TeamMember key={t.email} person={t} />
+                  ))}
+                </tbody>
+              </table>
+              <div className='add-team-member'>
+                <button type='button' className='add-team-member'>
+                  <span>Add team member</span>
+                </button>
+              </div>
+            </>
           )}
         </Await>
       </Suspense>
@@ -52,7 +68,7 @@ function TeamMembers() {
 }
 
 export const TeamMembersRoute: PortalRoute = {
-  description: 'Team Members',
+  description: 'Team Members & Contacts',
   element: <TeamMembers />,
   path: '/team',
   loader: () => {},

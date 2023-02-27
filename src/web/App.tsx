@@ -1,5 +1,10 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronDown,
+  faEllipsisH,
+  faPencil,
+  faTrashCan,
+} from '@fortawesome/free-solid-svg-icons';
 // import { userStore } from './stores/userStore';
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useEffect, useMemo, useRef, useState } from 'react';
@@ -12,9 +17,11 @@ import { apiClient, Routes } from './screens/routes';
 import { CurrentUserContext, GetLoggedInUserFromCookie, UserAccount } from './services/userAccount';
 
 import './App.scss';
-import './Theme.scss';
 
 library.add(faEllipsisH);
+library.add(faPencil);
+library.add(faTrashCan);
+library.add(faChevronDown);
 const menu = Routes.filter((r) => r.description);
 
 export function App() {
@@ -65,7 +72,11 @@ export function App() {
     <StrictMode>
       <CurrentUserContext.Provider value={userContext}>
         <div className='app' ref={rootRef}>
-          <PortalHeader username={keycloak.profile?.email} setDarkMode={setDarkMode} />
+          <PortalHeader
+            email={keycloak.profile?.email}
+            fullname='Joe Bloggs'
+            setDarkMode={setDarkMode}
+          />
           <div className='app-panel'>
             <SideNav menu={menu} />
             <div className='content'>
