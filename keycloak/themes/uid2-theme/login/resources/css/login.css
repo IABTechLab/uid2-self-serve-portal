@@ -19,15 +19,14 @@ body {
   color: var(--theme-action);
 }
 
-.login-pf body {
+.login-pf {
   background: none;
   background-color: var(--theme-background-content) !important;
 }
 
 .login-pf body {
-  background-color: rgb(53, 49, 49);
+  background-color: var(--theme-background-content) !important;
   background-image: none;
-  background-size: cover;
   height: 100%;
 }
 
@@ -41,7 +40,9 @@ body {
 textarea.pf-c-form-control {
   height: auto;
 }
-
+.login-pf-page .login-pf-header {
+  margin-bottom: 8px;
+}
 .pf-c-alert__title {
   font-size: var(--pf-global--FontSize--xs);
 }
@@ -73,9 +74,21 @@ p.instruction {
 }
 
 h1#kc-page-title {
-  margin-top: 10px;
+  margin: 10px 0 0 0;
   font-weight: 700;
   line-height: 29px;
+  text-align: left;
+}
+
+.kc-section-title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  margin-top: 32px;
+}
+
+.login-pf-page .card-pf .kc-description-text {
+  color: #000;
 }
 
 .pf-c-form__label-text {
@@ -192,10 +205,6 @@ div.kc-logo-text span {
 
 #kc-form-webauthn .pf-l-stack__item {
   margin: -1px 0;
-}
-
-#kc-content-wrapper {
-  margin-top: 20px;
 }
 
 #kc-form-wrapper {
