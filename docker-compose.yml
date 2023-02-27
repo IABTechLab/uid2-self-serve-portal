@@ -2,6 +2,7 @@ version: '3.8'
 volumes:
   mssqldata:
 
+
 services:
   database:
     container_name: uid2_selfserve_mssql
@@ -32,6 +33,7 @@ services:
     depends_on:
       - database
     command:
-      - start-dev --import-realm
+      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false
     volumes:
-      - ./keycloak:/opt/keycloak/data/import
+      - ./keycloak/realm:/opt/keycloak/data/import
+      - ./keycloak/themes:/opt/keycloak/themes

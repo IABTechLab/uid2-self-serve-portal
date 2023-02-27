@@ -2,29 +2,24 @@ import { Model } from 'objection';
 
 import { BaseModel } from './BaseModel';
 
-export interface IUser {}
-
-export class User extends BaseModel {
+export class ParticipantType extends BaseModel {
   static get tableName() {
-    return 'users';
+    return 'participantsTypes';
   }
   static relationMappings = {
     participants: {
       relation: Model.ManyToManyRelation,
       modelClass: 'Participant',
       join: {
-        from: 'users.id',
+        from: 'participantsTypes.id',
         through: {
-          from: 'usersXParticipants.userId',
-          to: 'usersXParticipants.participantId',
+          from: 'participantsXTypes.participantsTypeId',
+          to: 'participantsXTypes.participantId',
         },
         to: 'participants.id',
       },
     },
   };
   id!: number;
-  name!: string;
-  email!: string;
-  location!: string;
-  phone!: string;
+  typeName!: string;
 }
