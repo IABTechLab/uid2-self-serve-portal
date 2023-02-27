@@ -1,8 +1,9 @@
-@import 'colors';
-@import 'shared';
-@import 'theme';
+@import './styles/colors';
+@import './styles/themes';
 
 .app {
+  @import 'styles/tables';
+  @import 'styles/text';
   text-align: left;
   height: 100%;
   display: flex;
@@ -10,21 +11,27 @@
   align-items: stretch;
   color: var(--theme-primary);
 
-  a {
-    color: var(--theme-secondary);
-  }
+  font-size: 0.875rem;
 
   .app-panel {
     display: flex;
     align-items: stretch;
     flex-direction: row;
-    background-color: var(--theme-background);
+    background-color: var(--theme-background-header);
     height: 100%;
   }
 
   .content {
-    padding: 12px;
+    padding: 12px 112px 12px 12px;
     flex-grow: 1;
-    background-color: var(--theme-background-dark);
+    background-color: var(--theme-background-content);
+  }
+
+  button {
+    border: 1px solid var(--theme-button-border);
+    background: none;
+    border-radius: 5px;
+    font-weight: 700;
+    padding: 10px 20px 10px 20px;
   }
 }
