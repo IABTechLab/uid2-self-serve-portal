@@ -9,15 +9,11 @@ export class User extends BaseModel {
     return 'users';
   }
   static relationMappings = {
-    participants: {
-      relation: Model.ManyToManyRelation,
+    participant: {
+      relation: Model.BelongsToOneRelation,
       modelClass: 'Participant',
       join: {
-        from: 'users.id',
-        through: {
-          from: 'usersXParticipants.userId',
-          to: 'usersXParticipants.participantId',
-        },
+        from: 'users.participantId',
         to: 'participants.id',
       },
     },
