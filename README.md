@@ -28,8 +28,6 @@ When developing new components, you should create new stories in Storybook for t
 - Open [http://localhost:18080/admin](http://localhost:18080/admin/) and log in with the username and password which you can find in the `docker-compose.yml`.
 - Click `master` to open the dropdown menue and click `Create Realm`
 - Click `Browser` and select `keycloack/realm-export.json` and then click `Create`
-- Switch to `self-serve-portal` from dropdown menu
-- Go to `Clients - self_serve_portal_apis` and click `Action - Download adapter config`, copy the `secret` from the JSON and update `keycloak.json` under root folder
 
 ## Available Scripts
 

@@ -1,12 +1,13 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
-import KeycloakConnect from 'keycloak-connect';
+// import { setupAdminClient } from './kcAdminClient';
+import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import { z } from 'zod';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { User } from './entities/User';
-// import { setupAdminClient } from './kcAdminClient';
+import { kcAuthConfig } from './kcConfig';
 
 Configure();
 
@@ -14,7 +15,7 @@ const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
-const keycloak = new KeycloakConnect({});
+app.use(auth(kcAuthConfig));
 
 const port = 6540;
 const testDelay = false;
@@ -28,11 +29,9 @@ function delay(time: number) {
 
 app.use(async (_req, _res, next) => {
   // TODO: Use a logger
-  // console.log('Request', req);
   await next();
 });
 
-app.use(keycloak.middleware({}));
 router.get('/', async (_req, res) => {
   // const kcAdminClient = await setupAdminClient();
 
@@ -45,25 +44,19 @@ router.get('/', async (_req, res) => {
 const userIdParser = z.object({
   userid: z.string(),
 });
-router.get('/users/:userid', keycloak.protect(), async (req, res) => {
+router.get('/users/:userid', async (req, res) => {
   const { userid } = userIdParser.parse(req.params);
   const user = await User.query().findById(userid);
-  return res.json(user);
+  return res.status(200).json(user);
 });
 
-router.get('/users/', keycloak.protect(), async (_req, res) => {
+router.get('/users/', async (_req, res) => {
   if (testDelay) await delay(5000);
   const users = await User.query();
-  return res.json(users).send();
+  return res.status(200).json(users);
 });
 
-const protectByAccount = (token: KeycloakConnect.Token, req: express.Request) => {
-  console.log(token.hasRealmRole('TAM'), token.hasRole('api-admin'), token);
-  console.log(req.params.account);
-  return true;
-};
-
-router.get('/:account/test', keycloak.protect(protectByAccount), async (_req, res) => {
+router.get('/:account/test', claimIncludes('roles', 'admin'), async (_req, res) => {
   return res.sendStatus(200);
 });
 
