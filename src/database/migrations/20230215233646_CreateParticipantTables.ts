@@ -30,11 +30,12 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  knex.schema.alterTable('users', (table) => {
-    table.dropColumn('participant_id');
+  await knex.schema.alterTable('users', (table) => {
     table.dropForeign('participant_id');
+    table.dropColumn('participant_id');
   });
+
   await knex.schema.dropTableIfExists('participants_X_types');
-  await knex.schema.dropTableIfExists('participants');
   await knex.schema.dropTableIfExists('participants_types');
+  await knex.schema.dropTableIfExists('participants');
 }
