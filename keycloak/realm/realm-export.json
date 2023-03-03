@@ -1,6 +1,7 @@
 {
   "id": "9ff68022-48b8-4a83-98a7-9d7cd6b0b34f",
   "realm": "self-serve-portal",
+  "displayNameHtml": "<a href=\"http://localhost:3000/\"><img src=\"http://localhost:3000/uid2-logo.png\" alt=\"UID2 logo\" class=\"uid2-logo\"></a>",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -1479,6 +1480,7 @@
   "smtpServer": {},
   "eventsEnabled": false,
   "eventsListeners": ["jboss-logging"],
+  "loginTheme": "uid2-theme",
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
