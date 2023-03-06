@@ -72,6 +72,7 @@ p.instruction {
 }
 
 .pf-c-form-control {
+  height: 45px !important;
   border-radius: 5px;
   margin-top: 8px;
   border: 1px solid var(--theme-input-border);

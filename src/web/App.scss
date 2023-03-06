@@ -4,6 +4,8 @@
 .app {
   @import 'styles/tables';
   @import 'styles/text';
+  @import 'styles/buttons';
+
   text-align: left;
   height: 100%;
   display: flex;
@@ -19,12 +21,13 @@
     align-items: stretch;
     flex-direction: row;
     background-color: var(--theme-background-header);
-    height: 100%;
+    flex-flow: row wrap;
   }
 
   .app-centralize {
     align-items: center;
     justify-content: center;
+    height: 100%;
   }
   .content {
     padding: 12px 112px 12px 12px;
