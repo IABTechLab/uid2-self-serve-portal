@@ -2,12 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Suspense } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
-import { GetAllUsers, UserAccount } from '../services/userAccount';
+import { User } from '../../api/entities/User';
+import { GetAllUsers } from '../services/userAccount';
 import { PortalRoute } from './routeTypes';
 
 import './teamMembers.scss';
 
-type TeamMemberProps = { person: UserAccount };
+type TeamMemberProps = { person: User };
 function TeamMember({ person }: TeamMemberProps) {
   return (
     <tr>
@@ -28,7 +29,7 @@ function Loading() {
 }
 
 function TeamMembers() {
-  const data = useLoaderData() as { users: UserAccount[] };
+  const data = useLoaderData() as { users: User[] };
   return (
     <div className='portal-team'>
       <h1>Team Members & Contacts</h1>
@@ -36,7 +37,7 @@ function TeamMembers() {
       <h2>Current Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>
-          {(users: UserAccount[]) => (
+          {(users: User[]) => (
             <>
               <table className='portal-team-table'>
                 <thead>
@@ -70,10 +71,13 @@ function TeamMembers() {
 export const TeamMembersRoute: PortalRoute = {
   description: 'Team Members & Contacts',
   element: <TeamMembers />,
-  path: '/team',
-  loader: () => {},
-  curriedLoader: (apiClient) => () => {
-    const users = GetAllUsers(apiClient);
+  path: '/dashboard/team',
+  loader: () => {
+    const users = GetAllUsers();
     return defer({ users });
   },
+  // curriedLoader: (apiClient) => () => {
+  //   const users = GetAllUsers(apiClient);
+  //   return defer({ users });
+  // },
 };

@@ -32,7 +32,11 @@ body {
 
 .login-pf-page {
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
 .login-pf-page .login-pf-settings {
   justify-content: center;
   font-size: 18px;
@@ -89,6 +93,8 @@ h1#kc-page-title {
 
 .login-pf-page .card-pf .kc-description-text {
   color: #000;
+  font-size: 14px;
+  line-height: 22px;
 }
 
 .pf-c-form__label-text {
@@ -521,23 +527,35 @@ ul#kc-totp-supported-apps {
 }
 
 .card-pf {
-  margin: 10% auto 0 auto;
   background: var(--theme-background-content);
   border: 1px solid var(--theme-border);
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
-  padding: 0 20px;
-  max-width: 500px;
+  padding: 48px 80px !important;
+  width: 623px;
+  box-sizing: border-box;
+}
+
+.centralize-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
 }
 
 /*phone*/
 @media (max-width: 767px) {
+  .centralize-content {
+    justify-content: start;
+  }
+
   .login-pf-page .card-pf {
-    max-width: none;
     margin-left: 0;
     margin-right: 0;
+    margin-top: 0;
     padding-top: 0;
-    border-top: 0;
+    border: 0;
     box-shadow: 0 0;
   }
 
