@@ -6,9 +6,8 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { useKeycloak } from '@react-keycloak/web';
-import axios from 'axios';
-import { StrictMode, useEffect, useMemo, useRef, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { PortalHeader } from './components/Core/PortalHeader';
 import { CreateAccountRoute } from './screens/createAccount';
@@ -24,10 +23,23 @@ library.add(faChevronDown);
 export function App() {
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
   const { keycloak, initialized } = useKeycloak();
+  const location = useLocation();
+  const navigate = useNavigate();
   const kcToken = keycloak?.token ?? '';
+  const logout = useCallback(() => {
+    keycloak?.logout();
+  }, [keycloak]);
 
+  const setCurrentUser = useCallback(
+    (userAcount: UserAccount) => {
+      SetLoggedInUser(userAcount);
+      if (!userAcount.user && location.pathname !== CreateAccountRoute.path) {
+        navigate(CreateAccountRoute.path);
+      }
+    },
+    [navigate, location.pathname]
+  );
   const userContext = useMemo(
     () => ({
       LoggedInUser,
@@ -39,28 +51,16 @@ export function App() {
   useEffect(() => {
     async function loadUser() {
       const profile = await keycloak.loadUserProfile();
-      if (profile.email) {
-        const user = await GetUserAccountByEmail(profile?.email);
-        SetLoggedInUser({
-          profile,
-          user,
-        });
-      }
+      const user = await GetUserAccountByEmail(profile?.email);
+      setCurrentUser({
+        profile,
+        user,
+      });
     }
-
-    const requestInterceptor = axios.interceptors.request.use((config) => {
-      // Attach current access token ref value to outgoing request headers
-      // eslint-disable-next-line no-param-reassign
-      config.headers.Authorization = initialized ? `Bearer ${kcToken}` : undefined;
-      return config;
-    });
-
-    // Return cleanup function to remove interceptors if apiClient updates
-    return () => {
+    if (kcToken) {
       loadUser();
-      axios.interceptors.request.eject(requestInterceptor);
-    };
-  }, [initialized, kcToken, keycloak]);
+    }
+  }, [keycloak, kcToken, setCurrentUser]);
 
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) rootRef.current!.classList.add('darkmode');
@@ -79,6 +79,7 @@ export function App() {
             email={LoggedInUser?.profile?.email}
             fullname={fullname}
             setDarkMode={setDarkMode}
+            logout={logout}
           />
           <Outlet />
         </div>

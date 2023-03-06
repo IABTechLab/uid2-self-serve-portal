@@ -1,5 +1,7 @@
+import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import axios from 'axios';
+import { useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -19,16 +21,34 @@ const router = createBrowserRouter([
   },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(
-  <ReactKeycloakProvider
-    authClient={keycloak}
-    initOptions={{
-      checkLoginIframe: false,
-    }}
-  >
-    <RouterProvider router={router} />
-  </ReactKeycloakProvider>
-);
+
+function Root() {
+  const onUpdateToken = useCallback((tokens: AuthClientTokens) => {
+    let requestInterceptor;
+    if (tokens.token) {
+      requestInterceptor = axios.interceptors.request.use((config) => {
+        // Attach current access token ref value to outgoing request headers
+        // eslint-disable-next-line no-param-reassign
+        config.headers.Authorization = tokens ? `Bearer ${tokens.token}` : undefined;
+        return config;
+      });
+    } else if (requestInterceptor) {
+      axios.interceptors.request.eject(requestInterceptor);
+    }
+  }, []);
+  return (
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      initOptions={{
+        checkLoginIframe: false,
+      }}
+      onTokens={onUpdateToken}
+    >
+      <RouterProvider router={router} />
+    </ReactKeycloakProvider>
+  );
+}
+root.render(<Root />);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
