@@ -52,7 +52,6 @@ export function App() {
       // Attach current access token ref value to outgoing request headers
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = initialized ? `Bearer ${kcToken}` : undefined;
-      console.log('here?!');
       return config;
     });
 
