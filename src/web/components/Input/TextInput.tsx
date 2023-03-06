@@ -29,7 +29,7 @@ export function TextInput<
           {label}
         </Label.Root>
       )}
-      <input className='textInput' {...field} {...rest} />
+      <input className='inputContainer' {...field} {...rest} />
     </div>
   );
 }
