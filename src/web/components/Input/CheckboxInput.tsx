@@ -27,10 +27,10 @@ export function CheckboxInputt<
       )}
       <div className='inlineOptions'>
         {options.map(({ optionLabel, value }) => (
-          <div className='checkboxOption'>
+          <div className='checkboxOption' key={optionLabel}>
             <Checkbox.Root
               className='CheckboxRoot'
-              id={value}
+              id={optionLabel}
               value={value}
               onCheckedChange={(checked: boolean) => {
                 const valueCopy = new Set(field.value);
@@ -46,7 +46,7 @@ export function CheckboxInputt<
                 <CheckIcon />
               </Checkbox.Indicator>
             </Checkbox.Root>
-            <label className='optionLabel' htmlFor={value}>
+            <label className='optionLabel' htmlFor={optionLabel}>
               {optionLabel}
             </label>
           </div>

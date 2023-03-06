@@ -37,7 +37,7 @@ export async function GetUserAccountByEmail(
     const result = await axios.get<User>(`/users/byEmail?email=${email}`);
     return result.data;
   } catch (e: unknown) {
-    if (e instanceof AxiosError && e.code === '404') return null;
+    if (e instanceof AxiosError && e.response?.status === 404) return null;
     throw Error('Could not get user account');
   }
 }

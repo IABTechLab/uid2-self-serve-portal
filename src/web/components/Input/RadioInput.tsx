@@ -37,11 +37,11 @@ export function RadioInput<
         onValueChange={field.onChange}
       >
         {options.map(({ optionLabel, value }) => (
-          <div className='radioOption'>
-            <RadioGroup.Item className='RadioGroupItem' value={value} id={value}>
+          <div className='radioOption' key={optionLabel}>
+            <RadioGroup.Item className='RadioGroupItem' value={value} id={optionLabel}>
               <RadioGroup.Indicator className='RadioGroupIndicator' />
             </RadioGroup.Item>
-            <label className='optionLabel' htmlFor={value}>
+            <label className='optionLabel' htmlFor={optionLabel}>
               {optionLabel}
             </label>
           </div>

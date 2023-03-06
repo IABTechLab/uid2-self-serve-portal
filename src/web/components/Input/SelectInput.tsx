@@ -44,7 +44,9 @@ export function SelectInput<
       )}
       <select className='textInput' {...field} {...rest}>
         {options.map(({ optionLabel, value }) => (
-          <option value={value}>{optionLabel}</option>
+          <option value={value} key={value}>
+            {optionLabel}
+          </option>
         ))}
       </select>
     </div>
