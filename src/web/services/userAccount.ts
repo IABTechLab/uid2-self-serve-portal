@@ -1,15 +1,13 @@
-import { AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
+import { KeycloakProfile } from 'keycloak-js';
 import { createContext } from 'react';
-import { getCookie } from 'typescript-cookie';
+
+import { User } from '../../api/entities/User';
 
 export type UserAccount = {
-  email: string;
-  name: string;
-  location: string;
-  id: string;
+  profile: KeycloakProfile;
+  user: User | null;
 };
-
-const userCookie = 'uid2_ss_auth';
 
 type UserContextWithSetter = {
   LoggedInUser: UserAccount | null;
@@ -22,24 +20,31 @@ export const CurrentUserContext = createContext<UserContextWithSetter>({
   },
 });
 
-async function GetUserAccountById(apiClient: AxiosInstance | undefined, id: string) {
-  if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<UserAccount>(`/users/${id}`);
+export async function GetUserAccountById(id: string) {
+  const result = await axios.get<User>(`/users/${id}`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not get user account');
 }
 
-export function GetLoggedInUserFromCookie(apiClient?: AxiosInstance) {
-  const userId = getCookie(userCookie);
-  if (userId) return GetUserAccountById(apiClient, userId);
-  return null;
+export async function GetUserAccountByEmail(
+  // apiClient: AxiosInstance | undefined,
+  email: string | undefined
+) {
+  // if (!apiClient) throw Error('Unauthorized');
+  try {
+    const result = await axios.get<User>(`/users/byEmail?email=${email}`);
+    return result.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError && e.code === '404') return null;
+    throw Error('Could not get user account');
+  }
 }
 
-export async function GetAllUsers(apiClient: AxiosInstance | undefined) {
-  if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<UserAccount[]>(`http://localhost:6540/api/users/`);
+export async function GetAllUsers() {
+  // if (!apiClient) throw Error('Unauthorized');
+  const result = await axios.get<User[]>(`/users/`);
   if (result.status === 200) {
     return result.data;
   }

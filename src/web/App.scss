@@ -12,6 +12,7 @@
   color: var(--theme-primary);
 
   font-size: 0.875rem;
+  line-height: 1.375rem;
 
   .app-panel {
     display: flex;
@@ -21,6 +22,10 @@
     height: 100%;
   }
 
+  .app-centralize {
+    align-items: center;
+    justify-content: center;
+  }
   .content {
     padding: 12px 112px 12px 12px;
     flex-grow: 1;

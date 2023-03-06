@@ -1,4 +1,5 @@
 import { ReactKeycloakProvider } from '@react-keycloak/web';
+import axios from 'axios';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
@@ -9,6 +10,7 @@ import { Routes } from './web/screens/routes';
 
 import './web/index.scss';
 
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 const router = createBrowserRouter([
   {
     path: '/',
