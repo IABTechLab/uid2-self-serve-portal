@@ -9,7 +9,7 @@ type UserType = ModelObject<User>;
 const sampleData: Optional<UserType, 'id'>[] = [
   { email: 'test@example.com', location: 'Sydney, AU', name: 'Test User', phone: '+61298765432' },
   {
-    email: 'lionell.pack@thetradedesk.com',
+    email: 'lionell.pack@thetradedeskexample.com',
     location: 'Sydney, AU',
     name: 'Lionell Pack (TTD)',
     phone: '+61298765432',

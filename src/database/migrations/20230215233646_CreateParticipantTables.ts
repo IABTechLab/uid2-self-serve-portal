@@ -6,6 +6,18 @@ export async function up(knex: Knex): Promise<void> {
     table.string('type_name', 100).notNullable();
   });
 
+  await knex('participants_types').insert([
+    { type_name: 'DSP' },
+    {
+      type_name: 'Advertiser',
+    },
+    {
+      type_name: 'Data Provider',
+    },
+    {
+      type_name: 'Publisher',
+    },
+  ]);
   await knex.schema.createTable('participants', (table) => {
     table.increments('id').primary();
     table.string('name', 256).notNullable();
