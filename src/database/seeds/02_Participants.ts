@@ -6,16 +6,15 @@ import { ParticipantType } from '../../api/entities/ParticipantType';
 
 type ParitcipantsType = ModelObject<Participant> & { type: string };
 const sampleData: Optional<ParitcipantsType, 'id'>[] = [
-  { name: 'Publisher 1', location: '', status: 'awaiting_approval', type: 'Publisher' },
-  { name: 'DSP 1', location: '', status: 'initialize', type: 'DSP' },
-  { name: 'DP 1', location: '', status: 'approved', type: 'Data Provider' },
-  { name: 'Advertiser', location: '', status: 'approved', type: 'Advertiser' },
+  { name: 'Publisher example', location: '', status: 'awaiting_approval', type: 'Publisher' },
+  { name: 'DSP example', location: '', status: 'initialize', type: 'DSP' },
+  { name: 'DP example', location: '', status: 'approved', type: 'Data Provider' },
+  { name: 'Advertiser example', location: '', status: 'approved', type: 'Advertiser' },
 ];
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
-  await knex('participants').del();
-  await knex.schema.raw(`DBCC CHECKIDENT ('participants', RESEED, 0)`);
+  await knex('participants').whereILike('name', '%example').del();
   // Inserts seed entries
   let promises = sampleData.map((sample) => createParticipant(knex, sample));
   await Promise.all(promises);
