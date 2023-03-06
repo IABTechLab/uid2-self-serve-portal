@@ -67,13 +67,17 @@ export function App() {
     else rootRef.current!.classList.remove('darkmode');
   };
   if (!initialized) return <div>Loading...</div>;
+  const fullname =
+    LoggedInUser?.profile.firstName && LoggedInUser?.profile.lastName
+      ? `${LoggedInUser?.profile.firstName} ${LoggedInUser?.profile.lastName}`
+      : undefined;
   return (
     <StrictMode>
       <CurrentUserContext.Provider value={userContext}>
         <div className='app' ref={rootRef}>
           <PortalHeader
             email={LoggedInUser?.profile?.email}
-            fullname={`${LoggedInUser?.profile.firstName} ${LoggedInUser?.profile.lastName}`}
+            fullname={fullname}
             setDarkMode={setDarkMode}
           />
           <Outlet />
