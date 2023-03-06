@@ -7,14 +7,17 @@ import { CurrentUserContext } from '../services/userAccount';
 import { PortalRoute } from './routeTypes';
 import { TeamMembersRoute } from './teamMembers';
 
-export const DashboardRoutes: PortalRoute[] = [TeamMembersRoute];
+export const DashboardMainRoute: PortalRoute = {
+  path: '/',
+  description: 'Dashboard',
+  element: <span>Main</span>,
+};
+export const DashboardRoutes: PortalRoute[] = [TeamMembersRoute, DashboardMainRoute];
 const menu = DashboardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const location = useLocation();
-  const { LoggedInUser } = useContext(CurrentUserContext);
 
-  if (LoggedInUser === null) return <div>Not logged in!</div>;
   const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
     .description;
   return (

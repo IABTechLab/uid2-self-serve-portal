@@ -5,6 +5,7 @@ import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 
 import { Configure } from '../database/SelfServeDatabase';
+import { ParticipantType } from './entities/ParticipantType';
 import { kcAuthConfig } from './kcConfig';
 import { userRouter } from './userRouter';
 
@@ -42,6 +43,10 @@ router.get('/', async (_req, res) => {
 
 router.use('/users', userRouter);
 
+router.get('/participantTypes', async (_req, res) => {
+  const participantTypes = await ParticipantType.query();
+  return res.status(200).json(participantTypes);
+});
 router.get('/:account/test', claimIncludes('roles', 'admin'), async (_req, res) => {
   return res.sendStatus(200);
 });

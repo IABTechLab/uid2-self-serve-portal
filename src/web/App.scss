@@ -22,12 +22,12 @@
     flex-direction: row;
     background-color: var(--theme-background-header);
     flex-flow: row wrap;
+    height: 100%;
   }
 
   .app-centralize {
     align-items: center;
     justify-content: center;
-    height: 100%;
   }
   .content {
     padding: 12px 112px 12px 12px;
