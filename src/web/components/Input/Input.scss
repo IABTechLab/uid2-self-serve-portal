@@ -11,10 +11,10 @@
   line-height: 2rem;
 }
 
-.textInput {
+.inputContainer {
   height: 45px;
   box-sizing: border-box;
-  border: 1px solid #b8b8b8;
+  border: 1px solid var(--theme-input-border) !important;
   border-radius: 5px;
   padding: 0.5rem;
 }

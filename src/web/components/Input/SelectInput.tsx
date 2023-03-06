@@ -1,11 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import * as Label from '@radix-ui/react-label';
 import * as Select from '@radix-ui/react-select';
-import React from 'react';
 import { Control, FieldPath, FieldValue, FieldValues, useController } from 'react-hook-form';
 
 import './Input.scss';
-import './Select.scss';
+import './SelectInput.scss';
 
 export type Option<T> = {
   optionLabel: string;
@@ -23,13 +23,7 @@ export type SelectInputProps<
 export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({
-  control,
-  name,
-  label,
-  options,
-  ...rest
-}: SelectInputProps<TFieldValues, TPath> & React.SelectHTMLAttributes<HTMLSelectElement>) {
+>({ control, name, label, options }: SelectInputProps<TFieldValues, TPath>) {
   const { field } = useController({
     control,
     name,
@@ -42,13 +36,34 @@ export function SelectInput<
           {label}
         </Label.Root>
       )}
-      <select className='textInput' {...field} {...rest}>
-        {options.map(({ optionLabel, value }) => (
-          <option value={value} key={value}>
-            {optionLabel}
-          </option>
-        ))}
-      </select>
+      <Select.Root onValueChange={field.onChange}>
+        <Select.Trigger className='SelectTrigger inputContainer' aria-label={name}>
+          <Select.Value />
+          <Select.Icon className='SelectIcon'>
+            <ChevronDownIcon />
+          </Select.Icon>
+        </Select.Trigger>
+
+        <Select.Portal>
+          <Select.Content className='SelectContent'>
+            <Select.ScrollUpButton className='SelectScrollButton'>
+              <ChevronUpIcon />
+            </Select.ScrollUpButton>
+            <Select.Viewport className='SelectViewport'>
+              {options.map(({ optionLabel, value }) => (
+                <Select.Item value={value} className='SelectItem'>
+                  <Select.ItemText>{optionLabel}</Select.ItemText>
+                  <Select.ItemIndicator className='SelectItemIndicator'>
+                    <CheckIcon />
+                  </Select.ItemIndicator>
+                </Select.Item>
+              ))}
+            </Select.Viewport>
+            <Select.ScrollDownButton />
+            <Select.Arrow />
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
     </div>
   );
 }
