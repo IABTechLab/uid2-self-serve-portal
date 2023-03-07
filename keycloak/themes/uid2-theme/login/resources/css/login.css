@@ -15,6 +15,10 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+#kc-form-login {
+  display: flex;
+  flex-direction: column;
+}
 .login-pf a {
   color: var(--theme-action);
 }
@@ -39,8 +43,11 @@ body {
 .login-pf-page .login-pf-settings {
   justify-content: center;
   font-size: 18px;
+  order: 4;
 }
-
+#kc-form-options {
+  display: none;
+}
 .login-pf-page .login-pf-header {
   margin-bottom: 8px;
 }
@@ -53,6 +60,7 @@ body {
 }
 .pf-c-button.pf-m-primary {
   background-color: var(--theme-button-border);
+  width: auto;
 }
 
 .pf-c-form-control {
@@ -130,6 +138,7 @@ div.kc-logo-text {
 }
 
 #kc-form-buttons {
+  margin: 1rem 0;
   display: flex;
 }
 
@@ -147,12 +156,24 @@ div.kc-logo-text {
   padding: 3rem 5rem;
 }
 
+#kc-registration-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#kc-registration {
+  width: 200px;
+}
+.login-pf-page .login-pf-signup a {
+  margin: 0;
+}
 /*phone*/
 @media (max-width: 767px) {
   .login-pf-page .card-pf {
     margin-top: 0;
     border: 0;
     padding: 0 20px;
+    box-shadow: none;
   }
 }
 /* End Recovery codes */
