@@ -46,6 +46,8 @@ If you're working on database changes, you can run:
 - `npm run knex:seed:make [seed-name]`
   - Generates a new seed file for providing test data. This file is named based on the name you supply.
 
+See the [Knex migrations documentation](https://knexjs.org/guide/migrations.html) for more details.
+
 ## Tech Choices
 
 - This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
