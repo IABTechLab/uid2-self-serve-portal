@@ -127,7 +127,7 @@ div.kc-logo-text {
     border-bottom: 1px solid var(--theme-border);
     display: flex;
     align-items: center;
-    padding: 0 30px;
+    padding: 0;
     margin-bottom: 0;
   }
 
