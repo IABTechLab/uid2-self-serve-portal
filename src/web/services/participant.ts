@@ -1,22 +1,10 @@
 import axios from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
-import { createContext } from 'react';
 import { z } from 'zod';
 
 import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
 import { UserRole } from '../../api/entities/User';
-import { CreateUser } from './userAccount';
 
-type PariticipantWithSetter = {
-  participant: ParticipantPayload | null;
-  setParticipant: (account: ParticipantPayload | null) => void;
-};
-export const ParticipantContext = createContext<PariticipantWithSetter>({
-  participant: null,
-  setParticipant: () => {
-    throw Error('No participant context available');
-  },
-});
 export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
 
 export type CreateParticipantForm = {
@@ -56,7 +44,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
   return newParticipant.data;
 }
 
-export async function GetParticipantByUserId(id: string) {
+export async function GetParticipantByUserId(id: number) {
   const result = await axios.get<ParticipantPayload>(`/users/${id}/participant`);
   if (result.status === 200) {
     return result.data;

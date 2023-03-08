@@ -1,5 +1,7 @@
 import axios from 'axios';
+import { Outlet } from 'react-router-dom';
 
+import { AccountPendingRoute } from './accountPending';
 import { CreateAccountRoute } from './createAccount';
 import { DashboardRoute } from './dashboard';
 import { LoginRoute } from './login';
@@ -21,8 +23,19 @@ const makePrivateRoute = (route: PortalRoute): PortalRoute => {
   };
 };
 
+const AccountCreationRoute: PortalRoute = {
+  path: '/account',
+  description: 'CreateAccount',
+  element: (
+    <div className='app-panel app-centralize'>
+      <Outlet />
+    </div>
+  ),
+  children: [CreateAccountRoute, AccountPendingRoute],
+};
+
 export const Routes: PortalRoute[] = [
   LoginRoute,
   makePrivateRoute(DashboardRoute),
-  makePrivateRoute(CreateAccountRoute),
+  makePrivateRoute(AccountCreationRoute),
 ];
