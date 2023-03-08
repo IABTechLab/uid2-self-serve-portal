@@ -73,6 +73,10 @@ When developing new components, you should create new stories in Storybook for t
 
 In the project directory, you can run:
 
+### `npm run dev`
+
+Starts both the API and the React front-end side-by-side. This is probably the best way to get up and running in dev mode.
+
 ### `npm start`
 
 Runs the app in the development mode.\
