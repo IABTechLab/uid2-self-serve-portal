@@ -1,15 +1,25 @@
 import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
-import { Participant } from '../../api/entities/Participant';
-import { ParticipantType } from '../../api/entities/ParticipantType';
+
+import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
 type ParitcipantsType = ModelObject<Participant> & { type: string };
 const sampleData: Optional<ParitcipantsType, 'id'>[] = [
-  { name: 'Publisher example', location: '', status: 'awaiting_approval', type: 'Publisher' },
-  { name: 'DSP example', location: '', status: 'initialize', type: 'DSP' },
-  { name: 'DP example', location: '', status: 'approved', type: 'Data Provider' },
-  { name: 'Advertiser example', location: '', status: 'approved', type: 'Advertiser' },
+  {
+    name: 'Publisher example',
+    location: '',
+    status: ParticipantStatus.AwaitingSigning,
+    type: 'Publisher',
+  },
+  { name: 'DSP example', location: '', status: ParticipantStatus.AwaitingApproval, type: 'DSP' },
+  { name: 'DP example', location: '', status: ParticipantStatus.Approved, type: 'Data Provider' },
+  {
+    name: 'Advertiser example',
+    location: '',
+    status: ParticipantStatus.Approved,
+    type: 'Advertiser',
+  },
 ];
 
 export async function seed(knex: Knex): Promise<void> {

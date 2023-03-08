@@ -4,41 +4,33 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantType } from '../../api/entities/ParticipantType';
+import { UserRole } from '../../api/entities/User';
 import { Card } from '../components/Core/Card';
 import { CheckboxInputt } from '../components/Input/CheckboxInput';
 import { RadioInput } from '../components/Input/RadioInput';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
+import { CurrentUserContext } from '../contexts/CurrentUserProvider';
+import { CreateParticipant, CreateParticipantForm } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
-import { CurrentUserContext } from '../services/userAccount';
 import { PortalRoute } from './routeTypes';
 
 import './createAccount.scss';
 
 export const AccountCreationRoutes: PortalRoute[] = [];
 
-type FormValues = {
-  companyName: string;
-  companyLocation: string;
-  companyType: number[];
-  role: string;
-  canSign: boolean;
-  signeeEmail: string;
-};
-
 function Loading() {
   return <div>Loading participant...</div>;
 }
 function CreateAccount() {
-  // const { LoggedInUser } = useContext(CurrentUserContext);
   const data = useLoaderData() as { participantTypes: ParticipantType[] };
-
+  const { LoggedInUser } = useContext(CurrentUserContext);
   const {
     handleSubmit,
     control,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>({
+  } = useForm<CreateParticipantForm>({
     defaultValues: {
       companyName: '',
       companyLocation: '',
@@ -48,7 +40,10 @@ function CreateAccount() {
   });
   const watchCanSign = watch('canSign');
 
-  const onSubmit: SubmitHandler<FormValues> = (formData) => console.log(formData);
+  const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
+    console.log(formData);
+    await CreateParticipant(formData, LoggedInUser!.profile);
+  };
 
   return (
     <div className='app-panel app-centralize'>
@@ -81,8 +76,8 @@ function CreateAccount() {
               name='role'
               label='Your Role'
               options={[
-                { optionLabel: 'Admin', value: 'Admin' },
-                { optionLabel: 'Developer', value: 'Developer' },
+                { optionLabel: 'Admin', value: UserRole.Admin },
+                { optionLabel: 'Developer', value: UserRole.User },
               ]}
             />
             <RadioInput

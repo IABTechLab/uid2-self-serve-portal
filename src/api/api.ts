@@ -7,7 +7,8 @@ import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
 import { kcAuthConfig } from './kcConfig';
-import { userRouter } from './userRouter';
+import { participantsRouter } from './participantsRouter';
+import { usersRouter } from './usersRouter';
 
 Configure();
 
@@ -18,14 +19,6 @@ app.use(bodyParser.json());
 app.use(auth(kcAuthConfig));
 
 const port = 6540;
-const testDelay = false;
-
-// TODO: Remove - this is just for testing
-function delay(time: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, time);
-  });
-}
 
 app.use(async (_req, _res, next) => {
   // TODO: Use a logger
@@ -41,7 +34,8 @@ router.get('/', async (_req, res) => {
   res.json('UID2 Self-serve Portal: Online');
 });
 
-router.use('/users', userRouter);
+router.use('/users', usersRouter);
+router.use('/participants', participantsRouter);
 
 router.get('/participantTypes', async (_req, res) => {
   const participantTypes = await ParticipantType.query();

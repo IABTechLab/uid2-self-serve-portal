@@ -1,9 +1,7 @@
-import { useContext, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { SideNav } from '../components/Core/SideNav';
 import { SnailTrail } from '../components/Core/SnailTrail';
-import { CurrentUserContext } from '../services/userAccount';
 import { PortalRoute } from './routeTypes';
 import { TeamMembersRoute } from './teamMembers';
 

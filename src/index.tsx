@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { App } from './web/App';
+import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
 import keycloak from './web/Keycloak';
 import { reportWebVitals } from './web/reportWebVitals';
 import { Routes } from './web/screens/routes';
@@ -16,7 +17,11 @@ axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: (
+      <CurrentUserProvider>
+        <App />
+      </CurrentUserProvider>
+    ),
     children: Routes,
   },
 ]);
