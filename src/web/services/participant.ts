@@ -4,12 +4,13 @@ import { z } from 'zod';
 
 import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
 import { UserRole } from '../../api/entities/User';
+import { UserPayload } from './userAccount';
 
 export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
 
 export type CreateParticipantForm = {
   companyName: string;
-  companyLocation: string;
+  officeLocation: string;
   companyType: number[];
   role: string;
   canSign: boolean;
@@ -21,19 +22,17 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
     {
       email: user.email!,
       role: formData.role as UserRole,
-      location: formData.companyLocation,
+      location: formData.officeLocation,
     },
-  ];
+  ] as UserPayload[];
   if (!formData.canSign) {
     users.push({
       email: formData.signeeEmail,
       role: UserRole.Admin,
-      location: formData.companyLocation,
     });
   }
   const participantPayload: ParticipantPayload = {
     name: formData.companyName,
-    location: formData.companyLocation,
     status: formData.canSign
       ? ParticipantStatus.AwaitingApproval
       : ParticipantStatus.AwaitingSigning,
