@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
