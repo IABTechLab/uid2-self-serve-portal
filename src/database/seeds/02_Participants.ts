@@ -8,15 +8,15 @@ type ParitcipantsType = ModelObject<Participant> & { type: string };
 const sampleData: Optional<ParitcipantsType, 'id'>[] = [
   {
     name: 'Publisher example',
-    location: '',
+
     status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
   },
-  { name: 'DSP example', location: '', status: ParticipantStatus.AwaitingApproval, type: 'DSP' },
-  { name: 'DP example', location: '', status: ParticipantStatus.Approved, type: 'Data Provider' },
+  { name: 'DSP example', status: ParticipantStatus.AwaitingApproval, type: 'DSP' },
+  { name: 'DP example', status: ParticipantStatus.Approved, type: 'Data Provider' },
   {
     name: 'Advertiser example',
-    location: '',
+
     status: ParticipantStatus.Approved,
     type: 'Advertiser',
   },
@@ -26,7 +26,6 @@ const createParticipant = async (knex: Knex, sample: Optional<ParitcipantsType, 
   const participant = await knex('participants')
     .insert({
       name: sample.name,
-      location: sample.location,
       status: sample.status,
     })
     .returning('id');
