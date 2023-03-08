@@ -43,42 +43,44 @@ export function PortalHeader({
           <img src='/uid2-logo.png' alt='UID2 logo' className='uid2-logo' />
         </Link>
       </div>
-      <DropdownMenu defaultOpen={false}>
-        <DropdownMenuTrigger className='profile-dropdown-button'>
-          {fullname}
-          <FontAwesomeIcon icon='chevron-down' />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className='profile-dropdown-content' align='end'>
-          <DropdownMenuArrow className='profile-dropdown-arrow' />
-          <div className='portal-avatar-container'>
-            <Avatar className='portal-avatar' asChild>
-              {!!email && (
-                <AvatarImage
-                  src={`//www.gravatar.com/avatar/${emailMd5}.jpg`}
-                  alt={`Profile image for ${email}`}
-                  onLoadingStatusChange={() => 'loaded'}
-                />
-              )}
-            </Avatar>
-          </div>
-          <DropdownMenuSeparator className='separator' />
-          <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
-            <div className='theme-switch'>
-              <label htmlFor='dark-mode'>Dark mode</label>
-              <Switch.Root
-                name='dark-mode'
-                checked={darkToggleState}
-                onCheckedChange={onThemeToggle}
-                className='theme-toggle'
-              >
-                <Switch.Thumb className='thumb' />
-              </Switch.Root>
+      {fullname && (
+        <DropdownMenu defaultOpen={false}>
+          <DropdownMenuTrigger className='profile-dropdown-button'>
+            {fullname}
+            <FontAwesomeIcon icon='chevron-down' />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className='profile-dropdown-content' align='end'>
+            <DropdownMenuArrow className='profile-dropdown-arrow' />
+            <div className='portal-avatar-container'>
+              <Avatar className='portal-avatar' asChild>
+                {!!email && (
+                  <AvatarImage
+                    src={`//www.gravatar.com/avatar/${emailMd5}.jpg`}
+                    alt={`Profile image for ${email}`}
+                    onLoadingStatusChange={() => 'loaded'}
+                  />
+                )}
+              </Avatar>
             </div>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator className='separator' />
-          <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <DropdownMenuSeparator className='separator' />
+            <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+              <div className='theme-switch'>
+                <label htmlFor='dark-mode'>Dark mode</label>
+                <Switch.Root
+                  name='dark-mode'
+                  checked={darkToggleState}
+                  onCheckedChange={onThemeToggle}
+                  className='theme-toggle'
+                >
+                  <Switch.Thumb className='thumb' />
+                </Switch.Root>
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className='separator' />
+            <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
     </div>
   );
 }

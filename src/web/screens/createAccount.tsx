@@ -7,7 +7,7 @@ import { ParticipantType } from '../../api/entities/ParticipantType';
 import { UserRole } from '../../api/entities/User';
 import { Card } from '../components/Core/Card';
 import { CheckboxInputt } from '../components/Input/CheckboxInput';
-import { RadioInput } from '../components/Input/RadioInput';
+// import { RadioInput } from '../components/Input/RadioInput';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
@@ -29,7 +29,6 @@ function CreateAccount() {
   const {
     handleSubmit,
     control,
-    watch,
     formState: { errors, isSubmitting },
   } = useForm<CreateParticipantForm>({
     defaultValues: {
@@ -40,12 +39,11 @@ function CreateAccount() {
       canSign: true,
     },
   });
-  const watchCanSign = watch('canSign');
+  // const watchCanSign = watch('canSign');
 
   const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
     await CreateParticipant(formData, LoggedInUser!.profile);
     await loadUser();
-    console.log('now');
     navigate('/account/pending');
   };
 
@@ -73,7 +71,7 @@ function CreateAccount() {
             )}
           </Await>
 
-          <TextInput control={control} name='companyLocation' label='Company Location' />
+          <TextInput control={control} name='companyLocation' label='Office Location' />
           <SelectInput
             control={control}
             name='role'
@@ -83,7 +81,7 @@ function CreateAccount() {
               { optionLabel: 'Developer', value: UserRole.User },
             ]}
           />
-          <RadioInput
+          {/* <RadioInput
             name='canSign'
             label='Do you have the ability to sign a contract for UID Integration'
             options={[
@@ -103,7 +101,7 @@ function CreateAccount() {
 
           {watchCanSign === false && (
             <TextInput control={control} name='signeeEmail' label='Email for Contract Signee' />
-          )}
+          )} */}
           <div className='formFooter'>
             <button type='submit' disabled={isSubmitting} className='primaryButton largeButton'>
               Create Account

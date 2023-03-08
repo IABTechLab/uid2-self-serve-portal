@@ -13,11 +13,14 @@ test('has default gravatar', async () => {
   // No actual way to tell because we don't load the image in Jest - this is to provide more examples of Jest using Storybook data
   render(<InvalidEmailAddress />);
   const link = await screen.findByTestId('title-link');
-  expect(link.textContent).toContain('UID2 Portal');
+  const logo = within(link).getByRole('img') as HTMLImageElement;
+  expect(logo.alt).toContain('UID2 logo');
 });
 
 test('has personal email address', async () => {
   render(<InvalidEmailAddress />);
   const link = await screen.findByTestId('title-link');
-  expect(link.textContent).toContain('UID2 Portal');
+  const logo = within(link).getByRole('img') as HTMLImageElement;
+
+  expect(logo.alt).toContain('UID2 logo');
 });
