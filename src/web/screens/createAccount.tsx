@@ -24,7 +24,7 @@ function Loading() {
 }
 function CreateAccount() {
   const data = useLoaderData() as { participantTypes: ParticipantType[] };
-  const { LoggedInUser } = useContext(CurrentUserContext);
+  const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -37,12 +37,15 @@ function CreateAccount() {
       companyLocation: '',
       companyType: [],
       role: 'user',
+      canSign: true,
     },
   });
   const watchCanSign = watch('canSign');
 
   const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
     await CreateParticipant(formData, LoggedInUser!.profile);
+    await loadUser();
+    console.log('now');
     navigate('/account/pending');
   };
 

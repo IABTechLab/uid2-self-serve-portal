@@ -7,7 +7,7 @@ import { PortalRoute } from './routeTypes';
 
 import './accountPending.scss';
 
-const awaitingSigning = (
+const awaitingApproval = (
   <div>
     <h1 className='accountPendingHeader'>Access Requested!</h1>
     <p>
@@ -20,7 +20,7 @@ const awaitingSigning = (
   </div>
 );
 
-const awaitingApproval = (
+const awaitingSigning = (
   <div>
     <h1 className='accountPendingHeader'>Access Pending</h1>
     <p>
