@@ -1,32 +1,20 @@
 import { useKeycloak } from '@react-keycloak/web';
-import axios from 'axios';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { PortalRoute } from './routeTypes';
 
 import './login.scss';
 
 function Login() {
-  const { initialized, keycloak } = useKeycloak();
-  const kcToken = keycloak?.token ?? '';
+  const { keycloak } = useKeycloak();
   const login = useCallback(() => {
-    keycloak?.login();
+    keycloak?.login({ redirectUri: 'http://localhost:3000' });
   }, [keycloak]);
 
   const logout = useCallback(() => {
     keycloak?.logout({ redirectUri: 'http://localhost:3000' });
   }, [keycloak]);
 
-  useEffect(() => {
-    if (kcToken) {
-      axios.interceptors.request.use((config) => {
-        // Attach current access token ref value to outgoing request headers
-        // eslint-disable-next-line no-param-reassign
-        config.headers.Authorization = initialized ? `Bearer ${kcToken}` : undefined;
-        return config;
-      });
-    }
-  }, [initialized, kcToken, keycloak]);
   return (
     <div className='uid2-login'>
       {!keycloak.authenticated ? (
