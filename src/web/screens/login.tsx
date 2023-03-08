@@ -1,8 +1,7 @@
 import { useKeycloak } from '@react-keycloak/web';
 import axios from 'axios';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
-import { CurrentUserContext } from '../services/userAccount';
 import { PortalRoute } from './routeTypes';
 
 import './login.scss';
@@ -10,7 +9,6 @@ import './login.scss';
 function Login() {
   const { initialized, keycloak } = useKeycloak();
   const kcToken = keycloak?.token ?? '';
-  const { SetLoggedInUser } = useContext(CurrentUserContext);
   const login = useCallback(() => {
     keycloak?.login();
   }, [keycloak]);
@@ -28,7 +26,7 @@ function Login() {
         return config;
       });
     }
-  }, [SetLoggedInUser, initialized, kcToken, keycloak]);
+  }, [initialized, kcToken, keycloak]);
   return (
     <div className='uid2-login'>
       {!keycloak.authenticated ? (

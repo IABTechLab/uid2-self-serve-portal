@@ -6,12 +6,11 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
 import { useKeycloak } from '@react-keycloak/web';
-import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { StrictMode, useCallback, useContext, useEffect, useRef } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import { PortalHeader } from './components/Core/PortalHeader';
-import { CreateAccountRoute } from './screens/createAccount';
-import { CurrentUserContext, GetUserAccountByEmail, UserAccount } from './services/userAccount';
+import { CurrentUserContext, CurrentUserProvider } from './contexts/CurrentUserProvider';
 
 import './App.scss';
 
@@ -21,46 +20,19 @@ library.add(faTrashCan);
 library.add(faChevronDown);
 
 export function App() {
-  const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
+  const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const rootRef = useRef<HTMLDivElement>(null);
   const { keycloak, initialized } = useKeycloak();
-  const location = useLocation();
-  const navigate = useNavigate();
   const kcToken = keycloak?.token ?? '';
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);
 
-  const setCurrentUser = useCallback(
-    (userAcount: UserAccount) => {
-      SetLoggedInUser(userAcount);
-      if (!userAcount.user && location.pathname !== CreateAccountRoute.path) {
-        navigate(CreateAccountRoute.path);
-      }
-    },
-    [navigate, location.pathname]
-  );
-  const userContext = useMemo(
-    () => ({
-      LoggedInUser,
-      SetLoggedInUser,
-    }),
-    [LoggedInUser]
-  );
-
   useEffect(() => {
-    async function loadUser() {
-      const profile = await keycloak.loadUserProfile();
-      const user = await GetUserAccountByEmail(profile?.email);
-      setCurrentUser({
-        profile,
-        user,
-      });
-    }
     if (kcToken) {
       loadUser();
     }
-  }, [keycloak, kcToken, setCurrentUser]);
+  }, [kcToken, loadUser]);
 
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) rootRef.current!.classList.add('darkmode');
@@ -73,17 +45,15 @@ export function App() {
       : undefined;
   return (
     <StrictMode>
-      <CurrentUserContext.Provider value={userContext}>
-        <div className='app' ref={rootRef}>
-          <PortalHeader
-            email={LoggedInUser?.profile?.email}
-            fullname={fullname}
-            setDarkMode={setDarkMode}
-            logout={logout}
-          />
-          <Outlet />
-        </div>
-      </CurrentUserContext.Provider>
+      <div className='app' ref={rootRef}>
+        <PortalHeader
+          email={LoggedInUser?.profile?.email}
+          fullname={fullname}
+          setDarkMode={setDarkMode}
+          logout={logout}
+        />
+        <Outlet />
+      </div>
     </StrictMode>
   );
 }

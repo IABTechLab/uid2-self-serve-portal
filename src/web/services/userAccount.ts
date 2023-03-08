@@ -1,24 +1,15 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
-import { createContext } from 'react';
+import { z } from 'zod';
 
-import { User } from '../../api/entities/User';
+import { User, UserScheme } from '../../api/entities/User';
 
 export type UserAccount = {
   profile: KeycloakProfile;
   user: User | null;
 };
 
-type UserContextWithSetter = {
-  LoggedInUser: UserAccount | null;
-  SetLoggedInUser: (account: UserAccount | null) => void;
-};
-export const CurrentUserContext = createContext<UserContextWithSetter>({
-  LoggedInUser: null,
-  SetLoggedInUser: () => {
-    throw Error('No user context available');
-  },
-});
+export type UserPayload = z.infer<typeof UserScheme>;
 
 export async function GetUserAccountById(id: string) {
   const result = await axios.get<User>(`/users/${id}`);
@@ -43,10 +34,14 @@ export async function GetUserAccountByEmail(
 }
 
 export async function GetAllUsers() {
-  // if (!apiClient) throw Error('Unauthorized');
   const result = await axios.get<User[]>(`/users/`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not load users');
+}
+
+export async function CreateUser(userPayload: UserPayload) {
+  const newUser = await axios.post<User>(`/users`, userPayload);
+  return newUser.data;
 }

@@ -12,7 +12,6 @@ type TeamMemberProps = { person: User };
 function TeamMember({ person }: TeamMemberProps) {
   return (
     <tr>
-      <td>{person.name}</td>
       <td>{person.location}</td>
       <td>{person.email}</td>
       <td>Admin</td>
@@ -42,7 +41,6 @@ function TeamMembers() {
               <table className='portal-team-table'>
                 <thead>
                   <tr>
-                    <th>Name</th>
                     <th>Location</th>
                     <th>Email</th>
                     <th>Role</th>

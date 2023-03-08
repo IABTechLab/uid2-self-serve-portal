@@ -1,11 +1,15 @@
-import { AxiosInstance } from 'axios';
+import axios from 'axios';
+import { KeycloakProfile } from 'keycloak-js';
 import { createContext } from 'react';
+import { z } from 'zod';
 
-import { Participant } from '../../api/entities/Participant';
+import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
+import { UserRole } from '../../api/entities/User';
+import { CreateUser } from './userAccount';
 
 type PariticipantWithSetter = {
-  participant: Participant | null;
-  setParticipant: (account: Participant | null) => void;
+  participant: ParticipantPayload | null;
+  setParticipant: (account: ParticipantPayload | null) => void;
 };
 export const ParticipantContext = createContext<PariticipantWithSetter>({
   participant: null,
@@ -13,19 +17,55 @@ export const ParticipantContext = createContext<PariticipantWithSetter>({
     throw Error('No participant context available');
   },
 });
+export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
 
-async function GetParticipantByUserId(apiClient: AxiosInstance | undefined, id: string) {
-  if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<Participant>(`/users/${id}`);
+export type CreateParticipantForm = {
+  companyName: string;
+  companyLocation: string;
+  companyType: number[];
+  role: string;
+  canSign: boolean;
+  signeeEmail: string;
+};
+
+export async function CreateParticipant(formData: CreateParticipantForm, user: KeycloakProfile) {
+  const users = [
+    {
+      email: user.email!,
+      role: formData.role as UserRole,
+      location: formData.companyLocation,
+    },
+  ];
+  if (!formData.canSign) {
+    users.push({
+      email: formData.signeeEmail,
+      role: UserRole.Admin,
+      location: formData.companyLocation,
+    });
+  }
+  const participantPayload: ParticipantPayload = {
+    name: formData.companyName,
+    location: formData.companyLocation,
+    status: formData.canSign
+      ? ParticipantStatus.AwaitingApproval
+      : ParticipantStatus.AwaitingSigning,
+    types: formData.companyType.map((typeId) => ({ id: typeId })),
+    users,
+  };
+  const newParticipant = await axios.post<ParticipantPayload>(`/participants`, participantPayload);
+  return newParticipant.data;
+}
+
+export async function GetParticipantByUserId(id: string) {
+  const result = await axios.get<ParticipantPayload>(`/users/${id}/participant`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not get participant');
 }
 
-export async function GetAllParticipant(apiClient: AxiosInstance | undefined) {
-  if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<Participant[]>(`/users/`);
+export async function GetAllParticipant() {
+  const result = await axios.get<ParticipantPayload[]>(`/participants`);
   if (result.status === 200) {
     return result.data;
   }

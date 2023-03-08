@@ -51,7 +51,7 @@ export function SelectInput<
             </Select.ScrollUpButton>
             <Select.Viewport className='SelectViewport'>
               {options.map(({ optionLabel, value }) => (
-                <Select.Item value={value} className='SelectItem'>
+                <Select.Item value={value} className='SelectItem' key={optionLabel}>
                   <Select.ItemText>{optionLabel}</Select.ItemText>
                   <Select.ItemIndicator className='SelectItemIndicator'>
                     <CheckIcon />
