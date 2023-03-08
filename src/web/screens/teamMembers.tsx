@@ -74,3 +74,4 @@ export const TeamMembersRoute: PortalRoute = {
     const users = GetAllUsers();
     return defer({ users });
   },
+};
