@@ -38,14 +38,12 @@ export class Participant extends BaseModel {
   };
   id!: number;
   name!: string;
-  location!: string;
   status!: ParticipantStatus;
 }
 
 export const ParticipantSchema = z.object({
   id: z.number().optional(),
   name: z.string(),
-  location: z.string(),
   status: z.nativeEnum(ParticipantStatus),
   types: z
     .array(

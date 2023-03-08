@@ -34,8 +34,8 @@ function CreateAccount() {
   } = useForm<CreateParticipantForm>({
     defaultValues: {
       companyName: '',
-      companyLocation: '',
       companyType: [],
+      officeLocation: '',
       role: 'user',
       canSign: true,
     },
@@ -72,7 +72,7 @@ function CreateAccount() {
             )}
           </Await>
 
-          <TextInput control={control} name='companyLocation' label='Office Location' />
+          <TextInput control={control} name='officeLocation' label='Office Location' />
           <SelectInput
             control={control}
             name='role'
