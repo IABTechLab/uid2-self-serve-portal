@@ -18,7 +18,6 @@ export const apiClient = axios.create({
 const makePrivateRoute = (route: PortalRoute): PortalRoute => {
   return {
     ...route,
-    loader: route.curriedLoader ? route.curriedLoader(apiClient) : route.loader,
     element: <PrivateRoute>{route.element}</PrivateRoute>,
   };
 };

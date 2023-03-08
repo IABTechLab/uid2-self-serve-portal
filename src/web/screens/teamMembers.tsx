@@ -74,8 +74,3 @@ export const TeamMembersRoute: PortalRoute = {
     const users = GetAllUsers();
     return defer({ users });
   },
-  // curriedLoader: (apiClient) => () => {
-  //   const users = GetAllUsers(apiClient);
-  //   return defer({ users });
-  // },
-};
