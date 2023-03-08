@@ -26,7 +26,7 @@ usersRouter.get('/byEmail', async (req, res) => {
   }
 
   const userResult = await User.query().where('email', email);
-  if (userResult.length === 1) return res.json(userResult);
+  if (userResult.length === 1) return res.json(userResult[0]);
   if (userResult.length > 1) {
     return res.status(500).json('Duplicate accounts found, please contact support');
   }

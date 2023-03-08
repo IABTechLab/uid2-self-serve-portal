@@ -1,18 +1,14 @@
 import { useKeycloak } from '@react-keycloak/web';
-import { createContext, ReactNode, useCallback, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { GetUserAccountByEmail, UserAccount } from '../services/userAccount';
 
 type UserContextWithSetter = {
   LoggedInUser: UserAccount | null;
-  loadUser: () => void;
 };
 export const CurrentUserContext = createContext<UserContextWithSetter>({
   LoggedInUser: null,
-  loadUser: () => {
-    throw Error('No user context available');
-  },
 });
 
 function CurrentUserProvider({ children }: { children: ReactNode }) {
@@ -20,33 +16,34 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const kcToken = keycloak?.token ?? '';
 
-  const setCurrentUser = useCallback(
-    (userAcount: UserAccount | null) => {
-      SetLoggedInUser(userAcount);
-      if (userAcount && !userAcount.user && location.pathname !== '/createAccount') {
-        navigate('/createAccount');
-      }
-    },
-    [navigate, location.pathname]
-  );
-
-  const loadUser = useCallback(async () => {
-    const profile = await keycloak.loadUserProfile();
-    const user = await GetUserAccountByEmail(profile?.email);
-    setCurrentUser({
-      profile,
-      user,
-    });
-  }, [keycloak, setCurrentUser]);
+  useEffect(() => {
+    if (LoggedInUser && !LoggedInUser.user && location.pathname !== '/accont/create') {
+      navigate('/account/create');
+    }
+  }, [LoggedInUser, location.pathname, navigate]);
 
   const userContext = useMemo(
     () => ({
       LoggedInUser,
-      loadUser,
     }),
-    [LoggedInUser, loadUser]
+    [LoggedInUser]
   );
+  useEffect(() => {
+    const loadUser = async () => {
+      const profile = await keycloak.loadUserProfile();
+      const user = await GetUserAccountByEmail(profile?.email);
+      SetLoggedInUser({
+        profile,
+        user,
+      });
+    };
+    if (kcToken) {
+      loadUser();
+    }
+  }, [kcToken, keycloak, SetLoggedInUser]);
+
   return <CurrentUserContext.Provider value={userContext}>{children}</CurrentUserContext.Provider>;
 }
 
