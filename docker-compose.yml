@@ -10,18 +10,18 @@ services:
       context: .
       dockerfile: sqlServer/SqlServerDockerfile
     ports:
-      - "11433:1433"
+      - '11433:1433'
     volumes:
       - mssqldata:/var/opt/mssql
     environment:
-      ACCEPT_EULA: "yes"
-      MSSQL_SA_PASSWORD: "D3velopmentP0"
+      ACCEPT_EULA: 'yes'
+      MSSQL_SA_PASSWORD: 'D3velopmentP0'
   keycloak:
     image: quay.io/keycloak/keycloak:20.0.3
     environment:
       KC_DB: mssql
       KC_DB_URL: jdbc:sqlserver://database:1433;DatabaseName=keycloak;encrypt=true;trustServerCertificate=true;
-      KC_TRANSACTION_XA_ENABLED: "false"
+      KC_TRANSACTION_XA_ENABLED: 'false'
       KC_DB_USERNAME: sa
       KC_DB_PASSWORD: D3velopmentP0
       KEYCLOAK_ADMIN: admin
@@ -32,6 +32,7 @@ services:
     depends_on:
       - database
     command:
-      - start-dev --import-realm
+      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme
     volumes:
-      - ./keycloak:/opt/keycloak/data/import
+      - ./keycloak/realm:/opt/keycloak/data/import
+      - ./keycloak/themes:/opt/keycloak/themes

@@ -1,0 +1,179 @@
+/* Patternfly CSS places a "bg-login.jpg" as the background on this ".login-pf" class.
+   This clashes with the "keycloak-bg.png' background defined on the body below.
+   Therefore the Patternfly background must be set to none. */
+:root {
+  --theme-primary: black;
+  --theme-background-header: #fff;
+  --theme-background-content: #fff;
+  --theme-background-table-header: #f1f3fb;
+  --theme-table-border: #d9d9d9;
+  --theme-border: #dcdee1;
+  --theme-button-border: #030a40;
+  --theme-action: #0459fd;
+  --theme-input-border: #b8b8b8;
+}
+body {
+  font-family: 'Inter', sans-serif;
+}
+#kc-form-login {
+  display: flex;
+  flex-direction: column;
+}
+.login-pf a {
+  color: var(--theme-action);
+}
+
+.login-pf {
+  background: none;
+
+  background-color: var(--theme-background-content) !important;
+}
+.login-pf-page .card-pf {
+  padding: 3rem 5rem;
+}
+.login-pf body {
+  background-image: none;
+  background-color: var(--theme-background-content) !important;
+  background-size: none;
+}
+
+.login-pf-page {
+  padding: 0;
+}
+.login-pf-page .login-pf-settings {
+  justify-content: center;
+  font-size: 18px;
+  order: 4;
+}
+#kc-form-options {
+  display: none;
+}
+.login-pf-page .login-pf-header {
+  margin-bottom: 8px;
+}
+.pf-c-button {
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 15px 120px 15px 120px;
+  margin: 0 auto;
+}
+.pf-c-button.pf-m-primary {
+  background-color: var(--theme-button-border);
+  width: auto;
+}
+
+.pf-c-form-control {
+  border-radius: 5px;
+  margin-top: 8px;
+  border: 1px solid var(--theme-input-border);
+}
+
+h1#kc-page-title {
+  margin: 10px 0 0 0;
+  font-weight: 700;
+  line-height: 29px;
+  text-align: left;
+}
+
+.kc-section-title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  margin-top: 32px;
+}
+
+.login-pf-page .card-pf .kc-description-text {
+  font-size: 14px;
+  color: #000;
+}
+
+.pf-c-form__label-text {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+div.kc-logo-text {
+  background-image: none;
+}
+
+#kc-header {
+  background-color: var(--theme-background-header99);
+  border-bottom: 1px solid var(--theme-border);
+  display: flex;
+  align-items: center;
+  padding: 0 30px;
+  margin-bottom: 0;
+}
+#kc-header-wrapper {
+  padding: 20px;
+}
+#kc-header-wrapper .uid2-logo {
+  height: 30px;
+}
+#kc-content-wrapper {
+  margin-top: 0;
+}
+
+#kc-info-wrapper {
+  font-size: 18px;
+  padding: 0;
+  background: none;
+}
+
+@media (max-width: 767px) {
+  #kc-header {
+    background-color: var(--theme-background-header99);
+    border-bottom: 1px solid var(--theme-border);
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  #kc-header-wrapper {
+    font-size: 16px;
+    letter-spacing: 0;
+  }
+}
+
+#kc-form-buttons {
+  margin: 1rem 0;
+  display: flex;
+}
+
+.login-pf-page .login-pf-brand {
+  margin-top: 0;
+}
+
+.card-pf {
+  margin: 10% auto 0 auto;
+  background: var(--theme-background-content);
+  border: 1px solid var(--theme-border);
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  max-width: 623px;
+  padding: 3rem 5rem;
+}
+
+#kc-registration-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#kc-registration {
+  width: 200px;
+}
+.login-pf-page .login-pf-signup a {
+  margin: 0;
+}
+/*phone*/
+@media (max-width: 767px) {
+  .login-pf-page .card-pf {
+    margin-top: 0;
+    border: 0;
+    padding: 0 20px;
+    box-shadow: none;
+  }
+}
+/* End Recovery codes */
