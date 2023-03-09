@@ -5,8 +5,15 @@ import { BaseModel } from './BaseModel';
 
 export interface IUser {}
 export enum UserRole {
-  Admin = 'admin',
-  User = 'user',
+  BusinessDevelopment = 'Business Development',
+  DA = 'Data / Analytics',
+  Marketing = 'Marketing',
+  MediaBuyer = 'Media Buyer',
+  PM = 'Product Management',
+  Engineering = 'Engineering',
+  SCRelationships = 'Sales / Client Relationships',
+  TechnicalOps = 'Technical Ops',
+  Other = 'Other',
 }
 
 export class User extends BaseModel {
@@ -36,5 +43,5 @@ export const UserScheme = z.object({
   location: z.string().optional(),
   phone: z.string().optional(),
   participantId: z.number().optional(),
-  role: z.nativeEnum(UserRole),
+  role: z.nativeEnum(UserRole).optional(),
 });
