@@ -77,10 +77,10 @@ function CreateAccount() {
             control={control}
             name='role'
             label='Your Role'
-            options={[
-              { optionLabel: 'Admin', value: UserRole.Admin },
-              { optionLabel: 'Developer', value: UserRole.User },
-            ]}
+            options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
+              optionLabel: UserRole[key],
+              value: UserRole[key],
+            }))}
           />
           <RadioInput
             name='canSign'

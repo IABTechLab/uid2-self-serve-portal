@@ -3,7 +3,6 @@ import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
 import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
-import { UserRole } from '../../api/entities/User';
 import { UserPayload } from './userAccount';
 
 export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
@@ -21,14 +20,13 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
   const users = [
     {
       email: user.email!,
-      role: formData.role as UserRole,
+      role: formData.role,
       location: formData.officeLocation,
     },
   ] as UserPayload[];
   if (!formData.canSign) {
     users.push({
       email: formData.signeeEmail,
-      role: UserRole.Admin,
     });
   }
   const participantPayload: ParticipantPayload = {
