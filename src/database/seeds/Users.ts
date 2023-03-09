@@ -18,7 +18,12 @@ const sampleData: Optional<UserType, 'id'>[] = [
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
-  await knex('users').whereILike('email', '%example.com').del();
+  await knex('users')
+    .whereIn(
+      'email',
+      sampleData.map((d) => d.email)
+    )
+    .del();
 
   // Inserts seed entries
   await knex('users').insert(sampleData);

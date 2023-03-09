@@ -1,4 +1,5 @@
 import type { Knex } from 'knex';
+import { knexSnakeCaseMappers } from 'objection';
 
 const config: Knex.Config = {
   client: 'mssql',
@@ -15,6 +16,7 @@ const config: Knex.Config = {
   seeds: {
     directory: './src/database/seeds',
   },
+  ...knexSnakeCaseMappers(),
 };
 
 export default config;

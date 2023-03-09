@@ -1,7 +1,6 @@
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
-// import { setupAdminClient } from './kcAdminClient';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import { z } from 'zod';
 
@@ -33,11 +32,6 @@ app.use(async (_req, _res, next) => {
 });
 
 router.get('/', async (_req, res) => {
-  // const kcAdminClient = await setupAdminClient();
-
-  // // Test adminClient
-  // const users = await kcAdminClient.users.find();
-  // console.log(users);
   res.json('UID2 Self-serve Portal: Online');
 });
 
