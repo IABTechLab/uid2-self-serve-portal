@@ -4,9 +4,49 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 
 # Getting started
 
-## Database setup and docker
+## Requirements
 
-TODO: Add information about this!
+- A recent version of Node. Recommended: 16.x or later.
+- Docker Desktop.
+- VS Code (or equivalent).
+
+## Docker
+
+When you first check the repo out, run:
+
+```
+docker compose up
+```
+
+This will pull the needed docker images and start the stack. **IMPORTANT:** The first time you run this, the mssql database container will take a while to start. If you interrupt it during this process, the container may end up in a bad state. If this happens, you'll need to `docker compose down` and then manually delete the persistent volume first, then start over.
+
+If you get errors like `Login failed for user 'sa'. Reason: Failed to open the explicitly specified database 'keycloak'`, the Keycloak container probably tried to start before the database was ready. Run the following command to try again:
+
+```
+docker compose restart keycloak
+```
+
+Keep in mind that the first time you start the stack, mssql will take ~5 minutes to aunch, so you might need to be patient.
+
+## Database
+
+We use knex for migrations and seed data. Once your Docker environment is running, you can use the following commands:
+
+- `npm run knex:migrate:latest`
+  - Update your schema to the latest.
+- `npm run knex:migrate:rollback`
+  - Rollback the most recent update to your schema.
+- `npm run knex:seed:run`
+  - Generate some helpful seed data for a dev or test environment (n.b. this is only for seeding dev/test data).
+
+If you're working on database changes, you can run:
+
+- `npm run knex:migrate:make [migration-name]`
+  - Generates a new migration file. This file includes a timestamp and the name you specify after the command.
+- `npm run knex:seed:make [seed-name]`
+  - Generates a new seed file for providing test data. This file is named based on the name you supply.
+
+See the [Knex migrations documentation](https://knexjs.org/guide/migrations.html) for more details.
 
 ## Tech Choices
 
@@ -32,6 +72,10 @@ When developing new components, you should create new stories in Storybook for t
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm run dev`
+
+Starts both the API and the React front-end side-by-side. This is probably the best way to get up and running in dev mode.
 
 ### `npm start`
 
