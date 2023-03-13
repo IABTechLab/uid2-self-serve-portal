@@ -85,7 +85,10 @@
   "jest": {
     "moduleNameMapper": {
       "\\.s?css": "<rootDir>/src/testHelpers/styleMock.js"
-    }
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios|typescript-cookie))"
+    ]
   },
   "nodemonConfig": {
     "execMap": {
@@ -105,6 +108,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.0",
     "@craco/craco": "^7.0.0",
     "@storybook/addon-actions": "^6.5.14",
     "@storybook/addon-essentials": "^6.5.14",
@@ -124,6 +130,7 @@
     "@types/tedious": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
+    "babel-jest": "^29.5.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "css-loader": "^6.7.3",
     "eslint": "^8.31.0",

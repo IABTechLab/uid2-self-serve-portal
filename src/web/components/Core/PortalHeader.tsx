@@ -22,7 +22,7 @@ export type PortalHeaderProps = {
 };
 
 export function PortalHeader({ email, fullname, setDarkMode = undefined }: PortalHeaderProps) {
-  const emailMd5 = email ? MD5(email) : null;
+  const emailMd5 = email ? MD5(email).toString() : null;
   const [darkToggleState, setDarkToggleState] = useState(false);
   const onThemeToggle = () => {
     setDarkToggleState(!darkToggleState);
