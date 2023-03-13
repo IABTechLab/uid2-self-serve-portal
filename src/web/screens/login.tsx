@@ -1,7 +1,7 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { useCallback } from 'react';
 
-import { PortalRoute } from './routeTypes';
+import { PortalRoute } from './routeUtils';
 
 import './login.scss';
 

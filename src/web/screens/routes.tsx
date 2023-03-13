@@ -1,26 +1,10 @@
-import axios from 'axios';
 import { Outlet } from 'react-router-dom';
 
 import { AccountPendingRoute } from './accountPending';
 import { CreateAccountRoute } from './createAccount';
 import { DashboardRoute } from './dashboard';
 import { LoginRoute } from './login';
-import { PrivateRoute } from './PrivateRoute';
-import { PortalRoute } from './routeTypes';
-
-export const apiClient = axios.create({
-  baseURL: 'http://localhost:6540/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-const makePrivateRoute = (route: PortalRoute): PortalRoute => {
-  return {
-    ...route,
-    element: <PrivateRoute>{route.element}</PrivateRoute>,
-  };
-};
+import { makePrivateRoute, PortalRoute } from './routeUtils';
 
 const AccountCreationRoute: PortalRoute = {
   path: '/account',
@@ -30,11 +14,7 @@ const AccountCreationRoute: PortalRoute = {
       <Outlet />
     </div>
   ),
-  children: [CreateAccountRoute, AccountPendingRoute],
+  children: [CreateAccountRoute, AccountPendingRoute].map(makePrivateRoute),
 };
 
-export const Routes: PortalRoute[] = [
-  LoginRoute,
-  makePrivateRoute(DashboardRoute),
-  makePrivateRoute(AccountCreationRoute),
-];
+export const Routes: PortalRoute[] = [LoginRoute, DashboardRoute, AccountCreationRoute];

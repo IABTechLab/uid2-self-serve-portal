@@ -13,7 +13,7 @@ import { TextInput } from '../components/Input/TextInput';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { CreateParticipant, CreateParticipantForm } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
-import { PortalRoute } from './routeTypes';
+import { PortalRoute } from './routeUtils';
 
 import './createAccount.scss';
 
@@ -76,7 +76,7 @@ function CreateAccount() {
           <SelectInput
             control={control}
             name='role'
-            label='Your Role'
+            label='Job Function'
             options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
               optionLabel: UserRole[key],
               value: UserRole[key],
@@ -117,7 +117,7 @@ export const CreateAccountRoute: PortalRoute = {
   path: '/account/create',
   description: 'Create account',
   element: <CreateAccount />,
-  loader: () => {
+  loader: async () => {
     const participantTypes = GetAllParticipantTypes();
     return defer({ participantTypes });
   },

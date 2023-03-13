@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { ParticipantStatus } from '../../api/entities/Participant';
 import { Notification } from '../components/Core/Notification';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { PortalRoute } from './routeTypes';
+import { PortalRoute } from './routeUtils';
 
 import './accountPending.scss';
 
