@@ -1,19 +1,29 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import * as stories from './PortalHeader.stories';
 
-const { WithGravatar, InvalidEmailAddress } = composeStories(stories);
+const { ValidEmailAddress, InvalidEmailAddress, NoEmailAddress } = composeStories(stories);
 
-test('picks the right URL for the image', async () => {
-  render(<WithGravatar />);
-  // const button = await screen.findByRole('button');
-  // TODO: Click the button, check the gravatar is there
+test('when the drop is clicked, a gravatar is displayed', async () => {
+  const user = userEvent.setup();
+  render(<ValidEmailAddress />);
+  const button = await screen.findByRole('button');
+  user.click(button);
+  const menu = await screen.findByRole('menu');
+  const avatar = await within(menu).findByRole('img');
+  expect(avatar).toHaveAttribute('src', expect.stringContaining('//www.gravatar.com/avatar/'));
 });
 
-test('invalid email address still renders home link', async () => {
-  // No actual way to tell because we don't load the image in Jest - this is to provide more examples of Jest using Storybook data
+test('when an invalid email address is provided, a home link is still displayed', async () => {
   render(<InvalidEmailAddress />);
   const link = await screen.findByRole('link');
   expect(link).toHaveAttribute('href', '/');
+});
+
+test('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
+  render(<NoEmailAddress />);
+  const button = await screen.findByRole('button');
+  expect(button).toHaveTextContent('Not logged in');
 });

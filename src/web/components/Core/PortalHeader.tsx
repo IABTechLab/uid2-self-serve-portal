@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
+import { Avatar } from '@radix-ui/react-avatar';
 import {
   DropdownMenu,
   DropdownMenuArrow,
@@ -22,6 +22,7 @@ export type PortalHeaderProps = {
 };
 
 export function PortalHeader({ email, fullname, setDarkMode = undefined }: PortalHeaderProps) {
+  const displayName = fullname ?? '(No name provided)';
   const emailMd5 = email ? MD5(email).toString() : null;
   const [darkToggleState, setDarkToggleState] = useState(false);
   const onThemeToggle = () => {
@@ -40,7 +41,7 @@ export function PortalHeader({ email, fullname, setDarkMode = undefined }: Porta
       </div>
       <DropdownMenu defaultOpen={false}>
         <DropdownMenuTrigger className='profile-dropdown-button'>
-          {fullname}
+          {email ? displayName : 'Not logged in'}
           <FontAwesomeIcon icon='chevron-down' />
         </DropdownMenuTrigger>
         <DropdownMenuContent className='profile-dropdown-content' align='end'>
@@ -48,11 +49,7 @@ export function PortalHeader({ email, fullname, setDarkMode = undefined }: Porta
           <div className='portal-avatar-container'>
             <Avatar className='portal-avatar' asChild>
               {!!email && (
-                <AvatarImage
-                  src={`//www.gravatar.com/avatar/${emailMd5}.jpg`}
-                  alt={`Profile image for ${email}`}
-                  onLoadingStatusChange={() => 'loaded'}
-                />
+                <img src={`//www.gravatar.com/avatar/${emailMd5}.jpg`} alt='Profile avatar' />
               )}
             </Avatar>
           </div>

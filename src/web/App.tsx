@@ -1,10 +1,3 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faChevronDown,
-  faEllipsisH,
-  faPencil,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
 // import { userStore } from './stores/userStore';
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useEffect, useMemo, useRef, useState } from 'react';
@@ -13,15 +6,13 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { PortalHeader } from './components/Core/PortalHeader';
 import { SideNav } from './components/Core/SideNav';
 import { SnailTrail } from './components/Core/SnailTrail';
+import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { apiClient, Routes } from './screens/routes';
 import { CurrentUserContext, GetLoggedInUserFromCookie, UserAccount } from './services/userAccount';
 
 import './App.scss';
 
-library.add(faEllipsisH);
-library.add(faPencil);
-library.add(faTrashCan);
-library.add(faChevronDown);
+configureFontAwesomeLibrary();
 const menu = Routes.filter((r) => r.description);
 
 export function App() {

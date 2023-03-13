@@ -10,9 +10,10 @@ export default {
 
 const Template: ComponentStory<typeof PortalHeader> = (args) => <PortalHeader {...args} />;
 
-export const WithGravatar = Template.bind({});
-WithGravatar.args = {
-  email: 'lionell.pack@thetradedesk.com',
+export const ValidEmailAddress = Template.bind({});
+ValidEmailAddress.args = {
+  fullname: 'Test User',
+  email: 'test.user@example.com',
 };
 
 export const InvalidEmailAddress = Template.bind({});
@@ -21,6 +22,4 @@ InvalidEmailAddress.args = {
 };
 
 export const NoEmailAddress = Template.bind({});
-NoEmailAddress.args = {
-  email: '1f9b869cd86ed628fd2a9f8c74f9b0f3',
-};
+NoEmailAddress.args = {};
