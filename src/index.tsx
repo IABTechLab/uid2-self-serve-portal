@@ -1,6 +1,6 @@
 import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -14,6 +14,15 @@ import { Routes } from './web/screens/routes';
 import './web/index.scss';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      return axios.request(error.config as AxiosRequestConfig);
+    }
+    return Promise.reject(error);
+  }
+);
 const router = createBrowserRouter([
   {
     path: '/',
