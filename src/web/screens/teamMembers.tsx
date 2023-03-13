@@ -4,7 +4,7 @@ import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
 import { GetAllUsers } from '../services/userAccount';
-import { PortalRoute } from './routeTypes';
+import { PortalRoute } from './routeUtils';
 
 import './teamMembers.scss';
 
