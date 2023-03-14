@@ -1,7 +1,5 @@
-import Keycloak from 'keycloak-js';
 import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 
-import { hasToken } from '../axios';
 import keycloak from '../Keycloak';
 import { PrivateRoute } from './PrivateRoute';
 

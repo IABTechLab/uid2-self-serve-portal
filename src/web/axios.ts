@@ -13,7 +13,6 @@ export const setAuthToken = (token?: string) => {
   });
 };
 
-export const hasToken = () => !!requestInterceptor;
 export const ejectHeader = () => {
   axios.interceptors.request.eject(requestInterceptor);
 };
