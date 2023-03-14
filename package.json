@@ -56,7 +56,7 @@
     "build": "craco build",
     "test": "craco test",
     "api": "nodemon -r dotenv/config ./src/api/api.ts",
-    "build-api": "node_modules/.bin/tsc --build ./tsconfig-api.json",
+    "build-api": "npx tsc --build ./tsconfig-api.json",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "stylelint-check": "stylelint-config-prettier-check",
