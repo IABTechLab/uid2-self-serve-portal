@@ -1,11 +1,11 @@
 import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import axios, { AxiosRequestConfig } from 'axios';
 import { useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { App } from './web/App';
+import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
 import keycloak from './web/Keycloak';
 import { reportWebVitals } from './web/reportWebVitals';
@@ -13,16 +13,6 @@ import { Routes } from './web/screens/routes';
 
 import './web/index.scss';
 
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
-axios.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      return axios.request(error.config as AxiosRequestConfig);
-    }
-    return Promise.reject(error);
-  }
-);
 const router = createBrowserRouter([
   {
     path: '/',
@@ -38,18 +28,11 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 function Root() {
   const onUpdateToken = useCallback((tokens: AuthClientTokens) => {
-    let requestInterceptor;
     if (tokens.token) {
-      requestInterceptor = axios.interceptors.request.use((config) => {
-        // Attach current access token ref value to outgoing request headers
-        // eslint-disable-next-line no-param-reassign
-        config.headers.Authorization = tokens ? `Bearer ${tokens.token}` : undefined;
-        return config;
-      });
-    } else if (requestInterceptor) {
-      axios.interceptors.request.eject(requestInterceptor);
+      setAuthToken(tokens.token);
     }
   }, []);
+
   return (
     <ReactKeycloakProvider
       authClient={keycloak}
