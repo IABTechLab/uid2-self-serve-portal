@@ -19,6 +19,6 @@ const AccountCreationRoute: PortalRoute = {
 
 export const Routes: PortalRoute[] = [
   LoginRoute,
-  DashboardRoute,
+  makePrivateRoute(DashboardRoute),
   makePrivateRoute(AccountCreationRoute),
 ];

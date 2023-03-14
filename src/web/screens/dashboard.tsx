@@ -2,7 +2,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 import { SideNav } from '../components/Core/SideNav';
 import { SnailTrail } from '../components/Core/SnailTrail';
-import { makePrivateRoute, PortalRoute } from './routeUtils';
+import { PortalRoute } from './routeUtils';
 import { TeamMembersRoute } from './teamMembers';
 
 export const DashboardMainRoute: PortalRoute = {
@@ -10,9 +10,7 @@ export const DashboardMainRoute: PortalRoute = {
   description: 'Dashboard',
   element: <span>Main</span>,
 };
-export const DashboardRoutes: PortalRoute[] = [TeamMembersRoute, DashboardMainRoute].map(
-  makePrivateRoute
-);
+export const DashboardRoutes: PortalRoute[] = [TeamMembersRoute, DashboardMainRoute];
 const menu = DashboardRoutes.filter((r) => r.description);
 
 function Dashboard() {
