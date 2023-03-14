@@ -14,7 +14,11 @@ const AccountCreationRoute: PortalRoute = {
       <Outlet />
     </div>
   ),
-  children: [CreateAccountRoute, AccountPendingRoute].map(makePrivateRoute),
+  children: [CreateAccountRoute, AccountPendingRoute],
 };
 
-export const Routes: PortalRoute[] = [LoginRoute, DashboardRoute, AccountCreationRoute];
+export const Routes: PortalRoute[] = [
+  LoginRoute,
+  DashboardRoute,
+  makePrivateRoute(AccountCreationRoute),
+];
