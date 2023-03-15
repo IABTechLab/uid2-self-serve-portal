@@ -1,0 +1,17 @@
+{
+  "extends": "@tsconfig/node18/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "api-dist"
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "src/web/**/*",
+    "src/testHelpers/**/*",
+    "src/database/migrations/**/*",
+    "src/database/seeds/**/*",
+    "src/index.tsx",
+    "src/setupTests.ts"
+  ]
+}

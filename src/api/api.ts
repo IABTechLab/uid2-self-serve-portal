@@ -8,13 +8,26 @@ import { Configure } from '../database/SelfServeDatabase';
 import { User } from './entities/User';
 import { kcAuthConfig } from './kcConfig';
 
+const BASE_REQUEST_PATH = '/api';
+
 Configure();
+
+function bypassHandlerForPaths(middleware:express.Handler, ...paths:string[]) {
+    return function(req, res, next) {
+      const pathCheck = paths.some(path => path === req.path);
+      if (pathCheck) {
+        next();
+      } else {
+        middleware(req, res, next);
+      }
+    } as express.Handler;
+};
 
 const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
-app.use(auth(kcAuthConfig));
+app.use(bypassHandlerForPaths(auth(kcAuthConfig), `${BASE_REQUEST_PATH}/`, `${BASE_REQUEST_PATH}/health`));
 
 const port = 6540;
 const testDelay = false;
@@ -33,6 +46,11 @@ app.use(async (_req, _res, next) => {
 
 router.get('/', async (_req, res) => {
   res.json('UID2 Self-serve Portal: Online');
+});
+
+router.get('/health', async (_req, res) => {
+  // TODO: More robust health check information
+  res.json({ node: process.version });
 });
 
 const userIdParser = z.object({
@@ -76,7 +94,7 @@ router.all('/*', (req, res) => {
   res.json({ status: 405, message: `${req.method} not allowed on this route` });
 });
 
-app.use('/api', router);
+app.use(BASE_REQUEST_PATH, router);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}.`);
