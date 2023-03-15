@@ -1,24 +1,15 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faChevronDown,
-  faEllipsisH,
-  faPencil,
-  faTrashCan,
-} from '@fortawesome/free-solid-svg-icons';
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { PortalHeader } from './components/Core/PortalHeader';
+import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
 
 import './App.scss';
 
-library.add(faEllipsisH);
-library.add(faPencil);
-library.add(faTrashCan);
-library.add(faChevronDown);
+configureFontAwesomeLibrary();
 
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);

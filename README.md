@@ -4,9 +4,61 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 
 # Getting started
 
-## Database setup and docker
+## Requirements
 
-TODO: Add information about this!
+- A recent version of Node. Recommended: 16.x or later.
+- Docker Desktop.
+- VS Code (or equivalent). Note that if you don't use VS Code, you will need to find equivalent extensions for things like linting.
+
+Recommended VS Code extensions:
+| Extension | Details | Required? |
+| --------- | ------- | --------- |
+| ESLint | Lints your code. We expect PRs to be free of linter errors, and preferably free of warnings as well. | Yes |
+| i18n Ally | Checks your front-end code for accessibility rules. We expect PRs to maintain a high standard of A11y. | Yes |
+| Prettier - Code formatter | Formats your code. We want PRs to contain functionality changes, not whitespace fixes and linebreak changes. Prettier makes us all use the same code style so we can focus on the things which matter. | Yes |
+| Stylelint | Same as ESLint, but for your style files. | Yes |
+| Wallaby.js | Live, in-your-IDE, as-you-type test runner. It is free for open source projects, but please read the license and satisfy yourself that you're in compliance if you use the free version. | No |
+| Docker | Helps you manage docker containers straight from VS Code. | No |
+| Auto Rename Tag | Fixes your closing tags as you edit opening tags | No |
+| Toggle Quotes | You can hit `ctrl-'` to cycle between quote styles (', ", and `) for the string you're editing. | No |
+
+## Docker
+
+When you first check the repo out, run:
+
+```
+docker compose up
+```
+
+This will pull the needed docker images and start the stack. **IMPORTANT:** The first time you run this, the mssql database container will take a while to start. If you interrupt it during this process, the container may end up in a bad state. If this happens, you'll need to `docker compose down` and then manually delete the persistent volume first, then start over.
+
+If you get errors like `Login failed for user 'sa'. Reason: Failed to open the explicitly specified database 'keycloak'`, the Keycloak container probably tried to start before the database was ready. Run the following command to try again:
+
+```
+docker compose restart keycloak
+```
+
+Keep in mind that the first time you start the stack, mssql will take ~5 minutes to aunch, so you might need to be patient.
+
+## Database
+
+We use knex for migrations and seed data. Once your Docker environment is running, you can use the following commands:
+
+- `npm run knex:migrate:latest`
+  - Update your schema to the latest.
+- `npm run knex:migrate:rollback`
+  - Rollback the most recent update to your schema.
+- `npm run knex:seed:run`
+  - Generate some helpful seed data for a dev or test environment (n.b. this is only for seeding dev/test data).
+
+If you're working on database changes, you can run:
+
+- `npm run knex:migrate:make [migration-name]`
+  - Generates a new migration file. This file includes a timestamp and the name you specify after the command.
+- `npm run knex:seed:make [seed-name]`
+  - Generates a new seed file for providing test data. This file is named based on the name you supply.
+
+See the [Knex migrations documentation](https://knexjs.org/guide/migrations.html) for more details.
 
 ## Tech Choices
 
@@ -22,6 +74,12 @@ All components below the page level should be props-driven - data fetching shoul
 
 When developing new components, you should create new stories in Storybook for the key states to allow easy review of both visuals and functionality.
 
+## Testing
+
+Please add tests to your changes where possible! We don't have a minimum coverage level because we feel responsible developers should be able to decide what's important to test, and what's not worth testing. Continuing down this path requires us all to be responsible developers and write tests!
+
+Focus on testing functionality, not implementation. For example, if you have a button which waits 1 second and then displays a dialog, _do not_ simulate a click and then assert that `setTimeout(...)` was called. Instead, simulate a click, advance the timer, and make sure the dialog was displayed! Refer to the [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles) and the section of the docs on [Query Priority](https://testing-library.com/docs/queries/about#priority).
+
 ## Keycloak setup
 
 - Start database and Keycloak serve by run `docker-compose up`
@@ -32,6 +90,14 @@ When developing new components, you should create new stories in Storybook for t
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm run dev`
+
+Starts both the API and the React front-end side-by-side. This is probably the best way to get up and running in dev mode.
+
+### `npm run storybook`
+
+Starts Storybook. This is a great system for working on self-contained components and reviewing appearance and functionality of components across the site. It's also useful as a way for people to view or work on components (or even whole pages) without having the full environment set up.
 
 ### `npm start`
 
@@ -53,11 +119,3 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed! Note that builds for deployment are not made on developer machines - those happen in our CI pipeline.
-
-### `npm run storybook`
-
-Starts Storybook. This is a great system for working on self-contained components and reviewing appearance and functionality of components across the site.
-
-### `npm run build-storybook`
-
-Build the Storybook site into a static website, if you need that for some reason. (Should this be removed? I don't know if it's needed.)

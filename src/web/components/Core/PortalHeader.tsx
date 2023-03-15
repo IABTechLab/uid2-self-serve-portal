@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
+import { Avatar } from '@radix-ui/react-avatar';
 import {
   DropdownMenu,
   DropdownMenuArrow,
@@ -28,7 +28,7 @@ export function PortalHeader({
   setDarkMode = undefined,
   logout,
 }: PortalHeaderProps) {
-  const emailMd5 = email ? MD5(email) : null;
+  const emailMd5 = email ? MD5(email).toString() : null;
   const [darkToggleState, setDarkToggleState] = useState(false);
   const onThemeToggle = () => {
     setDarkToggleState(!darkToggleState);
@@ -43,44 +43,52 @@ export function PortalHeader({
           <img src='/uid2-logo.png' alt='UID2 logo' className='uid2-logo' />
         </Link>
       </div>
-      {fullname && (
-        <DropdownMenu defaultOpen={false}>
-          <DropdownMenuTrigger className='profile-dropdown-button'>
-            {fullname}
-            <FontAwesomeIcon icon='chevron-down' />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className='profile-dropdown-content' align='end'>
-            <DropdownMenuArrow className='profile-dropdown-arrow' />
-            <div className='portal-avatar-container'>
-              <Avatar className='portal-avatar' asChild>
-                {!!email && (
-                  <AvatarImage
-                    src={`//www.gravatar.com/avatar/${emailMd5}.jpg`}
-                    alt={`Profile image for ${email}`}
-                    onLoadingStatusChange={() => 'loaded'}
-                  />
-                )}
-              </Avatar>
+      <DropdownMenu defaultOpen={false}>
+        <DropdownMenuTrigger className='profile-dropdown-button'>
+          {email ? fullname : 'Not logged in'}
+          <FontAwesomeIcon icon='chevron-down' />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className='profile-dropdown-content' align='end'>
+          <DropdownMenuArrow className='profile-dropdown-arrow' />
+          <div className='portal-avatar-container'>
+            <Avatar className='portal-avatar' asChild>
+              {!!email && (
+                <img src={`//www.gravatar.com/avatar/${emailMd5}.jpg`} alt='Profile avatar' />
+              )}
+            </Avatar>
+          </div>
+          <DropdownMenuSeparator className='separator' />
+          <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+            <div className='theme-switch'>
+              <label htmlFor='dark-mode'>Dark mode</label>
+              <Switch.Root
+                name='dark-mode'
+                checked={darkToggleState}
+                onCheckedChange={onThemeToggle}
+                className='theme-toggle'
+              >
+                <Switch.Thumb className='thumb' />
+              </Switch.Root>
             </div>
-            <DropdownMenuSeparator className='separator' />
-            <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
-              <div className='theme-switch'>
-                <label htmlFor='dark-mode'>Dark mode</label>
-                <Switch.Root
-                  name='dark-mode'
-                  checked={darkToggleState}
-                  onCheckedChange={onThemeToggle}
-                  className='theme-toggle'
-                >
-                  <Switch.Thumb className='thumb' />
-                </Switch.Root>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator className='separator' />
-            <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className='separator' />
+          <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+            <div className='theme-switch'>
+              <label htmlFor='dark-mode'>Dark mode</label>
+              <Switch.Root
+                name='dark-mode'
+                checked={darkToggleState}
+                onCheckedChange={onThemeToggle}
+                className='theme-toggle'
+              >
+                <Switch.Thumb className='thumb' />
+              </Switch.Root>
+            </div>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator className='separator' />
+          <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 }
