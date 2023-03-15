@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 
+import { setAuthToken } from '../axios';
 import keycloak from '../Keycloak';
 import { PrivateRoute } from './PrivateRoute';
 
@@ -20,7 +21,10 @@ export const makePrivateRoute = (route: PortalRoute | RouteObject): PortalRoute 
     element: <PrivateRoute>{route.element}</PrivateRoute>,
     loader: route.loader
       ? async (args: LoaderFunctionArgs) => {
-          await keycloak.init({});
+          if (!keycloak.authenticated) {
+            await keycloak.init({});
+          }
+          setAuthToken(keycloak.token);
           return route.loader!(args);
         }
       : undefined,
