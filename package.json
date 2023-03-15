@@ -19,8 +19,8 @@
     "@react-keycloak/core": "^3.2.0",
     "@react-keycloak/web": "^3.4.0",
     "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.8",
     "@types/react": "^18.0.26",
@@ -90,7 +90,10 @@
   "jest": {
     "moduleNameMapper": {
       "\\.s?css": "<rootDir>/src/testHelpers/styleMock.js"
-    }
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(axios|typescript-cookie))"
+    ]
   },
   "nodemonConfig": {
     "execMap": {
@@ -110,6 +113,9 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.21.0",
     "@craco/craco": "^7.0.0",
     "@storybook/addon-actions": "^6.5.14",
     "@storybook/addon-essentials": "^6.5.14",
@@ -129,6 +135,7 @@
     "@types/tedious": "^4.0.9",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
     "@typescript-eslint/parser": "^5.48.0",
+    "babel-jest": "^29.5.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "css-loader": "^6.7.3",
     "eslint": "^8.31.0",
@@ -145,6 +152,7 @@
     "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
     "prop-types": "^15.8.1",
+    "resize-observer-polyfill": "^1.5.1",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
     "stylelint": "^14.16.1",

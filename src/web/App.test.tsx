@@ -9,6 +9,6 @@ test('renders the header', () => {
       <App />
     </TestContextProvider>
   );
-  const linkElement = screen.getByText(/UID2 Portal/i);
+  const linkElement = screen.getByText(/Loading/i);
   expect(linkElement).toBeInTheDocument();
 });

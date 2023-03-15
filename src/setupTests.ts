@@ -8,5 +8,10 @@ import '@testing-library/jest-dom';
 import { setGlobalConfig } from '@storybook/testing-react';
 
 import * as globalStorybookConfig from '../.storybook/preview';
+import { configureFontAwesomeLibrary } from './web/configureFontAwesomeLibrary';
 
 setGlobalConfig(globalStorybookConfig);
+configureFontAwesomeLibrary();
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, import/no-extraneous-dependencies
+global.ResizeObserver = require('resize-observer-polyfill');
