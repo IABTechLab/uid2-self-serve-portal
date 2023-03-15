@@ -29,7 +29,7 @@
   "enabled": true,
   "sslRequired": "external",
   "registrationAllowed": true,
-  "registrationEmailAsUsername": false,
+  "registrationEmailAsUsername": true,
   "rememberMe": true,
   "verifyEmail": false,
   "loginWithEmailAllowed": true,
@@ -116,7 +116,7 @@
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
-          "realm": ["offline_access", "uma_authorization"],
+          "realm": ["offline_access", "uma_authorization", "app-user"],
           "client": {
             "account": ["manage-account", "view-profile"]
           }
@@ -1477,10 +1477,24 @@
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
-  "smtpServer": {},
+  "smtpServer": {
+    "replyToDisplayName": "",
+    "starttls": "false",
+    "auth": "",
+    "port": "1025",
+    "host": "mailhog",
+    "replyTo": "",
+    "from": "test@self-serve-portal.com",
+    "fromDisplayName": "",
+    "envelopeFrom": "",
+    "ssl": "false"
+  },
   "eventsEnabled": false,
   "eventsListeners": ["jboss-logging"],
   "loginTheme": "uid2-theme",
+  "accountTheme": "",
+  "adminTheme": "",
+  "emailTheme": "uid2-theme",
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,

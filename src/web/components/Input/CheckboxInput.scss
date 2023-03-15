@@ -1,0 +1,29 @@
+.checkboxOption {
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.inlineOptions {
+  display: flex;
+  align-items: center;
+}
+
+.CheckboxRoot {
+  padding: 0 !important; // override button padding
+  width: 25px;
+  height: 25px;
+  border: 1px solid var(--theme-input-border) !important;
+
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.CheckboxRoot:focus {
+  box-shadow: 0 0 0 2px black;
+}
+
+.CheckboxIndicator {
+  color: black;
+}
