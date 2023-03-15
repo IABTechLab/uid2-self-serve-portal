@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 ## Install and configure nginx
 RUN apk update
 RUN apk add nginx
-COPY ssportal.conf /etc/nginx/http.d/default.conf
+COPY nginx.conf /etc/nginx/http.d/default.conf
 RUN nginx -t 
 
 ## Build api and spa code
