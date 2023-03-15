@@ -4,12 +4,12 @@ ENV NODE_ENV production
 WORKDIR /build
 
 COPY *.js *.ts *.json .npmrc /build
-RUN npm ci
+RUN npm ci --production=false
 
 COPY public/ public
 COPY src/ src
 RUN npm run build
 
-FROM httpd:alpine
-WORKDIR /usr/local/apache2/htdocs/
+FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
 COPY --from=build /build/build/ .
