@@ -7,7 +7,7 @@ import { ParticipantType } from '../../api/entities/ParticipantType';
 import { UserRole } from '../../api/entities/User';
 import { Card } from '../components/Core/Card';
 import { CheckboxInputt } from '../components/Input/CheckboxInput';
-import { RadioInput } from '../components/Input/RadioInput';
+// import { RadioInput } from '../components/Input/RadioInput';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
@@ -82,7 +82,8 @@ function CreateAccount() {
               value: UserRole[key],
             }))}
           />
-          <RadioInput
+          {/* Contract Sign will be introduced in phase 2 */}
+          {/* <RadioInput
             name='canSign'
             label='Do you have the ability to sign a contract for UID Integration'
             options={[
@@ -98,7 +99,7 @@ function CreateAccount() {
                 ? 'Great! Once you Request Access you will be presented the UID contract and terms.'
                 : 'Before we can grant access to your company, we will need a signed contract and agreement to our terms.\nDo you have an email address for who can sign the UID Contract?'}
             </div>
-          )}
+          )} */}
 
           {watchCanSign === false && (
             <TextInput control={control} name='signeeEmail' label='Email for Contract Signee' />
