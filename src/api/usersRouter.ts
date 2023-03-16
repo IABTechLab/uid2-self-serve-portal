@@ -4,33 +4,28 @@ import { z } from 'zod';
 import { User, UserScheme } from './entities/User';
 
 export const usersRouter = express.Router();
-usersRouter.get('/', async (_req, res) => {
-  const users = await User.query();
-  return res.status(200).json(users);
-});
-
-usersRouter.post('/', async (req, res) => {
-  const data = UserScheme.parse(req.body);
-  const user = await User.query().insert(data);
-  res.status(201).json(user);
-});
-
 const emailParser = z.object({
-  email: z.string(),
+  email: z.string().optional(),
 });
 
-usersRouter.get('/byEmail', async (req, res) => {
+usersRouter.get('/', async (req, res) => {
   const { email } = emailParser.parse(req.query);
   if (!email) {
-    return res.sendStatus(404);
+    const users = await User.query();
+    return res.status(200).json(users);
   }
-
   const userResult = await User.query().where('email', email);
   if (userResult.length === 1) return res.json(userResult[0]);
   if (userResult.length > 1) {
     return res.status(500).json('Duplicate accounts found, please contact support');
   }
   return res.sendStatus(404);
+});
+
+usersRouter.post('/', async (req, res) => {
+  const data = UserScheme.parse(req.body);
+  const user = await User.query().insert(data);
+  res.status(201).json(user);
 });
 
 const userIdParser = z.object({

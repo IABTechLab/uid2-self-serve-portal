@@ -25,7 +25,7 @@ export async function GetUserAccountByEmail(
 ) {
   // if (!apiClient) throw Error('Unauthorized');
   try {
-    const result = await axios.get<User>(`/users/byEmail?email=${email}`);
+    const result = await axios.get<User>(`/users?email=${email}`);
     return result.data;
   } catch (e: unknown) {
     if (e instanceof AxiosError && e.response?.status === 404) return null;

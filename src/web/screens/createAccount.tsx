@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { Suspense, useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Await, defer, useLoaderData, useNavigate } from 'react-router-dom';
