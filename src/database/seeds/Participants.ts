@@ -4,8 +4,8 @@ import { Optional } from 'utility-types';
 
 import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
-type ParitcipantsType = ModelObject<Participant> & { type: string };
-const sampleData: Optional<ParitcipantsType, 'id'>[] = [
+type ParticipantsType = ModelObject<Participant> & { type: string };
+const sampleData: Optional<ParticipantsType, 'id'>[] = [
   {
     name: 'Publisher example',
 
@@ -22,7 +22,7 @@ const sampleData: Optional<ParitcipantsType, 'id'>[] = [
   },
 ];
 
-const createParticipant = async (knex: Knex, sample: Optional<ParitcipantsType, 'id'>) => {
+const createParticipant = async (knex: Knex, sample: Optional<ParticipantsType, 'id'>) => {
   const participant = await knex('participants')
     .insert({
       name: sample.name,
