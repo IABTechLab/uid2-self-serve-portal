@@ -25,8 +25,8 @@ export function App() {
   };
   if (!initialized) return <div>Loading...</div>;
   const fullname =
-    LoggedInUser?.profile.firstName && LoggedInUser?.profile.lastName
-      ? `${LoggedInUser?.profile.firstName} ${LoggedInUser?.profile.lastName}`
+    LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
+      ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`
       : undefined;
   return (
     <StrictMode>

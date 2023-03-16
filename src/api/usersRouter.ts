@@ -45,6 +45,6 @@ usersRouter.get('/:userId', async (req, res) => {
 
 usersRouter.get('/:userId/participant', async (req, res) => {
   const { userId } = userIdParser.parse(req.params);
-  const paritcipant = await User.relatedQuery('participant').for(userId);
-  return res.status(200).json(paritcipant[0]);
+  const participant = await User.relatedQuery('participant').for(userId);
+  return res.status(200).json(participant[0]);
 });
