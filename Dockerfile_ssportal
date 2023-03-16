@@ -1,0 +1,23 @@
+FROM node:18-alpine
+ENV NODE_ENV production
+WORKDIR /usr/src/app
+
+## Install and configure nginx
+RUN apk update
+RUN apk add nginx
+COPY nginx.conf /etc/nginx/http.d/default.conf
+RUN nginx -t 
+
+## Build api and spa code
+COPY *.js *.ts *.json .npmrc ./
+# The image set ENV production, but we need the dev deps to build, so install with prod false
+RUN npm ci --production=false
+
+COPY public/ public
+COPY src/ src
+
+RUN npm run build
+RUN npm run build-api
+
+EXPOSE 80
+CMD nginx -g 'pid /tmp/nginx.pid;' & node api-dist/src/api/api.js
