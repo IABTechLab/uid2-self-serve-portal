@@ -9,13 +9,28 @@ import { kcAuthConfig } from './kcConfig';
 import { participantsRouter } from './participantsRouter';
 import { usersRouter } from './usersRouter';
 
+const BASE_REQUEST_PATH = '/api';
+
 Configure();
+
+function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) {
+  return function (req, res, next) {
+    const pathCheck = paths.some((path) => path === req.path);
+    if (pathCheck) {
+      next();
+    } else {
+      middleware(req, res, next);
+    }
+  } as express.Handler;
+}
 
 const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
-app.use(auth(kcAuthConfig));
+app.use(
+  bypassHandlerForPaths(auth(kcAuthConfig), `${BASE_REQUEST_PATH}/`, `${BASE_REQUEST_PATH}/health`)
+);
 
 const port = 6540;
 
@@ -30,6 +45,10 @@ router.get('/', async (_req, res) => {
 
 router.use('/users', usersRouter);
 router.use('/participants', participantsRouter);
+router.get('/health', async (_req, res) => {
+  // TODO: More robust health check information
+  res.json({ node: process.version });
+});
 
 router.get('/participantTypes', async (_req, res) => {
   const participantTypes = await ParticipantType.query();
@@ -43,7 +62,7 @@ router.all('/*', (req, res) => {
   res.json({ message: `${req.method} not allowed on this route` }).status(405);
 });
 
-app.use('/api', router);
+app.use(BASE_REQUEST_PATH, router);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}.`);
