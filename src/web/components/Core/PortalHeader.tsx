@@ -72,20 +72,6 @@ export function PortalHeader({
             </div>
           </DropdownMenuItem>
           <DropdownMenuSeparator className='separator' />
-          <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
-            <div className='theme-switch'>
-              <label htmlFor='dark-mode'>Dark mode</label>
-              <Switch.Root
-                name='dark-mode'
-                checked={darkToggleState}
-                onCheckedChange={onThemeToggle}
-                className='theme-toggle'
-              >
-                <Switch.Thumb className='thumb' />
-              </Switch.Root>
-            </div>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator className='separator' />
           <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
