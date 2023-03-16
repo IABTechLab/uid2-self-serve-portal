@@ -1,4 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import axios, { AxiosError } from 'axios';
 import { Suspense, useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Await, defer, useLoaderData, useNavigate } from 'react-router-dom';
@@ -30,6 +31,7 @@ function CreateAccount() {
     handleSubmit,
     control,
     watch,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<CreateParticipantForm>({
     defaultValues: {
@@ -43,9 +45,18 @@ function CreateAccount() {
   const watchCanSign = watch('canSign');
 
   const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
-    await CreateParticipant(formData, LoggedInUser!.profile);
-    await loadUser();
-    navigate('/account/pending');
+    try {
+      await CreateParticipant(formData, LoggedInUser!.profile);
+      await loadUser();
+      navigate('/account/pending');
+    } catch (err) {
+      setError('root.serverError', {
+        type: '400',
+        message: axios.isAxiosError(err)
+          ? (err.response?.data[0].message as string) ?? ''
+          : 'Something went wrong, please try again',
+      });
+    }
   };
 
   return (
@@ -56,7 +67,9 @@ function CreateAccount() {
       <Suspense fallback={<Loading />}>
         <h3>Company Information</h3>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {errors.root?.serverError && <p>Something went wrong, and please try again.</p>}
+          {errors.root?.serverError && (
+            <p className='formError'>{errors.root?.serverError.message}</p>
+          )}
           <TextInput control={control} name='companyName' label='Company Name' />
           <Await resolve={data.participantTypes}>
             {(participantTypes: ParticipantType[]) => (
