@@ -2,11 +2,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
+import util from 'util';
 import { z } from 'zod';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { User } from './entities/User';
-import { kcAuthConfig } from './kcConfig';
+import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_ISSUER_BASE_URL, SSP_KK_REALM, SSP_KK_SSL_CONFIDENTIAL_PORT, SSP_KK_SSL_PUBLIC_CLIENT, SSP_KK_SSL_REQUIRED, SSP_KK_SSL_RESOURCE } from './envars';
 
 const BASE_REQUEST_PATH = '/api';
 
@@ -27,7 +28,13 @@ const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
-app.use(bypassHandlerForPaths(auth(kcAuthConfig), `${BASE_REQUEST_PATH}/`, `${BASE_REQUEST_PATH}/health`));
+app.use(bypassHandlerForPaths(auth({
+  audience: SSP_KK_AUDIENCE,
+  issuerBaseURL: SSP_KK_ISSUER_BASE_URL
+}),
+  `${BASE_REQUEST_PATH}/`,
+  `${BASE_REQUEST_PATH}/health`,
+  `${BASE_REQUEST_PATH}/keycloak-config`));
 
 const port = 6540;
 const testDelay = false;
@@ -51,6 +58,18 @@ router.get('/', async (_req, res) => {
 router.get('/health', async (_req, res) => {
   // TODO: More robust health check information
   res.json({ node: process.version });
+});
+
+router.get('/keycloak-config', async (_req, res) => {
+  // TODO: More robust health check information
+  res.json({
+    "realm": SSP_KK_REALM,
+    "auth-server-url": SSP_KK_AUTH_SERVER_URL,
+    "ssl-required": SSP_KK_SSL_REQUIRED,
+    "resource": SSP_KK_SSL_RESOURCE,
+    "public-client": SSP_KK_SSL_PUBLIC_CLIENT,
+    "confidential-port": SSP_KK_SSL_CONFIDENTIAL_PORT
+  });
 });
 
 const userIdParser = z.object({
