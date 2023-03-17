@@ -1,13 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import axios from 'axios';
 import { Suspense, useContext } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler } from 'react-hook-form';
 import { Await, defer, useLoaderData, useNavigate } from 'react-router-dom';
 
 import { ParticipantType } from '../../api/entities/ParticipantType';
 import { UserRole } from '../../api/entities/User';
 import { Card } from '../components/Core/Card';
-import { CheckboxInputt } from '../components/Input/CheckboxInput';
+import { CheckboxInput } from '../components/Input/CheckboxInput';
+import { Form } from '../components/Input/Form';
 // import { RadioInput } from '../components/Input/RadioInput';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
@@ -16,47 +16,29 @@ import { CreateParticipant, CreateParticipantForm } from '../services/participan
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
-import './createAccount.scss';
-
 export const AccountCreationRoutes: PortalRoute[] = [];
 
 function Loading() {
   return <div>Loading...</div>;
 }
 function CreateAccount() {
-  const data = useLoaderData() as { participantTypes: ParticipantType[] };
+  const { participantTypes } = useLoaderData() as { participantTypes: ParticipantType[] };
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
-  const {
-    handleSubmit,
-    control,
-    watch,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<CreateParticipantForm>({
-    defaultValues: {
-      companyName: '',
-      companyType: [],
-      officeLocation: '',
-      role: 'user',
-      canSign: true,
-    },
-  });
-  const watchCanSign = watch('canSign');
+  const defaultFormData = {
+    companyName: '',
+    companyType: [],
+    officeLocation: '',
+    role: 'user',
+    canSign: true,
+  };
 
+  const onSubmitCallback = async () => {
+    await loadUser();
+    navigate('/account/pending');
+  };
   const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
-    try {
-      await CreateParticipant(formData, LoggedInUser!.profile);
-      await loadUser();
-      navigate('/account/pending');
-    } catch (err) {
-      setError('root.serverError', {
-        type: '400',
-        message: axios.isAxiosError(err)
-          ? (err.response?.data[0].message as string) ?? ''
-          : 'Something went wrong, please try again',
-      });
-    }
+    return CreateParticipant(formData, LoggedInUser!.profile);
   };
 
   return (
@@ -66,37 +48,38 @@ function CreateAccount() {
     >
       <Suspense fallback={<Loading />}>
         <h3>Company Information</h3>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {errors.root?.serverError && (
-            <p className='formError'>{errors.root?.serverError.message}</p>
-          )}
-          <TextInput control={control} name='companyName' label='Company Name' />
-          <Await resolve={data.participantTypes}>
-            {(participantTypes: ParticipantType[]) => (
-              <CheckboxInputt
-                control={control}
+        <Await resolve={participantTypes}>
+          {(resolvedParticipantTypes: ParticipantType[]) => (
+            <Form<CreateParticipantForm>
+              onSubmit={onSubmit}
+              onSubmitCallback={onSubmitCallback}
+              defaultValues={defaultFormData}
+              submitButtonText='Create Account'
+            >
+              {/* We passing control in props to differentiate this is a form input component  */}
+              <TextInput name='companyName' label='Company Name' control={undefined} />
+              <CheckboxInput
                 name='companyType'
                 label='Company Type'
-                options={participantTypes.map((p) => ({
+                control={undefined}
+                options={resolvedParticipantTypes.map((p) => ({
                   optionLabel: p.typeName,
                   value: p.id,
                 }))}
               />
-            )}
-          </Await>
 
-          <TextInput control={control} name='officeLocation' label='Office Location' />
-          <SelectInput
-            control={control}
-            name='role'
-            label='Job Function'
-            options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-              optionLabel: UserRole[key],
-              value: UserRole[key],
-            }))}
-          />
-          {/* Contract Sign will be introduced in phase 2 */}
-          {/* <RadioInput
+              <TextInput name='officeLocation' label='Office Location' control={undefined} />
+              <SelectInput
+                control={undefined}
+                name='role'
+                label='Job Function'
+                options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
+                  optionLabel: UserRole[key],
+                  value: UserRole[key],
+                }))}
+              />
+              {/* Contract Sign will be introduced in phase 2 */}
+              {/* <RadioInput
             name='canSign'
             label='Do you have the ability to sign a contract for UID Integration'
             options={[
@@ -114,15 +97,12 @@ function CreateAccount() {
             </div>
           )} */}
 
-          {watchCanSign === false && (
-            <TextInput control={control} name='signeeEmail' label='Email for Contract Signee' />
+              {/* {watchCanSign === false && (
+                <TextInput name='signeeEmail' label='Email for Contract Signee' />
+              )} */}
+            </Form>
           )}
-          <div className='formFooter'>
-            <button type='submit' disabled={isSubmitting} className='primaryButton largeButton'>
-              Create Account
-            </button>
-          </div>
-        </form>
+        </Await>
       </Suspense>
     </Card>
   );

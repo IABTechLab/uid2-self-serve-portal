@@ -9,7 +9,7 @@ import { SelectInputProps } from './SelectInput';
 import './Input.scss';
 import './CheckboxInput.scss';
 
-export function CheckboxInputt<
+export function CheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
 >({ control, name, label, options }: SelectInputProps<TFieldValues, TPath>) {

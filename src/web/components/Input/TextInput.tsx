@@ -13,7 +13,7 @@ export function TextInput<
   label,
   ...rest
 }: {
-  control: Control<TFieldValues>;
+  control?: Control<TFieldValues>;
   name: TPath;
   label: string;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
