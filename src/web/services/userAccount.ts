@@ -39,7 +39,7 @@ export function GetLoggedInUserFromCookie(apiClient?: AxiosInstance) {
 
 export async function GetAllUsers(apiClient: AxiosInstance | undefined) {
   if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<UserAccount[]>(`/api/users/`);
+  const result = await apiClient.get<UserAccount[]>(`/users/`);
   if (result.status === 200) {
     return result.data;
   }
