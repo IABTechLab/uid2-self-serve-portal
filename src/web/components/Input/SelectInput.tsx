@@ -16,7 +16,7 @@ export type SelectInputProps<
   TPath extends FieldPath<TFieldValues>
 > = {
   options: Option<FieldValue<TFieldValues>>[];
-  control: Control<TFieldValues>;
+  control?: Control<TFieldValues>;
   name: TPath;
   label?: string;
 };
