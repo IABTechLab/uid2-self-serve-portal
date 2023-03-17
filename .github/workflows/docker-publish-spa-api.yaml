@@ -1,4 +1,4 @@
-name: Docker
+name: Publish API/UI Docker Image
 on: workflow_dispatch
 
 env:
