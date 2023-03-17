@@ -8,4 +8,9 @@ module.exports = {
       },
     },
   },
+  devServer: {
+    proxy: {
+      '/api': 'http://localhost:6540',
+    },
+  },
 };

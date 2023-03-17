@@ -7,7 +7,7 @@ import { PortalRoute } from './routeTypes';
 import { TeamMembersRoute } from './teamMembers';
 
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:6540/api',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
