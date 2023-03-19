@@ -1,16 +1,22 @@
 import axios from 'axios';
 import React, { cloneElement, isValidElement, ReactElement, ReactNode } from 'react';
-import { DeepPartial, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  DeepPartial,
+  FieldValues,
+  SubmitErrorHandler,
+  SubmitHandler,
+  useForm,
+} from 'react-hook-form';
 
 import './Form.scss';
 
 type FormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
-  onSubmitCallback: () => Promise<void>;
+  children: ReactNode[];
+  onSubmitCallback?: () => Promise<void>;
   onError?: (error: unknown) => void;
   defaultValues?: DeepPartial<T>;
-  children: ReactNode[];
-  submitButtonText: string;
+  submitButtonText?: string;
 };
 
 export function Form<T extends FieldValues>({
@@ -32,7 +38,7 @@ export function Form<T extends FieldValues>({
 
   const submit = async (formData: T) => {
     try {
-      onSubmit(formData);
+      await onSubmit(formData);
     } catch (err) {
       if (onError) onError(err);
       const message =
@@ -44,24 +50,28 @@ export function Form<T extends FieldValues>({
         type: '400',
         message,
       });
+      return;
     }
     if (onSubmitCallback) await onSubmitCallback();
   };
 
   const isInputComponent = (child: ReactNode): child is ReactElement => {
-    console.log(child);
     return isValidElement(child) && typeof child.type === 'function' && 'control' in child.props;
   };
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      {errors.root?.serverError && <p className='formError'>{errors.root?.serverError.message}</p>}
+      {errors.root?.serverError && (
+        <p className='formError' data-testid='form-error'>
+          {errors.root?.serverError.message}
+        </p>
+      )}
       {React.Children.map(children, (child) =>
         isInputComponent(child) ? cloneElement(child, { control }) : child
       )}
       <div className='formFooter'>
         <button type='submit' disabled={isSubmitting} className='primaryButton largeButton'>
-          {submitButtonText}
+          {submitButtonText ?? 'Submit'}
         </button>
       </div>
     </form>

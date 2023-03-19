@@ -30,7 +30,7 @@ export function SelectInput<
   });
 
   return (
-    <div className='inputField'>
+    <div className='inputField' key={`${name}-input`}>
       {label && (
         <Label.Root className='inputLabel' htmlFor={name}>
           {label}
