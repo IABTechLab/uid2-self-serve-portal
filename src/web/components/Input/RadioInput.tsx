@@ -24,7 +24,7 @@ export function RadioInput<
   });
 
   return (
-    <div className='inputField'>
+    <div className='inputField' key={`${name}-input`} {...rest}>
       {label && (
         <Label.Root className='inputLabel' htmlFor={name}>
           {label}
@@ -32,8 +32,8 @@ export function RadioInput<
       )}
       <RadioGroup.Root
         className='RadioGroupRoot'
-        defaultValue='default'
-        aria-label='View density'
+        defaultValue={field.value}
+        aria-label={name}
         onValueChange={field.onChange}
       >
         {options.map(({ optionLabel, value }) => (

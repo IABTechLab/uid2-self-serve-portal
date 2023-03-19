@@ -11,17 +11,17 @@ participantsRouter.get('/', async (_req, res) => {
 });
 
 participantsRouter.post('/', async (req, res) => {
-  // try {
-  //   const data = ParticipantSchema.parse(req.body);
-  //   // insertGraphAndFetch will implicitly create a transaction
-  //   const newParticipant = await Participant.query().insertGraphAndFetch([data], { relate: true });
-  //   return res.status(201).json(newParticipant);
-  // } catch (err) {
-  //   if (err instanceof z.ZodError) {
-  //     return res.status(400).send(err.issues);
-  //   }
-  return res.status(400).send([{ message: 'Unable to create participant' }]);
-  // }
+  try {
+    const data = ParticipantSchema.parse(req.body);
+    // insertGraphAndFetch will implicitly create a transaction
+    const newParticipant = await Participant.query().insertGraphAndFetch([data], { relate: true });
+    return res.status(201).json(newParticipant);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).send(err.issues);
+    }
+    return res.status(400).send([{ message: 'Unable to create participant' }]);
+  }
 });
 
 const idParser = z.object({

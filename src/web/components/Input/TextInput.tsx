@@ -21,15 +21,16 @@ export function TextInput<
     control,
     name,
   });
+  const safeField = { ...field, value: field.value ?? '' }; // Ensure the value is never undefined
 
   return (
-    <div className='inputField'>
+    <div className='inputField' key={`${name}-input`}>
       {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
+        <Label.Root className='inputLabel' id={name} htmlFor={name}>
           {label}
         </Label.Root>
       )}
-      <input className='inputContainer' {...field} {...rest} />
+      <input className='inputContainer' {...safeField} {...rest} />
     </div>
   );
 }

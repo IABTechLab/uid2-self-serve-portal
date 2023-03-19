@@ -82,10 +82,9 @@ Focus on testing functionality, not implementation. For example, if you have a b
 
 ## Keycloak setup
 
-- Start database and Keycloak serve by run `docker-compose up`
-- Open [http://localhost:18080/admin](http://localhost:18080/admin/) and log in with the username and password which you can find in the `docker-compose.yml`.
-- Click `master` to open the dropdown menue and click `Create Realm`
-- Click `Browser` and select `keycloack/realm-export.json` and then click `Create`
+- Start database and Keycloak serve by run `docker-compose up -d`, Keycloak will be up and running, and the realm will be configured
+- To access [keycloak admin console](http://localhost:18080/admin/), you can find username and password in the `docker-compose.yml`
+- If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console.
 
 ## Available Scripts
 
