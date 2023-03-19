@@ -17,6 +17,7 @@ Recommended VS Code extensions:
 | i18n Ally | Checks your front-end code for accessibility rules. We expect PRs to maintain a high standard of A11y. | Yes |
 | Prettier - Code formatter | Formats your code. We want PRs to contain functionality changes, not whitespace fixes and linebreak changes. Prettier makes us all use the same code style so we can focus on the things which matter. | Yes |
 | Stylelint | Same as ESLint, but for your style files. | Yes |
+| Code Spell Checker | Popular extension by Street Side Software - checks your spelling. | Yes, or similar alternative |
 | Wallaby.js | Live, in-your-IDE, as-you-type test runner. It is free for open source projects, but please read the license and satisfy yourself that you're in compliance if you use the free version. | No |
 | Docker | Helps you manage docker containers straight from VS Code. | No |
 | Auto Rename Tag | Fixes your closing tags as you edit opening tags | No |
