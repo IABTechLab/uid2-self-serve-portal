@@ -1,6 +1,5 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import { composeStories } from '@storybook/testing-react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './SelectInput.stories';
@@ -15,7 +14,6 @@ describe('SelectInput', () => {
     expect(screen.getByText('Option 2')).toBeInTheDocument();
     expect(screen.getByText('Option 3')).toBeInTheDocument();
   });
-
   it('displays validation error message', async () => {
     render(<WithValidation />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
@@ -29,14 +27,14 @@ describe('SelectInput', () => {
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     userEvent.click(submitButton);
     expect(await screen.findByRole('alert')).not.toBeNull();
-    await act(async () => {
-      await userEvent.click(screen.getByRole('combobox', { name: 'select' }));
-    });
 
-    await act(async () => {
-      await userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
+    userEvent.click(screen.getByRole('combobox', { name: 'select' }));
+    await waitFor(async () => {
+      const option = screen.getByRole('option', { name: 'Option 2' });
+      expect(option).toBeInTheDocument();
     });
-    userEvent.click(submitButton);
+    userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
+
     expect(screen.queryByRole('alert')).toBeNull();
   });
 });

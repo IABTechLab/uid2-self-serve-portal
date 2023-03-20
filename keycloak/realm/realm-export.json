@@ -2,7 +2,7 @@
   "id": "1d50b28b-a002-4976-9b26-550d68fb8d8e",
   "realm": "self-serve-portal",
   "displayName": "",
-  "displayNameHtml": "<a href=\"http://localhost:3000/\"><img src=\"http://localhost:3000/uid2-logo.png\" alt=\"UID2 logo\" class=\"uid2-logo\"></a>",
+  "displayNameHtml": "111",
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
@@ -1439,7 +1439,7 @@
     "port": "1025",
     "host": "mailhog",
     "replyTo": "",
-    "from": "test@self-serve-portal.com",
+    "from": "admin@self-serve-portal.com",
     "fromDisplayName": "",
     "envelopeFrom": "",
     "ssl": "false"

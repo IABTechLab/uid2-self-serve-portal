@@ -1,6 +1,5 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import { composeStories } from '@storybook/testing-react';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './CheckboxInput.stories';
@@ -26,16 +25,17 @@ describe('CheckboxInput', () => {
 
   it('clears error message when input is valid', async () => {
     render(<WithValidation />);
-    await act(async () => {
-      await userEvent.click(screen.getByRole('checkbox', { name: 'Option 2' }));
+
+    userEvent.click(screen.getByRole('checkbox', { name: 'Option 2' }));
+    await waitFor(() => {
+      const option2 = screen.getByLabelText('Option 2');
+      expect(option2).toBeChecked();
     });
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     userEvent.click(submitButton);
     expect(await screen.findByRole('alert')).not.toBeNull();
 
-    await act(async () => {
-      await userEvent.click(screen.getByRole('checkbox', { name: 'Option 3' }));
-    });
-    expect(screen.queryByRole('alert')).toBeNull();
+    userEvent.click(screen.getByRole('checkbox', { name: 'Option 3' }));
+    await waitForElementToBeRemoved(screen.queryByRole('alert'));
   });
 });
