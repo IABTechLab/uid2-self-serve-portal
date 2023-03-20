@@ -13,5 +13,9 @@ import { configureFontAwesomeLibrary } from './web/configureFontAwesomeLibrary';
 setGlobalConfig(globalStorybookConfig);
 configureFontAwesomeLibrary();
 
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
+window.HTMLElement.prototype.releasePointerCapture = jest.fn();
+window.HTMLElement.prototype.hasPointerCapture = jest.fn();
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, import/no-extraneous-dependencies
 global.ResizeObserver = require('resize-observer-polyfill');

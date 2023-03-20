@@ -1,0 +1,63 @@
+.SelectTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 400 !important;
+}
+.SelectTrigger[data-placeholder] {
+  color: var(--theme-primary);
+}
+.SelectIcon {
+  color: Var(--theme-input-border);
+}
+
+.SelectContent {
+  overflow: hidden;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+}
+
+.SelectViewport {
+  padding: 5px;
+}
+
+.SelectItem {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--theme-input-border);
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 35px 0 25px;
+  position: relative;
+  user-select: none;
+}
+.SelectItem[data-disabled] {
+  color: var(--theme-input-border);
+  pointer-events: none;
+}
+.SelectItem[data-highlighted] {
+  outline: none;
+  font-weight: 700;
+  background-color: var(--theme-input-border);
+}
+
+.SelectItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.SelectScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: var(--violet11);
+  cursor: default;
+}

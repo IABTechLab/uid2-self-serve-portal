@@ -4,6 +4,8 @@
 .app {
   @import 'styles/tables';
   @import 'styles/text';
+  @import 'styles/buttons';
+
   text-align: left;
   height: 100%;
   display: flex;
@@ -12,15 +14,21 @@
   color: var(--theme-primary);
 
   font-size: 0.875rem;
+  line-height: 1.375rem;
 
   .app-panel {
     display: flex;
     align-items: stretch;
     flex-direction: row;
     background-color: var(--theme-background-header);
+    flex-flow: row wrap;
     height: 100%;
   }
 
+  .app-centralize {
+    align-items: center;
+    justify-content: center;
+  }
   .content {
     padding: 12px 112px 12px 12px;
     flex-grow: 1;

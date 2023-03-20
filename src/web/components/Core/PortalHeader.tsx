@@ -19,10 +19,15 @@ export type PortalHeaderProps = {
   email: string | undefined;
   fullname: string | undefined;
   setDarkMode?: (darkMode: boolean) => void;
+  logout: () => void;
 };
 
-export function PortalHeader({ email, fullname, setDarkMode = undefined }: PortalHeaderProps) {
-  const displayName = fullname ?? '(No name provided)';
+export function PortalHeader({
+  email,
+  fullname,
+  setDarkMode = undefined,
+  logout,
+}: PortalHeaderProps) {
   const emailMd5 = email ? MD5(email).toString() : null;
   const [darkToggleState, setDarkToggleState] = useState(false);
   const onThemeToggle = () => {
@@ -31,7 +36,6 @@ export function PortalHeader({ email, fullname, setDarkMode = undefined }: Porta
   useEffect(() => {
     setDarkMode?.(darkToggleState);
   }, [darkToggleState, setDarkMode]);
-
   return (
     <div className='portal-header' role='banner'>
       <div className='title'>
@@ -41,7 +45,7 @@ export function PortalHeader({ email, fullname, setDarkMode = undefined }: Porta
       </div>
       <DropdownMenu defaultOpen={false}>
         <DropdownMenuTrigger className='profile-dropdown-button'>
-          {email ? displayName : 'Not logged in'}
+          {email ? fullname : 'Not logged in'}
           <FontAwesomeIcon icon='chevron-down' />
         </DropdownMenuTrigger>
         <DropdownMenuContent className='profile-dropdown-content' align='end'>
@@ -68,7 +72,7 @@ export function PortalHeader({ email, fullname, setDarkMode = undefined }: Porta
             </div>
           </DropdownMenuItem>
           <DropdownMenuSeparator className='separator' />
-          <DropdownMenuItem>Log out</DropdownMenuItem>
+          <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

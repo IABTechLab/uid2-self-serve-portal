@@ -6,13 +6,8 @@ import keycloak from '../web/Keycloak';
 
 export function TestContextProvider({ children }: PropsWithChildren) {
   return (
-    <ReactKeycloakProvider
-      authClient={keycloak}
-      initOptions={{
-        checkLoginIframe: false,
-      }}
-    >
-      <BrowserRouter>{children}</BrowserRouter>;
+    <ReactKeycloakProvider authClient={keycloak}>
+      <BrowserRouter>{children}</BrowserRouter>
     </ReactKeycloakProvider>
   );
 }

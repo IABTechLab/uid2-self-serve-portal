@@ -1,47 +1,47 @@
-import { AxiosInstance } from 'axios';
-import { createContext } from 'react';
-import { getCookie } from 'typescript-cookie';
+import axios, { AxiosError } from 'axios';
+import { KeycloakProfile } from 'keycloak-js';
+import { z } from 'zod';
+
+import { User, UserScheme } from '../../api/entities/User';
 
 export type UserAccount = {
-  email: string;
-  name: string;
-  location: string;
-  id: string;
+  profile: KeycloakProfile;
+  user: User | null;
 };
 
-const userCookie = 'uid2_ss_auth';
+export type UserPayload = z.infer<typeof UserScheme>;
 
-type UserContextWithSetter = {
-  LoggedInUser: UserAccount | null;
-  SetLoggedInUser: (account: UserAccount | null) => void;
-};
-export const CurrentUserContext = createContext<UserContextWithSetter>({
-  LoggedInUser: null,
-  SetLoggedInUser: () => {
-    throw Error('No user context available');
-  },
-});
-
-async function GetUserAccountById(apiClient: AxiosInstance | undefined, id: string) {
-  if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<UserAccount>(`/users/${id}`);
+export async function GetUserAccountById(id: string) {
+  const result = await axios.get<User>(`/users/${id}`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not get user account');
 }
 
-export function GetLoggedInUserFromCookie(apiClient?: AxiosInstance) {
-  const userId = getCookie(userCookie);
-  if (userId) return GetUserAccountById(apiClient, userId);
-  return null;
+export async function GetUserAccountByEmail(
+  // apiClient: AxiosInstance | undefined,
+  email: string | undefined
+) {
+  // if (!apiClient) throw Error('Unauthorized');
+  try {
+    const result = await axios.get<User>(`/users?email=${email}`);
+    return result.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError && e.response?.status === 404) return null;
+    throw Error('Could not get user account');
+  }
 }
 
-export async function GetAllUsers(apiClient: AxiosInstance | undefined) {
-  if (!apiClient) throw Error('Unauthorized');
-  const result = await apiClient.get<UserAccount[]>(`/users/`);
+export async function GetAllUsers() {
+  const result = await axios.get<User[]>(`/users/`);
   if (result.status === 200) {
     return result.data;
   }
   throw Error('Could not load users');
+}
+
+export async function CreateUser(userPayload: UserPayload) {
+  const newUser = await axios.post<User>(`/users`, userPayload);
+  return newUser.data;
 }
