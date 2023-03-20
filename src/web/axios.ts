@@ -9,6 +9,7 @@ export const ejectHeader = () => {
 };
 
 export const setAuthToken = (token?: string) => {
+  localStorage.setItem('authToken', token ?? '');
   ejectHeader();
   requestInterceptor = axios.interceptors.request.use((config) => {
     // Attach current access token ref value to outgoing request headers

@@ -39,6 +39,7 @@
 }
 .SelectItem[data-highlighted] {
   outline: none;
+  font-weight: 700;
   background-color: var(--theme-input-border);
 }
 
