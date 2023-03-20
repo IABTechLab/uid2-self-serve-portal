@@ -42,15 +42,16 @@ export function TextInput<
   return (
     <div className='inputField' key={`${name}-input`}>
       {label && (
-        <Label.Root className='inputLabel' htmlFor={name} aria-label={name}>
+        <Label.Root className='inputLabel' htmlFor={name}>
           {label}
         </Label.Root>
       )}
       <input
         className={classNames('inputContainer', { withError: error })}
         {...safeField}
-        {...rest}
+        aria-label={name}
         aria-invalid={error ? 'true' : 'false'}
+        {...rest}
       />
       {error && <span role='alert'>{error.message}</span>}
     </div>

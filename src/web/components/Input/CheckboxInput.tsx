@@ -2,7 +2,6 @@
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
 import * as Label from '@radix-ui/react-label';
-import classNames from 'classnames';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
 import { SelectInputProps } from './SelectInput';
@@ -34,9 +33,10 @@ export function CheckboxInput<
         {options.map(({ optionLabel, value }) => (
           <div className='checkboxOption' key={optionLabel}>
             <Checkbox.Root
-              className={classNames('CheckboxRoot', { withError: error })}
+              className='CheckboxRoot'
               id={optionLabel}
               value={value}
+              aria-label={`name-${optionLabel}`}
               aria-invalid={error ? 'true' : 'false'}
               onCheckedChange={(checked: boolean) => {
                 const valueCopy = new Set(field.value);
