@@ -42,7 +42,7 @@ export function TextInput<
   return (
     <div className='inputField' key={`${name}-input`}>
       {label && (
-        <Label.Root className='inputLabel' id={name} htmlFor={name}>
+        <Label.Root className='inputLabel' htmlFor={name} aria-label={name}>
           {label}
         </Label.Root>
       )}
