@@ -36,7 +36,6 @@ export function CheckboxInput<
               className='CheckboxRoot'
               id={optionLabel}
               value={value}
-              aria-label={`name-${optionLabel}`}
               aria-invalid={error ? 'true' : 'false'}
               onCheckedChange={(checked: boolean) => {
                 const valueCopy = new Set(field.value);
