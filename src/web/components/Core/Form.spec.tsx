@@ -112,4 +112,24 @@ describe('Form Component', () => {
     const formError = await screen.findByTestId('form-error');
     expect(formError).toHaveTextContent(serverErrorMessage);
   });
+
+  test('should render an error when unknow server error occurs', async () => {
+    userEvent.setup();
+    (axios.isAxiosError as unknown as jest.Mock).mockReturnValue(true);
+
+    mockOnSubmit.mockImplementation(() => {
+      const error = {
+        response: {},
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-throw-literal
+      throw error;
+    });
+
+    render(<WithDefaultData onSubmit={mockOnSubmit} />);
+    const button = await screen.findByRole('button');
+    userEvent.click(button);
+    const formError = await screen.findByTestId('form-error');
+    expect(formError).toHaveTextContent('Something went wrong, please try again');
+  });
 });
