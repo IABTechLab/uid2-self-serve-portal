@@ -24,7 +24,7 @@ const Template: ComponentStory<typeof CheckboxInput> = (args) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <CheckboxInput control={control} {...args} name='checkbox' />{' '}
+      <CheckboxInput control={control} {...args} inputName='checkbox' />{' '}
       <button type='submit'>Submit</button>
     </form>
   );
@@ -32,14 +32,14 @@ const Template: ComponentStory<typeof CheckboxInput> = (args) => {
 
 export const WithLabel = Template.bind({});
 WithLabel.args = {
-  name: 'default',
+  inputName: 'default',
   label: 'Select options',
   options,
 };
 
 export const WithValidation = Template.bind({});
 WithValidation.args = {
-  name: 'checkbox with rule',
+  inputName: 'checkbox with rule',
   label: 'Select options',
   options,
   rules: {

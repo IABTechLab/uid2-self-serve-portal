@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <TextInput control={control} {...args} name='textInput' data-testid='text-input' />{' '}
+      <TextInput control={control} {...args} inputName='textInput' data-testid='text-input' />{' '}
       <button type='submit'>Submit</button>
     </form>
   );

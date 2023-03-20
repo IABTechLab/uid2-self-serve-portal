@@ -13,7 +13,7 @@ export function RadioInput<
   TPath extends FieldPath<TFieldValues>
 >({
   control,
-  name,
+  inputName,
   label,
   options,
   rules,
@@ -24,21 +24,21 @@ export function RadioInput<
     fieldState: { error },
   } = useController({
     control,
-    name,
+    name: inputName,
     rules,
   });
 
   return (
-    <div className='inputField' key={`${name}-input`} {...rest}>
+    <div className='inputField' key={`${inputName}-input`} {...rest}>
       {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
+        <Label.Root className='inputLabel' htmlFor={inputName}>
           {label}
         </Label.Root>
       )}
       <RadioGroup.Root
         className='RadioGroupRoot'
         defaultValue={field.value}
-        aria-label={name}
+        aria-label={inputName}
         aria-invalid={error ? 'true' : 'false'}
         onValueChange={field.onChange}
       >

@@ -18,7 +18,8 @@ const Template: ComponentStory<typeof RadioInput> = (args) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <RadioInput control={control} {...args} name='radio' /> <button type='submit'>Submit</button>
+      <RadioInput control={control} {...args} inputName='radio' />{' '}
+      <button type='submit'>Submit</button>
     </form>
   );
 };
@@ -31,14 +32,14 @@ const options: Option<string>[] = [
 
 export const WithLabel = Template.bind({});
 WithLabel.args = {
-  name: 'default radio',
+  inputName: 'default radio',
   label: 'Select an option',
   options,
 };
 
 export const WithValidation = Template.bind({});
 WithValidation.args = {
-  name: 'checkbox with rule',
+  inputName: 'checkbox with rule',
   label: 'Select options',
   options,
   rules: { required: 'This field is required' },

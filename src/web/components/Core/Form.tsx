@@ -50,7 +50,7 @@ export function Form<T extends FieldValues>({
   };
 
   const isInputComponent = (child: ReactNode): child is ReactElement => {
-    return isValidElement(child) && typeof child.type === 'function' && 'control' in child.props;
+    return isValidElement(child) && typeof child.type === 'function' && 'inputName' in child.props;
   };
 
   return (
