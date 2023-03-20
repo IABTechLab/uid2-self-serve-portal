@@ -39,6 +39,7 @@ export function RadioInput<
         className='RadioGroupRoot'
         defaultValue={field.value}
         aria-label={name}
+        aria-invalid={error ? 'true' : 'false'}
         onValueChange={field.onChange}
       >
         {options.map(({ optionLabel, value }) => (
