@@ -17,11 +17,7 @@ services:
       ACCEPT_EULA: 'yes'
       MSSQL_SA_PASSWORD: 'D3velopmentP0'
   keycloak:
-    container_name: uid2_keycloak
     image: quay.io/keycloak/keycloak:20.0.3
-    build:
-      context: .
-      dockerfile: Dockerfile_keycloak
     environment:
       KC_DB: mssql
       KC_DB_URL: jdbc:sqlserver://database:1433;DatabaseName=keycloak;encrypt=true;trustServerCertificate=true;
