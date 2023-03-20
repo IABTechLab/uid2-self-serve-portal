@@ -1,15 +1,7 @@
 @import '~normalize.css/normalize.css';
+@import './fonts';
 
 /* Base page styling - just the plumbing. Application styling belongs in App.scss or a component scss file! */
-
-:root {
-  font-family: 'Inter', sans-serif;
-}
-@supports (font-variation-settings: normal) {
-  :root {
-    font-family: 'Inter var', sans-serif;
-  }
-}
 
 body {
   margin: 0;
@@ -22,8 +14,4 @@ html,
 body,
 #root {
   height: 100%;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

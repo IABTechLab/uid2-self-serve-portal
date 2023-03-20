@@ -1,0 +1,34 @@
+@use "~inter-ui/default" with (
+  $inter-font-display: swap,
+  $inter-font-path: '~inter-ui/Inter (web)'
+);
+@use "~inter-ui/variable" with (
+  $inter-font-display: swap,
+  $inter-font-path: '~inter-ui/Inter (web)'
+);
+@use "~@fontsource/roboto-mono/scss/mixins" as RobotoMono;
+
+@include default.all;
+@include variable.all;
+
+@include RobotoMono.fontFace;
+@include RobotoMono.fontFaceVariable;
+
+html {
+  font-family: Inter, system-ui;
+}
+
+code {
+  font-family: 'Roboto Mono', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', system-ui;
+  }
+
+  code {
+    font-family: 'Roboto MonoVariable', source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+}
