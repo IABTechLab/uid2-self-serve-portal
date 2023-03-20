@@ -35,7 +35,6 @@ services:
       start-dev --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme &&
       /opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true
     volumes:
-      - ./keycloak/scripts:/opt/scripts
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/themes:/opt/keycloak/themes
   mailhog:
