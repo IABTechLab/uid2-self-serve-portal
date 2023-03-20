@@ -5,7 +5,7 @@ import {
 } from '@radix-ui/react-navigation-menu';
 import { NavLink } from 'react-router-dom';
 
-import { PortalRoute } from '../../screens/routeTypes';
+import { PortalRoute } from '../../screens/routeUtils';
 
 import './SideNav.scss';
 

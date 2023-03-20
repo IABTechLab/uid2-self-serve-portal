@@ -1,6 +1,14 @@
 import { Model } from 'objection';
+import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
+import { UserScheme } from './User';
+
+export enum ParticipantStatus {
+  AwaitingSigning = 'awaiting_signing',
+  AwaitingApproval = 'awaiting_approval',
+  Approved = 'approved',
+}
 
 export class Participant extends BaseModel {
   static get tableName() {
@@ -13,8 +21,8 @@ export class Participant extends BaseModel {
       join: {
         from: 'participants.id',
         through: {
-          from: 'participantsXTypes.participantId',
-          to: 'participantsXTypes.participantsTypeId',
+          from: 'participants_X_types.participantId',
+          to: 'participants_X_types.participantsTypeId',
         },
         to: 'participantsTypes.id',
       },
@@ -30,6 +38,19 @@ export class Participant extends BaseModel {
   };
   id!: number;
   name!: string;
-  location!: string;
-  status!: string;
+  status!: ParticipantStatus;
 }
+
+export const ParticipantSchema = z.object({
+  id: z.number().optional(),
+  name: z.string(),
+  status: z.nativeEnum(ParticipantStatus),
+  types: z
+    .array(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .optional(),
+  users: z.array(UserScheme).optional(),
+});

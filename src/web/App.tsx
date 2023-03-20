@@ -1,82 +1,46 @@
-// import { userStore } from './stores/userStore';
 import { useKeycloak } from '@react-keycloak/web';
-import { StrictMode, useEffect, useMemo, useRef, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { StrictMode, useCallback, useContext, useRef } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import { PortalHeader } from './components/Core/PortalHeader';
-import { SideNav } from './components/Core/SideNav';
-import { SnailTrail } from './components/Core/SnailTrail';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
-import { apiClient, Routes } from './screens/routes';
-import { CurrentUserContext, GetLoggedInUserFromCookie, UserAccount } from './services/userAccount';
+import { CurrentUserContext } from './contexts/CurrentUserProvider';
+import { ParticipantProvider } from './contexts/ParticipantProvider';
 
 import './App.scss';
 
 configureFontAwesomeLibrary();
-const menu = Routes.filter((r) => r.description);
 
 export function App() {
-  const location = useLocation();
-  const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
+  const { LoggedInUser } = useContext(CurrentUserContext);
   const rootRef = useRef<HTMLDivElement>(null);
   const { keycloak, initialized } = useKeycloak();
-  useEffect(() => {
-    async function loadUser() {
-      const user = await GetLoggedInUserFromCookie(apiClient);
-      SetLoggedInUser(user);
-    }
-    loadUser();
-  }, []);
-
-  const userContext = useMemo(
-    () => ({
-      LoggedInUser,
-      SetLoggedInUser,
-    }),
-    [LoggedInUser]
-  );
-
-  const kcToken = keycloak?.token ?? '';
-  useEffect(() => {
-    const requestInterceptor = apiClient.interceptors.request.use((config) => {
-      // Attach current access token ref value to outgoing request headers
-      // eslint-disable-next-line no-param-reassign
-      config.headers.Authorization = initialized ? `Bearer ${kcToken}` : undefined;
-      return config;
-    });
-
-    // Return cleanup function to remove interceptors if apiClient updates
-    return () => {
-      apiClient.interceptors.request.eject(requestInterceptor);
-    };
-  }, [initialized, kcToken]);
+  const logout = useCallback(() => {
+    keycloak?.logout();
+  }, [keycloak]);
 
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) rootRef.current!.classList.add('darkmode');
     else rootRef.current!.classList.remove('darkmode');
   };
-  const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
-    .description;
-
   if (!initialized) return <div>Loading...</div>;
+  const fullname =
+    LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
+      ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`
+      : undefined;
   return (
     <StrictMode>
-      <CurrentUserContext.Provider value={userContext}>
+      <ParticipantProvider>
         <div className='app' ref={rootRef}>
           <PortalHeader
-            email={keycloak.profile?.email}
-            fullname='Joe Bloggs'
+            email={LoggedInUser?.profile?.email}
+            fullname={fullname}
             setDarkMode={setDarkMode}
+            logout={logout}
           />
-          <div className='app-panel'>
-            <SideNav menu={menu} />
-            <div className='content'>
-              <SnailTrail location={currentLocationDescription} />
-              <Outlet />
-            </div>
-          </div>
+          <Outlet />
         </div>
-      </CurrentUserContext.Provider>
+      </ParticipantProvider>
     </StrictMode>
   );
 }

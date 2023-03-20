@@ -1,16 +1,29 @@
-import { useContext } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 
-import { CurrentUserContext } from '../services/userAccount';
-import { PortalRoute } from './routeTypes';
+import { SideNav } from '../components/Core/SideNav';
+import { SnailTrail } from '../components/Core/SnailTrail';
+import { PortalRoute } from './routeUtils';
+import { TeamMembersRoute } from './teamMembers';
+
+export const DashboardMainRoute: PortalRoute = {
+  path: '/',
+  description: 'Dashboard',
+  element: <span>Main</span>,
+};
+export const DashboardRoutes: PortalRoute[] = [TeamMembersRoute, DashboardMainRoute];
+const menu = DashboardRoutes.filter((r) => r.description);
 
 function Dashboard() {
-  const { LoggedInUser } = useContext(CurrentUserContext);
-  if (LoggedInUser === null) return <div>Not logged in!</div>;
+  const location = useLocation();
+
+  const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
+    .description;
   return (
-    <div>
-      <div>Welcome to your UID2 dashboard!</div>
-      <div>
-        Hi, {LoggedInUser.name}! Your email address is {LoggedInUser.email}
+    <div className='app-panel'>
+      <SideNav menu={menu} />
+      <div className='content'>
+        <SnailTrail location={currentLocationDescription} />
+        <Outlet />
       </div>
     </div>
   );
@@ -19,4 +32,5 @@ export const DashboardRoute: PortalRoute = {
   path: '/',
   description: 'Dashboard',
   element: <Dashboard />,
+  children: DashboardRoutes,
 };

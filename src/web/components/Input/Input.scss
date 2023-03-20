@@ -1,0 +1,25 @@
+.inputField {
+  display: flex;
+  justify-content: stretch;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.inputLabel {
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  line-height: 2rem;
+}
+
+.inputContainer {
+  height: 45px;
+  box-sizing: border-box;
+  border: 1px solid var(--theme-input-border) !important;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.optionLabel {
+  padding-left: 0.5rem;
+  line-height: 1rem;
+}

@@ -36,3 +36,8 @@ services:
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/themes:/opt/keycloak/themes
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 11025:1025 # smtp server
+      - 18025:8025 # web ui
