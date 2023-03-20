@@ -2,6 +2,7 @@
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
 import * as Label from '@radix-ui/react-label';
+import classNames from 'classnames';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
 import { SelectInputProps } from './SelectInput';
@@ -12,10 +13,14 @@ import './CheckboxInput.scss';
 export function CheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, name, label, options }: SelectInputProps<TFieldValues, TPath>) {
-  const { field } = useController({
+>({ control, name, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
     name,
+    rules,
   });
 
   return (
@@ -29,9 +34,10 @@ export function CheckboxInput<
         {options.map(({ optionLabel, value }) => (
           <div className='checkboxOption' key={optionLabel}>
             <Checkbox.Root
-              className='CheckboxRoot'
+              className={classNames('CheckboxRoot', { withError: error })}
               id={optionLabel}
               value={value}
+              aria-invalid={error ? 'true' : 'false'}
               onCheckedChange={(checked: boolean) => {
                 const valueCopy = new Set(field.value);
                 if (checked) {
@@ -52,6 +58,7 @@ export function CheckboxInput<
           </div>
         ))}
       </div>
+      {error && <span role='alert'>{error.message}</span>}
     </div>
   );
 }
