@@ -1,5 +1,6 @@
+/* eslint-disable testing-library/no-unnecessary-act */
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './SelectInput.stories';
@@ -28,9 +29,13 @@ describe('SelectInput', () => {
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     userEvent.click(submitButton);
     expect(await screen.findByRole('alert')).not.toBeNull();
+    await act(async () => {
+      await userEvent.click(screen.getByRole('combobox', { name: 'select' }));
+    });
 
-    await userEvent.click(screen.getByRole('combobox', { name: 'select' }));
-    await userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
+    });
     userEvent.click(submitButton);
     expect(screen.queryByRole('alert')).toBeNull();
   });
