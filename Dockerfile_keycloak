@@ -11,6 +11,5 @@ FROM quay.io/keycloak/keycloak:20.0.3
 
 COPY keycloak/realm/ /opt/keycloak/data/import
 COPY keycloak/themes /opt/keycloak/themes
-RUN /opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true; exit 0
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
 CMD ["start-dev", "--import-realm", "--spi-theme-static-max-age=-1", "--spi-theme-cache-themes=false", "--spi-theme-cache-templates=false", "--spi-theme-welcome-theme=uid2-theme"]
