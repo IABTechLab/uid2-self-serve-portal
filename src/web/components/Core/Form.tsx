@@ -36,8 +36,8 @@ export function Form<T extends FieldValues>({
     } catch (err) {
       if (onError) onError(err);
       const message =
-        axios.isAxiosError(err) && err.response?.data[0].message
-          ? (err.response?.data[0].message as string)
+        axios.isAxiosError(err) && err.response?.data[0]?.message
+          ? (err.response?.data[0]?.message as string)
           : 'Something went wrong, please try again';
 
       setError('root.serverError', {
