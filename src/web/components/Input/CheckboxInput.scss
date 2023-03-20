@@ -20,9 +20,6 @@
   align-items: center;
   justify-content: center;
 }
-.CheckboxRoot.withError {
-  border-color: red !important;
-}
 .CheckboxRoot:focus {
   box-shadow: 0 0 0 2px black;
 }
