@@ -26,10 +26,6 @@ function CreateAccount() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const defaultFormData = {
-    companyName: '',
-    companyType: [],
-    officeLocation: '',
-    role: 'user',
     canSign: true,
   };
 
@@ -57,7 +53,12 @@ function CreateAccount() {
               submitButtonText='Create Account'
             >
               {/* We passing control in props to differentiate this is a form input component  */}
-              <TextInput name='companyName' label='Company Name' control={undefined} />
+              <TextInput
+                name='companyName'
+                label='Company Name'
+                control={undefined}
+                rules={{ required: 'Please specify company name.' }}
+              />
               <CheckboxInput
                 name='companyType'
                 label='Company Type'
@@ -66,13 +67,20 @@ function CreateAccount() {
                   optionLabel: p.typeName,
                   value: p.id,
                 }))}
+                rules={{ required: 'Please specify company type.' }}
               />
 
-              <TextInput name='officeLocation' label='Office Location' control={undefined} />
+              <TextInput
+                name='officeLocation'
+                label='Office Location'
+                control={undefined}
+                rules={{ required: 'Please specify office location.' }}
+              />
               <SelectInput
                 control={undefined}
                 name='role'
                 label='Job Function'
+                rules={{ required: 'Please specify your job function.' }}
                 options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
                   optionLabel: UserRole[key],
                   value: UserRole[key],

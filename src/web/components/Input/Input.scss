@@ -19,7 +19,15 @@
   padding: 0.5rem;
 }
 
+.inputContainer.withError {
+  border: 1px solid red !important;
+}
+
 .optionLabel {
   padding-left: 0.5rem;
   line-height: 1rem;
+}
+
+span[role='alert'] {
+  color: red;
 }

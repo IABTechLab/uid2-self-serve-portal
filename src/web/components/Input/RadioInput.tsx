@@ -16,11 +16,16 @@ export function RadioInput<
   name,
   label,
   options,
+  rules,
   ...rest
 }: SelectInputProps<TFieldValues, TPath> & React.InputHTMLAttributes<HTMLInputElement>) {
-  const { field } = useController({
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
     name,
+    rules,
   });
 
   return (
@@ -47,6 +52,7 @@ export function RadioInput<
           </div>
         ))}
       </RadioGroup.Root>
+      {error && <span role='alert'>{error.message}</span>}
     </div>
   );
 }

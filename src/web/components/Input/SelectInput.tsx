@@ -2,7 +2,15 @@
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import * as Label from '@radix-ui/react-label';
 import * as Select from '@radix-ui/react-select';
-import { Control, FieldPath, FieldValue, FieldValues, useController } from 'react-hook-form';
+import classNames from 'classnames';
+import {
+  Control,
+  FieldPath,
+  FieldValue,
+  FieldValues,
+  RegisterOptions,
+  useController,
+} from 'react-hook-form';
 
 import './Input.scss';
 import './SelectInput.scss';
@@ -19,14 +27,22 @@ export type SelectInputProps<
   control?: Control<TFieldValues>;
   name: TPath;
   label?: string;
+  rules?: Omit<
+    RegisterOptions<TFieldValues, TPath>,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
+  >;
 };
 export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, name, label, options }: SelectInputProps<TFieldValues, TPath>) {
-  const { field } = useController({
+>({ control, name, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
     name,
+    rules,
   });
 
   return (
@@ -37,7 +53,11 @@ export function SelectInput<
         </Label.Root>
       )}
       <Select.Root onValueChange={field.onChange}>
-        <Select.Trigger className='SelectTrigger inputContainer' aria-label={name}>
+        <Select.Trigger
+          className={classNames('inputContainer', 'SelectTrigger', { withError: error })}
+          aria-label={name}
+          aria-invalid={error ? 'true' : 'false'}
+        >
           <Select.Value />
           <Select.Icon className='SelectIcon'>
             <ChevronDownIcon />
@@ -64,6 +84,7 @@ export function SelectInput<
           </Select.Content>
         </Select.Portal>
       </Select.Root>
+      {error && <span role='alert'>{error.message}</span>}
     </div>
   );
 }
