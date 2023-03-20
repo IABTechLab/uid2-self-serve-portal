@@ -52,17 +52,14 @@ function CreateAccount() {
               defaultValues={defaultFormData}
               submitButtonText='Create Account'
             >
-              {/* We passing control in props to differentiate this is a form input component  */}
               <TextInput
-                name='companyName'
+                inputName='companyName'
                 label='Company Name'
-                control={undefined}
                 rules={{ required: 'Please specify company name.' }}
               />
               <CheckboxInput
-                name='companyType'
+                inputName='companyType'
                 label='Company Type'
-                control={undefined}
                 options={resolvedParticipantTypes.map((p) => ({
                   optionLabel: p.typeName,
                   value: p.id,
@@ -71,14 +68,12 @@ function CreateAccount() {
               />
 
               <TextInput
-                name='officeLocation'
+                inputName='officeLocation'
                 label='Office Location'
-                control={undefined}
                 rules={{ required: 'Please specify office location.' }}
               />
               <SelectInput
-                control={undefined}
-                name='role'
+                inputName='role'
                 label='Job Function'
                 rules={{ required: 'Please specify your job function.' }}
                 options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
@@ -88,7 +83,7 @@ function CreateAccount() {
               />
               {/* Contract Sign will be introduced in phase 2 */}
               {/* <RadioInput
-            name='canSign'
+            inputName='canSign'
             label='Do you have the ability to sign a contract for UID Integration'
             options={[
               { optionLabel: 'Yes', value: true },
@@ -106,7 +101,7 @@ function CreateAccount() {
           )} */}
 
               {/* {watchCanSign === false && (
-                <TextInput name='signeeEmail' label='Email for Contract Signee' />
+                <TextInput inputName='signeeEmail' label='Email for Contract Signee' />
               )} */}
             </Form>
           )}

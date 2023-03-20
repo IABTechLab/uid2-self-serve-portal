@@ -2,7 +2,7 @@
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import * as Label from '@radix-ui/react-label';
 import * as Select from '@radix-ui/react-select';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import {
   Control,
   FieldPath,
@@ -25,7 +25,7 @@ export type SelectInputProps<
 > = {
   options: Option<FieldValue<TFieldValues>>[];
   control?: Control<TFieldValues>;
-  name: TPath;
+  inputName: TPath;
   label?: string;
   rules?: Omit<
     RegisterOptions<TFieldValues, TPath>,
@@ -35,27 +35,27 @@ export type SelectInputProps<
 export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, name, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
   const {
     field,
     fieldState: { error },
   } = useController({
     control,
-    name,
+    name: inputName,
     rules,
   });
 
   return (
-    <div className='inputField' key={`${name}-input`}>
+    <div className='inputField' key={`${inputName}-input`}>
       {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
+        <Label.Root className='inputLabel' htmlFor={inputName}>
           {label}
         </Label.Root>
       )}
       <Select.Root onValueChange={field.onChange}>
         <Select.Trigger
-          className={classNames('inputContainer', 'SelectTrigger', { withError: error })}
-          aria-label={name}
+          className={clsx('inputContainer', 'SelectTrigger', { withError: error })}
+          aria-label={inputName}
           aria-invalid={error ? 'true' : 'false'}
         >
           <Select.Value />

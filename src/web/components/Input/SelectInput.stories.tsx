@@ -23,7 +23,7 @@ const Template: ComponentStory<typeof SelectInput> = (args) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <SelectInput control={control} {...args} name='select' />
+      <SelectInput control={control} {...args} inputName='select' />
       <button type='submit'>Submit</button>
     </form>
   );

@@ -12,20 +12,20 @@ import './CheckboxInput.scss';
 export function CheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, name, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
   const {
     field,
     fieldState: { error },
   } = useController({
     control,
-    name,
+    name: inputName,
     rules,
   });
 
   return (
-    <div className='inputField' key={`${name}-input`}>
+    <div className='inputField' key={`${inputName}-input`}>
       {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
+        <Label.Root className='inputLabel' htmlFor={inputName}>
           {label}
         </Label.Root>
       )}

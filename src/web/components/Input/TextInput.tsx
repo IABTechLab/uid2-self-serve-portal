@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as Label from '@radix-ui/react-label';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import {
   Control,
   FieldPathByValue,
@@ -16,13 +16,13 @@ export function TextInput<
   TPath extends FieldPathByValue<TFieldValues, String>
 >({
   control,
-  name,
+  inputName,
   label,
   rules,
   ...rest
 }: {
   control?: Control<TFieldValues>;
-  name: TPath;
+  inputName: TPath;
   label: string;
   rules?: Omit<
     RegisterOptions<TFieldValues, TPath>,
@@ -34,22 +34,22 @@ export function TextInput<
     fieldState: { error },
   } = useController({
     control,
-    name,
+    name: inputName,
     rules,
   });
   const safeField = { ...field, value: field.value ?? '' }; // Ensure the value is never undefined
 
   return (
-    <div className='inputField' key={`${name}-input`}>
+    <div className='inputField' key={`${inputName}-input`}>
       {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
+        <Label.Root className='inputLabel' htmlFor={inputName}>
           {label}
         </Label.Root>
       )}
       <input
-        className={classNames('inputContainer', { withError: error })}
+        className={clsx('inputContainer', { withError: error })}
         {...safeField}
-        aria-label={name}
+        aria-label={inputName}
         aria-invalid={error ? 'true' : 'false'}
         {...rest}
       />
