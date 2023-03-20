@@ -17,7 +17,11 @@ services:
       ACCEPT_EULA: 'yes'
       MSSQL_SA_PASSWORD: 'D3velopmentP0'
   keycloak:
+    container_name: uid2_keycloak
     image: quay.io/keycloak/keycloak:20.0.3
+    build:
+      context: .
+      dockerfile: Dockerfile_keycloak
     environment:
       KC_DB: mssql
       KC_DB_URL: jdbc:sqlserver://database:1433;DatabaseName=keycloak;encrypt=true;trustServerCertificate=true;
@@ -31,9 +35,11 @@ services:
       - 19990:9990
     depends_on:
       - database
-    command:
-      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme
+    # command:
+    #   - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme
+
     volumes:
+      - ./keycloak/scripts:/scripts
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/themes:/opt/keycloak/themes
   mailhog:

@@ -1,6 +1,5 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import { composeStories } from '@storybook/testing-react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './RadioInput.stories';
@@ -18,6 +17,7 @@ describe('RadioInput', () => {
 
   it('displays validation error message', async () => {
     render(<WithValidation />);
+
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     userEvent.click(submitButton);
     const errorMessage = await screen.findByRole('alert');
@@ -27,13 +27,14 @@ describe('RadioInput', () => {
   it('clears error message when input is valid', async () => {
     render(<WithValidation />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
-    await act(async () => {
-      await userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
-    });
-    const option2Radio = screen.getByLabelText('Option 2');
-    expect(option2Radio).toBeChecked();
-
     userEvent.click(submitButton);
+    expect(await screen.findByRole('alert')).not.toBeNull();
+
+    userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
+    await waitFor(() => {
+      const option2Radio = screen.getByLabelText('Option 2');
+      expect(option2Radio).toBeChecked();
+    });
     expect(screen.queryByRole('alert')).toBeNull();
   });
 });
