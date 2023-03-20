@@ -1,5 +1,6 @@
+/* eslint-disable testing-library/no-unnecessary-act */
 import { composeStories } from '@storybook/testing-react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './RadioInput.stories';
@@ -26,9 +27,12 @@ describe('RadioInput', () => {
   it('clears error message when input is valid', async () => {
     render(<WithValidation />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
-    await userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
+    await act(async () => {
+      await userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
+    });
     const option2Radio = screen.getByLabelText('Option 2');
     expect(option2Radio).toBeChecked();
+
     userEvent.click(submitButton);
     expect(screen.queryByRole('alert')).toBeNull();
   });
