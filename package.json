@@ -66,6 +66,7 @@
     "web-vitals": "^2.1.4",
     "webpack": "^5.75.0",
     "winston": "^3.8.2",
+    "winston-loki": "^6.0.6",
     "zod": "^3.20.2"
   },
   "scripts": {
