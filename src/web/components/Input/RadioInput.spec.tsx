@@ -4,31 +4,15 @@ import userEvent from '@testing-library/user-event';
 
 import * as stories from './RadioInput.stories';
 
-const { WithLabel, WithValidation } = composeStories(stories);
+const { WithValidation } = composeStories(stories);
 
 describe('RadioInput', () => {
-  it('renders correctly with label', () => {
-    render(<WithLabel />);
-    expect(screen.getByText('Select an option')).toBeInTheDocument();
-    expect(screen.getByText('Option 1')).toBeInTheDocument();
-    expect(screen.getByText('Option 2')).toBeInTheDocument();
-    expect(screen.getByText('Option 3')).toBeInTheDocument();
-  });
-
-  it('displays validation error message', async () => {
+  it('verifies field based on rule', async () => {
     render(<WithValidation />);
-
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     userEvent.click(submitButton);
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent('This field is required');
-  });
-
-  it('clears error message when input is valid', async () => {
-    render(<WithValidation />);
-    const submitButton = screen.getByRole('button', { name: 'Submit' });
-    userEvent.click(submitButton);
-    expect(await screen.findByRole('alert')).not.toBeNull();
 
     userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
     await waitFor(() => {

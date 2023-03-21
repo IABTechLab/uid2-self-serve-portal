@@ -1,24 +1,15 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import * as Label from '@radix-ui/react-label';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
+import { Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
-import './Input.scss';
 import './RadioInput.scss';
 
 export function RadioInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({
-  control,
-  inputName,
-  label,
-  options,
-  rules,
-  ...rest
-}: SelectInputProps<TFieldValues, TPath> & React.InputHTMLAttributes<HTMLInputElement>) {
+>({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
   const {
     field,
     fieldState: { error },
@@ -29,12 +20,7 @@ export function RadioInput<
   });
 
   return (
-    <div className='inputField' key={`${inputName}-input`} {...rest}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={inputName}>
-          {label}
-        </Label.Root>
-      )}
+    <Input error={error} label={label} inputName={inputName}>
       <RadioGroup.Root
         className='RadioGroupRoot'
         defaultValue={field.value}
@@ -53,7 +39,6 @@ export function RadioInput<
           </div>
         ))}
       </RadioGroup.Root>
-      {error && <span role='alert'>{error.message}</span>}
-    </div>
+    </Input>
   );
 }
