@@ -5,12 +5,14 @@ import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import expressWinston from 'express-winston';
 import { collectDefaultMetrics, Registry } from 'prom-client';
 import winston from 'winston';
+import LokiTransport from 'winston-loki';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_APP_NAME,
   SSP_IS_DEVELOPMENT,
+  SSP_IS_PRODUCTION,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -19,6 +21,7 @@ import {
   SSP_KK_SSL_PUBLIC_CLIENT,
   SSP_KK_SSL_REQUIRED,
   SSP_KK_SSL_RESOURCE,
+  SSP_LOKI_HOST,
 } from './envars';
 import { participantsRouter } from './participantsRouter';
 import { usersRouter } from './usersRouter';
@@ -51,11 +54,28 @@ const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
 
+function getTransportsForEnv() {
+  const baseTransports = [new winston.transports.Console()];
+  if (SSP_IS_PRODUCTION) {
+    return [
+      ...baseTransports,
+      new LokiTransport({
+        host: SSP_LOKI_HOST,
+      }),
+    ];
+  }
+  return baseTransports;
+}
+
 // express-winston logger makes sense BEFORE the router
 app.use(
   expressWinston.logger({
-    transports: [new winston.transports.Console()],
-    format: winston.format.combine(winston.format.colorize(), winston.format.json()),
+    transports: getTransportsForEnv(),
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.json(),
+      winston.format.timestamp()
+    ),
   })
 );
 
@@ -67,6 +87,7 @@ app.use(
     }),
     `/favicon.ico`,
     `${BASE_REQUEST_PATH}/`,
+    `${BASE_REQUEST_PATH}/metrics`,
     `${BASE_REQUEST_PATH}/health`,
     `${BASE_REQUEST_PATH}/keycloak-config`
   )
@@ -126,11 +147,12 @@ app.use(BASE_REQUEST_PATH, router);
 // express-winston errorLogger makes sense AFTER the router.
 app.use(
   expressWinston.errorLogger({
-    transports: [new winston.transports.Console()],
+    transports: getTransportsForEnv(),
     format: winston.format.combine(
       winston.format.errors({ stack: SSP_IS_DEVELOPMENT }),
       winston.format.colorize(),
-      winston.format.json()
+      winston.format.json(),
+      winston.format.timestamp()
     ),
   })
 );
