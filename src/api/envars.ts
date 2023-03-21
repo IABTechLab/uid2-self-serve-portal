@@ -9,3 +9,4 @@ export const SSP_KK_SSL_RESOURCE = process.env.SSP_KK_SSL_RESOURCE ?? errorMessa
 export const SSP_KK_SSL_PUBLIC_CLIENT = process.env.SSP_KK_SSL_PUBLIC_CLIENT ?? errorMessage;
 export const SSP_KK_SSL_CONFIDENTIAL_PORT =
   process.env.SSP_KK_SSL_CONFIDENTIAL_PORT ?? errorMessage;
+export const SSP_APP_NAME = process.env.SSP_APP_NAME ?? 'ssportal';
