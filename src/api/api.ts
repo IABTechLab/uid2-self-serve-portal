@@ -5,6 +5,7 @@ import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
+import expressWinston from 'express-winston';
 import { collectDefaultMetrics, Registry } from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
@@ -12,6 +13,7 @@ import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_APP_NAME,
+  SSP_IS_DEVELOPMENT,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -51,6 +53,14 @@ const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
+
+// express-winston logger makes sense BEFORE the router
+app.use(
+  expressWinston.logger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(winston.format.colorize(), winston.format.json()),
+  })
+);
 
 app.use(
   bypassHandlerForPaths(
@@ -116,6 +126,17 @@ router.all('/*', (req, res) => {
 
 app.use(BASE_REQUEST_PATH, router);
 
+// express-winston errorLogger makes sense AFTER the router.
+app.use(
+  expressWinston.errorLogger({
+    transports: [new winston.transports.Console()],
+    format: winston.format.combine(
+      winston.format.errors({ stack: SSP_IS_DEVELOPMENT }),
+      winston.format.colorize(),
+      winston.format.json()
+    ),
+  })
+);
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   console.log('Fallback error handler invoked:');
   console.log(err.message);

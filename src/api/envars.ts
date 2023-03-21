@@ -12,3 +12,4 @@ export const SSP_KK_SSL_CONFIDENTIAL_PORT =
   process.env.SSP_KK_SSL_CONFIDENTIAL_PORT ?? errorMessage;
 export const SSP_APP_NAME = process.env.SSP_APP_NAME ?? 'ssportal';
 export const SSP_WEB_BASE_URL = process.env.SSP_WEB_BASE_URL ?? 'http://localhost:3000/';
+export const SSP_IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
