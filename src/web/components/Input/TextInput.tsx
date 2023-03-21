@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import * as Label from '@radix-ui/react-label';
 import clsx from 'clsx';
 import {
   Control,
@@ -8,6 +7,8 @@ import {
   RegisterOptions,
   useController,
 } from 'react-hook-form';
+
+import { Input } from './Input';
 
 import './Input.scss';
 
@@ -40,12 +41,7 @@ export function TextInput<
   const safeField = { ...field, value: field.value ?? '' }; // Ensure the value is never undefined
 
   return (
-    <div className='inputField' key={`${inputName}-input`}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={inputName}>
-          {label}
-        </Label.Root>
-      )}
+    <Input error={error} label={label} inputName={inputName}>
       <input
         className={clsx('inputContainer', { withError: error })}
         {...safeField}
@@ -53,7 +49,6 @@ export function TextInput<
         aria-invalid={error ? 'true' : 'false'}
         {...rest}
       />
-      {error && <span role='alert'>{error.message}</span>}
-    </div>
+    </Input>
   );
 }

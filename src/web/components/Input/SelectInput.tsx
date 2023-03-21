@@ -1,6 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import * as Label from '@radix-ui/react-label';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import {
@@ -12,7 +10,8 @@ import {
   useController,
 } from 'react-hook-form';
 
-import './Input.scss';
+import { Input } from './Input';
+
 import './SelectInput.scss';
 
 export type Option<T> = {
@@ -46,12 +45,7 @@ export function SelectInput<
   });
 
   return (
-    <div className='inputField' key={`${inputName}-input`}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={inputName}>
-          {label}
-        </Label.Root>
-      )}
+    <Input error={error} label={label} inputName={inputName}>
       <Select.Root onValueChange={field.onChange}>
         <Select.Trigger
           className={clsx('inputContainer', 'SelectTrigger', { withError: error })}
@@ -84,7 +78,6 @@ export function SelectInput<
           </Select.Content>
         </Select.Portal>
       </Select.Root>
-      {error && <span role='alert'>{error.message}</span>}
-    </div>
+    </Input>
   );
 }

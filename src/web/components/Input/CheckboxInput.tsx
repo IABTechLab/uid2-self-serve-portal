@@ -1,11 +1,10 @@
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from '@radix-ui/react-icons';
-import * as Label from '@radix-ui/react-label';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
+import { Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
-import './Input.scss';
 import './CheckboxInput.scss';
 
 export function CheckboxInput<
@@ -22,12 +21,7 @@ export function CheckboxInput<
   });
 
   return (
-    <div className='inputField' key={`${inputName}-input`}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={inputName}>
-          {label}
-        </Label.Root>
-      )}
+    <Input error={error} label={label} inputName={inputName}>
       <div className='inlineOptions'>
         {options.map(({ optionLabel, value }) => (
           <div className='checkboxOption' key={optionLabel}>
@@ -56,7 +50,6 @@ export function CheckboxInput<
           </div>
         ))}
       </div>
-      {error && <span role='alert'>{error.message}</span>}
-    </div>
+    </Input>
   );
 }
