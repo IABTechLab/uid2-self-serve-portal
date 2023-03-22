@@ -64,7 +64,7 @@
     "test": "craco test",
     "api": "nodemon -r dotenv/config ./src/api/api.ts",
     "build-api": "npx tsc --build ./tsconfig-api.json",
-    "reset-realm": "run-s keycloak:*",
+    "reset-realm": "run-s keycloak:override-realm keycloak:restart-keycloak",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "stylelint-check": "stylelint-config-prettier-check",
