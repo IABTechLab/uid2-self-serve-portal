@@ -75,7 +75,7 @@
     "knex:migrate:make": "knex --knexfile ./knexfile.ts migrate:make",
     "knex:seed:make": "knex --knexfile ./knexfile.ts seed:make",
     "knex:seed:run": "knex --knexfile ./knexfile.ts seed:run",
-    "keycloak:override-realm": "docker exec -it uid2_selfserve_keycloak /opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true",
+    "keycloak:override-realm": "docker exec -it uid2_selfserve_keycloak /opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true;exit 0",
     "keycloak:restart-keycloak": "docker compose restart keycloak"
   },
   "eslintConfig": {
