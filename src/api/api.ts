@@ -57,7 +57,8 @@ app.use(
     `/favicon.ico`,
     `${BASE_REQUEST_PATH}/`,
     `${BASE_REQUEST_PATH}/health`,
-    `${BASE_REQUEST_PATH}/keycloak-config`
+    `${BASE_REQUEST_PATH}/keycloak-config`,
+    `${BASE_REQUEST_PATH}/users/invite`
   )
 );
 

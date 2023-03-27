@@ -1,6 +1,7 @@
 const errorMessage = 'Unable to get envar value';
 
 export const SSP_KK_AUDIENCE = process.env.SSP_KK_AUDIENCE ?? errorMessage;
+export const SSP_KK_SECRET = process.env.SSP_KK_SECRET ?? errorMessage;
 export const SSP_KK_ISSUER_BASE_URL = process.env.SSP_KK_ISSUER_BASE_URL ?? errorMessage;
 export const SSP_KK_REALM = process.env.SSP_KK_REALM ?? errorMessage;
 export const SSP_KK_AUTH_SERVER_URL = process.env.SSP_KK_AUTH_SERVER_URL ?? errorMessage;
