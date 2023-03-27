@@ -51,12 +51,14 @@ const invitationParser = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
-  role: z.nativeEnum(UserRole),
+  jobFunction: z.nativeEnum(UserRole),
   participantId: z.number(),
 });
 usersRouter.post('/invite', async (req, res) => {
   try {
-    const { firstName, lastName, email, participantId, role } = invitationParser.parse(req.body);
+    const { firstName, lastName, email, participantId, jobFunction } = invitationParser.parse(
+      req.body
+    );
     const kcAdminClient = await getKcAdminClient();
     const user = await kcAdminClient.users.create({
       firstName,
@@ -74,7 +76,7 @@ usersRouter.post('/invite', async (req, res) => {
     });
     const userObject = {
       email,
-      role,
+      role: jobFunction,
       participantId,
     };
     await kcAdminClient.users.executeActionsEmail({

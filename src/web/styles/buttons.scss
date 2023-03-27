@@ -7,3 +7,17 @@
 .largeButton {
   padding: 1rem 3.75rem;
 }
+
+.transparent-button {
+  border: none;
+  background: none;
+  color: var(--theme-action);
+}
+
+.icon-button {
+  font-family: inherit;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--theme-action);
+  padding: 0;
+}
