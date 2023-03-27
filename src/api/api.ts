@@ -2,10 +2,12 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
+import { collectDefaultMetrics, Registry } from 'prom-client';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
 import {
+  SSP_APP_NAME,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -33,6 +35,14 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) 
   } as express.Handler;
 }
 
+const register = new Registry();
+
+register.setDefaultLabels({
+  app: `${SSP_APP_NAME}`,
+});
+
+collectDefaultMetrics({ register });
+
 const app = express();
 const router = express.Router();
 app.use(cors()); // TODO: Make this more secure
@@ -44,6 +54,7 @@ app.use(
       audience: SSP_KK_AUDIENCE,
       issuerBaseURL: SSP_KK_ISSUER_BASE_URL,
     }),
+    `/favicon.ico`,
     `${BASE_REQUEST_PATH}/`,
     `${BASE_REQUEST_PATH}/health`,
     `${BASE_REQUEST_PATH}/keycloak-config`
@@ -66,6 +77,12 @@ router.use('/participants', participantsRouter);
 router.get('/health', async (_req, res) => {
   // TODO: More robust health check information
   res.json({ node: process.version });
+});
+
+router.get('/metrics', async (_req, res) => {
+  res.setHeader('Content-Type', register.contentType);
+  const metrics = await register.metrics();
+  res.end(metrics);
 });
 
 router.get('/participantTypes', async (_req, res) => {

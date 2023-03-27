@@ -83,9 +83,19 @@ Focus on testing functionality, not implementation. For example, if you have a b
 
 ## Keycloak setup
 
-- Start database and Keycloak serve by run `docker-compose up -d`, Keycloak will be up and running, and the realm will be configured
+- Start database and Keycloak serve by run `docker compose up -d`, Keycloak will be up and running, and the realm will be configured
 - To access [keycloak admin console](http://localhost:18080/admin/), you can find username and password in the `docker-compose.yml`
 - If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console.
+
+### Reset Realm
+
+```
+docker exec -it uid2_selfserve_keycloak /bin/sh -c "/opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true;exit 0"
+docker compose restart keycloak
+```
+
+This script imports the [realm-export.json](https://github.com/IABTechLab/uid2-self-serve-portal/blob/main/keycloak/realm/realm-export.json) to the keycloak and override realm if exists.\
+It is important to note that all the users in the realm will be removed.
 
 ## Available Scripts
 

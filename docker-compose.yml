@@ -17,6 +17,7 @@ services:
       ACCEPT_EULA: 'yes'
       MSSQL_SA_PASSWORD: 'D3velopmentP0'
   keycloak:
+    container_name: uid2_selfserve_keycloak
     image: quay.io/keycloak/keycloak:20.0.3
     environment:
       KC_DB: mssql
@@ -32,7 +33,7 @@ services:
     depends_on:
       - database
     command:
-      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme
+      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme --health-enabled=true --metrics-enabled=true
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/themes:/opt/keycloak/themes
