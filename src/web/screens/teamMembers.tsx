@@ -4,6 +4,7 @@ import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
 import { GetAllUsers } from '../services/userAccount';
+import AddTeamMemberDialog from './addTeamMemberDialog';
 import { PortalRoute } from './routeUtils';
 
 import './teamMembers.scss';
@@ -54,9 +55,10 @@ function TeamMembers() {
                 </tbody>
               </table>
               <div className='add-team-member'>
-                <button type='button' className='add-team-member'>
+                <AddTeamMemberDialog />
+                {/* <button type='button' className='add-team-member'>
                   <span>Add team member</span>
-                </button>
+                </button> */}
               </div>
             </>
           )}

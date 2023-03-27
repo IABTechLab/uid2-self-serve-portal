@@ -45,3 +45,15 @@ export async function CreateUser(userPayload: UserPayload) {
   const newUser = await axios.post<User>(`/users`, userPayload);
   return newUser.data;
 }
+
+export type InviteTeamMemberForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  jobFunction: string;
+};
+
+export async function inviteTeamMember(formData: InviteTeamMemberForm) {
+  const newUser = await axios.post<User>(`/users/invite`, formData);
+  return newUser.data;
+}
