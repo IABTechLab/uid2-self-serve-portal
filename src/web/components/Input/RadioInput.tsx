@@ -22,18 +22,18 @@ export function RadioInput<
   return (
     <Input error={error} label={label} inputName={inputName}>
       <RadioGroup.Root
-        className='RadioGroupRoot'
+        className='radio-group-root'
         defaultValue={field.value}
         aria-label={inputName}
         aria-invalid={error ? 'true' : 'false'}
         onValueChange={field.onChange}
       >
         {options.map(({ optionLabel, value }) => (
-          <div className='radioOption' key={optionLabel}>
-            <RadioGroup.Item className='RadioGroupItem' value={value} id={optionLabel}>
-              <RadioGroup.Indicator className='RadioGroupIndicator' />
+          <div className='radio-option' key={optionLabel}>
+            <RadioGroup.Item className='radio-group-item' value={value} id={optionLabel}>
+              <RadioGroup.Indicator className='radio-group-indicator' />
             </RadioGroup.Item>
-            <label className='optionLabel' htmlFor={optionLabel}>
+            <label className='option-label' htmlFor={optionLabel}>
               {optionLabel}
             </label>
           </div>

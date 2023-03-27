@@ -88,7 +88,7 @@ describe('Form Component', () => {
     render(<SubmitWithError />);
     const button = await screen.findByRole('button');
     userEvent.click(button);
-    const formError = await screen.findByTestId('form-error');
+    const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent('Something went wrong, please try again');
   });
 
@@ -110,7 +110,7 @@ describe('Form Component', () => {
     render(<WithDefaultData onSubmit={mockOnSubmit} />);
     const button = await screen.findByRole('button');
     userEvent.click(button);
-    const formError = await screen.findByTestId('form-error');
+    const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent(serverErrorMessage);
   });
 
@@ -129,7 +129,7 @@ describe('Form Component', () => {
     render(<WithDefaultData onSubmit={mockOnSubmit} />);
     const button = await screen.findByRole('button');
     userEvent.click(button);
-    const formError = await screen.findByTestId('form-error');
+    const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent('Something went wrong, please try again');
   });
 });

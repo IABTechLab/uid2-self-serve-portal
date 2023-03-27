@@ -43,7 +43,7 @@ export function TextInput<
   return (
     <Input error={error} label={label} inputName={inputName}>
       <input
-        className={clsx('inputContainer', { withError: error })}
+        className={clsx('input-container', { withError: error })}
         {...safeField}
         aria-label={inputName}
         aria-invalid={error ? 'true' : 'false'}

@@ -1,17 +1,17 @@
-.inputField {
+.input-field {
   display: flex;
   justify-content: stretch;
   flex-direction: column;
   margin-top: 1rem;
 }
 
-.inputLabel {
+.input-label {
   margin-bottom: 0.5rem;
   font-weight: 700;
   line-height: 2rem;
 }
 
-.inputContainer {
+.input-container {
   height: 45px;
   box-sizing: border-box;
   border: 1px solid var(--theme-input-border) !important;
@@ -19,11 +19,11 @@
   padding: 0.5rem;
 }
 
-.inputContainer.withError {
+.input-container.withError {
   border: 1px solid red !important;
 }
 
-.optionLabel {
+.option-label {
   padding-left: 0.5rem;
   line-height: 1rem;
 }

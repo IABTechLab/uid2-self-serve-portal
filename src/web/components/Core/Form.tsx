@@ -56,14 +56,14 @@ export function Form<T extends FieldValues>({
   return (
     <form onSubmit={handleSubmit(submit)}>
       {errors.root?.serverError && (
-        <p className='formError' data-testid='form-error'>
+        <p className='form-error' data-testid='formError'>
           {errors.root?.serverError.message}
         </p>
       )}
       {React.Children.map(children, (child) =>
         isInputComponent(child) ? cloneElement(child, { control }) : child
       )}
-      <div className='formFooter'>
+      <div className='form-footer'>
         <button type='submit' disabled={isSubmitting} className='primaryButton largeButton'>
           {submitButtonText ?? 'Submit'}
         </button>

@@ -22,11 +22,11 @@ export function CheckboxInput<
 
   return (
     <Input error={error} label={label} inputName={inputName}>
-      <div className='inlineOptions'>
+      <div className='inline-options'>
         {options.map(({ optionLabel, value }) => (
-          <div className='checkboxOption' key={optionLabel}>
+          <div className='checkbox-option' key={optionLabel}>
             <Checkbox.Root
-              className='CheckboxRoot'
+              className='checkbox-root'
               id={optionLabel}
               value={value}
               aria-invalid={error ? 'true' : 'false'}
@@ -40,11 +40,11 @@ export function CheckboxInput<
                 field.onChange(Array.from(valueCopy));
               }}
             >
-              <Checkbox.Indicator className='CheckboxIndicator'>
+              <Checkbox.Indicator className='checkbox-indicator'>
                 <FontAwesomeIcon icon='check' />
               </Checkbox.Indicator>
             </Checkbox.Root>
-            <label className='optionLabel' htmlFor={optionLabel}>
+            <label className='option-label' htmlFor={optionLabel}>
               {optionLabel}
             </label>
           </div>
