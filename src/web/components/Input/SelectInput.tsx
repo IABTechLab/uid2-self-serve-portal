@@ -1,4 +1,4 @@
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
 import {
@@ -54,21 +54,21 @@ export function SelectInput<
         >
           <Select.Value />
           <Select.Icon className='SelectIcon'>
-            <ChevronDownIcon />
+            <FontAwesomeIcon icon='chevron-down' />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
           <Select.Content className='SelectContent'>
             <Select.ScrollUpButton className='SelectScrollButton'>
-              <ChevronUpIcon />
+              <FontAwesomeIcon icon='chevron-up' />
             </Select.ScrollUpButton>
             <Select.Viewport className='SelectViewport'>
               {options.map(({ optionLabel, value }) => (
                 <Select.Item value={value} className='SelectItem' key={optionLabel}>
                   <Select.ItemText>{optionLabel}</Select.ItemText>
                   <Select.ItemIndicator className='SelectItemIndicator'>
-                    <CheckIcon />
+                    <FontAwesomeIcon icon='check' />
                   </Select.ItemIndicator>
                 </Select.Item>
               ))}

@@ -1,5 +1,3 @@
-import { CheckCircledIcon } from '@radix-ui/react-icons';
-import { IconProps } from '@radix-ui/react-icons/dist/types';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Notification } from './Notification';
@@ -13,9 +11,7 @@ const Template: ComponentStory<typeof Notification> = (args) => <Notification {.
 
 export const WithIcon = Template.bind({});
 WithIcon.args = {
-  Icon: CheckCircledIcon as React.ForwardRefExoticComponent<
-    IconProps & React.RefAttributes<SVGSVGElement>
-  >,
+  icon: 'check-circle',
   notification: <p>Here is notification</p>,
 };
 

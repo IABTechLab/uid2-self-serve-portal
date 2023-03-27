@@ -1,5 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
 import { Input } from './Input';
@@ -41,7 +41,7 @@ export function CheckboxInput<
               }}
             >
               <Checkbox.Indicator className='CheckboxIndicator'>
-                <CheckIcon />
+                <FontAwesomeIcon icon='check' />
               </Checkbox.Indicator>
             </Checkbox.Root>
             <label className='optionLabel' htmlFor={optionLabel}>

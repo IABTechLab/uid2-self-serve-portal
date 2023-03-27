@@ -1,4 +1,4 @@
-import { CheckCircledIcon } from '@radix-ui/react-icons';
+import { findIconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useContext } from 'react';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
@@ -37,7 +37,7 @@ function AccountPending() {
       : 'Access Requested!';
   return (
     <Notification
-      Icon={CheckCircledIcon}
+      icon={findIconDefinition({ prefix: 'far', iconName: 'circle-check' })}
       title={title}
       notification={
         participant?.status === ParticipantStatus.AwaitingSigning
