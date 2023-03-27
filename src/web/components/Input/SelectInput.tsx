@@ -48,26 +48,26 @@ export function SelectInput<
     <Input error={error} label={label} inputName={inputName}>
       <Select.Root onValueChange={field.onChange}>
         <Select.Trigger
-          className={clsx('inputContainer', 'SelectTrigger', { withError: error })}
+          className={clsx('input-container', 'select-trigger', { withError: error })}
           aria-label={inputName}
           aria-invalid={error ? 'true' : 'false'}
         >
           <Select.Value />
-          <Select.Icon className='SelectIcon'>
+          <Select.Icon className='select-icon'>
             <FontAwesomeIcon icon='chevron-down' />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
-          <Select.Content className='SelectContent'>
-            <Select.ScrollUpButton className='SelectScrollButton'>
+          <Select.Content className='select-content'>
+            <Select.ScrollUpButton className='select-scroll-button'>
               <FontAwesomeIcon icon='chevron-up' />
             </Select.ScrollUpButton>
-            <Select.Viewport className='SelectViewport'>
+            <Select.Viewport className='select-viewport'>
               {options.map(({ optionLabel, value }) => (
-                <Select.Item value={value} className='SelectItem' key={optionLabel}>
+                <Select.Item value={value} className='select-item' key={optionLabel}>
                   <Select.ItemText>{optionLabel}</Select.ItemText>
-                  <Select.ItemIndicator className='SelectItemIndicator'>
+                  <Select.ItemIndicator className='select-item-indicator'>
                     <FontAwesomeIcon icon='check' />
                   </Select.ItemIndicator>
                 </Select.Item>

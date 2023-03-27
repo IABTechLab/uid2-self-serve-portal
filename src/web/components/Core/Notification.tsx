@@ -15,10 +15,14 @@ export function Notification({ icon, title, notification, className }: Notificat
   return (
     <div className={className}>
       {icon && (
-        <FontAwesomeIcon icon={icon} data-testid='notification-icon' className='NotificationIcon' />
+        <FontAwesomeIcon
+          icon={icon}
+          data-testid='notification-icon'
+          className='notification-icon'
+        />
       )}
       {title && (
-        <h1 data-testid='notification-title' className='NotificationHeader'>
+        <h1 data-testid='notification-title' className='notification-header'>
           {title}
         </h1>
       )}

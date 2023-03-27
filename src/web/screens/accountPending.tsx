@@ -44,7 +44,7 @@ function AccountPending() {
           ? awaitingSigning
           : awaitingApproval
       }
-      className='accountPendingContent'
+      className='account-pending-content'
     />
   );
 }
