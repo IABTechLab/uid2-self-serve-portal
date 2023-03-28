@@ -34,11 +34,17 @@
   }
 }
 
-.IconButton:hover {
-  background-color: var(--violet4);
+.dialog-close-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
 }
-.IconButton:focus {
-  box-shadow: 0 0 0 2px var(--violet7);
+
+.icon-button:hover {
+  background-color: var(--theme-background-sidepanel);
+}
+.icon-button:focus {
+  box-shadow: 0 0 0 2px var(--theme-box-shadow);
 }
 
 @keyframes overlayShow {

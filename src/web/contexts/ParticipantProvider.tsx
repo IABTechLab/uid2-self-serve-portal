@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
+import { Loading } from '../components/Core/Loading';
 import { GetParticipantByUserId, ParticipantPayload } from '../services/participant';
 import { CurrentUserContext } from './CurrentUserProvider';
 
@@ -33,12 +34,14 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadParticipant = async () => {
       setIsLoading(true);
-      const p = await GetParticipantByUserId(user!.id);
-      setParticipant(p);
+      if (user) {
+        const p = await GetParticipantByUserId(user!.id);
+        setParticipant(p);
+      }
       setIsLoading(false);
     };
-    loadParticipant();
-  }, [user]);
+    if (!participant) loadParticipant();
+  }, [user, participant]);
 
   const participantContext = useMemo(
     () => ({
@@ -48,7 +51,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   );
   return (
     <ParticipantContext.Provider value={participantContext}>
-      {loading ? <div>loading</div> : children}
+      {loading ? <Loading /> : children}
     </ParticipantContext.Provider>
   );
 }

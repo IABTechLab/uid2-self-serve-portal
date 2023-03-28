@@ -1,13 +1,17 @@
-.primaryButton {
+.primary-button {
   background-color: var(--theme-button);
-  color: var(--theme-button-border);
+  color: var(--theme-button-text);
   border: none;
 }
 
-.largeButton {
+.large-button {
   padding: 1rem 3.75rem;
 }
 
+.small-button {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
 .transparent-button {
   border: none;
   background: none;

@@ -7,6 +7,7 @@ import { ParticipantType } from '../../api/entities/ParticipantType';
 import { UserRole } from '../../api/entities/User';
 import { Card } from '../components/Core/Card';
 import { Form } from '../components/Core/Form';
+import { Loading } from '../components/Core/Loading';
 import { CheckboxInput } from '../components/Input/CheckboxInput';
 // import { RadioInput } from '../components/Input/RadioInput';
 import { SelectInput } from '../components/Input/SelectInput';
@@ -18,9 +19,6 @@ import { PortalRoute } from './routeUtils';
 
 export const AccountCreationRoutes: PortalRoute[] = [];
 
-function Loading() {
-  return <div>Loading...</div>;
-}
 function CreateAccount() {
   const { participantTypes } = useLoaderData() as { participantTypes: ParticipantType[] };
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);

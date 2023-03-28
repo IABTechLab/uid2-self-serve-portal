@@ -16,7 +16,7 @@ function Dialog({ triggerButton, title, closeButton, children, open, onOpenChang
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Trigger asChild>
-        <button className='Button violet' type='button'>
+        <button className='small-button' type='button'>
           {triggerButton}
         </button>
       </RadixDialog.Trigger>
@@ -25,7 +25,7 @@ function Dialog({ triggerButton, title, closeButton, children, open, onOpenChang
         <RadixDialog.Content className='app dialog-content'>
           <RadixDialog.Title>{title}</RadixDialog.Title>
           {children}
-          <div style={{ display: 'flex', marginTop: 25, justifyContent: 'center' }}>
+          <div className='dialog-close-button'>
             <RadixDialog.Close asChild>
               <button className='transparent-button' type='button'>
                 {closeButton}
