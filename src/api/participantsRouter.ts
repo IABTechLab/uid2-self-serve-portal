@@ -3,7 +3,9 @@ import { z } from 'zod';
 
 import { Participant, ParticipantSchema } from './entities/Participant';
 import { UserRole } from './entities/User';
-import { inviteNewUser } from './services/usersService';
+import { getKcAdminClient } from './keycloakAdminClient';
+import { createNewUser, sendInviteEmail } from './services/kcUsersService';
+import { createUserInPortal } from './services/usersService';
 
 export const participantsRouter = express.Router();
 participantsRouter.get('/', async (_req, res) => {
@@ -43,7 +45,10 @@ participantsRouter.post('/:participantId/invite', async (req, res) => {
       return res.status(404).send([{ message: 'Participant not exist' }]);
     }
     const { firstName, lastName, email, jobFunction } = invitationParser.parse(req.body);
-    await inviteNewUser(firstName, lastName, email, jobFunction, participantId);
+    const kcAdminClient = await getKcAdminClient();
+    const user = await createNewUser(kcAdminClient, firstName, lastName, email);
+    await createUserInPortal(email, jobFunction, participantId);
+    await sendInviteEmail(kcAdminClient, user);
     return res.sendStatus(201);
   } catch (e) {
     console.log(e);

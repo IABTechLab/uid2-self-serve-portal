@@ -51,7 +51,11 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
     [LoggedInUser, loadUser]
   );
 
-  return <CurrentUserContext.Provider value={userContext}>{children}</CurrentUserContext.Provider>;
+  return (
+    <CurrentUserContext.Provider value={userContext}>
+      {LoggedInUser ? children : <div>Loading...</div>}
+    </CurrentUserContext.Provider>
+  );
 }
 
 export { CurrentUserProvider };

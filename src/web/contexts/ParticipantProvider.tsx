@@ -14,6 +14,7 @@ export const ParticipantContext = createContext<PariticipantWithSetter>({
 
 function ParticipantProvider({ children }: { children: ReactNode }) {
   const [participant, setParticipant] = useState<ParticipantPayload | null>(null);
+  const [loading, setIsLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -31,12 +32,12 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const loadParticipant = async () => {
+      setIsLoading(true);
       const p = await GetParticipantByUserId(user!.id);
       setParticipant(p);
+      setIsLoading(false);
     };
-    if (user) {
-      loadParticipant();
-    }
+    loadParticipant();
   }, [user]);
 
   const participantContext = useMemo(
@@ -46,7 +47,9 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
     [participant]
   );
   return (
-    <ParticipantContext.Provider value={participantContext}>{children}</ParticipantContext.Provider>
+    <ParticipantContext.Provider value={participantContext}>
+      {loading ? <div>loading</div> : children}
+    </ParticipantContext.Provider>
   );
 }
 
