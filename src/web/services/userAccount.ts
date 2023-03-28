@@ -19,11 +19,7 @@ export async function GetUserAccountById(id: string) {
   throw Error('Could not get user account');
 }
 
-export async function GetUserAccountByEmail(
-  // apiClient: AxiosInstance | undefined,
-  email: string | undefined
-) {
-  // if (!apiClient) throw Error('Unauthorized');
+export async function GetUserAccountByEmail(email: string | undefined) {
   try {
     const result = await axios.get<User>(`/users?email=${email}`);
     return result.data;
@@ -43,17 +39,5 @@ export async function GetAllUsers() {
 
 export async function CreateUser(userPayload: UserPayload) {
   const newUser = await axios.post<User>(`/users`, userPayload);
-  return newUser.data;
-}
-
-export type InviteTeamMemberForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  jobFunction: string;
-};
-
-export async function inviteTeamMember(formData: InviteTeamMemberForm) {
-  const newUser = await axios.post<User>(`/users/invite`, formData);
   return newUser.data;
 }

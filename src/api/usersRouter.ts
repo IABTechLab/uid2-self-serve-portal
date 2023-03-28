@@ -1,10 +1,7 @@
-import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation';
 import express from 'express';
 import { z } from 'zod';
 
-import { User, UserRole, UserScheme } from './entities/User';
-import { SSP_KK_SSL_RESOURCE } from './envars';
-import { getKcAdminClient } from './keycloakAdminClient';
+import { User, UserScheme } from './entities/User';
 
 export const usersRouter = express.Router();
 const emailParser = z.object({
@@ -45,62 +42,4 @@ usersRouter.get('/:userId/participant', async (req, res) => {
   const { userId } = userIdParser.parse(req.params);
   const participant = await User.relatedQuery('participant').for(userId);
   return res.status(200).json(participant[0]);
-});
-
-const invitationParser = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  jobFunction: z.nativeEnum(UserRole),
-  participantId: z.number(),
-});
-usersRouter.post('/invite', async (req, res) => {
-  try {
-    const { firstName, lastName, email, participantId, jobFunction } = invitationParser.parse(
-      req.body
-    );
-    const kcAdminClient = await getKcAdminClient();
-    const user = await kcAdminClient.users.create({
-      firstName,
-      lastName,
-      email,
-      emailVerified: false,
-      enabled: true,
-      credentials: [
-        {
-          temporary: true,
-          type: 'PASSWORD',
-          value: 'test123',
-        },
-      ],
-    });
-    const userObject = {
-      email,
-      role: jobFunction,
-      participantId,
-    };
-    await kcAdminClient.users.executeActionsEmail({
-      id: user.id,
-      clientId: SSP_KK_SSL_RESOURCE,
-      actions: [
-        RequiredActionAlias.UPDATE_PASSWORD,
-        RequiredActionAlias.UPDATE_PROFILE,
-        RequiredActionAlias.VERIFY_EMAIL,
-      ],
-      redirectUri: 'http://localhost:3000/',
-    });
-    // await kcAdminClient.users.resetPassword({
-    //   id: user.id,
-    //   credential: {
-    //     temporary: true,
-    //     type: 'password',
-    //     value: 'test123',
-    //   },
-    // });
-    const sspUser = await User.query().insert(userObject);
-    return res.status(200).json(sspUser);
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json('Something went wrong please try again');
-  }
 });

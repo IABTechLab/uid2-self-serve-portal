@@ -7,7 +7,7 @@ import './Form.scss';
 type FormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
   children: ReactNode[];
-  onSubmitCallback?: () => Promise<void>;
+  onSubmitCallback?: () => Promise<void> | void;
   onError?: (error: unknown) => void;
   defaultValues?: DeepPartial<T>;
   submitButtonText?: string;

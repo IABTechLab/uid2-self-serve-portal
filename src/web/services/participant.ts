@@ -56,3 +56,14 @@ export async function GetAllParticipant() {
   }
   throw Error('Could not load participants');
 }
+
+export type InviteTeamMemberForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  jobFunction: string;
+};
+
+export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
+  return axios.post(`/participants/${participantId}/invite`, formData);
+}
