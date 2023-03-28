@@ -9,10 +9,12 @@ export type DialogProps = {
   title: string;
   closeButton: string;
   children: ReactNode;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
-function Dialog({ triggerButton, title, closeButton, children }: DialogProps) {
+function Dialog({ triggerButton, title, closeButton, children, open, onOpenChange }: DialogProps) {
   return (
-    <RadixDialog.Root>
+    <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Trigger asChild>
         <button className='Button violet' type='button'>
           {triggerButton}

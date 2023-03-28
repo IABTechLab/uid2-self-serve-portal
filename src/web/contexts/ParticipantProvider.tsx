@@ -31,10 +31,8 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const loadParticipant = async () => {
-      if (user) {
-        const p = await GetParticipantByUserId(user.id);
-        setParticipant(p);
-      }
+      const p = await GetParticipantByUserId(user!.id);
+      setParticipant(p);
     };
     if (user) {
       loadParticipant();
