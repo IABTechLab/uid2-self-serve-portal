@@ -50,8 +50,10 @@ participantsRouter.post('/:participantId/invite', async (req, res) => {
     await createUserInPortal(email, jobFunction, participantId);
     await sendInviteEmail(kcAdminClient, user);
     return res.sendStatus(201);
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).send(err.issues);
+    }
     return res.status(500).json('Something went wrong please try again');
   }
 });
