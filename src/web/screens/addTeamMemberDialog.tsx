@@ -4,6 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { UserRole } from '../../api/entities/User';
 import Dialog from '../components/Core/Dialog';
 import { Form } from '../components/Core/Form';
+import { CheckboxInput } from '../components/Input/CheckboxInput';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -15,7 +16,7 @@ function AddTeamMemberDialog() {
 
   const onSubmitCallback = () => setOpen(false);
   const onSubmit: SubmitHandler<InviteTeamMemberForm> = async (formData) => {
-    return InviteTeamMember(formData, participant!.id!);
+    await InviteTeamMember(formData, participant!.id!);
   };
 
   return (
@@ -42,6 +43,17 @@ function AddTeamMemberDialog() {
             optionLabel: UserRole[key],
             value: UserRole[key],
           }))}
+        />
+        <CheckboxInput
+          name='agreement'
+          control={undefined}
+          options={[
+            {
+              optionLabel:
+                'By checking this box I agree that I am responsible for managing this Team Member in this Platform.',
+              value: true,
+            },
+          ]}
         />
       </Form>
     </Dialog>

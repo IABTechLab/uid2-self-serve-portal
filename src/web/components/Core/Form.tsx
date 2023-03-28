@@ -64,7 +64,7 @@ export function Form<T extends FieldValues>({
         isInputComponent(child) ? cloneElement(child, { control }) : child
       )}
       <div className='formFooter'>
-        <button type='submit' disabled={isSubmitting} className='primaryButton largeButton'>
+        <button type='submit' disabled={isSubmitting} className='primary-button'>
           {submitButtonText ?? 'Submit'}
         </button>
       </div>

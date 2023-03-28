@@ -11,7 +11,7 @@
 
 .CheckboxRoot {
   padding: 0 !important; // override button padding
-  width: 25px;
+  min-width: 25px;
   height: 25px;
   border: 1px solid var(--theme-input-border) !important;
 
