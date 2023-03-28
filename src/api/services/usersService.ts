@@ -8,7 +8,7 @@ export const createUserInPortal = async (
   jobFunction: UserRole,
   participantId: string
 ) => {
-  const user = findUserByEmail(email);
+  const user = await findUserByEmail(email);
   if (user) return user;
 
   const userObject = {
