@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { UserRole } from '../../api/entities/User';
-import Dialog from '../components/Core/Dialog';
+import { Dialog } from '../components/Core/Dialog';
 import { Form } from '../components/Core/Form';
 import { CheckboxInput } from '../components/Input/CheckboxInput';
 import { SelectInput } from '../components/Input/SelectInput';

@@ -6,13 +6,20 @@ import './Dialog.scss';
 
 export type DialogProps = {
   triggerButton: string;
-  title: string;
-  closeButton: string;
   children: ReactNode;
+  title?: string;
+  closeButton?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
-function Dialog({ triggerButton, title, closeButton, children, open, onOpenChange }: DialogProps) {
+export function Dialog({
+  triggerButton,
+  children,
+  title,
+  closeButton,
+  open,
+  onOpenChange,
+}: DialogProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Trigger asChild>
@@ -23,15 +30,17 @@ function Dialog({ triggerButton, title, closeButton, children, open, onOpenChang
       <RadixDialog.Portal>
         <RadixDialog.Overlay className='dialog-overlay' />
         <RadixDialog.Content className='app dialog-content'>
-          <RadixDialog.Title>{title}</RadixDialog.Title>
+          {title && <RadixDialog.Title>{title}</RadixDialog.Title>}
           {children}
-          <div className='dialog-close-button'>
-            <RadixDialog.Close asChild>
-              <button className='transparent-button' type='button'>
-                {closeButton}
-              </button>
-            </RadixDialog.Close>
-          </div>
+          {closeButton && (
+            <div className='dialog-close-button'>
+              <RadixDialog.Close asChild>
+                <button className='transparent-button' type='button'>
+                  {closeButton}
+                </button>
+              </RadixDialog.Close>
+            </div>
+          )}
           <RadixDialog.Close asChild>
             <button className='icon-button' aria-label='Close' type='button'>
               <FontAwesomeIcon icon='xmark' />
@@ -42,5 +51,3 @@ function Dialog({ triggerButton, title, closeButton, children, open, onOpenChang
     </RadixDialog.Root>
   );
 }
-
-export default Dialog;
