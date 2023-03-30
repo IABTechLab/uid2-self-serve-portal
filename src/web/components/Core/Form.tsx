@@ -50,20 +50,20 @@ export function Form<T extends FieldValues>({
   };
 
   const isInputComponent = (child: ReactNode): child is ReactElement => {
-    return isValidElement(child) && typeof child.type === 'function' && 'control' in child.props;
+    return isValidElement(child) && typeof child.type === 'function' && 'inputName' in child.props;
   };
 
   return (
     <form onSubmit={handleSubmit(submit)}>
       {errors.root?.serverError && (
-        <p className='formError' data-testid='form-error'>
+        <p className='form-error' data-testid='formError'>
           {errors.root?.serverError.message}
         </p>
       )}
       {React.Children.map(children, (child) =>
         isInputComponent(child) ? cloneElement(child, { control }) : child
       )}
-      <div className='formFooter'>
+      <div className='form-footer'>
         <button type='submit' disabled={isSubmitting} className='primary-button'>
           {submitButtonText ?? 'Submit'}
         </button>

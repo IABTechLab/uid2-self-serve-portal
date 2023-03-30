@@ -1,6 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import * as Label from '@radix-ui/react-label';
-import { Control, FieldPathByValue, FieldValues, useController } from 'react-hook-form';
+import clsx from 'clsx';
+import {
+  Control,
+  FieldPathByValue,
+  FieldValues,
+  RegisterOptions,
+  useController,
+} from 'react-hook-form';
+
+import { Input } from './Input';
 
 import './Input.scss';
 
@@ -9,28 +17,38 @@ export function TextInput<
   TPath extends FieldPathByValue<TFieldValues, String>
 >({
   control,
-  name,
+  inputName,
   label,
+  rules,
   ...rest
 }: {
   control?: Control<TFieldValues>;
-  name: TPath;
+  inputName: TPath;
   label: string;
+  rules?: Omit<
+    RegisterOptions<TFieldValues, TPath>,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
+  >;
 } & React.InputHTMLAttributes<HTMLInputElement>) {
-  const { field } = useController({
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
-    name,
+    name: inputName,
+    rules,
   });
   const safeField = { ...field, value: field.value ?? '' }; // Ensure the value is never undefined
 
   return (
-    <div className='inputField' key={`${name}-input`}>
-      {label && (
-        <Label.Root className='inputLabel' id={name} htmlFor={name}>
-          {label}
-        </Label.Root>
-      )}
-      <input className='inputContainer' {...safeField} {...rest} />
-    </div>
+    <Input error={error} label={label} inputName={inputName}>
+      <input
+        className={clsx('input-container', { withError: error })}
+        {...safeField}
+        aria-label={inputName}
+        aria-invalid={error ? 'true' : 'false'}
+        {...rest}
+      />
+    </Input>
   );
 }
