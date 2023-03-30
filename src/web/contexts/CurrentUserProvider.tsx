@@ -43,6 +43,8 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (keycloak.token) {
       loadUser();
+    } else {
+      setIsLoading(false);
     }
   }, [SetLoggedInUser, loadUser, keycloak.token]);
 

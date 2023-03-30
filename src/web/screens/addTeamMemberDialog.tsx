@@ -32,21 +32,39 @@ function AddTeamMemberDialog() {
         submitButtonText='Save Team Member'
         onSubmitCallback={onSubmitCallback}
       >
-        <TextInput name='firstName' label='First Name' control={undefined} />
-        <TextInput name='lastName' label='Last Name' control={undefined} />
-        <TextInput name='email' label='email' control={undefined} />
+        <TextInput
+          inputName='firstName'
+          label='First Name'
+          rules={{ required: 'Please specify first name.' }}
+        />
+        <TextInput
+          inputName='lastName'
+          label='Last Name'
+          rules={{ required: 'Please specify last name.' }}
+        />
+        <TextInput
+          inputName='email'
+          label='email'
+          rules={{
+            required: 'Please specify email.',
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: 'Entered value does not match email format',
+            },
+          }}
+        />
         <SelectInput
-          control={undefined}
-          name='jobFunction'
+          inputName='jobFunction'
           label='Job Function'
+          rules={{ required: 'Please specify your job function.' }}
           options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
             optionLabel: UserRole[key],
             value: UserRole[key],
           }))}
         />
         <CheckboxInput
-          name='agreement'
-          control={undefined}
+          inputName='agreement'
+          rules={{ validate: (value) => (value && value[0]) || 'Please accept the agreement ' }}
           options={[
             {
               optionLabel:
