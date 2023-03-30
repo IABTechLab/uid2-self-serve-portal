@@ -1,15 +1,15 @@
-.checkboxOption {
+.checkbox-option {
   margin-right: 1rem;
   display: flex;
   align-items: center;
 }
 
-.inlineOptions {
+.inline-options {
   display: flex;
   align-items: center;
 }
 
-.CheckboxRoot {
+.checkbox-root {
   padding: 0 !important; // override button padding
   min-width: 25px;
   height: 25px;
@@ -20,10 +20,10 @@
   align-items: center;
   justify-content: center;
 }
-.CheckboxRoot:focus {
+.checkbox-root:focus {
   box-shadow: 0 0 0 2px black;
 }
 
-.CheckboxIndicator {
+.checkbox-indicator {
   color: black;
 }

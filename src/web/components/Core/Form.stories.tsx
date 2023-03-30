@@ -17,17 +17,10 @@ export const WithInputFields = Template.bind({});
 WithInputFields.args = {
   onSubmit: () => {},
   children: [
-    <TextInput
-      name='textInput'
-      key='textInput'
-      label='Text Input'
-      control={undefined}
-      data-testid='text-input'
-    />,
+    <TextInput inputName='textInput' key='textInput' label='Text Input' data-testid='text-input' />,
     <SelectInput
-      control={undefined}
       key='SelectInput'
-      name='selectInputValue'
+      inputName='selectInputValue'
       label='Select Input'
       options={[
         {
@@ -41,9 +34,8 @@ WithInputFields.args = {
       ]}
     />,
     <RadioInput
-      control={undefined}
       key='radioInput'
-      name='radioInputValue'
+      inputName='radioInputValue'
       label='Radio Input '
       options={[
         {
@@ -58,8 +50,7 @@ WithInputFields.args = {
     />,
     <CheckboxInput
       key='checkboxInput'
-      control={undefined}
-      name='checkboxInputValue'
+      inputName='checkboxInputValue'
       label='checkbox Input '
       options={[
         {
@@ -80,18 +71,17 @@ SubmitWithError.args = {
   onSubmit: () => {
     throw new Error('Here is an error');
   },
-  children: [<TextInput name='textInput' key='textInput' label='Text Input' control={undefined} />],
+  children: [<TextInput inputName='textInput' key='textInput' label='Text Input' />],
 };
 
 export const WithDefaultData = Template.bind({});
 WithDefaultData.args = {
   onSubmit: () => {},
   children: [
-    <TextInput name='textInput' key='textInput' label='Text Input' control={undefined} />,
+    <TextInput inputName='textInput' key='textInput' label='Text Input' />,
     <SelectInput
-      control={undefined}
       key='SelectInput'
-      name='selectInputValue'
+      inputName='selectInputValue'
       label='Select Input'
       options={[
         {
@@ -105,9 +95,8 @@ WithDefaultData.args = {
       ]}
     />,
     <RadioInput
-      control={undefined}
       key='radioInput'
-      name='radioInputValue'
+      inputName='radioInputValue'
       label='Radio Input '
       options={[
         {
@@ -122,8 +111,7 @@ WithDefaultData.args = {
     />,
     <CheckboxInput
       key='checkboxInput'
-      control={undefined}
-      name='checkboxInputValue'
+      inputName='checkboxInputValue'
       label='checkbox Input '
       options={[
         {
@@ -145,6 +133,6 @@ WithDefaultData.args = {
 export const WithSubmitButtonText = Template.bind({});
 WithSubmitButtonText.args = {
   onSubmit: () => {},
-  children: [<TextInput name='textInput' key='textInput' label='Text Input' control={undefined} />],
+  children: [<TextInput inputName='textInput' key='textInput' label='Text Input' />],
   submitButtonText: 'Create',
 };
