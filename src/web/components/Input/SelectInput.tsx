@@ -1,10 +1,17 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
-import * as Label from '@radix-ui/react-label';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Select from '@radix-ui/react-select';
-import { Control, FieldPath, FieldValue, FieldValues, useController } from 'react-hook-form';
+import clsx from 'clsx';
+import {
+  Control,
+  FieldPath,
+  FieldValue,
+  FieldValues,
+  RegisterOptions,
+  useController,
+} from 'react-hook-form';
 
-import './Input.scss';
+import { Input } from './Input';
+
 import './SelectInput.scss';
 
 export type Option<T> = {
@@ -17,44 +24,51 @@ export type SelectInputProps<
 > = {
   options: Option<FieldValue<TFieldValues>>[];
   control?: Control<TFieldValues>;
-  name: TPath;
+  inputName: TPath;
   label?: string;
+  rules?: Omit<
+    RegisterOptions<TFieldValues, TPath>,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
+  >;
 };
 export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, name, label, options }: SelectInputProps<TFieldValues, TPath>) {
-  const { field } = useController({
+>({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
-    name,
+    name: inputName,
+    rules,
   });
 
   return (
-    <div className='inputField' key={`${name}-input`}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
-          {label}
-        </Label.Root>
-      )}
+    <Input error={error} label={label} inputName={inputName}>
       <Select.Root onValueChange={field.onChange}>
-        <Select.Trigger className='SelectTrigger inputContainer' aria-label={name}>
+        <Select.Trigger
+          className={clsx('input-container', 'select-trigger', { withError: error })}
+          aria-label={inputName}
+          aria-invalid={error ? 'true' : 'false'}
+        >
           <Select.Value />
-          <Select.Icon className='SelectIcon'>
-            <ChevronDownIcon />
+          <Select.Icon className='select-icon'>
+            <FontAwesomeIcon icon='chevron-down' />
           </Select.Icon>
         </Select.Trigger>
 
         <Select.Portal>
-          <Select.Content className='SelectContent'>
-            <Select.ScrollUpButton className='SelectScrollButton'>
-              <ChevronUpIcon />
+          <Select.Content className='select-content'>
+            <Select.ScrollUpButton className='select-scroll-button'>
+              <FontAwesomeIcon icon='chevron-up' />
             </Select.ScrollUpButton>
-            <Select.Viewport className='SelectViewport'>
+            <Select.Viewport className='select-viewport'>
               {options.map(({ optionLabel, value }) => (
-                <Select.Item value={value} className='SelectItem' key={optionLabel}>
+                <Select.Item value={value} className='select-item' key={optionLabel}>
                   <Select.ItemText>{optionLabel}</Select.ItemText>
-                  <Select.ItemIndicator className='SelectItemIndicator'>
-                    <CheckIcon />
+                  <Select.ItemIndicator className='select-item-indicator'>
+                    <FontAwesomeIcon icon='check' />
                   </Select.ItemIndicator>
                 </Select.Item>
               ))}
@@ -64,6 +78,6 @@ export function SelectInput<
           </Select.Content>
         </Select.Portal>
       </Select.Root>
-    </div>
+    </Input>
   );
 }
