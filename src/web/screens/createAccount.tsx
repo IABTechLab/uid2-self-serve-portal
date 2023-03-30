@@ -26,10 +26,6 @@ function CreateAccount() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const defaultFormData = {
-    companyName: '',
-    companyType: [],
-    officeLocation: '',
-    role: 'user',
     canSign: true,
   };
 
@@ -56,23 +52,30 @@ function CreateAccount() {
               defaultValues={defaultFormData}
               submitButtonText='Create Account'
             >
-              {/* We passing control in props to differentiate this is a form input component  */}
-              <TextInput name='companyName' label='Company Name' control={undefined} />
+              <TextInput
+                inputName='companyName'
+                label='Company Name'
+                rules={{ required: 'Please specify company name.' }}
+              />
               <CheckboxInput
-                name='companyType'
+                inputName='companyType'
                 label='Company Type'
-                control={undefined}
                 options={resolvedParticipantTypes.map((p) => ({
                   optionLabel: p.typeName,
                   value: p.id,
                 }))}
+                rules={{ required: 'Please specify company type.' }}
               />
 
-              <TextInput name='officeLocation' label='Office Location' control={undefined} />
+              <TextInput
+                inputName='officeLocation'
+                label='Office Location'
+                rules={{ required: 'Please specify office location.' }}
+              />
               <SelectInput
-                control={undefined}
-                name='role'
+                inputName='role'
                 label='Job Function'
+                rules={{ required: 'Please specify your job function.' }}
                 options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
                   optionLabel: UserRole[key],
                   value: UserRole[key],
@@ -80,7 +83,7 @@ function CreateAccount() {
               />
               {/* Contract Sign will be introduced in phase 2 */}
               {/* <RadioInput
-            name='canSign'
+            inputName='canSign'
             label='Do you have the ability to sign a contract for UID Integration'
             options={[
               { optionLabel: 'Yes', value: true },
@@ -90,7 +93,7 @@ function CreateAccount() {
             control={control}
           />
           {typeof watchCanSign == 'boolean' && (
-            <div className='formMessageContainer'>
+            <div className='form-message-container'>
               {watchCanSign
                 ? 'Great! Once you Request Access you will be presented the UID contract and terms.'
                 : 'Before we can grant access to your company, we will need a signed contract and agreement to our terms.\nDo you have an email address for who can sign the UID Contract?'}
@@ -98,7 +101,7 @@ function CreateAccount() {
           )} */}
 
               {/* {watchCanSign === false && (
-                <TextInput name='signeeEmail' label='Email for Contract Signee' />
+                <TextInput inputName='signeeEmail' label='Email for Contract Signee' />
               )} */}
             </Form>
           )}

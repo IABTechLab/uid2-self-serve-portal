@@ -1,21 +1,28 @@
-import { IconProps } from '@radix-ui/react-icons/dist/types';
-import { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ReactNode } from 'react';
 
 import './Notification.scss';
 
 type NotificationProps = {
-  Icon?: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
+  icon?: IconProp;
   title?: string;
   notification: ReactNode;
   className?: string;
 };
 
-export function Notification({ Icon, title, notification, className }: NotificationProps) {
+export function Notification({ icon, title, notification, className }: NotificationProps) {
   return (
     <div className={className}>
-      {Icon && <Icon data-testid='notification-icon' className='NotificationIcon' />}
+      {icon && (
+        <FontAwesomeIcon
+          icon={icon}
+          data-testid='notification-icon'
+          className='notification-icon'
+        />
+      )}
       {title && (
-        <h1 data-testid='notification-title' className='NotificationHeader'>
+        <h1 data-testid='notification-title' className='notification-header'>
           {title}
         </h1>
       )}

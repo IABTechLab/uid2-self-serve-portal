@@ -1,6 +1,5 @@
-/* eslint-disable testing-library/no-unnecessary-act */
 import { composeStories } from '@storybook/testing-react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
@@ -23,27 +22,34 @@ describe('Form Component', () => {
 
     const textInput = screen.getByTestId('text-input');
 
-    await act(async () => {
-      await userEvent.type(textInput, 'New value');
-      await userEvent.click(screen.getByRole('radio', { name: 'No' }));
-      await userEvent.click(screen.getByRole('checkbox', { name: 'Checkbox 1' }));
-    });
-
+    userEvent.type(textInput, 'New value');
     await waitFor(() => {
       expect(screen.getByDisplayValue('New value')).toBeInTheDocument();
     });
 
-    await act(async () => {
-      await userEvent.click(screen.getByRole('combobox', { name: 'selectInputValue' }));
+    const radio2 = screen.getByLabelText('No');
+    userEvent.click(radio2);
+    await waitFor(() => {
+      expect(radio2).toBeChecked();
     });
+
+    const checkbox1 = screen.getByRole('checkbox', { name: 'Checkbox 1' });
+    userEvent.click(checkbox1);
+    await waitFor(() => {
+      expect(checkbox1).toBeChecked();
+    });
+
+    userEvent.click(screen.getByRole('combobox', { name: 'selectInputValue' }));
 
     await waitFor(async () => {
-      await userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
+      const option = screen.getByRole('option', { name: 'Option 2' });
+      expect(option).toBeInTheDocument();
     });
+    userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
 
-    await act(async () => {
-      await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
-    });
+    await waitForElementToBeRemoved(screen.queryByRole('option', { name: 'Option 2' }));
+
+    userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     const expectFormData = {
       checkboxInputValue: ['1'],
@@ -71,9 +77,7 @@ describe('Form Component', () => {
       textInput: 'Some default value',
     };
     render(<WithDefaultData onSubmit={mockOnSubmit} defaultValues={defaultFormData} />);
-    await act(async () => {
-      await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
-    });
+    userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     await waitFor(async () => {
       expect(mockOnSubmit).toBeCalledWith(defaultFormData);
@@ -81,17 +85,14 @@ describe('Form Component', () => {
   });
 
   test('should render error with user click submit', async () => {
-    userEvent.setup();
-
     render(<SubmitWithError />);
     const button = await screen.findByRole('button');
     userEvent.click(button);
-    const formError = await screen.findByTestId('form-error');
+    const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent('Something went wrong, please try again');
   });
 
   test('should render a server error when axios error occurs', async () => {
-    userEvent.setup();
     (axios.isAxiosError as unknown as jest.Mock).mockReturnValue(true);
     const serverErrorMessage = 'Server error message';
 
@@ -109,12 +110,11 @@ describe('Form Component', () => {
     render(<WithDefaultData onSubmit={mockOnSubmit} />);
     const button = await screen.findByRole('button');
     userEvent.click(button);
-    const formError = await screen.findByTestId('form-error');
+    const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent(serverErrorMessage);
   });
 
   test('should render an error when unknow server error occurs', async () => {
-    userEvent.setup();
     (axios.isAxiosError as unknown as jest.Mock).mockReturnValue(true);
 
     mockOnSubmit.mockImplementation(() => {
@@ -129,7 +129,7 @@ describe('Form Component', () => {
     render(<WithDefaultData onSubmit={mockOnSubmit} />);
     const button = await screen.findByRole('button');
     userEvent.click(button);
-    const formError = await screen.findByTestId('form-error');
+    const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent('Something went wrong, please try again');
   });
 });

@@ -1,52 +1,44 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import * as Label from '@radix-ui/react-label';
 import * as RadioGroup from '@radix-ui/react-radio-group';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
+import { Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
-import './Input.scss';
 import './RadioInput.scss';
 
 export function RadioInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({
-  control,
-  name,
-  label,
-  options,
-  ...rest
-}: SelectInputProps<TFieldValues, TPath> & React.InputHTMLAttributes<HTMLInputElement>) {
-  const { field } = useController({
+>({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
-    name,
+    name: inputName,
+    rules,
   });
 
   return (
-    <div className='inputField' key={`${name}-input`} {...rest}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
-          {label}
-        </Label.Root>
-      )}
+    <Input error={error} label={label} inputName={inputName}>
       <RadioGroup.Root
-        className='RadioGroupRoot'
+        className='radio-group-root'
         defaultValue={field.value}
-        aria-label={name}
+        aria-label={inputName}
+        aria-invalid={error ? 'true' : 'false'}
         onValueChange={field.onChange}
       >
         {options.map(({ optionLabel, value }) => (
-          <div className='radioOption' key={optionLabel}>
-            <RadioGroup.Item className='RadioGroupItem' value={value} id={optionLabel}>
-              <RadioGroup.Indicator className='RadioGroupIndicator' />
+          <div className='radio-option' key={optionLabel}>
+            <RadioGroup.Item className='radio-group-item' value={value} id={optionLabel}>
+              <RadioGroup.Indicator className='radio-group-indicator' />
             </RadioGroup.Item>
-            <label className='optionLabel' htmlFor={optionLabel}>
+            <label className='option-label' htmlFor={optionLabel}>
               {optionLabel}
             </label>
           </div>
         ))}
       </RadioGroup.Root>
-    </div>
+    </Input>
   );
 }

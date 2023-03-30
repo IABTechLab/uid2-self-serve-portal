@@ -1,37 +1,35 @@
-/* eslint-disable react/jsx-props-no-spreading */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
-import * as Label from '@radix-ui/react-label';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
+import { Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
-import './Input.scss';
 import './CheckboxInput.scss';
 
 export function CheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, name, label, options }: SelectInputProps<TFieldValues, TPath>) {
-  const { field } = useController({
+>({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
     control,
-    name,
+    name: inputName,
+    rules,
   });
 
   return (
-    <div className='inputField' key={`${name}-input`}>
-      {label && (
-        <Label.Root className='inputLabel' htmlFor={name}>
-          {label}
-        </Label.Root>
-      )}
-      <div className='inlineOptions'>
+    <Input error={error} label={label} inputName={inputName}>
+      <div className='inline-options'>
         {options.map(({ optionLabel, value }) => (
-          <div className='checkboxOption' key={optionLabel}>
+          <div className='checkbox-option' key={optionLabel}>
             <Checkbox.Root
-              className='CheckboxRoot'
+              className='checkbox-root'
               id={optionLabel}
               value={value}
+              aria-invalid={error ? 'true' : 'false'}
               onCheckedChange={(checked: boolean) => {
                 const valueCopy = new Set(field.value);
                 if (checked) {
@@ -42,16 +40,16 @@ export function CheckboxInput<
                 field.onChange(Array.from(valueCopy));
               }}
             >
-              <Checkbox.Indicator className='CheckboxIndicator'>
-                <CheckIcon />
+              <Checkbox.Indicator className='checkbox-indicator'>
+                <FontAwesomeIcon icon='check' />
               </Checkbox.Indicator>
             </Checkbox.Root>
-            <label className='optionLabel' htmlFor={optionLabel}>
+            <label className='option-label' htmlFor={optionLabel}>
               {optionLabel}
             </label>
           </div>
         ))}
       </div>
-    </div>
+    </Input>
   );
 }
