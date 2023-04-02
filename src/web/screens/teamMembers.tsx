@@ -56,9 +56,6 @@ function TeamMembers() {
               </table>
               <div className='add-team-member'>
                 <AddTeamMemberDialog />
-                {/* <button type='button' className='add-team-member'>
-                  <span>Add team member</span>
-                </button> */}
               </div>
             </>
           )}
