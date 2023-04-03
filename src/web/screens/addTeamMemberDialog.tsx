@@ -44,7 +44,7 @@ function AddTeamMemberDialog() {
         />
         <TextInput
           inputName='email'
-          label='email'
+          label='Email'
           rules={{
             required: 'Please specify email.',
             pattern: {

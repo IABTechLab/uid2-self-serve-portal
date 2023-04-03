@@ -85,7 +85,14 @@ Focus on testing functionality, not implementation. For example, if you have a b
 
 - Start database and Keycloak serve by run `docker compose up -d`, Keycloak will be up and running, and the realm will be configured
 - To access [keycloak admin console](http://localhost:18080/admin/), you can find username and password in the `docker-compose.yml`
-- If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console.
+- If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console
+
+You can obtain the `SSP_KK_SECRET` by generating a new client secret in the Keycloak admin portal. Here's how you can do it:
+
+1. Login to the Keycloak admin console.
+2. Navigate to the "Clients" page and select the `self-serve-portal-apis`.
+3. Go to the "Credentials" tab and click on "Regenerate Secret".
+4. Copy the new client secret and use it as the value of the `SSP_KK_SECRET` environment variable..
 
 ### Reset Realm
 
