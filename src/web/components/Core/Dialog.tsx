@@ -27,31 +27,29 @@ export function Dialog({
           {triggerButton}
         </button>
       </RadixDialog.Trigger>
-      <RadixDialog.Portal>
-        <RadixDialog.Overlay className='app dialog-overlay' />
-        <RadixDialog.Content
-          className='app dialog-content'
-          // To prevent dialog closed from user clicking outside of the dialog
-          onInteractOutside={(fireEvent) => fireEvent.preventDefault()}
-        >
-          {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
-          {children}
-          {closeButton && (
-            <div className='dialog-close-button'>
-              <RadixDialog.Close asChild>
-                <button className='transparent-button' type='button'>
-                  {closeButton}
-                </button>
-              </RadixDialog.Close>
-            </div>
-          )}
-          <RadixDialog.Close asChild>
-            <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
-              <FontAwesomeIcon icon='xmark' />
-            </button>
-          </RadixDialog.Close>
-        </RadixDialog.Content>
-      </RadixDialog.Portal>
+      <RadixDialog.Overlay className='dialog-overlay' />
+      <RadixDialog.Content
+        className='dialog-content'
+        // To prevent dialog closed from user clicking outside of the dialog
+        onInteractOutside={(fireEvent) => fireEvent.preventDefault()}
+      >
+        {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
+        {children}
+        {closeButton && (
+          <div className='dialog-close-button'>
+            <RadixDialog.Close asChild>
+              <button className='transparent-button' type='button'>
+                {closeButton}
+              </button>
+            </RadixDialog.Close>
+          </div>
+        )}
+        <RadixDialog.Close asChild>
+          <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
+            <FontAwesomeIcon icon='xmark' />
+          </button>
+        </RadixDialog.Close>
+      </RadixDialog.Content>
     </RadixDialog.Root>
   );
 }
