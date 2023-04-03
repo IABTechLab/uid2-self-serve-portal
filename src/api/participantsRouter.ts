@@ -5,7 +5,7 @@ import { Participant, ParticipantSchema } from './entities/Participant';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
-import { createUserInPortal } from './services/usersService';
+import { createUserInPortal, isUserBelongsToParticipant } from './services/usersService';
 
 export const participantsRouter = express.Router();
 participantsRouter.get('/', async (_req, res) => {
@@ -44,6 +44,13 @@ participantsRouter.post('/:participantId/invite', async (req, res) => {
     if (!(await Participant.query().findById(participantId))) {
       return res.status(404).send([{ message: 'Participant not exist' }]);
     }
+
+    if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, participantId))) {
+      return res
+        .status(401)
+        .send([{ message: 'You are not allow to invite user to this participant' }]);
+    }
+
     const { firstName, lastName, email, jobFunction } = invitationParser.parse(req.body);
     const kcAdminClient = await getKcAdminClient();
     const user = await createNewUser(kcAdminClient, firstName, lastName, email);
@@ -54,6 +61,6 @@ participantsRouter.post('/:participantId/invite', async (req, res) => {
     if (err instanceof z.ZodError) {
       return res.status(400).send(err.issues);
     }
-    return res.status(500).json('Something went wrong please try again');
+    return res.status(500).send([{ message: 'Something went wrong please try again' }]);
   }
 });
