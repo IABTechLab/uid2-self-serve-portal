@@ -90,11 +90,13 @@ Focus on testing functionality, not implementation. For example, if you have a b
 You can obtain the `SSP_KK_SECRET` by generating a new client secret in the Keycloak admin portal. Here's how you can do it:
 
 1. Login to the Keycloak admin console.
-2. Navigate to the "Clients" page and select the `self-serve-portal-apis`.
+2. Ensure the realm dropdown has 'self-serve-portal' selected, then navigate to the "Clients" page and select the `self-serve-portal-apis`.
 3. Go to the "Credentials" tab and click on "Regenerate Secret".
-4. Copy the new client secret and use it as the value of the `SSP_KK_SECRET` environment variable..
+4. Copy the new client secret and use it as the value of the `SSP_KK_SECRET` environment variable in your `.env` file.
 
 ### Reset Realm
+
+You might need to do this if the realm configuration has been updated by someone on another branch. If you update your own Keycloak realm configuration, make sure you include the changes in your PR by exporting the realm and updating `keycloak\realm\realm-export.json`.
 
 ```
 docker exec -it uid2_selfserve_keycloak /bin/sh -c "/opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true;exit 0"
@@ -102,7 +104,7 @@ docker compose restart keycloak
 ```
 
 This script imports the [realm-export.json](https://github.com/IABTechLab/uid2-self-serve-portal/blob/main/keycloak/realm/realm-export.json) to the keycloak and override realm if exists.\
-It is important to note that all the users in the realm will be removed.
+It is important to note that all the users in the realm will be removed. You may also need to re-generate your client secrets (see the main Keycloak setup entry above).
 
 ## Available Scripts
 
