@@ -551,7 +551,8 @@
       "requiredActions": [],
       "realmRoles": ["default-roles-self-serve-portal"],
       "clientRoles": {
-        "self_serve_portal_apis": ["uma_protection"]
+        "self_serve_portal_apis": ["uma_protection"],
+        "realm-management": ["manage-users", "view-users", "query-users"]
       },
       "notBefore": 0,
       "groups": []

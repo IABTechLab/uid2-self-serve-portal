@@ -1,7 +1,9 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { useContext, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { SideNav } from '../components/Core/SideNav';
 import { SnailTrail } from '../components/Core/SnailTrail';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { PortalRoute } from './routeUtils';
 import { TeamMembersRoute } from './teamMembers';
 
@@ -15,9 +17,17 @@ const menu = DashboardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const location = useLocation();
+  const { participant } = useContext(ParticipantContext);
+  const navigate = useNavigate();
 
   const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
     .description;
+
+  useEffect(() => {
+    if (!participant) {
+      navigate('/account/create');
+    }
+  }, [participant, navigate]);
   return (
     <div className='app-panel'>
       <SideNav menu={menu} />

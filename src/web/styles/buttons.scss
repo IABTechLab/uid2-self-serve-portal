@@ -1,9 +1,36 @@
-.primaryButton {
+button {
+  border: 1px solid var(--theme-button-border);
+  background: none;
+  border-radius: 5px;
+  font-weight: 700;
+  padding: 10px 20px;
+}
+
+.primary-button {
   background-color: var(--theme-button);
-  color: var(--theme-button-border);
+  color: var(--theme-button-text);
   border: none;
 }
 
-.largeButton {
+.large-button {
   padding: 1rem 3.75rem;
+}
+
+.small-button {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.transparent-button {
+  border: none;
+  background: none;
+  color: var(--theme-action);
+}
+
+.icon-button {
+  font-family: inherit;
+  border: none;
+  font-size: 1.25rem;
+  color: var(--theme-action);
+  padding: 0 10px;
 }
