@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@fontsource/roboto-mono": "^4.5.10",
-    "@fortawesome/fontawesome-svg-core": "^6.2.1",
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
-    "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@keycloak/keycloak-admin-client": "^18.0.2",
     "@radix-ui/react-avatar": "^1.0.1",
