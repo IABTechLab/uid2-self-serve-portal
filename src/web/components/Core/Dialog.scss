@@ -1,12 +1,5 @@
 @import '../../styles/themes';
 
-.dialog-overlay {
-  background-color: var(--theme-backdrop);
-  position: fixed;
-  inset: 0;
-  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 .dialog-container {
   position: fixed;
   top: 0;
@@ -16,68 +9,72 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
 
-.dialog-content {
-  background-color: var(--theme-background-content);
-  border-radius: 5px;
-  box-shadow: 0 4px 14px var(--theme-box-shadow);
-  max-width: 450px;
-  max-height: 85vh;
-  padding: 47px;
-  position: relative;
-  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  height: auto;
-}
+  .dialog-content {
+    background-color: var(--theme-background-content);
+    border-radius: 5px;
+    box-shadow: 0 4px 14px var(--theme-box-shadow);
+    max-width: 450px;
+    max-height: 85vh;
+    padding: 47px;
+    position: relative;
+    animation: content-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    height: auto;
 
-.dialog-close-container {
-  position: absolute;
-  right: 20px;
-  top: 20px;
-}
+    @keyframes content-show {
+      from {
+        opacity: 0;
+      }
 
-.dialog-close-icon {
-  top: 47px;
-  right: 47px;
-  background: none;
-}
-
-.dialog-title {
-  font-weight: 600;
-  font-size: 1.5rem !important;
-  margin-top: 0 !important;
-}
-
-.dialog-close-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
-
-.icon-button:hover {
-  background-color: var(--theme-background-sidepanel);
-}
-
-.icon-button:focus {
-  box-shadow: 0 0 0 2px var(--theme-box-shadow);
-}
-
-@keyframes overlayShow {
-  from {
-    opacity: 0;
+      to {
+        opacity: 1;
+      }
+    }
   }
 
-  to {
-    opacity: 1;
+  .dialog-close-container {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+
+  .dialog-close-icon {
+    top: 47px;
+    right: 47px;
+    background: none;
+    border: none;
+  }
+
+  .dialog-title {
+    font-weight: 600;
+    font-size: 1.5rem !important;
+    margin-top: 0 !important;
+  }
+
+  .dialog-close-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .icon-button:focus {
+    box-shadow: 0 0 0 2px var(--theme-box-shadow);
   }
 }
 
-@keyframes contentShow {
-  from {
-    opacity: 0;
-  }
+.dialog-overlay {
+  background-color: var(--theme-backdrop);
+  position: fixed;
+  inset: 0;
+  animation: overlay-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  to {
-    opacity: 1;
+  @keyframes overlay-show {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 }

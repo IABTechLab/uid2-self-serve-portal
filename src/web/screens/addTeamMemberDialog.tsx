@@ -10,13 +10,18 @@ import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
 
-function AddTeamMemberDialog() {
+type AddTeamMemberProps = {
+  onAddTeamMember: () => void;
+};
+
+function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   const { participant } = useContext(ParticipantContext);
   const [open, setOpen] = useState(false);
 
-  const onSubmitCallback = () => setOpen(false);
   const onSubmit: SubmitHandler<InviteTeamMemberForm> = async (formData) => {
     await InviteTeamMember(formData, participant!.id!);
+    setOpen(false);
+    onAddTeamMember();
   };
 
   return (
@@ -27,11 +32,7 @@ function AddTeamMemberDialog() {
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<InviteTeamMemberForm>
-        onSubmit={onSubmit}
-        submitButtonText='Save Team Member'
-        onSubmitCallback={onSubmitCallback}
-      >
+      <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
         <TextInput
           inputName='firstName'
           label='First Name'
