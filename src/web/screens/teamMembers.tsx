@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Suspense } from 'react';
-import { Await, defer, useLoaderData } from 'react-router-dom';
+import { Suspense, useCallback } from 'react';
+import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
 import { GetAllUsers } from '../services/userAccount';
@@ -30,6 +30,10 @@ function Loading() {
 
 function TeamMembers() {
   const data = useLoaderData() as { users: User[] };
+  const reloader = useRevalidator();
+  const onAddTeamMember = useCallback(() => {
+    reloader.revalidate();
+  }, [reloader]);
   return (
     <div className='portal-team'>
       <h1>Team Members & Contacts</h1>
@@ -55,7 +59,7 @@ function TeamMembers() {
                 </tbody>
               </table>
               <div className='add-team-member'>
-                <AddTeamMemberDialog />
+                <AddTeamMemberDialog onAddTeamMember={onAddTeamMember} />
               </div>
             </>
           )}
