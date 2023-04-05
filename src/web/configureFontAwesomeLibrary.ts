@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export function configureFontAwesomeLibrary(): void {
+  // @ts-ignore
   library.add(faCircleCheck);
   library.add(faCheck);
   library.add(faEllipsisH);
