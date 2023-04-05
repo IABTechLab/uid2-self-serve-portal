@@ -1,68 +1,80 @@
-.dialog-overlay {
-  background-color: rgba(255, 255, 255, 0.8);
-  position: fixed;
-  inset: 0;
-  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-}
+@import '../../styles/themes';
 
-.dialog-content {
-  background-color: white;
-  border-radius: 5px;
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.25);
+.dialog-container {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 90vw;
-  max-width: 450px;
-  max-height: 85vh;
-  padding: 47px;
-  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  height: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  .icon-button {
+  .dialog-content {
+    background-color: var(--theme-background-content);
+    border-radius: 5px;
+    box-shadow: 0 4px 14px var(--theme-box-shadow);
+    max-width: 450px;
+    max-height: 85vh;
+    padding: 47px;
+    position: relative;
+    animation: content-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    height: auto;
+
+    @keyframes content-show {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+  }
+
+  .dialog-close-container {
     position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+
+  .dialog-close-icon {
     top: 47px;
     right: 47px;
     background: none;
+    border: none;
   }
 
-  h2 {
+  .dialog-title {
     font-weight: 600;
-    font-size: 1.5rem;
-    margin: 0;
+    font-size: 1.5rem !important;
+    margin-top: 0 !important;
+  }
+
+  .dialog-close-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .icon-button:focus {
+    box-shadow: 0 0 0 2px var(--theme-box-shadow);
   }
 }
 
-.dialog-close-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-}
+.dialog-overlay {
+  background-color: var(--theme-backdrop);
+  position: fixed;
+  inset: 0;
+  animation: overlay-show 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
-.icon-button:hover {
-  background-color: var(--theme-background-sidepanel);
-}
-.icon-button:focus {
-  box-shadow: 0 0 0 2px var(--theme-box-shadow);
-}
+  @keyframes overlay-show {
+    from {
+      opacity: 0;
+    }
 
-@keyframes overlayShow {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes contentShow {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    to {
+      opacity: 1;
+    }
   }
 }

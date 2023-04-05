@@ -1,4 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCircleCheck } from '@fortawesome/free-regular-svg-icons';
 import {
   faCheck,
   faChevronDown,
@@ -10,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export function configureFontAwesomeLibrary(): void {
+  library.add(faCircleCheck);
   library.add(faCheck);
   library.add(faEllipsisH);
   library.add(faPencil);

@@ -27,10 +27,14 @@ export function Dialog({
           {triggerButton}
         </button>
       </RadixDialog.Trigger>
-      <RadixDialog.Portal>
-        <RadixDialog.Overlay className='dialog-overlay' />
-        <RadixDialog.Content className='app dialog-content'>
-          {title && <RadixDialog.Title>{title}</RadixDialog.Title>}
+      <RadixDialog.Overlay className='dialog-overlay' />
+      <RadixDialog.Content
+        className='dialog-container'
+        // To prevent dialog closed from user clicking outside of the dialog
+        onInteractOutside={(fireEvent) => fireEvent.preventDefault()}
+      >
+        <div className='dialog-content'>
+          {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
           {children}
           {closeButton && (
             <div className='dialog-close-button'>
@@ -41,13 +45,15 @@ export function Dialog({
               </RadixDialog.Close>
             </div>
           )}
-          <RadixDialog.Close asChild>
-            <button className='icon-button' aria-label='Close' type='button'>
-              <FontAwesomeIcon icon='xmark' />
-            </button>
-          </RadixDialog.Close>
-        </RadixDialog.Content>
-      </RadixDialog.Portal>
+          <div className='dialog-close-container'>
+            <RadixDialog.Close asChild>
+              <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
+                <FontAwesomeIcon icon='xmark' />
+              </button>
+            </RadixDialog.Close>
+          </div>
+        </div>
+      </RadixDialog.Content>
     </RadixDialog.Root>
   );
 }

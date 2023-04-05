@@ -58,25 +58,23 @@ export function SelectInput<
           </Select.Icon>
         </Select.Trigger>
 
-        <Select.Portal>
-          <Select.Content className='select-content'>
-            <Select.ScrollUpButton className='select-scroll-button'>
-              <FontAwesomeIcon icon='chevron-up' />
-            </Select.ScrollUpButton>
-            <Select.Viewport className='select-viewport'>
-              {options.map(({ optionLabel, value }) => (
-                <Select.Item value={value} className='select-item' key={optionLabel}>
-                  <Select.ItemText>{optionLabel}</Select.ItemText>
-                  <Select.ItemIndicator className='select-item-indicator'>
-                    <FontAwesomeIcon icon='check' />
-                  </Select.ItemIndicator>
-                </Select.Item>
-              ))}
-            </Select.Viewport>
-            <Select.ScrollDownButton />
-            <Select.Arrow />
-          </Select.Content>
-        </Select.Portal>
+        <Select.Content className='select-content'>
+          <Select.ScrollUpButton className='select-scroll-button'>
+            <FontAwesomeIcon icon='chevron-up' />
+          </Select.ScrollUpButton>
+          <Select.Viewport className='select-viewport'>
+            {options.map(({ optionLabel, value }) => (
+              <Select.Item value={value} className='select-item' key={optionLabel}>
+                <Select.ItemText>{optionLabel}</Select.ItemText>
+                <Select.ItemIndicator className='select-item-indicator'>
+                  <FontAwesomeIcon icon='check' />
+                </Select.ItemIndicator>
+              </Select.Item>
+            ))}
+          </Select.Viewport>
+          <Select.ScrollDownButton />
+          <Select.Arrow />
+        </Select.Content>
       </Select.Root>
     </Input>
   );
