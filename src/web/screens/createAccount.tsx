@@ -27,12 +27,10 @@ function CreateAccount() {
     canSign: true,
   };
 
-  const onSubmitCallback = async () => {
+  const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
+    await CreateParticipant(formData, LoggedInUser!.profile);
     await loadUser();
     navigate('/account/pending');
-  };
-  const onSubmit: SubmitHandler<CreateParticipantForm> = async (formData) => {
-    return CreateParticipant(formData, LoggedInUser!.profile);
   };
 
   return (
@@ -46,7 +44,6 @@ function CreateAccount() {
           {(resolvedParticipantTypes: ParticipantType[]) => (
             <Form<CreateParticipantForm>
               onSubmit={onSubmit}
-              onSubmitCallback={onSubmitCallback}
               defaultValues={defaultFormData}
               submitButtonText='Create Account'
             >
