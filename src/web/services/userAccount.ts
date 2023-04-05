@@ -19,11 +19,7 @@ export async function GetUserAccountById(id: string) {
   throw Error('Could not get user account');
 }
 
-export async function GetUserAccountByEmail(
-  // apiClient: AxiosInstance | undefined,
-  email: string | undefined
-) {
-  // if (!apiClient) throw Error('Unauthorized');
+export async function GetUserAccountByEmail(email: string | undefined) {
   try {
     const result = await axios.get<User>(`/users?email=${email}`);
     return result.data;

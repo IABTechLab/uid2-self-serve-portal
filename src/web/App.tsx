@@ -2,6 +2,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { Loading } from './components/Core/Loading';
 import { PortalHeader } from './components/Core/PortalHeader';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
@@ -23,7 +24,7 @@ export function App() {
     if (darkMode) rootRef.current!.classList.add('darkmode');
     else rootRef.current!.classList.remove('darkmode');
   };
-  if (!initialized) return <div>Loading...</div>;
+  if (!initialized) return <Loading />;
   const fullname =
     LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
       ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`

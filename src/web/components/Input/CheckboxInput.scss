@@ -11,19 +11,28 @@
 
 .checkbox-root {
   padding: 0 !important; // override button padding
-  width: 25px;
+  min-width: 25px;
   height: 25px;
   border: 1px solid var(--theme-input-border) !important;
-
   border-radius: 3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  .checkbox-indicator {
+    background-color: var(--theme-radio-background);
+    color: var(--theme-radio-active);
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      display: block;
+    }
+  }
 }
+
 .checkbox-root:focus {
   box-shadow: 0 0 0 2px black;
-}
-
-.checkbox-indicator {
-  color: black;
 }

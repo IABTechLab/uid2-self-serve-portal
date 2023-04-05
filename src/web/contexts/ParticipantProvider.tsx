@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
+import { Loading } from '../components/Core/Loading';
 import { GetParticipantByUserId, ParticipantPayload } from '../services/participant';
 import { CurrentUserContext } from './CurrentUserProvider';
 
@@ -14,6 +15,7 @@ export const ParticipantContext = createContext<PariticipantWithSetter>({
 
 function ParticipantProvider({ children }: { children: ReactNode }) {
   const [participant, setParticipant] = useState<ParticipantPayload | null>(null);
+  const [loading, setIsLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -31,15 +33,15 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const loadParticipant = async () => {
+      setIsLoading(true);
       if (user) {
-        const p = await GetParticipantByUserId(user.id);
+        const p = await GetParticipantByUserId(user!.id);
         setParticipant(p);
       }
+      setIsLoading(false);
     };
-    if (user) {
-      loadParticipant();
-    }
-  }, [user]);
+    if (!participant) loadParticipant();
+  }, [user, participant]);
 
   const participantContext = useMemo(
     () => ({
@@ -48,7 +50,9 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
     [participant]
   );
   return (
-    <ParticipantContext.Provider value={participantContext}>{children}</ParticipantContext.Provider>
+    <ParticipantContext.Provider value={participantContext}>
+      {loading ? <Loading /> : children}
+    </ParticipantContext.Provider>
   );
 }
 

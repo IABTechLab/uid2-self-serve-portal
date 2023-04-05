@@ -7,7 +7,6 @@ import './Form.scss';
 type FormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
   children: ReactNode[];
-  onSubmitCallback?: () => Promise<void>;
   onError?: (error: unknown) => void;
   defaultValues?: DeepPartial<T>;
   submitButtonText?: string;
@@ -15,7 +14,6 @@ type FormProps<T extends FieldValues> = {
 
 export function Form<T extends FieldValues>({
   onSubmit,
-  onSubmitCallback,
   onError,
   defaultValues,
   children,
@@ -44,9 +42,7 @@ export function Form<T extends FieldValues>({
         type: '400',
         message,
       });
-      return;
     }
-    if (onSubmitCallback) await onSubmitCallback();
   };
 
   const isInputComponent = (child: ReactNode): child is ReactElement => {
@@ -64,7 +60,7 @@ export function Form<T extends FieldValues>({
         isInputComponent(child) ? cloneElement(child, { control }) : child
       )}
       <div className='form-footer'>
-        <button type='submit' disabled={isSubmitting} className='primaryButton largeButton'>
+        <button type='submit' disabled={isSubmitting} className='primary-button'>
           {submitButtonText ?? 'Submit'}
         </button>
       </div>

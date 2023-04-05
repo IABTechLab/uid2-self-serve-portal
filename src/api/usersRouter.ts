@@ -2,6 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 
 import { User, UserScheme } from './entities/User';
+import { findUserByEmail } from './services/usersService';
 
 export const usersRouter = express.Router();
 const emailParser = z.object({
@@ -14,12 +15,9 @@ usersRouter.get('/', async (req, res) => {
     const users = await User.query();
     return res.status(200).json(users);
   }
-  const userResult = await User.query().where('email', email);
-  if (userResult.length === 1) return res.json(userResult[0]);
-  if (userResult.length > 1) {
-    return res.status(500).json('Duplicate accounts found, please contact support');
-  }
-  return res.sendStatus(404);
+  const userResult = await findUserByEmail(email);
+  if (userResult) return res.json(userResult);
+  res.sendStatus(404);
 });
 
 usersRouter.post('/', async (req, res) => {

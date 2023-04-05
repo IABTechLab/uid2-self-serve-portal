@@ -7,14 +7,16 @@ import {
   faEllipsisH,
   faPencil,
   faTrashCan,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
 export function configureFontAwesomeLibrary(): void {
-  library.add(faCheck);
   library.add(faCircleCheck);
+  library.add(faCheck);
   library.add(faEllipsisH);
   library.add(faPencil);
   library.add(faTrashCan);
   library.add(faChevronDown);
+  library.add(faXmark);
   library.add(faChevronUp);
 }
