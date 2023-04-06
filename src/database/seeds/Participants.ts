@@ -4,8 +4,8 @@ import { Optional } from 'utility-types';
 
 import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
-type ParticipantsType = ModelObject<Participant> & { type: string };
-const sampleData: Optional<ParticipantsType, 'id'>[] = [
+type ParticipantsType = ModelObject<Participant>;
+const sampleData: Optional<ParticipantsType & { type: string }, 'id'>[] = [
   {
     name: 'Publisher example',
 
