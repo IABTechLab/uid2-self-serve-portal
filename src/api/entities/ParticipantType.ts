@@ -4,17 +4,17 @@ import { BaseModel } from './BaseModel';
 
 export class ParticipantType extends BaseModel {
   static get tableName() {
-    return 'participantsTypes';
+    return 'participantTypes';
   }
   static relationMappings = {
     participants: {
       relation: Model.ManyToManyRelation,
       modelClass: 'Participant',
       join: {
-        from: 'participantsTypes.id',
+        from: 'participantTypes.id',
         through: {
-          from: 'participantsXTypes.participantsTypeId',
-          to: 'participantsXTypes.participantId',
+          from: 'participantsToTypes.participantTypeId',
+          to: 'participantsToTypes.participantId',
         },
         to: 'participants.id',
       },

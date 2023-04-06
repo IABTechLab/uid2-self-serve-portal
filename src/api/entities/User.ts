@@ -1,7 +1,8 @@
-import { Model } from 'objection';
+import { Model, ModelObject } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
+import { ModelObjectOpt } from './ModelObjectOpt';
 
 export interface IUser {}
 export enum UserRole {
@@ -32,14 +33,21 @@ export class User extends BaseModel {
   };
   id!: number;
   email!: string;
-  location: string | undefined;
-  phone: string | undefined;
+  firstName!: string;
+  lastName!: string;
+  location?: string;
+  phone?: string;
   role!: UserRole;
+  participantId!: number;
 }
+
+export type UserDTO = ModelObjectOpt<User>;
 
 export const UserScheme = z.object({
   id: z.number().optional(),
   email: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
   location: z.string().optional(),
   phone: z.string().optional(),
   participantId: z.number().optional(),
