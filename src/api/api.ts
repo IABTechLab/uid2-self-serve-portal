@@ -1,5 +1,8 @@
+import 'express-async-errors';
+
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import { collectDefaultMetrics, Registry } from 'prom-client';
@@ -111,6 +114,12 @@ router.all('/*', (req, res) => {
 });
 
 app.use(BASE_REQUEST_PATH, router);
+
+const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  // TODO: Add logging to the backend error handler.
+  res.status(500).json({ message: 'Something broke!' });
+};
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}.`);
