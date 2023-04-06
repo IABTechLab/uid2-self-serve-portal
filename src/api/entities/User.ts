@@ -1,4 +1,4 @@
-import { Model, ModelObject } from 'objection';
+import { Model } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
