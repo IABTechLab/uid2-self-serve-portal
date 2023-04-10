@@ -116,11 +116,12 @@ router.all('/*', (req, res) => {
 app.use(BASE_REQUEST_PATH, router);
 
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  // TODO: Add logging to the backend error handler.
+  console.log('Fallback error handler invoked:');
+  console.log(err.message);
   res.status(500).json({ message: 'Something broke!' });
 };
 app.use(errorHandler);
 
-app.listen(port, () => {
+export default app.listen(port, () => {
   console.log(`Listening on port ${port}.`);
 });
