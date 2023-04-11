@@ -118,7 +118,10 @@ app.use(BASE_REQUEST_PATH, router);
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   console.log('Fallback error handler invoked:');
   console.log(err.message);
-  res.status(500).json({ message: 'Something broke!' });
+  res.status(500).json({
+    message:
+      'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
+  });
 };
 app.use(errorHandler);
 

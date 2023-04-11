@@ -556,6 +556,31 @@
       },
       "notBefore": 0,
       "groups": []
+    },
+    {
+      "id": "17ed64d5-5e9a-40b9-90f1-261596510e39",
+      "createdTimestamp": 1681188848059,
+      "username": "test_user@example.com",
+      "enabled": true,
+      "totp": false,
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test_user@example.com",
+      "credentials": [
+        {
+          "id": "0b03b694-e141-44b4-803c-e94c5e8ed449",
+          "type": "password",
+          "createdDate": 1681188848106,
+          "secretData": "{\"value\":\"2zxihlIYp974aAsCkuPfvCPSWGSLi+jhynpEwgb/eBlAmMTSB1BJR/xV8aotyKzmtU4dPq9zRY4YUO55WwL9ow==\",\"salt\":\"IiABP6whWj8fuudgJVaUQQ==\",\"additionalParameters\":{}}",
+          "credentialData": "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\",\"additionalParameters\":{}}"
+        }
+      ],
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": ["default-roles-self-serve-portal"],
+      "notBefore": 0,
+      "groups": []
     }
   ],
   "clients": [
