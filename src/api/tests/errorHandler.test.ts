@@ -14,7 +14,9 @@ describe('Errors from endpoints do not crash the api', () => {
     const req: Request = request(api).get('/api/participantTypes');
     const res = await withToken(req);
     expect(res.statusCode).toBe(500);
-    expect(res.body.message).toBe('Something broke!');
+    expect(res.body.message).toBe(
+      'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.'
+    );
   });
 
   test('responds with 200 when api endpoints execute without errors', async () => {
