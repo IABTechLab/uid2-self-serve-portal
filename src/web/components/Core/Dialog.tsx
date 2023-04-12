@@ -31,7 +31,7 @@ export function Dialog({
       <RadixDialog.Content
         className='dialog-container'
         // To prevent dialog closed from user clicking outside of the dialog
-        onInteractOutside={(fireEvent) => fireEvent.preventDefault()}
+        onInteractOutside={(fireEvent) => fireEvent.preventDefault()} // eslint-disable-line @typescript-eslint/no-unsafe-call
       >
         <div className='dialog-content'>
           {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
