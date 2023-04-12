@@ -1,8 +1,9 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
 import { User, UserScheme } from '../../api/entities/User';
+import { ApiError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
@@ -12,32 +13,73 @@ export type UserAccount = {
 export type UserPayload = z.infer<typeof UserScheme>;
 
 export async function GetUserAccountById(id: string) {
-  const result = await axios.get<User>(`/users/${id}`);
-  if (result.status === 200) {
+  try {
+    const result = await axios.get<User>(`/users/${id}`, {
+      validateStatus: (status) => [200, 404].includes(status),
+    });
     return result.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      const hash = e.response?.data?.errorHash as string;
+
+      throw new ApiError('Could not get user account', {
+        errorHash: hash,
+        statusCode: e.status,
+      });
+    }
+    throw Error('Could not get user account');
   }
-  throw Error('Could not get user account');
 }
 
 export async function GetUserAccountByEmail(email: string | undefined) {
   try {
-    const result = await axios.get<User>(`/users?email=${email}`);
+    const result: AxiosResponse<User> = await axios.get<User>(`/users?email=${email}`, {
+      validateStatus: (status) => [200, 404].includes(status),
+    });
     return result.data;
   } catch (e: unknown) {
-    if (e instanceof AxiosError && e.response?.status === 404) return null;
+    if (e instanceof AxiosError) {
+      const hash = e.response?.data?.errorHash as string;
+
+      throw new ApiError('Could not get user account', {
+        errorHash: hash,
+        statusCode: e.status,
+      });
+    }
     throw Error('Could not get user account');
   }
 }
 
 export async function GetAllUsers() {
-  const result = await axios.get<User[]>(`/users/`);
-  if (result.status === 200) {
+  try {
+    const result = await axios.get<User[]>(`/users/`, {
+      validateStatus: (status) => [200, 404].includes(status),
+    });
     return result.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      const hash = e.response?.data?.errorHash as string;
+      throw new ApiError('Could not get user account', {
+        errorHash: hash,
+        statusCode: e.status,
+      });
+    }
+    throw Error('Could not load users');
   }
-  throw Error('Could not load users');
 }
 
 export async function CreateUser(userPayload: UserPayload) {
-  const newUser = await axios.post<User>(`/users`, userPayload);
-  return newUser.data;
+  try {
+    const newUser = await axios.post<User>(`/users`, userPayload);
+    return newUser.data;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      const hash = e.response?.data?.errorHash as string;
+      throw new ApiError('Could not get user account', {
+        errorHash: hash,
+        statusCode: e.status,
+      });
+    }
+    throw Error('Could not load users');
+  }
 }

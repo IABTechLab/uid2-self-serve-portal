@@ -3,9 +3,9 @@
  * with the user reported issues.
  */
 export class ApiError extends Error {
-  errorHash: string;
+  errorHash?: string;
   statusCode?: number;
-  constructor(message: string, opts: { errorHash: string; statusCode?: number }) {
+  constructor(message: string, opts: { errorHash?: string; statusCode?: number }) {
     super(message);
     this.errorHash = opts.errorHash;
     this.statusCode = opts.statusCode;
