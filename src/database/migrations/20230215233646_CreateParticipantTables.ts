@@ -2,53 +2,53 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable('participants_types', (table) => {
+  await knex.schema.createTable('participantTypes', (table) => {
     table.increments('id').primary();
-    table.string('type_name', 100).notNullable();
+    table.string('typeName', 100).notNullable();
   });
 
-  await knex('participants_types').insert([
-    { type_name: 'DSP' },
+  await knex('participantTypes').insert([
+    { typeName: 'DSP' },
     {
-      type_name: 'Advertiser',
+      typeName: 'Advertiser',
     },
     {
-      type_name: 'Data Provider',
+      typeName: 'Data Provider',
     },
     {
-      type_name: 'Publisher',
+      typeName: 'Publisher',
     },
   ]);
   await knex.schema.createTable('participants', (table) => {
     table.increments('id').primary();
     table.string('name', 256).notNullable();
     table.string('location', 100);
-    table.enu('status', ['initialize', 'awaiting_approval', 'approved']).notNullable();
+    table.enu('status', ['initialize', 'awaitingApproval', 'approved']).notNullable();
   });
 
-  await knex.schema.createTable('participants_X_types', (table) => {
-    table.integer('participant_id').references('participants.id').onDelete('CASCADE');
+  await knex.schema.createTable('participantsToTypes', (table) => {
+    table.integer('participantId').references('participants.id').onDelete('CASCADE');
     table
-      .integer('participants_type_id')
+      .integer('participantTypeId')
       .references('id')
-      .inTable('participants_types')
+      .inTable('participantTypes')
       .onDelete('CASCADE');
-    table.primary(['participant_id', 'participants_type_id']);
+    table.primary(['participantId', 'participantTypeId']);
   });
 
   await knex.schema.alterTable('users', (table) => {
-    table.integer('participant_id').unsigned();
-    table.foreign('participant_id').references('participants.id');
+    table.integer('participantId').unsigned();
+    table.foreign('participantId').references('participants.id');
   });
 }
 
 export async function down(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
-    table.dropForeign('participant_id');
-    table.dropColumn('participant_id');
+    table.dropForeign('participantId');
+    table.dropColumn('participantId');
   });
 
-  await knex.schema.dropTableIfExists('participants_X_types');
-  await knex.schema.dropTableIfExists('participants_types');
+  await knex.schema.dropTableIfExists('participantsToTypes');
+  await knex.schema.dropTableIfExists('participantTypes');
   await knex.schema.dropTableIfExists('participants');
 }

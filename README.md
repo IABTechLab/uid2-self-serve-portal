@@ -61,6 +61,16 @@ If you're working on database changes, you can run:
 
 See the [Knex migrations documentation](https://knexjs.org/guide/migrations.html) for more details.
 
+### Database Naming Conventions
+
+When creating a database, use `camelCase` table and column names to match the casing in the TypeScript entity classes.
+
+Tables should be created as the plural of the thing being stored. For example, if you're storing a list of possible participant types, the table should be called `participantTypes`.
+
+Linking tables should contain the names of the tables being linked, joined by the word 'To' - but avoid unnecessary duplication. For example, if you're creating a linking table for a many-to-many relationship between `participants` and `participantTypes`, it's reasonable to name the table `participantsToTypes`.
+
+All tables should have an auto-incrementing number column named `id`. When creating references to other tables, prefer to use the column name '<thing>Id', where thing is the thing being referred to. For example, when creating a column which references a participant, you should usually use the column name `participantId`.
+
 ## Tech Choices
 
 - This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
