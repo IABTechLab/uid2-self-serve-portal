@@ -1,26 +1,16 @@
-import { User, UserRole } from '../entities/User';
+import { User, UserDTO } from '../entities/User';
 
 export const findUserByEmail = async (email: string) => {
   return User.query().findOne('email', email);
 };
 
-export const createUserInPortal = async (
-  email: string,
-  jobFunction: UserRole,
-  participantId: string
-) => {
-  const user = await findUserByEmail(email);
-  if (user) return user;
-
-  const userObject = {
-    email,
-    role: jobFunction,
-    participantId,
-  };
-  return User.query().insert(userObject);
+export const createUserInPortal = async (user: Omit<UserDTO, 'id'>) => {
+  const existingUser = await findUserByEmail(user.email);
+  if (existingUser) return existingUser;
+  return User.query().insert(user);
 };
 
-export const isUserBelongsToParticipant = async (email: string, participantId: string) => {
+export const isUserBelongsToParticipant = async (email: string, participantId: number) => {
   const user = await User.query()
     .where('email', email)
     .andWhere('participantId', participantId)

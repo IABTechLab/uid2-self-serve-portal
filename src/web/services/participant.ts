@@ -22,12 +22,12 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
       email: user.email!,
       role: formData.role,
       location: formData.officeLocation,
+      firstName: user.firstName,
+      lastName: user.lastName,
     },
   ] as UserPayload[];
   if (!formData.canSign) {
-    users.push({
-      email: formData.signeeEmail,
-    });
+    // TODO: New feature to send an invitation to the person who can sign?
   }
   const participantPayload: ParticipantPayload = {
     name: formData.companyName,
@@ -61,7 +61,7 @@ export type InviteTeamMemberForm = {
   firstName: string;
   lastName: string;
   email: string;
-  jobFunction: string;
+  role: string;
 };
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
