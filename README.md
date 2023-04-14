@@ -110,11 +110,10 @@ It is important to note that all the users in the realm will be removed. You may
 
 > Declarative User Profile is Technology Preview and is not fully supported.
 
-1. Click on the `Realm Settings` on the left side menu and turn on the `User Profile Enabled` switch.
-2. Once you enable it and click on the `Save` button, you can access the `User Profile` tab.
-3. Click on `email`, scroll down to `validators` and click `create validator`.
-4. Select `pattern` from the list and add `^(?!.*@(gmail|hotmail|yahoo)\.com$).+@.+\..+$` as pattern and `errorPatternNoMatch` as error message key
-5. Click on the `Save` button
+1. Click on the `Realm Settings` on the left side menu and click the `User Profile` tab.
+2. Click on `email`, scroll down to `validators` and click `create validator`.
+3. Select `pattern` from the list and add `^(?!.*@(gmail|hotmail|yahoo)\.com$).+@.+\..+$` as pattern and `errorPatternNoMatch` as error message key
+4. Click on the `Save` button
 
 ## Available Scripts
 
