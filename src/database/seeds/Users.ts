@@ -2,17 +2,24 @@ import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
+import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 import { User, UserRole } from '../../api/entities/User';
+import { CreateParticipant } from './Participants';
 
 type UserType = ModelObject<User>;
 
-const sampleData: Optional<UserType, 'id'>[] = [
-  { email: 'test@example.com', location: 'Sydney, AU', phone: '+61298765432', role: UserRole.DA },
+const sampleParticipant = {
+  name: 'Publisher for user seeds',
+  status: ParticipantStatus.AwaitingSigning,
+};
+const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
   {
-    email: 'lionell.pack@thetradedesk.com',
+    email: 'test@example.com',
+    firstName: 'Text',
+    lastName: 'User',
     location: 'Sydney, AU',
     phone: '+61298765432',
-    role: UserRole.Engineering,
+    role: UserRole.DA,
   },
 ];
 
@@ -24,7 +31,11 @@ export async function seed(knex: Knex): Promise<void> {
       sampleData.map((d) => d.email)
     )
     .del();
+  await knex('participants')
+    .where((p) => p.whereLike('name', sampleParticipant.name))
+    .del();
 
   // Inserts seed entries
-  await knex('users').insert(sampleData);
+  const participantId = await CreateParticipant(knex, sampleParticipant, 'Advertiser');
+  await knex('users').insert(sampleData.map((user) => ({ ...user, participantId })));
 }

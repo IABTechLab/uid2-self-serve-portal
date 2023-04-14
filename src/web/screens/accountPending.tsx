@@ -1,4 +1,3 @@
-import { findIconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useContext } from 'react';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
@@ -37,7 +36,7 @@ function AccountPending() {
       : 'Access Requested!';
   return (
     <Notification
-      icon={findIconDefinition({ prefix: 'far', iconName: 'circle-check' })}
+      icon={['far', 'circle-check']}
       title={title}
       notification={
         participant?.status === ParticipantStatus.AwaitingSigning

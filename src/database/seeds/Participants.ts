@@ -4,8 +4,8 @@ import { Optional } from 'utility-types';
 
 import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
-type ParticipantsType = ModelObject<Participant> & { type: string };
-const sampleData: Optional<ParticipantsType, 'id'>[] = [
+type ParticipantsType = ModelObject<Participant>;
+const sampleData: Optional<ParticipantsType & { type: string }, 'id'>[] = [
   {
     name: 'Publisher example',
 
@@ -22,27 +22,32 @@ const sampleData: Optional<ParticipantsType, 'id'>[] = [
   },
 ];
 
-const createParticipant = async (knex: Knex, sample: Optional<ParticipantsType, 'id'>) => {
+export async function CreateParticipant(
+  knex: Knex,
+  details: Optional<ParticipantsType, 'id'>,
+  type: string
+) {
   const participant = await knex('participants')
     .insert({
-      name: sample.name,
-      status: sample.status,
+      name: details.name,
+      status: details.status,
     })
     .returning('id');
-  const participantType = await knex('participants_types').where('typeName', sample.type);
-  await knex('participants_X_types').insert<{
+  const participantType = await knex('participantTypes').where('typeName', type);
+  await knex('participantsToTypes').insert<{
     participantId: number;
-    participantsTypeId: number;
+    participantTypeId: number;
   }>({
     participantId: participant[0].id as number,
-    participantsTypeId: participantType[0].id as number,
+    participantTypeId: participantType[0].id as number,
   });
-};
+  return parseInt(participant[0].id as string, 10);
+}
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('participants').whereILike('name', '%example').del();
   // Inserts seed entries
-  const promises = sampleData.map((sample) => createParticipant(knex, sample));
+  const promises = sampleData.map((sample) => CreateParticipant(knex, sample, sample.type));
   await Promise.all(promises);
 }

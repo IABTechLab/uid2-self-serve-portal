@@ -55,7 +55,7 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
           }}
         />
         <SelectInput
-          inputName='jobFunction'
+          inputName='role'
           label='Job Function'
           rules={{ required: 'Please specify your job function.' }}
           options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({

@@ -5,8 +5,8 @@ import { BaseModel } from './BaseModel';
 import { UserScheme } from './User';
 
 export enum ParticipantStatus {
-  AwaitingSigning = 'awaiting_signing',
-  AwaitingApproval = 'awaiting_approval',
+  AwaitingSigning = 'awaitingSigning',
+  AwaitingApproval = 'awaitingApproval',
   Approved = 'approved',
 }
 
@@ -21,10 +21,10 @@ export class Participant extends BaseModel {
       join: {
         from: 'participants.id',
         through: {
-          from: 'participants_X_types.participantId',
-          to: 'participants_X_types.participantsTypeId',
+          from: 'participantsToTypes.participantId',
+          to: 'participantsToTypes.participantTypeId',
         },
-        to: 'participantsTypes.id',
+        to: 'participantTypes.id',
       },
     },
     users: {

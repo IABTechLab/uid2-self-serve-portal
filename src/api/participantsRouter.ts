@@ -28,14 +28,14 @@ participantsRouter.post('/', async (req, res) => {
 });
 
 const idParser = z.object({
-  participantId: z.string(),
+  participantId: z.coerce.number(),
 });
 
 const invitationParser = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
-  jobFunction: z.nativeEnum(UserRole),
+  role: z.nativeEnum(UserRole),
 });
 
 participantsRouter.post('/:participantId/invite', async (req, res) => {
@@ -51,10 +51,10 @@ participantsRouter.post('/:participantId/invite', async (req, res) => {
         .send([{ message: 'You do not have permission to make this invitation.' }]);
     }
 
-    const { firstName, lastName, email, jobFunction } = invitationParser.parse(req.body);
+    const { firstName, lastName, email, role } = invitationParser.parse(req.body);
     const kcAdminClient = await getKcAdminClient();
     const user = await createNewUser(kcAdminClient, firstName, lastName, email);
-    await createUserInPortal(email, jobFunction, participantId);
+    await createUserInPortal({ email, role, participantId, firstName, lastName });
     await sendInviteEmail(kcAdminClient, user);
     return res.sendStatus(201);
   } catch (err) {
