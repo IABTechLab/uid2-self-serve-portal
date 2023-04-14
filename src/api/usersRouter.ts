@@ -17,7 +17,7 @@ usersRouter.get('/', async (req, res) => {
   }
   const userResult = await findUserByEmail(email);
   if (userResult) return res.json(userResult);
-  res.sendStatus(404);
+  return res.sendStatus(404);
 });
 
 usersRouter.post('/', async (req, res) => {

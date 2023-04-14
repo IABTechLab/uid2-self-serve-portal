@@ -1,5 +1,8 @@
+import 'express-async-errors';
+
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import { collectDefaultMetrics, Registry } from 'prom-client';
@@ -112,6 +115,16 @@ router.all('/*', (req, res) => {
 
 app.use(BASE_REQUEST_PATH, router);
 
-app.listen(port, () => {
+const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
+  console.log('Fallback error handler invoked:');
+  console.log(err.message);
+  res.status(500).json({
+    message:
+      'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
+  });
+};
+app.use(errorHandler);
+
+export default app.listen(port, () => {
   console.log(`Listening on port ${port}.`);
 });

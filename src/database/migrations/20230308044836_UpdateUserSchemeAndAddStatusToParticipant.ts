@@ -2,7 +2,8 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
-    table.dropColumn('name');
+    table.string('firstName').notNullable();
+    table.string('lastName').notNullable();
     table.enu('role', ['admin', 'user']).notNullable().defaultTo('user');
   });
 
@@ -12,9 +13,9 @@ export async function up(knex: Knex): Promise<void> {
   });
   await knex.schema.alterTable('participants', (table) => {
     table
-      .enu('status', ['awaiting_signing', 'awaiting_approval', 'approved'])
+      .enu('status', ['awaitingSigning', 'awaitingApproval', 'approved'])
       .notNullable()
-      .defaultTo('awaiting_signing');
+      .defaultTo('awaitingSigning');
   });
 }
 
@@ -29,7 +30,7 @@ export async function down(knex: Knex): Promise<void> {
   });
   await knex.schema.alterTable('participants', (table) => {
     table
-      .enu('status', ['initialize', 'awaiting_approval', 'approved'])
+      .enu('status', ['initialize', 'awaitingApproval', 'approved'])
       .notNullable()
       .defaultTo('initialize');
   });
