@@ -1,9 +1,9 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
 import { User, UserScheme } from '../../api/entities/User';
-import { ApiError } from '../utils/apiError';
+import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
@@ -19,34 +19,19 @@ export async function GetUserAccountById(id: string) {
     });
     return result.data;
   } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      const hash = e.response?.data?.errorHash as string;
-
-      throw new ApiError('Could not get user account', {
-        errorHash: hash,
-        statusCode: e.status,
-      });
-    }
-    throw Error('Could not get user account');
+    throw backendError(e, 'Could not get user account');
   }
 }
 
-export async function GetUserAccountByEmail(email: string | undefined) {
+export async function GetUserAccountByEmail(email: string | undefined): Promise<User | null> {
   try {
-    const result: AxiosResponse<User> = await axios.get<User>(`/users?email=${email}`, {
+    const result = await axios.get<User>(`/users?email=${email}`, {
       validateStatus: (status) => [200, 404].includes(status),
     });
-    return result.data;
+    if (result.status === 200) return result.data;
+    return null;
   } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      const hash = e.response?.data?.errorHash as string;
-
-      throw new ApiError('Could not get user account', {
-        errorHash: hash,
-        statusCode: e.status,
-      });
-    }
-    throw Error('Could not get user account');
+    throw backendError(e, 'Could not get user account');
   }
 }
 
@@ -57,14 +42,7 @@ export async function GetAllUsers() {
     });
     return result.data;
   } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      const hash = e.response?.data?.errorHash as string;
-      throw new ApiError('Could not get user account', {
-        errorHash: hash,
-        statusCode: e.status,
-      });
-    }
-    throw Error('Could not load users');
+    throw backendError(e, 'Could not load users');
   }
 }
 
@@ -73,13 +51,6 @@ export async function CreateUser(userPayload: UserPayload) {
     const newUser = await axios.post<User>(`/users`, userPayload);
     return newUser.data;
   } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      const hash = e.response?.data?.errorHash as string;
-      throw new ApiError('Could not get user account', {
-        errorHash: hash,
-        statusCode: e.status,
-      });
-    }
-    throw Error('Could not load users');
+    throw backendError(e, 'Could not create user');
   }
 }
