@@ -40,7 +40,7 @@ export function ErrorView({
 }) {
   return (
     <div className='error-content'>
-      <img alt='Error icon' src='uid2-logo.png' />
+      <img alt='Error icon' src='/uid2-logo.png' />
       <div>Error</div>
       <div>{message}</div>
       <div>({analyticsIdentifier(errorId, errorHash)})</div>

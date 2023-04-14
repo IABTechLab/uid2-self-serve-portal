@@ -13,11 +13,14 @@ export function mockAuthenticatedKeycloak() {
 
   const authClient: Keycloak = {
     authenticated: true,
-    hasRealmRole(ignored: string) {
+    hasRealmRole(_ignored: string) {
       return true;
     },
-    hasResourceRole(ignored: string) {
+    hasResourceRole(_ignored: string) {
       return true;
+    },
+    loadUserProfile() {
+      return Promise.resolve(userProfile);
     },
     idToken: token,
     profile: userProfile,
