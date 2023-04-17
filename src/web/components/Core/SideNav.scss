@@ -5,13 +5,11 @@
 
   a {
     text-decoration: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: block;
+    font-weight: 600;
   }
 
   .active {
-    font-weight: 700;
+    border-bottom: 3px solid var(--theme-button-border);
   }
 
   li {
@@ -23,4 +21,8 @@
     padding: 0;
     margin: 0;
   }
+}
+
+.side-nav-item {
+  padding: 5px 10px;
 }

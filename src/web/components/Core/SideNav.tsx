@@ -11,7 +11,7 @@ import './SideNav.scss';
 
 function MenuItem({ path, description }: PortalRoute) {
   return (
-    <NavigationMenuItem key={path}>
+    <NavigationMenuItem key={path} className='side-nav-item'>
       <NavLink to={path}>{description}</NavLink>
     </NavigationMenuItem>
   );
