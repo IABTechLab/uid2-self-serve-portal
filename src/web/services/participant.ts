@@ -67,3 +67,9 @@ export type InviteTeamMemberForm = {
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   return axios.post(`/participants/${participantId}/invite`, formData);
 }
+
+export type UpdateParticipantForm = {
+  allowSharing: boolean;
+  location: string;
+  logo: string;
+};
