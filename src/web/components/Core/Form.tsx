@@ -1,6 +1,6 @@
 import axios from 'axios';
-import React, { cloneElement, isValidElement, ReactElement, ReactNode } from 'react';
-import { DeepPartial, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import React, { createContext, ReactNode, useCallback, useMemo } from 'react';
+import { Control, DeepPartial, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 import './Form.scss';
 
@@ -10,7 +10,16 @@ type FormProps<T extends FieldValues> = {
   onError?: (error: unknown) => void;
   defaultValues?: DeepPartial<T>;
   submitButtonText?: string;
+  customizeSubmit?: boolean;
 };
+
+export type FormContextType<T extends FieldValues> = {
+  control: Control<T>;
+  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const FormContext = createContext<FormContextType<any> | null>(null);
 
 export function Form<T extends FieldValues>({
   onSubmit,
@@ -18,6 +27,7 @@ export function Form<T extends FieldValues>({
   defaultValues,
   children,
   submitButtonText,
+  customizeSubmit,
 }: FormProps<T>) {
   const {
     handleSubmit,
@@ -28,42 +38,47 @@ export function Form<T extends FieldValues>({
     defaultValues,
   });
 
-  const submit = async (formData: T) => {
-    try {
-      await onSubmit(formData);
-    } catch (err) {
-      if (onError) onError(err);
-      const message =
-        axios.isAxiosError(err) && (err.response?.data ?? [])[0]?.message
-          ? ((err.response?.data ?? [])[0]?.message as string)
-          : 'Something went wrong, please try again';
+  const submit = useCallback(
+    async (formData: T) => {
+      try {
+        await onSubmit(formData);
+      } catch (err) {
+        if (onError) onError(err);
+        const message =
+          axios.isAxiosError(err) && (err.response?.data ?? [])[0]?.message
+            ? ((err.response?.data ?? [])[0]?.message as string)
+            : 'Something went wrong, please try again';
 
-      setError('root.serverError', {
-        type: '400',
-        message,
-      });
-    }
-  };
+        setError('root.serverError', {
+          type: '400',
+          message,
+        });
+      }
+    },
+    [onError, onSubmit, setError]
+  );
 
-  const isInputComponent = (child: ReactNode): child is ReactElement => {
-    return isValidElement(child) && typeof child.type === 'function' && 'inputName' in child.props;
-  };
+  const formContextValue = useMemo(() => {
+    return { control, handleSubmit: handleSubmit(submit) };
+  }, [control, handleSubmit, submit]);
 
   return (
     <form onSubmit={handleSubmit(submit)}>
-      {errors.root?.serverError && (
-        <p className='form-error' data-testid='formError'>
-          {errors.root?.serverError.message}
-        </p>
-      )}
-      {React.Children.map(children, (child) =>
-        isInputComponent(child) ? cloneElement(child, { control }) : child
-      )}
-      <div className='form-footer'>
-        <button type='submit' disabled={isSubmitting} className='primary-button'>
-          {submitButtonText ?? 'Submit'}
-        </button>
-      </div>
+      <FormContext.Provider value={formContextValue as FormContextType<T>}>
+        {errors.root?.serverError && (
+          <p className='form-error' data-testid='formError'>
+            {errors.root?.serverError.message}
+          </p>
+        )}
+        {children}
+        {!customizeSubmit && (
+          <div className='form-footer'>
+            <button type='submit' disabled={isSubmitting} className='primary-button'>
+              {submitButtonText ?? 'Submit'}
+            </button>
+          </div>
+        )}
+      </FormContext.Provider>
     </form>
   );
 }

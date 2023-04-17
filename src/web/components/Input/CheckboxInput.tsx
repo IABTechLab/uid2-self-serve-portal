@@ -1,7 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
+import { useContext } from 'react';
 import { FieldPath, FieldValues, useController } from 'react-hook-form';
 
+import { FormContext, FormContextType } from '../Core/Form';
 import { Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
@@ -10,7 +12,15 @@ import './CheckboxInput.scss';
 export function CheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({ inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const context = useContext(FormContext) as FormContextType<TFieldValues> | null;
+
+  if (!context) {
+    throw new Error('CheckboxInput must be used within a FormContext.Provider');
+  }
+
+  const { control } = context;
+
   const {
     field,
     fieldState: { error },
