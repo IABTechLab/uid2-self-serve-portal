@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
+import { useContext } from 'react';
 import {
-  Control,
   FieldPath,
   FieldValue,
   FieldValues,
@@ -10,6 +10,7 @@ import {
   useController,
 } from 'react-hook-form';
 
+import { FormContext, FormContextType } from '../Core/Form';
 import { Input } from './Input';
 
 import './SelectInput.scss';
@@ -23,7 +24,6 @@ export type SelectInputProps<
   TPath extends FieldPath<TFieldValues>
 > = {
   options: Option<FieldValue<TFieldValues>>[];
-  control?: Control<TFieldValues>;
   inputName: TPath;
   label?: string;
   rules?: Omit<
@@ -34,7 +34,15 @@ export type SelectInputProps<
 export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({ inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+  const context = useContext(FormContext) as FormContextType<TFieldValues> | null;
+
+  if (!context) {
+    throw new Error('SelectInput must be used within a FormContext.Provider');
+  }
+
+  const { control } = context;
+
   const {
     field,
     fieldState: { error },
