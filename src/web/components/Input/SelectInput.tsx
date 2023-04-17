@@ -1,17 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
-import { useContext } from 'react';
-import {
-  FieldPath,
-  FieldValue,
-  FieldValues,
-  RegisterOptions,
-  useController,
-} from 'react-hook-form';
+import { FieldPath, FieldValue, FieldValues, useController } from 'react-hook-form';
 
-import { FormContext, FormContextType } from '../Core/Form';
-import { Input } from './Input';
+import { BaseInputProps, Input } from './Input';
+import { withFormContext } from './withFormContext';
 
 import './SelectInput.scss';
 
@@ -19,30 +12,20 @@ export type Option<T> = {
   optionLabel: string;
   value: T;
 };
-export type SelectInputProps<
-  TFieldValues extends FieldValues,
-  TPath extends FieldPath<TFieldValues>
-> = {
+export type SelectInputProps<TFieldValues extends FieldValues> = {
   options: Option<FieldValue<TFieldValues>>[];
-  inputName: TPath;
-  label?: string;
-  rules?: Omit<
-    RegisterOptions<TFieldValues, TPath>,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
-  >;
 };
-export function SelectInput<
+
+function SelectInputComponent<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
-  const context = useContext(FormContext) as FormContextType<TFieldValues> | null;
-
-  if (!context) {
-    throw new Error('SelectInput must be used within a FormContext.Provider');
-  }
-
-  const { control } = context;
-
+>({
+  control,
+  inputName,
+  label,
+  options,
+  rules,
+}: SelectInputProps<TFieldValues> & BaseInputProps<TFieldValues, TPath>) {
   const {
     field,
     fieldState: { error },
@@ -87,3 +70,5 @@ export function SelectInput<
     </Input>
   );
 }
+
+export const SelectInput = withFormContext({ inputComponent: SelectInputComponent });
