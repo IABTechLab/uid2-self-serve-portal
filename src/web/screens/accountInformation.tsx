@@ -41,9 +41,7 @@ function AccountInformationFooter() {
 }
 
 function AccountInformation() {
-  const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
-    console.log('formData', formData);
-  };
+  const onSubmit: SubmitHandler<UpdateParticipantForm> = async () => {};
 
   const { participant } = useContext(ParticipantContext);
   return (
