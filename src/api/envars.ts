@@ -6,7 +6,7 @@ export const SSP_IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 export const SSP_IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 // Loki Config
-export const SSP_LOKI_HOST = process.env.SSP_LOKI_HOST ?? 'http://loki:3100';
+export const SSP_LOKI_HOST = process.env.SSP_LOKI_HOST ?? 'http://localhost:3100';
 
 // Keycloak Config
 export const SSP_KK_AUDIENCE = process.env.SSP_KK_AUDIENCE ?? errorMessage;
