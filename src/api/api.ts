@@ -16,7 +16,6 @@ import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_APP_NAME,
   SSP_IS_DEVELOPMENT,
-  SSP_IS_PRODUCTION,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -59,19 +58,14 @@ app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
 
 function getTransportsForEnv() {
-  const baseTransports = [new winston.transports.Console()];
-  if (SSP_IS_PRODUCTION) {
-    return [
-      ...baseTransports,
-      new LokiTransport({
-        host: SSP_LOKI_HOST,
-      }),
-    ];
-  }
-  return baseTransports;
+  return [
+    new winston.transports.Console(),
+    new LokiTransport({
+      host: SSP_LOKI_HOST,
+    }),
+  ];
 }
 
-// express-winston logger makes sense BEFORE the router
 app.use(
   expressWinston.logger({
     transports: getTransportsForEnv(),
@@ -148,7 +142,6 @@ router.all('/*', (req, res) => {
 
 app.use(BASE_REQUEST_PATH, router);
 
-// express-winston errorLogger makes sense AFTER the router.
 app.use(
   expressWinston.errorLogger({
     transports: getTransportsForEnv(),
