@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import { Form, FormContext } from '../components/Core/Form';
+import { Form } from '../components/Core/Form';
 import { Tooltip } from '../components/Core/Tooltip';
 import { CheckboxInput } from '../components/Input/CheckboxInput';
 import { TextInput } from '../components/Input/TextInput';
@@ -12,17 +12,10 @@ import { PortalRoute } from './routeUtils';
 import './accountInformation.scss';
 
 function AccountInformationFooter() {
-  const context = useContext(FormContext);
-
-  if (!context) {
-    throw new Error('AccountInformationFooter must be used within a FormContext.Provider');
-  }
-  const { handleSubmit } = context;
-
   return (
     <div className='dashboard-footer'>
       <div>
-        <button className='small-button primary-button' type='button' onClick={handleSubmit}>
+        <button className='small-button primary-button' type='submit' form='account-info-form'>
           Save & Continue
         </button>
         <button className='transparent-button' type='button'>
@@ -44,8 +37,12 @@ function AccountInformation() {
   const onSubmit: SubmitHandler<UpdateParticipantForm> = async () => {};
 
   const { participant } = useContext(ParticipantContext);
+  const participantTypes: string = useMemo(() => {
+    return participant?.types?.map((t) => t.typeName).join(', ') ?? '';
+  }, [participant]);
+
   return (
-    <Form<UpdateParticipantForm> customizeSubmit onSubmit={onSubmit}>
+    <Form<UpdateParticipantForm> customizeSubmit onSubmit={onSubmit} id='account-info-form'>
       <h1>General Account Information</h1>
       <div className='account-info-content'>
         <h3 className='account-info-title'>
@@ -67,7 +64,7 @@ function AccountInformation() {
             </span>
           </Tooltip>
         </h3>
-        <span>{participant?.types?.join(',')}</span>
+        <span>{participantTypes}</span>
         <h2>Company name visible in Sharing Settings</h2>
         <p>
           Making your participant name visible will allow other UID participants who are logged into
