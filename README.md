@@ -125,6 +125,37 @@ It is important to note that all the users in the realm will be removed. You may
 3. Select `pattern` from the list and add `^(?!.*@(gmail|hotmail|yahoo)\.com$).+@.+\..+$` as pattern and `errorPatternNoMatch` as error message key
 4. Click on the `Save` button
 
+## Logging stack
+
+#### Tech Stack
+
+For logging, we use [loki and grafana](https://grafana.com/oss/loki/) to store and query logs.
+We use winston in our express app to format and label our log outputs for ingestion into loki.
+
+#### Development setup
+
+For development purposes, we can can spawn docker images for loki/grafana/promtail to test and validate our loggings.
+
+To do this, an optional docker file is provided `docker-compose.log-stack.yml` in the root folder. This ensures that typical development workflows (that don't need logger stack) don't spawn these additional containers unnecessarily.
+
+To instantiate the logging stack, use the following command:-
+
+```
+docker compose -f docker-compose.yml -f docker-compose.log-stack.yml up
+```
+
+This will spawn 3 additional containers for promtail, loki and grafana.
+
+Once running, log onto the grafana UI from [here](http://localhost:3101).
+Add the loki datasource in grafana with the following loki data-source url: `http://host.docker.internal:3100`.
+
+The logs should now be available in the explore tab to query.
+For debugging requests - you may query a specific traceId like so:
+
+```
+{app="ssportal-dev"} |= `ae44989e-7654-4e7f-ae7c-8987a829a622`
+```
+
 ## Available Scripts
 
 In the project directory, you can run:
