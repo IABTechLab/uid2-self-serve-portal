@@ -54,6 +54,10 @@ collectDefaultMetrics({ register });
 
 const app = express();
 const router = express.Router();
+app.use((req, res, next) => {
+  req.headers.traceId = uuid();
+  next();
+});
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
 
@@ -62,20 +66,32 @@ function getTransportsForEnv() {
     new winston.transports.Console(),
     new LokiTransport({
       host: SSP_LOKI_HOST,
+      labels: {
+        app: SSP_APP_NAME,
+      },
     }),
   ];
 }
 
-app.use(
-  expressWinston.logger({
-    transports: getTransportsForEnv(),
-    format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.json(),
-      winston.format.timestamp()
-    ),
-  })
-);
+const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
+  const basicString = `${timestamp} [${label}] ${level}: ${message}`;
+  const requestDetails = meta
+    ? ` [traceId=${meta.req.headers.traceId ?? ''}] metadata=${JSON.stringify(meta)}`
+    : '';
+  return basicString + requestDetails;
+});
+
+const logger = winston.createLogger({
+  transports: getTransportsForEnv(),
+  format: winston.format.combine(
+    winston.format.label({ label: SSP_APP_NAME }),
+    winston.format.timestamp(),
+    winston.format.json(),
+    traceFormat
+  ),
+});
+
+app.use(expressWinston.logger(logger));
 
 app.use(
   bypassHandlerForPaths(
@@ -147,15 +163,15 @@ app.use(
     transports: getTransportsForEnv(),
     format: winston.format.combine(
       winston.format.errors({ stack: SSP_IS_DEVELOPMENT }),
-      winston.format.colorize(),
+      winston.format.label({ label: SSP_APP_NAME }),
+      winston.format.timestamp(),
       winston.format.json(),
-      winston.format.timestamp()
+      traceFormat
     ),
   })
 );
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  console.log('Fallback error handler invoked:');
-  console.log(err.message);
+  logger.error('Fallback error handler invoked:', err.message);
   res.status(500).json({
     message:
       'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
@@ -165,5 +181,5 @@ const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
 app.use(errorHandler);
 
 export default app.listen(port, () => {
-  console.log(`Listening on port ${port}.`);
+  logger.info(`Listening on port ${port}.`);
 });

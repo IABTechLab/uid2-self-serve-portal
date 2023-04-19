@@ -56,7 +56,7 @@ services:
       - ./loki-data:/tmp/loki
     networks:
       - loki
- 
+
   promtail:
     image: grafana/promtail:2.4.1
     volumes:
@@ -65,7 +65,7 @@ services:
     command: -config.file=/etc/promtail/config.yml
     networks:
       - loki
- 
+
   grafana:
     image: grafana/grafana:8.5.5
     ports:
