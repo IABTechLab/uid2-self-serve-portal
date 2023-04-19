@@ -1,16 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
-import {
-  Control,
-  FieldPath,
-  FieldValue,
-  FieldValues,
-  RegisterOptions,
-  useController,
-} from 'react-hook-form';
+import { FieldPath, FieldValue, FieldValues, useController, useFormContext } from 'react-hook-form';
 
-import { Input } from './Input';
+import { BaseInputProps, Input } from './Input';
 
 import './SelectInput.scss';
 
@@ -18,23 +11,20 @@ export type Option<T> = {
   optionLabel: string;
   value: T;
 };
-export type SelectInputProps<
-  TFieldValues extends FieldValues,
-  TPath extends FieldPath<TFieldValues>
-> = {
+export type SelectInputProps<TFieldValues extends FieldValues> = {
   options: Option<FieldValue<TFieldValues>>[];
-  control?: Control<TFieldValues>;
-  inputName: TPath;
-  label?: string;
-  rules?: Omit<
-    RegisterOptions<TFieldValues, TPath>,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
-  >;
 };
+
 export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({
+  inputName,
+  label,
+  options,
+  rules,
+}: SelectInputProps<TFieldValues> & BaseInputProps<TFieldValues, TPath>) {
+  const { control } = useFormContext<TFieldValues>();
   const {
     field,
     fieldState: { error },

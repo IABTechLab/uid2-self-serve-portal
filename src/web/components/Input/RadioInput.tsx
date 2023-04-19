@@ -1,7 +1,7 @@
 import * as RadioGroup from '@radix-ui/react-radio-group';
-import { FieldPath, FieldValues, useController } from 'react-hook-form';
+import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
-import { Input } from './Input';
+import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
 import './RadioInput.scss';
@@ -9,7 +9,13 @@ import './RadioInput.scss';
 export function RadioInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({
+  inputName,
+  label,
+  options,
+  rules,
+}: SelectInputProps<TFieldValues> & BaseInputProps<TFieldValues, TPath>) {
+  const { control } = useFormContext<TFieldValues>();
   const {
     field,
     fieldState: { error },

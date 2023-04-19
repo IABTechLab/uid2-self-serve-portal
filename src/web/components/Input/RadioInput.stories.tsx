@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useForm } from 'react-hook-form';
 
+import { Form } from '../Core/Form';
 import { RadioInput } from './RadioInput';
 import { Option } from './SelectInput';
 
@@ -10,17 +10,10 @@ export default {
 } as ComponentMeta<typeof RadioInput>;
 
 const Template: ComponentStory<typeof RadioInput> = (args) => {
-  const { control, handleSubmit } = useForm({
-    mode: 'onSubmit',
-    reValidateMode: 'onChange',
-  });
-  const onSubmit = () => {};
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <RadioInput control={control} {...args} inputName='radio' />{' '}
-      <button type='submit'>Submit</button>
-    </form>
+    <Form onSubmit={() => {}}>
+      <RadioInput {...args} inputName='radio' />{' '}
+    </Form>
   );
 };
 
