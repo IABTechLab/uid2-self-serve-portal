@@ -8,7 +8,6 @@ export type BaseInputProps<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
 > = {
-  control?: Control<TFieldValues>;
   inputName: TPath;
   label?: string;
   rules?: Omit<

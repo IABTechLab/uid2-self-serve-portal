@@ -1,23 +1,22 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import clsx from 'clsx';
-import { FieldPathByValue, FieldValues, useController } from 'react-hook-form';
+import { FieldPathByValue, FieldValues, useController, useFormContext } from 'react-hook-form';
 
 import { BaseInputProps, Input } from './Input';
-import { withFormContext } from './withFormContext';
 
 import './Input.scss';
 
-function TextInputComponent<
+export function TextInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPathByValue<TFieldValues, String>
 >({
-  control,
   inputName,
   label,
   rules,
   className,
   ...rest
 }: BaseInputProps<TFieldValues, TPath> & React.InputHTMLAttributes<HTMLInputElement>) {
+  const { control } = useFormContext<TFieldValues>();
   const {
     field,
     fieldState: { error },
@@ -40,5 +39,3 @@ function TextInputComponent<
     </Input>
   );
 }
-
-export const TextInput = withFormContext({ inputComponent: TextInputComponent });
