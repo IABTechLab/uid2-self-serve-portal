@@ -6,6 +6,7 @@ import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import { collectDefaultMetrics, Registry } from 'prom-client';
+import { v4 as uuid } from 'uuid';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
@@ -121,6 +122,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   res.status(500).json({
     message:
       'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
+    errorHash: uuid(), // TODO: should come from winston request context
   });
 };
 app.use(errorHandler);
