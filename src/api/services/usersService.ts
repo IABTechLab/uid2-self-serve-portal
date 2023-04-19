@@ -18,3 +18,7 @@ export const isUserBelongsToParticipant = async (email: string, participantId: n
 
   return !!user;
 };
+
+export function getUsersByParticipantId(participantId: number) {
+  return User.query().where('participantId', '=', participantId);
+}

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
@@ -10,15 +10,21 @@ import { PortalRoute } from './routeUtils';
 import './teamMembers.scss';
 
 type TeamMemberProps = { person: User };
+
 function TeamMember({ person }: TeamMemberProps) {
+  const [editMode, setEditMode] = useState(false);
   return (
-    <tr>
-      <td>{person.location}</td>
+    <tr className='member-view'>
+      <td>{`${person.firstName} ${person.lastName}`}</td>
       <td>{person.email}</td>
       <td>Admin</td>
       <td className='action'>
-        <FontAwesomeIcon icon='pencil' />
-        <FontAwesomeIcon icon='trash-can' />
+        <button type='button'>
+          <FontAwesomeIcon icon='pencil' onClick={() => setEditMode(true)} />
+        </button>
+        <button type='button' className='delete'>
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
       </td>
     </tr>
   );
@@ -46,9 +52,9 @@ function TeamMembers() {
               <table className='portal-team-table'>
                 <thead>
                   <tr>
-                    <th>Location</th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Job Function</th>
                     <th className='action'>Actions</th>
                   </tr>
                 </thead>

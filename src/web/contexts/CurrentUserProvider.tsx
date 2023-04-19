@@ -35,7 +35,7 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
   }, [keycloak]);
 
   useEffect(() => {
-    if (LoggedInUser && !LoggedInUser.user && location.pathname !== '/accont/create') {
+    if (LoggedInUser && !LoggedInUser.user && location.pathname !== '/account/create') {
       navigate('/account/create');
     }
   }, [LoggedInUser, location.pathname, navigate]);

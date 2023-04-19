@@ -15,7 +15,7 @@ const sampleParticipant = {
 const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
   {
     email: 'test@example.com',
-    firstName: 'Text',
+    firstName: 'Example',
     lastName: 'User',
     location: 'Sydney, AU',
     phone: '+61298765432',
