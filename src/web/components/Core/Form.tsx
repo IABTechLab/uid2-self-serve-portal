@@ -1,6 +1,7 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import axios from 'axios';
-import React, { createContext, ReactNode, useCallback, useMemo } from 'react';
-import { Control, DeepPartial, FieldValues, SubmitHandler, useForm } from 'react-hook-form';
+import { ReactNode, useCallback } from 'react';
+import { DeepPartial, FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import './Form.scss';
 
@@ -11,17 +12,11 @@ type FormProps<T extends FieldValues> = {
   defaultValues?: DeepPartial<T>;
   submitButtonText?: string;
   customizeSubmit?: boolean;
+  id?: string;
 };
-
-export type FormContextType<T extends FieldValues> = {
-  control: Control<T>;
-  handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const FormContext = createContext<FormContextType<any> | null>(null);
 
 export function Form<T extends FieldValues>({
+  id,
   onSubmit,
   onError,
   defaultValues,
@@ -29,15 +24,14 @@ export function Form<T extends FieldValues>({
   submitButtonText,
   customizeSubmit,
 }: FormProps<T>) {
-  const {
-    handleSubmit,
-    control,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm({
+  const methods = useForm<T>({
     defaultValues,
   });
-
+  const {
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = methods;
   const submit = useCallback(
     async (formData: T) => {
       try {
@@ -58,13 +52,9 @@ export function Form<T extends FieldValues>({
     [onError, onSubmit, setError]
   );
 
-  const formContextValue = useMemo(() => {
-    return { control, handleSubmit: handleSubmit(submit) };
-  }, [control, handleSubmit, submit]);
-
   return (
-    <form onSubmit={handleSubmit(submit)}>
-      <FormContext.Provider value={formContextValue as FormContextType<T>}>
+    <form onSubmit={handleSubmit(submit)} id={id}>
+      <FormProvider {...methods}>
         {errors.root?.serverError && (
           <p className='form-error' data-testid='formError'>
             {errors.root?.serverError.message}
@@ -78,7 +68,7 @@ export function Form<T extends FieldValues>({
             </button>
           </div>
         )}
-      </FormContext.Provider>
+      </FormProvider>
     </form>
   );
 }
