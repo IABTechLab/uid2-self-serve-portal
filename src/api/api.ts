@@ -61,18 +61,6 @@ app.use((req, res, next) => {
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
 
-function getTransportsForEnv() {
-  return [
-    new winston.transports.Console(),
-    new LokiTransport({
-      host: SSP_LOKI_HOST,
-      labels: {
-        app: SSP_APP_NAME,
-      },
-    }),
-  ];
-}
-
 const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
   const basicString = `${timestamp} [${label}] ${level}: ${message}`;
   const requestDetails = meta
@@ -81,14 +69,30 @@ const traceFormat = winston.format.printf(({ timestamp, label, level, message, m
   return basicString + requestDetails;
 });
 
-const logger = winston.createLogger({
-  transports: getTransportsForEnv(),
-  format: winston.format.combine(
+const loggerFormat = () => {
+  return winston.format.combine(
     winston.format.label({ label: SSP_APP_NAME }),
     winston.format.timestamp(),
     winston.format.json(),
     traceFormat
-  ),
+  );
+};
+function getTransportsForEnv() {
+  return [
+    new winston.transports.Console(),
+    new LokiTransport({
+      host: SSP_LOKI_HOST,
+      labels: {
+        app: SSP_APP_NAME,
+      },
+      format: loggerFormat(),
+    }),
+  ];
+}
+
+const logger = winston.createLogger({
+  transports: getTransportsForEnv(),
+  format: loggerFormat(),
 });
 
 app.use(expressWinston.logger(logger));

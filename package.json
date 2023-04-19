@@ -74,7 +74,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test --testPathPattern=src/web/",
-    "api": "nodemon -r dotenv/config --files ./src/api/api.ts",
+    "api": "nodemon -r dotenv/config ./src/api/api.ts",
     "build-api": "npx tsc --build ./tsconfig-api.json",
     "test-api": "npx jest --testTimeout=5000 --testPathPattern=src/api/tests --setupFiles dotenv/config --forceExit",
     "storybook": "start-storybook -p 6006 -s public",
