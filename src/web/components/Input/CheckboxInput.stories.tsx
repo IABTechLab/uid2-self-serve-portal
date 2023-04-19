@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { useForm } from 'react-hook-form';
 
+import { Form } from '../Core/Form';
 import { CheckboxInput } from './CheckboxInput';
 import { Option } from './SelectInput';
 
@@ -16,17 +16,10 @@ const options: Option<string>[] = [
 ];
 
 const Template: ComponentStory<typeof CheckboxInput> = (args) => {
-  const { control, handleSubmit } = useForm({
-    mode: 'onSubmit',
-    reValidateMode: 'onChange',
-  });
-  const onSubmit = () => {};
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <CheckboxInput control={control} {...args} inputName='checkbox' />{' '}
-      <button type='submit'>Submit</button>
-    </form>
+    <Form onSubmit={() => {}}>
+      <CheckboxInput {...args} inputName='checkbox' />{' '}
+    </Form>
   );
 };
 

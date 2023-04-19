@@ -1,14 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import clsx from 'clsx';
-import {
-  Control,
-  FieldPathByValue,
-  FieldValues,
-  RegisterOptions,
-  useController,
-} from 'react-hook-form';
+import { FieldPathByValue, FieldValues, useController, useFormContext } from 'react-hook-form';
 
-import { Input } from './Input';
+import { BaseInputProps, Input } from './Input';
 
 import './Input.scss';
 
@@ -16,20 +10,13 @@ export function TextInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPathByValue<TFieldValues, String>
 >({
-  control,
   inputName,
   label,
   rules,
+  className,
   ...rest
-}: {
-  control?: Control<TFieldValues>;
-  inputName: TPath;
-  label: string;
-  rules?: Omit<
-    RegisterOptions<TFieldValues, TPath>,
-    'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
-  >;
-} & React.InputHTMLAttributes<HTMLInputElement>) {
+}: BaseInputProps<TFieldValues, TPath> & React.InputHTMLAttributes<HTMLInputElement>) {
+  const { control } = useFormContext<TFieldValues>();
   const {
     field,
     fieldState: { error },
@@ -43,7 +30,7 @@ export function TextInput<
   return (
     <Input error={error} label={label} inputName={inputName}>
       <input
-        className={clsx('input-container', { withError: error })}
+        className={clsx('input-container', { withError: error }, className)}
         {...safeField}
         aria-label={inputName}
         aria-invalid={error ? 'true' : 'false'}
