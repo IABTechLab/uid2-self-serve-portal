@@ -1,6 +1,6 @@
 import * as Label from '@radix-ui/react-label';
 import { ReactNode } from 'react';
-import { Control, FieldError, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
+import { FieldError, FieldPath, FieldValues, RegisterOptions } from 'react-hook-form';
 
 import './Input.scss';
 
@@ -8,7 +8,6 @@ export type BaseInputProps<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
 > = {
-  control?: Control<TFieldValues>;
   inputName: TPath;
   label?: string;
   rules?: Omit<

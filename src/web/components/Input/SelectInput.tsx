@@ -1,10 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Select from '@radix-ui/react-select';
 import clsx from 'clsx';
-import { FieldPath, FieldValue, FieldValues, useController } from 'react-hook-form';
+import { FieldPath, FieldValue, FieldValues, useController, useFormContext } from 'react-hook-form';
 
 import { BaseInputProps, Input } from './Input';
-import { withFormContext } from './withFormContext';
 
 import './SelectInput.scss';
 
@@ -16,16 +15,16 @@ export type SelectInputProps<TFieldValues extends FieldValues> = {
   options: Option<FieldValue<TFieldValues>>[];
 };
 
-function SelectInputComponent<
+export function SelectInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
 >({
-  control,
   inputName,
   label,
   options,
   rules,
 }: SelectInputProps<TFieldValues> & BaseInputProps<TFieldValues, TPath>) {
+  const { control } = useFormContext<TFieldValues>();
   const {
     field,
     fieldState: { error },
@@ -70,5 +69,3 @@ function SelectInputComponent<
     </Input>
   );
 }
-
-export const SelectInput = withFormContext({ inputComponent: SelectInputComponent });

@@ -3,6 +3,7 @@ import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
 import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
+import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
 export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
@@ -42,19 +43,25 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
 }
 
 export async function GetParticipantByUserId(id: number) {
-  const result = await axios.get<ParticipantPayload>(`/users/${id}/participant`);
-  if (result.status === 200) {
+  try {
+    const result = await axios.get<ParticipantPayload>(`/users/${id}/participant`, {
+      validateStatus: (status) => status === 200,
+    });
     return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get participant');
   }
-  throw Error('Could not get participant');
 }
 
 export async function GetAllParticipant() {
-  const result = await axios.get<ParticipantPayload[]>(`/participants`);
-  if (result.status === 200) {
+  try {
+    const result = await axios.get<ParticipantPayload[]>(`/participants`, {
+      validateStatus: (status) => status === 200,
+    });
     return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load participants');
   }
-  throw Error('Could not load participants');
 }
 
 export type InviteTeamMemberForm = {
@@ -65,7 +72,11 @@ export type InviteTeamMemberForm = {
 };
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
-  return axios.post(`/participants/${participantId}/invite`, formData);
+  try {
+    return await axios.post(`/participants/${participantId}/invite`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not invite participants');
+  }
 }
 
 export type UpdateParticipantForm = {
