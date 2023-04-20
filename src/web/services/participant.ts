@@ -7,8 +7,9 @@ import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
 const ParticipantPartial = ParticipantSchema.deepPartial();
-export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
+export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'allowSharing'>;
 export type ParticipantCreationPayload = z.infer<typeof ParticipantPartial>;
+
 export type CreateParticipantForm = {
   companyName: string;
   officeLocation: string;
@@ -81,7 +82,6 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
 }
 
 export type UpdateParticipantForm = {
-  allowSharing: boolean;
   location: string;
   logo: string;
 };

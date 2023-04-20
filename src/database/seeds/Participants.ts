@@ -8,17 +8,31 @@ type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<ParticipantsType & { type: string }, 'id'>[] = [
   {
     name: 'Publisher example',
-
+    allowSharing: true,
     status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
+    location: 'Sydney',
   },
-  { name: 'DSP example', status: ParticipantStatus.AwaitingApproval, type: 'DSP' },
-  { name: 'DP example', status: ParticipantStatus.Approved, type: 'Data Provider' },
+  {
+    name: 'DSP example',
+    status: ParticipantStatus.AwaitingApproval,
+    type: 'DSP',
+    allowSharing: true,
+    location: 'Sydney',
+  },
+  {
+    name: 'DP example',
+    status: ParticipantStatus.Approved,
+    allowSharing: true,
+    type: 'Data Provider',
+    location: 'Sydney',
+  },
   {
     name: 'Advertiser example',
-
+    allowSharing: true,
     status: ParticipantStatus.Approved,
     type: 'Advertiser',
+    location: 'Sydney',
   },
 ];
 

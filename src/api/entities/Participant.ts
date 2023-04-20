@@ -40,12 +40,16 @@ export class Participant extends BaseModel {
   id!: number;
   name!: string;
   status!: ParticipantStatus;
+  allowSharing!: boolean;
+  location?: string;
 }
 
 export const ParticipantSchema = z.object({
-  id: z.number().optional(),
+  id: z.number(),
   name: z.string(),
   status: z.nativeEnum(ParticipantStatus),
   types: z.array(ParticipantTypeSchema).optional(),
   users: z.array(UserScheme).optional(),
+  allowSharing: z.boolean(),
+  location: z.string().optional(),
 });
