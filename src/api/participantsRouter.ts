@@ -78,6 +78,7 @@ participantsRouter.post(
       if (err instanceof z.ZodError) {
         return res.status(400).send(err.issues);
       }
+      throw err;
     }
   }
 );
@@ -95,11 +96,12 @@ participantsRouter.put(
 
       const { participant } = req;
       await participant!.$query().patch({ location, allowSharing });
-      return res.sendStatus(200);
+      return res.status(200).json(participant);
     } catch (err) {
       if (err instanceof z.ZodError) {
         return res.status(400).send(err.issues);
       }
+      throw err;
     }
   }
 );

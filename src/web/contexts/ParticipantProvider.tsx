@@ -6,11 +6,13 @@ import { Loading } from '../components/Core/Loading';
 import { GetParticipantByUserId, ParticipantResponse } from '../services/participant';
 import { CurrentUserContext } from './CurrentUserProvider';
 
-type PariticipantWithSetter = {
+type ParticipantWithSetter = {
   participant: ParticipantResponse | null;
+  setParticipant: (participant: ParticipantResponse) => void;
 };
-export const ParticipantContext = createContext<PariticipantWithSetter>({
+export const ParticipantContext = createContext<ParticipantWithSetter>({
   participant: null,
+  setParticipant: () => {},
 });
 
 function ParticipantProvider({ children }: { children: ReactNode }) {
@@ -46,6 +48,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const participantContext = useMemo(
     () => ({
       participant,
+      setParticipant,
     }),
     [participant]
   );

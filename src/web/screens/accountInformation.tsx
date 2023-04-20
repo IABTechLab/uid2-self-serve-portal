@@ -35,14 +35,15 @@ function AccountInformationFooter() {
 }
 
 function AccountInformation() {
-  const { participant } = useContext(ParticipantContext);
+  const { participant, setParticipant } = useContext(ParticipantContext);
   const navigate = useNavigate();
   const defaultFormData = {
     location: participant?.location,
-    allowSharing: participant?.allowSharing ? [true] : [],
+    allowSharing: participant?.allowSharing,
   };
   const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
-    await UpdateParticipant(formData, participant!.id);
+    const updatedParticipant = await UpdateParticipant(formData, participant!.id);
+    setParticipant(updatedParticipant);
     navigate('/dashboard/team');
   };
   const participantTypes: string = useMemo(() => {

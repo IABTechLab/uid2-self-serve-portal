@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
+import { useCallback } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
 import { BaseInputProps, Input } from './Input';
@@ -25,6 +26,29 @@ export function CheckboxInput<
     name: inputName,
     rules,
   });
+
+  const isBooleanCheckbox = options.length === 1;
+  const isDefaultChecked = useCallback(
+    (value: TPath) => {
+      if (isBooleanCheckbox) return field.value;
+      return (field.value as Array<TPath>).includes(value);
+    },
+    [field.value, isBooleanCheckbox]
+  );
+
+  const onCheckedChange = (checked: boolean, value: TPath) => {
+    if (!isBooleanCheckbox) {
+      const valueCopy = new Set(field.value);
+      if (checked) {
+        valueCopy.add(value);
+      } else {
+        valueCopy.delete(value);
+      }
+      field.onChange(Array.from(valueCopy));
+    } else {
+      field.onChange(checked);
+    }
+  };
   return (
     <Input error={error} label={label} inputName={inputName}>
       <div className='inline-options'>
@@ -35,16 +59,8 @@ export function CheckboxInput<
               id={optionLabel}
               value={value}
               aria-invalid={error ? 'true' : 'false'}
-              defaultChecked={(field.value as Array<TPath>).includes(value)}
-              onCheckedChange={(checked: boolean) => {
-                const valueCopy = new Set(field.value);
-                if (checked) {
-                  valueCopy.add(value);
-                } else {
-                  valueCopy.delete(value);
-                }
-                field.onChange(Array.from(valueCopy));
-              }}
+              defaultChecked={isDefaultChecked(value)}
+              onCheckedChange={(checked: boolean) => onCheckedChange(checked, value)}
             >
               <Checkbox.Indicator className='checkbox-indicator'>
                 <FontAwesomeIcon icon='check' />
