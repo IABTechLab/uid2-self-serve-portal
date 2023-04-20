@@ -1,10 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import { Server } from 'http';
 import tokenRequester from 'keycloak-request-token';
 import { Request } from 'supertest';
 
-import api from '../api';
+import { app } from '../api';
 
 /**
  * WARN: This leaves open time_wait connections after the test suite has finished running.
@@ -15,9 +16,6 @@ import api from '../api';
  */
 function useTestServer() {
   let token = '';
-  afterAll(async () => {
-    api.close();
-  });
   beforeAll(async () => {
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
       username: 'test_user@example.com',

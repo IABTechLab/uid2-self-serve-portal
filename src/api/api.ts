@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
-import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
+import { auth } from 'express-oauth2-jwt-bearer';
 import { collectDefaultMetrics, Registry } from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
@@ -106,10 +106,6 @@ router.get('/keycloak-config', async (_req, res) => {
   });
 });
 
-router.get('/:account/test', claimIncludes('roles', 'admin'), async (_req, res) => {
-  return res.sendStatus(200);
-});
-
 router.all('/*', (req, res) => {
   res.json({ message: `${req.method} not allowed on this route` }).status(405);
 });
@@ -126,7 +122,4 @@ const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   });
 };
 app.use(errorHandler);
-
-export default app.listen(port, () => {
-  console.log(`Listening on port ${port}.`);
-});
+export { app };

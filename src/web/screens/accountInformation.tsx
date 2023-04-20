@@ -15,7 +15,7 @@ function AccountInformationFooter() {
   return (
     <div className='dashboard-footer'>
       <div>
-        <button className='small-button primary-button' type='submit' form='account-info-form'>
+        <button className='small-button primary-button' type='submit'>
           Save & Continue
         </button>
         <button className='transparent-button' type='button'>
@@ -42,7 +42,7 @@ function AccountInformation() {
   }, [participant]);
 
   return (
-    <Form<UpdateParticipantForm> customizeSubmit onSubmit={onSubmit} id='account-info-form'>
+    <Form<UpdateParticipantForm> customizeSubmit onSubmit={onSubmit}>
       <h1>General Account Information</h1>
       <div className='account-info-content'>
         <h3 className='account-info-title'>

@@ -6,7 +6,7 @@ import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Partici
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
-export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
+export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'id' | 'allowSharing'>;
 
 export type CreateParticipantForm = {
   companyName: string;
