@@ -7,6 +7,7 @@ import { PortalHeader } from './components/Core/PortalHeader';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
+import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
 import './App.scss';
 
@@ -31,17 +32,19 @@ export function App() {
       : undefined;
   return (
     <StrictMode>
-      <ParticipantProvider>
-        <div className='app' ref={rootRef}>
-          <PortalHeader
-            email={LoggedInUser?.profile?.email}
-            fullname={fullname}
-            setDarkMode={setDarkMode}
-            logout={logout}
-          />
-          <Outlet />
-        </div>
-      </ParticipantProvider>
+      <PortalErrorBoundary>
+        <ParticipantProvider>
+          <div className='app' ref={rootRef}>
+            <PortalHeader
+              email={LoggedInUser?.profile?.email}
+              fullname={fullname}
+              setDarkMode={setDarkMode}
+              logout={logout}
+            />
+            <Outlet />
+          </div>
+        </ParticipantProvider>
+      </PortalErrorBoundary>
     </StrictMode>
   );
 }
