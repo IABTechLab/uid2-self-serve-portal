@@ -17,8 +17,8 @@ const options: Option<string>[] = [
 
 const Template: ComponentStory<typeof CheckboxInput> = (args) => {
   return (
-    <Form onSubmit={() => {}}>
-      <CheckboxInput {...args} inputName='checkbox' />{' '}
+    <Form onSubmit={(formData) => console.log(formData)}>
+      <CheckboxInput {...args} inputName='checkbox' />
     </Form>
   );
 };
