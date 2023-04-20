@@ -89,10 +89,8 @@ export type UpdateParticipantForm = {
 
 export async function UpdateParticipant(formData: UpdateParticipantForm, participantId: number) {
   try {
-    return await axios.put(`/participants/${participantId}`, {
-      location: formData.location,
-      logo: formData.logo,
-    });
+    const result = await axios.put<ParticipantResponse>(`/participants/${participantId}`, formData);
+    return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
   }
