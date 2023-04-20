@@ -49,6 +49,7 @@ export function CheckboxInput<
       field.onChange(checked);
     }
   };
+
   return (
     <Input error={error} label={label} inputName={inputName}>
       <div className='inline-options'>

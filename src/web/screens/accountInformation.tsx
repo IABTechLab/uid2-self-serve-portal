@@ -1,11 +1,12 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 import { Form } from '../components/Core/Form';
 import { Tooltip } from '../components/Core/Tooltip';
 import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { UpdateParticipantForm } from '../services/participant';
+import { UpdateParticipant, UpdateParticipantForm } from '../services/participant';
 import { PortalRoute } from './routeUtils';
 
 import './accountInformation.scss';
@@ -26,11 +27,26 @@ function AccountInformationFooter() {
 }
 
 function AccountInformation() {
-  const onSubmit: SubmitHandler<UpdateParticipantForm> = async () => {};
-
   const { participant } = useContext(ParticipantContext);
+  const navigate = useNavigate();
+  const defaultFormData = {
+    location: participant?.location,
+    allowSharing: participant?.allowSharing ? [true] : [],
+  };
+  const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
+    await UpdateParticipant(formData, participant!.id);
+    navigate('/dashboard/team');
+  };
+  const participantTypes: string = useMemo(() => {
+    return participant?.types?.map((t) => t.typeName).join(', ') ?? '';
+  }, [participant]);
+
   return (
-    <Form<UpdateParticipantForm> customizeSubmit onSubmit={onSubmit}>
+    <Form<UpdateParticipantForm>
+      customizeSubmit
+      onSubmit={onSubmit}
+      defaultValues={defaultFormData}
+    >
       <h1>General Account Information</h1>
       <p>View and manage your participant information and default sharing settings.</p>
       <div className='account-info-content'>
@@ -53,7 +69,7 @@ function AccountInformation() {
             </span>
           </Tooltip>
         </h3>
-        <span>{participant?.types?.join(',')}</span>
+        <span>{participantTypes}</span>
         <TextInput
           inputName='location'
           label='Participant Location (optional)'

@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('participants', (table) => {
-    table.boolean('allowSharing').defaultTo(false);
+    table.boolean('allowSharing').defaultTo(true);
     table.string('location', 100);
   });
 }

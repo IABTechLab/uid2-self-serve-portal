@@ -83,7 +83,6 @@ participantsRouter.post(
 );
 
 const participantParser = ParticipantSchema.pick({
-  allowSharing: true,
   location: true,
 });
 participantsRouter.put(
@@ -91,10 +90,10 @@ participantsRouter.put(
   hasParticipantAccess,
   async (req: ParticipantRequest, res: Response) => {
     try {
-      const { location, allowSharing } = participantParser.parse(req.body);
+      const { location } = participantParser.parse(req.body);
 
       const { participant } = req;
-      await participant!.$query().patch({ location, allowSharing });
+      await participant!.$query().patch({ location });
 
       return res.sendStatus(200);
     } catch (err) {
