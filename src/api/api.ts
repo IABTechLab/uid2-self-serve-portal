@@ -8,14 +8,11 @@ import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import expressWinston from 'express-winston';
 import { collectDefaultMetrics, Registry } from 'prom-client';
 import { v4 as uuid } from 'uuid';
-import winston from 'winston';
-import LokiTransport from 'winston-loki';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_APP_NAME,
-  SSP_IS_DEVELOPMENT,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -24,8 +21,8 @@ import {
   SSP_KK_SSL_PUBLIC_CLIENT,
   SSP_KK_SSL_REQUIRED,
   SSP_KK_SSL_RESOURCE,
-  SSP_LOKI_HOST,
 } from './envars';
+import { getLoggers } from './helpers/loggingHelpers';
 import { participantsRouter } from './participantsRouter';
 import { usersRouter } from './usersRouter';
 
@@ -61,39 +58,7 @@ app.use((req, res, next) => {
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
 
-const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
-  const basicString = `${timestamp} [${label}] ${level}: ${message}`;
-  const requestDetails = meta
-    ? ` [traceId=${meta.req.headers.traceId ?? ''}] metadata=${JSON.stringify(meta)}`
-    : '';
-  return basicString + requestDetails;
-});
-
-const loggerFormat = () => {
-  return winston.format.combine(
-    winston.format.label({ label: SSP_APP_NAME }),
-    winston.format.timestamp(),
-    winston.format.json(),
-    traceFormat
-  );
-};
-function getTransportsForEnv() {
-  return [
-    new winston.transports.Console(),
-    new LokiTransport({
-      host: SSP_LOKI_HOST,
-      labels: {
-        app: SSP_APP_NAME,
-      },
-      format: loggerFormat(),
-    }),
-  ];
-}
-
-const logger = winston.createLogger({
-  transports: getTransportsForEnv(),
-  format: loggerFormat(),
-});
+const [logger, errorLogger] = getLoggers();
 
 app.use(expressWinston.logger(logger));
 
@@ -162,24 +127,13 @@ router.all('/*', (req, res) => {
 
 app.use(BASE_REQUEST_PATH, router);
 
-app.use(
-  expressWinston.errorLogger({
-    transports: getTransportsForEnv(),
-    format: winston.format.combine(
-      winston.format.errors({ stack: SSP_IS_DEVELOPMENT }),
-      winston.format.label({ label: SSP_APP_NAME }),
-      winston.format.timestamp(),
-      winston.format.json(),
-      traceFormat
-    ),
-  })
-);
+app.use(expressWinston.errorLogger(errorLogger));
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  logger.error('Fallback error handler invoked:', err.message);
+  logger.error(`Fallback error handler invoked: ${err.message}`);
   res.status(500).json({
     message:
       'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
-    errorHash: uuid(), // TODO: should come from winston request context
+    errorHash: req.headers.traceId,
   });
 };
 app.use(errorHandler);
