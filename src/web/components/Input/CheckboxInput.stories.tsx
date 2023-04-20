@@ -39,3 +39,14 @@ WithValidation.args = {
     validate: (value) => (value && value.length > 1) || 'At least two options are required',
   },
 };
+
+export const BooleanCheckbox = Template.bind({});
+BooleanCheckbox.args = {
+  inputName: 'boolean checkbox',
+  options: [
+    {
+      optionLabel: 'Tick to accept the term',
+      value: true,
+    },
+  ],
+};

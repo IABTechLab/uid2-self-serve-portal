@@ -127,6 +127,9 @@ WithDefaultData.args = {
   ],
   defaultValues: {
     textInput: 'Some default value',
+    checkboxInputValue: ['1'],
+    selectInputValue: '1',
+    radioInputValue: 0,
   },
 };
 
