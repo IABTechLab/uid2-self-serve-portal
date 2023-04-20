@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ParticipantStatus } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading';
 import { GetParticipantByUserId, ParticipantPayload } from '../services/participant';
+import { ApiError } from '../utils/apiError';
+import { useAsyncError } from '../utils/errorHandler';
 import { CurrentUserContext } from './CurrentUserProvider';
 
 type PariticipantWithSetter = {
@@ -19,6 +21,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
+  const throwError = useAsyncError();
   const user = LoggedInUser?.user || null;
 
   useEffect(() => {
@@ -34,14 +37,19 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadParticipant = async () => {
       setIsLoading(true);
-      if (user) {
-        const p = await GetParticipantByUserId(user!.id);
-        setParticipant(p);
+      try {
+        if (user) {
+          const p = await GetParticipantByUserId(user!.id);
+          setParticipant(p);
+        }
+      } catch (e: unknown) {
+        if (e instanceof ApiError) throwError(e);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     if (!participant) loadParticipant();
-  }, [user, participant]);
+  }, [user, participant, throwError]);
 
   const participantContext = useMemo(
     () => ({
