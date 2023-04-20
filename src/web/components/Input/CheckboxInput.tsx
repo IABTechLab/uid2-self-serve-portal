@@ -31,7 +31,7 @@ export function CheckboxInput<
   const isDefaultChecked = useCallback(
     (value: TPath) => {
       if (isBooleanCheckbox) return field.value;
-      return (field.value as Array<TPath>).includes(value);
+      return (field.value as Array<TPath>)?.includes(value);
     },
     [field.value, isBooleanCheckbox]
   );
