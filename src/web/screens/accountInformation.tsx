@@ -104,8 +104,6 @@ function AccountInformation() {
           label='Company Location (optional)'
           className='account-info-input'
         />
-        <h3 className='account-info-title'>Company Logo (optional)</h3>
-        <p>Please upload your company logo. The following formats are accepted: jpeg, png, jpg.</p>
       </div>
       <AccountInformationFooter />
     </Form>
