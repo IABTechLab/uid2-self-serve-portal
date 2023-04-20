@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import { Form, FormContext } from '../components/Core/Form';
+import { Form } from '../components/Core/Form';
 import { Tooltip } from '../components/Core/Tooltip';
 import { CheckboxInput } from '../components/Input/CheckboxInput';
 import { TextInput } from '../components/Input/TextInput';
@@ -12,17 +12,10 @@ import { PortalRoute } from './routeUtils';
 import './accountInformation.scss';
 
 function AccountInformationFooter() {
-  const context = useContext(FormContext);
-
-  if (!context) {
-    throw new Error('AccountInformationFooter must be used within a FormContext.Provider');
-  }
-  const { handleSubmit } = context;
-
   return (
     <div className='dashboard-footer'>
       <div>
-        <button className='small-button primary-button' type='button' onClick={handleSubmit}>
+        <button className='small-button primary-button' type='submit'>
           Save & Continue
         </button>
         <button className='transparent-button' type='button'>
