@@ -3,20 +3,20 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading';
-import { GetParticipantByUserId, ParticipantPayload } from '../services/participant';
+import { GetParticipantByUserId, ParticipantResponse } from '../services/participant';
 import { ApiError } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { CurrentUserContext } from './CurrentUserProvider';
 
 type PariticipantWithSetter = {
-  participant: ParticipantPayload | null;
+  participant: ParticipantResponse | null;
 };
 export const ParticipantContext = createContext<PariticipantWithSetter>({
   participant: null,
 });
 
 function ParticipantProvider({ children }: { children: ReactNode }) {
-  const [participant, setParticipant] = useState<ParticipantPayload | null>(null);
+  const [participant, setParticipant] = useState<ParticipantResponse | null>(null);
   const [loading, setIsLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
