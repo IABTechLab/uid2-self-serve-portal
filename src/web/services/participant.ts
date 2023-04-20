@@ -81,7 +81,19 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
 }
 
 export type UpdateParticipantForm = {
-  allowSharing: boolean;
-  location: string;
-  logo: string;
+  allowSharing: boolean[];
+  location?: string;
+  logo?: string;
 };
+
+export async function UpdateParticipant(formData: UpdateParticipantForm, participantId: number) {
+  try {
+    return await axios.put(`/participants/${participantId}`, {
+      allowSharing: formData.allowSharing?.length > 0,
+      location: formData.location,
+      logo: formData.logo,
+    });
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update participant');
+  }
+}

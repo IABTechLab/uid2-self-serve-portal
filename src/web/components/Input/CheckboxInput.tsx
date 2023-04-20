@@ -25,7 +25,6 @@ export function CheckboxInput<
     name: inputName,
     rules,
   });
-
   return (
     <Input error={error} label={label} inputName={inputName}>
       <div className='inline-options'>
@@ -36,6 +35,7 @@ export function CheckboxInput<
               id={optionLabel}
               value={value}
               aria-invalid={error ? 'true' : 'false'}
+              defaultChecked={(field.value as Array<TPath>).includes(value)}
               onCheckedChange={(checked: boolean) => {
                 const valueCopy = new Set(field.value);
                 if (checked) {

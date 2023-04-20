@@ -95,7 +95,6 @@ participantsRouter.put(
 
       const { participant } = req;
       await participant!.$query().patch({ location, allowSharing });
-
       return res.sendStatus(200);
     } catch (err) {
       if (err instanceof z.ZodError) {
