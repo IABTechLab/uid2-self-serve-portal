@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Loading } from '../components/Core/Loading';
 import { GetUserAccountByEmail, UserAccount } from '../services/userAccount';
+import { useAsyncError } from '../utils/errorHandler';
 
 type UserContextWithSetter = {
   LoggedInUser: UserAccount | null;
@@ -22,17 +23,23 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const throwError = useAsyncError();
 
   const loadUser = useCallback(async () => {
     setIsLoading(true);
-    const profile = await keycloak.loadUserProfile();
-    const user = await GetUserAccountByEmail(profile?.email);
-    SetLoggedInUser({
-      profile,
-      user,
-    });
-    setIsLoading(false);
-  }, [keycloak]);
+    try {
+      const profile = await keycloak.loadUserProfile();
+      const user = await GetUserAccountByEmail(profile?.email);
+      SetLoggedInUser({
+        profile,
+        user,
+      });
+    } catch (e: unknown) {
+      if (e instanceof Error) throwError(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [keycloak, throwError]);
 
   useEffect(() => {
     if (LoggedInUser && !LoggedInUser.user && location.pathname !== '/account/create') {

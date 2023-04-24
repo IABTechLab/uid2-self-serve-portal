@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { FieldPath, FieldValues, useController } from 'react-hook-form';
+import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
-import { Input } from './Input';
+import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
 import './CheckboxInput.scss';
@@ -10,7 +10,13 @@ import './CheckboxInput.scss';
 export function CheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
->({ control, inputName, label, options, rules }: SelectInputProps<TFieldValues, TPath>) {
+>({
+  inputName,
+  label,
+  options,
+  rules,
+}: SelectInputProps<TFieldValues> & BaseInputProps<TFieldValues, TPath>) {
+  const { control } = useFormContext<TFieldValues>();
   const {
     field,
     fieldState: { error },

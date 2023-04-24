@@ -10,6 +10,7 @@ import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
 import keycloak from './web/Keycloak';
 import { reportWebVitals } from './web/reportWebVitals';
 import { Routes } from './web/screens/routes';
+import { PortalErrorBoundary } from './web/utils/PortalErrorBoundary';
 
 import './web/index.scss';
 
@@ -17,9 +18,11 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <CurrentUserProvider>
-        <App />
-      </CurrentUserProvider>
+      <PortalErrorBoundary>
+        <CurrentUserProvider>
+          <App />
+        </CurrentUserProvider>
+      </PortalErrorBoundary>
     ),
     children: Routes,
   },
