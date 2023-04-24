@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import './Dialog.scss';
 
 export type DialogProps = {
-  triggerButton: string;
+  triggerButton: JSX.Element;
   children: ReactNode;
   title?: string;
   closeButton?: string;
@@ -23,9 +23,7 @@ export function Dialog({
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
       <RadixDialog.Trigger asChild>
-        <button className='small-button' type='button'>
-          {triggerButton}
-        </button>
+        {triggerButton}
       </RadixDialog.Trigger>
       <RadixDialog.Overlay className='dialog-overlay' />
       <RadixDialog.Content
