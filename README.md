@@ -116,6 +116,15 @@ docker compose restart keycloak
 This script imports the [realm-export.json](https://github.com/IABTechLab/uid2-self-serve-portal/blob/main/keycloak/realm/realm-export.json) to the keycloak and override realm if exists.\
 It is important to note that all the users in the realm will be removed. You may also need to re-generate your client secrets (see the main Keycloak setup entry above).
 
+### Enable blocking account creation by free email providers
+
+> Declarative User Profile is Technology Preview and is not fully supported.
+
+1. Click on the `Realm Settings` on the left side menu and click the `User Profile` tab.
+2. Click on `email`, scroll down to `validators` and click `create validator`.
+3. Select `pattern` from the list and add `^(?!.*@(gmail|hotmail|yahoo)\.com$).+@.+\..+$` as pattern and `errorPatternNoMatch` as error message key
+4. Click on the `Save` button
+
 ## Available Scripts
 
 In the project directory, you can run:
