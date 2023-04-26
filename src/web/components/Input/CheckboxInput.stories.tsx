@@ -17,8 +17,8 @@ const options: Option<string>[] = [
 
 const Template: ComponentStory<typeof CheckboxInput> = (args) => {
   return (
-    <Form onSubmit={() => {}}>
-      <CheckboxInput {...args} inputName='checkbox' />{' '}
+    <Form onSubmit={(formData) => console.log(formData)}>
+      <CheckboxInput {...args} inputName='checkbox' />
     </Form>
   );
 };
@@ -38,4 +38,15 @@ WithValidation.args = {
   rules: {
     validate: (value) => (value && value.length > 1) || 'At least two options are required',
   },
+};
+
+export const BooleanCheckbox = Template.bind({});
+BooleanCheckbox.args = {
+  inputName: 'boolean checkbox',
+  options: [
+    {
+      optionLabel: 'Tick to accept the term',
+      value: true,
+    },
+  ],
 };

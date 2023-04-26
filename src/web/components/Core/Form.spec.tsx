@@ -77,6 +77,30 @@ describe('Form Component', () => {
       textInput: 'Some default value',
     };
     render(<WithDefaultData onSubmit={mockOnSubmit} defaultValues={defaultFormData} />);
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Some default value')).toBeInTheDocument();
+    });
+
+    const radio2 = screen.getByLabelText('No');
+    await waitFor(() => {
+      expect(radio2).toBeChecked();
+    });
+
+    const checkbox1 = screen.getByRole('checkbox', { name: 'Checkbox 1' });
+    await waitFor(() => {
+      expect(checkbox1).toBeChecked();
+    });
+
+    const checkbox2 = screen.getByRole('checkbox', { name: 'Checkbox 2' });
+    await waitFor(() => {
+      expect(checkbox2).toBeChecked();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Option 1')).toBeInTheDocument();
+    });
+
     userEvent.click(screen.getByRole('button', { name: 'Submit' }));
 
     await waitFor(async () => {

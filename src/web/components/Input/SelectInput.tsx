@@ -36,7 +36,7 @@ export function SelectInput<
 
   return (
     <Input error={error} label={label} inputName={inputName}>
-      <Select.Root onValueChange={field.onChange}>
+      <Select.Root onValueChange={field.onChange} defaultValue={field.value}>
         <Select.Trigger
           className={clsx('input-container', 'select-trigger', { withError: error })}
           aria-label={inputName}
