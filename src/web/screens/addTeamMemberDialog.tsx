@@ -26,7 +26,7 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
 
   return (
     <Dialog
-      triggerButton='Add team member'
+      triggerButton={<button className='small-button' type='button'>Add team member</button>}
       title='Add Team Member'
       closeButton='Cancel'
       open={open}
