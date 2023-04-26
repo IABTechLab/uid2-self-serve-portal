@@ -33,7 +33,7 @@ services:
     depends_on:
       - database
     command:
-      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme --health-enabled=true --metrics-enabled=true
+      - start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid2-theme --health-enabled=true --metrics-enabled=true --features=declarative-user-profile
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/themes:/opt/keycloak/themes
