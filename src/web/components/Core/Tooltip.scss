@@ -1,0 +1,13 @@
+.tooltip-trigger {
+  color: var(--theme-info-icon);
+  border: none !important;
+  padding: 0 5px !important;
+}
+
+.tooltip-content {
+  color: var(--theme-info-content);
+  font-family: 'Inter';
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.18rem;
+}

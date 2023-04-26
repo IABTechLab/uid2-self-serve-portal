@@ -19,18 +19,11 @@
     display: flex;
     align-items: stretch;
     background-color: var(--theme-background-header);
-    flex-flow: row wrap;
     height: 100%;
   }
 
   .app-centralize {
     align-items: center;
     justify-content: center;
-  }
-
-  .content {
-    padding: 12px 112px 12px 12px;
-    flex-grow: 1;
-    background-color: var(--theme-background-content);
   }
 }
