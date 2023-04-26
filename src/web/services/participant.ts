@@ -78,3 +78,9 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
     throw backendError(e, 'Could not invite participants');
   }
 }
+
+export type UpdateParticipantForm = {
+  allowSharing: boolean;
+  location: string;
+  logo: string;
+};
