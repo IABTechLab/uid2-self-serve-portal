@@ -83,4 +83,5 @@ export type UpdateParticipantForm = {
   allowSharing: boolean;
   location: string;
   logo: string;
+  acceptConditions: boolean;
 };

@@ -5,9 +5,16 @@
 }
 
 .tooltip-content {
-  color: var(--theme-info-content);
-  font-family: 'Inter';
+  color: var(--theme-button-text);
+  border-radius: 4px;
+  background-color: var(--theme-background-sidepanel);
+  // border: 2px solid var(--theme-info-icon);
+  padding: 0.625rem;
   font-weight: 400;
-  font-size: 1rem;
-  line-height: 1.18rem;
+  font-size: 0.625rem;
+  line-height: 0.75rem;
+}
+
+.tooltip-arrow {
+  fill: var(--theme-background-sidepanel);
 }

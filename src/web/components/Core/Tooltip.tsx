@@ -18,6 +18,7 @@ export function Tooltip({ children, side, align }: TooltipProps) {
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content side={side} align={align} className='tooltip-content'>
           {children}
+          <TooltipPrimitive.Arrow className='tooltip-arrow' />
         </TooltipPrimitive.Content>
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>
