@@ -30,3 +30,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: jyg-UID2-833-setup-sendgrid
+          forceSyncAll: '${{ github.event.inputs.forceSyncAll }}'
