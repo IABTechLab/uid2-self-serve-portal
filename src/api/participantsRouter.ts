@@ -4,8 +4,6 @@ import { z } from 'zod';
 import { Participant, ParticipantSchema } from './entities/Participant';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { createEmailService } from './services/emailService';
-import { EmailArgs } from './services/emailTypes';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
 import { createUserInPortal, isUserBelongsToParticipant } from './services/usersService';
 
