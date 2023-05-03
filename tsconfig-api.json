@@ -4,6 +4,7 @@
     "outDir": "api-dist"
   },
   "include": ["src/**/*"],
+  "resolveJsonModule": true,
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
