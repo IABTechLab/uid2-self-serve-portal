@@ -5,7 +5,6 @@
     "resolveJsonModule": true
   },
   "include": ["src/**/*"],
-  "resolveJsonModule": true,
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
