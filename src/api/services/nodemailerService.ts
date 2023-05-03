@@ -1,12 +1,14 @@
 import nodemailer from 'nodemailer';
 import { Address } from 'nodemailer/lib/mailer';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import hbs from 'nodemailer-express-handlebars';
 
 import { EmailArgs, EmailData, UID2Sender } from './emailTypes';
 
 const transporter = nodemailer.createTransport({
-  port: 18025,
-});
+  host: 'localhost',
+  port: 11025,
+} as SMTPTransport.Options);
 
 transporter.use(
   'compile',
@@ -14,10 +16,11 @@ transporter.use(
     viewEngine: {
       extname: '.hbs',
       layoutsDir: 'emailTemplates/',
+      defaultLayout: false,
     },
     viewPath: 'emailTemplates/',
     extName: '.hbs',
-  })
+  } as hbs.NodemailerExpressHandlebarsOptions)
 );
 
 export const convertEmailDataToAddress = (emailData: EmailData): string | Address => {
@@ -40,6 +43,6 @@ export const sendEmail = async ({
     template,
     context: templateData,
   };
-
+  console.log(mailOptions);
   await transporter.sendMail(mailOptions);
 };
