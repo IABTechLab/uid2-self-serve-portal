@@ -22,3 +22,4 @@ jobs:
           sendgridApiKey: ${{ secrets.SENDGRID_API_KEY }}
           templatesDir: 'emailTemplates/'
           forceSyncAll: '${{ github.event.inputs.forceSyncAll }}'
+          outputFile: 'src/api/templateIdMapping.json'
