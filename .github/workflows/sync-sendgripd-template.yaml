@@ -6,7 +6,9 @@ on:
         description: Force sync all files in templates dir (Useful for initial synchronization)
         required: false
         default: false
-
+    push:
+      branches:
+        - 'jyg-UID2-833-setup-sendgrid'
 jobs:
   sendgrid_sync:
     runs-on: ubuntu-latest
