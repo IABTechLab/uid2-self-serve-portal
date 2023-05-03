@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { Participant, ParticipantSchema } from './entities/Participant';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
+import { createEmailService } from './services/emailService';
+import { EmailArgs } from './services/emailTypes';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
 import { createUserInPortal, isUserBelongsToParticipant } from './services/usersService';
 
@@ -17,7 +19,19 @@ participantsRouter.post('/', async (req, res) => {
   try {
     const data = ParticipantSchema.parse(req.body);
     // insertGraphAndFetch will implicitly create a transaction
-    const newParticipant = await Participant.query().insertGraphAndFetch([data], { relate: true });
+    const emailService = createEmailService();
+    const emailArgs: EmailArgs = {
+      subject: 'test test',
+      templateData: { receiver: 'TAMs', link: 'test' },
+      template: 'newParticipantReadyForReview',
+      to: { name: 'TAMs', email: 'test.tams@example.com' },
+    };
+    emailService.sendEmail(emailArgs);
+
+    const newParticipant = await Participant.query().insertGraphAndFetch([data], {
+      relate: true,
+    });
+
     return res.status(201).json(newParticipant);
   } catch (err) {
     if (err instanceof z.ZodError) {
