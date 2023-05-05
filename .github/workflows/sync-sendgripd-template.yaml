@@ -26,8 +26,7 @@ jobs:
       - name: Write template id mapping
         uses: DamianReeves/write-file-action@master
         with:
-          templatesDir: 'emailTemplates/'
-          path: ${{ env.home}}/src/api/templateIdMapping.json
+          path: src/api/templateIdMapping.json
           contents: ${{ steps.sendgrid_sync.outputs.sendgridTemplateIdMapping }}
           write-mode: overwrite
       - name: Commit & Push
