@@ -34,5 +34,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: jyg-UID2-833-setup-sendgrid
-          force: true
-          message: 'Overwritten by Github Actions - ${date}'
