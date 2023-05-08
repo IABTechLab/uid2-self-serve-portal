@@ -22,12 +22,14 @@ export const sendEmail = async ({ to, subject, templateData, template }: EmailAr
   const message = {
     from: UID2Sender,
     templateId: findTemplate(template),
-    subject,
     personalizations: [
       {
         to,
         // eslint-disable-next-line camelcase
-        dynamic_template_data: templateData,
+        dynamic_template_data: {
+          subject,
+          ...templateData,
+        },
       },
     ],
   };

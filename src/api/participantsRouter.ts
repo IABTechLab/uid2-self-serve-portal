@@ -19,15 +19,6 @@ participantsRouter.post('/', async (req, res) => {
   try {
     const data = ParticipantSchema.parse(req.body);
     // insertGraphAndFetch will implicitly create a transaction
-    const emailService = createEmailService();
-    const emailArgs: EmailArgs = {
-      subject: 'test test',
-      templateData: { receiver: 'TAMs', link: 'test' },
-      template: 'newParticipantReadyForReview',
-      to: { name: 'TAMs', email: 'test.tams@example.com' },
-    };
-    emailService.sendEmail(emailArgs);
-
     const newParticipant = await Participant.query().insertGraphAndFetch([data], {
       relate: true,
     });
