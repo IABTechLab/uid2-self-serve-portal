@@ -5,6 +5,7 @@ import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
+import expressWinston from 'express-winston';
 import { collectDefaultMetrics, Registry } from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
@@ -21,6 +22,7 @@ import {
   SSP_KK_SSL_REQUIRED,
   SSP_KK_SSL_RESOURCE,
 } from './envars';
+import { getLoggers } from './helpers/loggingHelpers';
 import { participantsRouter } from './participantsRouter';
 import { usersRouter } from './usersRouter';
 
@@ -49,8 +51,16 @@ collectDefaultMetrics({ register });
 
 const app = express();
 const router = express.Router();
+app.use((req, res, next) => {
+  req.headers.traceId = uuid();
+  next();
+});
 app.use(cors()); // TODO: Make this more secure
 app.use(bodyParser.json());
+
+const [logger, errorLogger] = getLoggers();
+
+app.use(expressWinston.logger(logger));
 
 app.use(
   bypassHandlerForPaths(
@@ -60,6 +70,7 @@ app.use(
     }),
     `/favicon.ico`,
     `${BASE_REQUEST_PATH}/`,
+    `${BASE_REQUEST_PATH}/metrics`,
     `${BASE_REQUEST_PATH}/health`,
     `${BASE_REQUEST_PATH}/keycloak-config`
   )
@@ -116,17 +127,17 @@ router.all('/*', (req, res) => {
 
 app.use(BASE_REQUEST_PATH, router);
 
+app.use(expressWinston.errorLogger(errorLogger));
 const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-  console.log('Fallback error handler invoked:');
-  console.log(err.message);
+  logger.error(`Fallback error handler invoked: ${err.message}`);
   res.status(500).json({
     message:
       'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
-    errorHash: uuid(), // TODO: should come from winston request context
+    errorHash: req.headers.traceId,
   });
 };
 app.use(errorHandler);
 
 export default app.listen(port, () => {
-  console.log(`Listening on port ${port}.`);
+  logger.info(`Listening on port ${port}.`);
 });
