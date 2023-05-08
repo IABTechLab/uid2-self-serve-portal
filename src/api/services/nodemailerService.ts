@@ -43,6 +43,5 @@ export const sendEmail = async ({
     template,
     context: templateData,
   };
-  console.log(mailOptions);
   await transporter.sendMail(mailOptions);
 };
