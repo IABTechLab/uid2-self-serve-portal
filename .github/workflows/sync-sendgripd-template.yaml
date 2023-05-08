@@ -1,8 +1,5 @@
 name: Sync handlebars template with SendGrid
 on:
-  push:
-    branches:
-      - 'jyg-UID2-833-setup-sendgrid'
   workflow_dispatch:
     inputs:
       forceSyncAll:
@@ -22,7 +19,6 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           sendgridApiKey: ${{ secrets.SENDGRID_API_KEY }}
           templatesDir: 'emailTemplates/'
-          forceSyncAll: 'true'
       - name: Write template id mapping
         uses: DamianReeves/write-file-action@master
         with:
