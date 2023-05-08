@@ -1,8 +1,5 @@
 name: Sync handlebars template with SendGrid
 on:
-  push:
-    branches:
-      - 'jyg-UID2-833-setup-sendgrid'
   workflow_dispatch:
     inputs:
       forceSyncAll:
