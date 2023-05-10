@@ -20,3 +20,9 @@ export const SSP_KK_SSL_PUBLIC_CLIENT = process.env.SSP_KK_SSL_PUBLIC_CLIENT ?? 
 export const SSP_KK_SSL_CONFIDENTIAL_PORT =
   process.env.SSP_KK_SSL_CONFIDENTIAL_PORT ?? errorMessage;
 export const SSP_WEB_BASE_URL = process.env.SSP_WEB_BASE_URL ?? 'http://localhost:3000/';
+
+// DB config
+export const SSP_DB_HOST = process.env.SSP_DB_HOST ?? 'localhost';
+export const SSP_DB_PORT = process.env.SSP_DB_PORT ? +process.env.SSP_DB_PORT : 11433;
+export const SSP_DB_USER = process.env.SSP_DB_USER ?? 'sa';
+export const SSP_DB_PASSWORD = process.env.SSP_DB_PASSWORD ?? 'D3velopmentP0';
