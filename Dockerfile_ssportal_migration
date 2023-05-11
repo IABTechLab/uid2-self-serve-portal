@@ -1,0 +1,18 @@
+FROM node:18-alpine
+ENV NODE_ENV production
+WORKDIR /usr/src/app
+
+# Copy the relevant files for migration neeeds
+COPY *.js *.ts *json .npmrc ./
+COPY src/api/envars.ts ./src/api/
+COPY src/database/migrations/* ./src/database/migrations/
+
+# The image set ENV production, but we need the dev deps to build, so install with prod false
+RUN npm ci --production=false
+
+RUN npm run knex:migrate:latest
+
+# Create file indicating migration is completed
+RUN if [ $? -eq 0 ]; then \
+    touch /var/run/migration-status/completed-${DEPLOYMENT_REVISION}; \
+    fi
