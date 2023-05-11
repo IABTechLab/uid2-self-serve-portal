@@ -19,12 +19,9 @@ participantsRouter.post('/', async (req, res) => {
   try {
     const data = ParticipantSchema.parse(req.body);
     // insertGraphAndFetch will implicitly create a transaction
-    const newParticipant = await Participant.query()
-      .insertGraphAndFetch([data], {
-        relate: true,
-      })
-      .returning('*')
-      .withGraphFetched('types');
+    const newParticipant = await Participant.query().insertGraphAndFetch([data], {
+      relate: true,
+    });
 
     const participantTypes = await ParticipantType.query().findByIds(data.types!.map((t) => t.id));
     sendNewParticipantEmail(data, participantTypes);
