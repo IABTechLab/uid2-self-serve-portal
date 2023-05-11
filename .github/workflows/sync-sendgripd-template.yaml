@@ -22,7 +22,6 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           sendgridApiKey: ${{ secrets.SENDGRID_API_KEY }}
           templatesDir: 'emailTemplates/'
-          forceSyncAll: 'true'
       - name: Write template id mapping
         uses: DamianReeves/write-file-action@master
         with:
