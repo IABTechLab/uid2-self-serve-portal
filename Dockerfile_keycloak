@@ -2,8 +2,13 @@ FROM quay.io/keycloak/keycloak:20.0.3
 
 ENV KC_TRANSACTION_XA_ENABLED 'false'
 
-COPY keycloak/realm/ /opt/keycloak/data/import
+
+COPY keycloak/realm/realm-export.json /opt/keycloak/data/import/realm-export.json
 COPY keycloak/themes /opt/keycloak/themes
 
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
-CMD ["start-dev", "--import-realm", "--spi-theme-static-max-age=-1", "--spi-theme-cache-themes=false", "--spi-theme-cache-templates=false", "--spi-theme-welcome-theme=uid2-theme", "--health-enabled=true", "--metrics-enabled=true", "--features=declarative-user-profile"]
+USER root
+RUN chmod -R 775 /opt/keycloak/data/import
+USER keycloak
+
+ENTRYPOINT sed -i -E "s/http:\/\/localhost:[0-9]{4}/https:\/\/$SSP_WEB_HOST/g" opt/keycloak/data/import/realm-export.json && \
+/opt/keycloak/bin/kc.sh start-dev --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid-theme --health-enabled=true --metrics-enabled=true --features=declarative-user-profile
