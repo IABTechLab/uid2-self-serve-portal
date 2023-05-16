@@ -4,8 +4,10 @@ import {
   faCheck,
   faChevronDown,
   faChevronUp,
+  faCircleCheck as fasCircleCheck,
   faCircleInfo,
   faEllipsisH,
+  faExclamationCircle,
   faPencil,
   faTrashCan,
   faXmark,
@@ -22,4 +24,6 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faXmark);
   library.add(faChevronUp);
   library.add(faCircleInfo);
+  library.add(faExclamationCircle);
+  library.add(fasCircleCheck);
 }

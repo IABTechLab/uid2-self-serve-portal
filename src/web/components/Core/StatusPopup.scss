@@ -1,0 +1,66 @@
+.status-popup {
+  position: fixed;
+  top: 23px;
+  right: 31px;
+  padding: 24px;
+  border-radius: 5px;
+  z-index: 1000;
+  background: var(--theme-background-content);
+  box-shadow: 0px 6px 12px var(--theme-box-shadow);
+  border-radius: 4px;
+  border-left: 8px solid;
+}
+
+.status-popup.Success {
+  border-color: var(--theme-success);
+}
+
+.status-popup.Error {
+  border-color: darkred;
+}
+
+.status-popup.Info {
+  border-color: var(--theme-action);
+}
+
+.popup-close-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: none;
+  border: none;
+}
+
+.popup-close-icon {
+  width: 7.5px;
+}
+
+.status-popup-title-container {
+  margin-bottom: 4px;
+}
+
+.status-popup-title-container.Success {
+  color: var(--theme-success);
+}
+
+.status-popup-title-container.Error {
+  color: darkred;
+}
+
+.status-popup-title-container.Info {
+  color: var(--theme-action);
+}
+
+.status-popup-title {
+  margin-left: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.status-popup-message {
+  margin-left: 22px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}
