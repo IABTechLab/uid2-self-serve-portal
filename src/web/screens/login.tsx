@@ -8,11 +8,11 @@ import './login.scss';
 function Login() {
   const { keycloak } = useKeycloak();
   const login = useCallback(() => {
-    keycloak?.login({ redirectUri: 'http://localhost:3000' });
+    keycloak?.login({ redirectUri: window.location.origin });
   }, [keycloak]);
 
   const logout = useCallback(() => {
-    keycloak?.logout({ redirectUri: 'http://localhost:3000' });
+    keycloak?.logout({ redirectUri: window.location.origin });
   }, [keycloak]);
 
   return (
