@@ -2,7 +2,7 @@ import axios from 'axios';
 
 let requestInterceptor: number;
 
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL ?? '/api';
 
 export const ejectHeader = () => {
   axios.interceptors.request.eject(requestInterceptor);
