@@ -9,6 +9,7 @@ import {
   faEllipsisH,
   faExclamationCircle,
   faPencil,
+  faSearch,
   faTrashCan,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -26,4 +27,5 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faCircleInfo);
   library.add(faExclamationCircle);
   library.add(fasCircleCheck);
+  library.add(faSearch);
 }

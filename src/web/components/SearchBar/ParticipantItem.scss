@@ -1,0 +1,33 @@
+.participant-type-label {
+  background: var(--theme-label-background);
+  border-radius: 3px;
+  padding: 0.25rem 0.5rem;
+  margin-left: 0.5rem;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  cursor: 'pointer';
+  font-size: 14px;
+}
+
+.participant-checkbox {
+  margin-right: 1rem;
+  background-color: var(--theme-radio-background);
+  color: var(--theme-radio-active);
+  height: 21px;
+  width: 21px;
+}
+
+.participant-logo {
+  width: 50px;
+  margin-right: 1rem;
+}
+
+.participant-types {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  line-height: 12px;
+}
