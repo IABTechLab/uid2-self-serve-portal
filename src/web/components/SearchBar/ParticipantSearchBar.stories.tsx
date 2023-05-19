@@ -18,7 +18,7 @@ SearchBar.args = {
     {
       id: 1,
       name: 'Participant 1',
-      types: [{ id: 2, typeName: 'Type 1' }],
+      types: [{ id: 1, typeName: 'Type 1' }],
       status: ParticipantStatus.Approved,
     },
     {
@@ -30,16 +30,16 @@ SearchBar.args = {
     {
       id: 3,
       name: 'Participant 3',
-      types: [{ id: 2, typeName: 'Type 3' }],
+      types: [{ id: 3, typeName: 'Type 3' }],
       status: ParticipantStatus.Approved,
     },
     {
       id: 4,
       name: 'Participant 4',
-      types: [{ id: 2, typeName: 'Type 4' }],
+      types: [{ id: 2, typeName: 'Type 2' }],
       status: ParticipantStatus.Approved,
     },
   ],
   defaultSelected: [1, 3],
-  onSelect: () => {},
+  onSelectedChange: () => {},
 };

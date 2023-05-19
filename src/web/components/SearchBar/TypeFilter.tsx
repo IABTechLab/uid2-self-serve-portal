@@ -1,12 +1,13 @@
 import clsx from 'clsx';
 import { useState } from 'react';
+import { z } from 'zod';
 
-import { ParticipantType } from '../../../api/entities/ParticipantType';
+import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 
 import './TypeFilter.scss';
 
 type TypeButtonProps = {
-  type: ParticipantType;
+  type: z.infer<typeof ParticipantTypeSchema>;
   isSelected: boolean;
   onTypeSelect: (selectedTypeId: number) => void;
 };
@@ -24,7 +25,7 @@ export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) 
 }
 
 type TypeFilterProps = {
-  types: ParticipantType[];
+  types: z.infer<typeof ParticipantTypeSchema>[];
   onFilterChange: (selectedTypeIds: Set<number>) => void;
 };
 
@@ -39,9 +40,9 @@ export function TypeFilter({ types, onFilterChange }: TypeFilterProps) {
       } else {
         newSelectedTypeIds.add(typeId);
       }
+      onFilterChange(newSelectedTypeIds);
       return newSelectedTypeIds;
     });
-    onFilterChange(selectedTypeIds);
   };
 
   return (

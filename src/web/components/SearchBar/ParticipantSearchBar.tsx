@@ -11,13 +11,13 @@ import './ParticipantSearchBar.scss';
 type ParticipantSearchBarProps = {
   participants: ParticipantPayload[];
   defaultSelected: number[];
-  onSelect: (selectedItems: ParticipantPayload[]) => void;
+  onSelectedChange: (selectedItems: number[]) => void;
 };
 
 export function ParticipantSearchBar({
   participants,
   defaultSelected,
-  onSelect,
+  onSelectedChange,
 }: ParticipantSearchBarProps) {
   const [checkedItems, setCheckedItems] = useState<Set<number>>(new Set(defaultSelected));
   const [filter, setFilter] = useState('');
@@ -31,32 +31,27 @@ export function ParticipantSearchBar({
   }, [defaultSelected]);
 
   const handleCheckChange = (participant: ParticipantPayload) => {
-    setCheckedItems((prevState) => {
-      const newCheckedItems = new Set(prevState);
-      if (newCheckedItems.has(participant.id!)) {
-        newCheckedItems.delete(participant.id!);
-      } else {
-        newCheckedItems.add(participant.id!);
-      }
-      return newCheckedItems;
-    });
-  };
-
-  const handleButtonClick = () => {
-    onSelect(Array.from(checkedItems));
+    const newCheckedItems = new Set(checkedItems);
+    if (newCheckedItems.has(participant.id!)) {
+      newCheckedItems.delete(participant.id!);
+    } else {
+      newCheckedItems.add(participant.id!);
+    }
+    onSelectedChange(Array.from(newCheckedItems));
+    setCheckedItems(newCheckedItems);
   };
 
   const handleSelectAllChange = () => {
     if (selectAll) {
       setCheckedItems(new Set());
     } else {
-      setCheckedItems(new Set(participants.map((p) => p.id)));
+      setCheckedItems(new Set(participants.map((p) => p.id!)));
     }
     setSelectAll(!selectAll);
   };
 
   const handleFilterChange = (typeIds: Set<number>) => {
-    setSelectedTypeIds(selectedTypeIds);
+    setSelectedTypeIds(typeIds);
   };
 
   useEffect(() => {

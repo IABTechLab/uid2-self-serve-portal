@@ -6,8 +6,9 @@ import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Partici
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
+const ParticipantPartial = ParticipantSchema.deepPartial();
 export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
-
+export type ParticipantCreationPayload = z.infer<typeof ParticipantPartial>;
 export type CreateParticipantForm = {
   companyName: string;
   officeLocation: string;
@@ -30,7 +31,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
   if (!formData.canSign) {
     // TODO: New feature to send an invitation to the person who can sign?
   }
-  const participantPayload: ParticipantPayload = {
+  const participantPayload: ParticipantCreationPayload = {
     name: formData.companyName,
     status: formData.canSign
       ? ParticipantStatus.AwaitingApproval

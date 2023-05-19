@@ -1,3 +1,6 @@
+import { z } from 'zod';
+
+import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { ParticipantPayload } from '../../services/participant';
 
 import './ParticipantItem.scss';
@@ -9,7 +12,7 @@ type ParticipantItemProps = {
 };
 
 export function ParticipantItem({ participant, onClick, checked }: ParticipantItemProps) {
-  function getParticipantTypes(participantTypes?: { id: number; typeName: string }[]) {
+  function getParticipantTypes(participantTypes?: z.infer<typeof ParticipantTypeSchema>[]) {
     if (!participantTypes) return null;
     return participantTypes.map((pt) => (
       <div className='participant-type-label' key={pt.typeName}>
