@@ -1,12 +1,8 @@
-import { useContext } from 'react';
-
-import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { PortalRoute } from './routeUtils';
 
 import './accountInformation.scss';
 
 function SharingPermissions() {
-  const { participant } = useContext(ParticipantContext);
   return (
     <div>
       <h1>Sharing Permissions</h1>
