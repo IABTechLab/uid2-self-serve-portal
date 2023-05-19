@@ -84,7 +84,7 @@ export function ParticipantSearchBar({
       {dropdownOpen && (
         <div className='search-bar-dropdown'>
           <div className='search-bar-type-filter'>
-            <span>Only show me:</span>
+            <div className='search-bar-type-filter-title'>Only show me:</div>
             <TypeFilter
               onFilterChange={handleFilterChange}
               types={[
@@ -95,16 +95,20 @@ export function ParticipantSearchBar({
             />
           </div>
           <div className='search-bar-participants'>
-            <div className='participant-item'>
-              <input
-                type='checkbox'
-                checked={selectAll}
-                onChange={handleSelectAllChange}
-                id='select-all-checkbox'
-                className='participant-checkbox'
-              />
-              <span className='select-all'>Select All {participants.length} Participants</span>
-            </div>
+            <tr className='participant-item'>
+              <th>
+                <input
+                  type='checkbox'
+                  checked={selectAll}
+                  onChange={handleSelectAllChange}
+                  id='select-all-checkbox'
+                  className='participant-checkbox'
+                />
+              </th>
+              <th colSpan={3}>
+                <span className='select-all'>Select All {participants.length} Participants</span>
+              </th>
+            </tr>
             {filteredParticipants.map((participant) => (
               <ParticipantItem
                 key={participant.id}

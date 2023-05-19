@@ -6,10 +6,9 @@
 }
 
 .participant-item {
-  display: flex;
-  align-items: center;
-  cursor: 'pointer';
   font-size: 14px;
+  display: flex;
+  padding: 0.25rem 0;
 }
 
 .participant-checkbox {

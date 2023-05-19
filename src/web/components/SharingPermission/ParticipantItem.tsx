@@ -24,19 +24,27 @@ export function ParticipantItem({ participant, onClick, checked }: ParticipantIt
   // TODO: update this when we have login uploading
   const logo = '/default-logo.png';
   return (
-    <div className='participant-item'>
-      <input
-        type='checkbox'
-        checked={checked}
-        onChange={onClick}
-        id={`checkbox-${participant.id}`}
-        className='participant-checkbox'
-      />
-      <img src={logo} alt={participant.name} className='participant-logo' />
-      <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
-        {participant.name}
-      </label>
-      <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
-    </div>
+    <tr className='participant-item'>
+      <td>
+        <input
+          type='checkbox'
+          checked={checked}
+          onChange={onClick}
+          id={`checkbox-${participant.id}`}
+          className='participant-checkbox'
+        />
+      </td>
+      <td>
+        <img src={logo} alt={participant.name} className='participant-logo' />
+      </td>
+      <td>
+        <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
+          {participant.name}
+        </label>
+      </td>
+      <td>
+        <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+      </td>
+    </tr>
   );
 }

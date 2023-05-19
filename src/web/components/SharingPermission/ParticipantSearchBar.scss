@@ -31,6 +31,10 @@
   border-radius: 10px 10px 0px 0px;
 }
 
+.search-bar-type-filter-title {
+  margin-bottom: 10px;
+}
+
 .search-bar-input {
   border: none;
   outline: none;
@@ -49,7 +53,7 @@
 }
 
 .search-bar-type-filter {
-  padding: 20px;
+  padding: 20px 20px 15px 20px;
   border-bottom: 1px solid var(--theme-table-border);
 }
 
@@ -71,9 +75,9 @@
   color: var(--theme-action);
 }
 
-.search-bar-participants > *:not(:last-child) {
-  margin-bottom: 22px;
-}
+// .search-bar-participants > *:not(:last-child) {
+//   margin-bottom: 22px;
+// }
 
 .select-all {
   font-weight: 700;
