@@ -22,7 +22,7 @@ export function ParticipantItem({ participant, onClick, checked }: ParticipantIt
   }
 
   // TODO: update this when we have login uploading
-  const logo = '/default-logo.png';
+  const logo = '/default-logo.svg';
   return (
     <tr className='participant-item'>
       <td>
@@ -34,10 +34,8 @@ export function ParticipantItem({ participant, onClick, checked }: ParticipantIt
           className='participant-checkbox'
         />
       </td>
-      <td>
+      <td className='participant-name-cell'>
         <img src={logo} alt={participant.name} className='participant-logo' />
-      </td>
-      <td>
         <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
           {participant.name}
         </label>

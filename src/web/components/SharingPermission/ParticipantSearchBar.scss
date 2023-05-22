@@ -64,15 +64,20 @@
 .search-bar-participants th,
 td {
   background: none !important;
-  padding: 0;
+  padding: 0 0 1rem 0 !important;
+}
+
+.search-bar-participants th:first-of-type,
+.search-bar-participants td:first-of-type {
+  padding-left: 10px !important;
 }
 
 .search-bar-participants th {
-  padding-top: 1.2rem;
+  padding-top: 1.2rem !important;
 }
 
-.search-bar-participants td:last-of-type {
-  padding-bottom: 1.2rem;
+.search-bar-participants tr:last-of-type td {
+  padding-bottom: 1.2rem !important;
 }
 
 .search-bar-footer {

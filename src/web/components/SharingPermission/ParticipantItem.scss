@@ -7,7 +7,6 @@
 
 .participant-item {
   font-size: 14px;
-  display: flex;
   padding: 0.25rem 1.25rem;
 }
 
@@ -29,4 +28,9 @@
   align-items: center;
   font-size: 10px;
   line-height: 12px;
+}
+
+.participant-name-cell {
+  display: flex;
+  align-items: center;
 }
