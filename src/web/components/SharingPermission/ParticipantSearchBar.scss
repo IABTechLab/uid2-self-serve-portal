@@ -61,9 +61,20 @@
   padding: 20px;
 }
 
-.search-bar-participants th {
+.search-bar-participants th,
+td {
   background: none !important;
+  padding: 0;
 }
+
+.search-bar-participants th {
+  padding-top: 1.2rem;
+}
+
+.search-bar-participants td:last-of-type {
+  padding-bottom: 1.2rem;
+}
+
 .search-bar-footer {
   background-color: var(--theme-search-bar-background);
   padding: 0.5rem;
