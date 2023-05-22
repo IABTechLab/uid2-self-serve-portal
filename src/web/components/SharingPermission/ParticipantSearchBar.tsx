@@ -84,7 +84,7 @@ export function ParticipantSearchBar({
             onSelectedChange={handleSelectedChange}
             className='search-bar-participants'
           >
-            <tr className='participant-item'>
+            <tr>
               <th>
                 <input
                   type='checkbox'
