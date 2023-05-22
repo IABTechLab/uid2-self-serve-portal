@@ -1,7 +1,10 @@
+import clsx from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantItem } from './ParticipantItem';
+
+import './ParticipantsTable.scss';
 
 type ParticipantsTableProps = {
   participants: ParticipantPayload[];
@@ -49,7 +52,7 @@ export function ParticipantsTable({
   };
 
   return (
-    <table className={className} data-testid='participant-table'>
+    <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>{children}</thead>
       <tbody>
         {filteredParticipants.map((participant) => (
