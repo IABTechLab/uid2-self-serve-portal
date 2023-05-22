@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
-import { ParticipantItem } from './ParticipantItem';
+import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
@@ -19,54 +19,36 @@ export function ParticipantSearchBar({
   defaultSelected,
   onSelectedChange,
 }: ParticipantSearchBarProps) {
-  const [checkedItems, setCheckedItems] = useState<Set<number>>(new Set(defaultSelected));
   const [filter, setFilter] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
-  const [filteredParticipants, setFilteredParticipants] = useState(participants);
-
-  useEffect(() => {
-    setCheckedItems(new Set(defaultSelected));
-  }, [defaultSelected]);
-
-  const handleCheckChange = (participant: ParticipantPayload) => {
-    const newCheckedItems = new Set(checkedItems);
-    if (newCheckedItems.has(participant.id!)) {
-      newCheckedItems.delete(participant.id!);
-    } else {
-      newCheckedItems.add(participant.id!);
-    }
-    onSelectedChange(Array.from(newCheckedItems));
-    setCheckedItems(newCheckedItems);
-  };
-
+  const [checkedParticipants, setCheckedParticipants] = useState(defaultSelected);
   const handleSelectAllChange = () => {
-    if (selectAll) {
-      setCheckedItems(new Set());
-    } else {
-      setCheckedItems(new Set(participants.map((p) => p.id!)));
-    }
     setSelectAll(!selectAll);
+    if (selectAll) {
+      setCheckedParticipants([]);
+    } else {
+      setCheckedParticipants(participants.map((p) => p.id!));
+    }
   };
 
   const handleFilterChange = (typeIds: Set<number>) => {
     setSelectedTypeIds(typeIds);
   };
 
+  const handleSelectedChange = (selectedItems: number[]) => {
+    if (selectedItems.length > 0 && selectedItems.length === participants.length) {
+      setSelectAll(true);
+    } else {
+      setSelectAll(false);
+    }
+    setCheckedParticipants(selectedItems);
+  };
+
   useEffect(() => {
-    let filtered = participants;
-
-    if (selectedTypeIds.size > 0) {
-      filtered = filtered.filter((p) => p.types?.some((t) => selectedTypeIds.has(t.id)));
-    }
-
-    if (filter) {
-      filtered = filtered.filter((p) => p.name.toLowerCase().includes(filter.toLowerCase()));
-    }
-
-    setFilteredParticipants(filtered);
-  }, [participants, filter, selectedTypeIds]);
+    onSelectedChange(checkedParticipants);
+  }, [checkedParticipants, onSelectedChange]);
 
   return (
     <div className={clsx('search-bar', { clicked: dropdownOpen })}>
@@ -94,7 +76,14 @@ export function ParticipantSearchBar({
               ]}
             />
           </div>
-          <div className='search-bar-participants'>
+          <ParticipantsTable
+            participants={participants}
+            filter={filter}
+            selectedTypeIds={selectedTypeIds}
+            selectedParticipant={checkedParticipants}
+            onSelectedChange={handleSelectedChange}
+            className='search-bar-participants'
+          >
             <tr className='participant-item'>
               <th>
                 <input
@@ -109,15 +98,7 @@ export function ParticipantSearchBar({
                 <span className='select-all'>Select All {participants.length} Participants</span>
               </th>
             </tr>
-            {filteredParticipants.map((participant) => (
-              <ParticipantItem
-                key={participant.id}
-                participant={participant}
-                onClick={() => handleCheckChange(participant)}
-                checked={checkedItems.has(participant.id!)}
-              />
-            ))}
-          </div>
+          </ParticipantsTable>
           {/* TODO: update the participant not appearing url */}
           <div className='search-bar-footer'>
             <a href='/'>Participant Not Appearing in Search?</a>
