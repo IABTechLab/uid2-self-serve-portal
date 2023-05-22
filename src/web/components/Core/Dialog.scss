@@ -78,3 +78,18 @@
     }
   }
 }
+
+.fullScreen {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: 100%;
+  height: 100% !important;
+  box-sizing: border-box;
+  padding: 4.375rem !important;
+}
+
+.fullScreen > .dialog-close-container {
+  position: absolute;
+  right: 71px;
+  top: 71px;
+}
