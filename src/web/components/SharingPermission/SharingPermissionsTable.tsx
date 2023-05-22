@@ -66,7 +66,7 @@ export function SharingPermissionsTable({ sharedParticipants }: SharingPermissio
         onSelectedChange={handleSelectedChange}
         className='shared-participants-table'
       >
-        <tr className='participant-item'>
+        <tr>
           <th>
             <input
               type='checkbox'
