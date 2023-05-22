@@ -49,16 +49,18 @@ export function ParticipantsTable({
   };
 
   return (
-    <table className={className}>
-      {children}
-      {filteredParticipants.map((participant) => (
-        <ParticipantItem
-          key={participant.id}
-          participant={participant}
-          onClick={() => handleCheckChange(participant)}
-          checked={!!selectedParticipant?.includes(participant.id!)}
-        />
-      ))}
+    <table className={className} data-testid='participant-table'>
+      <thead>{children}</thead>
+      <tbody>
+        {filteredParticipants.map((participant) => (
+          <ParticipantItem
+            key={participant.id}
+            participant={participant}
+            onClick={() => handleCheckChange(participant)}
+            checked={!!selectedParticipant?.includes(participant.id!)}
+          />
+        ))}
+      </tbody>
     </table>
   );
 }
