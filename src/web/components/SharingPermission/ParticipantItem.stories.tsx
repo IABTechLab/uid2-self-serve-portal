@@ -4,7 +4,7 @@ import { ParticipantStatus } from '../../../api/entities/Participant';
 import { ParticipantItem } from './ParticipantItem';
 
 export default {
-  title: 'Search bar/ParticipantItem',
+  title: 'Sharing Permissions/ParticipantItem',
   component: ParticipantItem,
 } as ComponentMeta<typeof ParticipantItem>;
 

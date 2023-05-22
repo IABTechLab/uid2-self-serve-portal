@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { TypeFilter } from './TypeFilter';
 
 export default {
-  title: 'Search bar/TypeFilter',
+  title: 'Sharing Permissions/TypeFilter',
   component: TypeFilter,
 } as ComponentMeta<typeof TypeFilter>;
 

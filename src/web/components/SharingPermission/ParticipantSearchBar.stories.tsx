@@ -4,7 +4,7 @@ import { ParticipantStatus } from '../../../api/entities/Participant';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 export default {
-  title: 'Search bar/ParticipantSearchBar',
+  title: 'Sharing Permissions/ParticipantSearchBar',
   component: ParticipantSearchBar,
 } as ComponentMeta<typeof ParticipantSearchBar>;
 
