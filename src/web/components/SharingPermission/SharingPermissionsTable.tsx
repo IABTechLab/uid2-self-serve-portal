@@ -13,7 +13,7 @@ type SharingPermissionsTableProps = {
 function NoParticipant() {
   return (
     <div className='no-participants-container'>
-      <img src='./group-icon.svg' alt='group-icon' />
+      <img src='/group-icon.svg' alt='group-icon' />
       <div className='no-participants-text'>
         <h1>No Participants</h1>
         <span>You don&apos;t have any sharing permissions yet.</span>
