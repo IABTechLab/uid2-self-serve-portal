@@ -1,0 +1,99 @@
+.sharing-permissions-table {
+  max-width: 1200px;
+}
+
+.sharing-permissions-table-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sharing-permissions-table h1 {
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.375rem;
+}
+
+.sharing-permissions-search-bar-container {
+  width: 190px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--theme-search-border);
+  padding: 6px 2px;
+  justify-content: space-between;
+  ::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--theme-search-border);
+    opacity: 1; /* Firefox */
+  }
+
+  :-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: var(--theme-search-border);
+  }
+
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: var(--theme-search-border);
+  }
+}
+
+.sharing-permission-search-bar-icon {
+  color: var(--theme-search-border);
+  height: 1rem;
+  margin-left: 0.5rem;
+}
+
+.sharing-permissions-search-bar {
+  width: 100%;
+  border: none;
+  outline: none;
+  color: var(--theme-search-border);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.shared-participants-table {
+  width: 100%;
+}
+
+.shared-participants-table tr th {
+  background-color: var(--theme-background-sidepanel);
+  line-height: 1rem;
+  height: 1rem;
+}
+
+.shared-participants-table th:first-of-type,
+.shared-participants-table td:first-of-type {
+  padding-left: 0.625rem !important;
+}
+
+.shared-participants-table tr th:first-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.shared-participants-table tr th:last-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.shared-participants-table tr:nth-of-type(2) td {
+  margin-top: 1rem;
+}
+
+.no-participants-container {
+  margin-top: 1rem;
+  border: 1px solid var(--theme-border);
+  border-radius: 5px;
+  padding: 2.25rem;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.no-participants-text {
+  margin-left: 2.5rem;
+}
