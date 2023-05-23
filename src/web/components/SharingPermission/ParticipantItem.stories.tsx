@@ -8,7 +8,13 @@ export default {
   component: ParticipantItem,
 } as ComponentMeta<typeof ParticipantItem>;
 
-const Template: ComponentStory<typeof ParticipantItem> = (args) => <ParticipantItem {...args} />;
+const Template: ComponentStory<typeof ParticipantItem> = (args) => (
+  <table>
+    <tbody>
+      <ParticipantItem {...args} />
+    </tbody>
+  </table>
+);
 
 export const Checked = Template.bind({});
 Checked.args = {
