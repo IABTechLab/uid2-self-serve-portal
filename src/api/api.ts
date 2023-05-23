@@ -6,13 +6,12 @@ import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
 import expressWinston from 'express-winston';
-import { collectDefaultMetrics, Registry } from 'prom-client';
+import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
 import { Configure } from '../database/SelfServeDatabase';
 import { ParticipantType } from './entities/ParticipantType';
 import {
-  SSP_APP_NAME,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -23,6 +22,7 @@ import {
   SSP_KK_SSL_RESOURCE,
 } from './envars';
 import { getLoggers } from './helpers/loggingHelpers';
+import makeMetricsApiMiddleware from './middleware/metrics';
 import { participantsRouter } from './participantsRouter';
 import { usersRouter } from './usersRouter';
 
@@ -41,14 +41,6 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) 
   } as express.Handler;
 }
 
-const register = new Registry();
-
-register.setDefaultLabels({
-  app: `${SSP_APP_NAME}`,
-});
-
-collectDefaultMetrics({ register });
-
 const app = express();
 const router = express.Router();
 app.use((req, res, next) => {
@@ -61,6 +53,16 @@ app.use(bodyParser.json());
 const [logger, errorLogger] = getLoggers();
 
 app.use(expressWinston.logger(logger));
+
+app.use(
+  makeMetricsApiMiddleware(
+    {
+      isNormalizePathEnabled: true,
+      discardUnmatched: false,
+    },
+    logger
+  )
+);
 
 app.use(
   bypassHandlerForPaths(
@@ -95,9 +97,8 @@ router.get('/health', async (_req, res) => {
 });
 
 router.get('/metrics', async (_req, res) => {
-  res.setHeader('Content-Type', register.contentType);
-  const metrics = await register.metrics();
-  res.end(metrics);
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end(await promClient.register.metrics());
 });
 
 router.get('/participantTypes', async (_req, res) => {
