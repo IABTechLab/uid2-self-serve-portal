@@ -4,6 +4,8 @@
 import tokenRequester from 'keycloak-request-token';
 import { Request } from 'supertest';
 
+import api from '../api';
+
 /**
  * WARN: This leaves open time_wait connections after the test suite has finished running.
  * This is linked to the issue described [here](https://github.com/request/request/issues/287)
@@ -13,6 +15,9 @@ import { Request } from 'supertest';
  */
 function useTestServer() {
   let token = '';
+  afterAll(async () => {
+    api.close();
+  });
   beforeAll(async () => {
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
       username: 'test_user@example.com',
