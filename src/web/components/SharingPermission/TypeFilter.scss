@@ -1,0 +1,19 @@
+.type-filter {
+  display: flex;
+}
+
+.type-button {
+  cursor: pointer;
+  border: 1px solid var(--theme-action) !important;
+  border-radius: 30px !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: var(--theme-action);
+  padding: 5px 14px !important;
+  margin-right: 14px;
+}
+
+.type-button.selected {
+  background-color: var(--theme-action);
+  color: var(--theme-radio-active);
+}
