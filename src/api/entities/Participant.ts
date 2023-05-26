@@ -2,6 +2,7 @@ import { Model } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
+import { ParticipantTypeSchema } from './ParticipantType';
 import { UserScheme } from './User';
 
 export enum ParticipantStatus {
@@ -45,12 +46,6 @@ export const ParticipantSchema = z.object({
   id: z.number().optional(),
   name: z.string(),
   status: z.nativeEnum(ParticipantStatus),
-  types: z
-    .array(
-      z.object({
-        id: z.number(),
-      })
-    )
-    .optional(),
+  types: z.array(ParticipantTypeSchema).optional(),
   users: z.array(UserScheme).optional(),
 });
