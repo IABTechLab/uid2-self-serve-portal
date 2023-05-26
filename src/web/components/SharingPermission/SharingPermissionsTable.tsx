@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
@@ -26,14 +26,13 @@ export function SharingPermissionsTable({ sharedParticipants }: SharingPermissio
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
-  const handleSelectAllChange = () => {
-    setSelectAll(!selectAll);
-    if (selectAll) {
+  useEffect(() => {
+    if (!selectAll) {
       setCheckedParticipants([]);
     } else {
       setCheckedParticipants(sharedParticipants.map((p) => p.id!));
     }
-  };
+  }, [selectAll, sharedParticipants]);
 
   const handleSelectedChange = (selectedItems: number[]) => {
     if (selectedItems.length > 0 && selectedItems.length === sharedParticipants.length) {
@@ -71,7 +70,7 @@ export function SharingPermissionsTable({ sharedParticipants }: SharingPermissio
             <input
               type='checkbox'
               checked={selectAll}
-              onChange={handleSelectAllChange}
+              onChange={() => setSelectAll(!selectAll)}
               id='select-all-checkbox'
               className='participant-checkbox'
             />
