@@ -20,6 +20,10 @@ export const SSP_KK_SSL_PUBLIC_CLIENT = process.env.SSP_KK_SSL_PUBLIC_CLIENT ?? 
 export const SSP_KK_SSL_CONFIDENTIAL_PORT =
   process.env.SSP_KK_SSL_CONFIDENTIAL_PORT ?? errorMessage;
 export const SSP_WEB_BASE_URL = process.env.SSP_WEB_BASE_URL ?? 'http://localhost:3000/';
+export const SSP_SEND_GRID_API_KEY = process.env.SSP_SEND_GRID_API_KEY ?? '';
+export const SSP_EMAIL_SENDER = process.env.SSP_EMAIL_SENDER ?? 'noreply@unifiedid.com';
+export const SSP_EMAIL_SENDER_NAME =
+  process.env.SSP_EMAIL_SENDER_NAME ?? 'UID2 Service (do not reply)';
 
 // DB config
 export const SSP_DB_HOST = process.env.SSP_DB_HOST ?? 'localhost';
