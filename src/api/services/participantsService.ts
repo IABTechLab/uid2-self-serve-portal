@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { ParticipantSchema } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
+import { SSP_TAM_EMAIL, SSP_TAM_EMAIL_DISPLAY_NAME, SSP_WEB_BASE_URL } from '../envars';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 
@@ -18,13 +19,13 @@ export const sendNewParticipantEmail = async (
     requestorEmail: requestor.email,
     participantLocation: requestor.location,
     jobFunction: requestor.role,
-    link: 'http://localhost:3000/',
+    link: SSP_WEB_BASE_URL,
   };
   const emailArgs: EmailArgs = {
     subject: 'New Participant Request',
     templateData,
     template: 'newParticipantReadyForReview',
-    to: { name: 'TAMs', email: 'jingyi.gao@thetradedesk.com' },
+    to: { name: SSP_TAM_EMAIL_DISPLAY_NAME, email: SSP_TAM_EMAIL },
   };
   emailService.sendEmail(emailArgs);
 };

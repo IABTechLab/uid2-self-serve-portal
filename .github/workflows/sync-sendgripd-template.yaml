@@ -1,8 +1,5 @@
 name: Sync handlebars template with SendGrid
 on:
-  push:
-    branches:
-      - 'jyg-UID2-833-TAM_email_template'
   workflow_dispatch:
     inputs:
       forceSyncAll:
@@ -29,9 +26,13 @@ jobs:
           path: src/api/templateIdMapping.json
           contents: ${{ steps.sendgrid_sync.outputs.sendgridTemplateIdMapping }}
           write-mode: overwrite
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
       - name: Commit & Push
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: jyg-UID2-833-TAM_email_template
+          branch: ${{ steps.extract_branch.outputs.branch }}
           outputFile: 'src/api/templateIdMapping.json'
