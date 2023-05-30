@@ -2,13 +2,16 @@ import axios from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
-import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
+import {
+  ParticipantCreationPartial,
+  ParticipantSchema,
+  ParticipantStatus,
+} from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
-const ParticipantPartial = ParticipantSchema.deepPartial();
 export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'allowSharing'>;
-export type ParticipantCreationPayload = z.infer<typeof ParticipantPartial>;
+export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
 export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
 export type CreateParticipantForm = {
   companyName: string;
