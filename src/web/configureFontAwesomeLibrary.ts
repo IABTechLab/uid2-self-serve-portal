@@ -28,3 +28,4 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faExclamationCircle);
   library.add(fasCircleCheck);
   library.add(faSearch);
+}

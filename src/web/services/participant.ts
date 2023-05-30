@@ -10,7 +10,6 @@ const ParticipantPartial = ParticipantSchema.deepPartial();
 export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'allowSharing'>;
 export type ParticipantCreationPayload = z.infer<typeof ParticipantPartial>;
 export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
-
 export type CreateParticipantForm = {
   companyName: string;
   officeLocation: string;

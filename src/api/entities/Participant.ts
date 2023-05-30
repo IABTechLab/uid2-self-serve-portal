@@ -43,6 +43,7 @@ export class Participant extends BaseModel {
   allowSharing!: boolean;
   location?: string;
 }
+
 export const ParticipantSchema = z.object({
   id: z.number(),
   name: z.string(),
