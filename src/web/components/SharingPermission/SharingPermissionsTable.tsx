@@ -22,7 +22,7 @@ function NoParticipant() {
   );
 }
 export function SharingPermissionsTable({ sharedParticipants }: SharingPermissionsTableProps) {
-  const [filter, setFilter] = useState('');
+  const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
 
@@ -51,16 +51,16 @@ export function SharingPermissionsTable({ sharedParticipants }: SharingPermissio
           <input
             type='text'
             className='sharing-permissions-search-bar'
-            onChange={(event) => setFilter(event.target.value)}
+            onChange={(event) => setFilterText(event.target.value)}
             placeholder='Search sharing permissions'
-            value={filter}
+            value={filterText}
           />
           <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
         </div>
       </div>
       <ParticipantsTable
         participants={sharedParticipants}
-        filter={filter}
+        filterText={filterText}
         selectedParticipant={checkedParticipants}
         onSelectedChange={handleSelectedChange}
         className='shared-participants-table'

@@ -19,19 +19,8 @@
   padding: 6px 2px;
   justify-content: space-between;
   ::placeholder {
-    /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: var(--theme-search-border);
-    opacity: 1; /* Firefox */
-  }
-
-  :-ms-input-placeholder {
-    /* Internet Explorer 10-11 */
-    color: var(--theme-search-border);
-  }
-
-  ::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: var(--theme-search-border);
+    opacity: 1;
   }
 }
 
