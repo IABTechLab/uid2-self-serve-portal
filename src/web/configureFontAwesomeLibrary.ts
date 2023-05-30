@@ -4,9 +4,12 @@ import {
   faCheck,
   faChevronDown,
   faChevronUp,
+  faCircleCheck as fasCircleCheck,
   faCircleInfo,
   faEllipsisH,
+  faExclamationCircle,
   faPencil,
+  faSearch,
   faTrashCan,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -22,4 +25,6 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faXmark);
   library.add(faChevronUp);
   library.add(faCircleInfo);
-}
+  library.add(faExclamationCircle);
+  library.add(fasCircleCheck);
+  library.add(faSearch);

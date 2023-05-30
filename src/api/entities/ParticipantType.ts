@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 
@@ -23,3 +24,8 @@ export class ParticipantType extends BaseModel {
   id!: number;
   typeName!: string;
 }
+
+export const ParticipantTypeSchema = z.object({
+  id: z.number(),
+  typeName: z.string(),
+});

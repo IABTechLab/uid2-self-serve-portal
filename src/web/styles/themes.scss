@@ -3,6 +3,7 @@
 .app {
   --theme-primary: black;
   --theme-secondary: black;
+  --theme-title: #030a40;
   --theme-highlight: #{$color-winter-green};
   --theme-background-header: #fff;
   --theme-background-sidepanel: #f2f2f3;
@@ -25,6 +26,11 @@
   --theme-banner-background: #b7c2ea;
   --theme-banner-icon: #7085d4;
   --theme-scrollbar: #c0d6ff;
+  --theme-info-content: #035959;
+  --theme-success: #058a04;
+  --theme-label-background: #c0d6ff;
+  --theme-search-border: #7085d4;
+  --theme-search-bar-background: rgba(112, 133, 212, 0.15);
 }
 
 .app.darkmode {

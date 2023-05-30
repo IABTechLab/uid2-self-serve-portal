@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
-import { Participant, ParticipantStatus } from '../../api/entities/Participant';
+import { ParticipantStatus } from '../../api/entities/Participant';
 import { User, UserRole } from '../../api/entities/User';
 import { CreateParticipant } from './Participants';
 
@@ -11,6 +11,8 @@ type UserType = ModelObject<User>;
 const sampleParticipant = {
   name: 'Publisher for user seeds',
   status: ParticipantStatus.AwaitingSigning,
+  allowSharing: true,
+  location: 'Sydney',
 };
 const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
   {

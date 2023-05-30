@@ -38,6 +38,6 @@ usersRouter.get('/:userId', async (req, res) => {
 
 usersRouter.get('/:userId/participant', async (req, res) => {
   const { userId } = userIdParser.parse(req.params);
-  const participant = await User.relatedQuery('participant').for(userId);
+  const participant = await User.relatedQuery('participant').for(userId).withGraphFetched('types');
   return res.status(200).json(participant[0]);
 });
