@@ -2,11 +2,11 @@ import express from 'express';
 import { z } from 'zod';
 
 import { Participant, ParticipantSchema } from './entities/Participant';
+import { ParticipantType } from './entities/ParticipantType';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { createEmailService } from './services/emailService';
-import { EmailArgs } from './services/emailTypes';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
+import { sendNewParticipantEmail } from './services/participantsService';
 import { createUserInPortal, isUserBelongsToParticipant } from './services/usersService';
 
 export const participantsRouter = express.Router();
@@ -23,6 +23,8 @@ participantsRouter.post('/', async (req, res) => {
       relate: true,
     });
 
+    const participantTypes = await ParticipantType.query().findByIds(data.types!.map((t) => t.id));
+    sendNewParticipantEmail(data, participantTypes);
     return res.status(201).json(newParticipant);
   } catch (err) {
     if (err instanceof z.ZodError) {
