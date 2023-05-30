@@ -19,6 +19,9 @@ const findTemplate = (template: string): string => {
 };
 
 export const sendEmail = async ({ to, subject, templateData, template }: EmailArgs) => {
+  if (SSP_SEND_GRID_API_KEY === '') {
+    throw new Error('Missing environment variable SSP_SEND_GRID_API_KEY');
+  }
   const message = {
     from: UID2Sender,
     templateId: findTemplate(template),
