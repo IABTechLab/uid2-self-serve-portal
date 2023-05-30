@@ -1,6 +1,7 @@
 import sgMail from '@sendgrid/mail';
 
 import { SSP_SEND_GRID_API_KEY } from '../envars';
+import { getLoggers } from '../helpers/loggingHelpers';
 import _templateIdMapping from '../templateIdMapping.json';
 import { EmailArgs, UID2Sender } from './emailTypes';
 
@@ -9,7 +10,13 @@ type TemplateIdMapping = {
 };
 const templateIdMapping = _templateIdMapping as TemplateIdMapping;
 
-sgMail.setApiKey(SSP_SEND_GRID_API_KEY);
+const isProduction = process.env.NODE_ENV === 'production';
+if (isProduction) {
+  if (SSP_SEND_GRID_API_KEY === '') {
+    throw new Error('Missing environment variable SSP_SEND_GRID_API_KEY');
+  }
+  sgMail.setApiKey(SSP_SEND_GRID_API_KEY);
+}
 
 const findTemplate = (template: string): string => {
   if (template in templateIdMapping) {
@@ -19,9 +26,6 @@ const findTemplate = (template: string): string => {
 };
 
 export const sendEmail = async ({ to, subject, templateData, template }: EmailArgs) => {
-  if (SSP_SEND_GRID_API_KEY === '') {
-    throw new Error('Missing environment variable SSP_SEND_GRID_API_KEY');
-  }
   const message = {
     from: UID2Sender,
     templateId: findTemplate(template),
@@ -36,5 +40,11 @@ export const sendEmail = async ({ to, subject, templateData, template }: EmailAr
       },
     ],
   };
-  return sgMail.send(message);
+  try {
+    sgMail.send(message);
+  } catch (err: unknown) {
+    const [logger] = getLoggers();
+
+    logger.error(`Send email failed: ${err}`);
+  }
 };
