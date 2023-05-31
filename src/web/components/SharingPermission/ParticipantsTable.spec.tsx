@@ -23,7 +23,7 @@ describe('ParticipantsTable', () => {
   });
 
   it('handles filter changes', () => {
-    render(<Default filter='1' />);
+    render(<Default filterText='1' />);
     expect(screen.getByText('Participant 1')).toBeInTheDocument();
     expect(screen.queryByText('Participant 2')).not.toBeInTheDocument();
   });

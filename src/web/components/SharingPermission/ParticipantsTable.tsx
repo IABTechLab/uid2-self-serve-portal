@@ -8,7 +8,7 @@ import './ParticipantsTable.scss';
 
 type ParticipantsTableProps = {
   participants: ParticipantPayload[];
-  filter: string;
+  filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: number[]) => void;
   selectedParticipant?: number[];
@@ -18,7 +18,7 @@ type ParticipantsTableProps = {
 
 export function ParticipantsTable({
   participants,
-  filter,
+  filterText,
   children,
   selectedTypeIds,
   onSelectedChange,
@@ -34,12 +34,12 @@ export function ParticipantsTable({
       filtered = filtered.filter((p) => p.types?.some((t) => selectedTypeIds.has(t.id)));
     }
 
-    if (filter) {
-      filtered = filtered.filter((p) => p.name.toLowerCase().includes(filter.toLowerCase()));
+    if (filterText) {
+      filtered = filtered.filter((p) => p.name.toLowerCase().includes(filterText.toLowerCase()));
     }
 
     setFilteredParticipants(filtered);
-  }, [participants, filter, selectedTypeIds]);
+  }, [participants, filterText, selectedTypeIds]);
 
   const handleCheckChange = (participant: ParticipantPayload) => {
     const newCheckedItems = new Set(selectedParticipant);
