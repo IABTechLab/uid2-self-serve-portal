@@ -26,3 +26,10 @@ export const SSP_DB_HOST = process.env.SSP_DB_HOST ?? 'localhost';
 export const SSP_DB_PORT = process.env.SSP_DB_PORT ? +process.env.SSP_DB_PORT : 11433;
 export const SSP_DB_USER = process.env.SSP_DB_USER ?? 'sa';
 export const SSP_DB_PASSWORD = process.env.SSP_DB_PASSWORD ?? 'D3velopmentP0';
+export const SSP_SEND_GRID_API_KEY = process.env.SSP_SEND_GRID_API_KEY ?? '';
+export const SSP_EMAIL_SENDER = process.env.SSP_EMAIL_SENDER ?? 'noreply@unifiedid.com';
+export const SSP_EMAIL_SENDER_NAME =
+  process.env.SSP_EMAIL_SENDER_NAME ?? 'UID2 Service (do not reply)';
+
+export const SSP_TAM_EMAIL = process.env.SSP_TAM_EMAIL ?? errorMessage;
+export const SSP_TAM_EMAIL_DISPLAY_NAME = process.env.SSP_TAM_EMAIL ?? 'TAMs';

@@ -1,0 +1,38 @@
+name: Sync handlebars template with SendGrid
+on:
+  workflow_dispatch:
+    inputs:
+      forceSyncAll:
+        description: Force sync all files in templates dir (Useful for initial synchronization)
+        required: false
+        default: false
+jobs:
+  sendgrid_sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: SendGrid sync
+        id: sendgrid_sync
+        uses: nanopx/action-sendgrid-sync@0.5.2
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          sendgridApiKey: ${{ secrets.SENDGRID_API_KEY }}
+          templatesDir: 'emailTemplates/'
+          forceSyncAll: '${{ github.event.inputs.forceSyncAll }}'
+      - name: Write template id mapping
+        uses: DamianReeves/write-file-action@master
+        with:
+          path: src/api/templateIdMapping.json
+          contents: ${{ steps.sendgrid_sync.outputs.sendgridTemplateIdMapping }}
+          write-mode: overwrite
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
+      - name: Commit & Push
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.extract_branch.outputs.branch }}
+          outputFile: 'src/api/templateIdMapping.json'

@@ -27,5 +27,5 @@ export class ParticipantType extends BaseModel {
 
 export const ParticipantTypeSchema = z.object({
   id: z.number(),
-  typeName: z.string(),
+  typeName: z.string().optional(),
 });
