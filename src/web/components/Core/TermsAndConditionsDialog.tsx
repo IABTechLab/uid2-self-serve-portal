@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { Dialog } from './Dialog';
 
+import './TermsAndConditionsDialog.scss';
+
 type TermsAndConditionsDialogProps = {
   termsAndConditions: JSX.Element;
   triggerButton: JSX.Element;
