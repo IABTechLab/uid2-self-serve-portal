@@ -12,7 +12,11 @@ const Template: ComponentStory<typeof Dialog> = (args) => <Dialog {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  triggerButton: <button className='small-button' type='button'>Open Dialog</button>,
+  triggerButton: (
+    <button className='small-button' type='button'>
+      Open Dialog
+    </button>
+  ),
   title: 'Dialog Title',
   closeButton: 'Close',
   children: 'Dialog content goes here',
@@ -38,7 +42,11 @@ export const WithOpenAndOnOpenChange = () => {
     <div>
       <Dialog
         title='Dialog Title'
-        triggerButton={<button className='small-button' type='button'>Open Dialog</button>}
+        triggerButton={
+          <button className='small-button' type='button'>
+            Open Dialog
+          </button>
+        }
         open={isOpen}
         onOpenChange={handleOpenChange}
       >

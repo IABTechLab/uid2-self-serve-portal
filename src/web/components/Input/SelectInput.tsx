@@ -13,6 +13,7 @@ export type Option<T> = {
 };
 export type SelectInputProps<TFieldValues extends FieldValues> = {
   options: Option<FieldValue<TFieldValues>>[];
+  className?: string;
 };
 
 export function SelectInput<
@@ -23,6 +24,7 @@ export function SelectInput<
   label,
   options,
   rules,
+  className,
 }: SelectInputProps<TFieldValues> & BaseInputProps<TFieldValues, TPath>) {
   const { control } = useFormContext<TFieldValues>();
   const {
@@ -38,7 +40,7 @@ export function SelectInput<
     <Input error={error} label={label} inputName={inputName}>
       <Select.Root onValueChange={field.onChange} defaultValue={field.value}>
         <Select.Trigger
-          className={clsx('input-container', 'select-trigger', { withError: error })}
+          className={clsx('input-container', 'select-trigger', { withError: error }, className)}
           aria-label={inputName}
           aria-invalid={error ? 'true' : 'false'}
         >
