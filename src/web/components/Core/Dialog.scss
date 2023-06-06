@@ -11,10 +11,10 @@
   align-items: center;
 
   .dialog-content {
+    box-sizing: border-box;
     background-color: var(--theme-background-content);
     border-radius: 5px;
     box-shadow: 0 4px 14px var(--theme-box-shadow);
-    max-width: 37.875rem;
     max-height: 85vh;
     padding: 47px;
     position: relative;

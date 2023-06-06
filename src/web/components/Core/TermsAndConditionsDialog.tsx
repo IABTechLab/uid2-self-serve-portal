@@ -35,7 +35,6 @@ export function TermsAndConditionsDialog({
           id='acceptTerms'
           className='checkbox-root'
           onCheckedChange={(checked: boolean) => {
-            console.log('1111', checked);
             setAcceptTerms(checked);
           }}
         >
@@ -49,7 +48,7 @@ export function TermsAndConditionsDialog({
       </div>
 
       <div className='form-footer'>
-        <button type='submit' disabled={acceptTerms} className='primary-button'>
+        <button type='submit' disabled={!acceptTerms} className='primary-button'>
           Accept Terms & Conditions
         </button>
       </div>
