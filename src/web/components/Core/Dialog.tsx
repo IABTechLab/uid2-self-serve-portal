@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as RadixDialog from '@radix-ui/react-dialog';
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 import './Dialog.scss';
@@ -11,6 +12,7 @@ export type DialogProps = {
   closeButton?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  fullScreen?: boolean;
 };
 export function Dialog({
   triggerButton,
@@ -19,19 +21,18 @@ export function Dialog({
   closeButton,
   open,
   onOpenChange,
+  fullScreen,
 }: DialogProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
-      <RadixDialog.Trigger asChild>
-        {triggerButton}
-      </RadixDialog.Trigger>
+      <RadixDialog.Trigger asChild>{triggerButton}</RadixDialog.Trigger>
       <RadixDialog.Overlay className='dialog-overlay' />
       <RadixDialog.Content
         className='dialog-container'
         // To prevent dialog closed from user clicking outside of the dialog
         onInteractOutside={(fireEvent) => fireEvent.preventDefault()}
       >
-        <div className='dialog-content'>
+        <div className={clsx({ fullScreen }, 'dialog-content')}>
           {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
           {children}
           {closeButton && (
