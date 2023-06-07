@@ -54,20 +54,14 @@ function AccountInformation() {
         <h3 className='account-info-title'>
           Participant Name
           <Tooltip side='right'>
-            <span className='account-info-tips'>
-              If company information needs to be edited, please reach out to support to update
-              information.
-            </span>
+            For any changes to participant information, please contact Support.
           </Tooltip>
         </h3>
         <span>{participant?.name}</span>
         <h3 className='account-info-title'>
           Participant Type
           <Tooltip side='right'>
-            <span className='account-info-tips'>
-              If company information needs to be edited, please reach out to support to update
-              information.
-            </span>
+            For any changes to participant information, please contact Support.
           </Tooltip>
         </h3>
         <span>{participantTypes}</span>

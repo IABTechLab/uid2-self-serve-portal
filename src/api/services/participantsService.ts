@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
-import { ParticipantSchema } from '../entities/Participant';
+import { ParticipantCreationPartial } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { SSP_TAM_EMAIL, SSP_TAM_EMAIL_DISPLAY_NAME, SSP_WEB_BASE_URL } from '../envars';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 
 export const sendNewParticipantEmail = async (
-  newParticipant: z.infer<typeof ParticipantSchema>,
+  newParticipant: z.infer<typeof ParticipantCreationPartial>,
   participantTypes: ParticipantType[]
 ) => {
   const emailService = createEmailService();
