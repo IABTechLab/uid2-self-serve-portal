@@ -5,6 +5,9 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('allowSharing').defaultTo(true);
     table.string('location', 100);
   });
+
+  // Update existing rows to have the default value for 'allowSharing'
+  await knex('participants').update({ allowSharing: true });
 }
 
 export async function down(knex: Knex): Promise<void> {
