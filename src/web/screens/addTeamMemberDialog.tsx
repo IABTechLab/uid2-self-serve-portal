@@ -43,14 +43,12 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
           <TextInput
             inputName='firstName'
             label='First Name'
-            className='addTeamMemberDialogInput'
             rules={{ required: 'Please specify first name.' }}
           />
           <TextInput
             inputName='lastName'
             label='Last Name'
             rules={{ required: 'Please specify last name.' }}
-            className='addTeamMemberDialogInput'
           />
           <TextInput
             inputName='email'
@@ -62,7 +60,6 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
                 message: 'Entered value does not match email format',
               },
             }}
-            className='addTeamMemberDialogInput'
           />
           <SelectInput
             inputName='role'
@@ -72,7 +69,6 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
               optionLabel: UserRole[key],
               value: UserRole[key],
             }))}
-            className='addTeamMemberDialogDropdown'
           />
           <CheckboxInput
             inputName='agreement'
