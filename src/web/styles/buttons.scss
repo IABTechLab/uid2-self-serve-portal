@@ -12,6 +12,11 @@ button {
   border: none;
 }
 
+.primary-button:disabled {
+  background-color: var(--theme-background-sidepanel);
+  border-color: var(--theme-background-sidepanel);
+}
+
 .large-button {
   padding: 1rem 3.75rem;
 }
