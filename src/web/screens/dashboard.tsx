@@ -6,6 +6,7 @@ import { SnailTrail } from '../components/Core/SnailTrail';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AccountInformationRoute } from './accountInformation';
 import { PortalRoute } from './routeUtils';
+import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
 
 import './dashboard.scss';
@@ -18,6 +19,7 @@ export const DashboardMainRoute: PortalRoute = {
 export const DashboardRoutes: PortalRoute[] = [
   AccountInformationRoute,
   TeamMembersRoute,
+  SharingPermissionsRoute,
   DashboardMainRoute,
 ];
 const menu = DashboardRoutes.filter((r) => r.description);

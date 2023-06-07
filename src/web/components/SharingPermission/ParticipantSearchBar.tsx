@@ -19,7 +19,7 @@ export function ParticipantSearchBar({
   defaultSelected,
   onSelectedChange,
 }: ParticipantSearchBarProps) {
-  const [filter, setFilter] = useState('');
+  const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
@@ -57,9 +57,9 @@ export function ParticipantSearchBar({
           type='text'
           className='search-bar-input'
           onClick={() => setDropdownOpen(true)}
-          onChange={(event) => setFilter(event.target.value)}
+          onChange={(event) => setFilterText(event.target.value)}
           placeholder='Search and Add Participants'
-          value={filter}
+          value={filterText}
         />
         <FontAwesomeIcon icon='search' className='search-icon' />
       </div>
@@ -78,7 +78,7 @@ export function ParticipantSearchBar({
           </div>
           <ParticipantsTable
             participants={participants}
-            filter={filter}
+            filterText={filterText}
             selectedTypeIds={selectedTypeIds}
             selectedParticipant={checkedParticipants}
             onSelectedChange={handleSelectedChange}

@@ -18,6 +18,6 @@ Default.args = {
     { id: 1, name: 'Participant 1', types: [{ id: 1, typeName: 'Type 1' }] },
     { id: 2, name: 'Participant 2', types: [{ id: 2, typeName: 'Type 2' }] },
   ] as ParticipantPayload[],
-  filter: '',
+  filterText: '',
   onSelectedChange: (selectedItems: number[]) => console.log('Selected items:', selectedItems),
 };
