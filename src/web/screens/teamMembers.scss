@@ -15,6 +15,13 @@
   .portal-team-table {
     font-size: 0.875rem;
 
+    .resend-invite-label {
+      background: var(--theme-label-background);
+      border-radius: 3px;
+      padding: 0.25rem 0.5rem;
+      margin-left: 0.5rem;
+    }
+
     thead {
       font-weight: 700;
       border: none;
@@ -30,10 +37,20 @@
     }
 
     td.action {
-      color: var(--theme-action);
+      button {
+        &.clickable {
+          cursor: pointer;
+          color: var(--theme-action);
+        }
+
+        border: none;
+        width: 10em;
+        padding: 0 10px;
+      }
 
       svg {
-        padding: 0 5px;
+        color: var(--theme-action);
+        padding: 0 10px;
       }
     }
   }

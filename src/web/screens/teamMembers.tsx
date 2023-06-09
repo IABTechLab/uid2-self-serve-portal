@@ -1,22 +1,57 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Suspense, useCallback } from 'react';
+import clsx from 'clsx';
+import { Suspense, useCallback, useContext, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
-import { GetAllUsers } from '../services/userAccount';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
+import { GetAllUsers, ResendInvite } from '../services/userAccount';
 import AddTeamMemberDialog from './addTeamMemberDialog';
 import { PortalRoute } from './routeUtils';
 
 import './teamMembers.scss';
 
 type TeamMemberProps = { person: User };
+
+enum InviteState {
+  initial,
+  inProgress,
+  sent,
+}
 function TeamMember({ person }: TeamMemberProps) {
+  const { participant } = useContext(ParticipantContext);
+  const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
+  const resendInvite = useCallback(async () => {
+    switch (reinviteState) {
+      case InviteState.initial:
+        console.log(`Re-inviting ${person.firstName}`);
+        setInviteState(InviteState.inProgress);
+        ResendInvite(person.id).then((success) => {
+          if (success) {
+            setInviteState(InviteState.sent);
+          } else {
+            setInviteState(InviteState.initial); // TODO ERROR
+          }
+        });
+        break;
+    }
+  }, [person, reinviteState]);
   return (
     <tr>
-      <td>{person.location}</td>
+      <td>{`${person.firstName} ${person.lastName}`}</td>
       <td>{person.email}</td>
-      <td>Admin</td>
       <td className='action'>
+        {person.acceptedTerms || (
+          <button
+            type='button'
+            className={clsx({ clickable: reinviteState === InviteState.initial })}
+            onClick={() => resendInvite()}
+          >
+            {reinviteState === InviteState.initial && 'Resend Invitation'}
+            {reinviteState === InviteState.inProgress && 'Sending...'}
+            {reinviteState === InviteState.sent && 'Invitation Sent'}
+          </button>
+        )}
         <FontAwesomeIcon icon='pencil' />
         <FontAwesomeIcon icon='trash-can' />
       </td>
@@ -37,7 +72,7 @@ function TeamMembers() {
   return (
     <div className='portal-team'>
       <h1>Team Members & Contacts</h1>
-      <p>View current team members below and add additional team members to access UID Portal.</p>
+      <p className='heading-details'>Manage access to this participant account.</p>
       <h2>Current Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>
@@ -46,9 +81,8 @@ function TeamMembers() {
               <table className='portal-team-table'>
                 <thead>
                   <tr>
-                    <th>Location</th>
+                    <th>Name</th>
                     <th>Email</th>
-                    <th>Role</th>
                     <th className='action'>Actions</th>
                   </tr>
                 </thead>

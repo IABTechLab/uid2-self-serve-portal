@@ -35,6 +35,15 @@ export async function GetUserAccountByEmail(email: string | undefined): Promise<
   }
 }
 
+export async function ResendInvite(id: number): Promise<boolean> {
+  try {
+    await axios.post(`/users/${id}/resendInvitation`);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export async function GetAllUsers() {
   try {
     const result = await axios.get<User[]>(`/users/`, {

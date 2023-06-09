@@ -39,6 +39,7 @@ export class User extends BaseModel {
   phone?: string;
   role!: UserRole;
   participantId!: number;
+  acceptedTerms!: boolean;
 }
 
 export type UserDTO = ModelObjectOpt<User>;
