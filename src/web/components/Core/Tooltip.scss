@@ -5,9 +5,17 @@
 }
 
 .tooltip-content {
-  color: var(--theme-info-content);
-  font-family: 'Inter';
+  color: var(--theme-button-text);
+  border-radius: 4px;
+  background-color: var(--theme-background-sidepanel);
+  padding: 10px;
   font-weight: 400;
-  font-size: 1rem;
-  line-height: 1.18rem;
+  font-size: 0.625rem;
+  line-height: 0.75rem;
+  max-width: 190px;
+  box-shadow: 0px 4px 4px var(--theme-box-shadow);
+}
+
+.tooltip-arrow {
+  fill: var(--theme-background-sidepanel);
 }

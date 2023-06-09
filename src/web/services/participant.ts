@@ -2,13 +2,17 @@ import axios from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
-import { ParticipantSchema, ParticipantStatus } from '../../api/entities/Participant';
+import {
+  ParticipantCreationPartial,
+  ParticipantSchema,
+  ParticipantStatus,
+} from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
-const ParticipantPartial = ParticipantSchema.deepPartial();
-export type ParticipantPayload = z.infer<typeof ParticipantSchema>;
-export type ParticipantCreationPayload = z.infer<typeof ParticipantPartial>;
+export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'allowSharing'>;
+export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
+export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
 export type CreateParticipantForm = {
   companyName: string;
   officeLocation: string;
@@ -31,6 +35,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
   if (!formData.canSign) {
     // TODO: New feature to send an invitation to the person who can sign?
   }
+
   const participantPayload: ParticipantCreationPayload = {
     name: formData.companyName,
     status: formData.canSign
@@ -39,13 +44,13 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
     types: formData.companyType.map((typeId) => ({ id: typeId })),
     users,
   };
-  const newParticipant = await axios.post<ParticipantPayload>(`/participants`, participantPayload);
+  const newParticipant = await axios.post<ParticipantResponse>(`/participants`, participantPayload);
   return newParticipant.data;
 }
 
 export async function GetParticipantByUserId(id: number) {
   try {
-    const result = await axios.get<ParticipantPayload>(`/users/${id}/participant`, {
+    const result = await axios.get<ParticipantResponse>(`/users/${id}/participant`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
@@ -56,7 +61,7 @@ export async function GetParticipantByUserId(id: number) {
 
 export async function GetAllParticipant() {
   try {
-    const result = await axios.get<ParticipantPayload[]>(`/participants`, {
+    const result = await axios.get<ParticipantResponse[]>(`/participants`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
@@ -81,7 +86,15 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
 }
 
 export type UpdateParticipantForm = {
-  allowSharing: boolean;
-  location: string;
-  logo: string;
+  location?: string;
+  logo?: string;
 };
+
+export async function UpdateParticipant(formData: UpdateParticipantForm, participantId: number) {
+  try {
+    const result = await axios.put<ParticipantResponse>(`/participants/${participantId}`, formData);
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update participant');
+  }
+}

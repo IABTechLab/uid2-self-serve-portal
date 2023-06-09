@@ -27,11 +27,11 @@ export function CheckboxInput<
     rules,
   });
 
-  const isBooleanCheckbox = options.length === 1;
+  const isBooleanCheckbox = options?.length === 1;
   const isDefaultChecked = useCallback(
     (value: TPath) => {
       if (isBooleanCheckbox) return field.value;
-      return (field.value as Array<TPath>)?.includes(value);
+      return ((field.value as Array<TPath>) ?? []).includes(value);
     },
     [field.value, isBooleanCheckbox]
   );
@@ -49,6 +49,7 @@ export function CheckboxInput<
       field.onChange(checked);
     }
   };
+
   return (
     <Input error={error} label={label} inputName={inputName}>
       <div className='inline-options'>

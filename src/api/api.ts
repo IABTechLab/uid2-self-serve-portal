@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
-import { auth, claimIncludes } from 'express-oauth2-jwt-bearer';
+import { auth } from 'express-oauth2-jwt-bearer';
 import expressWinston from 'express-winston';
 import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
@@ -116,10 +116,6 @@ router.get('/keycloak-config', async (_req, res) => {
     'public-client': SSP_KK_SSL_PUBLIC_CLIENT,
     'confidential-port': SSP_KK_SSL_CONFIDENTIAL_PORT,
   });
-});
-
-router.get('/:account/test', claimIncludes('roles', 'admin'), async (_req, res) => {
-  return res.sendStatus(200);
 });
 
 router.all('/*', (req, res) => {
