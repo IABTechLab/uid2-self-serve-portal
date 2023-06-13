@@ -2,9 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import request, { Request } from 'supertest';
 
-import api from '../api';
 import { ParticipantType } from '../entities/ParticipantType';
-import useTestServer from './utils';
+import useTestServer, { api } from './utils';
 
 describe('Errors from endpoints do not crash the api', () => {
   const withToken = useTestServer();
