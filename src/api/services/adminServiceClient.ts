@@ -20,7 +20,8 @@ const adminServiceClient = axios.create({
 
 export const getSharingList = async (siteId: number): Promise<SharingListResponse> => {
   try {
-    return await adminServiceClient.get(`/api/sharing/list/${siteId}`);
+    const response = await adminServiceClient.get(`/api/sharing/list/${siteId}`);
+    return response.data;
   } catch (error: unknown) {
     const [logger] = getLoggers();
     logger.error(`Get ACLs failed: ${error}`);
@@ -34,11 +35,12 @@ export const updateSharingList = async (
   sharingList: number[]
 ): Promise<SharingListResponse> => {
   try {
-    return await adminServiceClient.post(`/api/sharing/list/${siteId}`, {
+    const response = await adminServiceClient.post(`/api/sharing/list/${siteId}`, {
       whitelist: sharingList,
       // eslint-disable-next-line camelcase
       whitelist_hash: whiteListHash,
     });
+    return response.data;
   } catch (error: unknown) {
     const [logger] = getLoggers();
     logger.error(`Update ACLs failed: ${error}`);

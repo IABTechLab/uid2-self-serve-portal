@@ -14,7 +14,7 @@ const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
 
 export const SharedWithParticipants = Template.bind({});
 SharedWithParticipants.args = {
-  sharedParticipants: [
+  sharingParticipants: [
     {
       id: 1,
       name: 'Participant 1',
@@ -44,5 +44,5 @@ SharedWithParticipants.args = {
 
 export const NotShared = Template.bind({});
 NotShared.args = {
-  sharedParticipants: [],
+  sharingParticipants: [],
 };

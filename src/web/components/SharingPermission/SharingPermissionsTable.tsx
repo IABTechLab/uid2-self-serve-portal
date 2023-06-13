@@ -8,7 +8,7 @@ import { SearchAndAddParticipants } from './searchAndAddParticipantsDialog';
 import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
-  sharedParticipants: ParticipantPayload[];
+  sharingParticipants: ParticipantPayload[];
   onSharingPermissionsAdded: () => void;
 };
 
@@ -24,7 +24,7 @@ function NoParticipant() {
   );
 }
 export function SharingPermissionsTable({
-  sharedParticipants,
+  sharingParticipants,
   onSharingPermissionsAdded,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
@@ -35,12 +35,12 @@ export function SharingPermissionsTable({
     if (!selectAll) {
       setCheckedParticipants([]);
     } else {
-      setCheckedParticipants(sharedParticipants.map((p) => p.id!));
+      setCheckedParticipants(sharingParticipants.map((p) => p.id!));
     }
-  }, [selectAll, sharedParticipants]);
+  }, [selectAll, sharingParticipants]);
 
   const handleSelectedChange = (selectedItems: number[]) => {
-    if (selectedItems.length > 0 && selectedItems.length === sharedParticipants.length) {
+    if (selectedItems.length > 0 && selectedItems.length === sharingParticipants.length) {
       setSelectAll(true);
     } else {
       setSelectAll(false);
@@ -67,7 +67,7 @@ export function SharingPermissionsTable({
         </div>
       </div>
       <ParticipantsTable
-        participants={sharedParticipants}
+        participants={sharingParticipants}
         filterText={filterText}
         selectedParticipant={checkedParticipants}
         onSelectedChange={handleSelectedChange}
@@ -87,7 +87,7 @@ export function SharingPermissionsTable({
           <th>Participant Type</th>
         </tr>
       </ParticipantsTable>
-      {!sharedParticipants.length && <NoParticipant />}
+      {!sharingParticipants.length && <NoParticipant />}
     </div>
   );
 }

@@ -12,8 +12,6 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('sharingParticipantSiteId');
     table.enu('action', ['add', 'delete']);
     table.timestamps(true, true);
-
-    table.unique(['participantId', 'sharingParticipantSiteId']);
   });
 }
 

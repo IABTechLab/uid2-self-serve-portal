@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
+import { GetSharingParticipants, ParticipantResponse } from '../services/participant';
 import { PortalRoute } from './routeUtils';
 
 function SharingPermissions() {
@@ -9,6 +11,16 @@ function SharingPermissions() {
   const handleSharingPermissionsAdded = () => {
     setShowStatusPopup(true);
   };
+  const { participant } = useContext(ParticipantContext);
+  const [sharingParticipants, setSharingParticipants] = useState<ParticipantResponse[]>([]);
+
+  useEffect(() => {
+    const loadSharingParticipants = async () => {
+      const response = await GetSharingParticipants(participant!.id);
+      setSharingParticipants(response);
+    };
+    loadSharingParticipants();
+  }, [participant, setSharingParticipants]);
 
   return (
     <div>
@@ -21,7 +33,7 @@ function SharingPermissions() {
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
       <SharingPermissionsTable
-        sharedParticipants={[]}
+        sharingParticipants={sharingParticipants}
         onSharingPermissionsAdded={handleSharingPermissionsAdded}
       />
       {showStatusPopup && (

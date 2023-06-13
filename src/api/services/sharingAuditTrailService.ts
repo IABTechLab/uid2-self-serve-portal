@@ -15,10 +15,7 @@ export const insertSharingAuditTrails = async (
       action,
     }));
 
-    await SharingAuditTrail.query()
-      .insert(auditTrails)
-      .onConflict(['participantId', 'sharingParticipantSiteId'])
-      .merge();
+    await SharingAuditTrail.query().insert(auditTrails);
   } catch (error) {
     const [logger] = getLoggers();
     logger.error(`Audit trails upserted failed: ${error}`);
