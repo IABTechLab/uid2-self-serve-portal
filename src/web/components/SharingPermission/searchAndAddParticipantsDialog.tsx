@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { Dialog } from '../components/Core/Dialog';
-import { ParticipantSearchBar } from '../components/SharingPermission/ParticipantSearchBar';
+import { Dialog } from '../Core/Dialog';
+import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 import './searchAndAddParticipantsDialog.scss';
 
@@ -24,8 +24,8 @@ export function SearchAndAddParticipants({
   return (
     <Dialog
       triggerButton={
-        <button type='button' className='primary-button add-sharing-permission-button'>
-          Add Sharing Permission
+        <button type='button' className='transparent-button add-sharing-permission-button'>
+          Advanced Search
         </button>
       }
       open={open}

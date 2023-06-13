@@ -11,13 +11,14 @@
   justify-content: flex-end;
 }
 .add-sharing-permission-button {
-  margin-bottom: 5rem;
+  margin-left: 20px;
+  border: 1px solid var(--theme-action) !important;
 }
 
 .add-participant-button {
-  margin-left: 2.5rem;
+  margin-left: 40px;
 }
 
 .add-participant-dialog-search-bar {
-  padding: 10rem;
+  padding: 160px;
 }

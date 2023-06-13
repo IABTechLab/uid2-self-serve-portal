@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { PortalRoute } from './routeUtils';
-import { SearchAndAddParticipants } from './searchAndAddParticipantsDialog';
 
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
@@ -21,8 +20,10 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SearchAndAddParticipants onSharingPermissionsAdded={handleSharingPermissionsAdded} />
-      <SharingPermissionsTable sharedParticipants={[]} />
+      <SharingPermissionsTable
+        sharedParticipants={[]}
+        onSharingPermissionsAdded={handleSharingPermissionsAdded}
+      />
       {showStatusPopup && (
         <StatusPopup status='Success' message='1 Participant added to Your Sharing Permissions' />
       )}
