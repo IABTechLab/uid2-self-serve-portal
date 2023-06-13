@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
+import { SearchAndAddParticipants } from './searchAndAddParticipantsDialog';
 
 import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
   sharedParticipants: ParticipantPayload[];
+  onSharingPermissionsAdded: () => void;
 };
 
 function NoParticipant() {
@@ -21,7 +23,10 @@ function NoParticipant() {
     </div>
   );
 }
-export function SharingPermissionsTable({ sharedParticipants }: SharingPermissionsTableProps) {
+export function SharingPermissionsTable({
+  sharedParticipants,
+  onSharingPermissionsAdded,
+}: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -47,15 +52,18 @@ export function SharingPermissionsTable({ sharedParticipants }: SharingPermissio
     <div className='sharing-permissions-table'>
       <div className='sharing-permissions-table-header-container'>
         <h1>Your Sharing Permission</h1>
-        <div className='sharing-permissions-search-bar-container'>
-          <input
-            type='text'
-            className='sharing-permissions-search-bar'
-            onChange={(event) => setFilterText(event.target.value)}
-            placeholder='Search sharing permissions'
-            value={filterText}
-          />
-          <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+        <div className='sharing-permission-actions'>
+          <div className='sharing-permissions-search-bar-container'>
+            <input
+              type='text'
+              className='sharing-permissions-search-bar'
+              onChange={(event) => setFilterText(event.target.value)}
+              placeholder='Search sharing permissions'
+              value={filterText}
+            />
+            <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+          </div>
+          <SearchAndAddParticipants onSharingPermissionsAdded={onSharingPermissionsAdded} />
         </div>
       </div>
       <ParticipantsTable

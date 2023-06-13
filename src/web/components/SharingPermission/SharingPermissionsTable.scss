@@ -1,8 +1,12 @@
+.sharing-permissions-table {
+  margin-top: 60px;
+}
+
 .sharing-permissions-table-header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 .sharing-permissions-table h1 {
@@ -27,7 +31,12 @@
 .sharing-permission-search-bar-icon {
   color: var(--theme-search-border);
   height: 1rem;
-  margin-left: 0.5rem;
+  margin-left: 8px;
+}
+
+.sharing-permission-actions {
+  display: flex;
+  align-items: center;
 }
 
 .sharing-permissions-search-bar {
@@ -52,23 +61,23 @@
 
 .shared-participants-table th:first-of-type,
 .shared-participants-table td:first-of-type {
-  padding-left: 0.625rem !important;
+  padding-left: 10px !important;
 }
 
 .shared-participants-table tr:nth-of-type(1) td {
-  margin-top: 1rem;
+  margin-top: 16px;
 }
 
 .no-participants-container {
-  margin-top: 1rem;
+  margin-top: 16px;
   border: 1px solid var(--theme-border);
   border-radius: 5px;
-  padding: 2.25rem;
+  padding: 36px;
   width: 100%;
   display: flex;
   box-sizing: border-box;
 }
 
 .no-participants-text {
-  margin-left: 2.5rem;
+  margin-left: 40px;
 }
