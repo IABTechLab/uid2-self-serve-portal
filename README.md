@@ -156,6 +156,32 @@ For debugging requests - you may query a specific traceId like so:
 {app="ssportal-dev"} |= `ae44989e-7654-4e7f-ae7c-8987a829a622`
 ```
 
+## Email Templates
+
+### Adding a New Email Template
+
+To add a new email template to the project, follow the steps below:
+
+1. Locate the `emailTemplates` folder in the project's directory structure. If the folder doesn't exist, create it at the root level of the project.
+
+2. Create a new file for your email template with the following naming convention: `{{templateName}}.hbs`. Replace `{{templateName}}` with a descriptive name for your template. For example, if your template is for a welcome email, you could name the file `welcome.hbs`.
+
+   > Before creating a new template, check if the desired template name already exists in the `templateMapping.json` file located in the `/src/api` directory. If it exists, choose a different template name to avoid overriding an existing template.
+
+3. Open the newly created file in a text editor and write your email template using [Handlebars](https://handlebarsjs.com/) syntax. Handlebars allows you to include placeholders, conditionals, and loops in your template to make it dynamic and personalized.
+
+### Synchronizing with SendGrid
+
+To ensure accurate email rendering, it is important to synchronize the Handlebars email templates with SendGrid. The synchronization process involves updating the SendGrid templates based on the files present in the `emailTemplates` folder. Follow the steps below:
+
+1. Trigger the **Sync Handlebars Template with SendGrid** action located in the repository's Actions tab.
+
+2. Click on the **Run workflow** button to start the synchronization process.
+
+This action should be triggered after adding or updating any templates and before building and publishing Docker images. It ensures that the latest email templates are reflected in SendGrid.
+
+> **Note:** If you only need to update an existing template, you can simply modify the corresponding `.hbs` file and trigger the **Sync Handlebars Template with SendGrid** action. There is no need to redeploy or rebuild Docker images in this case.
+
 ## Available Scripts
 
 In the project directory, you can run:
