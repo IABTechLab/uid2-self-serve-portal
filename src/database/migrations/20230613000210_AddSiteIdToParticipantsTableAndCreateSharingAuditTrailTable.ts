@@ -9,9 +9,11 @@ export async function up(knex: Knex): Promise<void> {
     table.increments('id').primary();
     table.integer('participantId').references('participants.id').onDelete('CASCADE');
     table.integer('userId').references('users.id').onDelete('CASCADE');
-    table.integer('sharingParticipantId').references('participants.id');
+    table.integer('sharingParticipantSiteId');
     table.enu('action', ['add', 'delete']);
     table.timestamps(true, true);
+
+    table.unique(['participantId', 'sharingParticipantSiteId']);
   });
 }
 

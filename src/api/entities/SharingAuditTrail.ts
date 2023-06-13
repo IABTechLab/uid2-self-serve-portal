@@ -31,6 +31,6 @@ export class SharingAuditTrail extends BaseModel {
   };
 
   id!: number;
-  sharingParticipantId!: number;
+  sharingParticipantSiteId!: number;
   action!: SharingAction;
 }
