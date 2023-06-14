@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { defer } from 'react-router-dom';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
-import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
+import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipantsDialog';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {

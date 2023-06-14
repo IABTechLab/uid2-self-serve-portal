@@ -8,7 +8,7 @@ import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
   sharingParticipants: ParticipantResponse[];
-  actionButton?: ReactNode;
+  children?: ReactNode;
 };
 
 function NoParticipant() {
@@ -24,7 +24,7 @@ function NoParticipant() {
 }
 export function SharingPermissionsTable({
   sharingParticipants,
-  actionButton,
+  children,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
@@ -62,7 +62,7 @@ export function SharingPermissionsTable({
             />
             <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
           </div>
-          {actionButton}
+          {children}
         </div>
       </div>
       <ParticipantsTable

@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { ParticipantType } from '../../../api/entities/ParticipantType';
 import { ParticipantResponse } from '../../services/participant';
+import { ParticipantTypeResponse } from '../../services/participantType';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
@@ -13,7 +13,7 @@ type ParticipantSearchBarProps = {
   participants: ParticipantResponse[];
   defaultSelected: number[];
   onSelectedChange: (selectedItems: number[]) => void;
-  participantTypes: ParticipantType[];
+  participantTypes: ParticipantTypeResponse[];
 };
 
 export function ParticipantSearchBar({
