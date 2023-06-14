@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantItem } from './ParticipantItem';

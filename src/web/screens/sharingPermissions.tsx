@@ -27,13 +27,14 @@ function SharingPermissions() {
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     try {
-      await AddSharingParticipants(participant!.id, selectedSiteIds);
+      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
       setStatusPopup({
         type: 'Success',
         message: `${
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
         } added to Your Sharing Permissions`,
       });
+      setSharingParticipants(response);
     } catch (e) {
       setStatusPopup({
         type: 'Error',

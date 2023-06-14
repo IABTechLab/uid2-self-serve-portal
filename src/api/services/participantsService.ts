@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Participant, ParticipantCreationPartial } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { SSP_TAM_EMAIL, SSP_TAM_EMAIL_DISPLAY_NAME, SSP_WEB_BASE_URL } from '../envars';
-import { getSharingList, updateSharingList } from './adminServiceClient';
+import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 
@@ -31,21 +31,43 @@ export const sendNewParticipantEmail = async (
   emailService.sendEmail(emailArgs);
 };
 
+export const fetchSharingParticipants = async (
+  sharingListResponse: SharingListResponse
+): Promise<Participant[]> => {
+  return Participant.query()
+    .whereIn('siteId', sharingListResponse.whitelist)
+    .withGraphFetched('types');
+};
+
 export const getSharingParticipants = async (participantSiteId: number): Promise<Participant[]> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  return Participant.query().whereIn('siteId', sharingListResponse.whiteList);
+  return fetchSharingParticipants(sharingListResponse);
 };
 
-export const addSharingParticipants = async (participantSiteId: number, siteIds: number[]) => {
+export const addSharingParticipants = async (
+  participantSiteId: number,
+  siteIds: number[]
+): Promise<Participant[]> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  const newSharingList = [...sharingListResponse.whiteList, ...siteIds];
-  return updateSharingList(participantSiteId, sharingListResponse.whitelist_hash, newSharingList);
+  const newSharingSet = new Set([...sharingListResponse.whitelist, ...siteIds]);
+  const response = await updateSharingList(participantSiteId, sharingListResponse.whitelist_hash, [
+    ...newSharingSet,
+  ]);
+  return fetchSharingParticipants(response);
 };
 
-export const deleteSharingParticipants = async (participantSiteId: number, siteIds: number[]) => {
+export const deleteSharingParticipants = async (
+  participantSiteId: number,
+  siteIds: number[]
+): Promise<Participant[]> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  const newSharingList = sharingListResponse.whiteList.filter(
+  const newSharingList = sharingListResponse.whitelist.filter(
     (siteId) => !siteIds.includes(siteId)
   );
-  return updateSharingList(participantSiteId, sharingListResponse.whitelist_hash, newSharingList);
+  const response = await updateSharingList(
+    participantSiteId,
+    sharingListResponse.whitelist_hash,
+    newSharingList
+  );
+  return fetchSharingParticipants(response);
 };

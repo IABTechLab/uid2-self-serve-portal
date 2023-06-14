@@ -99,7 +99,9 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
-export async function GetSharingParticipants(participantId: number) {
+export async function GetSharingParticipants(
+  participantId: number
+): Promise<ParticipantResponse[]> {
   try {
     const result = await axios.get<ParticipantResponse[]>(
       `/participants/${participantId}/sharingPermission`
@@ -110,7 +112,10 @@ export async function GetSharingParticipants(participantId: number) {
   }
 }
 
-export async function AddSharingParticipants(participantId: number, newParticipantSites: number[]) {
+export async function AddSharingParticipants(
+  participantId: number,
+  newParticipantSites: number[]
+): Promise<ParticipantResponse[]> {
   try {
     const result = await axios.post<ParticipantResponse[]>(
       `/participants/${participantId}/sharingPermission/add`,
@@ -127,7 +132,7 @@ export async function AddSharingParticipants(participantId: number, newParticipa
 export async function DeleteSharingParticipants(
   participantId: number,
   sharingSitesToRemove: number[]
-) {
+): Promise<ParticipantResponse[]> {
   try {
     const result = await axios.post<ParticipantResponse[]>(
       `/participants/${participantId}/sharingPermission/delete`,

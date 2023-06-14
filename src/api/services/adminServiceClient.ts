@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
 
-type SharingListResponse = {
-  whiteList: number[];
+export type SharingListResponse = {
+  whitelist: number[];
   whitelist_hash: number;
 };
 
@@ -23,6 +23,14 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
     const response = await adminServiceClient.get(`/api/sharing/list/${siteId}`);
     return response.data;
   } catch (error: unknown) {
+    // if site don't have ACLs, currently it returns 404
+    if (error instanceof AxiosError && error.response?.status === 404) {
+      return {
+        whitelist: [],
+        // eslint-disable-next-line camelcase
+        whitelist_hash: 0,
+      };
+    }
     const [logger] = getLoggers();
     logger.error(`Get ACLs failed: ${error}`);
     throw error;

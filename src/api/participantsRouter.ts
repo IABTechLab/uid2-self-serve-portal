@@ -149,7 +149,10 @@ participantsRouter.post(
       return res.status(400).send('Site id is not set');
     }
     const { newParticipantSites } = sharingRelationParser.parse(req.body);
-    await addSharingParticipants(participant.siteId, newParticipantSites);
+    const sharingParticipants = await addSharingParticipants(
+      participant.siteId,
+      newParticipantSites
+    );
 
     const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
     await insertSharingAuditTrails(
@@ -159,7 +162,7 @@ participantsRouter.post(
       newParticipantSites
     );
 
-    return res.status(200);
+    return res.status(200).json(sharingParticipants);
   }
 );
 
@@ -176,7 +179,10 @@ participantsRouter.post(
       return res.status(400).send('Site id is not set');
     }
     const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
-    await deleteSharingParticipants(participant.siteId, sharingSitesToRemove);
+    const sharingParticipants = await deleteSharingParticipants(
+      participant.siteId,
+      sharingSitesToRemove
+    );
 
     const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
     await insertSharingAuditTrails(
@@ -186,6 +192,6 @@ participantsRouter.post(
       sharingSitesToRemove
     );
 
-    return res.status(200);
+    return res.status(200).json(sharingParticipants);
   }
 );
