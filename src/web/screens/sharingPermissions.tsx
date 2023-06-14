@@ -26,12 +26,8 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SharingPermissionsTable sharingParticipants={sharingParticipants}>
-        <SearchAndAddParticipants
-          onSharingPermissionsAdded={handleSharingPermissionsAdded}
-          defaultSelected={sharingParticipants}
-        />
-      </SharingPermissionsTable>
+      <SearchAndAddParticipants onSharingPermissionsAdded={handleSharingPermissionsAdded} />
+      <SharingPermissionsTable sharedParticipants={[]} />
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}
