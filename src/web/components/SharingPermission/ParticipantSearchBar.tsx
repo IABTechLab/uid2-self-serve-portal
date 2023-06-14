@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
-import { ParticipantPayload } from '../../services/participant';
+import { ParticipantResponse } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
-  participants: ParticipantPayload[];
+  participants: ParticipantResponse[];
   defaultSelected: number[];
   onSelectedChange: (selectedItems: number[]) => void;
 };

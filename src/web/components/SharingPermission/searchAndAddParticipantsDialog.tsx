@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { ParticipantResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
@@ -20,7 +21,7 @@ export function SearchAndAddParticipants({
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
-    onSharingPermissionsAdded();
+    onSharingPermissionsAdded(selectedParticipants);
   };
 
   return (

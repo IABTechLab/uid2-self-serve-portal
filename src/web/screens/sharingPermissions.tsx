@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
+import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipantsDialog';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { PortalRoute } from './routeUtils';
 
@@ -12,7 +13,7 @@ type StatusPopupType = {
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
-
+  const handleSharingPermissionsAdded = async () => {
     setShowStatusPopup(true);
   };
 
@@ -26,8 +27,12 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SearchAndAddParticipants onSharingPermissionsAdded={handleSharingPermissionsAdded} />
-      <SharingPermissionsTable sharedParticipants={[]} />
+      <SharingPermissionsTable sharedParticipants={[]}>
+        <SearchAndAddParticipants
+          defaultSelected={[]}
+          onSharingPermissionsAdded={handleSharingPermissionsAdded}
+        />
+      </SharingPermissionsTable>
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}
