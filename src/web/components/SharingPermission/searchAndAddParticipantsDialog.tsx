@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
@@ -24,6 +24,10 @@ export function SearchAndAddParticipants({
     onSharingPermissionsAdded(selectedParticipants);
   };
 
+  const defaultSelectedParticipants = useMemo(() => {
+    return defaultSelected.map((p) => p.id!);
+  }, [defaultSelected]);
+
   return (
     <Dialog
       triggerButton={
@@ -39,7 +43,7 @@ export function SearchAndAddParticipants({
         <div className='add-participant-dialog-search-bar'>
           <ParticipantSearchBar
             participants={[]}
-            defaultSelected={[]}
+            defaultSelected={defaultSelectedParticipants}
             onSelectedChange={setSelectedParticipants}
           />
           {/* TODO: Add Automatically Add Participant Types: */}

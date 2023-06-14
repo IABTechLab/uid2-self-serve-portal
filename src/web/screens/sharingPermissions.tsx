@@ -15,6 +15,10 @@ function SharingPermissions() {
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
   const handleSharingPermissionsAdded = async () => {
     setShowStatusPopup(true);
+    setStatusPopup({
+      type: 'Success',
+      message: '1 Participant added to Your Sharing Permissions',
+    });
   };
 
   return (
