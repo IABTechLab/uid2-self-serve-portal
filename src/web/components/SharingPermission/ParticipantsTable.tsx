@@ -43,10 +43,10 @@ export function ParticipantsTable({
 
   const handleCheckChange = (participant: ParticipantPayload) => {
     const newCheckedItems = new Set(selectedParticipant);
-    if (newCheckedItems.has(participant.id!)) {
-      newCheckedItems.delete(participant.id!);
+    if (newCheckedItems.has(participant.siteId!)) {
+      newCheckedItems.delete(participant.siteId!);
     } else {
-      newCheckedItems.add(participant.id!);
+      newCheckedItems.add(participant.siteId!);
     }
     onSelectedChange(Array.from(newCheckedItems));
   };
@@ -60,7 +60,7 @@ export function ParticipantsTable({
             key={participant.id}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
-            checked={!!selectedParticipant?.includes(participant.id!)}
+            checked={!!selectedParticipant?.includes(participant.siteId!)}
           />
         ))}
       </tbody>

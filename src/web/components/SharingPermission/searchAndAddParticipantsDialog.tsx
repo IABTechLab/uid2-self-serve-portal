@@ -11,7 +11,7 @@ import { ParticipantSearchBar } from './ParticipantSearchBar';
 import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
-  onSharingPermissionsAdded: () => void;
+  onSharingPermissionsAdded: (selectedSiteIds: number[]) => void;
   defaultSelected: ParticipantResponse[];
 };
 export function SearchAndAddParticipants({
@@ -30,7 +30,7 @@ export function SearchAndAddParticipants({
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
-    onSharingPermissionsAdded();
+    onSharingPermissionsAdded(selectedParticipants);
   };
 
   const defaultSelectedParticipants = useMemo(() => {
