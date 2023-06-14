@@ -6,10 +6,12 @@ import { ParticipantSearchBar } from './ParticipantSearchBar';
 import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
-  onSharingPermissionsAdded: () => void;
+  onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
+  defaultSelected: ParticipantResponse[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
+  defaultSelected,
 }: SearchAndAddParticipantsProps) {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
