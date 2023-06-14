@@ -11,7 +11,7 @@ import { ParticipantSearchBar } from './ParticipantSearchBar';
 import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
-  onSharingPermissionsAdded: (selectedSiteIds: number[]) => void;
+  onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
   defaultSelected: ParticipantResponse[];
 };
 export function SearchAndAddParticipants({

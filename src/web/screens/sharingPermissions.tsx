@@ -13,9 +13,15 @@ import {
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
+type StatusPopupType = {
+  message: string;
+  type: 'Success' | 'Error' | 'Info';
+};
+
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
-  const handleSharingPermissionsAdded = () => {
+  const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
+
     setShowStatusPopup(true);
   };
   const { participant } = useContext(ParticipantContext);
@@ -45,8 +51,13 @@ function SharingPermissions() {
           defaultSelected={sharingParticipants}
         />
       </SharingPermissionsTable>
-      {showStatusPopup && (
-        <StatusPopup status='Success' message='1 Participant added to Your Sharing Permissions' />
+      {statusPopup && (
+        <StatusPopup
+          status={statusPopup!.type}
+          show={showStatusPopup}
+          setShow={setShowStatusPopup}
+          message={statusPopup!.message}
+        />
       )}
     </div>
   );
