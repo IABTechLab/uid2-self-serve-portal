@@ -27,8 +27,6 @@ function SharingPermissions() {
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     setShowStatusPopup(true);
   };
-  const { participant } = useContext(ParticipantContext);
-  const [sharingParticipants, setSharingParticipants] = useState<ParticipantResponse[]>([]);
 
   useEffect(() => {
     const loadSharingParticipants = async () => {
