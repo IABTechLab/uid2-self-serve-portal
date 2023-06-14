@@ -1,15 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
-import { SearchAndAddParticipants } from './searchAndAddParticipantsDialog';
 
 import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
   sharingParticipants: ParticipantResponse[];
-  onSharingPermissionsAdded: () => void;
+  actionButton?: ReactNode;
 };
 
 function NoParticipant() {
@@ -25,7 +24,7 @@ function NoParticipant() {
 }
 export function SharingPermissionsTable({
   sharingParticipants,
-  onSharingPermissionsAdded,
+  actionButton,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
@@ -63,10 +62,7 @@ export function SharingPermissionsTable({
             />
             <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
           </div>
-          <SearchAndAddParticipants
-            onSharingPermissionsAdded={onSharingPermissionsAdded}
-            defaultSelected={sharingParticipants}
-          />
+          {actionButton}
         </div>
       </div>
       <ParticipantsTable

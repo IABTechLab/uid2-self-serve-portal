@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { defer } from 'react-router-dom';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
+import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
@@ -38,10 +39,12 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SharingPermissionsTable
-        sharingParticipants={sharingParticipants}
-        onSharingPermissionsAdded={handleSharingPermissionsAdded}
-      />
+      <SharingPermissionsTable sharingParticipants={sharingParticipants}>
+        <SearchAndAddParticipants
+          onSharingPermissionsAdded={handleSharingPermissionsAdded}
+          defaultSelected={sharingParticipants}
+        />
+      </SharingPermissionsTable>
       {showStatusPopup && (
         <StatusPopup status='Success' message='1 Participant added to Your Sharing Permissions' />
       )}

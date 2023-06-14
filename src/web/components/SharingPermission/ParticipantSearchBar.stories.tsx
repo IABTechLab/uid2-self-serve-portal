@@ -45,5 +45,10 @@ SearchBar.args = {
     },
   ],
   defaultSelected: [1, 3],
+  participantTypes: [
+    { id: 1, typeName: 'Type 1' },
+    { id: 2, typeName: 'Type 2' },
+    { id: 3, typeName: 'Type 3' },
+  ],
   onSelectedChange: () => {},
 };
