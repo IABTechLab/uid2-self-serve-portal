@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { ParticipantResponse } from '../../services/participant';
+import { ParticipantPayload, ParticipantResponse } from '../../services/participant';
 import { ParticipantTypeResponse } from '../../services/participantType';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
@@ -27,6 +27,9 @@ export function ParticipantSearchBar({
   const [selectAll, setSelectAll] = useState(false);
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
   const [checkedParticipants, setCheckedParticipants] = useState(defaultSelected);
+  const [filteredParticipants, setFilteredParticipants] =
+    useState<ParticipantPayload[]>(participants);
+
   const handleSelectAllChange = () => {
     setSelectAll(!selectAll);
     if (selectAll) {
@@ -86,6 +89,8 @@ export function ParticipantSearchBar({
             selectedParticipant={checkedParticipants}
             onSelectedChange={handleSelectedChange}
             className='search-bar-participants'
+            filteredParticipants={filteredParticipants}
+            onFilteredParticipantChange={setFilteredParticipants}
           >
             <tr>
               <th>

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, useEffect, useState } from 'react';
 
-import { ParticipantResponse } from '../../services/participant';
+import { ParticipantPayload, ParticipantResponse } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
@@ -29,6 +29,8 @@ export function SharingPermissionsTable({
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
   const [selectAll, setSelectAll] = useState(false);
+  const [filteredParticipants, setFilteredParticipants] =
+    useState<ParticipantPayload[]>(sharingParticipants);
 
   useEffect(() => {
     if (!selectAll) {
@@ -71,6 +73,8 @@ export function SharingPermissionsTable({
         selectedParticipant={checkedParticipants}
         onSelectedChange={handleSelectedChange}
         className='shared-participants-table'
+        filteredParticipants={filteredParticipants}
+        onFilteredParticipantChange={setFilteredParticipants}
       >
         <tr>
           <th>

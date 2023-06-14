@@ -11,6 +11,8 @@ type ParticipantsTableProps = {
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: number[]) => void;
+  filteredParticipants: ParticipantPayload[];
+  onFilteredParticipantChange: (filteredParticipant: ParticipantPayload[]) => void;
   selectedParticipant?: number[];
   children?: ReactNode;
   className?: string;
@@ -24,9 +26,9 @@ export function ParticipantsTable({
   onSelectedChange,
   selectedParticipant,
   className,
+  filteredParticipants,
+  onFilteredParticipantChange,
 }: ParticipantsTableProps) {
-  const [filteredParticipants, setFilteredParticipants] = useState(participants);
-
   useEffect(() => {
     let filtered = participants;
 
@@ -38,8 +40,8 @@ export function ParticipantsTable({
       filtered = filtered.filter((p) => p.name.toLowerCase().includes(filterText.toLowerCase()));
     }
 
-    setFilteredParticipants(filtered);
-  }, [participants, filterText, selectedTypeIds]);
+    onFilteredParticipantChange(filtered);
+  }, [participants, filterText, selectedTypeIds, onFilteredParticipantChange]);
 
   const handleCheckChange = (participant: ParticipantPayload) => {
     const newCheckedItems = new Set(selectedParticipant);
