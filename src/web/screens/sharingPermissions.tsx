@@ -20,8 +20,11 @@ type StatusPopupType = {
 
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
+  const { participant } = useContext(ParticipantContext);
+  const [sharingParticipants, setSharingParticipants] = useState<ParticipantResponse[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
 
+  const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     setShowStatusPopup(true);
   };
   const { participant } = useContext(ParticipantContext);

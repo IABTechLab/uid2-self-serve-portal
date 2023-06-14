@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 
 import { ParticipantPayload, ParticipantResponse } from '../../services/participant';
 import { ParticipantTypeResponse } from '../../services/participantType';
@@ -35,21 +35,17 @@ export function ParticipantSearchBar({
     if (selectAll) {
       setCheckedParticipants([]);
     } else {
-      setCheckedParticipants(participants.map((p) => p.siteId!));
+      setCheckedParticipants(filteredParticipants.map((p) => p.siteId!));
     }
   };
+
+  const isSelectedAll = useMemo(() => {
+    const selected = new Set(checkedParticipants);
+    return filteredParticipants.every((p) => selected.has(p.siteId!));
+  }, [filteredParticipants, checkedParticipants]);
 
   const handleFilterChange = (typeIds: Set<number>) => {
     setSelectedTypeIds(typeIds);
-  };
-
-  const handleSelectedChange = (selectedItems: number[]) => {
-    if (selectedItems.length > 0 && selectedItems.length === participants.length) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-    setCheckedParticipants(selectedItems);
   };
 
   const handleFilterTextChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -62,6 +58,10 @@ export function ParticipantSearchBar({
   useEffect(() => {
     onSelectedChange(checkedParticipants);
   }, [checkedParticipants, onSelectedChange]);
+
+  useEffect(() => {
+    setSelectAll(isSelectedAll);
+  }, [filteredParticipants, checkedParticipants, isSelectedAll]);
 
   return (
     <div className={clsx('search-bar', { clicked: dropdownOpen })}>
@@ -87,7 +87,7 @@ export function ParticipantSearchBar({
             filterText={filterText}
             selectedTypeIds={selectedTypeIds}
             selectedParticipant={checkedParticipants}
-            onSelectedChange={handleSelectedChange}
+            onSelectedChange={setCheckedParticipants}
             className='search-bar-participants'
             filteredParticipants={filteredParticipants}
             onFilteredParticipantChange={setFilteredParticipants}
@@ -103,7 +103,9 @@ export function ParticipantSearchBar({
                 />
               </th>
               <th colSpan={3}>
-                <span className='select-all'>Select All {participants.length} Participants</span>
+                <span className='select-all'>
+                  Select All {filteredParticipants.length} Participants
+                </span>
               </th>
             </tr>
           </ParticipantsTable>
