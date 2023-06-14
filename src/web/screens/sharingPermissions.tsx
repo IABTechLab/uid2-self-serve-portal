@@ -6,6 +6,7 @@ import { SearchAndAddParticipants } from '../components/SharingPermission/search
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
+  AddSharingParticipants,
   GetAllParticipants,
   GetSharingParticipants,
   ParticipantResponse,
@@ -25,6 +26,20 @@ function SharingPermissions() {
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
+    try {
+      await AddSharingParticipants(participant!.id, selectedSiteIds);
+      setStatusPopup({
+        type: 'Success',
+        message: `${
+          selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
+        } added to Your Sharing Permissions`,
+      });
+    } catch (e) {
+      setStatusPopup({
+        type: 'Error',
+        message: `Add Sharing Permissions Failed`,
+      });
+    }
     setShowStatusPopup(true);
   };
 
