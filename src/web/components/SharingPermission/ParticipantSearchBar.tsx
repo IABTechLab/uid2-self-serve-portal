@@ -1,23 +1,26 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import { ParticipantPayload } from '../../services/participant';
+import { ParticipantType } from '../../../api/entities/ParticipantType';
+import { ParticipantResponse } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
-  participants: ParticipantPayload[];
+  participants: ParticipantResponse[];
   defaultSelected: number[];
   onSelectedChange: (selectedItems: number[]) => void;
+  participantTypes: ParticipantType[];
 };
 
 export function ParticipantSearchBar({
   participants,
   defaultSelected,
   onSelectedChange,
+  participantTypes,
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -29,7 +32,7 @@ export function ParticipantSearchBar({
     if (selectAll) {
       setCheckedParticipants([]);
     } else {
-      setCheckedParticipants(participants.map((p) => p.id!));
+      setCheckedParticipants(participants.map((p) => p.siteId!));
     }
   };
 
@@ -46,6 +49,13 @@ export function ParticipantSearchBar({
     setCheckedParticipants(selectedItems);
   };
 
+  const handleFilterTextChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFilterText(event.target.value);
+    if (!dropdownOpen) {
+      setDropdownOpen(true);
+    }
+  };
+
   useEffect(() => {
     onSelectedChange(checkedParticipants);
   }, [checkedParticipants, onSelectedChange]);
@@ -57,7 +67,7 @@ export function ParticipantSearchBar({
           type='text'
           className='search-bar-input'
           onClick={() => setDropdownOpen(true)}
-          onChange={(event) => setFilterText(event.target.value)}
+          onChange={handleFilterTextChange}
           placeholder='Search and Add Participants'
           value={filterText}
         />
@@ -67,14 +77,7 @@ export function ParticipantSearchBar({
         <div className='search-bar-dropdown'>
           <div className='search-bar-type-filter'>
             <div className='search-bar-type-filter-title'>Only show me:</div>
-            <TypeFilter
-              onFilterChange={handleFilterChange}
-              types={[
-                { id: 1, typeName: 'Type 1' },
-                { id: 2, typeName: 'Type 2' },
-                { id: 3, typeName: 'Type 3' },
-              ]}
-            />
+            <TypeFilter onFilterChange={handleFilterChange} types={participantTypes} />
           </div>
           <ParticipantsTable
             participants={participants}

@@ -1,9 +1,15 @@
 import { useContext, useEffect, useState } from 'react';
+import { defer } from 'react-router-dom';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { GetSharingParticipants, ParticipantResponse } from '../services/participant';
+import {
+  GetAllParticipants,
+  GetSharingParticipants,
+  ParticipantResponse,
+} from '../services/participant';
+import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
 function SharingPermissions() {
@@ -47,4 +53,9 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
+  loader: async () => {
+    const participants = GetAllParticipants();
+    const participantTypes = await GetAllParticipantTypes();
+    return defer({ participants, participantTypes });
+  },
 };
