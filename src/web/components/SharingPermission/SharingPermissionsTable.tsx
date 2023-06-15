@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode, useEffect, useState } from 'react';
+import clsx from 'clsx';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
@@ -8,6 +9,7 @@ import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
   sharedParticipants: ParticipantPayload[];
+  onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
   children?: ReactNode;
 };
 
@@ -24,6 +26,7 @@ function NoParticipant() {
 }
 export function SharingPermissionsTable({
   sharedParticipants,
+  onDeleteSharingPermission,
   children,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
@@ -47,6 +50,15 @@ export function SharingPermissionsTable({
     setCheckedParticipants(selectedItems);
   };
 
+  const hasParticipantSelected = useMemo(
+    () => checkedParticipants.length > 0,
+    [checkedParticipants]
+  );
+
+  const handleDeletePermissions = () => {
+    onDeleteSharingPermission(checkedParticipants);
+  };
+
   return (
     <div className='sharing-permissions-table'>
       <div className='sharing-permissions-table-header-container'>
@@ -66,11 +78,12 @@ export function SharingPermissionsTable({
         </div>
       </div>
       <ParticipantsTable
+        showAddedByColumn
         participants={sharedParticipants}
         filterText={filterText}
         selectedParticipant={checkedParticipants}
         onSelectedChange={handleSelectedChange}
-        className='shared-participants-table'
+        className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
       >
         <tr>
           <th>
@@ -82,8 +95,27 @@ export function SharingPermissionsTable({
               className='participant-checkbox'
             />
           </th>
-          <th>Participant Name</th>
-          <th>Participant Type</th>
+          {!hasParticipantSelected ? (
+            <>
+              <th>Participant Name</th>
+              <th>Participant Type</th>
+              <th>Added By</th>
+            </>
+          ) : (
+            <th colSpan={3}>
+              <button
+                className='transparent-button sharing-permission-delete-button'
+                type='button'
+                onClick={handleDeletePermissions}
+              >
+                <FontAwesomeIcon
+                  icon={['far', 'trash-can']}
+                  className='sharing-permission-trashcan-icon'
+                />
+                Delete Permissions
+              </button>
+            </th>
+          )}
         </tr>
       </ParticipantsTable>
       {!sharedParticipants.length && <NoParticipant />}

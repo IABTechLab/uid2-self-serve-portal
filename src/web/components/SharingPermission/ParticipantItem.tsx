@@ -9,9 +9,10 @@ type ParticipantItemProps = {
   participant: ParticipantPayload;
   onClick: () => void;
   checked: boolean;
+  addedBy?: string;
 };
 
-export function ParticipantItem({ participant, onClick, checked }: ParticipantItemProps) {
+export function ParticipantItem({ participant, onClick, checked, addedBy }: ParticipantItemProps) {
   function getParticipantTypes(participantTypes?: z.infer<typeof ParticipantTypeSchema>[]) {
     if (!participantTypes) return null;
     return participantTypes.map((pt) => (
@@ -43,6 +44,7 @@ export function ParticipantItem({ participant, onClick, checked }: ParticipantIt
       <td>
         <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
       </td>
+      {addedBy && <td>{addedBy}</td>}
     </tr>
   );
 }

@@ -27,4 +27,13 @@ describe('SharingPermissionsTable', () => {
     fireEvent.change(searchInput, { target: { value: 'Participant 1' } });
     expect(searchInput).toHaveValue('Participant 1');
   });
+
+  it('renders delete permissions button when there are permission select', () => {
+    render(<SharedWithParticipants />);
+
+    const firstParticipantItem = screen.getByText('Participant 1');
+    fireEvent.click(firstParticipantItem);
+
+    expect(screen.getByText('Delete Permissions')).toBeInTheDocument();
+  });
 });

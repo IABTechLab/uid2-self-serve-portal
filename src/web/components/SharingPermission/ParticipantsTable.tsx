@@ -14,6 +14,7 @@ type ParticipantsTableProps = {
   selectedParticipant?: number[];
   children?: ReactNode;
   className?: string;
+  showAddedByColumn?: boolean;
 };
 
 export function ParticipantsTable({
@@ -24,6 +25,7 @@ export function ParticipantsTable({
   onSelectedChange,
   selectedParticipant,
   className,
+  showAddedByColumn,
 }: ParticipantsTableProps) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
 
@@ -57,6 +59,7 @@ export function ParticipantsTable({
       <tbody>
         {filteredParticipants.map((participant) => (
           <ParticipantItem
+            addedBy={showAddedByColumn ? 'Auto' : undefined} // TODO: Update this once we have auto add functionality
             key={participant.id}
             participant={participant}
             onClick={() => handleCheckChange(participant)}

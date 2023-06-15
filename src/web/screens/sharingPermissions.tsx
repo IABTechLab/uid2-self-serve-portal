@@ -21,6 +21,14 @@ function SharingPermissions() {
     });
   };
 
+  const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
+    setShowStatusPopup(true);
+    setStatusPopup({
+      type: 'Success',
+      message: `${siteIdsToDelete} sharing permissions deleted`,
+    });
+  };
+
   return (
     <div>
       <h1>Sharing Permissions</h1>
@@ -31,7 +39,10 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SharingPermissionsTable sharedParticipants={[]}>
+      <SharingPermissionsTable
+        sharedParticipants={[]}
+        onDeleteSharingPermission={handleDeleteSharingPermission}
+      >
         <SearchAndAddParticipants
           defaultSelected={[]}
           onSharingPermissionsAdded={handleSharingPermissionsAdded}
