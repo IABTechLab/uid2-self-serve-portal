@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
+import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
@@ -31,23 +33,29 @@ export function SharingPermissionsTable({
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAllState, setSelectAllState] = useState<CheckedState>(
+    SelectAllCheckboxState.unchecked
+  );
 
   useEffect(() => {
-    if (!selectAll) {
-      setCheckedParticipants([]);
+    if (
+      checkedParticipants.length > 0 &&
+      checkedParticipants.length === sharedParticipants.length
+    ) {
+      setSelectAllState(SelectAllCheckboxState.checked);
+    } else if (checkedParticipants.length > 0) {
+      setSelectAllState(SelectAllCheckboxState.indeterminate as CheckedState);
     } else {
-      setCheckedParticipants(sharedParticipants.map((p) => p.id!));
+      setSelectAllState(SelectAllCheckboxState.unchecked);
     }
-  }, [selectAll, sharedParticipants]);
+  }, [checkedParticipants.length, sharedParticipants.length]);
 
-  const handleSelectedChange = (selectedItems: number[]) => {
-    if (selectedItems.length > 0 && selectedItems.length === sharedParticipants.length) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-    setCheckedParticipants(selectedItems);
+  const handleSelectAll = () => {
+    setCheckedParticipants(sharedParticipants.map((p) => p.id!));
+  };
+
+  const handleUnselectAll = () => {
+    setCheckedParticipants([]);
   };
 
   const hasParticipantSelected = useMemo(
@@ -82,17 +90,22 @@ export function SharingPermissionsTable({
         participants={sharedParticipants}
         filterText={filterText}
         selectedParticipant={checkedParticipants}
-        onSelectedChange={handleSelectedChange}
+        onSelectedChange={setCheckedParticipants}
         className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
       >
         <tr>
           <th>
-            <input
+            {/* <input
               type='checkbox'
               checked={selectAll}
               onChange={() => setSelectAll(!selectAll)}
               id='select-all-checkbox'
               className='participant-checkbox'
+            /> */}
+            <SelectAllCheckbox
+              onSelectAll={handleSelectAll}
+              onUnselect={handleUnselectAll}
+              status={selectAllState}
             />
           </th>
           {!hasParticipantSelected ? (

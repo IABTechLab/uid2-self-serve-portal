@@ -8,6 +8,7 @@ import {
   faCircleInfo,
   faEllipsisH,
   faExclamationCircle,
+  faMinus,
   faPencil,
   faSearch,
   faTrashCan,
@@ -29,4 +30,5 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faExclamationCircle);
   library.add(fasCircleCheck);
   library.add(faSearch);
+  library.add(faMinus);
 }
