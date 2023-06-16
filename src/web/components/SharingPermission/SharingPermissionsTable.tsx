@@ -95,17 +95,11 @@ export function SharingPermissionsTable({
       >
         <tr>
           <th>
-            {/* <input
-              type='checkbox'
-              checked={selectAll}
-              onChange={() => setSelectAll(!selectAll)}
-              id='select-all-checkbox'
-              className='participant-checkbox'
-            /> */}
             <SelectAllCheckbox
               onSelectAll={handleSelectAll}
               onUnselect={handleUnselectAll}
               status={selectAllState}
+              className='participant-checkbox'
             />
           </th>
           {!hasParticipantSelected ? (

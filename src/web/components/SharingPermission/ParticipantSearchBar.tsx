@@ -1,8 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
+import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
@@ -21,34 +23,35 @@ export function ParticipantSearchBar({
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectAll, setSelectAll] = useState(false);
+  const [selectAllState, setSelectAllState] = useState<CheckedState>(
+    SelectAllCheckboxState.unchecked
+  );
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
   const [checkedParticipants, setCheckedParticipants] = useState(defaultSelected);
-  const handleSelectAllChange = () => {
-    setSelectAll(!selectAll);
-    if (selectAll) {
-      setCheckedParticipants([]);
+
+  useEffect(() => {
+    if (checkedParticipants.length > 0 && checkedParticipants.length === participants.length) {
+      setSelectAllState(SelectAllCheckboxState.checked);
+    } else if (checkedParticipants.length > 0) {
+      setSelectAllState(SelectAllCheckboxState.indeterminate as CheckedState);
     } else {
-      setCheckedParticipants(participants.map((p) => p.id!));
+      setSelectAllState(SelectAllCheckboxState.unchecked);
     }
+  }, [checkedParticipants.length, participants.length]);
+
+  const handleSelectAll = () => {
+    setCheckedParticipants(participants.map((p) => p.id!));
+  };
+
+  const handleUnselectAll = () => {
+    setCheckedParticipants([]);
   };
 
   const handleFilterChange = (typeIds: Set<number>) => {
     setSelectedTypeIds(typeIds);
   };
 
-  const handleSelectedChange = (selectedItems: number[]) => {
-    if (selectedItems.length > 0 && selectedItems.length === participants.length) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-    setCheckedParticipants(selectedItems);
-  };
-
-  useEffect(() => {
-    onSelectedChange(checkedParticipants);
-  }, [checkedParticipants, onSelectedChange]);
+  useEffect(() => {}, [checkedParticipants, onSelectedChange]);
 
   return (
     <div className={clsx('search-bar', { clicked: dropdownOpen })}>
@@ -81,17 +84,15 @@ export function ParticipantSearchBar({
             filterText={filterText}
             selectedTypeIds={selectedTypeIds}
             selectedParticipant={checkedParticipants}
-            onSelectedChange={handleSelectedChange}
+            onSelectedChange={setCheckedParticipants}
             className='search-bar-participants'
           >
             <tr>
               <th>
-                <input
-                  type='checkbox'
-                  checked={selectAll}
-                  onChange={handleSelectAllChange}
-                  id='select-all-checkbox'
-                  className='participant-checkbox'
+                <SelectAllCheckbox
+                  onSelectAll={handleSelectAll}
+                  onUnselect={handleUnselectAll}
+                  status={selectAllState}
                 />
               </th>
               <th colSpan={3}>

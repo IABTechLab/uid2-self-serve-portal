@@ -2,14 +2,12 @@
   background-color: var(--theme-radio-background) !important;
   width: 21px;
   height: 21px;
-  border-radius: 3px;
   display: flex;
   align-items: center;
   justify-content: center;
 
   // Override the style of .app button
   padding: 0 !important;
-  margin: 0 !important;
   border: 0 !important;
 }
 

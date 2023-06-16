@@ -1,7 +1,11 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import clsx from 'clsx';
 import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { ParticipantPayload } from '../../services/participant';
+import { SelectAllCheckbox } from '../Core/SelectAllCheckbox';
 
 import './ParticipantItem.scss';
 
@@ -27,11 +31,10 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
   return (
     <tr>
       <td>
-        <input
-          type='checkbox'
-          checked={checked}
-          onChange={onClick}
-          id={`checkbox-${participant.id}`}
+        <SelectAllCheckbox
+          onSelectAll={onClick}
+          onUnselect={onClick}
+          status={checked}
           className='participant-checkbox'
         />
       </td>

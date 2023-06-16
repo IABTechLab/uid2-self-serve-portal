@@ -14,11 +14,16 @@ type SelectAllCheckboxProps = {
   status: Checkbox.CheckedState;
   onSelectAll: () => void;
   onUnselect: () => void;
+  className?: string;
 };
 
-export function SelectAllCheckbox({ status, onSelectAll, onUnselect }: SelectAllCheckboxProps) {
+export function SelectAllCheckbox({
+  status,
+  onSelectAll,
+  onUnselect,
+  className,
+}: SelectAllCheckboxProps) {
   const handleChange = () => {
-    console.log('here?!');
     if (
       status === SelectAllCheckboxState.checked ||
       status === SelectAllCheckboxState.indeterminate
@@ -43,7 +48,7 @@ export function SelectAllCheckbox({ status, onSelectAll, onUnselect }: SelectAll
     <Checkbox.Root
       checked={status}
       onCheckedChange={handleChange}
-      className={clsx('select-all-checkbox', {
+      className={clsx('select-all-checkbox', className, {
         uncheck: status === SelectAllCheckboxState.unchecked,
       })}
     >
