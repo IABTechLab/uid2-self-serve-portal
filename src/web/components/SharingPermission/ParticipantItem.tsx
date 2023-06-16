@@ -1,6 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import clsx from 'clsx';
 import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
