@@ -26,7 +26,7 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
   // TODO: update this when we have login uploading
   const logo = '/default-logo.svg';
   return (
-    <tr>
+    <tr onClick={onClick}>
       <td>
         <SelectAllCheckbox
           onSelectAll={onClick}
