@@ -10,6 +10,14 @@
   align-items: center;
   justify-content: flex-end;
 }
+
+.dialog-footer-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
 .add-sharing-permission-button {
   margin-left: 20px;
   border: 1px solid var(--theme-action) !important;

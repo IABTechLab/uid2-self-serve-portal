@@ -12,11 +12,11 @@ import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
-  defaultSelected: ParticipantResponse[];
+  sharingParticipants: ParticipantResponse[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
-  defaultSelected,
+  sharingParticipants,
 }: SearchAndAddParticipantsProps) {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -33,9 +33,15 @@ export function SearchAndAddParticipants({
     onSharingPermissionsAdded(selectedParticipants);
   };
 
-  const defaultSelectedParticipants = useMemo(() => {
-    return defaultSelected.map((p) => p.siteId!);
-  }, [defaultSelected]);
+  const sharingParticipantsSiteIds = useMemo(() => {
+    return new Set(sharingParticipants.map((p) => p.siteId));
+  }, [sharingParticipants]);
+
+  const getSearchableParticipants = (resolvedParticipants: ParticipantResponse[]) => {
+    return resolvedParticipants.filter(
+      (p) => p.id !== participant?.id && !sharingParticipantsSiteIds.has(p.siteId)
+    );
+  };
 
   const getParticipantText = (participantCount: number): string => {
     if (participantCount === 1) {
@@ -61,8 +67,7 @@ export function SearchAndAddParticipants({
             <Await resolve={participants}>
               {(resolvedParticipants: ParticipantResponse[]) => (
                 <ParticipantSearchBar
-                  participants={resolvedParticipants.filter((p) => p.id !== participant?.id)}
-                  defaultSelected={defaultSelectedParticipants}
+                  participants={getSearchableParticipants(resolvedParticipants)}
                   onSelectedChange={setSelectedParticipants}
                   participantTypes={participantTypes}
                 />
@@ -90,9 +95,16 @@ export function SearchAndAddParticipants({
             <ul className='dot-list'>
               <li>Adding {getParticipantText(selectedParticipants.length)}</li>
             </ul>
-            <div className='action-section'>
+            <div className='dialog-footer-section'>
               <button type='button' className='primary-button' onClick={onHandleAddParticipants}>
                 I acknowledge these changes
+              </button>
+              <button
+                type='button'
+                className='transparent-button'
+                onClick={() => setOpenConfirmation(false)}
+              >
+                Cancel
               </button>
             </div>
           </Dialog>

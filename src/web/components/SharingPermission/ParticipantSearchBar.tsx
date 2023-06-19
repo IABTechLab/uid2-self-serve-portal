@@ -13,16 +13,16 @@ import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
   participants: ParticipantResponse[];
-  defaultSelected: number[];
   onSelectedChange: (selectedItems: number[]) => void;
   participantTypes: ParticipantTypeResponse[];
+  defaultSelected?: number[];
 };
 
 export function ParticipantSearchBar({
   participants,
-  defaultSelected,
   onSelectedChange,
   participantTypes,
+  defaultSelected = [],
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);

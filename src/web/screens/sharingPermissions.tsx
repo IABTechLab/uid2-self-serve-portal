@@ -88,7 +88,7 @@ function SharingPermissions() {
       >
         <SearchAndAddParticipants
           onSharingPermissionsAdded={handleSharingPermissionsAdded}
-          defaultSelected={sharingParticipants}
+          sharingParticipants={sharingParticipants}
         />
       </SharingPermissionsTable>
       {statusPopup && (

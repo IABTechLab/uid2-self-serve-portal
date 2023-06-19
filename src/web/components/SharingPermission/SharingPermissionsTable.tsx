@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
 import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 
@@ -38,6 +39,7 @@ export function SharingPermissionsTable({
   );
   const [filteredParticipants, setFilteredParticipants] =
     useState<ParticipantResponse[]>(sharingParticipants);
+  const [openConfirmation, setOpenConfirmation] = useState(false);
 
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length) return false;
@@ -72,6 +74,10 @@ export function SharingPermissionsTable({
     onDeleteSharingPermission(checkedParticipants);
     handleUnselectAll();
   };
+
+  const selectedParticipantList = useMemo(() => {
+    return sharingParticipants.filter((p) => checkedParticipants.includes(p.siteId!));
+  }, [checkedParticipants, sharingParticipants]);
 
   return (
     <div className='sharing-permissions-table'>
@@ -118,17 +124,45 @@ export function SharingPermissionsTable({
             </>
           ) : (
             <th colSpan={3}>
-              <button
-                className='transparent-button sharing-permission-delete-button'
-                type='button'
-                onClick={handleDeletePermissions}
+              <Dialog
+                title='Are you sure you want to Delete these Permissions'
+                triggerButton={
+                  <button
+                    className='transparent-button sharing-permission-delete-button'
+                    type='button'
+                  >
+                    <FontAwesomeIcon
+                      icon={['far', 'trash-can']}
+                      className='sharing-permission-trashcan-icon'
+                    />
+                    Delete Permissions
+                  </button>
+                }
+                open={openConfirmation}
+                onOpenChange={setOpenConfirmation}
               >
-                <FontAwesomeIcon
-                  icon={['far', 'trash-can']}
-                  className='sharing-permission-trashcan-icon'
-                />
-                Delete Permissions
-              </button>
+                <ul className='dot-list'>
+                  {selectedParticipantList.map((participant) => (
+                    <li>{participant.name}</li>
+                  ))}
+                </ul>
+                <div className='dialog-footer-section'>
+                  <button
+                    type='button'
+                    className='primary-button'
+                    onClick={handleDeletePermissions}
+                  >
+                    I want to Remove Permissions
+                  </button>
+                  <button
+                    type='button'
+                    className='transparent-button'
+                    onClick={() => setOpenConfirmation(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </Dialog>
             </th>
           )}
         </tr>
