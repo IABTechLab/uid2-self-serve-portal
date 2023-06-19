@@ -40,6 +40,7 @@ export function SharingPermissionsTable({
     useState<ParticipantResponse[]>(sharingParticipants);
 
   const isSelectedAll = useMemo(() => {
+    if (!filteredParticipants.length) return false;
     const selected = new Set(checkedParticipants);
     return filteredParticipants.every((p) => selected.has(p.siteId!));
   }, [filteredParticipants, checkedParticipants]);
@@ -69,6 +70,7 @@ export function SharingPermissionsTable({
 
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(checkedParticipants);
+    handleUnselectAll();
   };
 
   return (

@@ -35,7 +35,7 @@ export function ParticipantSearchBar({
     useState<ParticipantResponse[]>(participants);
 
   const handleSelectAll = () => {
-    setCheckedParticipants(filteredParticipants.map((p) => p.id!));
+    setCheckedParticipants(filteredParticipants.map((p) => p.siteId!));
   };
 
   const handleUnselectAll = () => {
@@ -43,6 +43,7 @@ export function ParticipantSearchBar({
   };
 
   const isSelectedAll = useMemo(() => {
+    if (!filteredParticipants.length) return false;
     const selected = new Set(checkedParticipants);
     return filteredParticipants.every((p) => selected.has(p.siteId!));
   }, [filteredParticipants, checkedParticipants]);

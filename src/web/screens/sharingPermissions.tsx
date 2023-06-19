@@ -7,6 +7,7 @@ import { SharingPermissionsTable } from '../components/SharingPermission/Sharing
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
+  DeleteSharingParticipants,
   GetAllParticipants,
   GetSharingParticipants,
   ParticipantResponse,
@@ -44,11 +45,22 @@ function SharingPermissions() {
   };
 
   const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
-    setShowStatusPopup(true);
-    setStatusPopup({
-      type: 'Success',
-      message: `${siteIdsToDelete} sharing permissions deleted`,
-    });
+    try {
+      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
+      setShowStatusPopup(true);
+      setStatusPopup({
+        type: 'Success',
+        message: `${siteIdsToDelete.length} sharing ${
+          siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
+        } deleted`,
+      });
+      setSharingParticipants(response);
+    } catch (e) {
+      setStatusPopup({
+        type: 'Error',
+        message: `Delete Sharing Permissions Failed`,
+      });
+    }
   };
 
   const loadSharingParticipants = useCallback(async () => {
