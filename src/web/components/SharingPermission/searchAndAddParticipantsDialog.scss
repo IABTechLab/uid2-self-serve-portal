@@ -3,23 +3,24 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+
+  .action-section {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .add-participant-button {
+    margin-left: 40px;
+  }
+
+  .add-participant-dialog-search-bar {
+    padding: 160px;
+  }
 }
 
-.action-section {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.add-sharing-permission-button {
+.sharing-permission-actions .add-sharing-permission-button {
   margin-left: 20px;
-  border: 1px solid var(--theme-action) !important;
-  padding: 7px 21px !important;
-}
-
-.add-participant-button {
-  margin-left: 40px;
-}
-
-.add-participant-dialog-search-bar {
-  padding: 160px;
+  border: 1px solid var(--theme-action);
+  padding: 7px 21px;
 }

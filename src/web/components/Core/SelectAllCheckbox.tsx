@@ -45,14 +45,16 @@ export function SelectAllCheckbox({
     }
   };
   return (
-    <Checkbox.Root
-      checked={status}
-      onCheckedChange={handleChange}
-      className={clsx('select-all-checkbox', className, {
-        uncheck: status === SelectAllCheckboxState.unchecked,
-      })}
-    >
-      <Checkbox.Indicator>{getCheckboxIcon()}</Checkbox.Indicator>
-    </Checkbox.Root>
+    <div className='select-all-checkbox'>
+      <Checkbox.Root
+        checked={status}
+        onCheckedChange={handleChange}
+        className={clsx(className, {
+          uncheck: status === SelectAllCheckboxState.unchecked,
+        })}
+      >
+        <Checkbox.Indicator>{getCheckboxIcon()}</Checkbox.Indicator>
+      </Checkbox.Root>
+    </div>
   );
 }
