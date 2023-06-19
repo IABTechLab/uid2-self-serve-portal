@@ -108,6 +108,7 @@ export function ParticipantSearchBar({
                   onSelectAll={handleSelectAll}
                   onUnselect={handleUnselectAll}
                   status={selectAllState}
+                  className='participant-checkbox'
                 />
               </th>
               <th colSpan={3}>
