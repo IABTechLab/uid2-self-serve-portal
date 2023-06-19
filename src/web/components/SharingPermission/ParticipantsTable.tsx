@@ -1,21 +1,22 @@
 import clsx from 'clsx';
 import { ReactNode, useEffect } from 'react';
 
-import { ParticipantPayload } from '../../services/participant';
+import { ParticipantResponse } from '../../services/participant';
 import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
 
 type ParticipantsTableProps = {
-  participants: ParticipantPayload[];
+  participants: ParticipantResponse[];
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: number[]) => void;
-  filteredParticipants: ParticipantPayload[];
-  onFilteredParticipantChange: (filteredParticipant: ParticipantPayload[]) => void;
+  filteredParticipants: ParticipantResponse[];
+  onFilteredParticipantChange: (filteredParticipant: ParticipantResponse[]) => void;
   selectedParticipant?: number[];
   children?: ReactNode;
   className?: string;
+  showAddedByColumn?: boolean;
 };
 
 export function ParticipantsTable({
@@ -28,6 +29,7 @@ export function ParticipantsTable({
   className,
   filteredParticipants,
   onFilteredParticipantChange,
+  showAddedByColumn,
 }: ParticipantsTableProps) {
   useEffect(() => {
     let filtered = participants;
@@ -43,7 +45,7 @@ export function ParticipantsTable({
     onFilteredParticipantChange(filtered);
   }, [participants, filterText, selectedTypeIds, onFilteredParticipantChange]);
 
-  const handleCheckChange = (participant: ParticipantPayload) => {
+  const handleCheckChange = (participant: ParticipantResponse) => {
     const newCheckedItems = new Set(selectedParticipant);
     if (newCheckedItems.has(participant.siteId!)) {
       newCheckedItems.delete(participant.siteId!);
@@ -59,6 +61,7 @@ export function ParticipantsTable({
       <tbody>
         {filteredParticipants.map((participant) => (
           <ParticipantItem
+            addedBy={showAddedByColumn ? 'Auto' : undefined} // TODO: Update this once we have auto add functionality
             key={participant.id}
             participant={participant}
             onClick={() => handleCheckChange(participant)}

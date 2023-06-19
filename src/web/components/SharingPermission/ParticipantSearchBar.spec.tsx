@@ -19,17 +19,20 @@ describe('ParticipantSearchBar', () => {
   it('should mark defaultSelected participants as checked', () => {
     render(<SearchBar />);
     fireEvent.click(screen.getByRole('textbox'));
-
-    const participant1Checkbox = screen.getByLabelText('Participant 1');
-    const participant2Checkbox = screen.getByLabelText('Participant 2');
-    const participant3Checkbox = screen.getByLabelText('Participant 3');
-    const participant4Checkbox = screen.getByLabelText('Participant 4');
+    const [
+      ,
+      participant1Checkbox,
+      participant2Checkbox,
+      participant3Checkbox,
+      participant4Checkbox,
+    ] = screen.getAllByRole('checkbox');
 
     // The label text assumes that you are using the participant's name as the label for the checkbox.
     // If it's different, please update it accordingly.
-    expect(participant1Checkbox).toBeChecked();
-    expect(participant2Checkbox).not.toBeChecked();
-    expect(participant3Checkbox).toBeChecked();
-    expect(participant4Checkbox).not.toBeChecked();
+
+    expect(participant1Checkbox).toHaveAttribute('data-state', 'checked');
+    expect(participant2Checkbox).toHaveAttribute('data-state', 'unchecked');
+    expect(participant3Checkbox).toHaveAttribute('data-state', 'checked');
+    expect(participant4Checkbox).toHaveAttribute('data-state', 'unchecked');
   });
 });

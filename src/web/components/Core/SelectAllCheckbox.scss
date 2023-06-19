@@ -1,0 +1,21 @@
+.select-all-checkbox {
+  background-color: var(--theme-radio-background) !important;
+  width: 21px;
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Override the style of .app button
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.select-all-checkbox.uncheck {
+  background-color: var(--theme-radio-active) !important;
+  border: 1px solid var(--theme-input-border) !important;
+}
+
+.select-all-checkbox-icon {
+  color: var(--theme-radio-active);
+}

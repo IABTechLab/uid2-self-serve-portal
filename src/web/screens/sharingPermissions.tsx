@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { defer } from 'react-router-dom';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
@@ -41,16 +41,24 @@ function SharingPermissions() {
         message: `Add Sharing Permissions Failed`,
       });
     }
-    setShowStatusPopup(true);
   };
 
+  const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
+    setShowStatusPopup(true);
+    setStatusPopup({
+      type: 'Success',
+      message: `${siteIdsToDelete} sharing permissions deleted`,
+    });
+  };
+
+  const loadSharingParticipants = useCallback(async () => {
+    const response = await GetSharingParticipants(participant!.id);
+    setSharingParticipants(response);
+  }, [participant]);
+
   useEffect(() => {
-    const loadSharingParticipants = async () => {
-      const response = await GetSharingParticipants(participant!.id);
-      setSharingParticipants(response);
-    };
     loadSharingParticipants();
-  }, [participant, setSharingParticipants]);
+  }, [loadSharingParticipants]);
 
   return (
     <div>
@@ -62,7 +70,10 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SharingPermissionsTable sharingParticipants={sharingParticipants}>
+      <SharingPermissionsTable
+        sharingParticipants={sharingParticipants}
+        onDeleteSharingPermission={handleDeleteSharingPermission}
+      >
         <SearchAndAddParticipants
           onSharingPermissionsAdded={handleSharingPermissionsAdded}
           defaultSelected={sharingParticipants}

@@ -48,5 +48,6 @@ SharedWithParticipants.args = {
 
 export const NotShared = Template.bind({});
 NotShared.args = {
-  sharingParticipants: [],
+  sharedParticipants: [],
+  onDeleteSharingPermission: () => Promise.resolve(),
 };

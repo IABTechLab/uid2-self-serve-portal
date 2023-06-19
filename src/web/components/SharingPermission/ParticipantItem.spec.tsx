@@ -9,20 +9,22 @@ describe('ParticipantItem', () => {
   it('renders unchecked state correctly', () => {
     render(<Unchecked />);
     expect(screen.getByText(Unchecked.args!.participant!.name)).toBeInTheDocument();
-    expect(screen.getByLabelText(Unchecked.args!.participant!.name)).not.toBeChecked();
+    const checkbox = screen.getByRole('checkbox');
+    expect(checkbox).toHaveAttribute('data-state', 'unchecked');
   });
 
   it('renders checked state correctly', () => {
     render(<Checked />);
     expect(screen.getByText(Checked.args!.participant!.name)).toBeInTheDocument();
-    expect(screen.getByLabelText(Checked.args!.participant!.name)).toBeChecked();
+    const checkbox = screen.getByRole('checkbox');
+    expect(checkbox).toHaveAttribute('data-state', 'checked');
   });
 
   it('handles checkbox click', () => {
     const handleClick = jest.fn();
     render(<Unchecked onClick={handleClick} />);
 
-    fireEvent.click(screen.getByLabelText(Unchecked.args!.participant!.name));
+    fireEvent.click(screen.getByRole('checkbox'));
     expect(handleClick).toHaveBeenCalled();
   });
 });
