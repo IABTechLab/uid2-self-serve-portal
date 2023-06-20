@@ -21,4 +21,10 @@ describe('ParticipantsTable', () => {
 
     expect(mockOnSelectedChange).toHaveBeenCalled();
   });
+
+  it('handles filter changes', () => {
+    render(<Default filterText='1' />);
+    expect(screen.getByText('Participant 1')).toBeInTheDocument();
+    expect(screen.queryByText('Participant 2')).not.toBeInTheDocument();
+  });
 });
