@@ -20,7 +20,7 @@ export function SearchAndAddParticipants({
 }: SearchAndAddParticipantsProps) {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
-  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
   const { participants, participantTypes } = useLoaderData() as {
     participants: ParticipantResponse[];
     participantTypes: ParticipantType[];
@@ -30,7 +30,7 @@ export function SearchAndAddParticipants({
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
-    onSharingPermissionsAdded(selectedParticipants);
+    onSharingPermissionsAdded(Array.from(selectedParticipants));
   };
 
   const sharingParticipantsSiteIds = useMemo(() => {
@@ -79,7 +79,7 @@ export function SearchAndAddParticipants({
         <div className='action-section'>
           {selectedParticipants && (
             <span>
-              <b> {getParticipantText(selectedParticipants.length)} Selected</b>
+              <b> {getParticipantText(selectedParticipants.size)} Selected</b>
             </span>
           )}
           <Dialog
@@ -93,7 +93,7 @@ export function SearchAndAddParticipants({
             onOpenChange={setOpenConfirmation}
           >
             <ul className='dot-list'>
-              <li>Adding {getParticipantText(selectedParticipants.length)}</li>
+              <li>Adding {getParticipantText(selectedParticipants.size)}</li>
             </ul>
             <div className='dialog-footer-section'>
               <button type='button' className='primary-button' onClick={onHandleAddParticipants}>

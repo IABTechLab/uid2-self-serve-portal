@@ -9,18 +9,18 @@
   box-shadow: 0px 6px 12px var(--theme-box-shadow);
   border-radius: 4px;
   border-left: 8px solid;
-}
 
-.status-popup.Success {
-  border-color: var(--theme-success);
-}
+  &.Success {
+    border-color: var(--theme-success);
+  }
 
-.status-popup.Error {
-  border-color: red;
-}
+  &.Error {
+    border-color: var(--theme-error);
+  }
 
-.status-popup.Info {
-  border-color: var(--theme-action);
+  &.Info {
+    border-color: var(--theme-action);
+  }
 }
 
 .popup-close-button {
@@ -37,30 +37,29 @@
 
 .status-popup-title-container {
   margin-bottom: 4px;
-}
+  &.Success {
+    color: var(--theme-success);
+  }
 
-.status-popup-title-container.Success {
-  color: var(--theme-success);
-}
+  &.Error {
+    color: var(--theme-error);
+  }
 
-.status-popup-title-container.Error {
-  color: red;
-}
-
-.status-popup-title-container.Info {
-  color: var(--theme-action);
+  &.Info {
+    color: var(--theme-action);
+  }
 }
 
 .status-popup-title {
   margin-left: 8px;
   font-weight: 700;
-  font-size: 13px;
-  line-height: 16px;
+  font-size: 0.8125rem;
+  line-height: 1rem;
 }
 
 .status-popup-message {
   margin-left: 22px;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }

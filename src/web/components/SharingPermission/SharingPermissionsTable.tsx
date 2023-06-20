@@ -1,11 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
-import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
@@ -33,51 +31,61 @@ export function SharingPermissionsTable({
   children,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
-  const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
-  const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    SelectAllCheckboxState.unchecked
-  );
-  const [filteredParticipants, setFilteredParticipants] =
-    useState<ParticipantResponse[]>(sharingParticipants);
+  const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
-  const isSelectedAll = useMemo(() => {
-    if (!filteredParticipants.length) return false;
-    const selected = new Set(checkedParticipants);
-    return filteredParticipants.every((p) => selected.has(p.siteId!));
-  }, [filteredParticipants, checkedParticipants]);
-
-  const hasParticipantSelected = useMemo(
-    () => checkedParticipants.length > 0,
-    [checkedParticipants]
-  );
-
-  useEffect(() => {
-    if (isSelectedAll) {
-      setSelectAllState(SelectAllCheckboxState.checked);
-    } else if (hasParticipantSelected) {
-      setSelectAllState(SelectAllCheckboxState.indeterminate as CheckedState);
-    } else {
-      setSelectAllState(SelectAllCheckboxState.unchecked);
-    }
-  }, [hasParticipantSelected, isSelectedAll]);
-
-  const handleSelectAll = () => {
-    setCheckedParticipants(filteredParticipants.map((p) => p.siteId!));
-  };
-
-  const handleUnselectAll = () => {
-    setCheckedParticipants([]);
-  };
+  const hasParticipantSelected = checkedParticipants.size > 0;
 
   const handleDeletePermissions = () => {
-    onDeleteSharingPermission(checkedParticipants);
-    handleUnselectAll();
+    onDeleteSharingPermission(Array.from(checkedParticipants));
+    setCheckedParticipants(new Set());
   };
 
   const selectedParticipantList = useMemo(() => {
-    return sharingParticipants.filter((p) => checkedParticipants.includes(p.siteId!));
+    return sharingParticipants.filter((p) => checkedParticipants.has(p.siteId!));
   }, [checkedParticipants, sharingParticipants]);
+
+  const tableHeader = () =>
+    !hasParticipantSelected ? (
+      <>
+        <th>Participant Name</th>
+        <th>Participant Type</th>
+        <th>Added By</th>
+      </>
+    ) : (
+      <Dialog
+        title='Are you sure you want to Delete these Permissions'
+        triggerButton={
+          <button className='transparent-button sharing-permission-delete-button' type='button'>
+            <FontAwesomeIcon
+              icon={['far', 'trash-can']}
+              className='sharing-permission-trashcan-icon'
+            />
+            Delete Permissions
+          </button>
+        }
+        open={openConfirmation}
+        onOpenChange={setOpenConfirmation}
+      >
+        <ul className='dot-list'>
+          {selectedParticipantList.map((participant) => (
+            <li key={participant.id}>{participant.name}</li>
+          ))}
+        </ul>
+        <div className='dialog-footer-section'>
+          <button type='button' className='primary-button' onClick={handleDeletePermissions}>
+            I want to Remove Permissions
+          </button>
+          <button
+            type='button'
+            className='transparent-button'
+            onClick={() => setOpenConfirmation(false)}
+          >
+            Cancel
+          </button>
+        </div>
+      </Dialog>
+    );
 
   return (
     <div className='sharing-permissions-table'>
@@ -101,72 +109,11 @@ export function SharingPermissionsTable({
         showAddedByColumn
         participants={sharingParticipants}
         filterText={filterText}
-        selectedParticipant={checkedParticipants}
+        selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
-        filteredParticipants={filteredParticipants}
+        tableHeader={tableHeader}
         className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
-        onFilteredParticipantChange={setFilteredParticipants}
-      >
-        <tr>
-          <th>
-            <SelectAllCheckbox
-              onSelectAll={handleSelectAll}
-              onUnselect={handleUnselectAll}
-              status={selectAllState}
-              className='participant-checkbox'
-            />
-          </th>
-          {!hasParticipantSelected ? (
-            <>
-              <th>Participant Name</th>
-              <th>Participant Type</th>
-              <th>Added By</th>
-            </>
-          ) : (
-            <th colSpan={3}>
-              <Dialog
-                title='Are you sure you want to Delete these Permissions'
-                triggerButton={
-                  <button
-                    className='transparent-button sharing-permission-delete-button'
-                    type='button'
-                  >
-                    <FontAwesomeIcon
-                      icon={['far', 'trash-can']}
-                      className='sharing-permission-trashcan-icon'
-                    />
-                    Delete Permissions
-                  </button>
-                }
-                open={openConfirmation}
-                onOpenChange={setOpenConfirmation}
-              >
-                <ul className='dot-list'>
-                  {selectedParticipantList.map((participant) => (
-                    <li key={participant.id}>{participant.name}</li>
-                  ))}
-                </ul>
-                <div className='dialog-footer-section'>
-                  <button
-                    type='button'
-                    className='primary-button'
-                    onClick={handleDeletePermissions}
-                  >
-                    I want to Remove Permissions
-                  </button>
-                  <button
-                    type='button'
-                    className='transparent-button'
-                    onClick={() => setOpenConfirmation(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </Dialog>
-            </th>
-          )}
-        </tr>
-      </ParticipantsTable>
+      />
       {!sharingParticipants.length && <NoParticipant />}
     </div>
   );

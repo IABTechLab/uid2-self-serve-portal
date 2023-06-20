@@ -1,11 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
 import { ParticipantTypeResponse } from '../../services/participantType';
-import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
@@ -13,40 +11,20 @@ import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
   participants: ParticipantResponse[];
-  onSelectedChange: (selectedItems: number[]) => void;
   participantTypes: ParticipantTypeResponse[];
-  defaultSelected?: number[];
+  selectedParticipantIds?: Set<number>;
+  onSelectedChange: (selectedItems: Set<number>) => void;
 };
 
 export function ParticipantSearchBar({
   participants,
+  selectedParticipantIds,
   onSelectedChange,
   participantTypes,
-  defaultSelected = [],
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    SelectAllCheckboxState.unchecked
-  );
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
-  const [checkedParticipants, setCheckedParticipants] = useState(defaultSelected);
-  const [filteredParticipants, setFilteredParticipants] =
-    useState<ParticipantResponse[]>(participants);
-
-  const handleSelectAll = () => {
-    setCheckedParticipants(filteredParticipants.map((p) => p.siteId!));
-  };
-
-  const handleUnselectAll = () => {
-    setCheckedParticipants([]);
-  };
-
-  const isSelectedAll = useMemo(() => {
-    if (!filteredParticipants.length) return false;
-    const selected = new Set(checkedParticipants);
-    return filteredParticipants.every((p) => selected.has(p.siteId!));
-  }, [filteredParticipants, checkedParticipants]);
 
   const handleFilterChange = (typeIds: Set<number>) => {
     setSelectedTypeIds(typeIds);
@@ -58,20 +36,11 @@ export function ParticipantSearchBar({
       setDropdownOpen(true);
     }
   };
-
-  useEffect(() => {
-    if (isSelectedAll) {
-      setSelectAllState(SelectAllCheckboxState.checked);
-    } else if (checkedParticipants.length > 0) {
-      setSelectAllState(SelectAllCheckboxState.indeterminate as CheckedState);
-    } else {
-      setSelectAllState(SelectAllCheckboxState.unchecked);
-    }
-  }, [checkedParticipants.length, isSelectedAll]);
-
-  useEffect(() => {
-    onSelectedChange(checkedParticipants);
-  }, [checkedParticipants, onSelectedChange]);
+  const tableHeader = (filteredParticipants: ParticipantResponse[]) => (
+    <th colSpan={3}>
+      <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
+    </th>
+  );
 
   return (
     <div className={clsx('search-bar', { clicked: dropdownOpen })}>
@@ -96,28 +65,11 @@ export function ParticipantSearchBar({
             participants={participants}
             filterText={filterText}
             selectedTypeIds={selectedTypeIds}
-            selectedParticipant={checkedParticipants}
-            onSelectedChange={setCheckedParticipants}
+            selectedParticipantIds={selectedParticipantIds}
+            onSelectedChange={onSelectedChange}
             className='search-bar-participants'
-            filteredParticipants={filteredParticipants}
-            onFilteredParticipantChange={setFilteredParticipants}
-          >
-            <tr>
-              <th>
-                <SelectAllCheckbox
-                  onSelectAll={handleSelectAll}
-                  onUnselect={handleUnselectAll}
-                  status={selectAllState}
-                  className='participant-checkbox'
-                />
-              </th>
-              <th colSpan={3}>
-                <span className='select-all'>
-                  Select All {filteredParticipants.length} Participants
-                </span>
-              </th>
-            </tr>
-          </ParticipantsTable>
+            tableHeader={tableHeader}
+          />
           {/* TODO: update the participant not appearing url */}
           <div className='search-bar-footer'>
             <a href='/'>Participant Not Appearing in Search?</a>
