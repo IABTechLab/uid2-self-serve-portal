@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
