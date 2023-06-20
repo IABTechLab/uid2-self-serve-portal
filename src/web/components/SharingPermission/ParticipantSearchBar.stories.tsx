@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { useState } from 'react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
@@ -8,9 +9,16 @@ export default {
   component: ParticipantSearchBar,
 } as ComponentMeta<typeof ParticipantSearchBar>;
 
-const Template: ComponentStory<typeof ParticipantSearchBar> = (args) => (
-  <ParticipantSearchBar {...args} />
-);
+const Template: ComponentStory<typeof ParticipantSearchBar> = (args) => {
+  const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set([1, 3]));
+  return (
+    <ParticipantSearchBar
+      {...args}
+      selectedParticipantIds={selectedParticipants}
+      onSelectedChange={setSelectedParticipants}
+    />
+  );
+};
 
 export const SearchBar = Template.bind({});
 SearchBar.args = {
@@ -44,6 +52,4 @@ SearchBar.args = {
       allowSharing: true,
     },
   ],
-  defaultSelected: [1, 3],
-  onSelectedChange: () => {},
 };

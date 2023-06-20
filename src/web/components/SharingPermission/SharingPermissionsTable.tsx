@@ -1,10 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
@@ -32,39 +30,35 @@ export function SharingPermissionsTable({
   children,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
-  const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
-  const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    TriStateCheckboxState.unchecked
-  );
-
-  useEffect(() => {
-    if (
-      checkedParticipants.length > 0 &&
-      checkedParticipants.length === sharedParticipants.length
-    ) {
-      setSelectAllState(TriStateCheckboxState.checked);
-    } else if (checkedParticipants.length > 0) {
-      setSelectAllState(TriStateCheckboxState.indeterminate as CheckedState);
-    } else {
-      setSelectAllState(TriStateCheckboxState.unchecked);
-    }
-  }, [checkedParticipants.length, sharedParticipants.length]);
-
-  const handleCheckboxChange = () => {
-    if (selectAllState === TriStateCheckboxState.unchecked) {
-      setCheckedParticipants(sharedParticipants.map((p) => p.id!));
-    } else {
-      setCheckedParticipants([]);
-    }
-  };
-  const hasParticipantSelected = useMemo(
-    () => checkedParticipants.length > 0,
-    [checkedParticipants]
-  );
+  const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
+  const hasParticipantSelected = useMemo(() => checkedParticipants.size > 0, [checkedParticipants]);
 
   const handleDeletePermissions = () => {
-    onDeleteSharingPermission(checkedParticipants);
+    onDeleteSharingPermission(Array.from(checkedParticipants));
   };
+
+  const tableHeader = () =>
+    !hasParticipantSelected ? (
+      <>
+        <th>Participant Name</th>
+        <th>Participant Type</th>
+        <th>Added By</th>
+      </>
+    ) : (
+      <th colSpan={3}>
+        <button
+          className='transparent-button sharing-permission-delete-button'
+          type='button'
+          onClick={handleDeletePermissions}
+        >
+          <FontAwesomeIcon
+            icon={['far', 'trash-can']}
+            className='sharing-permission-trashcan-icon'
+          />
+          Delete Permissions
+        </button>
+      </th>
+    );
 
   return (
     <div className='sharing-permissions-table'>
@@ -88,41 +82,11 @@ export function SharingPermissionsTable({
         showAddedByColumn
         participants={sharedParticipants}
         filterText={filterText}
-        selectedParticipant={checkedParticipants}
+        selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
+        tableHeader={tableHeader}
         className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
-      >
-        <tr>
-          <th>
-            <TriStateCheckbox
-              onClick={handleCheckboxChange}
-              status={selectAllState}
-              className='participant-checkbox'
-            />
-          </th>
-          {!hasParticipantSelected ? (
-            <>
-              <th>Participant Name</th>
-              <th>Participant Type</th>
-              <th>Added By</th>
-            </>
-          ) : (
-            <th colSpan={3}>
-              <button
-                className='transparent-button sharing-permission-delete-button'
-                type='button'
-                onClick={handleDeletePermissions}
-              >
-                <FontAwesomeIcon
-                  icon={['far', 'trash-can']}
-                  className='sharing-permission-trashcan-icon'
-                />
-                Delete Permissions
-              </button>
-            </th>
-          )}
-        </tr>
-      </ParticipantsTable>
+      />
       {!sharedParticipants.length && <NoParticipant />}
     </div>
   );

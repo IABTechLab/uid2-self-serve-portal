@@ -16,16 +16,16 @@ export function SearchAndAddParticipants({
 }: SearchAndAddParticipantsProps) {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
-  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
 
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
-    onSharingPermissionsAdded(selectedParticipants);
+    onSharingPermissionsAdded(Array.from(selectedParticipants));
   };
 
   const defaultSelectedParticipants = useMemo(() => {
-    return defaultSelected.map((p) => p.id!);
+    return new Set(defaultSelected.map((p) => p.id!));
   }, [defaultSelected]);
 
   return (
@@ -43,7 +43,7 @@ export function SearchAndAddParticipants({
         <div className='add-participant-dialog-search-bar'>
           <ParticipantSearchBar
             participants={[]}
-            defaultSelected={defaultSelectedParticipants}
+            selectedParticipantIds={defaultSelectedParticipants}
             onSelectedChange={setSelectedParticipants}
           />
           {/* TODO: Add Automatically Add Participant Types: */}
@@ -51,7 +51,7 @@ export function SearchAndAddParticipants({
         <div className='action-section'>
           {selectedParticipants && (
             <span>
-              <b>{selectedParticipants.length} Participant Selected</b>
+              <b>{selectedParticipants.size} Participant Selected</b>
             </span>
           )}
           <Dialog
