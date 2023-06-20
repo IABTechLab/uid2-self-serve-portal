@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import './StatusPopup.scss';
 
@@ -7,16 +7,28 @@ interface StatusPopupProps {
   message: string;
   status: 'Success' | 'Error' | 'Info';
   displayDuration?: number;
+  show: boolean;
+  setShow: (show: boolean) => void;
 }
 
-export function StatusPopup({ message, status, displayDuration = 3000 }: StatusPopupProps) {
-  const [show, setShow] = useState(false);
-
+export function StatusPopup({
+  message,
+  status,
+  displayDuration = 3000,
+  show,
+  setShow,
+}: StatusPopupProps) {
   useEffect(() => {
-    setShow(true);
-    const timer = setTimeout(() => setShow(false), displayDuration);
-    return () => clearTimeout(timer);
-  }, [displayDuration, message, status]);
+    let timer: NodeJS.Timeout;
+    if (show) {
+      timer = setTimeout(() => setShow(false), displayDuration);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [displayDuration, setShow, show]);
 
   const getIcon = () => {
     switch (status) {

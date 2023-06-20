@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { useState } from 'react';
 
 import { StatusPopup } from './StatusPopup';
 
@@ -7,8 +8,11 @@ export default {
   component: StatusPopup,
 } as ComponentMeta<typeof StatusPopup>;
 
-const Template: ComponentStory<typeof StatusPopup> = (args) => <StatusPopup {...args} />;
+const Template: ComponentStory<typeof StatusPopup> = (args) => {
+  const [showStatusPopup, setShowStatusPopup] = useState(true);
 
+  return <StatusPopup {...args} show={showStatusPopup} setShow={setShowStatusPopup} />;
+};
 export const Success = Template.bind({});
 Success.args = {
   message: 'Success! Your action was successful.',

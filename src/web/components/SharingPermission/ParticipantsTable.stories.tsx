@@ -14,10 +14,16 @@ const Template: ComponentStory<typeof ParticipantsTable> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
+  tableHeader: () => (
+    <>
+      <th>Participant Name</th>
+      <th>Participant Type</th>
+    </>
+  ),
   participants: [
     { id: 1, name: 'Participant 1', types: [{ id: 1, typeName: 'Type 1' }] },
     { id: 2, name: 'Participant 2', types: [{ id: 2, typeName: 'Type 2' }] },
   ] as ParticipantPayload[],
   filterText: '',
-  onSelectedChange: (selectedItems: number[]) => console.log('Selected items:', selectedItems),
+  onSelectedChange: (selectedItems: Set<number>) => console.log('Selected items:', selectedItems),
 };

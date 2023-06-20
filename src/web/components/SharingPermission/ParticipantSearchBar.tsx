@@ -1,54 +1,37 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import { ParticipantPayload } from '../../services/participant';
+import { ParticipantPayload, ParticipantResponse } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
-  participants: ParticipantPayload[];
-  defaultSelected: number[];
-  onSelectedChange: (selectedItems: number[]) => void;
+  participants: ParticipantResponse[];
+  selectedParticipantIds: Set<number>;
+  onSelectedChange: (selectedItems: Set<number>) => void;
 };
 
 export function ParticipantSearchBar({
   participants,
-  defaultSelected,
+  selectedParticipantIds,
   onSelectedChange,
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [selectAll, setSelectAll] = useState(false);
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
-  const [checkedParticipants, setCheckedParticipants] = useState(defaultSelected);
-  const handleSelectAllChange = () => {
-    setSelectAll(!selectAll);
-    if (selectAll) {
-      setCheckedParticipants([]);
-    } else {
-      setCheckedParticipants(participants.map((p) => p.id!));
-    }
-  };
 
   const handleFilterChange = (typeIds: Set<number>) => {
     setSelectedTypeIds(typeIds);
   };
 
-  const handleSelectedChange = (selectedItems: number[]) => {
-    if (selectedItems.length > 0 && selectedItems.length === participants.length) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-    setCheckedParticipants(selectedItems);
-  };
-
-  useEffect(() => {
-    onSelectedChange(checkedParticipants);
-  }, [checkedParticipants, onSelectedChange]);
+  const tableHeader = (filteredParticipants: ParticipantPayload[]) => (
+    <th colSpan={3}>
+      <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
+    </th>
+  );
 
   return (
     <div className={clsx('search-bar', { clicked: dropdownOpen })}>
@@ -80,25 +63,11 @@ export function ParticipantSearchBar({
             participants={participants}
             filterText={filterText}
             selectedTypeIds={selectedTypeIds}
-            selectedParticipant={checkedParticipants}
-            onSelectedChange={handleSelectedChange}
+            selectedParticipantIds={selectedParticipantIds}
+            onSelectedChange={onSelectedChange}
             className='search-bar-participants'
-          >
-            <tr>
-              <th>
-                <input
-                  type='checkbox'
-                  checked={selectAll}
-                  onChange={handleSelectAllChange}
-                  id='select-all-checkbox'
-                  className='participant-checkbox'
-                />
-              </th>
-              <th colSpan={3}>
-                <span className='select-all'>Select All {participants.length} Participants</span>
-              </th>
-            </tr>
-          </ParticipantsTable>
+            tableHeader={tableHeader}
+          />
           {/* TODO: update the participant not appearing url */}
           <div className='search-bar-footer'>
             <a href='/'>Participant Not Appearing in Search?</a>

@@ -1,31 +1,38 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { Dialog } from '../components/Core/Dialog';
-import { ParticipantSearchBar } from '../components/SharingPermission/ParticipantSearchBar';
+import { ParticipantResponse } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
+import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
-  onSharingPermissionsAdded: () => void;
+  onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
+  defaultSelected: ParticipantResponse[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
+  defaultSelected,
 }: SearchAndAddParticipantsProps) {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
-  const [selectedParticipants, setSelectedParticipants] = useState<number[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
 
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
-    onSharingPermissionsAdded();
+    onSharingPermissionsAdded(Array.from(selectedParticipants));
   };
+
+  const defaultSelectedParticipants = useMemo(() => {
+    return new Set(defaultSelected.map((p) => p.id!));
+  }, [defaultSelected]);
 
   return (
     <Dialog
       triggerButton={
-        <button type='button' className='primary-button add-sharing-permission-button'>
-          Add Sharing Permission
+        <button type='button' className='transparent-button add-sharing-permission-button'>
+          Advanced Search
         </button>
       }
       open={open}
@@ -36,7 +43,7 @@ export function SearchAndAddParticipants({
         <div className='add-participant-dialog-search-bar'>
           <ParticipantSearchBar
             participants={[]}
-            defaultSelected={[]}
+            selectedParticipantIds={defaultSelectedParticipants}
             onSelectedChange={setSelectedParticipants}
           />
           {/* TODO: Add Automatically Add Participant Types: */}
@@ -44,7 +51,7 @@ export function SearchAndAddParticipants({
         <div className='action-section'>
           {selectedParticipants && (
             <span>
-              <b>{selectedParticipants.length} Participant Selected</b>
+              <b>{selectedParticipants.size} Participant Selected</b>
             </span>
           )}
           <Dialog

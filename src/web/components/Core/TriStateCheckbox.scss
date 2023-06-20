@@ -1,0 +1,23 @@
+.tristate-checkbox {
+  button {
+    background-color: var(--theme-radio-background);
+    width: 21px;
+    height: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // Override the style of .app button
+    padding: 0;
+    border: 0;
+  }
+
+  & button.uncheck {
+    background-color: var(--theme-radio-active);
+    border: 1px solid var(--theme-input-border);
+  }
+
+  &-icon {
+    color: var(--theme-radio-active);
+  }
+}
