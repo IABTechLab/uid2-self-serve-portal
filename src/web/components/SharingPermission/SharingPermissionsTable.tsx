@@ -31,7 +31,7 @@ export function SharingPermissionsTable({
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
-  const hasParticipantSelected = useMemo(() => checkedParticipants.size > 0, [checkedParticipants]);
+  const hasParticipantSelected = checkedParticipants.size > 0;
 
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(Array.from(checkedParticipants));
