@@ -30,6 +30,7 @@ export function SearchAndAddParticipants({
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
+    setSelectedParticipants(new Set());
     onSharingPermissionsAdded(Array.from(selectedParticipants));
   };
 
@@ -67,6 +68,7 @@ export function SearchAndAddParticipants({
             <Await resolve={participants}>
               {(resolvedParticipants: ParticipantResponse[]) => (
                 <ParticipantSearchBar
+                  selectedParticipantIds={selectedParticipants}
                   participants={getSearchableParticipants(resolvedParticipants)}
                   onSelectedChange={setSelectedParticipants}
                   participantTypes={participantTypes}

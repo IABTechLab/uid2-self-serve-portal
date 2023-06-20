@@ -39,6 +39,7 @@ export function SharingPermissionsTable({
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(Array.from(checkedParticipants));
     setCheckedParticipants(new Set());
+    setOpenConfirmation(false);
   };
 
   const selectedParticipantList = useMemo(() => {
@@ -53,38 +54,40 @@ export function SharingPermissionsTable({
         <th>Added By</th>
       </>
     ) : (
-      <Dialog
-        title='Are you sure you want to Delete these Permissions'
-        triggerButton={
-          <button className='transparent-button sharing-permission-delete-button' type='button'>
-            <FontAwesomeIcon
-              icon={['far', 'trash-can']}
-              className='sharing-permission-trashcan-icon'
-            />
-            Delete Permissions
-          </button>
-        }
-        open={openConfirmation}
-        onOpenChange={setOpenConfirmation}
-      >
-        <ul className='dot-list'>
-          {selectedParticipantList.map((participant) => (
-            <li key={participant.id}>{participant.name}</li>
-          ))}
-        </ul>
-        <div className='dialog-footer-section'>
-          <button type='button' className='primary-button' onClick={handleDeletePermissions}>
-            I want to Remove Permissions
-          </button>
-          <button
-            type='button'
-            className='transparent-button'
-            onClick={() => setOpenConfirmation(false)}
-          >
-            Cancel
-          </button>
-        </div>
-      </Dialog>
+      <th colSpan={3}>
+        <Dialog
+          title='Are you sure you want to Delete these Permissions'
+          triggerButton={
+            <button className='transparent-button sharing-permission-delete-button' type='button'>
+              <FontAwesomeIcon
+                icon={['far', 'trash-can']}
+                className='sharing-permission-trashcan-icon'
+              />
+              Delete Permissions
+            </button>
+          }
+          open={openConfirmation}
+          onOpenChange={setOpenConfirmation}
+        >
+          <ul className='dot-list'>
+            {selectedParticipantList.map((participant) => (
+              <li key={participant.id}>{participant.name}</li>
+            ))}
+          </ul>
+          <div className='dialog-footer-section'>
+            <button type='button' className='primary-button' onClick={handleDeletePermissions}>
+              I want to Remove Permissions
+            </button>
+            <button
+              type='button'
+              className='transparent-button'
+              onClick={() => setOpenConfirmation(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </Dialog>
+      </th>
     );
 
   return (

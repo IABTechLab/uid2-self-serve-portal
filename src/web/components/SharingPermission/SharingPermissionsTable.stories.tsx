@@ -21,6 +21,7 @@ SharedWithParticipants.args = {
       types: [{ id: 1, typeName: 'Type 1' }],
       status: ParticipantStatus.Approved,
       allowSharing: true,
+      siteId: 1,
     },
     {
       id: 2,
@@ -28,6 +29,7 @@ SharedWithParticipants.args = {
       types: [{ id: 2, typeName: 'Type 2' }],
       status: ParticipantStatus.Approved,
       allowSharing: true,
+      siteId: 2,
     },
     {
       id: 3,
@@ -35,6 +37,7 @@ SharedWithParticipants.args = {
       types: [{ id: 3, typeName: 'Type 3' }],
       status: ParticipantStatus.Approved,
       allowSharing: true,
+      siteId: 3,
     },
     {
       id: 4,
@@ -42,6 +45,7 @@ SharedWithParticipants.args = {
       types: [{ id: 2, typeName: 'Type 2' }],
       status: ParticipantStatus.Approved,
       allowSharing: true,
+      siteId: 4,
     },
   ],
   onDeleteSharingPermission: () => Promise.resolve(),

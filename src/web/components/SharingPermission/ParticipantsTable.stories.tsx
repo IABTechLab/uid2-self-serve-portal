@@ -7,7 +7,6 @@ export default {
   title: 'Sharing Permissions/ParticipantsTable',
   component: ParticipantsTable,
 } as ComponentMeta<typeof ParticipantsTable>;
-
 const Template: ComponentStory<typeof ParticipantsTable> = (args) => {
   return <ParticipantsTable {...args} />;
 };

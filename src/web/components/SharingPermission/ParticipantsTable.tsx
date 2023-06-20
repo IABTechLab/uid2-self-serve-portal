@@ -36,7 +36,7 @@ export function ParticipantsTable({
 
   const handleCheckboxChange = () => {
     if (selectAllState === TriStateCheckboxState.unchecked) {
-      onSelectedChange(new Set(filteredParticipants.map((p) => p.id!)));
+      onSelectedChange(new Set(filteredParticipants.map((p) => p.siteId!)));
     } else {
       onSelectedChange(new Set());
     }
@@ -73,11 +73,12 @@ export function ParticipantsTable({
 
   const handleCheckChange = (participant: ParticipantResponse) => {
     const newCheckedItems = new Set(selectedParticipantIds);
-    if (newCheckedItems.has(participant.id!)) {
-      newCheckedItems.delete(participant.id!);
+    if (newCheckedItems.has(participant.siteId!)) {
+      newCheckedItems.delete(participant.siteId!);
     } else {
       newCheckedItems.add(participant.siteId!);
     }
+
     onSelectedChange(newCheckedItems);
   };
 
@@ -102,7 +103,7 @@ export function ParticipantsTable({
             key={participant.id}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
-            checked={!!selectedParticipantIds.has(participant.id!)}
+            checked={!!selectedParticipantIds.has(participant.siteId!)}
           />
         ))}
       </tbody>
