@@ -1,7 +1,7 @@
 import { Configure } from '../database/SelfServeDatabase';
-import { configureApi } from './configureApi';
+import { configureAndStartApi } from './configureApi';
 
 Configure();
-const app = configureApi();
+const app = configureAndStartApi();
 
 export default app;

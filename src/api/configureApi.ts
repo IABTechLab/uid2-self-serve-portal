@@ -37,7 +37,7 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) 
   } as express.Handler;
 }
 
-export function configureApi(useMetrics: boolean = true) {
+export function configureAndStartApi(useMetrics: boolean = true) {
   const app = express();
   const router = express.Router();
   app.use((req, res, next) => {

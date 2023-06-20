@@ -6,7 +6,7 @@ import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 import tokenRequester from 'keycloak-request-token';
 import { Request } from 'supertest';
 
-import { configureApi } from '../configureApi';
+import { configureAndStartApi } from '../configureApi';
 
 /**
  * WARN: This leaves open time_wait connections after the test suite has finished running.
@@ -28,7 +28,7 @@ function useTestServer() {
     terminator = null;
   });
   beforeAll(async () => {
-    api = configureApi(false);
+    api = configureAndStartApi(false);
     terminator = createHttpTerminator({ server: api });
 
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
