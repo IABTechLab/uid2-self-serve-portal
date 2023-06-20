@@ -20,17 +20,14 @@ export let api: Server | null = null;
 let terminator: HttpTerminator | null = null;
 
 function useTestServer() {
-  console.log('SETTING UP USETESTSERVER-------------------------------------');
   let token = '';
   afterAll(async () => {
-    console.log('RUNNING AFTERALL-------------------------------------');
     if (api === null || terminator === null) throw Error('Server was not configured!');
     terminator.terminate();
     api = null;
     terminator = null;
   });
   beforeAll(async () => {
-    console.log('RUNNING BEFOREALL-------------------------------------');
     api = configureApi(false);
     terminator = createHttpTerminator({ server: api });
 
