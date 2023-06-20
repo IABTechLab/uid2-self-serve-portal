@@ -61,7 +61,7 @@ export function ParticipantsTable({
       <tbody>
         {filteredParticipants.map((participant) => (
           <ParticipantItem
-            addedBy={showAddedByColumn ? 'Auto' : undefined} // TODO: Update this once we have auto add functionality
+            addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
             key={participant.id}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
