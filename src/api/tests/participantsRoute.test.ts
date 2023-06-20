@@ -1,10 +1,9 @@
 import { QueryBuilder } from 'objection';
 import request, { Request } from 'supertest';
 
-import api from '../api';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
-import useTestServer from './utils';
+import useTestServer, { api } from './utils';
 
 const mockParticipant = (participant?: Participant | null) => {
   jest.spyOn(Participant, 'query').mockReturnValueOnce(
