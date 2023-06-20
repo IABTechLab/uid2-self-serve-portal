@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
-import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
+import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
@@ -34,7 +34,7 @@ export function SharingPermissionsTable({
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    SelectAllCheckboxState.unchecked
+    TriStateCheckboxState.unchecked
   );
 
   useEffect(() => {
@@ -42,22 +42,21 @@ export function SharingPermissionsTable({
       checkedParticipants.length > 0 &&
       checkedParticipants.length === sharedParticipants.length
     ) {
-      setSelectAllState(SelectAllCheckboxState.checked);
+      setSelectAllState(TriStateCheckboxState.checked);
     } else if (checkedParticipants.length > 0) {
-      setSelectAllState(SelectAllCheckboxState.indeterminate as CheckedState);
+      setSelectAllState(TriStateCheckboxState.indeterminate as CheckedState);
     } else {
-      setSelectAllState(SelectAllCheckboxState.unchecked);
+      setSelectAllState(TriStateCheckboxState.unchecked);
     }
   }, [checkedParticipants.length, sharedParticipants.length]);
 
-  const handleSelectAll = () => {
-    setCheckedParticipants(sharedParticipants.map((p) => p.id!));
+  const handleCheckboxChange = () => {
+    if (selectAllState === TriStateCheckboxState.unchecked) {
+      setCheckedParticipants(sharedParticipants.map((p) => p.id!));
+    } else {
+      setCheckedParticipants([]);
+    }
   };
-
-  const handleUnselectAll = () => {
-    setCheckedParticipants([]);
-  };
-
   const hasParticipantSelected = useMemo(
     () => checkedParticipants.length > 0,
     [checkedParticipants]
@@ -95,9 +94,8 @@ export function SharingPermissionsTable({
       >
         <tr>
           <th>
-            <SelectAllCheckbox
-              onSelectAll={handleSelectAll}
-              onUnselect={handleUnselectAll}
+            <TriStateCheckbox
+              onClick={handleCheckboxChange}
               status={selectAllState}
               className='participant-checkbox'
             />

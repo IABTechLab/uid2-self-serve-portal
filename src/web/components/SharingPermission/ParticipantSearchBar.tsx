@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 import { ParticipantResponse } from '../../services/participant';
-import { SelectAllCheckbox, SelectAllCheckboxState } from '../Core/SelectAllCheckbox';
+import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
@@ -24,27 +24,27 @@ export function ParticipantSearchBar({
   const [filterText, setFilterText] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    SelectAllCheckboxState.unchecked
+    TriStateCheckboxState.unchecked
   );
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
   const [checkedParticipants, setCheckedParticipants] = useState(defaultSelected);
 
   useEffect(() => {
     if (checkedParticipants.length > 0 && checkedParticipants.length === participants.length) {
-      setSelectAllState(SelectAllCheckboxState.checked);
+      setSelectAllState(TriStateCheckboxState.checked);
     } else if (checkedParticipants.length > 0) {
-      setSelectAllState(SelectAllCheckboxState.indeterminate as CheckedState);
+      setSelectAllState(TriStateCheckboxState.indeterminate as CheckedState);
     } else {
-      setSelectAllState(SelectAllCheckboxState.unchecked);
+      setSelectAllState(TriStateCheckboxState.unchecked);
     }
   }, [checkedParticipants.length, participants.length]);
 
-  const handleSelectAll = () => {
-    setCheckedParticipants(participants.map((p) => p.id!));
-  };
-
-  const handleUnselectAll = () => {
-    setCheckedParticipants([]);
+  const handleCheckboxChange = () => {
+    if (selectAllState === TriStateCheckboxState.unchecked) {
+      setCheckedParticipants(participants.map((p) => p.id!));
+    } else {
+      setCheckedParticipants([]);
+    }
   };
 
   const handleFilterChange = (typeIds: Set<number>) => {
@@ -89,11 +89,7 @@ export function ParticipantSearchBar({
           >
             <tr>
               <th>
-                <SelectAllCheckbox
-                  onSelectAll={handleSelectAll}
-                  onUnselect={handleUnselectAll}
-                  status={selectAllState}
-                />
+                <TriStateCheckbox onClick={handleCheckboxChange} status={selectAllState} />
               </th>
               <th colSpan={3}>
                 <span className='select-all'>Select All {participants.length} Participants</span>

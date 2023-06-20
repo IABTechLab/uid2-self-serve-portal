@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { ParticipantPayload } from '../../services/participant';
-import { SelectAllCheckbox } from '../Core/SelectAllCheckbox';
+import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 
 import './ParticipantItem.scss';
 
@@ -28,12 +28,7 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
   return (
     <tr onClick={onClick}>
       <td>
-        <SelectAllCheckbox
-          onSelectAll={onClick}
-          onUnselect={onClick}
-          status={checked}
-          className='participant-checkbox'
-        />
+        <TriStateCheckbox onClick={onClick} status={checked} className='participant-checkbox' />
       </td>
       <td className='participant-name-cell'>
         <img src={logo} alt={participant.name} className='participant-logo' />

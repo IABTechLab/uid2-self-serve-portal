@@ -1,4 +1,4 @@
-.select-all-checkbox {
+.tristate-checkbox {
   button {
     background-color: var(--theme-radio-background);
     width: 21px;
@@ -16,8 +16,8 @@
     background-color: var(--theme-radio-active);
     border: 1px solid var(--theme-input-border);
   }
-}
 
-.select-all-checkbox-icon {
-  color: var(--theme-radio-active);
+  &-icon {
+    color: var(--theme-radio-active);
+  }
 }
