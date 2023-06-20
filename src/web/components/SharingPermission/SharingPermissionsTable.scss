@@ -29,7 +29,7 @@
 
   .sharing-permission-search-bar-icon {
     color: var(--theme-search-border);
-    height: 1rem;
+    height: 16px;
     margin-left: 8px;
   }
 
@@ -44,8 +44,8 @@
     outline: none;
     color: var(--theme-search-border);
     font-weight: 400;
-    font-size: 12px;
-    line-height: 15px;
+    font-size: 0.75rem;
+    line-height: 0.9375rem;
   }
 
   .shared-participants-table {
