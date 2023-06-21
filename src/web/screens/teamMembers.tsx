@@ -85,8 +85,8 @@ function TeamMembers() {
               <table className='portal-team-table'>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Email</th>
+                    <th className='name'>Name</th>
+                    <th className='email'>Email</th>
                     <th className='action'>Actions</th>
                   </tr>
                 </thead>

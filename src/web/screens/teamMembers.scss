@@ -27,8 +27,17 @@
       border: none;
     }
 
-    .action {
-      text-align: center;
+    .name {
+      width: 30%;
+    }
+
+    .email {
+      width: 60%;
+    }
+
+    td.action {
+      padding-right: 80px;
+      font-size: 0.8125rem;
     }
 
     td {
@@ -37,6 +46,9 @@
     }
 
     td.action {
+      display: flex;
+      justify-content: flex-end;
+
       button {
         &.clickable {
           cursor: pointer;
@@ -48,7 +60,9 @@
         }
 
         border: none;
-        width: 10em;
+        white-space: nowrap;
+        flex-grow: 1;
+        align-items: center;
         padding: 0 10px;
       }
 

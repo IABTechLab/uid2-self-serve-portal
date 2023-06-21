@@ -2,6 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 
 import { User, UserScheme } from './entities/User';
+import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
 import { enrichWithUserFromParams, findUserByEmail, UserRequest } from './services/usersService';
@@ -48,6 +49,8 @@ usersRouter.post(
   '/:userId/resendInvitation',
   enrichWithUserFromParams,
   async (req: UserRequest, res) => {
+    const [logger, errorLogger] = getLoggers();
+
     const { userId } = userIdParser.parse(req.params);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
@@ -57,10 +60,11 @@ usersRouter.post(
       return res.sendStatus(404);
     }
     if (resultLength > 1) {
-      // TODO: Log a problem, there shouldn't be multiple accounts with the same email address.
+      errorLogger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
       return res.sendStatus(500);
     }
 
+    logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmail(kcAdminClient, user[0]);
     return res.sendStatus(200);
   }
