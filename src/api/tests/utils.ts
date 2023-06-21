@@ -1,10 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import { Server } from 'http';
+import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 import tokenRequester from 'keycloak-request-token';
 import { Request } from 'supertest';
 
-import api from '../api';
+import { configureAndStartApi } from '../configureApi';
 
 /**
  * WARN: This leaves open time_wait connections after the test suite has finished running.
@@ -13,12 +15,22 @@ import api from '../api';
  *
  * @returns withToken: A utility function that adds auth token to the request.
  */
+// eslint-disable-next-line import/no-mutable-exports
+export let api: Server | null = null;
+let terminator: HttpTerminator | null = null;
+
 function useTestServer() {
   let token = '';
   afterAll(async () => {
-    api.close();
+    if (api === null || terminator === null) throw Error('Server was not configured!');
+    terminator.terminate();
+    api = null;
+    terminator = null;
   });
   beforeAll(async () => {
+    api = configureAndStartApi(false);
+    terminator = createHttpTerminator({ server: api });
+
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
       username: 'test_user@example.com',
       password: '123456',
