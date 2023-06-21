@@ -2,7 +2,6 @@ import express, { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { Participant, ParticipantCreationPartial, ParticipantSchema } from './entities/Participant';
-import { ParticipantType } from './entities/ParticipantType';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
@@ -51,8 +50,10 @@ participantsRouter.post('/', async (req, res) => {
       relate: true,
     });
 
-    const participantTypes = await ParticipantType.query().findByIds(data.types!.map((t) => t.id));
-    sendNewParticipantEmail(data, participantTypes);
+    sendNewParticipantEmail(
+      data,
+      data.types.map((t) => t.id)
+    );
     return res.status(201).json(newParticipant);
   } catch (err) {
     if (err instanceof z.ZodError) {

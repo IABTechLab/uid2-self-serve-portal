@@ -38,7 +38,7 @@ export const sendEmail = async ({
 }: EmailArgs): Promise<void> => {
   const mailOptions = {
     from: convertEmailDataToAddress(UID2Sender),
-    to: convertEmailDataToAddress(to),
+    to: Array.isArray(to) ? to.map(convertEmailDataToAddress) : convertEmailDataToAddress(to),
     subject,
     template,
     context: templateData,

@@ -30,6 +30,3 @@ export const SSP_SEND_GRID_API_KEY = process.env.SSP_SEND_GRID_API_KEY ?? '';
 export const SSP_EMAIL_SENDER = process.env.SSP_EMAIL_SENDER ?? 'noreply@unifiedid.com';
 export const SSP_EMAIL_SENDER_NAME =
   process.env.SSP_EMAIL_SENDER_NAME ?? 'UID2 Service (do not reply)';
-
-export const SSP_TAM_EMAIL = process.env.SSP_TAM_EMAIL ?? errorMessage;
-export const SSP_TAM_EMAIL_DISPLAY_NAME = process.env.SSP_TAM_EMAIL ?? 'TAMs';

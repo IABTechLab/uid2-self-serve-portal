@@ -6,7 +6,7 @@ export type EmailArgs = {
   subject: string;
   templateData: { [key: string]: unknown };
   template: string;
-  to: EmailData;
+  to: EmailData | EmailData[];
 };
 
 export const UID2Sender: EmailData = {
