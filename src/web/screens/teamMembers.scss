@@ -43,6 +43,10 @@
           color: var(--theme-action);
         }
 
+        &.error {
+          color: red;
+        }
+
         border: none;
         width: 10em;
         padding: 0 10px;

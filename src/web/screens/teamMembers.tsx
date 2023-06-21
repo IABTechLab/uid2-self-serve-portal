@@ -17,6 +17,7 @@ enum InviteState {
   initial,
   inProgress,
   sent,
+  error,
 }
 function TeamMember({ person }: TeamMemberProps) {
   const { participant } = useContext(ParticipantContext);
@@ -24,13 +25,12 @@ function TeamMember({ person }: TeamMemberProps) {
   const resendInvite = useCallback(async () => {
     switch (reinviteState) {
       case InviteState.initial:
-        console.log(`Re-inviting ${person.firstName}`);
         setInviteState(InviteState.inProgress);
         ResendInvite(person.id).then((success) => {
           if (success) {
             setInviteState(InviteState.sent);
           } else {
-            setInviteState(InviteState.initial); // TODO ERROR
+            setInviteState(InviteState.error);
           }
         });
         break;
@@ -44,12 +44,16 @@ function TeamMember({ person }: TeamMemberProps) {
         {person.acceptedTerms || (
           <button
             type='button'
-            className={clsx({ clickable: reinviteState === InviteState.initial })}
+            className={clsx({
+              clickable: reinviteState === InviteState.initial,
+              error: reinviteState === InviteState.error,
+            })}
             onClick={() => resendInvite()}
           >
             {reinviteState === InviteState.initial && 'Resend Invitation'}
             {reinviteState === InviteState.inProgress && 'Sending...'}
             {reinviteState === InviteState.sent && 'Invitation Sent'}
+            {reinviteState === InviteState.error && 'Try again later'}
           </button>
         )}
         <FontAwesomeIcon icon='pencil' />
