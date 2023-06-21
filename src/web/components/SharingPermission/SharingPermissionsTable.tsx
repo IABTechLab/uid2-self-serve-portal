@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useState } from 'react';
+import clsx from 'clsx';
+import { ReactNode, useState } from 'react';
 
 import { ParticipantPayload } from '../../services/participant';
 import { ParticipantsTable } from './ParticipantsTable';
@@ -8,6 +9,8 @@ import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
   sharedParticipants: ParticipantPayload[];
+  onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
+  children?: ReactNode;
 };
 
 function NoParticipant() {
@@ -21,64 +24,69 @@ function NoParticipant() {
     </div>
   );
 }
-export function SharingPermissionsTable({ sharedParticipants }: SharingPermissionsTableProps) {
+export function SharingPermissionsTable({
+  sharedParticipants,
+  onDeleteSharingPermission,
+  children,
+}: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
-  const [checkedParticipants, setCheckedParticipants] = useState<number[]>([]);
-  const [selectAll, setSelectAll] = useState(false);
+  const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
+  const hasParticipantSelected = checkedParticipants.size > 0;
 
-  useEffect(() => {
-    if (!selectAll) {
-      setCheckedParticipants([]);
-    } else {
-      setCheckedParticipants(sharedParticipants.map((p) => p.id!));
-    }
-  }, [selectAll, sharedParticipants]);
-
-  const handleSelectedChange = (selectedItems: number[]) => {
-    if (selectedItems.length > 0 && selectedItems.length === sharedParticipants.length) {
-      setSelectAll(true);
-    } else {
-      setSelectAll(false);
-    }
-    setCheckedParticipants(selectedItems);
+  const handleDeletePermissions = () => {
+    onDeleteSharingPermission(Array.from(checkedParticipants));
   };
+
+  const tableHeader = () =>
+    !hasParticipantSelected ? (
+      <>
+        <th>Participant Name</th>
+        <th>Participant Type</th>
+        <th>Added By</th>
+      </>
+    ) : (
+      <th colSpan={3}>
+        <button
+          className='transparent-button sharing-permission-delete-button'
+          type='button'
+          onClick={handleDeletePermissions}
+        >
+          <FontAwesomeIcon
+            icon={['far', 'trash-can']}
+            className='sharing-permission-trashcan-icon'
+          />
+          Delete Permissions
+        </button>
+      </th>
+    );
 
   return (
     <div className='sharing-permissions-table'>
       <div className='sharing-permissions-table-header-container'>
         <h1>Your Sharing Permission</h1>
-        <div className='sharing-permissions-search-bar-container'>
-          <input
-            type='text'
-            className='sharing-permissions-search-bar'
-            onChange={(event) => setFilterText(event.target.value)}
-            placeholder='Search sharing permissions'
-            value={filterText}
-          />
-          <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+        <div className='sharing-permission-actions'>
+          <div className='sharing-permissions-search-bar-container'>
+            <input
+              type='text'
+              className='sharing-permissions-search-bar'
+              onChange={(event) => setFilterText(event.target.value)}
+              placeholder='Search sharing permissions'
+              value={filterText}
+            />
+            <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+          </div>
+          {children}
         </div>
       </div>
       <ParticipantsTable
+        showAddedByColumn
         participants={sharedParticipants}
         filterText={filterText}
-        selectedParticipant={checkedParticipants}
-        onSelectedChange={handleSelectedChange}
-        className='shared-participants-table'
-      >
-        <tr>
-          <th>
-            <input
-              type='checkbox'
-              checked={selectAll}
-              onChange={() => setSelectAll(!selectAll)}
-              id='select-all-checkbox'
-              className='participant-checkbox'
-            />
-          </th>
-          <th>Participant Name</th>
-          <th>Participant Type</th>
-        </tr>
-      </ParticipantsTable>
+        selectedParticipantIds={checkedParticipants}
+        onSelectedChange={setCheckedParticipants}
+        tableHeader={tableHeader}
+        className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
+      />
       {!sharedParticipants.length && <NoParticipant />}
     </div>
   );

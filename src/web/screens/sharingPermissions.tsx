@@ -1,14 +1,32 @@
 import { useState } from 'react';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
+import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipantsDialog';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { PortalRoute } from './routeUtils';
-import { SearchAndAddParticipants } from './searchAndAddParticipantsDialog';
+
+type StatusPopupType = {
+  message: string;
+  type: 'Success' | 'Error' | 'Info';
+};
 
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
-  const handleSharingPermissionsAdded = () => {
+  const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
+  const handleSharingPermissionsAdded = async () => {
     setShowStatusPopup(true);
+    setStatusPopup({
+      type: 'Success',
+      message: '1 Participant added to Your Sharing Permissions',
+    });
+  };
+
+  const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
+    setShowStatusPopup(true);
+    setStatusPopup({
+      type: 'Success',
+      message: `${siteIdsToDelete} sharing permissions deleted`,
+    });
   };
 
   return (
@@ -21,10 +39,22 @@ function SharingPermissions() {
         <br />
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
-      <SearchAndAddParticipants onSharingPermissionsAdded={handleSharingPermissionsAdded} />
-      <SharingPermissionsTable sharedParticipants={[]} />
-      {showStatusPopup && (
-        <StatusPopup status='Success' message='1 Participant added to Your Sharing Permissions' />
+      <SharingPermissionsTable
+        sharedParticipants={[]}
+        onDeleteSharingPermission={handleDeleteSharingPermission}
+      >
+        <SearchAndAddParticipants
+          defaultSelected={[]}
+          onSharingPermissionsAdded={handleSharingPermissionsAdded}
+        />
+      </SharingPermissionsTable>
+      {statusPopup && (
+        <StatusPopup
+          status={statusPopup!.type}
+          show={showStatusPopup}
+          setShow={setShowStatusPopup}
+          message={statusPopup!.message}
+        />
       )}
     </div>
   );
