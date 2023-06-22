@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { AccountPendingRoute } from './accountPending';
 import { CreateAccountRoute } from './createAccount';
 import { DashboardRoute } from './dashboard';
-import { LoginRoute } from './login';
 import { makePrivateRoute, PortalRoute } from './routeUtils';
 
 const AccountCreationRoute: PortalRoute = {
@@ -18,7 +17,6 @@ const AccountCreationRoute: PortalRoute = {
 };
 
 export const Routes: PortalRoute[] = [
-  LoginRoute,
   makePrivateRoute(DashboardRoute),
   makePrivateRoute(AccountCreationRoute),
 ];
