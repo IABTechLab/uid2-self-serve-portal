@@ -41,13 +41,14 @@ function SharingPermissions() {
         type: 'Error',
         message: `Add Sharing Permissions Failed`,
       });
+    } finally {
+      setShowStatusPopup(true);
     }
   };
 
   const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
     try {
       const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
-      setShowStatusPopup(true);
       setStatusPopup({
         type: 'Success',
         message: `${siteIdsToDelete.length} sharing ${
@@ -60,6 +61,8 @@ function SharingPermissions() {
         type: 'Error',
         message: `Delete Sharing Permissions Failed`,
       });
+    } finally {
+      setShowStatusPopup(true);
     }
   };
 
