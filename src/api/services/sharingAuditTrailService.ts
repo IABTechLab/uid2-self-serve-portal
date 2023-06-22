@@ -4,6 +4,7 @@ import { getLoggers } from '../helpers/loggingHelpers';
 export const insertSharingAuditTrails = async (
   participantId: number,
   userId: number,
+  userEmail: string,
   action: SharingAction,
   siteIds: number[]
 ) => {
@@ -11,14 +12,15 @@ export const insertSharingAuditTrails = async (
     const auditTrails = siteIds.map((siteId) => ({
       participantId,
       userId,
+      userEmail,
       sharingParticipantSiteId: siteId,
       action,
     }));
 
-    await SharingAuditTrail.query().insert(auditTrails);
+    return await SharingAuditTrail.query().insert(auditTrails);
   } catch (error) {
     const [logger] = getLoggers();
-    logger.error(`Audit trails upserted failed: ${error}`);
+    logger.error(`Audit trails inserted failed: ${error}`);
     throw error;
   }
 };
@@ -27,4 +29,8 @@ export const getSharingAuditTrails = async (participantId: number, siteIds: numb
   return SharingAuditTrail.query()
     .where('participantId', participantId)
     .whereIn('sharingParticipantSiteId', siteIds);
+};
+
+export const updateAuditTrailsToProceed = async (ids: number[]) => {
+  return SharingAuditTrail.query().patch({ proceed: true }).whereIn('id', ids);
 };

@@ -13,7 +13,10 @@ import {
   getSharingParticipants,
   sendNewParticipantEmail,
 } from './services/participantsService';
-import { insertSharingAuditTrails } from './services/sharingAuditTrailService';
+import {
+  insertSharingAuditTrails,
+  updateAuditTrailsToProceed,
+} from './services/sharingAuditTrailService';
 import {
   createUserInPortal,
   findUserByEmail,
@@ -49,7 +52,7 @@ export const hasParticipantAccess = async (
   return next();
 };
 
-participantsRouter.get('/', async (_req, res) => {
+participantsRouter.get('/available', async (_req, res) => {
   const participants = await Participant.query().whereNotNull('siteId').withGraphFetched('types');
   return res.status(200).json(participants);
 });
@@ -149,19 +152,21 @@ participantsRouter.post(
       return res.status(400).send('Site id is not set');
     }
     const { newParticipantSites } = sharingRelationParser.parse(req.body);
+    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    const auditTrails = await insertSharingAuditTrails(
+      participant.id,
+      currentUser!.id,
+      currentUser!.email,
+      SharingAction.Add,
+      newParticipantSites
+    );
+
     const sharingParticipants = await addSharingParticipants(
       participant.siteId,
       newParticipantSites
     );
 
-    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
-    await insertSharingAuditTrails(
-      participant.id,
-      currentUser!.id,
-      SharingAction.Add,
-      newParticipantSites
-    );
-
+    await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
     return res.status(200).json(sharingParticipants);
   }
 );
@@ -179,18 +184,21 @@ participantsRouter.post(
       return res.status(400).send('Site id is not set');
     }
     const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
+    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    const auditTrails = await insertSharingAuditTrails(
+      participant.id,
+      currentUser!.id,
+      currentUser!.email,
+      SharingAction.Delete,
+      sharingSitesToRemove
+    );
+
     const sharingParticipants = await deleteSharingParticipants(
       participant.siteId,
       sharingSitesToRemove
     );
 
-    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
-    await insertSharingAuditTrails(
-      participant.id,
-      currentUser!.id,
-      SharingAction.Delete,
-      sharingSitesToRemove
-    );
+    await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
 
     return res.status(200).json(sharingParticipants);
   }

@@ -8,7 +8,7 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
   DeleteSharingParticipants,
-  GetAllParticipants,
+  GetAllAvailableParticipants,
   GetSharingParticipants,
   ParticipantResponse,
 } from '../services/participant';
@@ -108,7 +108,7 @@ export const SharingPermissionsRoute: PortalRoute = {
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
   loader: async () => {
-    const participants = GetAllParticipants();
+    const participants = GetAllAvailableParticipants();
     const participantTypes = await GetAllParticipantTypes();
     return defer({ participants, participantTypes });
   },

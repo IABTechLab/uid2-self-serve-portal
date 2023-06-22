@@ -59,9 +59,9 @@ export async function GetParticipantByUserId(id: number) {
   }
 }
 
-export async function GetAllParticipants() {
+export async function GetAllAvailableParticipants() {
   try {
-    const result = await axios.get<ParticipantResponse[]>(`/participants`, {
+    const result = await axios.get<ParticipantResponse[]>(`/participants/available`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;

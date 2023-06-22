@@ -7,10 +7,12 @@ export async function up(knex: Knex): Promise<void> {
 
   await knex.schema.createTable('sharingAuditTrails', (table) => {
     table.increments('id').primary();
-    table.integer('participantId').references('participants.id').onDelete('CASCADE');
-    table.integer('userId').references('users.id').onDelete('CASCADE');
+    table.integer('participantId').references('participants.id');
+    table.integer('userId').references('users.id');
+    table.string('userEmail');
     table.integer('sharingParticipantSiteId');
     table.enu('action', ['add', 'delete']);
+    table.boolean('proceed').defaultTo(false);
     table.timestamps(true, true);
   });
 }
