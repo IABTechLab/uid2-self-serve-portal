@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
-import { ParticipantCreationPartial } from '../entities/Participant';
+import { Participant, ParticipantCreationPartial } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { SSP_TAM_EMAIL, SSP_TAM_EMAIL_DISPLAY_NAME, SSP_WEB_BASE_URL } from '../envars';
+import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 
@@ -28,4 +29,45 @@ export const sendNewParticipantEmail = async (
     to: { name: SSP_TAM_EMAIL_DISPLAY_NAME, email: SSP_TAM_EMAIL },
   };
   emailService.sendEmail(emailArgs);
+};
+
+export const fetchSharingParticipants = async (
+  sharingListResponse: SharingListResponse
+): Promise<Participant[]> => {
+  return Participant.query()
+    .whereIn('siteId', sharingListResponse.whitelist)
+    .withGraphFetched('types');
+};
+
+export const getSharingParticipants = async (participantSiteId: number): Promise<Participant[]> => {
+  const sharingListResponse = await getSharingList(participantSiteId);
+  return fetchSharingParticipants(sharingListResponse);
+};
+
+export const addSharingParticipants = async (
+  participantSiteId: number,
+  siteIds: number[]
+): Promise<Participant[]> => {
+  const sharingListResponse = await getSharingList(participantSiteId);
+  const newSharingSet = new Set([...sharingListResponse.whitelist, ...siteIds]);
+  const response = await updateSharingList(participantSiteId, sharingListResponse.whitelist_hash, [
+    ...newSharingSet,
+  ]);
+  return fetchSharingParticipants(response);
+};
+
+export const deleteSharingParticipants = async (
+  participantSiteId: number,
+  siteIds: number[]
+): Promise<Participant[]> => {
+  const sharingListResponse = await getSharingList(participantSiteId);
+  const newSharingList = sharingListResponse.whitelist.filter(
+    (siteId) => !siteIds.includes(siteId)
+  );
+  const response = await updateSharingList(
+    participantSiteId,
+    sharingListResponse.whitelist_hash,
+    newSharingList
+  );
+  return fetchSharingParticipants(response);
 };

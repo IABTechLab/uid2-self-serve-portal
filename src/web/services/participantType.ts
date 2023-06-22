@@ -1,11 +1,14 @@
 import axios from 'axios';
 
-import { ParticipantType } from '../../api/entities/ParticipantType';
 import { backendError } from '../utils/apiError';
 
+export type ParticipantTypeResponse = {
+  id: number;
+  typeName: string;
+};
 export async function GetAllParticipantTypes() {
   try {
-    const result = await axios.get<ParticipantType[]>(`/participantTypes`, {
+    const result = await axios.get<ParticipantTypeResponse[]>(`/participantTypes`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;

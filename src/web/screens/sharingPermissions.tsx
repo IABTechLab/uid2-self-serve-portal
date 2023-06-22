@@ -1,8 +1,18 @@
-import { useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { defer } from 'react-router-dom';
 
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipantsDialog';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
+import {
+  AddSharingParticipants,
+  DeleteSharingParticipants,
+  GetAllAvailableParticipants,
+  GetSharingParticipants,
+  ParticipantResponse,
+} from '../services/participant';
+import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
 type StatusPopupType = {
@@ -12,22 +22,55 @@ type StatusPopupType = {
 
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
+  const { participant } = useContext(ParticipantContext);
+  const [sharingParticipants, setSharingParticipants] = useState<ParticipantResponse[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
-  const handleSharingPermissionsAdded = async () => {
-    setShowStatusPopup(true);
-    setStatusPopup({
-      type: 'Success',
-      message: '1 Participant added to Your Sharing Permissions',
-    });
+
+  const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
+    try {
+      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
+      setStatusPopup({
+        type: 'Success',
+        message: `${
+          selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
+        } added to Your Sharing Permissions`,
+      });
+      setSharingParticipants(response);
+    } catch (e) {
+      setStatusPopup({
+        type: 'Error',
+        message: `Add Sharing Permissions Failed`,
+      });
+    }
   };
 
   const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
-    setShowStatusPopup(true);
-    setStatusPopup({
-      type: 'Success',
-      message: `${siteIdsToDelete} sharing permissions deleted`,
-    });
+    try {
+      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
+      setShowStatusPopup(true);
+      setStatusPopup({
+        type: 'Success',
+        message: `${siteIdsToDelete.length} sharing ${
+          siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
+        } deleted`,
+      });
+      setSharingParticipants(response);
+    } catch (e) {
+      setStatusPopup({
+        type: 'Error',
+        message: `Delete Sharing Permissions Failed`,
+      });
+    }
   };
+
+  const loadSharingParticipants = useCallback(async () => {
+    const response = await GetSharingParticipants(participant!.id);
+    setSharingParticipants(response);
+  }, [participant]);
+
+  useEffect(() => {
+    loadSharingParticipants();
+  }, [loadSharingParticipants]);
 
   return (
     <div>
@@ -40,12 +83,12 @@ function SharingPermissions() {
         <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
       </p>
       <SharingPermissionsTable
-        sharedParticipants={[]}
+        sharingParticipants={sharingParticipants}
         onDeleteSharingPermission={handleDeleteSharingPermission}
       >
         <SearchAndAddParticipants
-          defaultSelected={[]}
           onSharingPermissionsAdded={handleSharingPermissionsAdded}
+          sharingParticipants={sharingParticipants}
         />
       </SharingPermissionsTable>
       {statusPopup && (
@@ -64,4 +107,9 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
+  loader: async () => {
+    const participants = GetAllAvailableParticipants();
+    const participantTypes = await GetAllParticipantTypes();
+    return defer({ participants, participantTypes });
+  },
 };

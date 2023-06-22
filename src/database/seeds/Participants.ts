@@ -5,7 +5,7 @@ import { Optional } from 'utility-types';
 import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
 type ParticipantsType = ModelObject<Participant>;
-const sampleData: Optional<ParticipantsType & { type: string }, 'id' | 'location'>[] = [
+const sampleData: Optional<ParticipantsType & { type: string }, 'id' | 'location' | 'siteId'>[] = [
   {
     name: 'Publisher example',
     allowSharing: true,
@@ -38,7 +38,7 @@ const sampleData: Optional<ParticipantsType & { type: string }, 'id' | 'location
 
 export async function CreateParticipant(
   knex: Knex,
-  details: Optional<ParticipantsType, 'id' | 'allowSharing' | 'location'>,
+  details: Optional<ParticipantsType, 'id' | 'allowSharing' | 'location' | 'siteId'>,
   type: string
 ) {
   const participant = await knex('participants')

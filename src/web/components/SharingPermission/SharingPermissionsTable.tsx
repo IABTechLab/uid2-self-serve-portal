@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
-import { ParticipantPayload } from '../../services/participant';
+import { ParticipantResponse } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
-  sharedParticipants: ParticipantPayload[];
+  sharingParticipants: ParticipantResponse[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
   children?: ReactNode;
 };
@@ -25,17 +26,25 @@ function NoParticipant() {
   );
 }
 export function SharingPermissionsTable({
-  sharedParticipants,
+  sharingParticipants,
   onDeleteSharingPermission,
   children,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+
   const hasParticipantSelected = checkedParticipants.size > 0;
 
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(Array.from(checkedParticipants));
+    setCheckedParticipants(new Set());
+    setOpenConfirmation(false);
   };
+
+  const selectedParticipantList = useMemo(() => {
+    return sharingParticipants.filter((p) => checkedParticipants.has(p.siteId!));
+  }, [checkedParticipants, sharingParticipants]);
 
   const tableHeader = () =>
     !hasParticipantSelected ? (
@@ -46,17 +55,38 @@ export function SharingPermissionsTable({
       </>
     ) : (
       <th colSpan={3}>
-        <button
-          className='transparent-button sharing-permission-delete-button'
-          type='button'
-          onClick={handleDeletePermissions}
+        <Dialog
+          title='Are you sure you want to Delete these Permissions'
+          triggerButton={
+            <button className='transparent-button sharing-permission-delete-button' type='button'>
+              <FontAwesomeIcon
+                icon={['far', 'trash-can']}
+                className='sharing-permission-trashcan-icon'
+              />
+              Delete Permissions
+            </button>
+          }
+          open={openConfirmation}
+          onOpenChange={setOpenConfirmation}
         >
-          <FontAwesomeIcon
-            icon={['far', 'trash-can']}
-            className='sharing-permission-trashcan-icon'
-          />
-          Delete Permissions
-        </button>
+          <ul className='dot-list'>
+            {selectedParticipantList.map((participant) => (
+              <li key={participant.id}>{participant.name}</li>
+            ))}
+          </ul>
+          <div className='dialog-footer-section'>
+            <button type='button' className='primary-button' onClick={handleDeletePermissions}>
+              I want to Remove Permissions
+            </button>
+            <button
+              type='button'
+              className='transparent-button'
+              onClick={() => setOpenConfirmation(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </Dialog>
       </th>
     );
 
@@ -80,14 +110,14 @@ export function SharingPermissionsTable({
       </div>
       <ParticipantsTable
         showAddedByColumn
-        participants={sharedParticipants}
+        participants={sharingParticipants}
         filterText={filterText}
         selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
         className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
       />
-      {!sharedParticipants.length && <NoParticipant />}
+      {!sharingParticipants.length && <NoParticipant />}
     </div>
   );
 }
