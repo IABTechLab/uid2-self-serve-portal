@@ -31,9 +31,6 @@ export const SSP_EMAIL_SENDER = process.env.SSP_EMAIL_SENDER ?? 'noreply@unified
 export const SSP_EMAIL_SENDER_NAME =
   process.env.SSP_EMAIL_SENDER_NAME ?? 'UID2 Service (do not reply)';
 
-export const SSP_TAM_EMAIL = process.env.SSP_TAM_EMAIL ?? errorMessage;
-export const SSP_TAM_EMAIL_DISPLAY_NAME = process.env.SSP_TAM_EMAIL ?? 'TAMs';
-
 export const SSP_ADMIN_SERVICE_BASE_URL =
   process.env.SSP_ADMIN_SERVICE_BASE_URL ?? 'http://localhost:8089';
 export const SSP_ADMIN_SERVICE_CLIENT_KEY =
