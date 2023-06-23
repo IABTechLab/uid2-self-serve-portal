@@ -5,7 +5,6 @@ import { Suspense, useCallback, useContext, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
-import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllUsers, ResendInvite } from '../services/userAccount';
 import AddTeamMemberDialog from './addTeamMemberDialog';
 import { PortalRoute } from './routeUtils';
@@ -21,7 +20,6 @@ enum InviteState {
   error,
 }
 function TeamMember({ person }: TeamMemberProps) {
-  const { participant } = useContext(ParticipantContext);
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const resendInvite = useCallback(async () => {
     if (reinviteState !== InviteState.initial) {
