@@ -41,6 +41,7 @@ export class Participant extends BaseModel {
   name!: string;
   status!: ParticipantStatus;
   allowSharing!: boolean;
+  siteId?: number;
   location?: string;
 }
 
@@ -52,6 +53,7 @@ export const ParticipantSchema = z.object({
   users: z.array(UserScheme).optional(),
   allowSharing: z.boolean(),
   location: z.string().optional(),
+  siteId: z.number().optional(),
 });
 
 export const ParticipantCreationPartial = ParticipantSchema.omit({

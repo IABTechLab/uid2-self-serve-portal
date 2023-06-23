@@ -1,32 +1,55 @@
-import { useMemo, useState } from 'react';
+import { Suspense, useContext, useMemo, useState } from 'react';
+import { Await, useLoaderData } from 'react-router-dom';
 
+import { ParticipantType } from '../../../api/entities/ParticipantType';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { ParticipantResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
+import { Loading } from '../Core/Loading';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
-  defaultSelected: ParticipantResponse[];
+  sharingParticipants: ParticipantResponse[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
-  defaultSelected,
+  sharingParticipants,
 }: SearchAndAddParticipantsProps) {
   const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
+  const { participants, participantTypes } = useLoaderData() as {
+    participants: ParticipantResponse[];
+    participantTypes: ParticipantType[];
+  };
+  const { participant } = useContext(ParticipantContext);
 
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
     setOpen(false);
+    setSelectedParticipants(new Set());
     onSharingPermissionsAdded(Array.from(selectedParticipants));
   };
 
-  const defaultSelectedParticipants = useMemo(() => {
-    return new Set(defaultSelected.map((p) => p.id!));
-  }, [defaultSelected]);
+  const sharingParticipantsSiteIds = useMemo(() => {
+    return new Set(sharingParticipants.map((p) => p.siteId));
+  }, [sharingParticipants]);
+
+  const getSearchableParticipants = (resolvedParticipants: ParticipantResponse[]) => {
+    return resolvedParticipants.filter(
+      (p) => p.id !== participant?.id && !sharingParticipantsSiteIds.has(p.siteId)
+    );
+  };
+
+  const getParticipantText = (participantCount: number): string => {
+    if (participantCount === 1) {
+      return '1 participant';
+    }
+    return `${participantCount} participants`;
+  };
 
   return (
     <Dialog
@@ -41,17 +64,24 @@ export function SearchAndAddParticipants({
     >
       <div className='add-participant-dialog-content'>
         <div className='add-participant-dialog-search-bar'>
-          <ParticipantSearchBar
-            participants={[]}
-            selectedParticipantIds={defaultSelectedParticipants}
-            onSelectedChange={setSelectedParticipants}
-          />
+          <Suspense fallback={<Loading />}>
+            <Await resolve={participants}>
+              {(resolvedParticipants: ParticipantResponse[]) => (
+                <ParticipantSearchBar
+                  selectedParticipantIds={selectedParticipants}
+                  participants={getSearchableParticipants(resolvedParticipants)}
+                  onSelectedChange={setSelectedParticipants}
+                  participantTypes={participantTypes}
+                />
+              )}
+            </Await>
+          </Suspense>
           {/* TODO: Add Automatically Add Participant Types: */}
         </div>
         <div className='action-section'>
           {selectedParticipants && (
             <span>
-              <b>{selectedParticipants.size} Participant Selected</b>
+              <b> {getParticipantText(selectedParticipants.size)} Selected</b>
             </span>
           )}
           <Dialog
@@ -65,12 +95,18 @@ export function SearchAndAddParticipants({
             onOpenChange={setOpenConfirmation}
           >
             <ul className='dot-list'>
-              <li>Adding 1 Participant</li>
-              <li>adding future publishers who join Unified ID to decrypt your UID2 tokens.</li>
+              <li>Adding {getParticipantText(selectedParticipants.size)}</li>
             </ul>
-            <div className='action-section'>
+            <div className='dialog-footer-section'>
               <button type='button' className='primary-button' onClick={onHandleAddParticipants}>
                 I acknowledge these changes
+              </button>
+              <button
+                type='button'
+                className='transparent-button'
+                onClick={() => setOpenConfirmation(false)}
+              >
+                Cancel
               </button>
             </div>
           </Dialog>
