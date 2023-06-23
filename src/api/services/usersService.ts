@@ -21,7 +21,7 @@ export const isUserBelongsToParticipant = async (email: string, participantId: n
     .first();
 
   if (!user) {
-    const [logger, errorLogger] = getLoggers();
+    const [, errorLogger] = getLoggers();
     errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`);
   }
   return !!user;
