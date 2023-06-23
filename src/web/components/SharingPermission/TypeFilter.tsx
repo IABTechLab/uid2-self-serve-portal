@@ -1,13 +1,12 @@
 import clsx from 'clsx';
 import { useState } from 'react';
-import { z } from 'zod';
 
-import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
+import { ParticipantTypeResponse } from '../../services/participantType';
 
 import './TypeFilter.scss';
 
 type TypeButtonProps = {
-  type: z.infer<typeof ParticipantTypeSchema>;
+  type: ParticipantTypeResponse;
   isSelected: boolean;
   onTypeSelect: (selectedTypeId: number) => void;
 };
@@ -25,7 +24,7 @@ export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) 
 }
 
 type TypeFilterProps = {
-  types: z.infer<typeof ParticipantTypeSchema>[];
+  types: ParticipantTypeResponse[];
   onFilterChange: (selectedTypeIds: Set<number>) => void;
 };
 

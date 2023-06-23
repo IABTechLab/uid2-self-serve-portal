@@ -59,9 +59,9 @@ export async function GetParticipantByUserId(id: number) {
   }
 }
 
-export async function GetAllParticipant() {
+export async function GetAllAvailableParticipants() {
   try {
-    const result = await axios.get<ParticipantResponse[]>(`/participants`, {
+    const result = await axios.get<ParticipantResponse[]>(`/participants/available`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
@@ -96,5 +96,52 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
+  }
+}
+
+export async function GetSharingParticipants(
+  participantId: number
+): Promise<ParticipantResponse[]> {
+  try {
+    const result = await axios.get<ParticipantResponse[]>(
+      `/participants/${participantId}/sharingPermission`
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load sharing participants');
+  }
+}
+
+export async function AddSharingParticipants(
+  participantId: number,
+  newParticipantSites: number[]
+): Promise<ParticipantResponse[]> {
+  try {
+    const result = await axios.post<ParticipantResponse[]>(
+      `/participants/${participantId}/sharingPermission/add`,
+      {
+        newParticipantSites,
+      }
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not add sharing participants');
+  }
+}
+
+export async function DeleteSharingParticipants(
+  participantId: number,
+  sharingSitesToRemove: number[]
+): Promise<ParticipantResponse[]> {
+  try {
+    const result = await axios.post<ParticipantResponse[]>(
+      `/participants/${participantId}/sharingPermission/delete`,
+      {
+        sharingSitesToRemove,
+      }
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not delete sharing participants');
   }
 }

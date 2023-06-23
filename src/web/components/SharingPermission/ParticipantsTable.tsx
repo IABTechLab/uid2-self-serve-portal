@@ -2,19 +2,19 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { ParticipantPayload } from '../../services/participant';
+import { ParticipantResponse } from '../../services/participant';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
 
 type ParticipantsTableProps = {
-  participants: ParticipantPayload[];
+  participants: ParticipantResponse[];
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   selectedParticipantIds?: Set<number>;
-  tableHeader: (filteredParticipants: ParticipantPayload[]) => ReactNode;
+  tableHeader: (filteredParticipants: ParticipantResponse[]) => ReactNode;
   className?: string;
   showAddedByColumn?: boolean;
 };
@@ -36,7 +36,7 @@ export function ParticipantsTable({
 
   const handleCheckboxChange = () => {
     if (selectAllState === TriStateCheckboxState.unchecked) {
-      onSelectedChange(new Set(filteredParticipants.map((p) => p.id!)));
+      onSelectedChange(new Set(filteredParticipants.map((p) => p.siteId!)));
     } else {
       onSelectedChange(new Set());
     }
@@ -71,13 +71,14 @@ export function ParticipantsTable({
     }
   }, [selectedParticipantIds.size, isSelectedAll]);
 
-  const handleCheckChange = (participant: ParticipantPayload) => {
+  const handleCheckChange = (participant: ParticipantResponse) => {
     const newCheckedItems = new Set(selectedParticipantIds);
-    if (newCheckedItems.has(participant.id!)) {
-      newCheckedItems.delete(participant.id!);
+    if (newCheckedItems.has(participant.siteId!)) {
+      newCheckedItems.delete(participant.siteId!);
     } else {
-      newCheckedItems.add(participant.id!);
+      newCheckedItems.add(participant.siteId!);
     }
+
     onSelectedChange(newCheckedItems);
   };
 
@@ -98,11 +99,11 @@ export function ParticipantsTable({
       <tbody>
         {filteredParticipants.map((participant) => (
           <ParticipantItem
-            addedBy={showAddedByColumn ? 'Auto' : undefined} // TODO: Update this once we have auto add functionality
+            addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
             key={participant.id}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
-            checked={!!selectedParticipantIds.has(participant.id!)}
+            checked={!!selectedParticipantIds.has(participant.siteId!)}
           />
         ))}
       </tbody>

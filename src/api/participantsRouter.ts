@@ -2,11 +2,25 @@ import express, { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { Participant, ParticipantCreationPartial, ParticipantSchema } from './entities/Participant';
+import { SharingAction } from './entities/SharingAuditTrail';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
-import { sendNewParticipantEmail } from './services/participantsService';
-import { createUserInPortal, isUserBelongsToParticipant } from './services/usersService';
+import {
+  addSharingParticipants,
+  deleteSharingParticipants,
+  getSharingParticipants,
+  sendNewParticipantEmail,
+} from './services/participantsService';
+import {
+  insertSharingAuditTrails,
+  updateAuditTrailsToProceed,
+} from './services/sharingAuditTrailService';
+import {
+  createUserInPortal,
+  findUserByEmail,
+  isUserBelongsToParticipant,
+} from './services/usersService';
 
 export const participantsRouter = express.Router();
 
@@ -37,8 +51,8 @@ export const hasParticipantAccess = async (
   return next();
 };
 
-participantsRouter.get('/', async (_req, res) => {
-  const participants = await Participant.query().withGraphFetched('types');
+participantsRouter.get('/available', async (_req, res) => {
+  const participants = await Participant.query().whereNotNull('siteId').withGraphFetched('types');
   return res.status(200).json(participants);
 });
 
@@ -110,5 +124,83 @@ participantsRouter.put(
       }
       throw err;
     }
+  }
+);
+
+participantsRouter.get(
+  '/:participantId/sharingPermission',
+  hasParticipantAccess,
+  async (req: ParticipantRequest, res: Response) => {
+    const { participant } = req;
+    if (!participant?.siteId) {
+      return res.status(400).send('Site id is not set');
+    }
+    const sharingParticipants = await getSharingParticipants(participant.siteId);
+    return res.status(200).json(sharingParticipants);
+  }
+);
+
+const sharingRelationParser = z.object({
+  newParticipantSites: z.array(z.number()),
+});
+
+participantsRouter.post(
+  '/:participantId/sharingPermission/add',
+  hasParticipantAccess,
+  async (req: ParticipantRequest, res: Response) => {
+    const { participant } = req;
+    if (!participant?.siteId) {
+      return res.status(400).send('Site id is not set');
+    }
+    const { newParticipantSites } = sharingRelationParser.parse(req.body);
+    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    const auditTrails = await insertSharingAuditTrails(
+      participant.id,
+      currentUser!.id,
+      currentUser!.email,
+      SharingAction.Add,
+      newParticipantSites
+    );
+
+    const sharingParticipants = await addSharingParticipants(
+      participant.siteId,
+      newParticipantSites
+    );
+
+    await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
+    return res.status(200).json(sharingParticipants);
+  }
+);
+
+const removeSharingRelationParser = z.object({
+  sharingSitesToRemove: z.array(z.number()),
+});
+
+participantsRouter.post(
+  '/:participantId/sharingPermission/delete',
+  hasParticipantAccess,
+  async (req: ParticipantRequest, res: Response) => {
+    const { participant } = req;
+    if (!participant?.siteId) {
+      return res.status(400).send('Site id is not set');
+    }
+    const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
+    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    const auditTrails = await insertSharingAuditTrails(
+      participant.id,
+      currentUser!.id,
+      currentUser!.email,
+      SharingAction.Delete,
+      sharingSitesToRemove
+    );
+
+    const sharingParticipants = await deleteSharingParticipants(
+      participant.siteId,
+      sharingSitesToRemove
+    );
+
+    await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
+
+    return res.status(200).json(sharingParticipants);
   }
 );
