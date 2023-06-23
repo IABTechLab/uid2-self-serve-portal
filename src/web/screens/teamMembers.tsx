@@ -77,8 +77,10 @@ function TeamMembers() {
   return (
     <div className='portal-team'>
       <h1>Team Members & Contacts</h1>
-      <p className='heading-details'>Manage access to this participant account.</p>
-      <h2>Current Team Members</h2>
+      <p className='heading-details'>
+        View current team members below and add additional team members to access Unified ID Portal.
+      </p>
+      <h2>Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>
           {(users: User[]) => (
