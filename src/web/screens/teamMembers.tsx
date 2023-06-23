@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
-import { Suspense, useCallback, useContext, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
