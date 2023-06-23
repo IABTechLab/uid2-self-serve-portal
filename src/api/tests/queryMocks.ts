@@ -15,18 +15,23 @@ export const mockParticipant = (participant: Partial<Participant> = {}) => {
   );
 };
 
-export const mockUser = (user: Partial<User> | Partial<User>[] = {}) => {
+type PartialUserOrNull = Partial<User> | null;
+export const mockUser = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => {
   const users = Array.isArray(user) ? user : [user];
   const spy = jest.spyOn(User, 'query');
   users.forEach((u) =>
     spy.mockReturnValueOnce(
-      QueryBuilder.forClass(User).resolve({
-        id: '1',
-        email: 'test_user@example.com',
-        name: 'Test User',
-        participantId: 1,
-        ...u,
-      })
+      QueryBuilder.forClass(User).resolve(
+        u === null
+          ? null
+          : {
+              id: '1',
+              email: 'test_user@example.com',
+              name: 'Test User',
+              participantId: 1,
+              ...u,
+            }
+      )
     )
   );
 };

@@ -51,7 +51,6 @@ usersRouter.post(
   async (req: UserRequest, res) => {
     const [logger, errorLogger] = getLoggers();
 
-    const { userId } = userIdParser.parse(req.params);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
 

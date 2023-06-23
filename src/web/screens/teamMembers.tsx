@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
+import log from 'loglevel';
 import { Suspense, useCallback, useContext, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
@@ -23,17 +24,17 @@ function TeamMember({ person }: TeamMemberProps) {
   const { participant } = useContext(ParticipantContext);
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const resendInvite = useCallback(async () => {
-    switch (reinviteState) {
-      case InviteState.initial:
-        setInviteState(InviteState.inProgress);
-        ResendInvite(person.id).then((success) => {
-          if (success) {
-            setInviteState(InviteState.sent);
-          } else {
-            setInviteState(InviteState.error);
-          }
-        });
-        break;
+    if (reinviteState !== InviteState.initial) {
+      log.error(`Unexpected click event on reinvite button`);
+      return;
+    }
+
+    setInviteState(InviteState.inProgress);
+    try {
+      await ResendInvite(person.id);
+      setInviteState(InviteState.sent);
+    } catch {
+      setInviteState(InviteState.error);
     }
   }, [person, reinviteState]);
   return (

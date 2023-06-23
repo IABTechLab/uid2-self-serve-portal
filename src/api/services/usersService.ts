@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { User, UserDTO } from '../entities/User';
+import { getLoggers } from '../helpers/loggingHelpers';
 
 export const findUserByEmail = async (email: string) => {
   return User.query().findOne('email', email);
@@ -19,6 +20,10 @@ export const isUserBelongsToParticipant = async (email: string, participantId: n
     .andWhere('participantId', participantId)
     .first();
 
+  if (!user) {
+    const [logger, errorLogger] = getLoggers();
+    errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`);
+  }
   return !!user;
 };
 
@@ -40,7 +45,6 @@ export const enrichWithUserFromParams = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-
   if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, user.participantId))) {
     return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }

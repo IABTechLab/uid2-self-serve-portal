@@ -8,11 +8,14 @@ import { App } from './web/App';
 import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
 import keycloak from './web/Keycloak';
+import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
 import { Routes } from './web/screens/routes';
 import { PortalErrorBoundary } from './web/utils/PortalErrorBoundary';
 
 import './web/index.scss';
+
+configureLogging();
 
 const router = createBrowserRouter([
   {

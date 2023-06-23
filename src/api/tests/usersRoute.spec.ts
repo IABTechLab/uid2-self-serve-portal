@@ -22,7 +22,7 @@ describe('Users API tests', () => {
 
     test('From the same participant, the invitation is sent', async () => {
       mockParticipant();
-      mockUser([{}, { participantId: 2 }]);
+      mockUser([{}, {}]);
       const req: Request = request(api).post('/api/users/1/resendInvitation');
       const res = await withToken(req);
 
@@ -32,7 +32,7 @@ describe('Users API tests', () => {
 
     test('Should deny access to an authenticated user without permission', async () => {
       mockParticipant();
-      mockUser({ participantId: 2 });
+      mockUser([{ participantId: 2 }, null]);
       const req: Request = request(api).post('/api/users/1/resendInvitation');
       const res = await withToken(req);
 
