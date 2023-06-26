@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
+import log from 'loglevel';
 import { z } from 'zod';
 
 import { User, UserScheme } from '../../api/entities/User';
@@ -32,6 +33,16 @@ export async function GetUserAccountByEmail(email: string | undefined): Promise<
     return null;
   } catch (e: unknown) {
     throw backendError(e, 'Could not get user account');
+  }
+}
+
+export async function ResendInvite(id: number): Promise<void> {
+  try {
+    await axios.post(`/users/${id}/resendInvitation`);
+  } catch (e: unknown) {
+    const error = backendError(e, 'Unable to resent invite.');
+    log.error(error);
+    throw error;
   }
 }
 

@@ -22,6 +22,7 @@ const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
     location: 'Sydney, AU',
     phone: '+61298765432',
     role: UserRole.DA,
+    acceptedTerms: false,
   },
 ];
 

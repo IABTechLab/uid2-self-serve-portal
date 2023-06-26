@@ -3,6 +3,10 @@
   flex-direction: column;
   align-items: stretch;
 
+  .heading-details {
+    margin: 4px 0;
+  }
+
   .add-team-member {
     margin-top: 10px;
     margin-right: 30px;
@@ -16,15 +20,48 @@
       border: none;
     }
 
-    .action {
-      text-align: center;
+    .name {
+      width: 30%;
+    }
+
+    .email {
+      width: 60%;
     }
 
     td.action {
-      color: var(--theme-action);
+      padding-right: 80px;
+      font-size: 0.8125rem;
+    }
+
+    td {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    td.action {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        &.clickable {
+          cursor: pointer;
+          color: var(--theme-action);
+        }
+
+        &.error {
+          color: var(--theme-error);
+        }
+
+        border: none;
+        white-space: nowrap;
+        flex-grow: 1;
+        align-items: center;
+        padding: 0 10px;
+      }
 
       svg {
-        padding: 0 5px;
+        color: var(--theme-action);
+        padding: 0 10px;
       }
     }
   }

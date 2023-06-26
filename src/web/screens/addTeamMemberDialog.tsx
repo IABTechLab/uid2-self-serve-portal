@@ -72,7 +72,7 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
           />
           <CheckboxInput
             inputName='agreement'
-            rules={{ validate: (value) => (value && value[0]) || 'Please accept the agreement ' }}
+            rules={{ validate: (value) => value || 'Please accept the agreement ' }}
             options={[
               {
                 optionLabel:
