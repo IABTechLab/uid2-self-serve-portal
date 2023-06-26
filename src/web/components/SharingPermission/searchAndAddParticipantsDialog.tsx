@@ -46,9 +46,9 @@ export function SearchAndAddParticipants({
 
   const getParticipantText = (participantCount: number): string => {
     if (participantCount === 1) {
-      return '1 participant';
+      return '1 Participant';
     }
-    return `${participantCount} participants`;
+    return `${participantCount} Participants`;
   };
 
   return (

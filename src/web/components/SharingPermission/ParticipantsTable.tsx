@@ -58,7 +58,7 @@ export function ParticipantsTable({
 
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length) return false;
-    return filteredParticipants.every((p) => selectedParticipantIds.has(p.id));
+    return filteredParticipants.every((p) => selectedParticipantIds.has(p.siteId!));
   }, [filteredParticipants, selectedParticipantIds]);
 
   useEffect(() => {
