@@ -13,8 +13,9 @@ button {
 }
 
 .primary-button:disabled {
-  background-color: var(--theme-background-sidepanel);
-  border-color: var(--theme-background-sidepanel);
+  background-color: var(--theme-table-border);
+  border-color: var(--theme-table-border);
+  color: var(--theme-disabled-button-text);
 }
 
 .large-button {

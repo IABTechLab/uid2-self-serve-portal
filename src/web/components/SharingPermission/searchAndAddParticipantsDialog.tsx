@@ -79,7 +79,7 @@ export function SearchAndAddParticipants({
           {/* TODO: Add Automatically Add Participant Types: */}
         </div>
         <div className='action-section'>
-          {selectedParticipants && (
+          {selectedParticipants.size > 0 && (
             <span>
               <b> {getParticipantText(selectedParticipants.size)} Selected</b>
             </span>
@@ -87,7 +87,11 @@ export function SearchAndAddParticipants({
           <Dialog
             title='Please review the following changes'
             triggerButton={
-              <button type='button' className='primary-button add-participant-button'>
+              <button
+                type='button'
+                className='primary-button add-participant-button'
+                disabled={!selectedParticipants.size}
+              >
                 Add Participants
               </button>
             }
