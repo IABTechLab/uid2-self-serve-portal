@@ -16,6 +16,7 @@ type ParticipantsTableProps = {
   selectedParticipantIds?: Set<number>;
   tableHeader: (filteredParticipants: ParticipantResponse[]) => ReactNode;
   className?: string;
+  hideCheckboxIfNoItem?: boolean;
   showAddedByColumn?: boolean;
 };
 
@@ -27,6 +28,7 @@ export function ParticipantsTable({
   onSelectedChange,
   selectedParticipantIds = new Set(),
   className,
+  hideCheckboxIfNoItem,
   showAddedByColumn,
 }: ParticipantsTableProps) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
@@ -82,16 +84,19 @@ export function ParticipantsTable({
     onSelectedChange(newCheckedItems);
   };
 
+  const showCheckbox = !hideCheckboxIfNoItem || (hideCheckboxIfNoItem && !!participants.length);
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>
         <tr>
           <th>
-            <TriStateCheckbox
-              onClick={handleCheckboxChange}
-              status={selectAllState}
-              className='participant-checkbox'
-            />
+            {showCheckbox && (
+              <TriStateCheckbox
+                onClick={handleCheckboxChange}
+                status={selectAllState}
+                className='participant-checkbox'
+              />
+            )}
           </th>
           {tableHeader(filteredParticipants)}
         </tr>

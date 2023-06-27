@@ -115,6 +115,7 @@ export function SharingPermissionsTable({
         selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
+        hideCheckboxIfNoItem
         className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
       />
       {!sharingParticipants.length && <NoParticipant />}
