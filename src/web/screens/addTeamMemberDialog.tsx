@@ -4,7 +4,6 @@ import { SubmitHandler } from 'react-hook-form';
 import { UserRole } from '../../api/entities/User';
 import { Dialog } from '../components/Core/Dialog';
 import { Form } from '../components/Core/Form';
-import { CheckboxInput } from '../components/Input/CheckboxInput';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -69,17 +68,6 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
               optionLabel: UserRole[key],
               value: UserRole[key],
             }))}
-          />
-          <CheckboxInput
-            inputName='agreement'
-            rules={{ validate: (value) => value || 'Please accept the agreement ' }}
-            options={[
-              {
-                optionLabel:
-                  'By checking this box I agree that I am responsible for managing this Team Member in this Platform.',
-                value: true,
-              },
-            ]}
           />
         </Form>
       </div>
