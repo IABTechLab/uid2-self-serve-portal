@@ -13,8 +13,8 @@ button {
 }
 
 .primary-button:disabled {
-  background-color: var(--theme-table-border);
-  border-color: var(--theme-table-border);
+  background-color: var(--theme-disabled-button);
+  border-color: var(--theme-disabled-button);
   color: var(--theme-disabled-button-text);
 }
 
