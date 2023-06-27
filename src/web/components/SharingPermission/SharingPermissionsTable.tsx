@@ -93,7 +93,7 @@ export function SharingPermissionsTable({
   return (
     <div className='sharing-permissions-table'>
       <div className='sharing-permissions-table-header-container'>
-        <h1>Your Sharing Permissions</h1>
+        <h2>Your Sharing Permissions</h2>
         <div className='sharing-permission-actions'>
           <div className='sharing-permissions-search-bar-container'>
             <input

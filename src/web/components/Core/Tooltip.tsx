@@ -13,10 +13,7 @@ export function Tooltip({ children, side, align }: TooltipProps) {
   return (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
-        <TooltipPrimitive.Trigger
-          className='tooltip-trigger'
-          onClick={(event) => event.preventDefault()}
-        >
+        <TooltipPrimitive.Trigger className='tooltip-trigger' type='button'>
           <FontAwesomeIcon icon='circle-info' data-testid='tooltip-info-icon' />
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content side={side} align={align} className='tooltip-content'>

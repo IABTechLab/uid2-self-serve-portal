@@ -1,17 +1,11 @@
 .sharing-permissions-table {
-  margin-top: 60px;
+  margin-top: 30px;
 
   .sharing-permissions-table-header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
-
-    h1 {
-      font-weight: 600;
-      font-size: 1.125rem;
-      line-height: 1.375rem;
-    }
   }
 
   .sharing-permissions-search-bar-container {
