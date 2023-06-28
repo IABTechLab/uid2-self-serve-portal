@@ -71,9 +71,9 @@ export function ParticipantSearchBar({
             tableHeader={tableHeader}
           />
           {/* TODO: update the participant not appearing url */}
-          <div className='search-bar-footer'>
+          {/* <div className='search-bar-footer'>
             <a href='/'>Participant Not Appearing in Search?</a>
-          </div>
+          </div> */}
         </div>
       )}
     </div>

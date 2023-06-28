@@ -15,6 +15,8 @@ import {
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
+import './sharingPermissions.scss';
+
 type StatusPopupType = {
   message: string;
   type: 'Success' | 'Error' | 'Info';
@@ -76,7 +78,7 @@ function SharingPermissions() {
   }, [loadSharingParticipants]);
 
   return (
-    <div>
+    <div className='sharingPermissions'>
       <h1>Sharing Permissions</h1>
       <p>
         Adding a sharing permission only allows the participant you&apos;re sharing with to decrypt
