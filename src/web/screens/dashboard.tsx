@@ -7,7 +7,7 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AccountInformationRoute } from './accountInformation';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
-import { TeamMembersRoute } from './teamMembers';
+import { TeamMembersAndBusinessContactsRoute } from './teamMembersAndBusinessContacts';
 
 import './dashboard.scss';
 
@@ -18,7 +18,7 @@ export const DashboardMainRoute: PortalRoute = {
 };
 export const DashboardRoutes: PortalRoute[] = [
   AccountInformationRoute,
-  TeamMembersRoute,
+  TeamMembersAndBusinessContactsRoute,
   SharingPermissionsRoute,
   DashboardMainRoute,
 ];

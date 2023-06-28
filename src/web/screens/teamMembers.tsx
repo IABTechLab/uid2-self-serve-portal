@@ -2,12 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
 import { Suspense, useCallback, useState } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { Await, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
-import { GetAllUsers, ResendInvite } from '../services/userAccount';
+import { ResendInvite } from '../services/userAccount';
 import AddTeamMemberDialog from './addTeamMemberDialog';
-import { PortalRoute } from './routeUtils';
 
 import './teamMembers.scss';
 
@@ -66,54 +65,37 @@ function Loading() {
   return <div>Loading team data...</div>;
 }
 
-function TeamMembers() {
+export function TeamMembers() {
   const data = useLoaderData() as { users: User[] };
   const reloader = useRevalidator();
   const onAddTeamMember = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
   return (
-    <div className='portal-team'>
-      <h1>Team Members & Contacts</h1>
-      <p className='heading-details'>
-        View current team members below and add additional team members to access Unified ID Portal.
-      </p>
-      <h2>Team Members</h2>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={data.users}>
-          {(users: User[]) => (
-            <>
-              <table className='portal-team-table'>
-                <thead>
-                  <tr>
-                    <th className='name'>Name</th>
-                    <th className='email'>Email</th>
-                    <th className='action'>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((t) => (
-                    <TeamMember key={t.email} person={t} />
-                  ))}
-                </tbody>
-              </table>
-              <div className='add-team-member'>
-                <AddTeamMemberDialog onAddTeamMember={onAddTeamMember} />
-              </div>
-            </>
-          )}
-        </Await>
-      </Suspense>
-    </div>
+    <Suspense fallback={<Loading />}>
+      <Await resolve={data.users}>
+        {(users: User[]) => (
+          <>
+            <table className='portal-team-table'>
+              <thead>
+                <tr>
+                  <th className='name'>Name</th>
+                  <th className='email'>Email</th>
+                  <th className='action'>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((t) => (
+                  <TeamMember key={t.email} person={t} />
+                ))}
+              </tbody>
+            </table>
+            <div className='add-team-member'>
+              <AddTeamMemberDialog onAddTeamMember={onAddTeamMember} />
+            </div>
+          </>
+        )}
+      </Await>
+    </Suspense>
   );
 }
-
-export const TeamMembersRoute: PortalRoute = {
-  description: 'Team Members & Contacts',
-  element: <TeamMembers />,
-  path: '/dashboard/team',
-  loader: () => {
-    const users = GetAllUsers();
-    return defer({ users });
-  },
-};
