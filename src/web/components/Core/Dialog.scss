@@ -11,6 +11,7 @@
   align-items: center;
 
   .dialog-content {
+    max-width: 606px;
     box-sizing: border-box;
     background-color: var(--theme-background-content);
     border-radius: 5px;

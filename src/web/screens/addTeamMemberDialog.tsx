@@ -26,18 +26,18 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   };
 
   return (
-    <Dialog
-      triggerButton={
-        <button className='small-button' type='button'>
-          Add team member
-        </button>
-      }
-      title='Add Team Member'
-      closeButton='Cancel'
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <div className='addTeamMemberDialog'>
+    <div className='add-team-member-dialog'>
+      <Dialog
+        triggerButton={
+          <button className='small-button' type='button'>
+            Add team member
+          </button>
+        }
+        title='Add Team Member'
+        closeButton='Cancel'
+        open={open}
+        onOpenChange={setOpen}
+      >
         <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
           <TextInput
             inputName='firstName'
@@ -70,8 +70,8 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
             }))}
           />
         </Form>
-      </div>
-    </Dialog>
+      </Dialog>
+    </div>
   );
 }
 
