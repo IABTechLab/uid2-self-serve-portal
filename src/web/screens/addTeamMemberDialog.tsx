@@ -38,51 +38,49 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
       open={open}
       onOpenChange={setOpen}
     >
-      <div className='addTeamMemberDialog'>
-        <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
-          <TextInput
-            inputName='firstName'
-            label='First Name'
-            rules={{ required: 'Please specify first name.' }}
-          />
-          <TextInput
-            inputName='lastName'
-            label='Last Name'
-            rules={{ required: 'Please specify last name.' }}
-          />
-          <TextInput
-            inputName='email'
-            label='Email'
-            rules={{
-              required: 'Please specify email.',
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: 'Entered value does not match email format',
-              },
-            }}
-          />
-          <SelectInput
-            inputName='role'
-            label='Job Function'
-            rules={{ required: 'Please specify your job function.' }}
-            options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-              optionLabel: UserRole[key],
-              value: UserRole[key],
-            }))}
-          />
-          <CheckboxInput
-            inputName='agreement'
-            rules={{ validate: (value) => value || 'Please accept the agreement ' }}
-            options={[
-              {
-                optionLabel:
-                  'By checking this box I agree that I am responsible for managing this Team Member in this Platform.',
-                value: true,
-              },
-            ]}
-          />
-        </Form>
-      </div>
+      <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
+        <TextInput
+          inputName='firstName'
+          label='First Name'
+          rules={{ required: 'Please specify first name.' }}
+        />
+        <TextInput
+          inputName='lastName'
+          label='Last Name'
+          rules={{ required: 'Please specify last name.' }}
+        />
+        <TextInput
+          inputName='email'
+          label='Email'
+          rules={{
+            required: 'Please specify email.',
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: 'Entered value does not match email format',
+            },
+          }}
+        />
+        <SelectInput
+          inputName='role'
+          label='Job Function'
+          rules={{ required: 'Please specify your job function.' }}
+          options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
+            optionLabel: UserRole[key],
+            value: UserRole[key],
+          }))}
+        />
+        <CheckboxInput
+          inputName='agreement'
+          rules={{ validate: (value) => value || 'Please accept the agreement ' }}
+          options={[
+            {
+              optionLabel:
+                'By checking this box I agree that I am responsible for managing this Team Member in this Platform.',
+              value: true,
+            },
+          ]}
+        />
+      </Form>
     </Dialog>
   );
 }

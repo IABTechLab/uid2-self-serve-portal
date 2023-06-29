@@ -9,8 +9,6 @@ import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AddEmailContact, EmailContactForm } from '../services/participant';
 
-import './addTeamMemberDialog.scss';
-
 type AddBusinessContactProps = {
   onAddBusinessContact: () => void;
 };
@@ -37,35 +35,33 @@ function AddBusinessContactDialog({ onAddBusinessContact }: AddBusinessContactPr
       open={open}
       onOpenChange={setOpen}
     >
-      <div className='addTeamMemberDialog'>
-        <Form<EmailContactForm> onSubmit={onSubmit} submitButtonText='Save Email Contact'>
-          <TextInput
-            inputName='name'
-            label='Email Group Name'
-            rules={{ required: 'Please specify email group name.' }}
-          />
-          <TextInput
-            inputName='emailAlias'
-            label='Email Alias'
-            rules={{
-              required: 'Please specify email alias.',
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: 'Entered value does not match email format',
-              },
-            }}
-          />
-          <SelectInput
-            inputName='contactType'
-            label='Contact Type'
-            rules={{ required: 'Please specify contact type' }}
-            options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-              optionLabel: UserRole[key],
-              value: UserRole[key],
-            }))}
-          />
-        </Form>
-      </div>
+      <Form<EmailContactForm> onSubmit={onSubmit} submitButtonText='Save Email Contact'>
+        <TextInput
+          inputName='name'
+          label='Email Group Name'
+          rules={{ required: 'Please specify email group name.' }}
+        />
+        <TextInput
+          inputName='emailAlias'
+          label='Email Alias'
+          rules={{
+            required: 'Please specify email alias.',
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: 'Entered value does not match email format',
+            },
+          }}
+        />
+        <SelectInput
+          inputName='contactType'
+          label='Contact Type'
+          rules={{ required: 'Please specify contact type' }}
+          options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
+            optionLabel: UserRole[key],
+            value: UserRole[key],
+          }))}
+        />
+      </Form>
     </Dialog>
   );
 }
