@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, Suspense, useCallback } from 'react';
 import { Await, useLoaderData, useRevalidator } from 'react-router-dom';
 
-import { EmailContactResponse } from '../services/participant';
+import { BusinessContactResponse } from '../services/participant';
 import AddBusinessContactDialog from './addBusinessContactDialog';
 
 import './businessContacts.scss';
@@ -19,7 +19,7 @@ function NoEmailContact({ children }: { children: ReactNode }) {
   );
 }
 
-type EmailContactProps = { contact: EmailContactResponse };
+type EmailContactProps = { contact: BusinessContactResponse };
 
 function EmailContact({ contact }: EmailContactProps) {
   return (
@@ -40,7 +40,7 @@ function Loading() {
 }
 
 export function BusinessContacts() {
-  const data = useLoaderData() as { emailContacts: EmailContactResponse[] };
+  const data = useLoaderData() as { emailContacts: BusinessContactResponse[] };
   const reloader = useRevalidator();
   const onAddBusinessContact = useCallback(() => {
     reloader.revalidate();
@@ -48,7 +48,7 @@ export function BusinessContacts() {
   return (
     <Suspense fallback={<Loading />}>
       <Await resolve={data.emailContacts}>
-        {(emailContacts: EmailContactResponse[]) => (
+        {(emailContacts: BusinessContactResponse[]) => (
           <>
             <table className='business-contacts-table'>
               <thead>

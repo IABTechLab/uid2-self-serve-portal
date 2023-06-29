@@ -1,24 +1,22 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import { UserRole } from '../../api/entities/User';
+import { ContactType } from '../../api/entities/BusinessContact';
 import { Dialog } from '../components/Core/Dialog';
 import { Form } from '../components/Core/Form';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
-import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { AddEmailContact, EmailContactForm } from '../services/participant';
+import { AddEmailContact, BusinessContactForm } from '../services/participant';
 
 type AddBusinessContactProps = {
   onAddBusinessContact: () => void;
 };
 
 function AddBusinessContactDialog({ onAddBusinessContact }: AddBusinessContactProps) {
-  const { participant } = useContext(ParticipantContext);
   const [open, setOpen] = useState(false);
 
-  const onSubmit: SubmitHandler<EmailContactForm> = async (formData) => {
-    await AddEmailContact(formData, participant!.id);
+  const onSubmit: SubmitHandler<BusinessContactForm> = async (formData) => {
+    await AddEmailContact(formData);
     setOpen(false);
     onAddBusinessContact();
   };
@@ -35,7 +33,7 @@ function AddBusinessContactDialog({ onAddBusinessContact }: AddBusinessContactPr
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<EmailContactForm> onSubmit={onSubmit} submitButtonText='Save Email Contact'>
+      <Form<BusinessContactForm> onSubmit={onSubmit} submitButtonText='Save Email Contact'>
         <TextInput
           inputName='name'
           label='Email Group Name'
@@ -56,9 +54,9 @@ function AddBusinessContactDialog({ onAddBusinessContact }: AddBusinessContactPr
           inputName='contactType'
           label='Contact Type'
           rules={{ required: 'Please specify contact type' }}
-          options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-            optionLabel: UserRole[key],
-            value: UserRole[key],
+          options={(Object.keys(ContactType) as Array<keyof typeof ContactType>).map((key) => ({
+            optionLabel: ContactType[key],
+            value: ContactType[key],
           }))}
         />
       </Form>

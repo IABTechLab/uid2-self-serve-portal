@@ -2,6 +2,7 @@ import axios from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
+import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import {
   ParticipantCreationPartial,
   ParticipantSchema,
@@ -146,22 +147,17 @@ export async function DeleteSharingParticipants(
   }
 }
 
-export type EmailContactResponse = {
-  id: number;
+export type BusinessContactResponse = z.infer<typeof BusinessContactSchema>;
+
+export type BusinessContactForm = {
   name: string;
   emailAlias: string;
   contactType: string;
 };
 
-export type EmailContactForm = {
-  name: string;
-  emailAlias: string;
-  contactType: string;
-};
-
-export async function AddEmailContact(formData: EmailContactForm, participantId: number) {
+export async function AddEmailContact(formData: BusinessContactForm) {
   try {
-    return await axios.post(`/participants/${participantId}/emailContacts`, formData);
+    return await axios.post(`/participants/current/businessContacts`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not invite participants');
   }
@@ -169,24 +165,10 @@ export async function AddEmailContact(formData: EmailContactForm, participantId:
 
 export async function GetEmailContacts() {
   try {
-    // const result = await axios.get<EmailContactResponse[]>(
-    //   `/participants/current/emailContacts`
-    // );
-    // return [
-    //   {
-    //     id: 1,
-    //     name: 'Business Group',
-    //     emailAlias: 'business@shredders.com',
-    //     contactType: 'Business',
-    //   },
-    //   {
-    //     id: 2,
-    //     name: 'Dev Squad',
-    //     emailAlias: 'developers@shredders.com',
-    //     contactType: 'Technical',
-    //   },
-    // ];
-    return [];
+    const result = await axios.get<BusinessContactResponse[]>(
+      `/participants/current/businessContacts`
+    );
+    return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load sharing participants');
   }
