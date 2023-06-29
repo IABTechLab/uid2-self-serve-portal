@@ -54,8 +54,12 @@ function TeamMember({ person }: TeamMemberProps) {
             {reinviteState === InviteState.error && 'Try again later'}
           </button>
         )}
-        <FontAwesomeIcon icon='pencil' />
-        <FontAwesomeIcon icon='trash-can' />
+        <button className='icon-button' aria-label='edit' type='button'>
+          <FontAwesomeIcon icon='pencil' />
+        </button>
+        <button className='icon-button' aria-label='delete' type='button'>
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
       </td>
     </tr>
   );

@@ -159,7 +159,7 @@ export async function AddEmailContact(formData: BusinessContactForm) {
   try {
     return await axios.post(`/participants/current/businessContacts`, formData);
   } catch (e: unknown) {
-    throw backendError(e, 'Could not invite participants');
+    throw backendError(e, 'Could not add email contact');
   }
 }
 
@@ -170,6 +170,14 @@ export async function GetEmailContacts() {
     );
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not load sharing participants');
+    throw backendError(e, 'Could not load email contact');
+  }
+}
+
+export async function RemoveEmailContact(contactId: number) {
+  try {
+    await axios.delete(`/participants/current/businessContacts/${contactId}`);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not delete email contact');
   }
 }

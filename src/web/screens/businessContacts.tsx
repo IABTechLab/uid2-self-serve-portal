@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, Suspense, useCallback } from 'react';
 import { Await, useLoaderData, useRevalidator } from 'react-router-dom';
 
-import { BusinessContactResponse } from '../services/participant';
+import { BusinessContactResponse, RemoveEmailContact } from '../services/participant';
 import AddBusinessContactDialog from './addBusinessContactDialog';
 
 import './businessContacts.scss';
@@ -19,17 +19,31 @@ function NoEmailContact({ children }: { children: ReactNode }) {
   );
 }
 
-type EmailContactProps = { contact: BusinessContactResponse };
+type EmailContactProps = { contact: BusinessContactResponse; onBusinessContactUpdated: () => void };
 
-function EmailContact({ contact }: EmailContactProps) {
+function EmailContact({ contact, onBusinessContactUpdated }: EmailContactProps) {
+  const removeEmailContact = async () => {
+    await RemoveEmailContact(contact.id);
+    onBusinessContactUpdated();
+  };
+
   return (
     <tr>
       <td>{contact.name}</td>
       <td>{contact.emailAlias}</td>
       <td>{contact.contactType}</td>
       <td className='action'>
-        <FontAwesomeIcon icon='pencil' />
-        <FontAwesomeIcon icon='trash-can' />
+        <button className='icon-button' aria-label='edit' type='button'>
+          <FontAwesomeIcon icon='pencil' />
+        </button>
+        <button
+          className='icon-button'
+          aria-label='delete'
+          type='button'
+          onClick={removeEmailContact}
+        >
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
       </td>
     </tr>
   );
@@ -42,7 +56,7 @@ function Loading() {
 export function BusinessContacts() {
   const data = useLoaderData() as { emailContacts: BusinessContactResponse[] };
   const reloader = useRevalidator();
-  const onAddBusinessContact = useCallback(() => {
+  const onBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
   return (
@@ -61,18 +75,22 @@ export function BusinessContacts() {
               </thead>
               <tbody>
                 {emailContacts.map((e) => (
-                  <EmailContact key={e.id} contact={e} />
+                  <EmailContact
+                    key={e.id}
+                    contact={e}
+                    onBusinessContactUpdated={onBusinessContactUpdated}
+                  />
                 ))}
               </tbody>
             </table>
             {!emailContacts.length && (
               <NoEmailContact>
-                <AddBusinessContactDialog onAddBusinessContact={onAddBusinessContact} />
+                <AddBusinessContactDialog onAddBusinessContact={onBusinessContactUpdated} />
               </NoEmailContact>
             )}
             {!!emailContacts.length && (
               <div className='add-new-item'>
-                <AddBusinessContactDialog onAddBusinessContact={onAddBusinessContact} />
+                <AddBusinessContactDialog onAddBusinessContact={onBusinessContactUpdated} />
               </div>
             )}
           </>
