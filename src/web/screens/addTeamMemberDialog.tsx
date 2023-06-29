@@ -9,8 +9,6 @@ import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
 
-import './addTeamMemberDialog.scss';
-
 type AddTeamMemberProps = {
   onAddTeamMember: () => void;
 };
@@ -26,52 +24,50 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   };
 
   return (
-    <div className='add-team-member-dialog'>
-      <Dialog
-        triggerButton={
-          <button className='small-button' type='button'>
-            Add team member
-          </button>
-        }
-        title='Add Team Member'
-        closeButton='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-      >
-        <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
-          <TextInput
-            inputName='firstName'
-            label='First Name'
-            rules={{ required: 'Please specify first name.' }}
-          />
-          <TextInput
-            inputName='lastName'
-            label='Last Name'
-            rules={{ required: 'Please specify last name.' }}
-          />
-          <TextInput
-            inputName='email'
-            label='Email'
-            rules={{
-              required: 'Please specify email.',
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: 'Entered value does not match email format',
-              },
-            }}
-          />
-          <SelectInput
-            inputName='role'
-            label='Job Function'
-            rules={{ required: 'Please specify your job function.' }}
-            options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-              optionLabel: UserRole[key],
-              value: UserRole[key],
-            }))}
-          />
-        </Form>
-      </Dialog>
-    </div>
+    <Dialog
+      triggerButton={
+        <button className='small-button' type='button'>
+          Add team member
+        </button>
+      }
+      title='Add Team Member'
+      closeButton='Cancel'
+      open={open}
+      onOpenChange={setOpen}
+    >
+      <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
+        <TextInput
+          inputName='firstName'
+          label='First Name'
+          rules={{ required: 'Please specify first name.' }}
+        />
+        <TextInput
+          inputName='lastName'
+          label='Last Name'
+          rules={{ required: 'Please specify last name.' }}
+        />
+        <TextInput
+          inputName='email'
+          label='Email'
+          rules={{
+            required: 'Please specify email.',
+            pattern: {
+              value: /\S+@\S+\.\S+/,
+              message: 'Entered value does not match email format',
+            },
+          }}
+        />
+        <SelectInput
+          inputName='role'
+          label='Job Function'
+          rules={{ required: 'Please specify your job function.' }}
+          options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
+            optionLabel: UserRole[key],
+            value: UserRole[key],
+          }))}
+        />
+      </Form>
+    </Dialog>
   );
 }
 

@@ -13,6 +13,7 @@ export type DialogProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   fullScreen?: boolean;
+  className?: string;
 };
 export function Dialog({
   triggerButton,
@@ -22,6 +23,7 @@ export function Dialog({
   open,
   onOpenChange,
   fullScreen,
+  className,
 }: DialogProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -32,7 +34,7 @@ export function Dialog({
         // To prevent dialog closed from user clicking outside of the dialog
         onInteractOutside={(fireEvent) => fireEvent.preventDefault()}
       >
-        <div className={clsx({ fullScreen }, 'dialog-content')}>
+        <div className={clsx({ fullScreen }, 'dialog-content', className)}>
           {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
           {children}
           {closeButton && (
