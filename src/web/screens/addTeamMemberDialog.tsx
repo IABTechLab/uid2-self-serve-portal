@@ -30,7 +30,7 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
     <Dialog
       triggerButton={
         <button className='small-button' type='button'>
-          Add team member
+          Add Team Member
         </button>
       }
       title='Add Team Member'

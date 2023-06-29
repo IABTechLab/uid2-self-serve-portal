@@ -90,7 +90,7 @@ export function TeamMembers() {
                 ))}
               </tbody>
             </table>
-            <div className='add-team-member'>
+            <div className='add-new-item'>
               <AddTeamMemberDialog onAddTeamMember={onAddTeamMember} />
             </div>
           </>
