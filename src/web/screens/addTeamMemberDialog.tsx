@@ -10,8 +10,6 @@ import { TextInput } from '../components/Input/TextInput';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
 
-import './addTeamMemberDialog.scss';
-
 type AddTeamMemberProps = {
   onAddTeamMember: () => void;
 };
