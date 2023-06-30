@@ -6,34 +6,42 @@ import { Dialog } from '../components/Core/Dialog';
 import { Form } from '../components/Core/Form';
 import { SelectInput } from '../components/Input/SelectInput';
 import { TextInput } from '../components/Input/TextInput';
-import { AddEmailContact, BusinessContactForm } from '../services/participant';
+import { BusinessContactForm, BusinessContactResponse } from '../services/participant';
 
-type AddBusinessContactProps = {
-  onAddBusinessContact: () => void;
+type BusinessContactDialogProps = {
+  onFormSubmit: (formData: BusinessContactForm) => Promise<void>;
+  callback: () => void;
+  triggerButton: JSX.Element;
+  contact?: BusinessContactResponse;
 };
 
-function AddBusinessContactDialog({ onAddBusinessContact }: AddBusinessContactProps) {
+function BusinessContactDialog({
+  onFormSubmit,
+  callback,
+  triggerButton,
+  contact,
+}: BusinessContactDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<BusinessContactForm> = async (formData) => {
-    await AddEmailContact(formData);
+    await onFormSubmit(formData);
     setOpen(false);
-    onAddBusinessContact();
+    callback();
   };
 
   return (
     <Dialog
-      triggerButton={
-        <button className='small-button' type='button'>
-          Add Email Contact
-        </button>
-      }
-      title='Add Email Contact'
+      triggerButton={triggerButton}
+      title={`${contact ? 'Edit' : 'Add'} Email Contact`}
       closeButton='Cancel'
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<BusinessContactForm> onSubmit={onSubmit} submitButtonText='Save Email Contact'>
+      <Form<BusinessContactForm>
+        onSubmit={onSubmit}
+        submitButtonText='Save Email Contact'
+        defaultValues={contact as BusinessContactForm}
+      >
         <TextInput
           inputName='name'
           label='Email Group Name'
@@ -64,4 +72,4 @@ function AddBusinessContactDialog({ onAddBusinessContact }: AddBusinessContactPr
   );
 }
 
-export default AddBusinessContactDialog;
+export default BusinessContactDialog;

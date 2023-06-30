@@ -57,7 +57,7 @@
     td.action {
       display: flex;
 
-      button {
+      .icon-button {
         &.clickable {
           cursor: pointer;
           color: var(--theme-action);

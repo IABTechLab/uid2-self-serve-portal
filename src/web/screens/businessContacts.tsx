@@ -2,8 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, Suspense, useCallback } from 'react';
 import { Await, useLoaderData, useRevalidator } from 'react-router-dom';
 
-import { BusinessContactResponse, RemoveEmailContact } from '../services/participant';
-import AddBusinessContactDialog from './addBusinessContactDialog';
+import {
+  AddEmailContact,
+  BusinessContactForm,
+  BusinessContactResponse,
+  RemoveEmailContact,
+  UpdateEmailContact,
+} from '../services/participant';
+import BusinessContactDialog from './businessContactDialog';
 
 import './businessContacts.scss';
 
@@ -27,15 +33,26 @@ function EmailContact({ contact, onBusinessContactUpdated }: EmailContactProps) 
     onBusinessContactUpdated();
   };
 
+  const updateEmailContact = async (formData: BusinessContactForm) => {
+    await UpdateEmailContact(contact.id, formData);
+  };
+
   return (
     <tr>
       <td>{contact.name}</td>
       <td>{contact.emailAlias}</td>
       <td>{contact.contactType}</td>
       <td className='action'>
-        <button className='icon-button' aria-label='edit' type='button'>
-          <FontAwesomeIcon icon='pencil' />
-        </button>
+        <BusinessContactDialog
+          onFormSubmit={updateEmailContact}
+          callback={onBusinessContactUpdated}
+          contact={contact}
+          triggerButton={
+            <button className='icon-button' aria-label='edit' type='button'>
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+          }
+        />
         <button
           className='icon-button'
           aria-label='delete'
@@ -59,6 +76,12 @@ export function BusinessContacts() {
   const onBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
+  const addEmailContactButton = (
+    <button className='small-button' type='button'>
+      Add Email Contact
+    </button>
+  );
+
   return (
     <Suspense fallback={<Loading />}>
       <Await resolve={data.emailContacts}>
@@ -85,12 +108,20 @@ export function BusinessContacts() {
             </table>
             {!emailContacts.length && (
               <NoEmailContact>
-                <AddBusinessContactDialog onAddBusinessContact={onBusinessContactUpdated} />
+                <BusinessContactDialog
+                  onFormSubmit={AddEmailContact}
+                  callback={onBusinessContactUpdated}
+                  triggerButton={addEmailContactButton}
+                />
               </NoEmailContact>
             )}
             {!!emailContacts.length && (
               <div className='add-new-item'>
-                <AddBusinessContactDialog onAddBusinessContact={onBusinessContactUpdated} />
+                <BusinessContactDialog
+                  onFormSubmit={AddEmailContact}
+                  callback={onBusinessContactUpdated}
+                  triggerButton={addEmailContactButton}
+                />
               </div>
             )}
           </>

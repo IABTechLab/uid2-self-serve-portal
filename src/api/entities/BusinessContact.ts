@@ -37,7 +37,7 @@ export const BusinessContactSchema = z.object({
   participantId: z.number(),
 });
 
-export const BusinessContactsCreation = BusinessContactSchema.omit({
+export const BusinessContactsDTO = BusinessContactSchema.omit({
   id: true,
   participantId: true,
 });

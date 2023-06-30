@@ -157,7 +157,7 @@ export type BusinessContactForm = {
 
 export async function AddEmailContact(formData: BusinessContactForm) {
   try {
-    return await axios.post(`/participants/current/businessContacts`, formData);
+    await axios.post(`/participants/current/businessContacts`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not add email contact');
   }
@@ -179,5 +179,13 @@ export async function RemoveEmailContact(contactId: number) {
     await axios.delete(`/participants/current/businessContacts/${contactId}`);
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete email contact');
+  }
+}
+
+export async function UpdateEmailContact(contactId: number, formData: BusinessContactForm) {
+  try {
+    await axios.put(`/participants/current/businessContacts/${contactId}`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update email contact');
   }
 }
