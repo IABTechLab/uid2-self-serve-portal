@@ -1,7 +1,12 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-import { Participant, ParticipantCreationPartial, ParticipantSchema } from './entities/Participant';
+import {
+  Participant,
+  ParticipantCreationPartial,
+  ParticipantSchema,
+  ParticipantStatus,
+} from './entities/Participant';
 import { SharingAction } from './entities/SharingAuditTrail';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
@@ -58,7 +63,10 @@ participantsRouter.get('/available', async (_req, res) => {
 
 participantsRouter.post('/', async (req, res) => {
   try {
-    const data = ParticipantCreationPartial.parse(req.body);
+    const data = {
+      ...ParticipantCreationPartial.parse(req.body),
+      status: ParticipantStatus.AwaitingApproval,
+    };
     // insertGraphAndFetch will implicitly create a transaction
     const newParticipant = await Participant.query().insertGraphAndFetch([data], {
       relate: true,
