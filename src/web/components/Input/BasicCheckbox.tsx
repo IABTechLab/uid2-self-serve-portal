@@ -1,8 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import React from 'react';
 import {
-  Controller,
   FieldPath,
   FieldValues,
   useController,
@@ -20,7 +18,6 @@ export function StyledCheckbox(props: Checkbox.CheckboxProps) {
     </Checkbox.CheckboxIndicator>
   );
   const rootProps = { ...props, className };
-  console.log('Styled props', rootProps);
   return (
     <Checkbox.Root
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -39,11 +36,7 @@ export function FormStyledCheckbox<
     UseControllerProps<TFieldValues, TFieldName> &
     Omit<UseFormRegisterReturn<TFieldName>, 'ref'>
 ) {
-  const {
-    field,
-    fieldState: { error },
-  } = useController<TFieldValues, TFieldName>({ ...props });
-  console.log('Form styled props', props);
+  const { field } = useController<TFieldValues, TFieldName>({ ...props });
   const handleChange = (checked: Checkbox.CheckedState) => {
     field.onChange(checked);
     if (props.onCheckedChange) props.onCheckedChange(checked);

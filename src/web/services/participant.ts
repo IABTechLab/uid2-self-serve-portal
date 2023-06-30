@@ -2,11 +2,7 @@ import axios, { AxiosError, isAxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
-import {
-  ParticipantCreationPartial,
-  ParticipantSchema,
-  ParticipantStatus,
-} from '../../api/entities/Participant';
+import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
