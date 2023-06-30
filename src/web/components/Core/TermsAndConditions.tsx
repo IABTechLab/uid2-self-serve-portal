@@ -234,14 +234,12 @@ export function TermsAndConditions({ onAccept, onCancel }: TermsAndConditionsPro
           conducted electronically.
         </p>
       </div>
-      <div className='terms-actions'>
-        <button type='submit' className='primary-button' onClick={onAccept}>
-          Accept Terms & Conditions
-        </button>
-        <button type='button' className='text-button' onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
+      <button type='button' className='primary-button' onClick={onAccept}>
+        Accept Terms & Conditions
+      </button>
+      <button type='button' className='text-button' onClick={onCancel}>
+        Cancel
+      </button>
     </div>
   );
 }
