@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { useState } from 'react';
+import { UIEvent, useCallback, useState } from 'react';
 
 import './TermsAndConditions.scss';
 
@@ -14,9 +14,15 @@ export type AcceptTermForm = {
 };
 
 export function TermsAndConditions({ onAccept, onCancel }: TermsAndConditionsProps) {
+  const [scrolledToBottom, setScrolledToBottom] = useState(false);
+  const handleScroll = useCallback((event: UIEvent<HTMLDivElement>) => {
+    const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
+    const scrollPos = scrollHeight - scrollTop - clientHeight;
+    if (scrollPos === 0) setScrolledToBottom(true);
+  }, []);
   return (
     <div className='terms-and-conditions'>
-      <div className='terms-container'>
+      <div className='terms-container' onScroll={handleScroll}>
         <h1>UID2 SHARING PORTAL TERMS OF SERVICE</h1>
         <p>
           These Terms of Service (“<span className='terms-bold'>Terms</span>”) apply to your use of
@@ -234,7 +240,12 @@ export function TermsAndConditions({ onAccept, onCancel }: TermsAndConditionsPro
           conducted electronically.
         </p>
       </div>
-      <button type='button' className='primary-button' onClick={onAccept}>
+      <button
+        type='button'
+        className='primary-button'
+        onClick={onAccept}
+        disabled={!scrolledToBottom}
+      >
         Accept Terms & Conditions
       </button>
       <button type='button' className='text-button' onClick={onCancel}>
