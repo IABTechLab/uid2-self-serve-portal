@@ -1,0 +1,30 @@
+.terms-and-conditions {
+  .terms-container {
+    border: 1px solid var(--theme-border);
+    border-radius: 5px;
+    padding: 16px;
+    height: 468px;
+    overflow: scroll;
+    margin-bottom: 22px;
+    max-width: 910px;
+    font-size: 0.8125rem;
+    line-height: 1.8;
+
+    h1 {
+      text-align: center;
+    }
+
+    td {
+      vertical-align: top;
+    }
+
+    .terms-bold {
+      font-weight: 600;
+    }
+
+    .form-footer {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
