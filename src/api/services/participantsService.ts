@@ -20,7 +20,6 @@ export const sendNewParticipantEmail = async (
     participantType: participantTypes.map((pt) => pt.typeName).join(', '),
     requestor: `${requestor.firstName} ${requestor.lastName}`,
     requestorEmail: requestor.email,
-    participantLocation: requestor.location,
     jobFunction: requestor.role,
     link: SSP_WEB_BASE_URL,
   };
