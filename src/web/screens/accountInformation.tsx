@@ -16,7 +16,7 @@ function AccountInformationFooter() {
     <div className='dashboard-footer'>
       <div>
         <button className='small-button primary-button' type='button' onClick={onClick}>
-          Next
+          Continue
         </button>
       </div>
       <p>
