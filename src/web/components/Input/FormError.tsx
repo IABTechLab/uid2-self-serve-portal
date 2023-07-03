@@ -12,6 +12,20 @@ export function getGlobalErrorsAsArray(root: FieldErrors['root']) {
   }));
 }
 
-export function ErrorDiv({ display, children }: PropsWithChildren<{ display: boolean }>) {
+export function FormError({ display, children }: PropsWithChildren<{ display: boolean }>) {
   return display ? <div className='form-error'>{children}</div> : null;
+}
+
+type RootFormErrorsProps = {
+  fieldErrors: FieldErrors;
+};
+export function RootFormErrors({ fieldErrors, children }: PropsWithChildren<RootFormErrorsProps>) {
+  return (
+    <FormError display={!!fieldErrors.root}>
+      {children}
+      {getGlobalErrorsAsArray(fieldErrors.root).map((err) => (
+        <div key={err.name}>{err.message}</div>
+      ))}
+    </FormError>
+  );
 }

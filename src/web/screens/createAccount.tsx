@@ -10,10 +10,10 @@ import { Dialog } from '../components/Core/Dialog';
 import { withoutRef } from '../components/Core/Form';
 import { Loading } from '../components/Core/Loading';
 import { TermsAndConditions } from '../components/Core/TermsAndConditions';
-import { FormStyledCheckbox } from '../components/Input/BasicCheckbox';
 import { CheckboxInput } from '../components/Input/CheckboxInput';
-import { ErrorDiv, getGlobalErrorsAsArray } from '../components/Input/ErrorDiv';
+import { FormError, RootFormErrors } from '../components/Input/FormError';
 import { SelectInput } from '../components/Input/SelectInput';
+import { FormStyledCheckbox } from '../components/Input/StyledCheckbox';
 import { TextInput } from '../components/Input/TextInput';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { CreateParticipant, CreateParticipantForm } from '../services/participant';
@@ -76,13 +76,10 @@ function CreateAccount() {
             {(resolvedParticipantTypes: ParticipantType[]) => (
               <FormProvider {...formMethods}>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                  <ErrorDiv display={!!errors.root}>
+                  <RootFormErrors fieldErrors={errors}>
                     Something went wrong creating your account. Please review the following error
                     information, and if the problem persists contact support.
-                    {getGlobalErrorsAsArray(errors.root).map((err) => (
-                      <div key={err.name}>{err.message}</div>
-                    ))}
-                  </ErrorDiv>
+                  </RootFormErrors>
                   <TextInput
                     inputName='companyName'
                     label='Participant Name'
@@ -129,10 +126,9 @@ function CreateAccount() {
                       />
                     </Dialog>
                   </div>
-
-                  <ErrorDiv display={!!errors.agreeToTerms}>
+                  <FormError display={!!errors.agreeToTerms}>
                     Please click the link above to accept the terms and conditions.
-                  </ErrorDiv>
+                  </FormError>
                   <div className='privacy-section'>
                     View our{' '}
                     <a
