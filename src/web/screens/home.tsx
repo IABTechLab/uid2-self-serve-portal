@@ -12,10 +12,12 @@ function SharingPermissionCard() {
       <h2>Your Sharing Permissions</h2>
       <span>Participants you&apos;re sharing with to decrypt your encrypted UID2s. </span>
       <div className='permissions-count-section'>
-        <div className='permissions-count'>105</div>
-        <span>TOTAL PERMISSIONS</span>
+        <div>
+          <div className='permissions-count'>105</div>
+          <span>TOTAL PERMISSIONS</span>
+        </div>
+        <div className='divider' />
       </div>
-
       <Link to='/dashboard/sharing'>
         <button className='primary-button small-button' type='button'>
           View & Add Sharing Permissions
