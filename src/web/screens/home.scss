@@ -1,0 +1,57 @@
+.dashboard-cards-container {
+  display: flex;
+  gap: 22px;
+  margin-top: 28px;
+
+  & > div {
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    width: 487px;
+    padding: 30px;
+    box-sizing: border-box;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin: 0 0 8px 0;
+  }
+}
+
+.sharing-permission-card {
+  box-shadow: 0 4px 8px var(--theme-box-shadow);
+
+  .permissions-count-section {
+    margin: 20px 0;
+
+    .permissions-count {
+      font-size: 3.75rem;
+    }
+
+    span {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.document-card {
+  display: flex;
+
+  img {
+    height: 49.5px;
+    margin-right: 23.5px;
+  }
+
+  a:first-of-type {
+    margin-top: 0.5rem;
+  }
+
+  a {
+    display: block;
+    color: var(--theme-action);
+    font-size: 0.9375rem;
+    line-height: 2;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
