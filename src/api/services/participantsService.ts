@@ -1,3 +1,4 @@
+import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { Participant, ParticipantCreationPartial } from '../entities/Participant';
@@ -7,6 +8,11 @@ import { getSharingList, SharingListResponse, updateSharingList } from './adminS
 import { findApproversByType } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
+import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
+
+export interface ParticipantRequest extends Request {
+  participant?: Participant;
+}
 
 export const sendNewParticipantEmail = async (
   newParticipant: z.infer<typeof ParticipantCreationPartial>,
@@ -74,4 +80,45 @@ export const deleteSharingParticipants = async (
     newSharingList
   );
   return fetchSharingParticipants(response);
+};
+
+const idParser = z.object({
+  participantId: z.coerce.number(),
+});
+
+export const hasParticipantAccess = async (
+  req: ParticipantRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { participantId } = idParser.parse(req.params);
+  const participant = await Participant.query().findById(participantId);
+  if (!participant) {
+    return res.status(404).send([{ message: 'The participant cannot be found.' }]);
+  }
+
+  if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, participantId))) {
+    return res.status(403).send([{ message: 'You do not have permission to update participant.' }]);
+  }
+
+  req.participant = participant;
+  return next();
+};
+
+export const enrichCurrentParticipant = async (
+  req: ParticipantRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userEmail = req.auth?.payload?.email as string;
+  const user = await findUserByEmail(userEmail);
+  if (!user) {
+    return res.status(404).send([{ message: 'The user cannot be found.' }]);
+  }
+  const participant = await Participant.query().findById(user.participantId);
+  if (!participant) {
+    return res.status(404).send([{ message: 'The participant cannot be found.' }]);
+  }
+  req.participant = participant;
+  return next();
 };
