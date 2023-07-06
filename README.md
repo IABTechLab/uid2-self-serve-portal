@@ -39,7 +39,7 @@ If you get errors like `Login failed for user 'sa'. Reason: Failed to open the e
 docker compose restart keycloak
 ```
 
-Keep in mind that the first time you start the stack, mssql will take ~5 minutes to aunch, so you might need to be patient.
+Keep in mind that the first time you start the stack, mssql will take ~5 minutes to launch, so you might need to be patient.
 
 ## Database
 
@@ -93,8 +93,8 @@ Focus on testing functionality, not implementation. For example, if you have a b
 
 ## Keycloak setup
 
-- Start database and Keycloak serve by run `docker compose up -d`, Keycloak will be up and running, and the realm will be configured
-- To access [keycloak admin console](http://localhost:18080/admin/), you can find username and password in the `docker-compose.yml`
+- Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
+- To access [keycloak admin console](http://localhost:18080/admin/), you can find the username and password in the `docker-compose.yml`
 - If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console
 
 You can obtain the `SSP_KK_SECRET` by generating a new client secret in the Keycloak admin portal. Here's how you can do it:
@@ -186,6 +186,9 @@ This action should be triggered after adding or updating any templates and befor
 
 In the project directory, you can run:
 
+### `npm install`
+Installs the dependencies for the project. You will need to run this before running any of the following commands.
+
 ### `npm run dev`
 
 Starts both the API and the React front-end side-by-side. This is probably the best way to get up and running in dev mode.
@@ -214,3 +217,49 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed! Note that builds for deployment are not made on developer machines - those happen in our CI pipeline.
+
+## Setting up UI Dev Environment
+
+1. Set up Docker, as described above: [Docker](README.md#docker)
+2. Run the following to install dependencies:
+    ```
+    npm install
+    ```
+3. Run the following to start the API and React front-end:
+
+    ```
+    npm run dev
+    ``` 
+    Successfully running this will result in the self-serve-portal opening in the browser.
+4. Run the following to build the database schema:
+
+    ```
+    npm run knex:migrate:latest
+    ``` 
+    
+5. Run the following to populate test data:
+
+    ```
+    npm run knex:seed:run
+    ``` 
+    
+6. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
+7. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
+8. Open the email and Click `Verify Email`
+9. Fill in the form however you want and submit the form
+10. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml)
+11. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
+12. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e. 
+
+```
+declare @email as nvarchar(256) = '<Enter your email here>'
+
+update p
+set status = 'approved'
+from dbo.participants p
+left join dbo.users u
+	on p.id = u.participantId
+where u.email = @email
+```
+
+
