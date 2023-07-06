@@ -226,7 +226,6 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
     npm install
     ```
 3. Run the following to start the API and React front-end:
-
     ```
     npm run dev
     ``` 
@@ -236,13 +235,11 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
     ```
     npm run knex:migrate:latest
     ``` 
-    
 5. Run the following to populate test data:
 
     ```
     npm run knex:seed:run
     ``` 
-    
 6. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
 7. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
 8. Open the email and Click `Verify Email`
