@@ -8,10 +8,9 @@ import { getKcAdminClient } from './keycloakAdminClient';
 import { createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
+  checkParticipantId,
   deleteSharingParticipants,
-  enrichCurrentParticipant,
   getSharingParticipants,
-  hasParticipantAccess,
   ParticipantRequest,
   sendNewParticipantEmail,
 } from './services/participantsService';
@@ -49,6 +48,8 @@ participantsRouter.post('/', async (req, res) => {
   }
 });
 
+participantsRouter.use('/:participantId', checkParticipantId);
+
 const invitationParser = z.object({
   firstName: z.string(),
   lastName: z.string(),
@@ -58,7 +59,6 @@ const invitationParser = z.object({
 
 participantsRouter.post(
   '/:participantId/invite',
-  hasParticipantAccess,
   async (req: ParticipantRequest, res: Response) => {
     try {
       const { participant } = req;
@@ -87,28 +87,23 @@ const participantParser = ParticipantSchema.pick({
   location: true,
 });
 
-participantsRouter.put(
-  '/:participantId',
-  hasParticipantAccess,
-  async (req: ParticipantRequest, res: Response) => {
-    try {
-      const { location } = participantParser.parse(req.body);
+participantsRouter.put('/:participantId', async (req: ParticipantRequest, res: Response) => {
+  try {
+    const { location } = participantParser.parse(req.body);
 
-      const { participant } = req;
-      await participant!.$query().patch({ location });
-      return res.status(200).json(participant);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).send(err.issues);
-      }
-      throw err;
+    const { participant } = req;
+    await participant!.$query().patch({ location });
+    return res.status(200).json(participant);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).send(err.issues);
     }
+    throw err;
   }
-);
+});
 
 participantsRouter.get(
   '/:participantId/sharingPermission',
-  hasParticipantAccess,
   async (req: ParticipantRequest, res: Response) => {
     const { participant } = req;
     if (!participant?.siteId) {
@@ -125,7 +120,6 @@ const sharingRelationParser = z.object({
 
 participantsRouter.post(
   '/:participantId/sharingPermission/add',
-  hasParticipantAccess,
   async (req: ParticipantRequest, res: Response) => {
     const { participant } = req;
     if (!participant?.siteId) {
@@ -157,7 +151,6 @@ const removeSharingRelationParser = z.object({
 
 participantsRouter.post(
   '/:participantId/sharingPermission/delete',
-  hasParticipantAccess,
   async (req: ParticipantRequest, res: Response) => {
     const { participant } = req;
     if (!participant?.siteId) {
@@ -183,6 +176,3 @@ participantsRouter.post(
     return res.status(200).json(sharingParticipants);
   }
 );
-
-export const currentParticipantRouter = express.Router();
-participantsRouter.use('/current', enrichCurrentParticipant, currentParticipantRouter);
