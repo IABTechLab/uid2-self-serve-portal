@@ -184,5 +184,5 @@ participantsRouter.post(
   }
 );
 
-const currentParticipantRoute = express.Router();
-participantsRouter.use('/current', enrichCurrentParticipant, currentParticipantRoute);
+export const currentParticipantRouter = express.Router();
+participantsRouter.use('/current', enrichCurrentParticipant, currentParticipantRouter);

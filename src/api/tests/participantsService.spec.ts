@@ -1,15 +1,15 @@
 import request, { Request } from 'supertest';
 
-import { participantsRouter } from '../participantsRouter';
+import { currentParticipantRouter } from '../participantsRouter';
 import { ParticipantRequest } from '../services/participantsService';
 import { mockParticipant, mockUser } from './queryMocks';
 import useTestServer, { api } from './utils';
 
-describe.only('enrichCurrentParticipant middleware', () => {
+describe('enrichCurrentParticipant middleware', () => {
   const withToken = useTestServer();
 
   beforeEach(() => {
-    participantsRouter.use((req: ParticipantRequest, res) => {
+    currentParticipantRouter.use((req: ParticipantRequest, res) => {
       res.status(200).json(req.participant);
     });
   });
