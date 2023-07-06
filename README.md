@@ -231,12 +231,10 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
     ``` 
     Successfully running this will result in the self-serve-portal opening in the browser.
 4. Run the following to build the database schema:
-
     ```
     npm run knex:migrate:latest
     ``` 
 5. Run the following to populate test data:
-
     ```
     npm run knex:seed:run
     ``` 
@@ -247,7 +245,6 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 10. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml)
 11. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
 12. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e. 
-
     ```
     declare @email as nvarchar(256) = '<Enter your email here>'
 
@@ -258,5 +255,3 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
       on p.id = u.participantId
     where u.email = @email
     ```
-
-
