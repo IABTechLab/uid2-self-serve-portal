@@ -98,7 +98,7 @@ export const hasParticipantAccess = async (
   }
 
   if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, participantId))) {
-    return res.status(403).send([{ message: 'You do not have permission to update participant.' }]);
+    return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
   }
 
   req.participant = participant;
