@@ -248,15 +248,15 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 11. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
 12. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e. 
 
-```
-declare @email as nvarchar(256) = '<Enter your email here>'
+    ```
+    declare @email as nvarchar(256) = '<Enter your email here>'
 
-update p
-set status = 'approved'
-from dbo.participants p
-left join dbo.users u
-	on p.id = u.participantId
-where u.email = @email
-```
+    update p
+    set status = 'approved'
+    from dbo.participants p
+    left join dbo.users u
+      on p.id = u.participantId
+    where u.email = @email
+    ```
 
 
