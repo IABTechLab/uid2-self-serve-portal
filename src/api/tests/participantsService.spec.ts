@@ -8,7 +8,7 @@ import useTestServer, { api } from './utils';
 describe('Participant Service Tests', () => {
   const withToken = useTestServer();
 
-  beforeEach(() => {
+  beforeAll(() => {
     participantsRouter.get('/:participantId/', (req: ParticipantRequest, res) => {
       res.status(200).json(req.participant);
     });
