@@ -16,12 +16,9 @@ function AccountInformationFooter() {
     <div className='dashboard-footer'>
       <div>
         <button className='small-button primary-button' type='button' onClick={onClick}>
-          Continue
+          Save
         </button>
       </div>
-      <p>
-        <i>Next: Add Team Members & Contacts</i>
-      </p>
     </div>
   );
 }
