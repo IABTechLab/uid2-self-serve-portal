@@ -1,19 +1,30 @@
-import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Suspense, useContext } from 'react';
+import { Await, defer, Link, useLoaderData } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
+import { GetSharingParticipants, ParticipantResponse } from '../services/participant';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
 
 function SharingPermissionCard() {
+  const { sharingPermissions } = useLoaderData() as {
+    sharingPermissions: ParticipantResponse[];
+  };
+
   return (
     <div className='sharing-permission-card'>
       <h2>Your Sharing Permissions</h2>
       <span>Participants you&apos;re sharing with to decrypt your encrypted UID2s. </span>
       <div className='permissions-count-section'>
         <div>
-          <div className='permissions-count'>105</div>
+          <Suspense fallback='Loading...'>
+            <Await resolve={sharingPermissions}>
+              {(resolvedSharingPermissions: ParticipantResponse[]) => (
+                <div className='permissions-count'>{resolvedSharingPermissions.length}</div>
+              )}
+            </Await>
+          </Suspense>
           <span>TOTAL PERMISSIONS</span>
         </div>
         <div className='divider' />
@@ -84,4 +95,8 @@ export const HomeRoute: PortalRoute = {
   path: '/',
   description: 'Home',
   element: <Home />,
+  loader: () => {
+    const sharingPermissions = GetSharingParticipants();
+    return defer({ sharingPermissions });
+  },
 };
