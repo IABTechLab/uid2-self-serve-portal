@@ -41,12 +41,9 @@ function TeamMembersAndBusinessContacts() {
       <div className='dashboard-footer'>
         <div>
           <button className='small-button primary-button' onClick={handleNext} type='button'>
-            Save & Continue
+            Save
           </button>
         </div>
-        <p>
-          <i>Next: Sharing Settings</i>
-        </p>
       </div>
     </div>
   );
