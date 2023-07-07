@@ -86,11 +86,7 @@ const idParser = z.object({
   participantId: z.coerce.number(),
 });
 
-export const hasParticipantAccess = async (
-  req: ParticipantRequest,
-  res: Response,
-  next: NextFunction
-) => {
+const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);
   const participant = await Participant.query().findById(participantId);
   if (!participant) {
@@ -98,14 +94,14 @@ export const hasParticipantAccess = async (
   }
 
   if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, participantId))) {
-    return res.status(403).send([{ message: 'You do not have permission to update participant.' }]);
+    return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
   }
 
   req.participant = participant;
   return next();
 };
 
-export const enrichCurrentParticipant = async (
+const enrichCurrentParticipant = async (
   req: ParticipantRequest,
   res: Response,
   next: NextFunction
@@ -121,4 +117,15 @@ export const enrichCurrentParticipant = async (
   }
   req.participant = participant;
   return next();
+};
+
+export const checkParticipantId = async (
+  req: ParticipantRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (req.params.participantId === 'current') {
+    return enrichCurrentParticipant(req, res, next);
+  }
+  return hasParticipantAccess(req, res, next);
 };

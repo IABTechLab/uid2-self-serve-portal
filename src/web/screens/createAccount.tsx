@@ -61,12 +61,6 @@ function CreateAccount() {
                 }))}
                 rules={{ required: 'Please specify company type.' }}
               />
-
-              <TextInput
-                inputName='officeLocation'
-                label='Office Location'
-                rules={{ required: 'Please specify office location.' }}
-              />
               <SelectInput
                 inputName='role'
                 label='Job Function'

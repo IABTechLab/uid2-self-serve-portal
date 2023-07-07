@@ -16,7 +16,6 @@ export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationParti
 export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
 export type CreateParticipantForm = {
   companyName: string;
-  officeLocation: string;
   companyType: number[];
   role: string;
   canSign: boolean;
@@ -28,7 +27,6 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
     {
       email: user.email!,
       role: formData.role,
-      location: formData.officeLocation,
       firstName: user.firstName,
       lastName: user.lastName,
     },

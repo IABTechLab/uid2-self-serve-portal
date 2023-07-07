@@ -4,6 +4,13 @@ button {
   border-radius: 5px;
   font-weight: 600;
   padding: 10px 20px;
+
+  &.text-button {
+    border: none;
+    padding: 0;
+    color: var(--theme-action);
+    cursor: pointer;
+  }
 }
 
 .primary-button {
