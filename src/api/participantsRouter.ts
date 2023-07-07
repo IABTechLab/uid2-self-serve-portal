@@ -178,4 +178,4 @@ participantsRouter.post(
   }
 );
 
-participantsRouter.use('/:participantId//businessContacts', businessContactsRouter);
+participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
