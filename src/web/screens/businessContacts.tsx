@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ReactNode, Suspense, useCallback } from 'react';
+import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom';
 
 import {
@@ -23,7 +23,7 @@ function NoEmailContact({ onBusinessContactUpdated }: { onBusinessContactUpdated
         <h2>No Email Contacts</h2>
         <BusinessContactDialog
           onFormSubmit={AddEmailContact}
-          callback={onBusinessContactUpdated}
+          onFormSubmitted={onBusinessContactUpdated}
           triggerButton={
             <button className='transparent-button' type='button'>
               Add Email Contact
@@ -55,7 +55,7 @@ function EmailContact({ contact, onBusinessContactUpdated }: EmailContactProps) 
       <td className='action'>
         <BusinessContactDialog
           onFormSubmit={updateEmailContact}
-          callback={onBusinessContactUpdated}
+          onFormSubmitted={onBusinessContactUpdated}
           contact={contact}
           triggerButton={
             <button className='icon-button' aria-label='edit' type='button'>
@@ -131,7 +131,7 @@ export function BusinessContacts() {
                 <div className='add-new-item'>
                   <BusinessContactDialog
                     onFormSubmit={AddEmailContact}
-                    callback={onBusinessContactUpdated}
+                    onFormSubmitted={onBusinessContactUpdated}
                     triggerButton={
                       <button className='small-button' type='button'>
                         Add Email Contact

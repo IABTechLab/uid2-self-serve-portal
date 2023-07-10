@@ -10,14 +10,14 @@ import { BusinessContactForm, BusinessContactResponse } from '../services/partic
 
 type BusinessContactDialogProps = {
   onFormSubmit: (formData: BusinessContactForm) => Promise<void>;
-  callback: () => void;
+  onFormSubmitted: () => void;
   triggerButton: JSX.Element;
   contact?: BusinessContactResponse;
 };
 
 function BusinessContactDialog({
   onFormSubmit,
-  callback,
+  onFormSubmitted,
   triggerButton,
   contact,
 }: BusinessContactDialogProps) {
@@ -26,7 +26,7 @@ function BusinessContactDialog({
   const onSubmit: SubmitHandler<BusinessContactForm> = async (formData) => {
     await onFormSubmit(formData);
     setOpen(false);
-    callback();
+    onFormSubmitted();
   };
 
   return (
