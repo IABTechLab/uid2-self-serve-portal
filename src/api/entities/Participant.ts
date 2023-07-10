@@ -59,6 +59,7 @@ export const ParticipantSchema = z.object({
 export const ParticipantCreationPartial = ParticipantSchema.omit({
   id: true,
   allowSharing: true,
+  status: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
 });

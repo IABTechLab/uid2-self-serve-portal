@@ -36,9 +36,6 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
 
   const participantPayload: ParticipantCreationPayload = {
     name: formData.companyName,
-    status: formData.canSign
-      ? ParticipantStatus.AwaitingApproval
-      : ParticipantStatus.AwaitingSigning,
     types: formData.companyType.map((typeId) => ({ id: typeId })),
     users,
   };
