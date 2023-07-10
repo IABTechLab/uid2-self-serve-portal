@@ -3,15 +3,19 @@ import { QueryBuilder } from 'objection';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
 
-export const mockParticipant = (participant: Partial<Participant> = {}) => {
+export const mockParticipant = (participant: Partial<Participant> | null = {}) => {
   jest.spyOn(Participant, 'query').mockReturnValueOnce(
-    QueryBuilder.forClass(Participant).resolve({
-      id: '1',
-      name: 'Test Participant',
-      location: 'Test Location',
-      allowSharing: true,
-      ...participant,
-    })
+    QueryBuilder.forClass(Participant).resolve(
+      participant === null
+        ? undefined
+        : {
+            id: '1',
+            name: 'Test Participant',
+            location: 'Test Location',
+            allowSharing: true,
+            ...participant,
+          }
+    )
   );
 };
 
@@ -23,7 +27,7 @@ export const mockUser = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => 
     spy.mockReturnValueOnce(
       QueryBuilder.forClass(User).resolve(
         u === null
-          ? null
+          ? undefined
           : {
               id: '1',
               email: 'test_user@example.com',
