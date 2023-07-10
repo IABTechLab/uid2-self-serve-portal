@@ -1,6 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { businessContactsRouter } from './businessContactsRouter';
 import { Participant, ParticipantCreationPartial, ParticipantSchema } from './entities/Participant';
 import { SharingAction } from './entities/SharingAuditTrail';
 import { UserRole } from './entities/User';
@@ -176,3 +177,5 @@ participantsRouter.post(
     return res.status(200).json(sharingParticipants);
   }
 );
+
+participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);

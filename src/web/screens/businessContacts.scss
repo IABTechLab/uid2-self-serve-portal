@@ -1,30 +1,92 @@
-.business-contacts-table {
-  .name {
-    width: 25%;
-  }
-
-  .email {
-    width: 25%;
-  }
-
-  .contactType {
-    width: 40%;
-  }
-}
-
-.no-contacts-container {
-  margin-top: 15px;
-  border: 1px solid var(--theme-border);
-  border-radius: 5px;
-  padding: 33px 24px;
+.portal-business-contact {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
 
-  .no-contacts-text {
-    margin-left: 33px;
+  .heading-details {
+    margin: 4px 0;
+  }
 
-    h2 {
-      margin-top: 0;
+  .add-new-item {
+    margin-top: 16px;
+  }
+
+  .business-contacts-table {
+    .name {
+      width: 25%;
+    }
+
+    .email {
+      width: 25%;
+    }
+
+    .contactType {
+      width: 40%;
+    }
+
+    font-size: 0.875rem;
+    width: 100%;
+
+    thead {
+      font-weight: 700;
+      border: none;
+    }
+
+    td.action {
+      padding-right: 80px;
+      font-size: 0.8125rem;
+    }
+
+    td {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    td.action {
+      display: flex;
+
+      .icon-button {
+        &.clickable {
+          cursor: pointer;
+          color: var(--theme-action);
+        }
+
+        &.error {
+          color: var(--theme-error);
+        }
+
+        border: none;
+        white-space: nowrap;
+        flex-grow: 1;
+        align-items: center;
+        padding: 0 10px;
+      }
+
+      svg {
+        color: var(--theme-action);
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .no-contacts-container {
+    margin-top: 15px;
+    border: 1px solid var(--theme-border);
+    border-radius: 5px;
+    padding: 33px 24px;
+    display: flex;
+    align-items: center;
+
+    .no-contacts-text {
+      margin-left: 33px;
+
+      h2 {
+        margin-top: 0;
+      }
+    }
+
+    .transparent-button {
+      padding: 0;
     }
   }
 }

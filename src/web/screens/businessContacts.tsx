@@ -2,35 +2,75 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ReactNode, Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom';
 
-import { EmailContactResponse, GetEmailContacts } from '../services/participant';
+import {
+  AddEmailContact,
+  BusinessContactForm,
+  BusinessContactResponse,
+  GetEmailContacts,
+  RemoveEmailContact,
+  UpdateEmailContact,
+} from '../services/participant';
 import BusinessContactDialog from './businessContactDialog';
 import { PortalRoute } from './routeUtils';
 
 import './businessContacts.scss';
 
-function NoEmailContact({ children }: { children: ReactNode }) {
+function NoEmailContact({ onBusinessContactUpdated }: { onBusinessContactUpdated: () => void }) {
   return (
     <div className='no-contacts-container'>
       <img src='/email-icon.svg' alt='email-icon' />
       <div className='no-contacts-text'>
         <h2>No Email Contacts</h2>
-        {children}
+        <BusinessContactDialog
+          onFormSubmit={AddEmailContact}
+          callback={onBusinessContactUpdated}
+          triggerButton={
+            <button className='transparent-button' type='button'>
+              Add Email Contact
+            </button>
+          }
+        />
       </div>
     </div>
   );
 }
 
-type EmailContactProps = { contact: EmailContactResponse };
+type EmailContactProps = { contact: BusinessContactResponse; onBusinessContactUpdated: () => void };
 
-function EmailContact({ contact }: EmailContactProps) {
+function EmailContact({ contact, onBusinessContactUpdated }: EmailContactProps) {
+  const removeEmailContact = async () => {
+    await RemoveEmailContact(contact.id);
+    onBusinessContactUpdated();
+  };
+
+  const updateEmailContact = async (formData: BusinessContactForm) => {
+    await UpdateEmailContact(contact.id, formData);
+  };
+
   return (
     <tr>
       <td>{contact.name}</td>
       <td>{contact.emailAlias}</td>
       <td>{contact.contactType}</td>
       <td className='action'>
-        <FontAwesomeIcon icon='pencil' />
-        <FontAwesomeIcon icon='trash-can' />
+        <BusinessContactDialog
+          onFormSubmit={updateEmailContact}
+          callback={onBusinessContactUpdated}
+          contact={contact}
+          triggerButton={
+            <button className='icon-button' aria-label='edit' type='button'>
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+          }
+        />
+        <button
+          className='icon-button'
+          aria-label='delete'
+          type='button'
+          onClick={removeEmailContact}
+        >
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
       </td>
     </tr>
   );
@@ -42,17 +82,19 @@ function Loading() {
 
 export function BusinessContacts() {
   const navigate = useNavigate();
-  const data = useLoaderData() as { emailContacts: EmailContactResponse[] };
+  const data = useLoaderData() as { emailContacts: BusinessContactResponse[] };
   const reloader = useRevalidator();
-  const onAddBusinessContact = useCallback(() => {
+  const onBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
+
   // TODO: update to Participation Policy page
   const onClick = () => {
     navigate('/');
   };
+
   return (
-    <div className='portal-team'>
+    <div className='portal-business-contact'>
       <h1>Email Contacts</h1>
       <p className='heading-details'>
         View and manage email contacts. We’ll send information about the latest updates and releases
@@ -61,7 +103,7 @@ export function BusinessContacts() {
       <h2>Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.emailContacts}>
-          {(emailContacts: EmailContactResponse[]) => (
+          {(emailContacts: BusinessContactResponse[]) => (
             <>
               <table className='business-contacts-table'>
                 <thead>
@@ -74,18 +116,28 @@ export function BusinessContacts() {
                 </thead>
                 <tbody>
                   {emailContacts.map((e) => (
-                    <EmailContact key={e.id} contact={e} />
+                    <EmailContact
+                      key={e.id}
+                      contact={e}
+                      onBusinessContactUpdated={onBusinessContactUpdated}
+                    />
                   ))}
                 </tbody>
               </table>
               {!emailContacts.length && (
-                <NoEmailContact>
-                  <BusinessContactDialog onAddBusinessContact={onAddBusinessContact} />
-                </NoEmailContact>
+                <NoEmailContact onBusinessContactUpdated={onBusinessContactUpdated} />
               )}
               {!!emailContacts.length && (
                 <div className='add-new-item'>
-                  <BusinessContactDialog onAddBusinessContact={onAddBusinessContact} />
+                  <BusinessContactDialog
+                    onFormSubmit={AddEmailContact}
+                    callback={onBusinessContactUpdated}
+                    triggerButton={
+                      <button className='small-button' type='button'>
+                        Add Email Contact
+                      </button>
+                    }
+                  />
                 </div>
               )}
             </>
