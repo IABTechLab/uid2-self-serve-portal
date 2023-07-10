@@ -143,3 +143,49 @@ export async function DeleteSharingParticipants(
     throw backendError(e, 'Could not delete sharing participants');
   }
 }
+
+export type EmailContactResponse = {
+  id: number;
+  name: string;
+  emailAlias: string;
+  contactType: string;
+};
+
+export type EmailContactForm = {
+  name: string;
+  emailAlias: string;
+  contactType: string;
+};
+
+export async function AddEmailContact(formData: EmailContactForm, participantId: number) {
+  try {
+    return await axios.post(`/participants/${participantId}/emailContacts`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not invite participants');
+  }
+}
+
+export async function GetEmailContacts() {
+  try {
+    // const result = await axios.get<EmailContactResponse[]>(
+    //   `/participants/current/emailContacts`
+    // );
+    // return [
+    //   {
+    //     id: 1,
+    //     name: 'Business Group',
+    //     emailAlias: 'business@shredders.com',
+    //     contactType: 'Business',
+    //   },
+    //   {
+    //     id: 2,
+    //     name: 'Dev Squad',
+    //     emailAlias: 'developers@shredders.com',
+    //     contactType: 'Technical',
+    //   },
+    // ];
+    return [];
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load sharing participants');
+  }
+}

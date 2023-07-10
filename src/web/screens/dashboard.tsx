@@ -5,6 +5,7 @@ import { SideNav } from '../components/Core/SideNav';
 import { SnailTrail } from '../components/Core/SnailTrail';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AccountInformationRoute } from './accountInformation';
+import { EmailContactsRoute } from './businessContacts';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
@@ -17,10 +18,11 @@ export const DashboardMainRoute: PortalRoute = {
   element: <span>Main</span>,
 };
 export const DashboardRoutes: PortalRoute[] = [
+  DashboardMainRoute,
+  SharingPermissionsRoute,
   AccountInformationRoute,
   TeamMembersRoute,
-  SharingPermissionsRoute,
-  DashboardMainRoute,
+  EmailContactsRoute,
 ];
 const menu = DashboardRoutes.filter((r) => r.description);
 

@@ -109,7 +109,7 @@ function TeamMembers() {
 }
 
 export const TeamMembersRoute: PortalRoute = {
-  description: 'Team Members & Contacts',
+  description: 'Team Members',
   element: <TeamMembers />,
   path: '/dashboard/team',
   loader: () => {
