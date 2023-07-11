@@ -3,11 +3,7 @@ import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
-import {
-  ParticipantCreationPartial,
-  ParticipantSchema,
-  ParticipantStatus,
-} from '../../api/entities/Participant';
+import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
@@ -37,9 +33,6 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
 
   const participantPayload: ParticipantCreationPayload = {
     name: formData.companyName,
-    status: formData.canSign
-      ? ParticipantStatus.AwaitingApproval
-      : ParticipantStatus.AwaitingSigning,
     types: formData.companyType.map((typeId) => ({ id: typeId })),
     users,
   };
