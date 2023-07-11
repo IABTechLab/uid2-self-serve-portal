@@ -2,6 +2,8 @@ import { BusinessContactForm, BusinessContactResponse } from '../../services/par
 import BusinessContact from './BusinessContact';
 import BusinessContactDialog from './BusinessContactDialog';
 
+import './BusinessContactsTable.scss';
+
 function NoEmailContact({
   addEmailContact,
   onBusinessContactUpdated,
@@ -44,7 +46,7 @@ function BusinessContactsTable({
   onBusinessContactUpdated,
 }: BusinessContactsTableProps) {
   return (
-    <>
+    <div className='business-contacts-table-container'>
       <table className='business-contacts-table'>
         <thead>
           <tr>
@@ -85,7 +87,7 @@ function BusinessContactsTable({
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
 
