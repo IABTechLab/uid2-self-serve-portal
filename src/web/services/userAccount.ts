@@ -12,7 +12,7 @@ export type UserAccount = {
 };
 
 export type UserPayload = z.infer<typeof UserScheme>;
-
+export type UserResponse = z.infer<typeof UserScheme>;
 export async function GetUserAccountById(id: string) {
   try {
     const result = await axios.get<User>(`/users/${id}`, {
@@ -68,9 +68,12 @@ export async function CreateUser(userPayload: UserPayload) {
 
 export async function GetAllUsersOfParticipant(participantId?: number) {
   try {
-    const result = await axios.get<User[]>(`/participants/${participantId ?? 'current'}/users`, {
-      validateStatus: (status) => [200, 404].includes(status),
-    });
+    const result = await axios.get<UserResponse[]>(
+      `/participants/${participantId ?? 'current'}/users`,
+      {
+        validateStatus: (status) => [200, 404].includes(status),
+      }
+    );
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load users');

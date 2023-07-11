@@ -45,7 +45,7 @@ export class User extends BaseModel {
 export type UserDTO = ModelObjectOpt<User>;
 
 export const UserScheme = z.object({
-  id: z.number().optional(),
+  id: z.number(),
   email: z.string(),
   firstName: z.string(),
   lastName: z.string(),
@@ -53,4 +53,5 @@ export const UserScheme = z.object({
   phone: z.string().optional(),
   participantId: z.number().optional(),
   role: z.nativeEnum(UserRole).optional(),
+  acceptedTerms: z.boolean(),
 });

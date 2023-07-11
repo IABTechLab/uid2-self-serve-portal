@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
-import { User } from '../../../api/entities/User';
+import { UserResponse } from '../../services/userAccount';
 
-type TeamMemberProps = { person: User; resendInvite: (id: number) => Promise<void> };
+type TeamMemberProps = { person: UserResponse; resendInvite: (id: number) => Promise<void> };
 
 enum InviteState {
   initial,

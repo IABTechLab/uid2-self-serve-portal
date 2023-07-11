@@ -1,10 +1,9 @@
 import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
-import { User } from '../../api/entities/User';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { InviteTeamMember } from '../services/participant';
-import { GetAllUsersOfParticipant, ResendInvite } from '../services/userAccount';
+import { GetAllUsersOfParticipant, ResendInvite, UserResponse } from '../services/userAccount';
 import { PortalRoute } from './routeUtils';
 
 function Loading() {
@@ -12,7 +11,7 @@ function Loading() {
 }
 
 function TeamMembers() {
-  const data = useLoaderData() as { users: User[] };
+  const data = useLoaderData() as { users: UserResponse[] };
   const reloader = useRevalidator();
   const onTeamMembersUpdated = useCallback(() => {
     reloader.revalidate();
@@ -26,7 +25,7 @@ function TeamMembers() {
       <h2>Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>
-          {(users: User[]) => (
+          {(users: UserResponse[]) => (
             <TeamMembersTable
               teamMembers={users}
               addTeamMember={InviteTeamMember}

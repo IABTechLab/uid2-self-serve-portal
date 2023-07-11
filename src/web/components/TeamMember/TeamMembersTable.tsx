@@ -1,12 +1,12 @@
-import { User } from '../../../api/entities/User';
 import { InviteTeamMemberForm } from '../../services/participant';
-import AddTeamMemberDialog from './addTeamMemberDialog';
+import { UserResponse } from '../../services/userAccount';
+import AddTeamMemberDialog from './AddTeamMemberDialog';
 import TeamMember from './TeamMember';
 
 import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = {
-  teamMembers: User[];
+  teamMembers: UserResponse[];
   addTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
   onTeamMembersUpdated: () => void;
   resendInvite: (id: number) => Promise<void>;
