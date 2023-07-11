@@ -14,5 +14,5 @@ const Template: ComponentStory<typeof AddTeamMemberDialog> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   addTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
-  onTeamMemberAdded: () => console.log('team member list updated'),
+  onTeamMemberAdded: () => console.log('team member added'),
 };
