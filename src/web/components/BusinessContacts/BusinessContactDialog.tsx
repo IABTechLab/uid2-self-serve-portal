@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import { ContactType } from '../../api/entities/BusinessContact';
-import { Dialog } from '../components/Core/Dialog';
-import { Form } from '../components/Core/Form';
-import { SelectInput } from '../components/Input/SelectInput';
-import { TextInput } from '../components/Input/TextInput';
-import { BusinessContactForm, BusinessContactResponse } from '../services/participant';
+import { ContactType } from '../../../api/entities/BusinessContact';
+import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
+import { Form } from '../Core/Form';
+import { SelectInput } from '../Input/SelectInput';
+import { TextInput } from '../Input/TextInput';
 
 type BusinessContactDialogProps = {
   onFormSubmit: (formData: BusinessContactForm) => Promise<void>;

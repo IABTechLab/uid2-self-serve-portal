@@ -10,7 +10,7 @@ import {
   RemoveEmailContact,
   UpdateEmailContact,
 } from '../services/participant';
-import BusinessContactDialog from './businessContactDialog';
+import BusinessContactDialog from '../components/BusinessContacts/businessContactDialog';
 import { PortalRoute } from './routeUtils';
 
 import './businessContacts.scss';
