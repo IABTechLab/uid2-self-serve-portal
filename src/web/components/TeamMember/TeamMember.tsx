@@ -31,7 +31,12 @@ function TeamMember({ person, resendInvite }: TeamMemberProps) {
   }, [person.id, reinviteState, resendInvite]);
   return (
     <tr>
-      <td>{`${person.firstName} ${person.lastName}`}</td>
+      <td>
+        <div className='name-cell'>
+          {`${person.firstName} ${person.lastName}`}
+          {person.acceptedTerms || <div className='pending-label'>Pending</div>}
+        </div>
+      </td>
       <td>{person.email}</td>
       <td className='action'>
         {person.acceptedTerms || (

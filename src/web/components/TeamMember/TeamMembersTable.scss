@@ -24,17 +24,14 @@
       width: 60%;
     }
 
-    td.action {
-      padding-right: 80px;
-      font-size: 0.8125rem;
-    }
-
     td {
       padding-top: 15px;
       padding-bottom: 15px;
     }
 
     td.action {
+      padding-right: 80px;
+      font-size: 0.8125rem;
       display: flex;
       justify-content: flex-end;
 
@@ -58,6 +55,18 @@
       svg {
         color: var(--theme-action);
         padding: 0 10px;
+      }
+    }
+
+    .name-cell {
+      display: flex;
+      align-items: center;
+      .pending-label {
+        background: var(--theme-label);
+        font-size: 0.625rem;
+        border-radius: 3px;
+        padding: 3px 8px;
+        margin-left: 10px;
       }
     }
   }
