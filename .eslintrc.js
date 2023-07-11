@@ -144,6 +144,7 @@ module.exports = {
       files: ['*.tsx', '*.ts'],
       rules: {
         'react/require-default-props': 'off',
+        'react/destructuring-assignment': 'off',
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': [
           'warn',
