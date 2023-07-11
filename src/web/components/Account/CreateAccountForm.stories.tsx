@@ -33,11 +33,10 @@ const CreateAccountStory = ({ onSubmit }: CreateAccountStoryProps) => {
   const [formData, setFormData] = useState<string | null>();
   return (
     <>
-      <div style={{ maxWidth: '660px' }}>
+      <div style={{ maxWidth: '660px' }} className='create-account-screen'>
         <CreateAccountForm
           // eslint-disable-next-line consistent-return
           onSubmit={async (data) => {
-            // eslint-disable-next-line no-console
             setFormData(JSON.stringify(data));
             if (onSubmit) return onSubmit(data);
           }}

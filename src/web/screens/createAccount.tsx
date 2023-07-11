@@ -10,9 +10,6 @@ import { CreateParticipant, CreateParticipantForm } from '../services/participan
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
-import '../components/Core/Form.scss';
-import './createAccount.scss';
-
 export const AccountCreationRoutes: PortalRoute[] = [];
 
 function CreateAccount() {

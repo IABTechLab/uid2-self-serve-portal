@@ -13,6 +13,9 @@ import { SelectInput } from '../Input/SelectInput';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 
+import './createAccountForm.scss';
+import '../Core/Form.scss';
+
 export type CreateAccountFormProps = {
   resolvedParticipantTypes: ParticipantTypeDTO[];
   onSubmit: (data: CreateParticipantForm) => Promise<string[] | void>;
