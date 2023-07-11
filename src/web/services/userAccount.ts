@@ -65,3 +65,14 @@ export async function CreateUser(userPayload: UserPayload) {
     throw backendError(e, 'Could not create user');
   }
 }
+
+export async function GetAllUsersOfParticipant(participantId?: number) {
+  try {
+    const result = await axios.get<User[]>(`/participants/${participantId ?? 'current'}/users`, {
+      validateStatus: (status) => [200, 404].includes(status),
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load users');
+  }
+}

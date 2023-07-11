@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
+import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
 
@@ -51,4 +52,8 @@ export const enrichWithUserFromParams = async (
 
   req.user = user;
   return next();
+};
+
+export const getAllUserFromParticipant = async (participant: Participant) => {
+  return participant!.$relatedQuery('users');
 };

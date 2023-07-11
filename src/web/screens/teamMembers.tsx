@@ -5,7 +5,7 @@ import { Suspense, useCallback, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { User } from '../../api/entities/User';
-import { GetAllUsers, ResendInvite } from '../services/userAccount';
+import { GetAllUsersOfParticipant, ResendInvite } from '../services/userAccount';
 import AddTeamMemberDialog from './addTeamMemberDialog';
 import { PortalRoute } from './routeUtils';
 
@@ -113,7 +113,7 @@ export const TeamMembersRoute: PortalRoute = {
   element: <TeamMembers />,
   path: '/dashboard/team',
   loader: () => {
-    const users = GetAllUsers();
+    const users = GetAllUsersOfParticipant();
     return defer({ users });
   },
 };

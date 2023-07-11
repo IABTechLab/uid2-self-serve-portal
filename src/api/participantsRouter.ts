@@ -23,7 +23,11 @@ import {
   insertSharingAuditTrails,
   updateAuditTrailsToProceed,
 } from './services/sharingAuditTrailService';
-import { createUserInPortal, findUserByEmail } from './services/usersService';
+import {
+  createUserInPortal,
+  findUserByEmail,
+  getAllUserFromParticipant,
+} from './services/usersService';
 
 export const participantsRouter = express.Router();
 
@@ -184,3 +188,9 @@ participantsRouter.post(
     return res.status(200).json(sharingParticipants);
   }
 );
+
+participantsRouter.get('/:participantId/users', async (req: ParticipantRequest, res: Response) => {
+  const { participant } = req;
+  const users = await getAllUserFromParticipant(participant!);
+  return res.status(200).json(users);
+});
