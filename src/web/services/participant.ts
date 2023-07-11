@@ -70,7 +70,7 @@ export type InviteTeamMemberForm = {
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   try {
-    return await axios.post(`/participants/${participantId}/invite`, formData);
+    await axios.post(`/participants/${participantId}/invite`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not invite participants');
   }

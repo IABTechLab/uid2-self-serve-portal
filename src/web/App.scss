@@ -19,6 +19,10 @@
     align-items: stretch;
     background-color: var(--theme-background-header);
     height: 100%;
+
+    .heading-details {
+      margin: 4px 0;
+    }
   }
 
   .app-centralize {
