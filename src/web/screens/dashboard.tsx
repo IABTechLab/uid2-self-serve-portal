@@ -5,22 +5,18 @@ import { SideNav } from '../components/Core/SideNav';
 import { SnailTrail } from '../components/Core/SnailTrail';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AccountInformationRoute } from './accountInformation';
+import { HomeRoute } from './home';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
 
 import './dashboard.scss';
 
-export const DashboardMainRoute: PortalRoute = {
-  path: '/',
-  description: 'Dashboard',
-  element: <span>Main</span>,
-};
 export const DashboardRoutes: PortalRoute[] = [
+  HomeRoute,
   AccountInformationRoute,
   TeamMembersRoute,
   SharingPermissionsRoute,
-  DashboardMainRoute,
 ];
 const menu = DashboardRoutes.filter((r) => r.description);
 

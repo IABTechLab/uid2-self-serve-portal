@@ -119,11 +119,11 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
 }
 
 export async function GetSharingParticipants(
-  participantId: number
+  participantId?: number
 ): Promise<ParticipantResponse[]> {
   try {
     const result = await axios.get<ParticipantResponse[]>(
-      `/participants/${participantId}/sharingPermission`
+      `/participants/${participantId ?? 'current'}/sharingPermission`
     );
     return result.data;
   } catch (e: unknown) {

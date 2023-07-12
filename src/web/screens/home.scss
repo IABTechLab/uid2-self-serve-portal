@@ -1,0 +1,19 @@
+.dashboard-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin-top: 28px;
+
+  & > div {
+    border: 1px solid var(--theme-border);
+    border-radius: 8px;
+    max-width: 487px;
+    padding: 30px;
+    box-sizing: border-box;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin: 0 0 8px 0;
+  }
+}
