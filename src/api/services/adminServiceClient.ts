@@ -4,8 +4,8 @@ import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../env
 import { getLoggers } from '../helpers/loggingHelpers';
 
 export type SharingListResponse = {
-  whitelist: number[];
-  whitelist_hash: number;
+  allowlist: number[];
+  hash: number;
 };
 
 const adminServiceClient = axios.create({
@@ -29,9 +29,8 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
     return response.status === 200
       ? response.data
       : {
-          whitelist: [],
-          // eslint-disable-next-line camelcase
-          whitelist_hash: 0,
+          allowlist: [],
+          hash: 0,
         };
   } catch (error: unknown) {
     const [logger] = getLoggers();
@@ -42,14 +41,13 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
 
 export const updateSharingList = async (
   siteId: number,
-  whiteListHash: number,
+  hash: number,
   sharingList: number[]
 ): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.post(`/api/sharing/list/${siteId}`, {
-      whitelist: sharingList,
-      // eslint-disable-next-line camelcase
-      whitelist_hash: whiteListHash,
+      allowlist: sharingList,
+      hash,
     });
     return response.data;
   } catch (error: unknown) {
