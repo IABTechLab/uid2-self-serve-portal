@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import './Dialog.scss';
 
 export type DialogProps = {
-  triggerButton: JSX.Element;
+  triggerButton?: JSX.Element;
   children: ReactNode;
   title?: string;
   closeButton?: string;
@@ -27,7 +27,7 @@ export function Dialog({
 }: DialogProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
-      <RadixDialog.Trigger asChild>{triggerButton}</RadixDialog.Trigger>
+      {triggerButton && <RadixDialog.Trigger asChild>{triggerButton}</RadixDialog.Trigger>}
       <RadixDialog.Overlay className='dialog-overlay' />
       <RadixDialog.Content
         className='dialog-container'
