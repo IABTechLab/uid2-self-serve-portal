@@ -1,11 +1,18 @@
+import log from 'loglevel';
 import { Suspense, useContext } from 'react';
-import { Await, defer, Link, useLoaderData } from 'react-router-dom';
+import { Await, defer, Link, useAsyncError, useLoaderData } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetSharingParticipants, ParticipantResponse } from '../services/participant';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
+
+function ErrorElement() {
+  const error = useAsyncError();
+  log.error(error);
+  return <p className='error'>Uh Oh, something went wrong! </p>;
+}
 
 function SharingPermissionCard() {
   const { sharingPermissions } = useLoaderData() as {
@@ -19,13 +26,15 @@ function SharingPermissionCard() {
       <div className='permissions-count-section'>
         <div>
           <Suspense fallback='Loading...'>
-            <Await resolve={sharingPermissions}>
+            <Await resolve={sharingPermissions} errorElement={<ErrorElement />}>
               {(resolvedSharingPermissions: ParticipantResponse[]) => (
-                <div className='permissions-count'>{resolvedSharingPermissions.length}</div>
+                <>
+                  <div className='permissions-count'>{resolvedSharingPermissions.length}</div>
+                  <span>TOTAL PERMISSIONS</span>
+                </>
               )}
             </Await>
           </Suspense>
-          <span>TOTAL PERMISSIONS</span>
         </div>
         <div className='divider' />
       </div>

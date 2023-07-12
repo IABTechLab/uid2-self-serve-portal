@@ -1,12 +1,13 @@
 .dashboard-cards-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 22px;
   margin-top: 28px;
 
   & > div {
     border: 1px solid var(--theme-border);
     border-radius: 8px;
-    width: 487px;
+    max-width: 487px;
     padding: 30px;
     box-sizing: border-box;
   }
@@ -31,6 +32,10 @@
     span {
       font-size: 0.75rem;
       font-weight: 600;
+    }
+
+    .error {
+      color: var(--theme-error);
     }
   }
 
