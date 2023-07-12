@@ -27,6 +27,7 @@ export class BusinessContact extends BaseModel {
   name!: string;
   emailAlias!: string;
   contactType!: string;
+  participantId!: number;
 }
 
 export const BusinessContactSchema = z.object({
@@ -35,9 +36,4 @@ export const BusinessContactSchema = z.object({
   emailAlias: z.string(),
   contactType: z.nativeEnum(ContactType),
   participantId: z.number(),
-});
-
-export const BusinessContactsDTO = BusinessContactSchema.omit({
-  id: true,
-  participantId: true,
 });

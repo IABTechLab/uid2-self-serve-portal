@@ -1,8 +1,16 @@
 import express, { Response } from 'express';
-import { z } from 'zod';
 
-import { BusinessContact, BusinessContactsDTO } from './entities/BusinessContact';
+import { BusinessContactSchema } from './entities/BusinessContact';
+import {
+  BusinessContactRequest,
+  hasBusinessContactAccess,
+} from './services/businessContactsService';
 import { ParticipantRequest } from './services/participantsService';
+
+export const BusinessContactsDTO = BusinessContactSchema.omit({
+  id: true,
+  participantId: true,
+});
 
 export const businessContactsRouter = express.Router();
 
@@ -19,19 +27,17 @@ businessContactsRouter.post('/', async (req: ParticipantRequest, res: Response) 
   return res.status(200).json(newContact);
 });
 
-const contactIdParser = z.object({
-  contactId: z.string(),
-});
+businessContactsRouter.use('/:contactId', hasBusinessContactAccess);
 
-businessContactsRouter.delete('/:contactId', async (req: ParticipantRequest, res: Response) => {
-  const { contactId } = contactIdParser.parse(req.params);
-  await BusinessContact.query().deleteById(contactId);
+businessContactsRouter.delete('/:contactId', async (req: BusinessContactRequest, res: Response) => {
+  const { businessContact } = req;
+  await businessContact!.$query().delete();
   return res.sendStatus(200);
 });
 
-businessContactsRouter.put('/:contactId', async (req: ParticipantRequest, res: Response) => {
-  const { contactId } = contactIdParser.parse(req.params);
+businessContactsRouter.put('/:contactId', async (req: BusinessContactRequest, res: Response) => {
+  const { businessContact } = req;
   const data = BusinessContactsDTO.parse(req.body);
-  await BusinessContact.query().findById(contactId).patch(data);
+  await businessContact!.$query().patch(data);
   return res.sendStatus(200);
 });
