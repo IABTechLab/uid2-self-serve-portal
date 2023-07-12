@@ -143,6 +143,7 @@ module.exports = {
     {
       files: ['*.tsx', '*.ts'],
       rules: {
+        'consistent-return': 'off',
         'react/require-default-props': 'off',
         'react/destructuring-assignment': 'off',
         'no-unused-vars': 'off',

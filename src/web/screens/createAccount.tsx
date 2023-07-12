@@ -23,7 +23,7 @@ function CreateAccount() {
       return createResult.messages;
     }
     await loadUser();
-    return navigate('/account/pending');
+    navigate('/account/pending');
   };
 
   return (
