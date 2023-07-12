@@ -1,0 +1,23 @@
+.create-account-screen {
+  .terms-section {
+    display: flex;
+    align-items: center;
+    margin-top: 23px;
+    font-weight: 500;
+
+    button {
+      font-weight: 500;
+    }
+  }
+
+  .privacy-section {
+    margin-top: 8px;
+    font-weight: 500;
+    margin-left: 36px;
+  }
+
+  .verification-text {
+    margin-top: 16px;
+    font-style: italic;
+  }
+}

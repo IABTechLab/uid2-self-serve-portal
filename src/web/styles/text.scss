@@ -4,16 +4,24 @@ h1 {
   font-weight: 600;
   color: var(--theme-title);
 }
+
 h2 {
   font-size: 1.125rem;
   line-height: 1.375rem;
   margin-top: 30px;
 }
+
 h3 {
   font-size: 0.8125rem;
   margin-bottom: 0.5rem;
   font-weight: 600;
 }
+
 a {
   color: var(--theme-secondary);
+
+  &.outside-link {
+    text-decoration: none;
+    color: var(--theme-action);
+  }
 }

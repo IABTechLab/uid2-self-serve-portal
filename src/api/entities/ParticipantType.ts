@@ -2,6 +2,7 @@ import { Model } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
+import { ModelObjectOpt } from './ModelObjectOpt';
 
 export class ParticipantType extends BaseModel {
   static get tableName() {
@@ -24,6 +25,8 @@ export class ParticipantType extends BaseModel {
   id!: number;
   typeName!: string;
 }
+
+export type ParticipantTypeDTO = ModelObjectOpt<ParticipantType>;
 
 export const ParticipantTypeSchema = z.object({
   id: z.number(),

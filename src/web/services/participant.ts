@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, isAxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
@@ -15,7 +15,21 @@ export type CreateParticipantForm = {
   role: string;
   canSign: boolean;
   signeeEmail: string;
+  agreeToTerms: boolean;
 };
+
+export const isCreateParticipantError = (error: unknown): error is CreateParticipantError => {
+  return (
+    axios.isAxiosError(error) &&
+    Array.isArray(error.response?.data) &&
+    error.response!.data.every((d) => typeof d.message === 'string')
+  );
+};
+type CreateParticipantErrorOptionalResponse = AxiosError<{ message: string }[]>;
+export type CreateParticipantError = Required<
+  Pick<CreateParticipantErrorOptionalResponse, 'response'>
+> &
+  Omit<CreateParticipantErrorOptionalResponse, 'response'>;
 
 export async function CreateParticipant(formData: CreateParticipantForm, user: KeycloakProfile) {
   const users = [
@@ -35,8 +49,22 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
     types: formData.companyType.map((typeId) => ({ id: typeId })),
     users,
   };
-  const newParticipant = await axios.post<ParticipantResponse>(`/participants`, participantPayload);
-  return newParticipant.data;
+  try {
+    const newParticipant = await axios.post<ParticipantResponse>(
+      `/participants`,
+      participantPayload
+    );
+    return newParticipant.data;
+  } catch (err: unknown | AxiosError<CreateParticipantError>) {
+    const status = isAxiosError(err) ? err.response?.status : null;
+    const responseMessages = isCreateParticipantError(err)
+      ? err.response?.data.map((d) => d.message)
+      : null;
+    return {
+      errorStatus: status ?? 'Unknown',
+      messages: responseMessages ?? ['An unknown error occurred.'],
+    };
+  }
 }
 
 export async function GetParticipantByUserId(id: number) {
