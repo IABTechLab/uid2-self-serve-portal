@@ -24,7 +24,7 @@ function TeamMembers() {
 
   return (
     <>
-      <h1>Team Members & Contacts</h1>
+      <h1>Team Members</h1>
       <p className='heading-details'>
         View current team members below and add additional team members to access Unified ID Portal.
       </p>
