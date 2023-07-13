@@ -21,13 +21,13 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         domiciled in the United States, or (b) the UK Trade Desk Limited if Company is domiciled in
         any country or territory outside of the United States.
       </p>
-      <p>
+      <div>
         In connection with your use of the Portal, you agree to comply with these Terms, any terms
         of the POC Agreement and any documentation provided by TD. You and Company are jointly
         liable for any breach of those obligations by you.
-      </p>
+      </div>
       <h2>1 Authorization</h2>
-      <p>
+      <div>
         You represent, warrant and covenant to the following: (1) You (or your affiliate) have
         entered into a POC Agreement with TD; (2) such POC Agreement will remain in effect for the
         duration of your use of the Portal; (3) you have been duly authorized to act for and on
@@ -35,9 +35,9 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         bind such party to these Terms and your use of the Portal; and (3) you have obtained all
         necessary rights, licenses, and approvals in your use of the Portal and you will provide
         only accurate information when using the Portal.
-      </p>
+      </div>
       <h2>2 User Account and Account Security</h2>
-      <p>
+      <div>
         When you register for an account through the Portal (the “
         <span className='terms-bold'>Account</span>”), you will need to provide required information
         and complete all required steps. You must own, control or have all necessary rights to
@@ -47,9 +47,9 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         access to your Account, and you should not otherwise share your login or password to your
         Account with any third party. Account creation is subject to TD’s approval, in its sole
         discretion.
-      </p>
+      </div>
       <h2>3 Prohibited Conduct and Content</h2>
-      <p>
+      <div>
         <table>
           <tr>
             <td>(a)</td>
@@ -104,9 +104,9 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
             </td>
           </tr>
         </table>
-      </p>
+      </div>
       <h2>4 Ownership; Limited License</h2>
-      <p>
+      <div>
         The Portal is owned by TD or its licensors and is protected under both United States and
         foreign laws. Except as explicitly stated in these Terms, all rights in and to the Portal
         are reserved by TD or its licensors. Subject to your compliance with these Terms, you are
@@ -115,9 +115,9 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         other than as specifically authorized herein, without TD’s prior written permission, is
         strictly prohibited, will terminate the license granted herein and violate TD’s or its
         licensors’ intellectual property rights.
-      </p>
+      </div>
       <h2>5 Feedback</h2>
-      <p>
+      <div>
         You may voluntarily post, submit or otherwise communicate to TD any questions, comments,
         suggestions, ideas, original or creative materials or other information about TD or the
         Portal (which includes your Account) (collectively, “
@@ -125,9 +125,9 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         for any purpose, commercial or otherwise, without acknowledgment or compensation to you,
         including to develop, copy, publish, or improve the Feedback in TD’s sole discretion. You
         understand that TD may treat Feedback as nonconfidential.
-      </p>
+      </div>
       <h2>6 Indemnification</h2>
-      <p>
+      <div>
         To the fullest extent permitted by applicable law, Company will indemnify, defend (at TD’s
         option) and hold harmless TD and its affiliates, and each of their respective officers,
         directors, agents, partners and employees (individually and collectively, “
@@ -140,17 +140,17 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         Claims. This indemnity is in addition to, and not in lieu of, any other indemnities set
         forth in a written agreement between Company and TD or the other TD Parties (including any
         POC Agreement).
-      </p>
+      </div>
       <h2>7 Disclaimers</h2>
-      <p className='terms-bold'>
+      <div className='terms-bold'>
         Your use of the Portal is at your sole risk. The Portal and any content therein are provided
         “as is” and “as available” without warranties of any kind, either express or implied,
         including implied warranties of merchantability, fitness for a particular purpose, title,
         and non-infringement. In addition, TD does not represent or warrant that the Portal is
         accurate, complete, reliable, current or error-free.
-      </p>
+      </div>
       <h2>8 Limitation of Liability</h2>
-      <p className='terms-bold'>
+      <div className='terms-bold'>
         <table>
           <tr>
             <td>(a)</td>
@@ -183,36 +183,36 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
             </td>
           </tr>
         </table>
-      </p>
+      </div>
       <h2>9 Governing Law; Jurisdiction.</h2>
-      <p>
+      <div>
         These Terms and any disputes hereunder will be governed by the governing law and dispute
         resolution clause set forth in the POC Agreement.
-      </p>
+      </div>
       <h2>10 Modifying and Terminating the Portal</h2>
-      <p>
+      <div>
         TD reserves the right to modify the Portal or to suspend or stop providing all or portions
         of the Portal at any time. You also have the right to stop using the Portal at any time. We
         are not responsible for any loss or harm related to your inability to access or use the
         Portal.
-      </p>
+      </div>
       <h2>11 Amendments</h2>
-      <p>
+      <div>
         TD may make changes to these Terms from time to time. If TD makes changes, TD will provide
         you with notice of such changes, such as by sending an email or providing a notice through
         the Portal. Unless TD says otherwise in the notice, the amended Terms will be effective
         immediately, and your continued use of the Portal after TD provides such notice will confirm
         acceptance of the changes. If you or Company do not agree to the amended Terms, you must
         stop using the Portal.
-      </p>
+      </div>
       <h2>12 Severability</h2>
-      <p>
+      <div>
         If any provision or part of a provision of these Terms is unlawful, void or unenforceable,
         that provision or part of the provision is deemed severable from these Terms and does not
         affect the validity and enforceability of any remaining provisions.
-      </p>
+      </div>
       <h2>13 Miscellaneous</h2>
-      <p>
+      <div>
         The failure of TD to exercise or enforce any right or provision of these Terms will not
         operate as a waiver of such right or provision. These Terms reflect the entire agreement
         between the parties relating to the subject matter hereof and supersede all prior
@@ -223,7 +223,7 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
         and are not intended to confer third-party beneficiary rights upon any other person or
         entity. You agree that communications and transactions between you and TD may be conducted
         electronically.
-      </p>
+      </div>
     </div>
   );
 }
