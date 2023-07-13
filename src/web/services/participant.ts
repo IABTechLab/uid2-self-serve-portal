@@ -39,6 +39,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
       role: formData.role,
       firstName: user.firstName,
       lastName: user.lastName,
+      acceptedTerms: formData.agreeToTerms,
     },
   ] as UserPayload[];
   if (!formData.canSign) {
