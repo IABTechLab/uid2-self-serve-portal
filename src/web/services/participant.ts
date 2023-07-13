@@ -2,6 +2,7 @@ import axios, { AxiosError, isAxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
+import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
@@ -162,5 +163,55 @@ export async function DeleteSharingParticipants(
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete sharing participants');
+  }
+}
+
+export type BusinessContactResponse = z.infer<typeof BusinessContactSchema>;
+
+export type BusinessContactForm = {
+  name: string;
+  emailAlias: string;
+  contactType: string;
+};
+
+export async function AddEmailContact(formData: BusinessContactForm, participantId?: number) {
+  try {
+    await axios.post(`/participants/${participantId ?? 'current'}/businessContacts`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not add email contact');
+  }
+}
+
+export async function GetEmailContacts(participantId?: number) {
+  try {
+    const result = await axios.get<BusinessContactResponse[]>(
+      `/participants/${participantId ?? 'current'}/businessContacts`
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load email contacts');
+  }
+}
+
+export async function RemoveEmailContact(contactId: number, participantId?: number) {
+  try {
+    await axios.delete(`/participants/${participantId ?? 'current'}/businessContacts/${contactId}`);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not delete email contact');
+  }
+}
+
+export async function UpdateEmailContact(
+  contactId: number,
+  formData: BusinessContactForm,
+  participantId?: number
+) {
+  try {
+    await axios.put(
+      `/participants/${participantId ?? 'current'}/businessContacts/${contactId}`,
+      formData
+    );
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update email contact');
   }
 }

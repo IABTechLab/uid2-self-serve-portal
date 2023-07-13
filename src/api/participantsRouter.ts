@@ -1,6 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { businessContactsRouter } from './businessContactsRouter';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -184,3 +185,5 @@ participantsRouter.post(
     return res.status(200).json(sharingParticipants);
   }
 );
+
+participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
