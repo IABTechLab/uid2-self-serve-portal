@@ -33,7 +33,7 @@ export function SideNav({ menu }: SideNavProps) {
       </NavigationMenuList>
       <NavigationMenuList className='nav-footer'>
         <li className='side-nav-item'>&copy; 2023 Unified ID</li>
-        <li className='side-nav-item'>
+        <NavigationMenuItem className='side-nav-item'>
           <a
             target='_blank'
             className='outside-link'
@@ -42,7 +42,7 @@ export function SideNav({ menu }: SideNavProps) {
           >
             Website Privacy Policy
           </a>
-        </li>
+        </NavigationMenuItem>
         {menu
           .filter((m) => m.location === 'footer')
           .map((m) => (
