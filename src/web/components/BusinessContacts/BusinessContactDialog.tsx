@@ -10,14 +10,12 @@ import { TextInput } from '../Input/TextInput';
 
 type BusinessContactDialogProps = {
   onFormSubmit: (formData: BusinessContactForm) => Promise<void>;
-  onFormSubmitted: () => void;
   triggerButton: JSX.Element;
   contact?: BusinessContactResponse;
 };
 
 function BusinessContactDialog({
   onFormSubmit,
-  onFormSubmitted,
   triggerButton,
   contact,
 }: BusinessContactDialogProps) {
@@ -26,7 +24,6 @@ function BusinessContactDialog({
   const onSubmit: SubmitHandler<BusinessContactForm> = async (formData) => {
     await onFormSubmit(formData);
     setOpen(false);
-    onFormSubmitted();
   };
 
   return (

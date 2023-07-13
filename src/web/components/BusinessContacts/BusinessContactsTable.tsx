@@ -5,11 +5,9 @@ import BusinessContactDialog from './BusinessContactDialog';
 import './BusinessContactsTable.scss';
 
 function NoEmailContact({
-  addEmailContact,
-  onBusinessContactUpdated,
+  onAddEmailContact,
 }: {
-  addEmailContact: (form: BusinessContactForm) => Promise<void>;
-  onBusinessContactUpdated: () => void;
+  onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
 }) {
   return (
     <div className='no-contacts-container'>
@@ -17,8 +15,7 @@ function NoEmailContact({
       <div className='no-contacts-text'>
         <h2>No Email Contacts</h2>
         <BusinessContactDialog
-          onFormSubmit={addEmailContact}
-          onFormSubmitted={onBusinessContactUpdated}
+          onFormSubmit={onAddEmailContact}
           triggerButton={
             <button className='transparent-button' type='button'>
               Add Email Contact
@@ -32,18 +29,16 @@ function NoEmailContact({
 
 type BusinessContactsTableProps = {
   businessContacts: BusinessContactResponse[];
-  removeEmailContact: (id: number) => Promise<void>;
-  updateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
-  addEmailContact: (form: BusinessContactForm) => Promise<void>;
-  onBusinessContactUpdated: () => void;
+  onRemoveEmailContact: (id: number) => Promise<void>;
+  onUpdateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
+  onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
 };
 
 function BusinessContactsTable({
   businessContacts,
-  removeEmailContact,
-  updateEmailContact,
-  addEmailContact,
-  onBusinessContactUpdated,
+  onRemoveEmailContact,
+  onUpdateEmailContact,
+  onAddEmailContact,
 }: BusinessContactsTableProps) {
   return (
     <div className='business-contacts-table-container'>
@@ -61,24 +56,17 @@ function BusinessContactsTable({
             <BusinessContact
               key={e.id}
               contact={e}
-              removeEmailContact={removeEmailContact}
-              updateEmailContact={updateEmailContact}
-              onBusinessContactUpdated={onBusinessContactUpdated}
+              onRemoveEmailContact={onRemoveEmailContact}
+              onUpdateEmailContact={onUpdateEmailContact}
             />
           ))}
         </tbody>
       </table>
-      {!businessContacts.length && (
-        <NoEmailContact
-          onBusinessContactUpdated={onBusinessContactUpdated}
-          addEmailContact={addEmailContact}
-        />
-      )}
+      {!businessContacts.length && <NoEmailContact onAddEmailContact={onAddEmailContact} />}
       {!!businessContacts.length && (
         <div className='add-new-item'>
           <BusinessContactDialog
-            onFormSubmit={addEmailContact}
-            onFormSubmitted={onBusinessContactUpdated}
+            onFormSubmit={onAddEmailContact}
             triggerButton={
               <button className='small-button' type='button'>
                 Add Email Contact

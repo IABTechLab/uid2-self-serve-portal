@@ -4,6 +4,7 @@ import { Await, defer, useLoaderData, useNavigate, useRevalidator } from 'react-
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
 import {
   AddEmailContact,
+  BusinessContactForm,
   BusinessContactResponse,
   GetEmailContacts,
   RemoveEmailContact,
@@ -11,7 +12,7 @@ import {
 } from '../services/participant';
 import { PortalRoute } from './routeUtils';
 
-import './businessContacts.scss';
+import './emailContacts.scss';
 
 function Loading() {
   return <div>Loading business contacts...</div>;
@@ -21,13 +22,28 @@ export function BusinessContacts() {
   const navigate = useNavigate();
   const data = useLoaderData() as { emailContacts: BusinessContactResponse[] };
   const reloader = useRevalidator();
-  const onBusinessContactUpdated = useCallback(() => {
+  const handleBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
 
   // TODO: update to Participation Policy page
   const onClick = () => {
     navigate('/');
+  };
+
+  const handleRemoveEmailContact = async (contactId: number) => {
+    await RemoveEmailContact(contactId);
+    handleBusinessContactUpdated();
+  };
+
+  const handleUpdateEmailContact = async (contactId: number, formData: BusinessContactForm) => {
+    await UpdateEmailContact(contactId, formData);
+    handleBusinessContactUpdated();
+  };
+
+  const handleAddEmailContact = async (formData: BusinessContactForm) => {
+    await AddEmailContact(formData);
+    handleBusinessContactUpdated();
   };
 
   return (
@@ -43,10 +59,9 @@ export function BusinessContacts() {
           {(emailContacts: BusinessContactResponse[]) => (
             <BusinessContactsTable
               businessContacts={emailContacts}
-              removeEmailContact={RemoveEmailContact}
-              updateEmailContact={UpdateEmailContact}
-              addEmailContact={AddEmailContact}
-              onBusinessContactUpdated={onBusinessContactUpdated}
+              onRemoveEmailContact={handleRemoveEmailContact}
+              onUpdateEmailContact={handleUpdateEmailContact}
+              onAddEmailContact={handleAddEmailContact}
             />
           )}
         </Await>

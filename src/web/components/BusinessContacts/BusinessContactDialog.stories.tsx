@@ -17,7 +17,6 @@ WithoutBusinessContact.args = {
   triggerButton: <button type='button'>Open</button>,
   onFormSubmit: (formData) =>
     Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`)),
-  onFormSubmitted: () => console.log('Business contact submitted'),
 };
 
 export const WithBusinessContact = Template.bind({});
@@ -42,5 +41,4 @@ WithSubmitError.args = {
     contactType: ContactType.Business,
     participantId: 1,
   },
-  onFormSubmit: (formData) => Promise.reject(),
 };

@@ -5,24 +5,21 @@ import BusinessContactDialog from './BusinessContactDialog';
 
 type BusinessContactProps = {
   contact: BusinessContactResponse;
-  onBusinessContactUpdated: () => void;
-  removeEmailContact: (id: number) => Promise<void>;
-  updateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
+  onRemoveEmailContact: (id: number) => Promise<void>;
+  onUpdateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
 };
 
 function BusinessContact({
   contact,
-  onBusinessContactUpdated,
-  removeEmailContact,
-  updateEmailContact,
+  onRemoveEmailContact,
+  onUpdateEmailContact,
 }: BusinessContactProps) {
-  const onRemoveEmailContact = async () => {
-    await removeEmailContact(contact.id);
-    onBusinessContactUpdated();
+  const handleRemoveEmailContact = async () => {
+    await onRemoveEmailContact(contact.id);
   };
 
-  const onUpdateEmailContact = async (formData: BusinessContactForm) => {
-    await updateEmailContact(contact.id, formData);
+  const handleUpdateEmailContact = async (formData: BusinessContactForm) => {
+    await onUpdateEmailContact(contact.id, formData);
   };
 
   return (
@@ -32,8 +29,7 @@ function BusinessContact({
       <td>{contact.contactType}</td>
       <td className='action'>
         <BusinessContactDialog
-          onFormSubmit={onUpdateEmailContact}
-          onFormSubmitted={onBusinessContactUpdated}
+          onFormSubmit={handleUpdateEmailContact}
           contact={contact}
           triggerButton={
             <button className='icon-button' aria-label='edit' type='button'>
@@ -45,7 +41,7 @@ function BusinessContact({
           className='icon-button'
           aria-label='delete'
           type='button'
-          onClick={onRemoveEmailContact}
+          onClick={handleRemoveEmailContact}
         >
           <FontAwesomeIcon icon='trash-can' />
         </button>

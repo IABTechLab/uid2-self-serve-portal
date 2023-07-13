@@ -15,11 +15,10 @@ const Template: ComponentStory<typeof BusinessContactsTable> = (args) => (
 export const WithoutBusinessContacts = Template.bind({});
 WithoutBusinessContacts.args = {
   businessContacts: [],
-  removeEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
-  updateEmailContact: (id, form) =>
+  onRemoveEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
+  onUpdateEmailContact: (id, form) =>
     Promise.resolve(console.log(`Update contact id: ${id} with ${JSON.stringify(form)}`)),
-  addEmailContact: (form) => Promise.resolve(console.log(`Add contact ${JSON.stringify(form)}`)),
-  onBusinessContactUpdated: () => console.log('Business contact updated'),
+  onAddEmailContact: (form) => Promise.resolve(console.log(`Add contact ${JSON.stringify(form)}`)),
 };
 
 export const WithBusinessContacts = Template.bind({});

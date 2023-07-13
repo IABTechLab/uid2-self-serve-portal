@@ -5,7 +5,7 @@ import { SideNav } from '../components/Core/SideNav';
 import { SnailTrail } from '../components/Core/SnailTrail';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AccountInformationRoute } from './accountInformation';
-import { EmailContactsRoute } from './businessContacts';
+import { EmailContactsRoute } from './emailContacts';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';

@@ -19,8 +19,7 @@ Default.args = {
     contactType: ContactType.Business,
     participantId: 1,
   },
-  removeEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
-  updateEmailContact: (id, form) =>
+  onRemoveEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
+  onUpdateEmailContact: (id, form) =>
     Promise.resolve(console.log(`Update contact id: ${id} with ${JSON.stringify(form)}`)),
-  onBusinessContactUpdated: () => console.log('Business contact updated'),
 };
