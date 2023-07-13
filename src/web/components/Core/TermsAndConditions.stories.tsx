@@ -1,14 +1,14 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { TermsAndConditions } from './TermsAndConditions';
+import { TermsAndConditionsForm } from './TermsAndConditions';
 
 export default {
   title: 'Shared Components/Terms and Conditions Dialog',
-  component: TermsAndConditions,
-} as ComponentMeta<typeof TermsAndConditions>;
+  component: TermsAndConditionsForm,
+} as ComponentMeta<typeof TermsAndConditionsForm>;
 
-const Template: ComponentStory<typeof TermsAndConditions> = (args) => (
-  <TermsAndConditions {...args} />
+const Template: ComponentStory<typeof TermsAndConditionsForm> = (args) => (
+  <TermsAndConditionsForm {...args} />
 );
 
 export const Default = Template.bind({});
