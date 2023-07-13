@@ -10,6 +10,7 @@ import { HomeRoute } from './home';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
+import { TermsOfServiceRoute } from './termsOfService';
 
 import './dashboard.scss';
 
@@ -19,6 +20,7 @@ export const DashboardRoutes: PortalRoute[] = [
   AccountInformationRoute,
   TeamMembersRoute,
   EmailContactsRoute,
+  TermsOfServiceRoute,
 ];
 const menu = DashboardRoutes.filter((r) => r.description);
 

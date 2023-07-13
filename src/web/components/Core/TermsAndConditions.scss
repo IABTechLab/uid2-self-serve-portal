@@ -1,4 +1,27 @@
-.terms-and-conditions {
+.terms-container {
+  margin-bottom: 22px;
+  font-size: 0.8125rem;
+  line-height: 1.8;
+
+  div {
+    margin: 13px 0;
+  }
+
+  h1 {
+    text-align: center;
+    margin-top: 0;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  .terms-bold {
+    font-weight: 600;
+  }
+}
+
+.terms-and-conditions-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -13,22 +36,6 @@
     padding: 16px;
     height: 468px;
     overflow: scroll;
-    margin-bottom: 22px;
     max-width: 910px;
-    font-size: 0.8125rem;
-    line-height: 1.8;
-
-    h1 {
-      text-align: center;
-      margin-top: 0;
-    }
-
-    td {
-      vertical-align: top;
-    }
-
-    .terms-bold {
-      font-weight: 600;
-    }
   }
 }

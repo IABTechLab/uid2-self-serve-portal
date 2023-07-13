@@ -6,7 +6,7 @@ import { UserRole } from '../../../api/entities/User';
 import { CreateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { withoutRef } from '../Core/Form';
-import { TermsAndConditions } from '../Core/TermsAndConditions';
+import { TermsAndConditionsForm } from '../Core/TermsAndConditions';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
 import { SelectInput } from '../Input/SelectInput';
@@ -92,7 +92,7 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
             (must click link)
           </span>
           <Dialog open={showTermsDialog} onOpenChange={setShowTermsDialog}>
-            <TermsAndConditions
+            <TermsAndConditionsForm
               onAccept={handleAccept}
               onCancel={() => setShowTermsDialog(false)}
             />
