@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError, isAxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
+import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
@@ -15,7 +16,21 @@ export type CreateParticipantForm = {
   role: string;
   canSign: boolean;
   signeeEmail: string;
+  agreeToTerms: boolean;
 };
+
+export const isCreateParticipantError = (error: unknown): error is CreateParticipantError => {
+  return (
+    axios.isAxiosError(error) &&
+    Array.isArray(error.response?.data) &&
+    error.response!.data.every((d) => typeof d.message === 'string')
+  );
+};
+type CreateParticipantErrorOptionalResponse = AxiosError<{ message: string }[]>;
+export type CreateParticipantError = Required<
+  Pick<CreateParticipantErrorOptionalResponse, 'response'>
+> &
+  Omit<CreateParticipantErrorOptionalResponse, 'response'>;
 
 export async function CreateParticipant(formData: CreateParticipantForm, user: KeycloakProfile) {
   const users = [
@@ -35,8 +50,22 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
     types: formData.companyType.map((typeId) => ({ id: typeId })),
     users,
   };
-  const newParticipant = await axios.post<ParticipantResponse>(`/participants`, participantPayload);
-  return newParticipant.data;
+  try {
+    const newParticipant = await axios.post<ParticipantResponse>(
+      `/participants`,
+      participantPayload
+    );
+    return newParticipant.data;
+  } catch (err: unknown | AxiosError<CreateParticipantError>) {
+    const status = isAxiosError(err) ? err.response?.status : null;
+    const responseMessages = isCreateParticipantError(err)
+      ? err.response?.data.map((d) => d.message)
+      : null;
+    return {
+      errorStatus: status ?? 'Unknown',
+      messages: responseMessages ?? ['An unknown error occurred.'],
+    };
+  }
 }
 
 export async function GetParticipantByUserId(id: number) {
@@ -91,11 +120,11 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
 }
 
 export async function GetSharingParticipants(
-  participantId: number
+  participantId?: number
 ): Promise<ParticipantResponse[]> {
   try {
     const result = await axios.get<ParticipantResponse[]>(
-      `/participants/${participantId}/sharingPermission`
+      `/participants/${participantId ?? 'current'}/sharingPermission`
     );
     return result.data;
   } catch (e: unknown) {
@@ -134,5 +163,55 @@ export async function DeleteSharingParticipants(
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete sharing participants');
+  }
+}
+
+export type BusinessContactResponse = z.infer<typeof BusinessContactSchema>;
+
+export type BusinessContactForm = {
+  name: string;
+  emailAlias: string;
+  contactType: string;
+};
+
+export async function AddEmailContact(formData: BusinessContactForm, participantId?: number) {
+  try {
+    await axios.post(`/participants/${participantId ?? 'current'}/businessContacts`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not add email contact');
+  }
+}
+
+export async function GetEmailContacts(participantId?: number) {
+  try {
+    const result = await axios.get<BusinessContactResponse[]>(
+      `/participants/${participantId ?? 'current'}/businessContacts`
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load email contacts');
+  }
+}
+
+export async function RemoveEmailContact(contactId: number, participantId?: number) {
+  try {
+    await axios.delete(`/participants/${participantId ?? 'current'}/businessContacts/${contactId}`);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not delete email contact');
+  }
+}
+
+export async function UpdateEmailContact(
+  contactId: number,
+  formData: BusinessContactForm,
+  participantId?: number
+) {
+  try {
+    await axios.put(
+      `/participants/${participantId ?? 'current'}/businessContacts/${contactId}`,
+      formData
+    );
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update email contact');
   }
 }

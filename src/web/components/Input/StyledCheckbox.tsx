@@ -22,13 +22,19 @@ export function StyledCheckbox(props: Checkbox.CheckboxProps) {
   );
 }
 
+type ExtraCheckboxProps = Omit<
+  Checkbox.CheckboxProps,
+  'checked' | 'defaultChecked' | 'required' | 'onCheckedChange'
+>;
 export function FormStyledCheckbox<
   TFieldValues extends FieldValues,
   TFieldName extends FieldPath<TFieldValues>
->(props: UseControllerProps<TFieldValues, TFieldName>) {
+>(props: UseControllerProps<TFieldValues, TFieldName> & ExtraCheckboxProps) {
   const { field } = useController<TFieldValues, TFieldName>({ ...props });
   return (
     <StyledCheckbox
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
       checked={field.value}
       onBlur={field.onBlur}
       name={field.name}

@@ -1,0 +1,27 @@
+.sharing-permission-card {
+  box-shadow: 0 4px 8px var(--theme-box-shadow);
+
+  .permissions-count-section {
+    margin: 20px 0;
+    display: flex;
+
+    .permissions-count {
+      font-size: 3.75rem;
+    }
+
+    span {
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .error {
+      color: var(--theme-error);
+    }
+  }
+
+  .divider {
+    width: 1px;
+    border-right: 1px solid var(--theme-divider);
+    margin: 0 24px 0 38px;
+  }
+}

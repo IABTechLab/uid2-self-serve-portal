@@ -72,7 +72,7 @@ export function ParticipantSearchBar({
           />
           {/* TODO: update the participant not appearing url */}
           {/* <div className='search-bar-footer'>
-            <a href='/'>Participant Not Appearing in Search?</a>
+            <a className='outside-link' href='/'>Participant Not Appearing in Search?</a>
           </div> */}
         </div>
       )}

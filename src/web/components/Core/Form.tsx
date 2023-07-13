@@ -1,7 +1,14 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import axios from 'axios';
 import { ReactNode, useCallback } from 'react';
-import { DeepPartial, FieldValues, FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  DeepPartial,
+  FieldValues,
+  FormProvider,
+  SubmitHandler,
+  useForm,
+  UseFormRegisterReturn,
+} from 'react-hook-form';
 
 import './Form.scss';
 
@@ -14,6 +21,11 @@ type FormProps<T extends FieldValues> = {
   customizeSubmit?: boolean;
   id?: string;
 };
+
+export function withoutRef<TFieldName extends string>(props: UseFormRegisterReturn<TFieldName>) {
+  const { ref, ...rest } = props;
+  return rest;
+}
 
 export function Form<T extends FieldValues>({
   id,

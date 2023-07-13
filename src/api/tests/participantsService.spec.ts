@@ -78,7 +78,7 @@ describe('Participant Service Tests', () => {
 
       expect(res.statusCode).toBe(200);
       expect(res.body).toEqual({
-        id: '1',
+        id: 1,
         name: 'Test Participant',
         location: 'Test Location',
         allowSharing: true,
