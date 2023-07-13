@@ -1,5 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as Checkbox from '@radix-ui/react-checkbox';
 import { UIEvent, useCallback, useState } from 'react';
 
 import './TermsAndConditions.scss';
@@ -18,7 +16,7 @@ export function TermsAndConditions({ onAccept, onCancel }: TermsAndConditionsPro
   const handleScroll = useCallback((event: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
     const scrollPos = scrollHeight - scrollTop - clientHeight;
-    if (scrollPos === 0) setScrolledToBottom(true);
+    if (scrollPos < 20) setScrolledToBottom(true);
   }, []);
   return (
     <div className='terms-and-conditions'>

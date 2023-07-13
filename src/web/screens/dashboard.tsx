@@ -6,19 +6,15 @@ import { SnailTrail } from '../components/Core/SnailTrail';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
+import { HomeRoute } from './home';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
 
 import './dashboard.scss';
 
-export const DashboardMainRoute: PortalRoute = {
-  path: '/',
-  description: 'Dashboard',
-  element: <span>Main</span>,
-};
 export const DashboardRoutes: PortalRoute[] = [
-  DashboardMainRoute,
+  HomeRoute,
   SharingPermissionsRoute,
   AccountInformationRoute,
   TeamMembersRoute,
