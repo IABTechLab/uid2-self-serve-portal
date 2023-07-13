@@ -10,18 +10,16 @@ import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 
 type AddTeamMemberProps = {
-  addTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
-  onTeamMemberAdded: () => void;
+  onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
 };
 
-function AddTeamMemberDialog({ addTeamMember, onTeamMemberAdded }: AddTeamMemberProps) {
+function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   const { participant } = useContext(ParticipantContext);
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<InviteTeamMemberForm> = async (formData) => {
-    await addTeamMember(formData, participant!.id!);
+    await onAddTeamMember(formData, participant!.id!);
     setOpen(false);
-    onTeamMemberAdded();
   };
 
   return (

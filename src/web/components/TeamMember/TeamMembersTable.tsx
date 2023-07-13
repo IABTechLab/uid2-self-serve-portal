@@ -7,17 +7,11 @@ import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = {
   teamMembers: UserResponse[];
-  addTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
-  onTeamMembersUpdated: () => void;
+  onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
   resendInvite: (id: number) => Promise<void>;
 };
 
-function TeamMembersTable({
-  teamMembers,
-  addTeamMember,
-  onTeamMembersUpdated,
-  resendInvite,
-}: TeamMembersTableProps) {
+function TeamMembersTable({ teamMembers, onAddTeamMember, resendInvite }: TeamMembersTableProps) {
   return (
     <div className='portal-team'>
       <table className='portal-team-table'>
@@ -35,10 +29,7 @@ function TeamMembersTable({
         </tbody>
       </table>
       <div className='add-team-member'>
-        <AddTeamMemberDialog
-          onTeamMemberAdded={onTeamMembersUpdated}
-          addTeamMember={addTeamMember}
-        />
+        <AddTeamMemberDialog onAddTeamMember={onAddTeamMember} />
       </div>
     </div>
   );

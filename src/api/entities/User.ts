@@ -55,3 +55,7 @@ export const UserScheme = z.object({
   role: z.nativeEnum(UserRole).optional(),
   acceptedTerms: z.boolean(),
 });
+
+export const UserCreationPartial = UserScheme.omit({
+  id: true,
+});

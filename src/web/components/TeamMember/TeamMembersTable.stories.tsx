@@ -14,8 +14,7 @@ export const WithoutTeamMembers = Template.bind({});
 WithoutTeamMembers.args = {
   teamMembers: [],
   resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
-  addTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
-  onTeamMembersUpdated: () => console.log('team member list updated'),
+  onAddTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
 };
 
 export const WithTeamMembers = Template.bind({});

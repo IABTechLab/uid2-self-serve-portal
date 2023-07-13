@@ -2,7 +2,7 @@ import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
-import { InviteTeamMember } from '../services/participant';
+import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
 import { GetAllUsersOfParticipant, ResendInvite, UserResponse } from '../services/userAccount';
 import { PortalRoute } from './routeUtils';
 
@@ -16,6 +16,12 @@ function TeamMembers() {
   const onTeamMembersUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
+
+  const handleAddTeamMember = async (formData: InviteTeamMemberForm, participantId: number) => {
+    await InviteTeamMember(formData, participantId);
+    onTeamMembersUpdated();
+  };
+
   return (
     <>
       <h1>Team Members & Contacts</h1>
@@ -28,8 +34,7 @@ function TeamMembers() {
           {(users: UserResponse[]) => (
             <TeamMembersTable
               teamMembers={users}
-              addTeamMember={InviteTeamMember}
-              onTeamMembersUpdated={onTeamMembersUpdated}
+              onAddTeamMember={handleAddTeamMember}
               resendInvite={ResendInvite}
             />
           )}
