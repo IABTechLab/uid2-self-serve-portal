@@ -1,5 +1,5 @@
 import { Suspense, useCallback } from 'react';
-import { Await, defer, useLoaderData, useNavigate, useRevalidator } from 'react-router-dom';
+import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
 import {
@@ -19,17 +19,11 @@ function Loading() {
 }
 
 export function BusinessContacts() {
-  const navigate = useNavigate();
   const data = useLoaderData() as { emailContacts: BusinessContactResponse[] };
   const reloader = useRevalidator();
   const handleBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
-
-  // TODO: update to Participation Policy page
-  const onClick = () => {
-    navigate('/');
-  };
 
   const handleRemoveEmailContact = async (contactId: number) => {
     await RemoveEmailContact(contactId);
@@ -66,13 +60,6 @@ export function BusinessContacts() {
           )}
         </Await>
       </Suspense>
-      <div className='dashboard-footer'>
-        <div>
-          <button className='small-button primary-button' type='button' onClick={onClick}>
-            Save
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
