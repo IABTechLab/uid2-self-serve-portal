@@ -12,7 +12,7 @@ import './home.scss';
 
 function Home() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const [loading, setIsLoading] = useState<boolean>(false);
+  const [loading, setIsLoading] = useState<boolean>(true);
   const [sharingPermissionsCount, setSharingPermissionsCount] = useState<number>(0);
   const [hasError, setHasError] = useState<boolean>(false);
   useEffect(() => {
