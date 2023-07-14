@@ -47,7 +47,6 @@ export function BusinessContacts() {
         View and manage email contacts. We’ll send information about the latest updates and releases
         for UID2.
       </p>
-      <h2>Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.emailContacts}>
           {(emailContacts: BusinessContactResponse[]) => (

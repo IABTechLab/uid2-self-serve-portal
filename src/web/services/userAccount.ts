@@ -3,7 +3,7 @@ import { KeycloakProfile } from 'keycloak-js';
 import log from 'loglevel';
 import { z } from 'zod';
 
-import { User, UserScheme } from '../../api/entities/User';
+import { User, UserCreationPartial, UserDTO } from '../../api/entities/User';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
@@ -11,8 +11,8 @@ export type UserAccount = {
   user: User | null;
 };
 
-export type UserPayload = z.infer<typeof UserScheme>;
-
+export type UserPayload = z.infer<typeof UserCreationPartial>;
+export type UserResponse = UserDTO;
 export async function GetUserAccountById(id: string) {
   try {
     const result = await axios.get<User>(`/users/${id}`, {
@@ -63,5 +63,19 @@ export async function CreateUser(userPayload: UserPayload) {
     return newUser.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not create user');
+  }
+}
+
+export async function GetAllUsersOfParticipant(participantId?: number) {
+  try {
+    const result = await axios.get<UserResponse[]>(
+      `/participants/${participantId ?? 'current'}/users`,
+      {
+        validateStatus: (status) => [200, 404].includes(status),
+      }
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load users');
   }
 }

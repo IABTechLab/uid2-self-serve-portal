@@ -1,16 +1,16 @@
 import { useContext, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
-import { UserRole } from '../../api/entities/User';
-import { Dialog } from '../components/Core/Dialog';
-import { Form } from '../components/Core/Form';
-import { SelectInput } from '../components/Input/SelectInput';
-import { TextInput } from '../components/Input/TextInput';
-import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
+import { UserRole } from '../../../api/entities/User';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
+import { InviteTeamMemberForm } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
+import { Form } from '../Core/Form';
+import { SelectInput } from '../Input/SelectInput';
+import { TextInput } from '../Input/TextInput';
 
 type AddTeamMemberProps = {
-  onAddTeamMember: () => void;
+  onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
 };
 
 function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
@@ -18,9 +18,8 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<InviteTeamMemberForm> = async (formData) => {
-    await InviteTeamMember(formData, participant!.id!);
+    await onAddTeamMember(formData, participant!.id!);
     setOpen(false);
-    onAddTeamMember();
   };
 
   return (

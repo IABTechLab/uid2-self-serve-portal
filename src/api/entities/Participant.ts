@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ParticipantTypeSchema } from './ParticipantType';
-import { UserScheme } from './User';
+import { UserCreationPartial, UserScheme } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -70,4 +70,5 @@ export const ParticipantCreationPartial = ParticipantSchema.omit({
   status: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
+  users: z.array(UserCreationPartial).optional(),
 });

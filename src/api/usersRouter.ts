@@ -1,7 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 
-import { User, UserScheme } from './entities/User';
+import { User, UserCreationPartial } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
@@ -24,7 +24,7 @@ usersRouter.get('/', async (req, res) => {
 });
 
 usersRouter.post('/', async (req, res) => {
-  const data = UserScheme.parse(req.body);
+  const data = UserCreationPartial.parse(req.body);
   const user = await User.query().insert(data);
   res.status(201).json(user);
 });
