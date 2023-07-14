@@ -23,7 +23,7 @@ import {
 import { getLoggers } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createParticipantsRouter } from './participantsRouter';
-import { usersRouter } from './usersRouter';
+import { createUsersRouter } from './usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
 function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) {
@@ -42,7 +42,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   const routers = {
     rootRouter: express.Router(),
     participantsRouter: createParticipantsRouter(),
-    usersRouter,
+    usersRouter: createUsersRouter(),
   };
   const router = routers.rootRouter;
   app.use((req, res, next) => {
