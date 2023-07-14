@@ -2,19 +2,19 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { ParticipantResponse } from '../../services/participant';
+import { AvailableParticipant } from '../../../api/participantsRouter';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
 
 type ParticipantsTableProps = {
-  participants: ParticipantResponse[];
+  participants: AvailableParticipant[];
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   selectedParticipantIds?: Set<number>;
-  tableHeader: (filteredParticipants: ParticipantResponse[]) => ReactNode;
+  tableHeader: (filteredParticipants: AvailableParticipant[]) => ReactNode;
   className?: string;
   hideCheckboxIfNoItem?: boolean;
   showAddedByColumn?: boolean;
@@ -73,7 +73,7 @@ export function ParticipantsTable({
     }
   }, [selectedParticipantIds.size, isSelectedAll]);
 
-  const handleCheckChange = (participant: ParticipantResponse) => {
+  const handleCheckChange = (participant: AvailableParticipant) => {
     const newCheckedItems = new Set(selectedParticipantIds);
     if (newCheckedItems.has(participant.siteId!)) {
       newCheckedItems.delete(participant.siteId!);

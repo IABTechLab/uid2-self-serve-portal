@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { defer } from 'react-router-dom';
 
+import { AvailableParticipant } from '../../api/participantsRouter';
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipantsDialog';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
@@ -10,7 +11,6 @@ import {
   DeleteSharingParticipants,
   GetAllAvailableParticipants,
   GetSharingParticipants,
-  ParticipantResponse,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
@@ -25,7 +25,7 @@ type StatusPopupType = {
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant } = useContext(ParticipantContext);
-  const [sharingParticipants, setSharingParticipants] = useState<ParticipantResponse[]>([]);
+  const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipant[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {

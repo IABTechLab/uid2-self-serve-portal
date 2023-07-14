@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { ParticipantResponse } from '../../services/participant';
+import { AvailableParticipant } from '../../../api/participantsRouter';
 import { ParticipantsTable } from './ParticipantsTable';
 
 export default {
@@ -22,7 +22,7 @@ Default.args = {
   participants: [
     { id: 1, name: 'Participant 1', types: [{ id: 1, typeName: 'Type 1' }] },
     { id: 2, name: 'Participant 2', types: [{ id: 2, typeName: 'Type 2' }] },
-  ] as ParticipantResponse[],
+  ] as AvailableParticipant[],
   filterText: '',
   onSelectedChange: (selectedItems: Set<number>) => console.log('Selected items:', selectedItems),
 };

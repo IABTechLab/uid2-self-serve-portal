@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
-import { ParticipantPayload } from '../../services/participant';
+import { AvailableParticipant } from '../../../api/participantsRouter';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 
 import './ParticipantItem.scss';
 
 type ParticipantItemProps = {
-  participant: ParticipantPayload;
+  participant: AvailableParticipant;
   onClick: () => void;
   checked: boolean;
   addedBy?: string;

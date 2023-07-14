@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 
-import { ParticipantResponse } from '../../services/participant';
+import { AvailableParticipant } from '../../../api/participantsRouter';
 import { ParticipantTypeResponse } from '../../services/participantType';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
@@ -10,7 +10,7 @@ import { TypeFilter } from './TypeFilter';
 import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
-  participants: ParticipantResponse[];
+  participants: AvailableParticipant[];
   participantTypes: ParticipantTypeResponse[];
   selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
@@ -36,7 +36,7 @@ export function ParticipantSearchBar({
       setDropdownOpen(true);
     }
   };
-  const tableHeader = (filteredParticipants: ParticipantResponse[]) => (
+  const tableHeader = (filteredParticipants: AvailableParticipant[]) => (
     <th colSpan={3}>
       <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
     </th>
