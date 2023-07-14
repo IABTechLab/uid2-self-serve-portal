@@ -124,11 +124,18 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   app.use(expressWinston.errorLogger(errorLogger));
   const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     logger.error(`Fallback error handler invoked: ${err.message}`);
-    res.status(500).json({
-      message:
-        'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
-      errorHash: req.headers.traceId,
-    });
+    if (err.statusCode === 401) {
+      res.status(401).json({
+        message: 'Unauthorized. You do not have the necessary permissions.',
+        errorHash: req.headers.traceId,
+      });
+    } else {
+      res.status(500).json({
+        message:
+          'Something unexpected went wrong. If the problem persists, please contact support with details about what you were trying to do.',
+        errorHash: req.headers.traceId,
+      });
+    }
   };
   app.use(errorHandler);
   const port = 6540;

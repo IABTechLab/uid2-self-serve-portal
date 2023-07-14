@@ -17,5 +17,5 @@ Default.args = {
 
 export const WithError = Template.bind({});
 WithError.args = {
-  error: { message: 'some error' },
+  hasError: true,
 };
