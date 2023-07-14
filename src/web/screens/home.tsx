@@ -51,8 +51,4 @@ export const HomeRoute: PortalRoute = {
   path: '/',
   description: 'Home',
   element: <Home />,
-  // loader: () => {
-  //   const sharingPermissions = GetSharingParticipants();
-  //   return defer({ sharingPermissions });
-  // },
 };
