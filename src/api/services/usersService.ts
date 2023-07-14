@@ -36,6 +36,16 @@ const userIdParser = z.object({
   userId: z.coerce.number(),
 });
 
+export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
+  const userEmail = req.auth?.payload?.email as string;
+  const user = await findUserByEmail(userEmail);
+  if (!user) {
+    return res.status(404).send([{ message: 'The user cannot be found.' }]);
+  }
+  req.user = user;
+  return next();
+};
+
 export const enrichWithUserFromParams = async (
   req: UserRequest,
   res: Response,

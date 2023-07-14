@@ -79,3 +79,11 @@ export async function GetAllUsersOfParticipant(participantId?: number) {
     throw backendError(e, 'Could not load users');
   }
 }
+
+export async function SetTermsAccepted() {
+  try {
+    await axios.put('/users/current/acceptTerms');
+  } catch (e: unknown) {
+    throw backendError(e, 'Unable to mark terms as accepted.');
+  }
+}
