@@ -200,4 +200,5 @@ export function createParticipantsRouter() {
     }
   );
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
+  return participantsRouter;
 }
