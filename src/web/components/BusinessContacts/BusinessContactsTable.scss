@@ -24,9 +24,12 @@
       border: none;
     }
 
-    td.action {
+    th.action {
+      text-align: center;
+    }
+
+    .action {
       padding-right: 80px;
-      font-size: 0.8125rem;
     }
 
     td {
@@ -35,7 +38,9 @@
     }
 
     td.action {
+      font-size: 0.8125rem;
       display: flex;
+      justify-content: flex-end;
 
       .icon-button {
         &.clickable {

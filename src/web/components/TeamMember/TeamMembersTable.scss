@@ -24,13 +24,20 @@
       width: 40%;
     }
 
+    th.action {
+      text-align: center;
+    }
+
     td {
       padding-top: 15px;
       padding-bottom: 15px;
     }
 
-    td.action {
+    .action {
       padding-right: 80px;
+    }
+
+    td.action {
       font-size: 0.8125rem;
       display: flex;
       justify-content: flex-end;
