@@ -4,6 +4,7 @@ import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
 import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { InlineError } from '../Core/InlineError';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type TeamMemberProps = {
@@ -26,6 +27,7 @@ function TeamMember({
   onUpdateTeamMember,
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
+  const [hasError, setHasError] = useState<boolean>(false);
   const onResendInvite = useCallback(async () => {
     if (reinviteState !== InviteState.initial) {
       log.error(`Unexpected click event on reinvite button`);
@@ -42,11 +44,19 @@ function TeamMember({
   }, [person.id, reinviteState, resendInvite]);
 
   const handleRemoveUser = async () => {
-    await onRemoveTeamMember(person.id);
+    try {
+      await onRemoveTeamMember(person.id);
+    } catch {
+      setHasError(true);
+    }
   };
 
   const handleUpdateUser = async (formData: InviteTeamMemberForm) => {
-    await onUpdateTeamMember(person.id, formData);
+    try {
+      await onUpdateTeamMember(person.id, formData);
+    } catch {
+      setHasError(true);
+    }
   };
 
   return (
@@ -59,6 +69,7 @@ function TeamMember({
       </td>
       <td>{person.email}</td>
       <td className='action'>
+        {hasError && <InlineError />}
         {person.acceptedTerms || (
           <button
             type='button'

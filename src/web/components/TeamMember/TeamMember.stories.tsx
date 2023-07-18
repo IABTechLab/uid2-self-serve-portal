@@ -30,6 +30,9 @@ withAcceptedTerm.args = {
     participantId: 1,
   },
   resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
+  onRemoveTeamMember: (id) => Promise.resolve(console.log(`Remove userId: ${id}`)),
+  onUpdateTeamMember: (id, formData) =>
+    Promise.resolve(console.log(`Update userId: ${id} with ${JSON.stringify(formData)}`)),
 };
 
 export const pendingMember = Template.bind({});
@@ -44,4 +47,7 @@ pendingMember.args = {
     participantId: 1,
   },
   resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
+  onRemoveTeamMember: (id) => Promise.resolve(console.log(`Remove userId: ${id}`)),
+  onUpdateTeamMember: (id, formData) =>
+    Promise.resolve(console.log(`Update userId: ${id} with ${JSON.stringify(formData)}`)),
 };

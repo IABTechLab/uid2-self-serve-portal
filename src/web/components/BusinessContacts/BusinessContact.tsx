@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { InlineError } from '../Core/InlineError';
 import BusinessContactDialog from './BusinessContactDialog';
 
 type BusinessContactProps = {
@@ -14,12 +16,22 @@ function BusinessContact({
   onRemoveEmailContact,
   onUpdateEmailContact,
 }: BusinessContactProps) {
+  const [hasError, setHasError] = useState<boolean>(false);
+
   const handleRemoveEmailContact = async () => {
-    await onRemoveEmailContact(contact.id);
+    try {
+      await onRemoveEmailContact(contact.id);
+    } catch {
+      setHasError(true);
+    }
   };
 
   const handleUpdateEmailContact = async (formData: BusinessContactForm) => {
-    await onUpdateEmailContact(contact.id, formData);
+    try {
+      await onUpdateEmailContact(contact.id, formData);
+    } catch {
+      setHasError(true);
+    }
   };
 
   return (
@@ -28,6 +40,7 @@ function BusinessContact({
       <td>{contact.emailAlias}</td>
       <td>{contact.contactType}</td>
       <td className='action'>
+        {hasError && <InlineError />}
         <BusinessContactDialog
           onFormSubmit={handleUpdateEmailContact}
           contact={contact}

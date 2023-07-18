@@ -41,3 +41,9 @@ WithBusinessContacts.args = {
     },
   ],
 };
+
+export const WithDeleteError = Template.bind({});
+WithDeleteError.args = {
+  ...WithBusinessContacts.args,
+  onRemoveEmailContact: (id) => Promise.reject(console.log(`Failed to delete contact id: ${id}`)),
+};
