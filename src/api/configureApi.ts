@@ -22,8 +22,8 @@ import {
 } from './envars';
 import { getLoggers } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
-import { participantsRouter } from './participantsRouter';
-import { usersRouter } from './usersRouter';
+import { createParticipantsRouter } from './participantsRouter';
+import { createUsersRouter } from './usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
 function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) {
@@ -39,7 +39,12 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) 
 
 export function configureAndStartApi(useMetrics: boolean = true) {
   const app = express();
-  const router = express.Router();
+  const routers = {
+    rootRouter: express.Router(),
+    participantsRouter: createParticipantsRouter(),
+    usersRouter: createUsersRouter(),
+  };
+  const router = routers.rootRouter;
   app.use((req, res, next) => {
     req.headers.traceId = uuid();
     next();
@@ -86,8 +91,8 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     res.json('UID2 Self-serve Portal: Online');
   });
 
-  router.use('/users', usersRouter);
-  router.use('/participants', participantsRouter);
+  router.use('/users', routers.usersRouter);
+  router.use('/participants', routers.participantsRouter);
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });
@@ -142,5 +147,5 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   const server = app.listen(port, () => {
     logger.info(`Listening on port ${port}.`);
   });
-  return server;
+  return { server, routers };
 }
