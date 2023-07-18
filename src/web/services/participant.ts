@@ -4,10 +4,10 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
+import { AvailableParticipantDTO } from '../../api/participantsRouter';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
-export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'allowSharing'>;
 export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
 export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
 export type CreateParticipantForm = {
@@ -82,7 +82,7 @@ export async function GetParticipantByUserId(id: number) {
 
 export async function GetAllAvailableParticipants() {
   try {
-    const result = await axios.get<ParticipantResponse[]>(`/participants/available`, {
+    const result = await axios.get<AvailableParticipantDTO[]>(`/participants/available`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
@@ -122,9 +122,9 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
 
 export async function GetSharingParticipants(
   participantId?: number
-): Promise<ParticipantResponse[]> {
+): Promise<AvailableParticipantDTO[]> {
   try {
-    const result = await axios.get<ParticipantResponse[]>(
+    const result = await axios.get<AvailableParticipantDTO[]>(
       `/participants/${participantId ?? 'current'}/sharingPermission`
     );
     return result.data;
@@ -136,9 +136,9 @@ export async function GetSharingParticipants(
 export async function AddSharingParticipants(
   participantId: number,
   newParticipantSites: number[]
-): Promise<ParticipantResponse[]> {
+): Promise<AvailableParticipantDTO[]> {
   try {
-    const result = await axios.post<ParticipantResponse[]>(
+    const result = await axios.post<AvailableParticipantDTO[]>(
       `/participants/${participantId}/sharingPermission/add`,
       {
         newParticipantSites,
@@ -153,9 +153,9 @@ export async function AddSharingParticipants(
 export async function DeleteSharingParticipants(
   participantId: number,
   sharingSitesToRemove: number[]
-): Promise<ParticipantResponse[]> {
+): Promise<AvailableParticipantDTO[]> {
   try {
-    const result = await axios.post<ParticipantResponse[]>(
+    const result = await axios.post<AvailableParticipantDTO[]>(
       `/participants/${participantId}/sharingPermission/delete`,
       {
         sharingSitesToRemove,

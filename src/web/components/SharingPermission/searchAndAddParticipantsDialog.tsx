@@ -2,8 +2,8 @@ import { Suspense, useContext, useMemo, useState } from 'react';
 import { Await, useLoaderData } from 'react-router-dom';
 
 import { ParticipantType } from '../../../api/entities/ParticipantType';
+import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
-import { ParticipantResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { Loading } from '../Core/Loading';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
@@ -12,7 +12,7 @@ import './searchAndAddParticipantsDialog.scss';
 
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
-  sharingParticipants: ParticipantResponse[];
+  sharingParticipants: AvailableParticipantDTO[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
@@ -22,7 +22,7 @@ export function SearchAndAddParticipants({
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
   const { participants, participantTypes } = useLoaderData() as {
-    participants: ParticipantResponse[];
+    participants: AvailableParticipantDTO[];
     participantTypes: ParticipantType[];
   };
   const { participant } = useContext(ParticipantContext);
@@ -38,7 +38,7 @@ export function SearchAndAddParticipants({
     return new Set(sharingParticipants.map((p) => p.siteId));
   }, [sharingParticipants]);
 
-  const getSearchableParticipants = (resolvedParticipants: ParticipantResponse[]) => {
+  const getSearchableParticipants = (resolvedParticipants: AvailableParticipantDTO[]) => {
     return resolvedParticipants.filter(
       (p) => p.id !== participant?.id && !sharingParticipantsSiteIds.has(p.siteId)
     );
@@ -66,7 +66,7 @@ export function SearchAndAddParticipants({
         <div className='add-participant-dialog-search-bar'>
           <Suspense fallback={<Loading />}>
             <Await resolve={participants}>
-              {(resolvedParticipants: ParticipantResponse[]) => (
+              {(resolvedParticipants: AvailableParticipantDTO[]) => (
                 <ParticipantSearchBar
                   selectedParticipantIds={selectedParticipants}
                   participants={getSearchableParticipants(resolvedParticipants)}
