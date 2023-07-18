@@ -2,8 +2,15 @@ import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
-import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
-import { GetAllUsersOfParticipant, ResendInvite, UserResponse } from '../services/userAccount';
+import { InviteTeamMember } from '../services/participant';
+import {
+  GetAllUsersOfParticipant,
+  InviteTeamMemberForm,
+  RemoveUser,
+  ResendInvite,
+  UpdateUser,
+  UserResponse,
+} from '../services/userAccount';
 import { PortalRoute } from './routeUtils';
 
 function Loading() {
@@ -22,13 +29,22 @@ function TeamMembers() {
     onTeamMembersUpdated();
   };
 
+  const handleRemoveTeamMember = async (userId: number) => {
+    await RemoveUser(userId);
+    onTeamMembersUpdated();
+  };
+
+  const handleUpdateTeamMember = async (userId: number, formData: InviteTeamMemberForm) => {
+    await UpdateUser(userId, formData);
+    onTeamMembersUpdated();
+  };
+
   return (
     <>
       <h1>Team Members</h1>
       <p className='heading-details'>
         View current team members below and add additional team members to access Unified ID Portal.
       </p>
-      <h2>Team Members</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>
           {(users: UserResponse[]) => (
@@ -36,6 +52,8 @@ function TeamMembers() {
               teamMembers={users}
               onAddTeamMember={handleAddTeamMember}
               resendInvite={ResendInvite}
+              onRemoveTeamMember={handleRemoveTeamMember}
+              onUpdateTeamMember={handleUpdateTeamMember}
             />
           )}
         </Await>

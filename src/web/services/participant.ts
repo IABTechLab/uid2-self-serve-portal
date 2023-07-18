@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
 import { backendError } from '../utils/apiError';
-import { UserPayload } from './userAccount';
+import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
 export type ParticipantPayload = Omit<z.infer<typeof ParticipantSchema>, 'allowSharing'>;
 export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
@@ -90,13 +90,6 @@ export async function GetAllAvailableParticipants() {
     throw backendError(e, 'Could not load participants');
   }
 }
-
-export type InviteTeamMemberForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-};
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   try {

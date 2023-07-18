@@ -1,17 +1,24 @@
-import { InviteTeamMemberForm } from '../../services/participant';
-import { UserResponse } from '../../services/userAccount';
-import AddTeamMemberDialog from './AddTeamMemberDialog';
+import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
 import TeamMember from './TeamMember';
+import TeamMemberDialog from './TeamMemberDialog';
 
 import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = {
   teamMembers: UserResponse[];
   onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
+  onRemoveTeamMember: (id: number) => Promise<void>;
+  onUpdateTeamMember: (id: number, form: InviteTeamMemberForm) => Promise<void>;
   resendInvite: (id: number) => Promise<void>;
 };
 
-function TeamMembersTable({ teamMembers, onAddTeamMember, resendInvite }: TeamMembersTableProps) {
+function TeamMembersTable({
+  teamMembers,
+  onAddTeamMember,
+  resendInvite,
+  onRemoveTeamMember,
+  onUpdateTeamMember,
+}: TeamMembersTableProps) {
   return (
     <div className='portal-team'>
       <table className='portal-team-table'>
@@ -24,12 +31,25 @@ function TeamMembersTable({ teamMembers, onAddTeamMember, resendInvite }: TeamMe
         </thead>
         <tbody>
           {teamMembers.map((t) => (
-            <TeamMember key={t.email} person={t} resendInvite={resendInvite} />
+            <TeamMember
+              key={t.email}
+              person={t}
+              resendInvite={resendInvite}
+              onRemoveTeamMember={onRemoveTeamMember}
+              onUpdateTeamMember={onUpdateTeamMember}
+            />
           ))}
         </tbody>
       </table>
       <div className='add-team-member'>
-        <AddTeamMemberDialog onAddTeamMember={onAddTeamMember} />
+        <TeamMemberDialog
+          onFormSubmit={onAddTeamMember}
+          triggerButton={
+            <button className='small-button' type='button'>
+              Add team member
+            </button>
+          }
+        />
       </div>
     </div>
   );

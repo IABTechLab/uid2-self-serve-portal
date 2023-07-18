@@ -3,38 +3,40 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { UserRole } from '../../../api/entities/User';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
-import { InviteTeamMemberForm } from '../../services/participant';
+import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 
-type AddTeamMemberProps = {
-  onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
+type TeamMemberDialogProps = {
+  onFormSubmit: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
+  triggerButton: JSX.Element;
+  person?: UserResponse;
 };
 
-function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
+function TeamMemberDialog({ onFormSubmit, triggerButton, person }: TeamMemberDialogProps) {
   const { participant } = useContext(ParticipantContext);
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<InviteTeamMemberForm> = async (formData) => {
-    await onAddTeamMember(formData, participant!.id!);
+    await onFormSubmit(formData, participant!.id!);
     setOpen(false);
   };
 
   return (
     <Dialog
-      triggerButton={
-        <button className='small-button' type='button'>
-          Add team member
-        </button>
-      }
-      title='Add Team Member'
+      triggerButton={triggerButton}
+      title={`${person ? 'Edit' : 'Add'} Team Member`}
       closeButton='Cancel'
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
+      <Form<InviteTeamMemberForm>
+        onSubmit={onSubmit}
+        submitButtonText='Save Team Member'
+        defaultValues={person as InviteTeamMemberForm}
+      >
         <TextInput
           inputName='firstName'
           label='First Name'
@@ -48,6 +50,7 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
         <TextInput
           inputName='email'
           label='Email'
+          disabled={!!person}
           rules={{
             required: 'Please specify email.',
             pattern: {
@@ -70,4 +73,4 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   );
 }
 
-export default AddTeamMemberDialog;
+export default TeamMemberDialog;

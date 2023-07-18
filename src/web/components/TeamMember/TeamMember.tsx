@@ -3,9 +3,15 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
-import { UserResponse } from '../../services/userAccount';
+import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
+import TeamMemberDialog from './TeamMemberDialog';
 
-type TeamMemberProps = { person: UserResponse; resendInvite: (id: number) => Promise<void> };
+type TeamMemberProps = {
+  person: UserResponse;
+  resendInvite: (id: number) => Promise<void>;
+  onRemoveTeamMember: (id: number) => Promise<void>;
+  onUpdateTeamMember: (id: number, form: InviteTeamMemberForm) => Promise<void>;
+};
 
 enum InviteState {
   initial,
@@ -13,7 +19,12 @@ enum InviteState {
   sent,
   error,
 }
-function TeamMember({ person, resendInvite }: TeamMemberProps) {
+function TeamMember({
+  person,
+  resendInvite,
+  onRemoveTeamMember,
+  onUpdateTeamMember,
+}: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const onResendInvite = useCallback(async () => {
     if (reinviteState !== InviteState.initial) {
@@ -29,6 +40,15 @@ function TeamMember({ person, resendInvite }: TeamMemberProps) {
       setInviteState(InviteState.error);
     }
   }, [person.id, reinviteState, resendInvite]);
+
+  const handleRemoveUser = async () => {
+    await onRemoveTeamMember(person.id);
+  };
+
+  const handleUpdateUser = async (formData: InviteTeamMemberForm) => {
+    await onUpdateTeamMember(person.id, formData);
+  };
+
   return (
     <tr>
       <td>
@@ -42,7 +62,7 @@ function TeamMember({ person, resendInvite }: TeamMemberProps) {
         {person.acceptedTerms || (
           <button
             type='button'
-            className={clsx({
+            className={clsx('invite-button', {
               clickable: reinviteState === InviteState.initial,
               error: reinviteState === InviteState.error,
             })}
@@ -54,8 +74,23 @@ function TeamMember({ person, resendInvite }: TeamMemberProps) {
             {reinviteState === InviteState.error && 'Try again later'}
           </button>
         )}
-        <FontAwesomeIcon icon='pencil' />
-        <FontAwesomeIcon icon='trash-can' />
+        <TeamMemberDialog
+          onFormSubmit={handleUpdateUser}
+          person={person}
+          triggerButton={
+            <button className='icon-button' aria-label='edit' type='button'>
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+          }
+        />
+        <button
+          className='icon-button'
+          aria-label='delete'
+          type='button'
+          onClick={handleRemoveUser}
+        >
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
       </td>
     </tr>
   );

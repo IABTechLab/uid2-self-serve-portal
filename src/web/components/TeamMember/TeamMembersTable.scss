@@ -35,7 +35,7 @@
       display: flex;
       justify-content: flex-end;
 
-      button {
+      .invite-button {
         &.clickable {
           cursor: pointer;
           color: var(--theme-action);
@@ -54,7 +54,7 @@
 
       svg {
         color: var(--theme-action);
-        padding: 0 10px;
+        font-size: 1rem;
       }
     }
 

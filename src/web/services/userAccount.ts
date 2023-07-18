@@ -11,6 +11,13 @@ export type UserAccount = {
   user: User | null;
 };
 
+export type InviteTeamMemberForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+};
+
 export type UserPayload = z.infer<typeof UserCreationPartial>;
 export type UserResponse = UserDTO;
 export async function GetUserAccountById(id: string) {
@@ -77,5 +84,21 @@ export async function GetAllUsersOfParticipant(participantId?: number) {
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load users');
+  }
+}
+
+export async function RemoveUser(id: number) {
+  try {
+    await axios.delete(`/users/${id}`);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not delete user');
+  }
+}
+
+export async function UpdateUser(id: number, formData: InviteTeamMemberForm) {
+  try {
+    await axios.put(`/users/${id}`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update user');
   }
 }
