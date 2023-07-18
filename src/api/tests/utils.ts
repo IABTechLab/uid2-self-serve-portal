@@ -17,6 +17,8 @@ import { configureAndStartApi } from '../configureApi';
  */
 // eslint-disable-next-line import/no-mutable-exports
 export let api: Server | null = null;
+// eslint-disable-next-line import/no-mutable-exports
+export let routers: ReturnType<typeof configureAndStartApi>['routers'] | null = null;
 let terminator: HttpTerminator | null = null;
 
 function useTestServer() {
@@ -28,7 +30,9 @@ function useTestServer() {
     terminator = null;
   });
   beforeAll(async () => {
-    api = configureAndStartApi(false);
+    const serverDetails = configureAndStartApi(false);
+    api = serverDetails.server;
+    routers = serverDetails.routers;
     terminator = createHttpTerminator({ server: api });
 
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {

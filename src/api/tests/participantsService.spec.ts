@@ -1,15 +1,14 @@
 import request, { Request } from 'supertest';
 
-import { participantsRouter } from '../participantsRouter';
 import { ParticipantRequest } from '../services/participantsService';
 import { mockParticipant, mockUser } from './queryMocks';
-import useTestServer, { api } from './utils';
+import useTestServer, { api, routers } from './utils';
 
 describe('Participant Service Tests', () => {
   const withToken = useTestServer();
 
   beforeAll(() => {
-    participantsRouter.get('/:participantId/', (req: ParticipantRequest, res) => {
+    routers!.participantsRouter.get('/:participantId/', (req: ParticipantRequest, res) => {
       res.status(200).json(req.participant);
     });
   });

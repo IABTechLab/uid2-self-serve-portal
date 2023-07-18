@@ -102,3 +102,11 @@ export async function UpdateUser(id: number, formData: InviteTeamMemberForm) {
     throw backendError(e, 'Could not update user');
   }
 }
+
+export async function SetTermsAccepted() {
+  try {
+    await axios.put('/users/current/acceptTerms');
+  } catch (e: unknown) {
+    throw backendError(e, 'Unable to mark terms as accepted.');
+  }
+}

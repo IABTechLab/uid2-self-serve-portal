@@ -5,50 +5,53 @@ import { User, UserCreationPartial } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
-import { enrichWithUserFromParams, findUserByEmail, UserRequest } from './services/usersService';
-
-export const usersRouter = express.Router();
-const emailParser = z.object({
-  email: z.string().optional(),
-});
-
-usersRouter.get('/', async (req, res) => {
-  const { email } = emailParser.parse(req.query);
-  if (!email) {
-    const users = await User.query();
-    return res.status(200).json(users);
-  }
-  const userResult = await findUserByEmail(email);
-  if (userResult) return res.json(userResult);
-  return res.sendStatus(404);
-});
-
-usersRouter.post('/', async (req, res) => {
-  const data = UserCreationPartial.parse(req.body);
-  const user = await User.query().insert(data);
-  res.status(201).json(user);
-});
-
-const userIdParser = z.object({
-  userId: z.string(),
-});
-
-usersRouter.get('/:userId', async (req, res) => {
-  const { userId } = userIdParser.parse(req.params);
-  const user = await User.query().findById(userId);
-  return res.status(200).json(user);
-});
-
-usersRouter.get('/:userId/participant', async (req, res) => {
-  const { userId } = userIdParser.parse(req.params);
-  const participant = await User.relatedQuery('participant').for(userId).withGraphFetched('types');
-  return res.status(200).json(participant[0]);
-});
-
-usersRouter.post(
-  '/:userId/resendInvitation',
+import {
+  enrichCurrentUser,
   enrichWithUserFromParams,
-  async (req: UserRequest, res) => {
+  findUserByEmail,
+  UserRequest,
+} from './services/usersService';
+
+export function createUsersRouter() {
+  const usersRouter = express.Router();
+  const emailParser = z.object({
+    email: z.string().optional(),
+  });
+
+  usersRouter.get('/', async (req, res) => {
+    const { email } = emailParser.parse(req.query);
+    if (!email) {
+      const users = await User.query();
+      return res.status(200).json(users);
+    }
+    const userResult = await findUserByEmail(email);
+    if (userResult) return res.json(userResult);
+    return res.sendStatus(404);
+  });
+
+  usersRouter.post('/', async (req, res) => {
+    const data = UserCreationPartial.parse(req.body);
+    const user = await User.query().insert(data);
+    res.status(201).json(user);
+  });
+
+usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {
+  await req.user!.$query().patch({ acceptedTerms: true });
+  return res.sendStatus(200);
+  });
+
+usersRouter.use('/:userId', enrichWithUserFromParams);
+
+usersRouter.get('/:userId', async (req: UserRequest, res) => {
+  return res.status(200).json(req.user);
+  });
+
+usersRouter.get('/:userId/participant', async (req: UserRequest, res) => {
+const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
+  return res.status(200).json(participant);
+  });
+
+usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {
     const [logger, errorLogger] = getLoggers();
 
     const kcAdminClient = await getKcAdminClient();
@@ -59,12 +62,15 @@ usersRouter.post(
       return res.sendStatus(404);
     }
     if (resultLength > 1) {
-      errorLogger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
+        errorLogger.error(
+          `Multiple results received when loading user entry for ${req.user?.email}`
+        );
       return res.sendStatus(500);
     }
 
     logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmail(kcAdminClient, user[0]);
     return res.sendStatus(200);
-  }
-);
+});
+  return usersRouter;
+}
