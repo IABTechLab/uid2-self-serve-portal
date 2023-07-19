@@ -1,10 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
-import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { InlineError } from '../Core/InlineError';
 import TeamMemberDialog from './TeamMemberDialog';
 
@@ -12,7 +11,7 @@ type TeamMemberProps = {
   person: UserResponse;
   resendInvite: (id: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
-  onUpdateTeamMember: (id: number, form: InviteTeamMemberForm) => Promise<void>;
+  onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
 };
 
 enum InviteState {
@@ -27,7 +26,6 @@ function TeamMember({
   onRemoveTeamMember,
   onUpdateTeamMember,
 }: TeamMemberProps) {
-  const { LoggedInUser } = useContext(CurrentUserContext);
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [hasError, setHasError] = useState<boolean>(false);
   const onResendInvite = useCallback(async () => {
@@ -53,7 +51,7 @@ function TeamMember({
     }
   };
 
-  const handleUpdateUser = async (formData: InviteTeamMemberForm) => {
+  const handleUpdateUser = async (formData: UpdateTeamMemberForm) => {
     try {
       await onUpdateTeamMember(person.id, formData);
     } catch {
@@ -89,7 +87,7 @@ function TeamMember({
           </button>
         )}
         <TeamMemberDialog
-          onFormSubmit={handleUpdateUser}
+          onUpdateTeamMember={handleUpdateUser}
           person={person}
           triggerButton={
             <button className='icon-button' aria-label='edit' type='button'>
@@ -101,7 +99,6 @@ function TeamMember({
           className='icon-button'
           aria-label='delete'
           type='button'
-          disabled={person.email === LoggedInUser?.profile.email}
           onClick={handleRemoveUser}
         >
           <FontAwesomeIcon icon='trash-can' />

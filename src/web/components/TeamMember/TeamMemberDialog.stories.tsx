@@ -13,7 +13,7 @@ const Template: ComponentStory<typeof TeamMemberDialog> = (args) => <TeamMemberD
 export const Default = Template.bind({});
 Default.args = {
   triggerButton: <button type='button'>Open</button>,
-  onFormSubmit: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
+  onAddTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
 };
 
 export const WithTeamMember = Template.bind({});

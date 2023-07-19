@@ -1,13 +1,15 @@
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useContext } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { InviteTeamMember } from '../services/participant';
 import {
   GetAllUsersOfParticipant,
   InviteTeamMemberForm,
   RemoveUser,
   ResendInvite,
+  UpdateTeamMemberForm,
   UpdateUser,
   UserResponse,
 } from '../services/userAccount';
@@ -19,13 +21,14 @@ function Loading() {
 
 function TeamMembers() {
   const data = useLoaderData() as { users: UserResponse[] };
+  const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
   const onTeamMembersUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
 
-  const handleAddTeamMember = async (formData: InviteTeamMemberForm, participantId: number) => {
-    await InviteTeamMember(formData, participantId);
+  const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
+    await InviteTeamMember(formData, participant!.id);
     onTeamMembersUpdated();
   };
 
@@ -34,7 +37,7 @@ function TeamMembers() {
     onTeamMembersUpdated();
   };
 
-  const handleUpdateTeamMember = async (userId: number, formData: InviteTeamMemberForm) => {
+  const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
     await UpdateUser(userId, formData);
     onTeamMembersUpdated();
   };

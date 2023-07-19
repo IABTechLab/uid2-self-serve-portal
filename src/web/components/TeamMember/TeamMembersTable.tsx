@@ -1,4 +1,8 @@
-import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
+import {
+  InviteTeamMemberForm,
+  UpdateTeamMemberForm,
+  UserResponse,
+} from '../../services/userAccount';
 import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
@@ -6,9 +10,9 @@ import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = {
   teamMembers: UserResponse[];
-  onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
+  onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
-  onUpdateTeamMember: (id: number, form: InviteTeamMemberForm) => Promise<void>;
+  onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
   resendInvite: (id: number) => Promise<void>;
 };
 
@@ -44,7 +48,7 @@ function TeamMembersTable({
       </table>
       <div className='add-team-member'>
         <TeamMemberDialog
-          onFormSubmit={onAddTeamMember}
+          onAddTeamMember={onAddTeamMember}
           triggerButton={
             <button className='small-button' type='button'>
               Add team member
