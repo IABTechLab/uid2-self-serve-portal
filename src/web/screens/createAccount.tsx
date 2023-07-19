@@ -34,6 +34,9 @@ function CreateAccount() {
       >
         <Suspense fallback={<Loading />}>
           <h2>Participant Information</h2>
+          <p className='heading-details'>
+            Provide the following information about the company/participant you work for.
+          </p>
           <Await resolve={participantTypes}>
             {(partTypes: ParticipantType[]) => (
               <CreateAccountForm onSubmit={onSubmit} resolvedParticipantTypes={partTypes} />

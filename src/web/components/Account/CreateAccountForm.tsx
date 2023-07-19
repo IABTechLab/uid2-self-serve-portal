@@ -90,8 +90,14 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
               Terms and Conditions
             </button>{' '}
             (must click link)
+            <br />
+            View our Privacy Policies
           </span>
-          <Dialog open={showTermsDialog} onOpenChange={setShowTermsDialog}>
+          <Dialog
+            open={showTermsDialog}
+            onOpenChange={setShowTermsDialog}
+            title='Accept Terms and Conditions'
+          >
             <TermsAndConditionsForm
               onAccept={handleAccept}
               onCancel={() => setShowTermsDialog(false)}

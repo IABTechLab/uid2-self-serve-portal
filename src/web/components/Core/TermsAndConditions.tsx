@@ -253,7 +253,7 @@ export function TermsAndConditionsForm({ onAccept, onCancel }: TermsAndCondition
         onClick={onAccept}
         disabled={!scrolledToBottom}
       >
-        Accept Terms & Conditions
+        Accept Terms and Conditions
       </button>
       <button type='button' className='text-button' onClick={onCancel}>
         Cancel
