@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { InviteTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { InlineError } from '../Core/InlineError';
 import TeamMemberDialog from './TeamMemberDialog';
@@ -26,6 +27,7 @@ function TeamMember({
   onRemoveTeamMember,
   onUpdateTeamMember,
 }: TeamMemberProps) {
+  const { LoggedInUser } = useContext(CurrentUserContext);
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [hasError, setHasError] = useState<boolean>(false);
   const onResendInvite = useCallback(async () => {
@@ -68,6 +70,7 @@ function TeamMember({
         </div>
       </td>
       <td>{person.email}</td>
+      <td>{person.role}</td>
       <td className='action'>
         {hasError && <InlineError />}
         {person.acceptedTerms || (
@@ -98,6 +101,7 @@ function TeamMember({
           className='icon-button'
           aria-label='delete'
           type='button'
+          disabled={person.email === LoggedInUser?.profile.email}
           onClick={handleRemoveUser}
         >
           <FontAwesomeIcon icon='trash-can' />

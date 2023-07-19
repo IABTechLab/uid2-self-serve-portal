@@ -97,7 +97,7 @@ export async function RemoveUser(id: number) {
 
 export async function UpdateUser(id: number, formData: InviteTeamMemberForm) {
   try {
-    await axios.put(`/users/${id}`, formData);
+    await axios.patch(`/users/${id}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update user');
   }

@@ -26,6 +26,7 @@ function TeamMembersTable({
           <tr>
             <th className='name'>Name</th>
             <th className='email'>Email</th>
+            <th className='jobFunction'>Job Function</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>

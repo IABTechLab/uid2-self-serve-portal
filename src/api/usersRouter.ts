@@ -73,6 +73,9 @@ export function createUsersRouter() {
 
   usersRouter.delete('/:userId', async (req: UserRequest, res) => {
     const { user } = req;
+    if (req.auth?.payload?.email === user?.email) {
+      return res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
+    }
     await user!.$query().delete();
     return res.sendStatus(200);
   });
@@ -83,7 +86,7 @@ export function createUsersRouter() {
     role: z.nativeEnum(UserRole),
   });
 
-  usersRouter.put('/:userId', async (req: UserRequest, res) => {
+  usersRouter.patch('/:userId', async (req: UserRequest, res) => {
     const { user } = req;
     const data = UpdateUserParser.parse(req.body);
     await user!.$query().patch(data);
