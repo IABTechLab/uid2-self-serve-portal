@@ -25,7 +25,8 @@
     }
 
     th.action {
-      text-align: center;
+      text-align: end;
+      padding-left: 140px;
     }
 
     .action {
@@ -59,7 +60,6 @@
       }
 
       svg {
-        color: var(--theme-action);
         font-size: 1rem;
       }
     }
