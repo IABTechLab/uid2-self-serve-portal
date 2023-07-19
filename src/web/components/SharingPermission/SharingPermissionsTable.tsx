@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ReactNode, useMemo, useState } from 'react';
 
-import { ParticipantResponse } from '../../services/participant';
+import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
-  sharingParticipants: ParticipantResponse[];
+  sharingParticipants: AvailableParticipantDTO[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
   children?: ReactNode;
 };

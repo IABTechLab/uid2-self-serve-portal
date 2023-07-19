@@ -5,6 +5,7 @@ import { businessContactsRouter } from './businessContactsRouter';
 import {
   Participant,
   ParticipantCreationPartial,
+  ParticipantDTO,
   ParticipantSchema,
   ParticipantStatus,
 } from './entities/Participant';
@@ -30,12 +31,22 @@ import {
   getAllUserFromParticipant,
 } from './services/usersService';
 
+export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
+function mapParticipantToAvailableParticipant(participant: Participant) {
+  return {
+    id: participant.id,
+    name: participant.name,
+    siteId: participant.siteId,
+    types: participant.types,
+  };
+}
+
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
   participantsRouter.get('/available', async (_req, res) => {
     const participants = await Participant.query().whereNotNull('siteId').withGraphFetched('types');
-    return res.status(200).json(participants);
+    return res.status(200).json(participants.map(mapParticipantToAvailableParticipant));
   });
 
   participantsRouter.post('/', async (req, res) => {
@@ -155,7 +166,7 @@ export function createParticipantsRouter() {
       );
 
       await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
-      return res.status(200).json(sharingParticipants);
+      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
     }
   );
 
@@ -187,7 +198,7 @@ export function createParticipantsRouter() {
 
       await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
 
-      return res.status(200).json(sharingParticipants);
+      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
     }
   );
 
@@ -200,5 +211,6 @@ export function createParticipantsRouter() {
     }
   );
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
+
   return participantsRouter;
 }
