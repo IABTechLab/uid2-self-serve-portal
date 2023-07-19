@@ -18,11 +18,7 @@ export type InviteTeamMemberForm = {
   role: string;
 };
 
-export type UpdateTeamMemberForm = {
-  firstName: string;
-  lastName: string;
-  role: string;
-};
+export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
 export type UserResponse = UserDTO;
@@ -103,11 +99,7 @@ export async function RemoveUser(id: number) {
 
 export async function UpdateUser(id: number, formData: UpdateTeamMemberForm) {
   try {
-    await axios.patch(`/users/${id}`, {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      role: formData.role,
-    });
+    await axios.patch(`/users/${id}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update user');
   }
