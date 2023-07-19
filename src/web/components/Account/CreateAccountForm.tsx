@@ -90,8 +90,6 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
               Terms and Conditions
             </button>{' '}
             (must click link)
-            <br />
-            View our Privacy Policies
           </span>
           <Dialog
             open={showTermsDialog}
