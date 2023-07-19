@@ -41,23 +41,25 @@ function BusinessContact({
       <td>{contact.contactType}</td>
       <td className='action'>
         {hasError && <InlineError />}
-        <BusinessContactDialog
-          onFormSubmit={handleUpdateEmailContact}
-          contact={contact}
-          triggerButton={
-            <button className='icon-button' aria-label='edit' type='button'>
-              <FontAwesomeIcon icon='pencil' />
-            </button>
-          }
-        />
-        <button
-          className='icon-button'
-          aria-label='delete'
-          type='button'
-          onClick={handleRemoveEmailContact}
-        >
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
+        <div>
+          <BusinessContactDialog
+            onFormSubmit={handleUpdateEmailContact}
+            contact={contact}
+            triggerButton={
+              <button className='icon-button' aria-label='edit' type='button'>
+                <FontAwesomeIcon icon='pencil' />
+              </button>
+            }
+          />
+          <button
+            className='icon-button'
+            aria-label='delete'
+            type='button'
+            onClick={handleRemoveEmailContact}
+          >
+            <FontAwesomeIcon icon='trash-can' />
+          </button>
+        </div>
       </td>
     </tr>
   );

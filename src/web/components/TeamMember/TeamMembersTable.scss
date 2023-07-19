@@ -46,6 +46,7 @@
       font-size: 0.8125rem;
       display: flex;
       justify-content: flex-end;
+      flex-wrap: wrap;
 
       .invite-button {
         &.clickable {

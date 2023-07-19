@@ -4,8 +4,53 @@ import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { Dialog } from '../Core/Dialog';
 import { InlineError } from '../Core/InlineError';
 import TeamMemberDialog from './TeamMemberDialog';
+
+type DeleteConfirmationDialogProps = {
+  person: UserResponse;
+  onRemoveTeamMember: () => Promise<void>;
+};
+
+function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirmationDialogProps) {
+  const [openConfirmation, setOpenConfirmation] = useState(false);
+
+  const handleRemove = () => {
+    setOpenConfirmation(false);
+    onRemoveTeamMember();
+  };
+  return (
+    <Dialog
+      title='Are you sure you want to delete this team member?'
+      triggerButton={
+        <button className='icon-button' aria-label='delete' type='button'>
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
+      }
+      open={openConfirmation}
+      onOpenChange={setOpenConfirmation}
+    >
+      <ul className='dot-list'>
+        <li>
+          {person.firstName} {person.lastName}
+        </li>
+      </ul>
+      <div className='dialog-footer-section'>
+        <button type='button' className='primary-button' onClick={handleRemove}>
+          Delete Team Member
+        </button>
+        <button
+          type='button'
+          className='transparent-button'
+          onClick={() => setOpenConfirmation(false)}
+        >
+          Cancel
+        </button>
+      </div>
+    </Dialog>
+  );
+}
 
 type TeamMemberProps = {
   person: UserResponse;
@@ -28,6 +73,7 @@ function TeamMember({
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [hasError, setHasError] = useState<boolean>(false);
+
   const onResendInvite = useCallback(async () => {
     if (reinviteState !== InviteState.initial) {
       log.error(`Unexpected click event on reinvite button`);
@@ -71,38 +117,33 @@ function TeamMember({
       <td>{person.role}</td>
       <td className='action'>
         {hasError && <InlineError />}
-        {person.acceptedTerms || (
-          <button
-            type='button'
-            className={clsx('invite-button', {
-              clickable: reinviteState === InviteState.initial,
-              error: reinviteState === InviteState.error,
-            })}
-            onClick={() => onResendInvite()}
-          >
-            {reinviteState === InviteState.initial && 'Resend Invitation'}
-            {reinviteState === InviteState.inProgress && 'Sending...'}
-            {reinviteState === InviteState.sent && 'Invitation Sent'}
-            {reinviteState === InviteState.error && 'Try again later'}
-          </button>
-        )}
-        <TeamMemberDialog
-          onUpdateTeamMember={handleUpdateUser}
-          person={person}
-          triggerButton={
-            <button className='icon-button' aria-label='edit' type='button'>
-              <FontAwesomeIcon icon='pencil' />
+        <div>
+          {person.acceptedTerms || (
+            <button
+              type='button'
+              className={clsx('invite-button', {
+                clickable: reinviteState === InviteState.initial,
+                error: reinviteState === InviteState.error,
+              })}
+              onClick={() => onResendInvite()}
+            >
+              {reinviteState === InviteState.initial && 'Resend Invitation'}
+              {reinviteState === InviteState.inProgress && 'Sending...'}
+              {reinviteState === InviteState.sent && 'Invitation Sent'}
+              {reinviteState === InviteState.error && 'Try again later'}
             </button>
-          }
-        />
-        <button
-          className='icon-button'
-          aria-label='delete'
-          type='button'
-          onClick={handleRemoveUser}
-        >
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
+          )}
+          <TeamMemberDialog
+            onUpdateTeamMember={handleUpdateUser}
+            person={person}
+            triggerButton={
+              <button className='icon-button' aria-label='edit' type='button'>
+                <FontAwesomeIcon icon='pencil' />
+              </button>
+            }
+          />
+          <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
+        </div>
       </td>
     </tr>
   );

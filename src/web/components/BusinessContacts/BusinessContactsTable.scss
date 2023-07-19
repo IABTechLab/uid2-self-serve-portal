@@ -42,6 +42,7 @@
       font-size: 0.8125rem;
       display: flex;
       justify-content: flex-end;
+      flex-wrap: wrap;
 
       .icon-button {
         &.clickable {
