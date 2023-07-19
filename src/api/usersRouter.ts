@@ -78,12 +78,11 @@ export function createUsersRouter() {
   });
 
   usersRouter.delete('/:userId', enrichKeycloakUser, async (req: KcUserRequest, res) => {
-    const { user, kcUser } = req;
+    const { user, kcUser, kcAdminClient } = req;
     if (req.auth?.payload?.email === user?.email) {
       return res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
     }
-    const kcAdminClient = await getKcAdminClient();
-    await deleteUser(kcAdminClient, kcUser!);
+    await deleteUser(kcAdminClient!, kcUser!);
     await user!.$query().delete();
     return res.sendStatus(200);
   });
