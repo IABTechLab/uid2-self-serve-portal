@@ -2,6 +2,7 @@ import { Suspense, useCallback, useContext } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
+import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { InviteTeamMember } from '../services/participant';
 import {
@@ -20,6 +21,7 @@ function Loading() {
 }
 
 function TeamMembers() {
+  const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const data = useLoaderData() as { users: UserResponse[] };
   const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
@@ -39,6 +41,7 @@ function TeamMembers() {
 
   const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
     await UpdateUser(userId, formData);
+    if (LoggedInUser?.user?.id === userId) await loadUser();
     onTeamMembersUpdated();
   };
 

@@ -4,7 +4,12 @@ import { z } from 'zod';
 import { User, UserCreationPartial, UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { deleteUserByEmail, queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
+import {
+  deleteUserByEmail,
+  queryUsersByEmail,
+  sendInviteEmail,
+  updateUserProfile,
+} from './services/kcUsersService';
 import {
   enrichCurrentUser,
   enrichWithUserFromParams,
@@ -91,6 +96,11 @@ export function createUsersRouter() {
   usersRouter.patch('/:userId', async (req: UserRequest, res) => {
     const { user } = req;
     const data = UpdateUserParser.parse(req.body);
+    const kcAdminClient = await getKcAdminClient();
+    await updateUserProfile(kcAdminClient, user?.email!, {
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
     await user!.$query().patch(data);
     return res.sendStatus(200);
   });

@@ -41,6 +41,27 @@ export const sendInviteEmail = async (
   });
 };
 
+type UpdateUserPayload = {
+  firstName: string;
+  lastName: string;
+};
+
+export const updateUserProfile = async (
+  kcAdminClient: KeycloakAdminClient,
+  userEmail: string,
+  updateUserPayload: UpdateUserPayload
+) => {
+  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  if (users.length !== 1) throw Error(`Unable to update  entry for ${userEmail}`);
+
+  await kcAdminClient.users.update(
+    {
+      id: users[0].id!,
+    },
+    updateUserPayload
+  );
+};
+
 export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, userEmail: string) => {
   const userLists = await queryUsersByEmail(kcAdminClient, userEmail);
   const resultLength = userLists.length ?? 0;
