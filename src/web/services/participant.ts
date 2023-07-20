@@ -91,6 +91,17 @@ export async function GetAllAvailableParticipants() {
   }
 }
 
+export async function GetParticipantsAwaitingApproval() {
+  try {
+    const result = await axios.get<ParticipantResponse[]>(`/participants/awaitingApproval`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load participants awaiting approval');
+  }
+}
+
 export type InviteTeamMemberForm = {
   firstName: string;
   lastName: string;

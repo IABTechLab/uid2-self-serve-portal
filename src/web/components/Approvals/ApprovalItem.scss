@@ -1,0 +1,31 @@
+.approval-item {
+  line-height: 2rem;
+
+  .approval-type-label {
+    background: var(--theme-label-background);
+    border-radius: 3px;
+    padding: 4px 8px;
+  }
+
+  .approval-logo {
+    width: 50px;
+    margin-right: 16px;
+  }
+
+  .approval-types {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+  }
+
+  .approval-name-cell {
+    display: flex;
+    align-items: center;
+  }
+
+  .approval-status {
+    display: flex;
+    align-items: center;
+  }
+}

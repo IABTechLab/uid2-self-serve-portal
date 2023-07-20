@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { ParticipantStatus } from '../../../api/entities/Participant';
 import { ParticipantItem } from './ParticipantItem';
 
 export default {
@@ -21,6 +22,7 @@ Checked.args = {
     id: 1,
     name: 'Participant 1',
     types: [{ id: 2, typeName: 'Type 2' }],
+    status: ParticipantStatus.AwaitingApproval,
   },
   onClick: () => {},
   checked: true,
@@ -35,6 +37,7 @@ Unchecked.args = {
       { id: 3, typeName: 'Type 3' },
       { id: 4, typeName: 'Type 4' },
     ],
+    status: ParticipantStatus.AwaitingApproval,
   },
   onClick: () => {},
   checked: false,

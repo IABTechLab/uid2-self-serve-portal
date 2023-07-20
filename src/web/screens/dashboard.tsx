@@ -9,6 +9,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
+import { ApprovalsRoute } from './approvals';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
 import { PortalRoute } from './routeUtils';
@@ -25,6 +26,7 @@ export const DashboardRoutes: PortalRoute[] = [
   TeamMembersRoute,
   EmailContactsRoute,
   TermsOfServiceRoute,
+  ApprovalsRoute,
 ];
 const menu = DashboardRoutes.filter((r) => r.description);
 
@@ -34,8 +36,11 @@ function Dashboard() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const [showMustAccept, setShowMustAccept] = useState(false);
   const navigate = useNavigate();
+  const filteredMenu = LoggedInUser?.user?.isApprover
+    ? menu
+    : menu.filter((x) => x.description !== ApprovalsRoute.description);
 
-  const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
+  const currentLocationDescription = filteredMenu.filter((m) => m.path === location.pathname)[0]
     .description;
 
   const handleAccept = async () => {
@@ -53,7 +58,7 @@ function Dashboard() {
   }, [participant, navigate]);
   return (
     <div className='app-panel'>
-      <SideNav menu={menu} />
+      <SideNav menu={filteredMenu} />
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (

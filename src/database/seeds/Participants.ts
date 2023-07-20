@@ -15,6 +15,7 @@ const sampleData: Optional<
     status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
     location: 'Sydney',
+    types: [],
   },
   {
     name: 'DSP example',
@@ -22,6 +23,7 @@ const sampleData: Optional<
     type: 'DSP',
     allowSharing: true,
     location: 'Sydney',
+    types: [],
   },
   {
     name: 'DP example',
@@ -29,6 +31,7 @@ const sampleData: Optional<
     allowSharing: true,
     type: 'Data Provider',
     location: 'Sydney',
+    types: [],
   },
   {
     name: 'Advertiser example',
@@ -36,6 +39,7 @@ const sampleData: Optional<
     status: ParticipantStatus.Approved,
     type: 'Advertiser',
     location: 'Sydney',
+    types: [],
   },
 ];
 

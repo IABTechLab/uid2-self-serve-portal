@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { User, UserCreationPartial } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
+import { isUserAnApprover } from './services/approversService';
 import { queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
 import {
   enrichCurrentUser,
@@ -25,7 +26,13 @@ export function createUsersRouter() {
       return res.status(200).json(users);
     }
     const userResult = await findUserByEmail(email);
-    if (userResult) return res.json(userResult);
+    const userIsApprover = await isUserAnApprover(email);
+
+    const updatedUserResult = {
+      ...userResult,
+      isApprover: userIsApprover,
+    };
+    if (updatedUserResult) return res.json(updatedUserResult);
     return res.sendStatus(404);
   });
 
@@ -35,23 +42,23 @@ export function createUsersRouter() {
     res.status(201).json(user);
   });
 
-usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {
-  await req.user!.$query().patch({ acceptedTerms: true });
-  return res.sendStatus(200);
+  usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {
+    await req.user!.$query().patch({ acceptedTerms: true });
+    return res.sendStatus(200);
   });
 
-usersRouter.use('/:userId', enrichWithUserFromParams);
+  usersRouter.use('/:userId', enrichWithUserFromParams);
 
-usersRouter.get('/:userId', async (req: UserRequest, res) => {
-  return res.status(200).json(req.user);
+  usersRouter.get('/:userId', async (req: UserRequest, res) => {
+    return res.status(200).json(req.user);
   });
 
-usersRouter.get('/:userId/participant', async (req: UserRequest, res) => {
-const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
-  return res.status(200).json(participant);
+  usersRouter.get('/:userId/participant', async (req: UserRequest, res) => {
+    const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
+    return res.status(200).json(participant);
   });
 
-usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {
+  usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {
     const [logger, errorLogger] = getLoggers();
 
     const kcAdminClient = await getKcAdminClient();
@@ -62,15 +69,13 @@ usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {
       return res.sendStatus(404);
     }
     if (resultLength > 1) {
-        errorLogger.error(
-          `Multiple results received when loading user entry for ${req.user?.email}`
-        );
+      errorLogger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
       return res.sendStatus(500);
     }
 
     logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmail(kcAdminClient, user[0]);
     return res.sendStatus(200);
-});
+  });
   return usersRouter;
 }

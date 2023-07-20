@@ -2,6 +2,7 @@ import express, { Response } from 'express';
 import { z } from 'zod';
 
 import { businessContactsRouter } from './businessContactsRouter';
+import { Approver } from './entities/Approver';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -31,7 +32,10 @@ import {
   getAllUserFromParticipant,
 } from './services/usersService';
 
-export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
+export type AvailableParticipantDTO = Pick<
+  ParticipantDTO,
+  'id' | 'name' | 'siteId' | 'types' | 'status'
+>;
 function mapParticipantToAvailableParticipant(participant: Participant) {
   return {
     id: participant.id,
@@ -47,6 +51,23 @@ export function createParticipantsRouter() {
   participantsRouter.get('/available', async (_req, res) => {
     const participants = await Participant.query().whereNotNull('siteId').withGraphFetched('types');
     return res.status(200).json(participants.map(mapParticipantToAvailableParticipant));
+  });
+
+  participantsRouter.get('/awaitingApproval', async (req: ParticipantRequest, res) => {
+    const approvers = await Approver.query()
+      .distinct('participantTypeId')
+      .where('email', String(req.auth?.payload?.email));
+    const approvableParticipantTypeIds = approvers.map((approver) => approver.participantTypeId);
+    const participantsAwaitingApproval = await Participant.query()
+      .whereIn(
+        'id',
+        Participant.relatedQuery('types')
+          .whereIn('participantTypeId', approvableParticipantTypeIds)
+          .select('participantId')
+      )
+      .withGraphFetched('types')
+      .where('status', ParticipantStatus.AwaitingApproval);
+    return res.status(200).json(participantsAwaitingApproval);
   });
 
   participantsRouter.post('/', async (req, res) => {

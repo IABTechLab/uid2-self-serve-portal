@@ -40,6 +40,7 @@ export class User extends BaseModel {
   role!: UserRole;
   participantId!: number;
   acceptedTerms!: boolean;
+  isApprover?: boolean;
 }
 
 export type UserDTO = ModelObjectOpt<User>;
@@ -54,6 +55,7 @@ export const UserScheme = z.object({
   participantId: z.number().optional(),
   role: z.nativeEnum(UserRole).optional(),
   acceptedTerms: z.boolean(),
+  isApprover: z.boolean().optional(),
 });
 
 export const UserCreationPartial = UserScheme.omit({
