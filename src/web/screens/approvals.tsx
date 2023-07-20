@@ -14,7 +14,7 @@ function Approvals() {
 
   return (
     <div>
-      <h1>Participant Information</h1>
+      <h1>Manage Participants</h1>
       <h2>Participant Requests</h2>
       <Suspense fallback={<Loading />}>
         <Await resolve={participantsAwaitingApproval}>
@@ -27,7 +27,7 @@ function Approvals() {
 
 export const ApprovalsRoute: PortalRoute = {
   path: '/dashboard/approvals',
-  description: 'Participant Information',
+  description: 'Manage Participants',
   element: <Approvals />,
   loader: async () => {
     const participantsAwaitingApproval = await GetParticipantsAwaitingApproval();
