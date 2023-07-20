@@ -1,13 +1,21 @@
 .account-pending-content {
-  align-self: start;
-  padding: 4.5rem 6.5rem;
+  padding: 70px 100px;
+
+  p {
+    margin-top: 8px;
+    font-size: 1rem;
+  }
 }
 
-.pending-label {
-  background: var(--theme-label);
-  font-size: 0.625rem;
-  border-radius: 3px;
-  padding: 3px 8px;
-  margin-left: 10px;
-  text-transform: uppercase;
+.account-pending--header {
+  display: flex;
+  align-items: center;
+  .pending-label {
+    background: var(--theme-account-pending-label);
+    font-size: 0.75rem;
+    border-radius: 3px;
+    padding: 3px 12px;
+    margin-left: 10px;
+    text-transform: uppercase;
+  }
 }

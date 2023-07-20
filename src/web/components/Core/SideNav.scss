@@ -37,10 +37,14 @@
       color: var(--theme-title);
     }
 
+    .portal-documentation-link a {
+      font-size: 0.875rem;
+    }
     position: fixed;
-    margin: 0 0 12px 12px;
+    margin: 0 12px 12px 12px;
     bottom: 0;
     left: 0;
+    min-width: 250px;
   }
 }
 

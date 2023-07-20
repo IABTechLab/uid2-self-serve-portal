@@ -32,21 +32,23 @@ function AccountPending() {
       ? 'Access Pending'
       : 'Access Requested!';
   return (
-    <Notification
-      icon={['far', 'circle-check']}
-      title={
-        <>
-          {title}
-          <div className='pending-label'>Account Pending</div>
-        </>
-      }
-      notification={
-        participant?.status === ParticipantStatus.AwaitingSigning
-          ? awaitingSigning
-          : awaitingApproval
-      }
-      className='account-pending-content'
-    />
+    <div className='app-panel'>
+      <Notification
+        icon={['far', 'circle-check']}
+        title={
+          <div className='account-pending--header'>
+            {title}
+            <div className='pending-label'>Account Pending</div>
+          </div>
+        }
+        notification={
+          participant?.status === ParticipantStatus.AwaitingSigning
+            ? awaitingSigning
+            : awaitingApproval
+        }
+        className='account-pending-content'
+      />
+    </div>
   );
 }
 

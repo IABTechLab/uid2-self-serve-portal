@@ -32,11 +32,11 @@ export function SideNav({ menu }: SideNavProps) {
         {menu.filter((m) => (m.location ?? 'default') === 'default').map((m) => MenuItem(m))}
       </NavigationMenuList>
       <NavigationMenuList className='nav-footer'>
-        <NavigationMenuItem className='side-nav-item'>
+        <NavigationMenuItem className='side-nav-item portal-documentation-link'>
           <a
             target='_blank'
             className='outside-link'
-            href='https://www.thetradedesk.com/us/website-privacy-policy'
+            href='http://unifiedid.com/docs/getting-started/gs-sharing'
             rel='noreferrer'
           >
             UID2 Portal Documentation

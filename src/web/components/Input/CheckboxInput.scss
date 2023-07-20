@@ -32,6 +32,10 @@
       display: block;
     }
   }
+
+  &:disabled {
+    background-color: var(--theme-disabled-checkbox);
+  }
 }
 
 .checkbox-root:focus {
