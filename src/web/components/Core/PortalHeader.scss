@@ -55,6 +55,10 @@
       background-color: var(--theme-border);
       margin: 10px -5px;
     }
+
+    *:hover {
+      outline: none;
+    }
   }
 
   .theme-switch {
