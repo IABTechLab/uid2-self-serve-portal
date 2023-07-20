@@ -40,7 +40,7 @@ export function PortalHeader({
     <div className='portal-header' role='banner'>
       <div className='title'>
         <Link data-testid='title-link' to='/'>
-          <img src='/uid2-logo.png' alt='UID2 logo' className='uid2-logo' />
+          <img src='/uid2-logo.svg' alt='UID2 logo' className='uid2-logo' />
         </Link>
       </div>
       <DropdownMenu defaultOpen={false}>

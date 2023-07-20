@@ -28,7 +28,7 @@ export type SideNavProps = {
 export function SideNav({ menu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>
-      <NavigationMenuList>
+      <NavigationMenuList className='main-nav'>
         {menu.filter((m) => (m.location ?? 'default') === 'default').map((m) => MenuItem(m))}
       </NavigationMenuList>
       <NavigationMenuList className='nav-footer'>

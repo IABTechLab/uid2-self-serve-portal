@@ -22,6 +22,18 @@
     margin: 0;
   }
 
+  .side-nav-item {
+    padding: 5px 10px;
+  }
+
+  .main-nav {
+    padding: 0 30px;
+
+    .side-nav-item {
+      padding: 12px 0;
+    }
+  }
+
   .nav-footer {
     color: var(--theme-title);
 
@@ -46,8 +58,4 @@
     left: 0;
     min-width: 250px;
   }
-}
-
-.side-nav-item {
-  padding: 5px 10px;
 }
