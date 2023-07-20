@@ -32,7 +32,7 @@ export function createUsersRouter() {
       ...userResult,
       isApprover: userIsApprover,
     };
-    if (updatedUserResult) return res.json(updatedUserResult);
+    if (userResult) return res.json(updatedUserResult);
     return res.sendStatus(404);
   });
 
