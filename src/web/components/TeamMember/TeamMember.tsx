@@ -16,10 +16,11 @@ type DeleteConfirmationDialogProps = {
 function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirmationDialogProps) {
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
-  const handleRemove = () => {
+  const handleRemove = async () => {
     setOpenConfirmation(false);
-    onRemoveTeamMember();
+    await onRemoveTeamMember();
   };
+
   return (
     <Dialog
       title='Are you sure you want to delete this team member?'
