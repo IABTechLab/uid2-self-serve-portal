@@ -4,13 +4,7 @@ import { z } from 'zod';
 import { User, UserCreationPartial, UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
-import {
-  deleteUser,
-  enrichKeycloakUser,
-  KcUserRequest,
-  queryUsersByEmail,
-  sendInviteEmail,
-} from './services/kcUsersService';
+import { deleteUserByEmail, queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
 import {
   enrichCurrentUser,
   enrichWithUserFromParams,
@@ -77,13 +71,13 @@ export function createUsersRouter() {
     return res.sendStatus(200);
   });
 
-  usersRouter.delete('/:userId', enrichKeycloakUser, async (req: KcUserRequest, res) => {
-    const { user, kcUser } = req;
+  usersRouter.delete('/:userId', async (req: UserRequest, res) => {
+    const { user } = req;
     if (req.auth?.payload?.email === user?.email) {
       return res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
     }
     const kcAdminClient = await getKcAdminClient();
-    await deleteUser(kcAdminClient!, kcUser!);
+    await deleteUserByEmail(kcAdminClient!, user?.email!);
     await user!.$query().delete();
     return res.sendStatus(200);
   });

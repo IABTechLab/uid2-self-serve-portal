@@ -44,32 +44,15 @@ export const sendInviteEmail = async (
   });
 };
 
-export const deleteUser = async (kcAdminClient: KeycloakAdminClient, user: UserRepresentation) => {
+export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, userEmail: string) => {
+  const userLists = await queryUsersByEmail(kcAdminClient, userEmail);
+  const resultLength = userLists.length ?? 0;
+  // If user not exists in keycloak, it is fine to just delete the record from db
+  if (resultLength < 1) return;
+  if (resultLength > 1)
+    throw Error(`Multiple results received when loading user entry for ${userEmail}`);
+
   await kcAdminClient.users.del({
-    id: user.id!,
+    id: userLists[0].id!,
   });
-};
-
-export interface KcUserRequest extends UserRequest {
-  kcUser?: UserRepresentation;
-}
-
-export const enrichKeycloakUser = async (req: KcUserRequest, res: Response, next: NextFunction) => {
-  const kcAdminClient = await getKcAdminClient();
-  const keycloakUser = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
-
-  const resultLength = keycloakUser?.length ?? 0;
-  if (resultLength < 1) {
-    return res.status(404).send([{ message: 'The user cannot be found in keycloak.' }]);
-  }
-  if (resultLength > 1) {
-    return res
-      .status(500)
-      .send([
-        { message: ` Multiple results received when loading user entry for ${req.user?.email}` },
-      ]);
-  }
-  const [kcUser] = keycloakUser;
-  req.kcUser = kcUser;
-  return next();
 };
