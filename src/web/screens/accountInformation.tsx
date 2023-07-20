@@ -15,7 +15,7 @@ function AccountInformation() {
   return (
     <>
       <h1>Participant Information</h1>
-      <p>View and manage your participant information.</p>
+      <p className='heading-details'>View and manage your participant information.</p>
       <div className='account-info-content'>
         <h3 className='account-info-title'>
           Participant Name
