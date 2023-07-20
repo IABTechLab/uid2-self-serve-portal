@@ -1,11 +1,8 @@
 import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation';
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
-import { NextFunction, Response } from 'express';
 
 import { SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
-import { getKcAdminClient } from '../keycloakAdminClient';
-import { UserRequest } from './usersService';
 
 export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
   return kcAdminClient.users.find({
