@@ -52,7 +52,6 @@ export const deleteUser = async (kcAdminClient: KeycloakAdminClient, user: UserR
 
 export interface KcUserRequest extends UserRequest {
   kcUser?: UserRepresentation;
-  kcAdminClient?: KeycloakAdminClient;
 }
 
 export const enrichKeycloakUser = async (req: KcUserRequest, res: Response, next: NextFunction) => {
@@ -72,6 +71,5 @@ export const enrichKeycloakUser = async (req: KcUserRequest, res: Response, next
   }
   const [kcUser] = keycloakUser;
   req.kcUser = kcUser;
-  req.kcAdminClient = kcAdminClient;
   return next();
 };
