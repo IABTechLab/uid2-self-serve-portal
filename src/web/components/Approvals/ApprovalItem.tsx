@@ -1,15 +1,15 @@
 import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { ApprovalDTO } from '../../../api/participantsRouter';
 
 import './ApprovalItem.scss';
 
-type ParticipantItemProps = {
-  participant: AvailableParticipantDTO;
+type ApprovalItemProps = {
+  participant: ApprovalDTO;
 };
 
-export function ApprovalItem({ participant }: ParticipantItemProps) {
+export function ApprovalItem({ participant }: ApprovalItemProps) {
   function getParticipantTypes(participantTypes?: z.infer<typeof ParticipantTypeSchema>[]) {
     if (!participantTypes) return null;
     return participantTypes.map((pt) => (

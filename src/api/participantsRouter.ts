@@ -32,10 +32,10 @@ import {
   getAllUserFromParticipant,
 } from './services/usersService';
 
-export type AvailableParticipantDTO = Pick<
-  ParticipantDTO,
-  'id' | 'name' | 'siteId' | 'types' | 'status'
->;
+export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
+
+export type ApprovalDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types' | 'status'>;
+
 function mapParticipantToAvailableParticipant(participant: Participant) {
   return {
     id: participant.id,
