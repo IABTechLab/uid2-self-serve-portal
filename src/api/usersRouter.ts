@@ -82,8 +82,8 @@ export function createUsersRouter() {
       return res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
     }
     const kcAdminClient = await getKcAdminClient();
-    await deleteUserByEmail(kcAdminClient!, user?.email!);
-    await user!.$query().delete();
+    await Promise.all([deleteUserByEmail(kcAdminClient!, user?.email!), user!.$query().delete()]);
+
     return res.sendStatus(200);
   });
 
@@ -97,11 +97,13 @@ export function createUsersRouter() {
     const { user } = req;
     const data = UpdateUserParser.parse(req.body);
     const kcAdminClient = await getKcAdminClient();
-    await updateUserProfile(kcAdminClient, user?.email!, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-    });
-    await user!.$query().patch(data);
+    await Promise.all([
+      updateUserProfile(kcAdminClient, user?.email!, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }),
+      user!.$query().patch(data),
+    ]);
     return res.sendStatus(200);
   });
 

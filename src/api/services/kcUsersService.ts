@@ -52,7 +52,7 @@ export const updateUserProfile = async (
   updateUserPayload: UpdateUserPayload
 ) => {
   const users = await queryUsersByEmail(kcAdminClient, userEmail);
-  if (users.length !== 1) throw Error(`Unable to update  entry for ${userEmail}`);
+  if (users.length !== 1) throw Error(`Unable to update entry for ${userEmail}`);
 
   await kcAdminClient.users.update(
     {
