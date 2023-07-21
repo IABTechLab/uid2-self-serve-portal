@@ -33,7 +33,6 @@ export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 
 const standardMenu = StandardRoutes.filter((r) => r.description);
-const adminMenu = AdminRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const location = useLocation();
@@ -41,8 +40,9 @@ function Dashboard() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const [showMustAccept, setShowMustAccept] = useState(false);
   const navigate = useNavigate();
-  const menu = LoggedInUser?.user?.isApprover ? standardMenu.concat(adminMenu) : standardMenu;
-  const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
+  const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
+  const visibleMenu = standardMenu.concat(adminMenu);
+  const currentLocationDescription = visibleMenu.filter((m) => m.path === location.pathname)[0]
     .description;
 
   const handleAccept = async () => {
@@ -60,7 +60,7 @@ function Dashboard() {
   }, [participant, navigate]);
   return (
     <div className='app-panel'>
-      <SideNav menu={menu} />
+      <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (

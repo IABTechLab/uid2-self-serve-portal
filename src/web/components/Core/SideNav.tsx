@@ -24,13 +24,24 @@ function MenuItem({
   );
 }
 export type SideNavProps = {
-  menu: PortalRoute[];
+  standardMenu: PortalRoute[];
+  adminMenu: PortalRoute[];
 };
-export function SideNav({ menu }: SideNavProps) {
+export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>
       <NavigationMenuList className='main-nav'>
-        {menu.filter((m) => (m.location ?? 'default') === 'default').map((m) => MenuItem(m))}
+        {standardMenu
+          .filter((m) => (m.location ?? 'default') === 'default')
+          .map((m) => MenuItem(m))}
+        {adminMenu.length > 0 && (
+          <>
+            <div className='side-nav-divider' />
+            {adminMenu
+              .filter((m) => (m.location ?? 'default') === 'default')
+              .map((m) => MenuItem(m))}
+          </>
+        )}
       </NavigationMenuList>
       <NavigationMenuList className='nav-footer'>
         <NavigationMenuItem className='side-nav-item portal-documentation-link'>
@@ -55,7 +66,7 @@ export function SideNav({ menu }: SideNavProps) {
             Website Privacy Policy
           </a>
         </NavigationMenuItem>
-        {menu
+        {standardMenu
           .filter((m) => m.location === 'footer')
           .map((m) => (
             <MenuItem path={m.path} description={m.description} linkClass='outside-link' />
