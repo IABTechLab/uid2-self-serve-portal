@@ -2,7 +2,6 @@ import express, { Response } from 'express';
 import { z } from 'zod';
 
 import { businessContactsRouter } from './businessContactsRouter';
-import { Approver } from './entities/Approver';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -18,6 +17,7 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
+  getParticipantsAwaitingApproval,
   getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
@@ -57,19 +57,8 @@ export function createParticipantsRouter() {
   });
 
   participantsRouter.get('/awaitingApproval', async (req: ParticipantRequest, res) => {
-    const approvers = await Approver.query()
-      .distinct('participantTypeId')
-      .where('email', String(req.auth?.payload?.email));
-    const approvableParticipantTypeIds = approvers.map((approver) => approver.participantTypeId);
-    const participantsAwaitingApproval = await Participant.query()
-      .whereIn(
-        'id',
-        Participant.relatedQuery('types')
-          .whereIn('participantTypeId', approvableParticipantTypeIds)
-          .select('participantId')
-      )
-      .withGraphFetched('types')
-      .where('status', ParticipantStatus.AwaitingApproval);
+    const email = String(req.auth?.payload?.email);
+    const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
     return res.status(200).json(participantsAwaitingApproval);
   });
 
