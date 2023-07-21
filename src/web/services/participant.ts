@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
-import { AvailableParticipantDTO } from '../../api/participantsRouter';
+import { AvailableParticipantDTO, ParticipantRequestDTO } from '../../api/participantsRouter';
 import { backendError } from '../utils/apiError';
 import { UserPayload } from './userAccount';
 
@@ -93,7 +93,7 @@ export async function GetAllAvailableParticipants() {
 
 export async function GetParticipantsAwaitingApproval() {
   try {
-    const result = await axios.get<ParticipantResponse[]>(`/participants/awaitingApproval`, {
+    const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;

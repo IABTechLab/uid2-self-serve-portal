@@ -1,6 +1,3 @@
-import { z } from 'zod';
-
-import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/participantsRouter';
 
 import './ParticipantRequestItem.scss';
@@ -12,7 +9,9 @@ type ParticipantRequestProps = {
 export function ParticipantRequestItem({
   participantRequest: participant,
 }: ParticipantRequestProps) {
-  function getParticipantTypes(participantTypes?: z.infer<typeof ParticipantTypeSchema>[]) {
+  function getParticipantTypes(
+    participantTypes?: ParticipantRequestProps['participantRequest']['types']
+  ) {
     if (!participantTypes) return null;
     return participantTypes.map((pt) => (
       <div className='participant-request-type-label' key={pt.typeName}>

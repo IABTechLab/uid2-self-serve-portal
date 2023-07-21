@@ -9,12 +9,21 @@ import { isUserAnApprover } from './approversService';
 export type UserWithIsApprover = User & { isApprover: false };
 
 export const findUserByEmail = async (email: string) => {
-  const user = await User.query().findOne('email', email);
-  const userIsApprover = await isUserAnApprover(email);
+  return User.query().findOne('email', email);
+};
+
+export const enrichUserWithIsApprover = async (user: User) => {
+  const userIsApprover = await isUserAnApprover(user.email);
   return {
     ...user,
     isApprover: userIsApprover,
-  } as UserWithIsApprover;
+  };
+};
+
+export const findEnrichedUserByEmail = async (email: string) => {
+  const user = await findUserByEmail(email);
+  if (!user) return;
+  return enrichUserWithIsApprover(user);
 };
 
 export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTerms'>) => {

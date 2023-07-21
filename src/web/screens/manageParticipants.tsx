@@ -29,7 +29,7 @@ function ManageParticipants() {
 }
 
 export const ManageParticipantsRoute: PortalRoute = {
-  path: '/dashboard/manageParticpants',
+  path: '/dashboard/manageParticipants',
   description: 'Manage Participants',
   element: <ManageParticipants />,
   loader: async () => {
