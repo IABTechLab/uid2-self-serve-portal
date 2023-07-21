@@ -1,27 +1,10 @@
 import { useContext, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Tooltip } from '../components/Core/Tooltip';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { PortalRoute } from './routeUtils';
 
 import './accountInformation.scss';
-
-function AccountInformationFooter() {
-  const navigate = useNavigate();
-  const onClick = () => {
-    navigate('/dashboard/team');
-  };
-  return (
-    <div className='dashboard-footer'>
-      <div>
-        <button className='small-button primary-button' type='button' onClick={onClick}>
-          Save
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function AccountInformation() {
   const { participant } = useContext(ParticipantContext);
@@ -31,8 +14,8 @@ function AccountInformation() {
 
   return (
     <>
-      <h1>General Account Information</h1>
-      <p>View and manage your participant information and default sharing settings.</p>
+      <h1>Participant Information</h1>
+      <p className='heading-details'>View and manage your participant information.</p>
       <div className='account-info-content'>
         <h3 className='account-info-title'>
           Participant Name
@@ -49,13 +32,12 @@ function AccountInformation() {
         </h3>
         <span>{participantTypes}</span>
       </div>
-      <AccountInformationFooter />
     </>
   );
 }
 
 export const AccountInformationRoute: PortalRoute = {
-  description: 'General Account Info.',
+  description: 'Participant Information',
   element: <AccountInformation />,
   path: '/dashboard/info',
 };

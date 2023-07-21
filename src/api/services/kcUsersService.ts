@@ -40,3 +40,37 @@ export const sendInviteEmail = async (
     redirectUri: SSP_WEB_BASE_URL,
   });
 };
+
+type UpdateUserPayload = {
+  firstName: string;
+  lastName: string;
+};
+
+export const updateUserProfile = async (
+  kcAdminClient: KeycloakAdminClient,
+  userEmail: string,
+  updateUserPayload: UpdateUserPayload
+) => {
+  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  if (users.length !== 1) throw Error(`Unable to update entry for ${userEmail}`);
+
+  await kcAdminClient.users.update(
+    {
+      id: users[0].id!,
+    },
+    updateUserPayload
+  );
+};
+
+export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, userEmail: string) => {
+  const userLists = await queryUsersByEmail(kcAdminClient, userEmail);
+  const resultLength = userLists.length ?? 0;
+  // If user not exists in keycloak, it is fine to just delete the record from db
+  if (resultLength < 1) return;
+  if (resultLength > 1)
+    throw Error(`Multiple results received when loading user entry for ${userEmail}`);
+
+  await kcAdminClient.users.del({
+    id: userLists[0].id!,
+  });
+};

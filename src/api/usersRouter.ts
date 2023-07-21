@@ -1,10 +1,15 @@
 import express from 'express';
 import { z } from 'zod';
 
-import { User, UserCreationPartial } from './entities/User';
+import { User, UserCreationPartial, UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
+import {
+  deleteUserByEmail,
+  queryUsersByEmail,
+  sendInviteEmail,
+  updateUserProfile,
+} from './services/kcUsersService';
 import {
   enrichCurrentUser,
   enrichWithUserFromParams,
@@ -71,5 +76,37 @@ export function createUsersRouter() {
     await sendInviteEmail(kcAdminClient, user[0]);
     return res.sendStatus(200);
   });
+
+  usersRouter.delete('/:userId', async (req: UserRequest, res) => {
+    const { user } = req;
+    if (req.auth?.payload?.email === user?.email) {
+      return res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
+    }
+    const kcAdminClient = await getKcAdminClient();
+    await Promise.all([deleteUserByEmail(kcAdminClient!, user?.email!), user!.$query().delete()]);
+
+    return res.sendStatus(200);
+  });
+
+  const UpdateUserParser = z.object({
+    firstName: z.string(),
+    lastName: z.string(),
+    role: z.nativeEnum(UserRole),
+  });
+
+  usersRouter.patch('/:userId', async (req: UserRequest, res) => {
+    const { user } = req;
+    const data = UpdateUserParser.parse(req.body);
+    const kcAdminClient = await getKcAdminClient();
+    await Promise.all([
+      updateUserProfile(kcAdminClient, user?.email!, {
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }),
+      user!.$query().patch(data),
+    ]);
+    return res.sendStatus(200);
+  });
+
   return usersRouter;
 }

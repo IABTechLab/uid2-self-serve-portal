@@ -44,6 +44,14 @@ button {
   font-family: inherit;
   border: none;
   font-size: 1.25rem;
-  color: var(--theme-action);
   padding: 0 10px;
+  svg {
+    color: var(--theme-action);
+  }
+}
+
+.icon-button:disabled {
+  svg {
+    color: var(--theme-disabled-button-text);
+  }
 }

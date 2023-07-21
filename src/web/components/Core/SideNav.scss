@@ -22,7 +22,26 @@
     margin: 0;
   }
 
+  .side-nav-item {
+    padding: 5px 10px;
+  }
+
+  .main-nav {
+    padding: 0 30px;
+
+    .side-nav-item {
+      padding: 12px 0;
+    }
+  }
+
   .nav-footer {
+    color: var(--theme-title);
+
+    .side-nav-divider {
+      border-bottom: 1px solid var(--theme-footer-divider);
+      margin: 10px;
+    }
+
     .side-nav-item,
     a {
       &.version-info {
@@ -32,15 +51,16 @@
 
       font-size: 0.75rem;
       font-weight: 400;
+      color: var(--theme-title);
     }
 
+    .portal-documentation-link a {
+      font-size: 0.875rem;
+    }
     position: fixed;
-    margin: 0 0 12px 12px;
+    margin: 0 12px 12px 12px;
     bottom: 0;
     left: 0;
+    min-width: 250px;
   }
-}
-
-.side-nav-item {
-  padding: 5px 10px;
 }

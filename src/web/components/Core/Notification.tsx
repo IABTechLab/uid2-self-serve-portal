@@ -6,7 +6,7 @@ import './Notification.scss';
 
 type NotificationProps = {
   icon?: IconProp;
-  title?: string;
+  title?: ReactNode;
   notification: ReactNode;
   className?: string;
 };

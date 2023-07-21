@@ -9,6 +9,7 @@
   }
 
   .portal-team-table {
+    margin-top: 32px;
     font-size: 0.875rem;
 
     thead {
@@ -21,7 +22,16 @@
     }
 
     .email {
-      width: 60%;
+      width: 30%;
+    }
+
+    .jobFunction {
+      width: 10%;
+    }
+
+    th.action {
+      text-align: end;
+      padding-left: 140px;
     }
 
     td {
@@ -29,13 +39,17 @@
       padding-bottom: 15px;
     }
 
-    td.action {
+    .action {
       padding-right: 80px;
+    }
+
+    td.action {
       font-size: 0.8125rem;
       display: flex;
       justify-content: flex-end;
+      flex-wrap: wrap;
 
-      button {
+      .invite-button {
         &.clickable {
           cursor: pointer;
           color: var(--theme-action);
@@ -47,14 +61,12 @@
 
         border: none;
         white-space: nowrap;
-        flex-grow: 1;
         align-items: center;
         padding: 0 10px;
       }
 
       svg {
-        color: var(--theme-action);
-        padding: 0 10px;
+        font-size: 1rem;
       }
     }
 

@@ -6,7 +6,7 @@ import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
 import { AvailableParticipantDTO, ParticipantRequestDTO } from '../../api/participantsRouter';
 import { backendError } from '../utils/apiError';
-import { UserPayload } from './userAccount';
+import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
 export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
 export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
@@ -101,13 +101,6 @@ export async function GetParticipantsAwaitingApproval() {
     throw backendError(e, 'Could not load participants awaiting approval');
   }
 }
-
-export type InviteTeamMemberForm = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-};
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   try {

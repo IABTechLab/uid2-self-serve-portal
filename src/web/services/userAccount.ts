@@ -12,6 +12,15 @@ export type UserAccount = {
   user: UserWithIsApprover | null;
 };
 
+export type InviteTeamMemberForm = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+};
+
+export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
+
 export type UserPayload = z.infer<typeof UserCreationPartial>;
 export type UserResponse = UserDTO;
 export async function GetUserAccountById(id: string) {
@@ -80,6 +89,22 @@ export async function GetAllUsersOfParticipant(participantId?: number) {
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load users');
+  }
+}
+
+export async function RemoveUser(id: number) {
+  try {
+    await axios.delete(`/users/${id}`);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not delete user');
+  }
+}
+
+export async function UpdateUser(id: number, formData: UpdateTeamMemberForm) {
+  try {
+    await axios.patch(`/users/${id}`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update user');
   }
 }
 
