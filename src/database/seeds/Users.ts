@@ -24,7 +24,6 @@ const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
     phone: '+61298765432',
     role: UserRole.DA,
     acceptedTerms: false,
-    isApprover: false,
   },
 ];
 

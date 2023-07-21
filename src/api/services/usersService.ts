@@ -4,9 +4,17 @@ import { z } from 'zod';
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
+import { isUserAnApprover } from './approversService';
+
+export type UserWithIsApprover = User & { isApprover: false };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query().findOne('email', email);
+  const user = await User.query().findOne('email', email);
+  const userIsApprover = await isUserAnApprover(email);
+  return {
+    ...user,
+    isApprover: userIsApprover,
+  } as UserWithIsApprover;
 };
 
 export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTerms'>) => {

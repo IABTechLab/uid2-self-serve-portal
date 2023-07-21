@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { User, UserCreationPartial } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { isUserAnApprover } from './services/approversService';
 import { queryUsersByEmail, sendInviteEmail } from './services/kcUsersService';
 import {
   enrichCurrentUser,
@@ -26,13 +25,8 @@ export function createUsersRouter() {
       return res.status(200).json(users);
     }
     const userResult = await findUserByEmail(email);
-    const userIsApprover = await isUserAnApprover(email);
 
-    const updatedUserResult = {
-      ...userResult,
-      isApprover: userIsApprover,
-    };
-    if (userResult) return res.json(updatedUserResult);
+    if (userResult.id) return res.json(userResult);
     return res.sendStatus(404);
   });
 

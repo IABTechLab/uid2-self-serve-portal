@@ -4,11 +4,12 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { User, UserCreationPartial, UserDTO } from '../../api/entities/User';
+import { UserWithIsApprover } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
-  user: User | null;
+  user: UserWithIsApprover | null;
 };
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
@@ -24,9 +25,11 @@ export async function GetUserAccountById(id: string) {
   }
 }
 
-export async function GetUserAccountByEmail(email: string | undefined): Promise<User | null> {
+export async function GetUserAccountByEmail(
+  email: string | undefined
+): Promise<UserWithIsApprover | null> {
   try {
-    const result = await axios.get<User>(`/users?email=${email}`, {
+    const result = await axios.get<UserWithIsApprover>(`/users?email=${email}`, {
       validateStatus: (status) => [200, 404].includes(status),
     });
     if (result.status === 200) return result.data;
