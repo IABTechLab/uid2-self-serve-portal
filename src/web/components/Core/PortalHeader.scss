@@ -3,7 +3,7 @@
   border-bottom: 1px solid var(--theme-border);
   display: flex;
   align-items: center;
-  padding: 0 30px;
+  padding: 0 40px;
 
   .uid2-logo {
     height: 30px;
@@ -11,7 +11,7 @@
 
   .title {
     flex-grow: 1;
-    padding: 20px 20px 15px 20px;
+    padding: 20px 20px 15px 0;
   }
 
   .profile-dropdown-button {
@@ -54,6 +54,10 @@
       height: 1px;
       background-color: var(--theme-border);
       margin: 10px -5px;
+    }
+
+    *:hover {
+      outline: none;
     }
   }
 

@@ -49,7 +49,7 @@ function TeamMembers() {
     <>
       <h1>Team Members</h1>
       <p className='heading-details'>
-        View current team members below and add additional team members to access Unified ID Portal.
+        View and manage team members who have access to the UID2 Portal.
       </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.users}>

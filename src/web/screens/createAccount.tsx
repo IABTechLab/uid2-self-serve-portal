@@ -27,20 +27,22 @@ function CreateAccount() {
   };
 
   return (
-    <div className='create-account-screen'>
-      <Card
-        title='Participant Information'
-        description='Provide the following information about the company/participant you work for.'
-      >
-        <Suspense fallback={<Loading />}>
-          <h2>Participant Information</h2>
-          <Await resolve={participantTypes}>
-            {(partTypes: ParticipantType[]) => (
-              <CreateAccountForm onSubmit={onSubmit} resolvedParticipantTypes={partTypes} />
-            )}
-          </Await>
-        </Suspense>
-      </Card>
+    <div className='app-panel app-centralize'>
+      <div className='create-account-screen'>
+        <Card
+          title='Participant Information'
+          description='Provide the following information about the company/participant you work for.'
+        >
+          <Suspense fallback={<Loading />}>
+            <h2>Participant Information</h2>
+            <Await resolve={participantTypes}>
+              {(partTypes: ParticipantType[]) => (
+                <CreateAccountForm onSubmit={onSubmit} resolvedParticipantTypes={partTypes} />
+              )}
+            </Await>
+          </Suspense>
+        </Card>
+      </div>
     </div>
   );
 }

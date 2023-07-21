@@ -29,10 +29,21 @@ export type SideNavProps = {
 export function SideNav({ menu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>
-      <NavigationMenuList>
+      <NavigationMenuList className='main-nav'>
         {menu.filter((m) => (m.location ?? 'default') === 'default').map((m) => MenuItem(m))}
       </NavigationMenuList>
       <NavigationMenuList className='nav-footer'>
+        <NavigationMenuItem className='side-nav-item portal-documentation-link'>
+          <a
+            target='_blank'
+            className='outside-link'
+            href='http://unifiedid.com/docs/getting-started/gs-sharing'
+            rel='noreferrer'
+          >
+            UID2 Portal Documentation
+          </a>
+        </NavigationMenuItem>
+        <div className='side-nav-divider' />
         <li className='side-nav-item'>&copy; 2023 Unified ID</li>
         <NavigationMenuItem className='side-nav-item'>
           <a

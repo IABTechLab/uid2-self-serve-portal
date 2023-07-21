@@ -8,11 +8,7 @@ import { makePrivateRoute, PortalRoute } from './routeUtils';
 const AccountCreationRoute: PortalRoute = {
   path: '/account',
   description: 'CreateAccount',
-  element: (
-    <div className='app-panel app-centralize'>
-      <Outlet />
-    </div>
-  ),
+  element: <Outlet />,
   children: [CreateAccountRoute, AccountPendingRoute],
 };
 

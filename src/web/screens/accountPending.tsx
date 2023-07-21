@@ -9,11 +9,8 @@ import './accountPending.scss';
 
 const awaitingApproval = (
   <p>
-    You’re all set to go. please give our team up to 3 business days to review your request and get
-    you set up. You’ll receive an email once your account is ready to go. <br />
-    <br />
-    Please be on the look out. Please understand that we cannot begin to process your request until
-    we have a signed contract and agreement to terms.
+    Thank you! We’ve sent a confirmation message to the email you gave us. Please verify and then
+    we’ll review your request.
   </p>
 );
 
@@ -35,16 +32,23 @@ function AccountPending() {
       ? 'Access Pending'
       : 'Access Requested!';
   return (
-    <Notification
-      icon={['far', 'circle-check']}
-      title={title}
-      notification={
-        participant?.status === ParticipantStatus.AwaitingSigning
-          ? awaitingSigning
-          : awaitingApproval
-      }
-      className='account-pending-content'
-    />
+    <div className='app-panel'>
+      <Notification
+        icon={['far', 'circle-check']}
+        title={
+          <div className='account-pending--header'>
+            {title}
+            <div className='pending-label'>Account Pending</div>
+          </div>
+        }
+        notification={
+          participant?.status === ParticipantStatus.AwaitingSigning
+            ? awaitingSigning
+            : awaitingApproval
+        }
+        className='account-pending-content'
+      />
+    </div>
   );
 }
 
