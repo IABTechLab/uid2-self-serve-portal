@@ -19,17 +19,8 @@ import {
 
 export function createUsersRouter() {
   const usersRouter = express.Router();
-  const emailParser = z.object({
-    email: z.string().optional(),
-  });
-
-  usersRouter.get('/', async (req, res) => {
-    const { email } = emailParser.parse(req.query);
-    if (!email) {
-      const users = await User.query();
-      return res.status(200).json(users);
-    }
-    const userResult = await findUserByEmail(email);
+  usersRouter.get('/current', async (req, res) => {
+    const userResult = await findUserByEmail(req.auth?.payload?.email as string);
     if (userResult) return res.json(userResult);
     return res.sendStatus(404);
   });

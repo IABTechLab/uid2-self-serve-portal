@@ -3,7 +3,7 @@ import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } f
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Loading } from '../components/Core/Loading';
-import { GetUserAccountByEmail, UserAccount } from '../services/userAccount';
+import { GetLoggedInUserAccount, UserAccount } from '../services/userAccount';
 import { useAsyncError } from '../utils/errorHandler';
 
 type UserContextWithSetter = {
@@ -29,7 +29,7 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     try {
       const profile = await keycloak.loadUserProfile();
-      const user = await GetUserAccountByEmail(profile?.email);
+      const user = await GetLoggedInUserAccount();
       SetLoggedInUser({
         profile,
         user,
