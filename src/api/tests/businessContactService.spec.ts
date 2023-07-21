@@ -1,18 +1,20 @@
 import request, { Request } from 'supertest';
 
-import { businessContactsRouter } from '../businessContactsRouter';
 import { ContactType } from '../entities/BusinessContact';
 import { BusinessContactRequest } from '../services/businessContactsService';
 import { mockBusinessContact, mockParticipant, mockUser } from './queryMocks';
-import useTestServer, { api } from './utils';
+import useTestServer, { api, routers } from './utils';
 
 describe('Business Contact Service Tests', () => {
   const withToken = useTestServer();
 
   beforeAll(() => {
-    businessContactsRouter.get('/:contactId', (req: BusinessContactRequest, res) => {
-      res.status(200).json(req.businessContact);
-    });
+    routers!.participantsRouter.businessContactsRouter.get(
+      '/:contactId',
+      (req: BusinessContactRequest, res) => {
+        res.status(200).json(req.businessContact);
+      }
+    );
   });
 
   afterEach(() => {

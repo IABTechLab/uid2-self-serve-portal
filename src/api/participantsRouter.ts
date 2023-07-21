@@ -1,7 +1,7 @@
-import express, { Response } from 'express';
+import express, { Response, Router } from 'express';
 import { z } from 'zod';
 
-import { businessContactsRouter } from './businessContactsRouter';
+import { createBusinessContactsRouter } from './businessContactsRouter';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -210,7 +210,8 @@ export function createParticipantsRouter() {
       return res.status(200).json(users);
     }
   );
+  const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
 
-  return participantsRouter;
+  return { router: participantsRouter, businessContactsRouter };
 }

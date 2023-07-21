@@ -19,10 +19,8 @@ import {
 
 export function createUsersRouter() {
   const usersRouter = express.Router();
-  usersRouter.get('/current', async (req, res) => {
-    const userResult = await findUserByEmail(req.auth?.payload?.email as string);
-    if (userResult) return res.json(userResult);
-    return res.sendStatus(404);
+  usersRouter.get('/current', enrichCurrentUser, async (req: UserRequest, res) => {
+    return res.json(req.user);
   });
 
   usersRouter.post('/', async (req, res) => {
