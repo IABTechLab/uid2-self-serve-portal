@@ -15,6 +15,9 @@ WithoutTeamMembers.args = {
   teamMembers: [],
   resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
   onAddTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
+  onRemoveTeamMember: (id) => Promise.resolve(console.log(`Remove userId: ${id}`)),
+  onUpdateTeamMember: (id, formData) =>
+    Promise.resolve(console.log(`Update userId: ${id} with ${JSON.stringify(formData)}`)),
 };
 
 export const WithTeamMembers = Template.bind({});
@@ -40,4 +43,10 @@ WithTeamMembers.args = {
       participantId: 1,
     },
   ],
+};
+
+export const WithDeleteError = Template.bind({});
+WithDeleteError.args = {
+  ...WithTeamMembers.args,
+  onRemoveTeamMember: (id) => Promise.reject(console.log(`Failed to remove userId: ${id}`)),
 };

@@ -1,40 +1,59 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { UserRole } from '../../../api/entities/User';
-import { ParticipantContext } from '../../contexts/ParticipantProvider';
-import { InviteTeamMemberForm } from '../../services/participant';
+import {
+  InviteTeamMemberForm,
+  UpdateTeamMemberForm,
+  UserResponse,
+} from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 
-type AddTeamMemberProps = {
-  onAddTeamMember: (form: InviteTeamMemberForm, participantId: number) => Promise<void>;
+type AddTeamMemberDialogProps = {
+  onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
+  triggerButton: JSX.Element;
+  person?: never;
 };
+type UpdateTeamMemberDialogProps = {
+  onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
+  triggerButton: JSX.Element;
+  person: UserResponse;
+};
+type TeamMemberDialogProps = AddTeamMemberDialogProps | UpdateTeamMemberDialogProps;
 
-function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
-  const { participant } = useContext(ParticipantContext);
+const isUpdateTeamMemberDialogProps = (
+  props: TeamMemberDialogProps
+): props is UpdateTeamMemberDialogProps => 'person' in props;
+
+function TeamMemberDialog(props: TeamMemberDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<InviteTeamMemberForm> = async (formData) => {
-    await onAddTeamMember(formData, participant!.id!);
+    if (isUpdateTeamMemberDialogProps(props)) {
+      const { firstName, lastName, role } = formData;
+      await props.onUpdateTeamMember({ firstName, lastName, role });
+    } else {
+      await props.onAddTeamMember(formData);
+    }
     setOpen(false);
   };
 
   return (
     <Dialog
-      triggerButton={
-        <button className='small-button' type='button'>
-          Add team member
-        </button>
-      }
-      title='Add Team Member'
+      triggerButton={props.triggerButton}
+      title={`${props.person ? 'Edit' : 'Add'} Team Member`}
       closeButton='Cancel'
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<InviteTeamMemberForm> onSubmit={onSubmit} submitButtonText='Save Team Member'>
+      <Form<InviteTeamMemberForm>
+        onSubmit={onSubmit}
+        submitButtonText='Save Team Member'
+        defaultValues={props.person as InviteTeamMemberForm}
+      >
         <TextInput
           inputName='firstName'
           label='First Name'
@@ -48,6 +67,7 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
         <TextInput
           inputName='email'
           label='Email'
+          disabled={!!props.person}
           rules={{
             required: 'Please specify email.',
             pattern: {
@@ -70,4 +90,4 @@ function AddTeamMemberDialog({ onAddTeamMember }: AddTeamMemberProps) {
   );
 }
 
-export default AddTeamMemberDialog;
+export default TeamMemberDialog;

@@ -13,7 +13,7 @@
     }
 
     .contactType {
-      width: 40%;
+      width: 25%;
     }
 
     font-size: 0.875rem;
@@ -24,9 +24,13 @@
       border: none;
     }
 
-    td.action {
+    th.action {
+      text-align: end;
+      padding-left: 140px;
+    }
+
+    .action {
       padding-right: 80px;
-      font-size: 0.8125rem;
     }
 
     td {
@@ -35,7 +39,10 @@
     }
 
     td.action {
+      font-size: 0.8125rem;
       display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
 
       .icon-button {
         &.clickable {
@@ -49,13 +56,11 @@
 
         border: none;
         white-space: nowrap;
-        flex-grow: 1;
         align-items: center;
         padding: 0 10px;
       }
 
       svg {
-        color: var(--theme-action);
         font-size: 1rem;
       }
     }

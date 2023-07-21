@@ -38,6 +38,13 @@
   .icon-button:focus {
     box-shadow: 0 0 0 2px var(--theme-box-shadow);
   }
+
+  .dialog-footer-section {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 30px;
+  }
 }
 
 .dialog-overlay {
