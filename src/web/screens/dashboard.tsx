@@ -9,9 +9,9 @@ import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
-import { ApprovalsRoute } from './approvals';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
+import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
@@ -26,7 +26,7 @@ export const DashboardRoutes: PortalRoute[] = [
   TeamMembersRoute,
   EmailContactsRoute,
   TermsOfServiceRoute,
-  ApprovalsRoute,
+  ManageParticipantsRoute,
 ];
 const menu = DashboardRoutes.filter((r) => r.description);
 
@@ -38,7 +38,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const filteredMenu = LoggedInUser?.user?.isApprover
     ? menu
-    : menu.filter((x) => x.description !== ApprovalsRoute.description);
+    : menu.filter((x) => x.description !== ManageParticipantsRoute.description);
 
   const currentLocationDescription = filteredMenu.filter((m) => m.path === location.pathname)[0]
     .description;

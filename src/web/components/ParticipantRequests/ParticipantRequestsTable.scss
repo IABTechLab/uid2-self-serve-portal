@@ -1,5 +1,5 @@
-.approvals-container {
-  .approvals-table {
+.participant-requests-container {
+  .participant-requests-table {
     width: 100%;
 
     tr th {
@@ -9,7 +9,7 @@
     }
 
   }
-  .no-approvals-container {
+  .no-participant-requests-container {
     margin-top: 15px;
     border: 1px solid var(--theme-border);
     border-radius: 5px;
@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
 
-    .no-approvals-text {
+    .no-participant-requests-text {
       margin-left: 33px;
 
       h2 {
