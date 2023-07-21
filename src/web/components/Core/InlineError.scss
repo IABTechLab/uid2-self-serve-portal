@@ -1,0 +1,12 @@
+.inline-error {
+  margin: 0 8px;
+}
+
+.inline-error-content {
+  font-size: 0.625rem;
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 3px 8px;
+  background-color: var(--theme-error-label-background);
+  color: var(--theme-title);
+}

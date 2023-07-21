@@ -5,6 +5,7 @@ import {
 } from '@radix-ui/react-navigation-menu';
 import { NavLink } from 'react-router-dom';
 
+import config from '../../../../package.json';
 import { PortalRoute } from '../../screens/routeUtils';
 
 import './SideNav.scss';
@@ -59,6 +60,7 @@ export function SideNav({ menu }: SideNavProps) {
           .map((m) => (
             <MenuItem path={m.path} description={m.description} linkClass='outside-link' />
           ))}
+        <li className='side-nav-item version-info'>UID2 Self-Serve Portal v.{config.version}</li>
       </NavigationMenuList>
     </NavigationMenu>
   );

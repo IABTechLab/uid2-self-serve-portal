@@ -44,6 +44,11 @@
 
     .side-nav-item,
     a {
+      &.version-info {
+        font-size: 0.625rem;
+        color: var(--theme-disabled-button-text);
+      }
+
       font-size: 0.75rem;
       font-weight: 400;
       color: var(--theme-title);

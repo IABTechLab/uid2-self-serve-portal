@@ -1,9 +1,19 @@
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useContext } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
-import { InviteTeamMember, InviteTeamMemberForm } from '../services/participant';
-import { GetAllUsersOfParticipant, ResendInvite, UserResponse } from '../services/userAccount';
+import { CurrentUserContext } from '../contexts/CurrentUserProvider';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
+import { InviteTeamMember } from '../services/participant';
+import {
+  GetAllUsersOfParticipant,
+  InviteTeamMemberForm,
+  RemoveUser,
+  ResendInvite,
+  UpdateTeamMemberForm,
+  UpdateUser,
+  UserResponse,
+} from '../services/userAccount';
 import { PortalRoute } from './routeUtils';
 
 function Loading() {
@@ -11,14 +21,27 @@ function Loading() {
 }
 
 function TeamMembers() {
+  const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const data = useLoaderData() as { users: UserResponse[] };
+  const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
   const onTeamMembersUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
 
-  const handleAddTeamMember = async (formData: InviteTeamMemberForm, participantId: number) => {
-    await InviteTeamMember(formData, participantId);
+  const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
+    await InviteTeamMember(formData, participant!.id);
+    onTeamMembersUpdated();
+  };
+
+  const handleRemoveTeamMember = async (userId: number) => {
+    await RemoveUser(userId);
+    onTeamMembersUpdated();
+  };
+
+  const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
+    await UpdateUser(userId, formData);
+    if (LoggedInUser?.user?.id === userId) await loadUser();
     onTeamMembersUpdated();
   };
 
@@ -35,6 +58,8 @@ function TeamMembers() {
               teamMembers={users}
               onAddTeamMember={handleAddTeamMember}
               resendInvite={ResendInvite}
+              onRemoveTeamMember={handleRemoveTeamMember}
+              onUpdateTeamMember={handleUpdateTeamMember}
             />
           )}
         </Await>
