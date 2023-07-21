@@ -6,7 +6,7 @@ import { User, UserDTO } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 
-export type UserWithIsApprover = User & { isApprover: false };
+export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
   return User.query().findOne('email', email);
