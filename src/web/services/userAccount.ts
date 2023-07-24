@@ -55,15 +55,6 @@ export async function ResendInvite(id: number): Promise<void> {
   }
 }
 
-export async function CreateUser(userPayload: UserPayload) {
-  try {
-    const newUser = await axios.post<User>(`/users`, userPayload);
-    return newUser.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not create user');
-  }
-}
-
 export async function GetAllUsersOfParticipant(participantId?: number) {
   try {
     const result = await axios.get<UserResponse[]>(

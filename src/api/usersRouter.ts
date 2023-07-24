@@ -23,12 +23,6 @@ export function createUsersRouter() {
     return res.json(req.user);
   });
 
-  usersRouter.post('/', async (req, res) => {
-    const data = UserCreationPartial.parse(req.body);
-    const user = await User.query().insert(data);
-    res.status(201).json(user);
-  });
-
   usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {
     await req.user!.$query().patch({ acceptedTerms: true });
     return res.sendStatus(200);
