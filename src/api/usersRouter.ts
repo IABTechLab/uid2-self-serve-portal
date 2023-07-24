@@ -13,7 +13,7 @@ import {
 import {
   enrichCurrentUser,
   enrichWithUserFromParams,
-  findUserByEmail,
+  findEnrichedUserByEmail,
   UserRequest,
 } from './services/usersService';
 
@@ -29,7 +29,8 @@ export function createUsersRouter() {
       const users = await User.query();
       return res.status(200).json(users);
     }
-    const userResult = await findUserByEmail(email);
+    const userResult = await findEnrichedUserByEmail(email);
+
     if (userResult) return res.json(userResult);
     return res.sendStatus(404);
   });
