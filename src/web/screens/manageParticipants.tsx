@@ -33,7 +33,7 @@ export const ManageParticipantsRoute: PortalRoute = {
   description: 'Manage Participants',
   element: <ManageParticipants />,
   loader: async () => {
-    const participantsAwaitingApproval = await GetParticipantsAwaitingApproval();
+    const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
     return defer({
       participantsAwaitingApproval,
     });
