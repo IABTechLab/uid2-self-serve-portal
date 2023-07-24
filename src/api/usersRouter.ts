@@ -1,7 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 
-import { User, UserCreationPartial, UserRole } from './entities/User';
+import { UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import {
