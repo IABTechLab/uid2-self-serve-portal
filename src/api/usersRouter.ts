@@ -12,15 +12,16 @@ import {
 } from './services/kcUsersService';
 import {
   enrichCurrentUser,
+  enrichUserWithIsApprover,
   enrichWithUserFromParams,
-  findUserByEmail,
   UserRequest,
 } from './services/usersService';
 
 export function createUsersRouter() {
   const usersRouter = express.Router();
   usersRouter.get('/current', enrichCurrentUser, async (req: UserRequest, res) => {
-    return res.json(req.user);
+    const userWithIsApprover = enrichUserWithIsApprover(req.user!);
+    return res.json(userWithIsApprover);
   });
 
   usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {

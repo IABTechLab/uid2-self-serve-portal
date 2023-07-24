@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { ParticipantStatus } from '../../../api/entities/Participant';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
 
 export default {

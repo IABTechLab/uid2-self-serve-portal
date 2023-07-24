@@ -11,6 +11,7 @@ import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
+import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
@@ -18,7 +19,7 @@ import { TermsOfServiceRoute } from './termsOfService';
 
 import './dashboard.scss';
 
-export const DashboardRoutes: PortalRoute[] = [
+export const StandardRoutes: PortalRoute[] = [
   HomeRoute,
   SharingPermissionsRoute,
   AccountInformationRoute,
@@ -26,7 +27,12 @@ export const DashboardRoutes: PortalRoute[] = [
   EmailContactsRoute,
   TermsOfServiceRoute,
 ];
-const menu = DashboardRoutes.filter((r) => r.description);
+
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+
+export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
+
+const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const location = useLocation();
@@ -34,8 +40,9 @@ function Dashboard() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const [showMustAccept, setShowMustAccept] = useState(false);
   const navigate = useNavigate();
-
-  const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
+  const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
+  const visibleMenu = standardMenu.concat(adminMenu);
+  const currentLocationDescription = visibleMenu.filter((m) => m.path === location.pathname)[0]
     .description;
 
   const handleAccept = async () => {
@@ -53,7 +60,7 @@ function Dashboard() {
   }, [participant, navigate]);
   return (
     <div className='app-panel'>
-      <SideNav menu={menu} />
+      <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (
