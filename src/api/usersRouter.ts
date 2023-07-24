@@ -20,7 +20,7 @@ import {
 export function createUsersRouter() {
   const usersRouter = express.Router();
   usersRouter.get('/current', enrichCurrentUser, async (req: UserRequest, res) => {
-    const userWithIsApprover = enrichUserWithIsApprover(req.user!);
+    const userWithIsApprover = await enrichUserWithIsApprover(req.user!);
     return res.json(userWithIsApprover);
   });
 
