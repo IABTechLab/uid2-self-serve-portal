@@ -20,12 +20,6 @@ export const enrichUserWithIsApprover = async (user: User) => {
   };
 };
 
-export const findEnrichedUserByEmail = async (email: string) => {
-  const user = await findUserByEmail(email);
-  if (!user) return;
-  return enrichUserWithIsApprover(user);
-};
-
 export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTerms'>) => {
   const existingUser = await findUserByEmail(user.email);
   if (existingUser) return existingUser;

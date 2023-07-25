@@ -34,11 +34,9 @@ export async function GetUserAccountById(id: string) {
   }
 }
 
-export async function GetUserAccountByEmail(
-  email: string | undefined
-): Promise<UserWithIsApprover | null> {
+export async function GetLoggedInUserAccount(): Promise<UserWithIsApprover | null> {
   try {
-    const result = await axios.get<UserWithIsApprover>(`/users?email=${email}`, {
+    const result = await axios.get<UserWithIsApprover>(`/users/current`, {
       validateStatus: (status) => [200, 404].includes(status),
     });
     if (result.status === 200) return result.data;
@@ -55,26 +53,6 @@ export async function ResendInvite(id: number): Promise<void> {
     const error = backendError(e, 'Unable to resent invite.');
     log.error(error);
     throw error;
-  }
-}
-
-export async function GetAllUsers() {
-  try {
-    const result = await axios.get<User[]>(`/users/`, {
-      validateStatus: (status) => [200, 404].includes(status),
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load users');
-  }
-}
-
-export async function CreateUser(userPayload: UserPayload) {
-  try {
-    const newUser = await axios.post<User>(`/users`, userPayload);
-    return newUser.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not create user');
   }
 }
 
