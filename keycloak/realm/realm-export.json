@@ -109,7 +109,7 @@
         "composite": true,
         "composites": {
           "client": {
-            "self_serve_portal_apis": ["api-participant-member"],
+            "self_serve_portal_apis": ["api-user"],
             "self_serve_portal_web": ["participant-user"]
           }
         },
@@ -129,6 +129,14 @@
     ],
     "client": {
       "self_serve_portal_apis": [
+        {
+          "id": "7ee4e371-b426-476b-85a7-dc7c02faad8d",
+          "name": "api-user",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "fe765b74-a8dc-4da3-ac1f-cd5a71573807",
+          "attributes": {}
+        },
         {
           "id": "82530f66-a8b6-4554-a97b-62997298a8d1",
           "name": "uma_protection",

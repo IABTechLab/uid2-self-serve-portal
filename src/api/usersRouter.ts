@@ -19,25 +19,26 @@ import {
 
 export function createUsersRouter() {
   const usersRouter = express.Router();
-  usersRouter.get('/current', enrichCurrentUser, async (req: UserRequest, res) => {
+  usersRouter.use('/current', enrichCurrentUser);
+  usersRouter.get('/current', async (req: UserRequest, res) => {
     const userWithIsApprover = await enrichUserWithIsApprover(req.user!);
     return res.json(userWithIsApprover);
   });
 
-  usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {
+  usersRouter.put('/current/acceptTerms', async (req: UserRequest, res) => {
     await req.user!.$query().patch({ acceptedTerms: true });
     return res.sendStatus(200);
+  });
+
+  usersRouter.get('/current/participant', async (req: UserRequest, res) => {
+    const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
+    return res.status(200).json(participant);
   });
 
   usersRouter.use('/:userId', enrichWithUserFromParams);
 
   usersRouter.get('/:userId', async (req: UserRequest, res) => {
     return res.status(200).json(req.user);
-  });
-
-  usersRouter.get('/:userId/participant', async (req: UserRequest, res) => {
-    const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
-    return res.status(200).json(participant);
   });
 
   usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {

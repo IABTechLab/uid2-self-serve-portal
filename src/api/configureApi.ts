@@ -26,11 +26,15 @@ import { createParticipantsRouter } from './participantsRouter';
 import { createUsersRouter } from './usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
-function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) {
+function bypassHandlerForPaths(middleware: express.Handler, ...paths: (string | string[])[]) {
   return function (req, res, next) {
-    const pathCheck = paths.some((path) => path === req.path);
-    if (pathCheck) {
-      next();
+    const bypassPath = paths.find((path) =>
+      Array.isArray(path) ? path.includes(req.path) : path === req.path
+    );
+    if (bypassPath) {
+      if (typeof bypassPath === 'string' || bypassPath[1] === req.method) {
+        next();
+      }
     } else {
       middleware(req, res, next);
     }
@@ -90,10 +94,10 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     };
   };
 
+  // TODO: we should assign api-participant-member role to user once the participant is approved
   app.use(
     bypassHandlerForPaths(
       claimCheck((claim: Claim) => {
-        console.log('In claim check', claim);
         const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
         return roles.includes('api-participant-member');
       }),
@@ -103,8 +107,9 @@ export function configureAndStartApi(useMetrics: boolean = true) {
       `${BASE_REQUEST_PATH}/health`,
       `${BASE_REQUEST_PATH}/keycloak-config`,
       `${BASE_REQUEST_PATH}/participantTypes`,
-      `${BASE_REQUEST_PATH}/participants`,
-      `${BASE_REQUEST_PATH}/users`
+      [`${BASE_REQUEST_PATH}/participants`, 'POST'],
+      `${BASE_REQUEST_PATH}/users/current`,
+      `${BASE_REQUEST_PATH}/users/current/participant`
     )
   );
 
