@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
-import { auth } from 'express-oauth2-jwt-bearer';
+import { auth, claimCheck, JWTPayload } from 'express-oauth2-jwt-bearer';
 import expressWinston from 'express-winston';
 import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
@@ -80,6 +80,20 @@ export function configureAndStartApi(useMetrics: boolean = true) {
       `${BASE_REQUEST_PATH}/health`,
       `${BASE_REQUEST_PATH}/keycloak-config`
     )
+  );
+
+  type Claim = JWTPayload & {
+    resource_access?: {
+      self_serve_portal_apis?: {
+        roles?: string[];
+      };
+    };
+  };
+  app.use(
+    claimCheck((claim: Claim) => {
+      const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
+      return roles.includes('api-participant-member');
+    })
   );
 
   app.use(async (_req, _res, next) => {
