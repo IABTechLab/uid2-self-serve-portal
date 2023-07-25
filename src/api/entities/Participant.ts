@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeSchema } from './ParticipantType';
-import { UserCreationPartial, UserScheme } from './User';
+import { UserCreationPartial, UserSchema } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -65,16 +65,15 @@ export const ParticipantSchema = z.object({
   name: z.string(),
   status: z.nativeEnum(ParticipantStatus),
   types: z.array(ParticipantTypeSchema).optional(),
-  users: z.array(UserScheme).optional(),
+  users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
 });
 
-export const ParticipantCreationPartial = ParticipantSchema.omit({
-  id: true,
-  allowSharing: true,
-  status: true,
+export const ParticipantCreationPartial = ParticipantSchema.pick({
+  name: true,
+  location: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   users: z.array(UserCreationPartial).optional(),

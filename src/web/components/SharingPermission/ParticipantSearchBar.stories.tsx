@@ -1,7 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { useState } from 'react';
 
-import { ParticipantStatus } from '../../../api/entities/Participant';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 export default {

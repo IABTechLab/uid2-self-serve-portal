@@ -118,7 +118,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   });
 
   router.use('/users', routers.usersRouter);
-  router.use('/participants', routers.participantsRouter);
+  router.use('/participants', routers.participantsRouter.router);
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });

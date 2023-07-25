@@ -1,7 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 
-import { User, UserCreationPartial, UserRole } from './entities/User';
+import { UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import {
@@ -12,32 +12,16 @@ import {
 } from './services/kcUsersService';
 import {
   enrichCurrentUser,
+  enrichUserWithIsApprover,
   enrichWithUserFromParams,
-  findUserByEmail,
   UserRequest,
 } from './services/usersService';
 
 export function createUsersRouter() {
   const usersRouter = express.Router();
-  const emailParser = z.object({
-    email: z.string().optional(),
-  });
-
-  usersRouter.get('/', async (req, res) => {
-    const { email } = emailParser.parse(req.query);
-    if (!email) {
-      const users = await User.query();
-      return res.status(200).json(users);
-    }
-    const userResult = await findUserByEmail(email);
-    if (userResult) return res.json(userResult);
-    return res.sendStatus(404);
-  });
-
-  usersRouter.post('/', async (req, res) => {
-    const data = UserCreationPartial.parse(req.body);
-    const user = await User.query().insert(data);
-    res.status(201).json(user);
+  usersRouter.get('/current', enrichCurrentUser, async (req: UserRequest, res) => {
+    const userWithIsApprover = await enrichUserWithIsApprover(req.user!);
+    return res.json(userWithIsApprover);
   });
 
   usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {

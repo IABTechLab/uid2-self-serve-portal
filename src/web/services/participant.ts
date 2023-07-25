@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
-import { AvailableParticipantDTO } from '../../api/participantsRouter';
+import { AvailableParticipantDTO, ParticipantRequestDTO } from '../../api/participantsRouter';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -88,6 +88,17 @@ export async function GetAllAvailableParticipants() {
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load participants');
+  }
+}
+
+export async function GetParticipantsAwaitingApproval() {
+  try {
+    const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load participants awaiting approval');
   }
 }
 
