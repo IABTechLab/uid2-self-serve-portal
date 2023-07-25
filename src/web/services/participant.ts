@@ -3,13 +3,12 @@ import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
-import { ParticipantCreationPartial, ParticipantSchema } from '../../api/entities/Participant';
+import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { AvailableParticipantDTO, ParticipantRequestDTO } from '../../api/participantsRouter';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
 export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
-export type ParticipantResponse = z.infer<typeof ParticipantSchema>;
 export type CreateParticipantForm = {
   companyName: string;
   companyType: number[];
@@ -52,10 +51,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
     users,
   };
   try {
-    const newParticipant = await axios.post<ParticipantResponse>(
-      `/participants`,
-      participantPayload
-    );
+    const newParticipant = await axios.post<ParticipantDTO>(`/participants`, participantPayload);
     return newParticipant.data;
   } catch (err: unknown | AxiosError<CreateParticipantError>) {
     const status = isAxiosError(err) ? err.response?.status : null;
@@ -71,7 +67,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
 
 export async function GetParticipantByUserId(id: number) {
   try {
-    const result = await axios.get<ParticipantResponse>(`/users/${id}/participant`, {
+    const result = await axios.get<ParticipantDTO>(`/users/${id}/participant`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
@@ -117,7 +113,7 @@ export type UpdateParticipantForm = {
 
 export async function UpdateParticipant(formData: UpdateParticipantForm, participantId: number) {
   try {
-    const result = await axios.put<ParticipantResponse>(`/participants/${participantId}`, formData);
+    const result = await axios.put<ParticipantDTO>(`/participants/${participantId}`, formData);
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
