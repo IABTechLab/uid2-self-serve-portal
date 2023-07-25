@@ -86,7 +86,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         audience: SSP_KK_AUDIENCE,
         issuerBaseURL: SSP_KK_ISSUER_BASE_URL,
       }),
-      BYPASS_PATHS
+      ...BYPASS_PATHS
     )
   );
 
