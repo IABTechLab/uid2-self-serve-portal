@@ -89,11 +89,23 @@ export function configureAndStartApi(useMetrics: boolean = true) {
       };
     };
   };
+
   app.use(
-    claimCheck((claim: Claim) => {
-      const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
-      return roles.includes('api-participant-member');
-    })
+    bypassHandlerForPaths(
+      claimCheck((claim: Claim) => {
+        console.log('In claim check', claim);
+        const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
+        return roles.includes('api-participant-member');
+      }),
+      `/favicon.ico`,
+      `${BASE_REQUEST_PATH}/`,
+      `${BASE_REQUEST_PATH}/metrics`,
+      `${BASE_REQUEST_PATH}/health`,
+      `${BASE_REQUEST_PATH}/keycloak-config`,
+      `${BASE_REQUEST_PATH}/participantTypes`,
+      `${BASE_REQUEST_PATH}/participants`,
+      `${BASE_REQUEST_PATH}/users`
+    )
   );
 
   app.use(async (_req, _res, next) => {
