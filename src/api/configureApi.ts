@@ -26,6 +26,14 @@ import { createParticipantsRouter } from './participantsRouter';
 import { createUsersRouter } from './usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
+const BYPASS_PATHS = [
+  `/favicon.ico`,
+  `${BASE_REQUEST_PATH}/`,
+  `${BASE_REQUEST_PATH}/metrics`,
+  `${BASE_REQUEST_PATH}/health`,
+  `${BASE_REQUEST_PATH}/keycloak-config`,
+];
+
 function bypassHandlerForPaths(middleware: express.Handler, ...paths: (string | string[])[]) {
   return function (req, res, next) {
     const bypassPath = paths.find((path) =>
@@ -78,11 +86,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         audience: SSP_KK_AUDIENCE,
         issuerBaseURL: SSP_KK_ISSUER_BASE_URL,
       }),
-      `/favicon.ico`,
-      `${BASE_REQUEST_PATH}/`,
-      `${BASE_REQUEST_PATH}/metrics`,
-      `${BASE_REQUEST_PATH}/health`,
-      `${BASE_REQUEST_PATH}/keycloak-config`
+      BYPASS_PATHS
     )
   );
 
@@ -101,15 +105,10 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
         return roles.includes('api-participant-member');
       }),
-      `/favicon.ico`,
-      `${BASE_REQUEST_PATH}/`,
-      `${BASE_REQUEST_PATH}/metrics`,
-      `${BASE_REQUEST_PATH}/health`,
-      `${BASE_REQUEST_PATH}/keycloak-config`,
-      `${BASE_REQUEST_PATH}/participantTypes`,
       [`${BASE_REQUEST_PATH}/participants`, 'POST'],
       `${BASE_REQUEST_PATH}/users/current`,
-      `${BASE_REQUEST_PATH}/users/current/participant`
+      `${BASE_REQUEST_PATH}/users/current/participant`,
+      ...BYPASS_PATHS
     )
   );
 
