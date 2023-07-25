@@ -29,7 +29,7 @@ const BASE_REQUEST_PATH = '/api';
 function bypassHandlerForPaths(middleware: express.Handler, ...paths: (string | string[])[]) {
   return function (req, res, next) {
     const bypassPath = paths.find((path) =>
-      Array.isArray(path) ? path.includes(req.path) : path === req.path
+      Array.isArray(path) ? path[0] === req.path : path === req.path
     );
     if (bypassPath) {
       if (typeof bypassPath === 'string' || bypassPath[1] === req.method) {
