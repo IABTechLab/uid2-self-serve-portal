@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { Dialog } from './Dialog';
 import { TermsAndConditions, TermsAndConditionsForm } from './TermsAndConditions';
 
 export default {
@@ -8,11 +9,13 @@ export default {
 } as ComponentMeta<typeof TermsAndConditionsForm | typeof TermsAndConditions>;
 
 const Template: ComponentStory<typeof TermsAndConditionsForm> = (args) => (
-  <TermsAndConditionsForm {...args} />
+  <Dialog open className='terms-conditions-dialog'>
+    <TermsAndConditionsForm {...args} />
+  </Dialog>
 );
 
-export const Dialog = Template.bind({});
-Dialog.args = {
+export const AsDialog = Template.bind({});
+AsDialog.args = {
   onAccept: () => {},
   onCancel: () => {},
 };
