@@ -1,33 +1,23 @@
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
 export const getDefaultPublisherCheckboxState = (participantTypeNames: string[]) => {
-  if (participantTypeNames?.includes('Data Provider')) return true;
-  return false;
+  const publisherRelatedTypes = ['Data Provider'];
+  return participantTypeNames.some((type) => publisherRelatedTypes.includes(type));
 };
 
 export const getDefaultAdvertiserCheckboxState = (participantTypeNames: string[]) => {
-  if (participantTypeNames?.includes('Data Provider') || participantTypeNames?.includes('DSP')) {
-    return true;
-  }
-  return false;
+  const advertiserRelatedTypes = ['Data Provider', 'DSP'];
+  return participantTypeNames.some((type) => advertiserRelatedTypes.includes(type));
 };
 
 export const getDefaultDSPCheckboxState = (participantTypeNames: string[]) => {
-  if (
-    participantTypeNames?.includes('Data Provider') ||
-    participantTypeNames?.includes('Advertiser') ||
-    participantTypeNames?.includes('Publisher')
-  ) {
-    return true;
-  }
-  return false;
+  const DSPRelatedTypes = ['Data Provider', 'Advertiser', 'Publisher'];
+  return participantTypeNames.some((type) => DSPRelatedTypes.includes(type));
 };
 
 export const getDefaultDataProviderCheckboxState = (participantTypeNames: string[]) => {
-  if (participantTypeNames?.includes('Advertiser') || participantTypeNames?.includes('DSP')) {
-    return true;
-  }
-  return false;
+  const dataProviderRelatedTypes = ['Advertiser', 'DSP'];
+  return participantTypeNames.some((type) => dataProviderRelatedTypes.includes(type));
 };
 
 export const getRecommendedTypeFromParticipant = (participantTypeNames: string[]) => {
