@@ -107,6 +107,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
         return roles.includes('api-participant-member');
       }),
+      { url: `${BASE_REQUEST_PATH}/participantTypes`, method: 'GET' },
       { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
       { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
       { url: `${BASE_REQUEST_PATH}/users/current/participant`, method: 'GET' },
