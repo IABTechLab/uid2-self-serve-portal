@@ -13,6 +13,10 @@
     padding: 0 20px;
     flex-direction: row;
 
+    h2 {
+      margin-top: 20px;
+    }
+
     .recommendation-label {
       background: var(--theme-label-background);
       border-radius: 3px;
@@ -27,7 +31,7 @@
   }
 
   .bulk-add-permissions-body {
-    padding: 0 40px;
+    padding: 10px 40px 0 40px;
 
     .participant-type-checkbox-section {
       display: flex;
@@ -44,6 +48,6 @@
   }
 
   .bulk-add-permissions-footer {
-    padding: 20px 20px;
+    padding: 20px;
   }
 }
