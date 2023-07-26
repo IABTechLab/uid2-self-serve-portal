@@ -97,35 +97,7 @@ Focus on testing functionality, not implementation. For example, if you have a b
 - To access [keycloak admin console](http://localhost:18080/admin/), you can find the username and password in the `docker-compose.yml`
 - If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console
 
-### Generating SSP_KK_SECRET
-
-You can obtain the `SSP_KK_SECRET` by generating a new client secret in the Keycloak admin portal. Here's how you can do it:
-
-1. Login to the Keycloak admin console.
-2. Ensure the realm dropdown has 'self-serve-portal' selected (rather than 'master'), then navigate to the "Clients" page and select the `self-serve-portal-apis`.
-3. Go to the "Credentials" tab and regenerate the Client secret by clicking "Regenerate".
-4. Copy the new client secret and use it as the value of the `SSP_KK_SECRET` environment variable in your `.env` file.
-
-### Reset Realm
-
-You might need to do this if the realm configuration has been updated by someone on another branch. If you update your own Keycloak realm configuration, make sure you include the changes in your PR by exporting the realm and updating `keycloak\realm\realm-export.json`.
-
-```
-docker exec -it uid2_selfserve_keycloak /bin/sh -c "/opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/realm-export.json --override true;exit 0"
-docker compose restart keycloak
-```
-
-This script imports the [realm-export.json](https://github.com/IABTechLab/uid2-self-serve-portal/blob/main/keycloak/realm/realm-export.json) to the keycloak and override realm if exists.\
-It is important to note that all the users in the realm will be removed. You may also need to re-generate your client secrets (see the main Keycloak setup entry above).
-
-### Enable blocking account creation by free email providers
-
-> Declarative User Profile is Technology Preview and is not fully supported.
-
-1. Click on the `Realm Settings` on the left side menu and click the `User Profile` tab.
-2. Click on `email`, scroll down to `validators` and click `create validator`.
-3. Select `pattern` from the list and add `^(?!.*@(gmail|hotmail|yahoo)\.com$).+@.+\..+$` as pattern and `errorPatternNoMatch` as error message key
-4. Click on the `Save` button
+For more advanced setup, see [Keycloak Advanced Setup](./KeycloakAdvancedSetup.md).
 
 ## Logging stack
 
@@ -189,6 +161,7 @@ This action should be triggered after adding or updating any templates and befor
 In the project directory, you can run:
 
 ### `npm install`
+
 Installs the dependencies for the project. You will need to run this before running any of the following commands.
 
 ### `npm run dev`
@@ -223,31 +196,32 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 ## Setting up UI Dev Environment
 
 1. Set up Docker, as described above: [Docker](README.md#docker)
-2. Update your `SSP_KK_SECRET` by following the steps above: [Generating SSP_KK_SECRET](README.md#generating-ssp_kk_secret)
+2. Update your `SSP_KK_SECRET` by following the steps above: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
 3. Run the following to install dependencies:
-    ```
-    npm install
-    ```
+   ```
+   npm install
+   ```
 4. Run the following to start the API and React front-end:
-    ```
-    npm run dev
-    ``` 
-    Successfully running this will result in the self-serve-portal opening in the browser.
+   ```
+   npm run dev
+   ```
+   Successfully running this will result in the self-serve-portal opening in the browser.
 5. Run the following to build the database schema:
-    ```
-    npm run knex:migrate:latest
-    ``` 
+   ```
+   npm run knex:migrate:latest
+   ```
 6. Run the following to populate test data:
-    ```
-    npm run knex:seed:run
-    ``` 
+   ```
+   npm run knex:seed:run
+   ```
 7. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
 8. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
 9. Open the email and Click `Verify Email`
 10. Fill in the form however you want and submit the form
 11. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml)
 12. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-13. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e. 
+13. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
+
     ```
     declare @email as nvarchar(256) = '<Enter your email here>'
 
@@ -258,4 +232,5 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
       on p.id = u.participantId
     where u.email = @email
     ```
+
 14. Return to the UI and you should be good to go!
