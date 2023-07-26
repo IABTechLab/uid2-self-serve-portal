@@ -12,20 +12,15 @@
     justify-content: space-between;
     padding: 0 20px;
     flex-direction: row;
-
-    h2 {
-      margin-top: 20px;
-    }
+    margin-top: 10px;
 
     .recommendation-label {
       background: var(--theme-label-background);
       border-radius: 3px;
       padding: 4px 8px;
-      margin-right: 8px;
       display: flex;
       align-items: center;
       font-size: 0.75rem;
-      width: 115px;
       height: 18px;
     }
   }
