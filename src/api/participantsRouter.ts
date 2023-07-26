@@ -1,4 +1,4 @@
-import express, { Response, Router } from 'express';
+import express, { Response } from 'express';
 import { z } from 'zod';
 
 import { createBusinessContactsRouter } from './businessContactsRouter';

@@ -65,9 +65,9 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
   }
 }
 
-export async function GetParticipantByUserId(id: number) {
+export async function GetCurrentUsersParticipant() {
   try {
-    const result = await axios.get<ParticipantDTO>(`/users/${id}/participant`, {
+    const result = await axios.get<ParticipantDTO>(`/users/current/participant`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;

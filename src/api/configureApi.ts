@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
-import { auth } from 'express-oauth2-jwt-bearer';
+import { auth, claimCheck, JWTPayload } from 'express-oauth2-jwt-bearer';
 import expressWinston from 'express-winston';
 import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
@@ -26,10 +26,24 @@ import { createParticipantsRouter } from './participantsRouter';
 import { createUsersRouter } from './usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
-function bypassHandlerForPaths(middleware: express.Handler, ...paths: string[]) {
+
+type BypassPath = {
+  url: string;
+  method: string;
+};
+
+const BYPASS_PATHS = [
+  `/favicon.ico`,
+  `${BASE_REQUEST_PATH}/`,
+  `${BASE_REQUEST_PATH}/metrics`,
+  `${BASE_REQUEST_PATH}/health`,
+  `${BASE_REQUEST_PATH}/keycloak-config`,
+].map((path) => ({ url: path, method: 'GET' }));
+
+function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath[]) {
   return function (req, res, next) {
-    const pathCheck = paths.some((path) => path === req.path);
-    if (pathCheck) {
+    const bypassPath = paths.find((path) => path.url === req.path && path.method === req.method);
+    if (bypassPath) {
       next();
     } else {
       middleware(req, res, next);
@@ -74,11 +88,30 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         audience: SSP_KK_AUDIENCE,
         issuerBaseURL: SSP_KK_ISSUER_BASE_URL,
       }),
-      `/favicon.ico`,
-      `${BASE_REQUEST_PATH}/`,
-      `${BASE_REQUEST_PATH}/metrics`,
-      `${BASE_REQUEST_PATH}/health`,
-      `${BASE_REQUEST_PATH}/keycloak-config`
+      ...BYPASS_PATHS
+    )
+  );
+
+  type Claim = JWTPayload & {
+    resource_access?: {
+      self_serve_portal_apis?: {
+        roles?: string[];
+      };
+    };
+  };
+
+  // TODO: we should assign api-participant-member role to user once the participant is approved
+  app.use(
+    bypassHandlerForPaths(
+      claimCheck((claim: Claim) => {
+        const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
+        return roles.includes('api-participant-member');
+      }),
+      { url: `${BASE_REQUEST_PATH}/participantTypes`, method: 'GET' },
+      { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
+      { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
+      { url: `${BASE_REQUEST_PATH}/users/current/participant`, method: 'GET' },
+      ...BYPASS_PATHS
     )
   );
 
