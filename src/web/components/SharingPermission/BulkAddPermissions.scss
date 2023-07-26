@@ -1,0 +1,49 @@
+.bulk-add-permissions {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--theme-action);
+  border-radius: 5px;
+  line-height: 1;
+  box-shadow: 0px 4px 14px var(--theme-box-shadow);
+
+  .bulk-add-permissions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    flex-direction: row;
+
+    .recommendation-label {
+      background: var(--theme-label-background);
+      border-radius: 3px;
+      padding: 4px 8px;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      width: 115px;
+      height: 18px;
+    }
+  }
+
+  .bulk-add-permissions-body {
+    padding: 0 40px;
+
+    .participant-type-checkbox-section {
+      display: flex;
+      align-items: center;
+
+      .checkbox-label {
+        padding-right: 25px;
+      }
+    }
+
+    .bulk-add-permissions-view-recommendations-button {
+      padding-top: 20px;
+    }
+  }
+
+  .bulk-add-permissions-footer {
+    padding: 20px 20px;
+  }
+}
