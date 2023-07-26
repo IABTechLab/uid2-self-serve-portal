@@ -64,14 +64,15 @@ function Dashboard() {
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (
-          <Dialog open>
-            <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel} />
-            {showMustAccept && (
-              <div className='accept-error'>
-                You will not be able to access the portal unless you accept the terms of service.
-                You must scroll to the bottom of the terms of service before you can accept them.
-              </div>
-            )}
+          <Dialog open className='terms-conditions-dialog'>
+            <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
+              {showMustAccept && (
+                <div className='accept-error'>
+                  You will not be able to access the portal unless you accept the terms of service.
+                  You must scroll to the bottom of the terms of service before you can accept them.
+                </div>
+              )}
+            </TermsAndConditionsForm>
           </Dialog>
         ) : (
           <Outlet />
