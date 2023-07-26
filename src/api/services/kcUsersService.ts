@@ -36,7 +36,7 @@ export const sendInviteEmail = async (
   await kcAdminClient.users.executeActionsEmail({
     id: user.id!,
     clientId: SSP_KK_SSL_RESOURCE,
-    actions: [RequiredActionAlias.UPDATE_PASSWORD, RequiredActionAlias.VERIFY_EMAIL],
+    actions: [RequiredActionAlias.UPDATE_PASSWORD],
     redirectUri: SSP_WEB_BASE_URL,
   });
 };

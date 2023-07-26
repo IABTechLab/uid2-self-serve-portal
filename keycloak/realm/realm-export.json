@@ -1465,8 +1465,8 @@
     "port": "1025",
     "host": "mailhog",
     "replyTo": "",
-    "from": "test@self-serve-portal.com",
-    "fromDisplayName": "",
+    "from": "noreply@unifiedid.com",
+    "fromDisplayName": "UID2 Service (do not reply)",
     "envelopeFrom": "",
     "ssl": "false"
   },
