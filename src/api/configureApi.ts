@@ -26,23 +26,25 @@ import { createParticipantsRouter } from './participantsRouter';
 import { createUsersRouter } from './usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
+
+type BypassPath = {
+  url: string;
+  method: string;
+};
+
 const BYPASS_PATHS = [
   `/favicon.ico`,
   `${BASE_REQUEST_PATH}/`,
   `${BASE_REQUEST_PATH}/metrics`,
   `${BASE_REQUEST_PATH}/health`,
   `${BASE_REQUEST_PATH}/keycloak-config`,
-];
+].map((path) => ({ url: path, method: 'GET' }));
 
-function bypassHandlerForPaths(middleware: express.Handler, ...paths: (string | string[])[]) {
+function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath[]) {
   return function (req, res, next) {
-    const bypassPath = paths.find((path) =>
-      Array.isArray(path) ? path[0] === req.path : path === req.path
-    );
+    const bypassPath = paths.find((path) => path.url === req.path && path.method === req.method);
     if (bypassPath) {
-      if (typeof bypassPath === 'string' || bypassPath[1] === req.method) {
-        next();
-      }
+      next();
     } else {
       middleware(req, res, next);
     }
@@ -105,9 +107,9 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
         return roles.includes('api-participant-member');
       }),
-      [`${BASE_REQUEST_PATH}/participants`, 'POST'],
-      `${BASE_REQUEST_PATH}/users/current`,
-      `${BASE_REQUEST_PATH}/users/current/participant`,
+      { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
+      { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
+      { url: `${BASE_REQUEST_PATH}/users/current/participant`, method: 'GET' },
       ...BYPASS_PATHS
     )
   );
