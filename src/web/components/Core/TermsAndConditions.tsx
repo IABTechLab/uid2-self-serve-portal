@@ -1,4 +1,4 @@
-import { UIEvent, UIEventHandler, useCallback, useState } from 'react';
+import { PropsWithChildren, UIEvent, UIEventHandler, useCallback, useState } from 'react';
 
 import './TermsAndConditions.scss';
 
@@ -228,16 +228,20 @@ export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
   );
 }
 
-type TermsAndConditionsFormProps = {
+type TermsAndConditionsFormProps = PropsWithChildren<{
   onAccept: () => void;
   onCancel: () => void;
-};
+}>;
 
 export type AcceptTermForm = {
   acceptConditions: boolean;
 };
 
-export function TermsAndConditionsForm({ onAccept, onCancel }: TermsAndConditionsFormProps) {
+export function TermsAndConditionsForm({
+  onAccept,
+  onCancel,
+  children,
+}: TermsAndConditionsFormProps) {
   const [scrolledToBottom, setScrolledToBottom] = useState(false);
   const handleScroll = useCallback((event: UIEvent<HTMLDivElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = event.currentTarget;
@@ -258,6 +262,7 @@ export function TermsAndConditionsForm({ onAccept, onCancel }: TermsAndCondition
       <button type='button' className='text-button' onClick={onCancel}>
         Cancel
       </button>
+      {children}
     </div>
   );
 }
