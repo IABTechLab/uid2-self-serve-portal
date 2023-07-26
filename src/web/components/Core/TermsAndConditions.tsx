@@ -250,6 +250,7 @@ export function TermsAndConditionsForm({
   }, []);
   return (
     <div className='terms-and-conditions-form'>
+      <h1>Accept Terms and Conditions</h1>
       <TermsAndConditions onScroll={handleScroll} />
       <button
         type='button'

@@ -33,6 +33,12 @@
   height: 100%;
   display: flex;
 
+  & > h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    align-self: flex-start;
+  }
+
   .text-button {
     margin-top: 10px;
   }

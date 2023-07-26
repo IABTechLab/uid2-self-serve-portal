@@ -94,7 +94,6 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
           <Dialog
             open={showTermsDialog}
             onOpenChange={setShowTermsDialog}
-            title='Accept Terms and Conditions'
             className='terms-conditions-dialog'
           >
             <TermsAndConditionsForm
