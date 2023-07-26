@@ -34,7 +34,7 @@ export type CreateParticipantError = Required<
 export async function CreateParticipant(formData: CreateParticipantForm, user: KeycloakProfile) {
   const users = [
     {
-      email: user.email!,
+      email: user.email ?? user.username!,
       role: formData.role,
       firstName: user.firstName,
       lastName: user.lastName,
