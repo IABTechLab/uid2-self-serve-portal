@@ -1,5 +1,5 @@
 <#import "template.ftl" as layout>
-<@layout.registrationLayout displayMessage=false; section>
+<@layout.registrationLayout displayMessage=!messagesPerField.existsError('password','password-confirm'); section>
     <#if section = "header">
         ${msg("updatePasswordTitle")}
     <#elseif section = "form">
@@ -49,11 +49,9 @@
             <div class="${properties.kcFormGroupClass!}">
                 <div id="kc-form-options" class="${properties.kcFormOptionsClass!}">
                     <div class="${properties.kcFormOptionsWrapperClass!}">
-                        <#if isAppInitiatedAction??>
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="logout-sessions" name="logout-sessions" value="on" checked> ${msg("logoutOtherSessions")}</label>
-                            </div>
-                        </#if>
+                        <div class="checkbox">
+                            <label><input type="checkbox" id="logout-sessions" name="logout-sessions" value="on" checked /><span>${msg("logoutOtherSessions")}</span></label>
+                        </div>
                     </div>
                 </div>
 
