@@ -35,7 +35,7 @@
   color: var(--theme-button-text);
   font-weight: 400;
   font-size: 1.1875rem;
-  line-height: 1.4375rem;
+  line-height: 1.4375;
   background: none;
   width: 100%;
 }
@@ -83,12 +83,12 @@
 
 .search-bar-footer a {
   font-size: 0.9375rem;
-  line-height: 1.125rem;
+  line-height: 1.125;
   font-weight: 500;
 }
 
 .select-all {
   font-weight: 700;
   font-size: 0.875rem;
-  line-height: 1.0625rem;
+  line-height: 1.0625;
 }

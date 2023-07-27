@@ -3,7 +3,6 @@ import { useContext, useMemo, useState } from 'react';
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { ParticipantTypeResponse } from '../../services/participantType';
-import { Collapsible } from '../Core/Collapsible';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
