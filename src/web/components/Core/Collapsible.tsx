@@ -7,7 +7,7 @@ import './Collapsible.scss';
 export type CollapsibleProps = {
   title: string;
   content: ReactNode;
-  defaultOpen: boolean;
+  defaultOpen?: boolean;
 };
 
 export function Collapsible({ title, content, defaultOpen }: CollapsibleProps) {

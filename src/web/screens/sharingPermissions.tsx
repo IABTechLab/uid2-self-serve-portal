@@ -3,6 +3,7 @@ import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantType } from '../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../api/participantsRouter';
+import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipants';
@@ -96,11 +97,16 @@ function SharingPermissions() {
       <Suspense fallback={<Loading />}>
         <Await resolve={participants}>
           {(resolvedParticipants: AvailableParticipantDTO[]) => (
-            <SearchAndAddParticipants
-              onSharingPermissionsAdded={handleSharingPermissionsAdded}
-              sharingParticipants={sharingParticipants}
-              availableParticipants={resolvedParticipants}
-              participantTypes={participantTypes}
+            <Collapsible
+              title='Search and Add Permissions'
+              content={
+                <SearchAndAddParticipants
+                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
+                  sharingParticipants={sharingParticipants}
+                  availableParticipants={resolvedParticipants}
+                  participantTypes={participantTypes}
+                />
+              }
             />
           )}
         </Await>

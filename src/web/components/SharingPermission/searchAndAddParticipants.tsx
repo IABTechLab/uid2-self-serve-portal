@@ -3,6 +3,7 @@ import { useContext, useMemo, useState } from 'react';
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { ParticipantTypeResponse } from '../../services/participantType';
+import { Collapsible } from '../Core/Collapsible';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
@@ -54,7 +55,6 @@ export function SearchAndAddParticipants({
 
   return (
     <div className='search-and-add-participants'>
-      <h2>Search and Add Permissions</h2>
       <div className='add-participant-dialog-search-bar'>
         <ParticipantSearchBar
           selectedParticipantIds={selectedParticipants}

@@ -1,9 +1,8 @@
 .search-and-add-participants {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--theme-border);
   border-radius: 5px;
-  padding: 20px;
+  flex-grow: 1;
 
   h2 {
     margin-top: 0;
