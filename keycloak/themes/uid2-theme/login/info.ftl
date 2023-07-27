@@ -12,7 +12,7 @@
         <#if skipLink??>
         <#else>
             <#if pageRedirectUri?has_content>
-              <script>location.href = '${pageRedirectUri}';</script>
+              <p><a href="${pageRedirectUri}">${kcSanitize(msg("backToApplication"))?no_esc}</a></p>
             <#elseif actionUri?has_content>
               <p><a id="proceedWithAction" href="${actionUri}">${kcSanitize(msg("proceedWithAction"))?no_esc}</a></p>
               <script>document.getElementById('proceedWithAction').click()</script>
