@@ -17,7 +17,7 @@ const Template: ComponentStory<typeof ParticipantSearchBar> = (args) => {
       selectedParticipantIds={selectedParticipants}
       onSelectedChange={setSelectedParticipants}
       open={open}
-      onToggle={setOpen}
+      onToggleOpen={setOpen}
     />
   );
 };

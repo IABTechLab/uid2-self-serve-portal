@@ -61,7 +61,7 @@ export function SearchAndAddParticipants({
           onSelectedChange={handleSelectedParticipantChanged}
           participantTypes={participantTypes}
           open={openSearchResult}
-          onToggle={setOpenSearchResult}
+          onToggleOpen={setOpenSearchResult}
         />
       </div>
       {!openSearchResult && (

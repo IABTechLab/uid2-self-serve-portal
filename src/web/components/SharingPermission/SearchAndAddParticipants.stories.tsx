@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { SearchAndAddParticipants } from './SearchAndAddParticipants';
+import { SearchAndAddParticipants } from './searchAndAddParticipants';
 
 export default {
   title: 'Sharing Permissions/Search Participants',

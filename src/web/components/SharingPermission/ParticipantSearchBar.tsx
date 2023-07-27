@@ -15,7 +15,7 @@ type ParticipantSearchBarProps = {
   selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   open: boolean;
-  onToggle: (open: boolean) => void;
+  onToggleOpen: (open: boolean) => void;
 };
 
 export function ParticipantSearchBar({
@@ -24,7 +24,7 @@ export function ParticipantSearchBar({
   onSelectedChange,
   participantTypes,
   open,
-  onToggle,
+  onToggleOpen,
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
@@ -36,9 +36,9 @@ export function ParticipantSearchBar({
   const handleFilterTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
     if (event.target.value === '') {
-      onToggle(false);
+      onToggleOpen(false);
     } else {
-      onToggle(true);
+      onToggleOpen(true);
     }
   };
   const tableHeader = (filteredParticipants: AvailableParticipantDTO[]) => (
@@ -53,7 +53,7 @@ export function ParticipantSearchBar({
         <input
           type='text'
           className='search-bar-input'
-          onClick={() => onToggle(true)}
+          onClick={() => onToggleOpen(true)}
           onChange={handleFilterTextChange}
           placeholder='Search Participants'
           value={filterText}
