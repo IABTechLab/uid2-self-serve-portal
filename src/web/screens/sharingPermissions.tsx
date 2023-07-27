@@ -1,9 +1,11 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { defer } from 'react-router-dom';
+import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
+import { Await, defer, useLoaderData } from 'react-router-dom';
 
+import { ParticipantType } from '../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../api/participantsRouter';
+import { Loading } from '../components/Core/Loading';
 import { StatusPopup } from '../components/Core/StatusPopup';
-import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipantsDialog';
+import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
@@ -27,6 +29,10 @@ function SharingPermissions() {
   const { participant } = useContext(ParticipantContext);
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
+  const { participants, participantTypes } = useLoaderData() as {
+    participants: AvailableParticipantDTO[];
+    participantTypes: ParticipantType[];
+  };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     try {
@@ -85,17 +91,24 @@ function SharingPermissions() {
         your encrypted UID2s.
         <br />
         <br />
-        <b>Please note - this only allows the sharing permission to be enabled, no data is sent.</b>
+        Note: This only enables the sharing permission. No data is sent.
       </p>
+      <Suspense fallback={<Loading />}>
+        <Await resolve={participants}>
+          {(resolvedParticipants: AvailableParticipantDTO[]) => (
+            <SearchAndAddParticipants
+              onSharingPermissionsAdded={handleSharingPermissionsAdded}
+              sharingParticipants={sharingParticipants}
+              availableParticipants={resolvedParticipants}
+              participantTypes={participantTypes}
+            />
+          )}
+        </Await>
+      </Suspense>
       <SharingPermissionsTable
         sharingParticipants={sharingParticipants}
         onDeleteSharingPermission={handleDeleteSharingPermission}
-      >
-        <SearchAndAddParticipants
-          onSharingPermissionsAdded={handleSharingPermissionsAdded}
-          sharingParticipants={sharingParticipants}
-        />
-      </SharingPermissionsTable>
+      />
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}

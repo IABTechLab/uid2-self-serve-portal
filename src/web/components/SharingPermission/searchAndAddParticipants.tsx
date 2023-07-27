@@ -1,35 +1,31 @@
-import { Suspense, useContext, useMemo, useState } from 'react';
-import { Await, useLoaderData } from 'react-router-dom';
+import { useContext, useMemo, useState } from 'react';
 
-import { ParticipantType } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
+import { ParticipantTypeResponse } from '../../services/participantType';
 import { Dialog } from '../Core/Dialog';
-import { Loading } from '../Core/Loading';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
-import './searchAndAddParticipantsDialog.scss';
+import './searchAndAddParticipants.scss';
 
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
   sharingParticipants: AvailableParticipantDTO[];
+  availableParticipants: AvailableParticipantDTO[];
+  participantTypes: ParticipantTypeResponse[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
   sharingParticipants,
+  availableParticipants,
+  participantTypes,
 }: SearchAndAddParticipantsProps) {
-  const [open, setOpen] = useState(false);
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
-  const { participants, participantTypes } = useLoaderData() as {
-    participants: AvailableParticipantDTO[];
-    participantTypes: ParticipantType[];
-  };
+  const [openSearchResult, setOpenSearchResult] = useState<boolean>(false);
   const { participant } = useContext(ParticipantContext);
-
   const onHandleAddParticipants = () => {
     setOpenConfirmation(false);
-    setOpen(false);
     setSelectedParticipants(new Set());
     onSharingPermissionsAdded(Array.from(selectedParticipants));
   };
@@ -51,38 +47,28 @@ export function SearchAndAddParticipants({
     return `${participantCount} Participants`;
   };
 
+  const handleSelectedParticipantChanged = (selectedItems: Set<number>) => {
+    setSelectedParticipants(selectedItems);
+    setOpenSearchResult(false);
+  };
+
   return (
-    <Dialog
-      triggerButton={
-        <button type='button' className='transparent-button add-sharing-permission-button'>
-          Advanced Search
-        </button>
-      }
-      open={open}
-      onOpenChange={setOpen}
-      fullScreen
-    >
-      <div className='add-participant-dialog-content'>
-        <div className='add-participant-dialog-search-bar'>
-          <Suspense fallback={<Loading />}>
-            <Await resolve={participants}>
-              {(resolvedParticipants: AvailableParticipantDTO[]) => (
-                <ParticipantSearchBar
-                  selectedParticipantIds={selectedParticipants}
-                  participants={getSearchableParticipants(resolvedParticipants)}
-                  onSelectedChange={setSelectedParticipants}
-                  participantTypes={participantTypes}
-                />
-              )}
-            </Await>
-          </Suspense>
-          {/* TODO: Add Automatically Add Participant Types: */}
-        </div>
+    <div className='search-and-add-participants'>
+      <h2>Search and Add Permissions</h2>
+      <div className='add-participant-dialog-search-bar'>
+        <ParticipantSearchBar
+          selectedParticipantIds={selectedParticipants}
+          participants={getSearchableParticipants(availableParticipants)}
+          onSelectedChange={handleSelectedParticipantChanged}
+          participantTypes={participantTypes}
+          open={openSearchResult}
+          onToggle={setOpenSearchResult}
+        />
+      </div>
+      {!openSearchResult && (
         <div className='action-section'>
           {selectedParticipants.size > 0 && (
-            <span>
-              <b> {getParticipantText(selectedParticipants.size)} Selected</b>
-            </span>
+            <p>{getParticipantText(selectedParticipants.size)} added</p>
           )}
           <Dialog
             title='Please review the following changes'
@@ -115,7 +101,7 @@ export function SearchAndAddParticipants({
             </div>
           </Dialog>
         </div>
-      </div>
-    </Dialog>
+      )}
+    </div>
   );
 }

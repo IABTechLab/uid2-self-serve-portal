@@ -14,6 +14,8 @@ type ParticipantSearchBarProps = {
   participantTypes: ParticipantTypeResponse[];
   selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
+  open: boolean;
+  onToggle: (open: boolean) => void;
 };
 
 export function ParticipantSearchBar({
@@ -21,9 +23,10 @@ export function ParticipantSearchBar({
   selectedParticipantIds,
   onSelectedChange,
   participantTypes,
+  open,
+  onToggle,
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
 
   const handleFilterChange = (typeIds: Set<number>) => {
@@ -32,8 +35,8 @@ export function ParticipantSearchBar({
 
   const handleFilterTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
-    if (!dropdownOpen) {
-      setDropdownOpen(true);
+    if (!open) {
+      onToggle(true);
     }
   };
   const tableHeader = (filteredParticipants: AvailableParticipantDTO[]) => (
@@ -43,19 +46,19 @@ export function ParticipantSearchBar({
   );
 
   return (
-    <div className={clsx('search-bar', { clicked: dropdownOpen })}>
+    <div className={clsx('search-bar', { clicked: open })}>
       <div className='search-bar-input-container'>
         <input
           type='text'
           className='search-bar-input'
-          onClick={() => setDropdownOpen(true)}
+          onClick={() => onToggle(true)}
           onChange={handleFilterTextChange}
-          placeholder='Search and Add Participants'
+          placeholder='Search Participants'
           value={filterText}
         />
         <FontAwesomeIcon icon='search' className='search-icon' />
       </div>
-      {dropdownOpen && (
+      {open && (
         <div className='search-bar-dropdown'>
           <div className='search-bar-type-filter'>
             <div className='search-bar-type-filter-title'>Only show me:</div>
