@@ -35,7 +35,9 @@ export function ParticipantSearchBar({
 
   const handleFilterTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
-    if (!open) {
+    if (event.target.value === '') {
+      onToggle(false);
+    } else {
       onToggle(true);
     }
   };
