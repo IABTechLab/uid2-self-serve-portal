@@ -19,10 +19,6 @@
 .clicked .search-bar-input-container {
   border-radius: 10px 10px 0 0;
   border: 1px solid var(--theme-search-border);
-
-  ::placeholder {
-    color: transparent;
-  }
 }
 
 .search-bar-type-filter-title {
