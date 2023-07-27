@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 
-import { ParticipantTypeResponse } from '../../services/participantType';
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 
 import './TypeFilter.scss';
 
 type TypeButtonProps = {
-  type: ParticipantTypeResponse;
+  type: ParticipantTypeDTO;
   isSelected: boolean;
   onTypeSelect: (selectedTypeId: number) => void;
 };
@@ -24,7 +24,7 @@ export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) 
 }
 
 type TypeFilterProps = {
-  types: ParticipantTypeResponse[];
+  types: ParticipantTypeDTO[];
   onFilterChange: (selectedTypeIds: Set<number>) => void;
 };
 
