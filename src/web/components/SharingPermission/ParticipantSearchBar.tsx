@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
-import { ParticipantTypeResponse } from '../../services/participantType';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
@@ -11,7 +11,7 @@ import './ParticipantSearchBar.scss';
 
 type ParticipantSearchBarProps = {
   participants: AvailableParticipantDTO[];
-  participantTypes: ParticipantTypeResponse[];
+  participantTypes: ParticipantTypeDTO[];
   selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   open: boolean;

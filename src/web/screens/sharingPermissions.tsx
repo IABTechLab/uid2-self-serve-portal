@@ -1,12 +1,12 @@
 import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
-import { ParticipantType } from '../../api/entities/ParticipantType';
+import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../api/participantsRouter';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
 import { StatusPopup } from '../components/Core/StatusPopup';
-import { SearchAndAddParticipants } from '../components/SharingPermission/searchAndAddParticipants';
+import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
@@ -32,7 +32,7 @@ function SharingPermissions() {
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
   const { participants, participantTypes } = useLoaderData() as {
     participants: AvailableParticipantDTO[];
-    participantTypes: ParticipantType[];
+    participantTypes: ParticipantTypeDTO[];
   };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {

@@ -1,18 +1,18 @@
 import { useContext, useMemo, useState } from 'react';
 
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
-import { ParticipantTypeResponse } from '../../services/participantType';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
-import './searchAndAddParticipants.scss';
+import './SearchAndAddParticipants.scss';
 
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
   sharingParticipants: AvailableParticipantDTO[];
   availableParticipants: AvailableParticipantDTO[];
-  participantTypes: ParticipantTypeResponse[];
+  participantTypes: ParticipantTypeDTO[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
