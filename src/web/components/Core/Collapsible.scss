@@ -1,0 +1,36 @@
+.collapsible-root{
+  display: flex;
+  border: 1px solid var(--theme-border);
+  border-radius: 5px;
+  flex-direction: column;
+  width: 100%;
+
+  .collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+
+    h2 {
+      margin: 20px 0;
+    }
+
+    .collapsible-trigger {
+      border: none;
+      border-radius: 5px;
+      align-items: center;
+
+      .chevron-icon {
+        color: var(--theme-action);
+      }
+    }
+
+    .collapsible-trigger[data-state='open'] > .chevron-icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .collapsible-content {
+    display: flex;
+    padding: 0 0 20px 20px;
+  }
+}
