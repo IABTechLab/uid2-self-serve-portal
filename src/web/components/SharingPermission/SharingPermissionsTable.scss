@@ -1,28 +1,30 @@
 .sharing-permissions-table {
   margin-top: 30px;
+  border: 1px solid var(--theme-border);
+  border-radius: 5px;
+  padding: 0 20px 20px 20px;
 
   .sharing-permissions-table-header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
   }
 
   .sharing-permissions-search-bar-container {
     width: 190px;
     display: flex;
     align-items: center;
-    border-bottom: 2px solid var(--theme-search-border);
+    border-bottom: 2px solid var(--theme-action);
     padding: 6px 2px;
     justify-content: space-between;
     ::placeholder {
-      color: var(--theme-search-border);
+      color: var(--theme-action);
       opacity: 1;
     }
   }
 
   .sharing-permission-search-bar-icon {
-    color: var(--theme-search-border);
+    color: var(--theme-action);
     height: 16px;
     margin-left: 8px;
   }
@@ -36,7 +38,7 @@
     width: 100%;
     border: none;
     outline: none;
-    color: var(--theme-search-border);
+    color: var(--theme-action);
     font-weight: 400;
     font-size: 0.75rem;
     line-height: 0.9375rem;
@@ -59,6 +61,14 @@
     td:first-of-type {
       padding-left: 10px;
       width: 21px;
+    }
+
+    th:nth-of-type(2) {
+      padding-left: 66px;
+    }
+
+    tr:nth-of-type(2n) {
+      background-color: var(--theme-background-table-header);
     }
   }
 
