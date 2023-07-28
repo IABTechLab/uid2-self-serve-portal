@@ -1,13 +1,13 @@
 .search-bar {
   .search-icon {
-    color: var(--theme-search-border);
+    color: var(--theme-action);
     height: 1.25rem;
   }
 
   .search-bar-input-container {
     display: flex;
     align-items: center;
-    border-bottom: 2px solid var(--theme-search-border);
+    border-bottom: 2px solid var(--theme-action);
     padding: 14px 11px;
     justify-content: space-between;
 
@@ -19,7 +19,7 @@
 
   &.clicked .search-bar-input-container {
     border-radius: 10px 10px 0 0;
-    border: 1px solid var(--theme-search-border);
+    border: 1px solid var(--theme-action);
   }
 
   .search-bar-type-filter-title {
@@ -41,7 +41,7 @@
     background: var(--theme-background-content);
     box-shadow: 0 4px 8px var(--theme-box-shadow);
     border-radius: 0 0 10px 10px;
-    border: 1px solid var(--theme-search-border);
+    border: 1px solid var(--theme-action);
   }
 
   .search-bar-type-filter {
