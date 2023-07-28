@@ -2,7 +2,7 @@ import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation';
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
-import { SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
+import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
 export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
   return kcAdminClient.users.find({
@@ -72,5 +72,28 @@ export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, user
 
   await kcAdminClient.users.del({
     id: userLists[0].id!,
+  });
+};
+
+export const assignClientRoleToUser = async (
+  kcAdminClient: KeycloakAdminClient,
+  userId: string,
+  roleName: string
+) => {
+  const clientRole = await kcAdminClient.clients.findRole({
+    id: SSP_KK_API_CLIENT_ID,
+    roleName,
+  });
+  if (!clientRole) throw Error(`Unable to find the client role ${roleName}`);
+
+  await kcAdminClient.users.addClientRoleMappings({
+    id: userId,
+    clientUniqueId: SSP_KK_API_CLIENT_ID,
+    roles: [
+      {
+        id: clientRole.id!,
+        name: clientRole.name!,
+      },
+    ],
   });
 };

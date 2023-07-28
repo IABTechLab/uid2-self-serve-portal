@@ -12,7 +12,7 @@ import {
 import { SharingAction } from './entities/SharingAuditTrail';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { createNewUser, sendInviteEmail } from './services/kcUsersService';
+import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
   checkParticipantId,
@@ -103,6 +103,7 @@ export function createParticipantsRouter() {
         const { firstName, lastName, email, role } = invitationParser.parse(req.body);
         const kcAdminClient = await getKcAdminClient();
         const user = await createNewUser(kcAdminClient, firstName, lastName, email);
+        await assignClientRoleToUser(kcAdminClient, user.id!, 'api-participant-member');
         await createUserInPortal({
           email,
           role,
