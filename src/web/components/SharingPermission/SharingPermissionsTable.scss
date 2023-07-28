@@ -50,7 +50,6 @@
       background-color: var(--theme-background-sidepanel);
       font-size: 0.875rem;
       line-height: 1rem;
-      padding: 9px 0;
     }
 
     &.selected tr th {
@@ -61,10 +60,6 @@
     td:first-of-type {
       padding-left: 10px;
       width: 21px;
-    }
-
-    th:nth-of-type(2) {
-      padding-left: 66px;
     }
 
     tr:nth-of-type(2n) {
