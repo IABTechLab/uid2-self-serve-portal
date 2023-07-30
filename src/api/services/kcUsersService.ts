@@ -77,9 +77,12 @@ export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, user
 
 export const assignClientRoleToUser = async (
   kcAdminClient: KeycloakAdminClient,
-  userId: string,
+  userEmail: string,
   roleName: string
 ) => {
+  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  if (users.length !== 1) throw Error(`Unable to assign role to ${userEmail}`);
+
   const clientRole = await kcAdminClient.clients.findRole({
     id: SSP_KK_API_CLIENT_ID,
     roleName,
@@ -87,7 +90,7 @@ export const assignClientRoleToUser = async (
   if (!clientRole) throw Error(`Unable to find the client role ${roleName}`);
 
   await kcAdminClient.users.addClientRoleMappings({
-    id: userId,
+    id: users[0].id!,
     clientUniqueId: SSP_KK_API_CLIENT_ID,
     roles: [
       {
