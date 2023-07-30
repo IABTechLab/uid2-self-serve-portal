@@ -5,6 +5,7 @@ import { UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import {
+  assignClientRoleToUser,
   deleteUserByEmail,
   queryUsersByEmail,
   sendInviteEmail,
@@ -26,7 +27,12 @@ export function createUsersRouter() {
   });
 
   usersRouter.put('/current/acceptTerms', async (req: UserRequest, res) => {
-    await req.user!.$query().patch({ acceptedTerms: true });
+    const kcAdminClient = await getKcAdminClient();
+    const promises = [
+      req.user!.$query().patch({ acceptedTerms: true }),
+      assignClientRoleToUser(kcAdminClient, req.user?.email!, 'api-participant-member'),
+    ];
+    await Promise.all(promises);
     return res.sendStatus(200);
   });
 

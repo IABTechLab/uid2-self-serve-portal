@@ -111,6 +111,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
       { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
       { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
       { url: `${BASE_REQUEST_PATH}/users/current/participant`, method: 'GET' },
+      { url: `${BASE_REQUEST_PATH}/users/current/acceptTerms`, method: 'PUT' },
       ...BYPASS_PATHS
     )
   );
