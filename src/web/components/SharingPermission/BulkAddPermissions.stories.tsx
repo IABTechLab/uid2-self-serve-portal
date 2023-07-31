@@ -12,6 +12,8 @@ const Template: ComponentStory<typeof BulkAddPermissions> = (args) => (
   <BulkAddPermissions {...args} />
 );
 
+const onBulkAddSharingPermission = (ids: number[]) => Promise.resolve(console.log(ids));
+
 export const Publisher = Template.bind({});
 Publisher.args = {
   participant: {
@@ -21,7 +23,7 @@ Publisher.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
-  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  onBulkAddSharingPermission,
   participantTypes: [
     { id: 2, typeName: 'Publisher' },
     { id: 3, typeName: 'Advertiser' },
@@ -42,7 +44,7 @@ AdvertiserAndDSP.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
-  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  onBulkAddSharingPermission,
   participantTypes: [
     { id: 2, typeName: 'Publisher' },
     { id: 3, typeName: 'Advertiser' },
@@ -65,7 +67,7 @@ AllTypes.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
-  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  onBulkAddSharingPermission,
   participantTypes: [
     { id: 2, typeName: 'Publisher' },
     { id: 3, typeName: 'Advertiser' },
@@ -87,7 +89,7 @@ HasSharedParticipants.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
-  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  onBulkAddSharingPermission,
   participantTypes: [
     { id: 2, typeName: 'Publisher' },
     { id: 3, typeName: 'Advertiser' },
