@@ -1,4 +1,12 @@
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
+
+export type BulkAddPermissionsForm = {
+  publisherChecked: boolean;
+  advertiserChecked: boolean;
+  DSPChecked: boolean;
+  dataProviderChecked: boolean;
+};
 
 export const getDefaultPublisherCheckboxState = (participantTypeNames: string[]) => {
   const publisherRelatedTypes = ['Data Provider'];
@@ -38,6 +46,36 @@ export const getRecommendedTypeFromParticipant = (participantTypeNames: string[]
   if (result.length === 4) return 'participants';
 
   return formatStringsWithSeparator(result);
+};
+
+export const hasUncheckedDefaultParticipantTypeRecommendation = (
+  participantTypeNames: string[],
+  publisherChecked: boolean,
+  advertiserChecked: boolean,
+  DSPChecked: boolean,
+  dataProviderChecked: boolean
+) => {
+  if (!publisherChecked && getDefaultPublisherCheckboxState(participantTypeNames)) return true;
+  if (!advertiserChecked && getDefaultAdvertiserCheckboxState(participantTypeNames)) return true;
+  if (!DSPChecked && getDefaultDSPCheckboxState(participantTypeNames)) return true;
+  if (!dataProviderChecked && getDefaultDataProviderCheckboxState(participantTypeNames))
+    return true;
+  return false;
+};
+
+export const getCheckedParticipantTypeIds = (
+  data: BulkAddPermissionsForm,
+  participantTypes: ParticipantTypeDTO[]
+) => {
+  const ids = [];
+  if (data.publisherChecked)
+    ids.push(participantTypes.find((x) => x.typeName === 'Publisher')?.id!);
+  if (data.advertiserChecked)
+    ids.push(participantTypes.find((x) => x.typeName === 'Advertiser')?.id!);
+  if (data.DSPChecked) ids.push(participantTypes.find((x) => x.typeName === 'DSP')?.id!);
+  if (data.dataProviderChecked)
+    ids.push(participantTypes.find((x) => x.typeName === 'Data Provider')?.id!);
+  return ids;
 };
 
 export const getRecommendationMessageFromTypeNames = (participantTypeNames: string[]) => {

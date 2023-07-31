@@ -21,6 +21,13 @@ Publisher.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
+  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  participantTypes: [
+    { id: 2, typeName: 'Publisher' },
+    { id: 3, typeName: 'Advertiser' },
+    { id: 4, typeName: 'DSP' },
+    { id: 5, typeName: 'Data Provider' },
+  ],
 };
 
 export const AdvertiserAndDSP = Template.bind({});
@@ -35,6 +42,13 @@ AdvertiserAndDSP.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
+  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  participantTypes: [
+    { id: 2, typeName: 'Publisher' },
+    { id: 3, typeName: 'Advertiser' },
+    { id: 4, typeName: 'DSP' },
+    { id: 5, typeName: 'Data Provider' },
+  ],
 };
 
 export const AllTypes = Template.bind({});
@@ -51,4 +65,34 @@ AllTypes.args = {
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
+  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  participantTypes: [
+    { id: 2, typeName: 'Publisher' },
+    { id: 3, typeName: 'Advertiser' },
+    { id: 4, typeName: 'DSP' },
+    { id: 5, typeName: 'Data Provider' },
+  ],
+};
+
+export const HasSharedParticipants = Template.bind({});
+HasSharedParticipants.args = {
+  participant: {
+    id: 1,
+    name: 'Participant 1',
+    types: [
+      { id: 2, typeName: 'Publisher' },
+      { id: 3, typeName: 'Advertiser' },
+      { id: 4, typeName: 'DSP' },
+    ],
+    allowSharing: true,
+    status: ParticipantStatus.Approved,
+  },
+  onBulkAddSharingPermission: (id) => Promise.resolve(console.log(id)),
+  participantTypes: [
+    { id: 2, typeName: 'Publisher' },
+    { id: 3, typeName: 'Advertiser' },
+    { id: 4, typeName: 'DSP' },
+    { id: 5, typeName: 'Data Provider' },
+  ],
+  sharingParticipants: [{ id: 1, name: 'Test shared participant' }],
 };
