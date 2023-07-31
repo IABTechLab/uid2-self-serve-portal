@@ -11,18 +11,18 @@ type BannerProps = {
 
 export function Banner({ message, type }: BannerProps) {
   let icon: IconProp;
-
-  if (type === 'warning') {
-    icon = 'triangle-exclamation';
-  } else if (type === 'error') {
-    icon = 'fishing-rod';
+  if (type === 'error') {
+    icon = 'exclamation-triangle';
   } else {
     icon = 'circle-info';
   }
 
   return (
     <div className={clsx('banner-container', type)}>
-      <FontAwesomeIcon icon={icon} data-testid='banner-icon' className='banner-icon' />
+      {type === 'warning' && <img src='/warning.svg' alt='warning' className='uid2-logo' />}
+      {type !== 'warning' && (
+        <FontAwesomeIcon icon={icon} data-testid='banner-icon' className='banner-icon' />
+      )}
       <span data-testid='banner-message' className='banner-text'>
         {message}
       </span>

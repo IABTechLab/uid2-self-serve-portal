@@ -1,22 +1,33 @@
 .banner-container {
+  display: flex;
+  align-items: center;
   background: var(--theme-banner-info-background);
   border-radius: 10px;
-  padding: 12px 30px;
+  padding: 12px 20px;
+  gap: 15px;
+
+  .banner-text {
+    font-weight: 600;
+    color: var(--theme-button-text);
+  }
+
+  &.info {
+    background: var(--theme-banner-info-background);
+
+    .banner-icon {
+      color: var(--theme-banner-info-icon);
+    }
+  }
 
   &.warning {
     background: var(--theme-banner-warning-background);
+
+    .banner-icon {
+      color: var(--theme-banner-warning-icon);
+    }
   }
 
   &.error {
     background: var(--theme-banner-error-background);
-  }
-
-  .banner-icon {
-    color: var(--theme-banner-icon);
-    margin-right: 16px;
-  }
-
-  .banner-text {
-    color: var(--theme-button-text);
   }
 }
