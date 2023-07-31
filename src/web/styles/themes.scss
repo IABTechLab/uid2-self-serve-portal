@@ -27,8 +27,11 @@
   --theme-success: #058a04;
   --theme-label-background: #c0d6ff;
   --theme-search-bar-background: rgb(112 133 212 / 15%);
-  --theme-banner-background: #b7c2ea;
-  --theme-banner-icon: #7085d4;
+  --theme-banner-info-background: #b7c2ea;
+  --theme-banner-warning-background: rgba(247, 208, 49, 0.3);
+  --theme-banner-warning-icon: rgba(247, 208, 49, 1);
+  --theme-banner-error-background: rgba(255, 0, 0, 0.8);
+  --theme-banner-info-icon: #7085d4;
   --theme-scrollbar: #c0d6ff;
   --theme-error: red;
   --theme-disabled-button-text: #878787;
