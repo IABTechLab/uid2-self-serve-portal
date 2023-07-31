@@ -22,3 +22,11 @@ Collapsed.args = {
   content: 'Test Collapsible Content',
   defaultOpen: false,
 };
+
+export const WithLabel = Template.bind({});
+WithLabel.args = {
+  title: 'Test Collapsible Title',
+  content: 'Test Collapsible Content',
+  defaultOpen: true,
+  label: 'TEST LABEL',
+};

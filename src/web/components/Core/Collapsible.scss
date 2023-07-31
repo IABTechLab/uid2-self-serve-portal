@@ -1,28 +1,46 @@
-.collapsible-root{
+.collapsible-root {
   display: flex;
   border: 1px solid var(--theme-border);
   border-radius: 5px;
   flex-direction: column;
   width: 100%;
 
-  .collapsible-header {
+  .collapsible-trigger {
     display: flex;
     justify-content: space-between;
-    padding-left: 20px;
+    border: none;
+    border-radius: 5px;
 
-    .collapsible-trigger {
-      border: none;
-      border-radius: 5px;
+    .collapsible-header {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
       align-items: center;
 
-      .chevron-icon {
-        color: var(--theme-action);
+      .collapsible-header-label-and-icon {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .label {
+          background: var(--theme-label-background);
+          border-radius: 3px;
+          padding: 4px 8px;
+          display: flex;
+          align-items: center;
+          font-size: 0.75rem;
+          height: 18px;
+        }
+
+        .chevron-icon {
+          color: var(--theme-action);
+        }
       }
     }
+  }
 
-    .collapsible-trigger[data-state='open'] > .chevron-icon {
-      transform: rotate(180deg);
-    }
+  .collapsible-trigger[data-state='open'] > .collapsible-header > .collapsible-header-label-and-icon > .chevron-icon {
+    transform: rotate(180deg);
   }
 
   .collapsible-content {
