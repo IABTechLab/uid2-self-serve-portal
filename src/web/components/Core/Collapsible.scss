@@ -17,16 +17,32 @@
       width: 100%;
       align-items: center;
 
-      .chevron-icon {
-        color: var(--theme-action);
+      .collapsible-header-label-and-icon {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        .label {
+          background: var(--theme-label-background);
+          border-radius: 3px;
+          padding: 4px 8px;
+          display: flex;
+          align-items: center;
+          font-size: 0.75rem;
+          height: 18px;
+        }
+
+        .chevron-icon {
+          color: var(--theme-action);
+        }
       }
     }
   }
 
-  .collapsible-trigger[data-state='open'] > .collapsible-header > .chevron-icon {
+  .collapsible-trigger[data-state='open'] > .collapsible-header > .collapsible-header-label-and-icon > .chevron-icon {
     transform: rotate(180deg);
   }
-  
+
   .collapsible-content {
     display: flex;
     padding: 0 0 20px 20px;
