@@ -13,16 +13,16 @@ export type CollapsibleProps = {
 export function Collapsible({ title, content, defaultOpen }: CollapsibleProps) {
   return (
     <RadixCollapsible.Root className='collapsible-root' defaultOpen={defaultOpen}>
-      <div className='collapsible-header'>
-        <h2>{title}</h2>
-        <RadixCollapsible.Trigger className='collapsible-trigger'>
+      <RadixCollapsible.Trigger className='collapsible-trigger'>
+        <div className='collapsible-header'>
+          <h2>{title}</h2>
           <FontAwesomeIcon
             icon='chevron-down'
             data-testid='chevron-icon'
             className='chevron-icon'
           />
-        </RadixCollapsible.Trigger>
-      </div>
+        </div>
+      </RadixCollapsible.Trigger>
       <RadixCollapsible.Content>
         <div className='collapsible-content'>{content}</div>
       </RadixCollapsible.Content>
