@@ -1,7 +1,6 @@
 .banner-container {
   display: flex;
   align-items: center;
-  background: var(--theme-banner-info-background);
   border-radius: 10px;
   padding: 12px 20px;
   gap: 15px;
@@ -29,5 +28,13 @@
 
   &.error {
     background: var(--theme-banner-error-background);
+
+    .banner-text {
+      color: white;
+    }
+
+    .banner-icon {
+      color: white;
+    }
   }
 }
