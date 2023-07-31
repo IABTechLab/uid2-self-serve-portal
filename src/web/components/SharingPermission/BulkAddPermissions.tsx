@@ -60,7 +60,6 @@ export function BulkAddPermissions({
 
   const handleSave = (data: BulkAddPermissionsForm) => {
     onBulkAddSharingPermission(getCheckedParticipantTypeIds(data, participantTypes));
-    // TODO: call onBulkAddSharingPermission with the appropriate data
   };
 
   const onToggleViewRecommendedParticipants = () => {
