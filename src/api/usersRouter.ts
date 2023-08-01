@@ -1,10 +1,11 @@
 import express from 'express';
 import { z } from 'zod';
 
-import { User, UserCreationPartial, UserRole } from './entities/User';
+import { UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
 import {
+  assignClientRoleToUser,
   deleteUserByEmail,
   queryUsersByEmail,
   sendInviteEmail,
@@ -12,48 +13,38 @@ import {
 } from './services/kcUsersService';
 import {
   enrichCurrentUser,
+  enrichUserWithIsApprover,
   enrichWithUserFromParams,
-  findUserByEmail,
   UserRequest,
 } from './services/usersService';
 
 export function createUsersRouter() {
   const usersRouter = express.Router();
-  const emailParser = z.object({
-    email: z.string().optional(),
+  usersRouter.use('/current', enrichCurrentUser);
+  usersRouter.get('/current', async (req: UserRequest, res) => {
+    const userWithIsApprover = await enrichUserWithIsApprover(req.user!);
+    return res.json(userWithIsApprover);
   });
 
-  usersRouter.get('/', async (req, res) => {
-    const { email } = emailParser.parse(req.query);
-    if (!email) {
-      const users = await User.query();
-      return res.status(200).json(users);
-    }
-    const userResult = await findUserByEmail(email);
-    if (userResult) return res.json(userResult);
-    return res.sendStatus(404);
-  });
-
-  usersRouter.post('/', async (req, res) => {
-    const data = UserCreationPartial.parse(req.body);
-    const user = await User.query().insert(data);
-    res.status(201).json(user);
-  });
-
-  usersRouter.put('/current/acceptTerms', enrichCurrentUser, async (req: UserRequest, res) => {
-    await req.user!.$query().patch({ acceptedTerms: true });
+  usersRouter.put('/current/acceptTerms', async (req: UserRequest, res) => {
+    const kcAdminClient = await getKcAdminClient();
+    const promises = [
+      req.user!.$query().patch({ acceptedTerms: true }),
+      assignClientRoleToUser(kcAdminClient, req.user?.email!, 'api-participant-member'),
+    ];
+    await Promise.all(promises);
     return res.sendStatus(200);
+  });
+
+  usersRouter.get('/current/participant', async (req: UserRequest, res) => {
+    const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
+    return res.status(200).json(participant);
   });
 
   usersRouter.use('/:userId', enrichWithUserFromParams);
 
   usersRouter.get('/:userId', async (req: UserRequest, res) => {
     return res.status(200).json(req.user);
-  });
-
-  usersRouter.get('/:userId/participant', async (req: UserRequest, res) => {
-    const participant = await req.user!.$relatedQuery('participant').withGraphFetched('types');
-    return res.status(200).json(participant);
   });
 
   usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {

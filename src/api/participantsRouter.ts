@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { businessContactsRouter } from './businessContactsRouter';
+import { createBusinessContactsRouter } from './businessContactsRouter';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -17,6 +17,7 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
+  getParticipantsAwaitingApproval,
   getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
@@ -32,6 +33,12 @@ import {
 } from './services/usersService';
 
 export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
+
+export type ParticipantRequestDTO = Pick<
+  ParticipantDTO,
+  'id' | 'name' | 'siteId' | 'types' | 'status'
+>;
+
 function mapParticipantToAvailableParticipant(participant: Participant) {
   return {
     id: participant.id,
@@ -47,6 +54,12 @@ export function createParticipantsRouter() {
   participantsRouter.get('/available', async (_req, res) => {
     const participants = await Participant.query().whereNotNull('siteId').withGraphFetched('types');
     return res.status(200).json(participants.map(mapParticipantToAvailableParticipant));
+  });
+
+  participantsRouter.get('/awaitingApproval', async (req: ParticipantRequest, res) => {
+    const email = String(req.auth?.payload?.email);
+    const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
+    return res.status(200).json(participantsAwaitingApproval);
   });
 
   participantsRouter.post('/', async (req, res) => {
@@ -210,7 +223,8 @@ export function createParticipantsRouter() {
       return res.status(200).json(users);
     }
   );
+  const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
 
-  return participantsRouter;
+  return { router: participantsRouter, businessContactsRouter };
 }

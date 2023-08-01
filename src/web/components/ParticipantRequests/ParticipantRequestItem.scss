@@ -1,0 +1,32 @@
+.participant-request-item {
+  line-height: 2;
+
+  .participant-request-type-label {
+    background: var(--theme-label-background);
+    border-radius: 3px;
+    padding: 4px 8px;
+    margin-right: 8px;
+  }
+
+  .participant-request-logo {
+    width: 50px;
+    margin-right: 16px;
+  }
+
+  .participant-request-types {
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+  }
+
+  .participant-request-name-cell {
+    display: flex;
+    align-items: center;
+  }
+
+  .participant-request-status {
+    display: flex;
+    align-items: center;
+  }
+}

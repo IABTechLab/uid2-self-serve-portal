@@ -1,16 +1,16 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ParticipantStatus } from '../../api/entities/Participant';
+import { ParticipantDTO, ParticipantStatus } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading';
-import { GetParticipantByUserId, ParticipantResponse } from '../services/participant';
+import { GetCurrentUsersParticipant } from '../services/participant';
 import { ApiError } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { CurrentUserContext } from './CurrentUserProvider';
 
 type ParticipantWithSetter = {
-  participant: ParticipantResponse | null;
-  setParticipant: (participant: ParticipantResponse) => void;
+  participant: ParticipantDTO | null;
+  setParticipant: (participant: ParticipantDTO) => void;
 };
 export const ParticipantContext = createContext<ParticipantWithSetter>({
   participant: null,
@@ -18,7 +18,7 @@ export const ParticipantContext = createContext<ParticipantWithSetter>({
 });
 
 function ParticipantProvider({ children }: { children: ReactNode }) {
-  const [participant, setParticipant] = useState<ParticipantResponse | null>(null);
+  const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
   const [loading, setIsLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
@@ -41,7 +41,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       try {
         if (user) {
-          const p = await GetParticipantByUserId(user!.id);
+          const p = await GetCurrentUsersParticipant();
           setParticipant(p);
         }
       } catch (e: unknown) {

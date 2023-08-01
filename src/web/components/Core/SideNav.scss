@@ -32,6 +32,10 @@
     .side-nav-item {
       padding: 12px 0;
     }
+
+    .side-nav-divider {
+      border-bottom: 1px solid var(--theme-footer-divider);
+    }
   }
 
   .nav-footer {

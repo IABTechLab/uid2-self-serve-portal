@@ -16,25 +16,29 @@
   --theme-warning-background: rgba(183, 194, 234, 0.45);
   --theme-warning-icon: rgba(112, 133, 212, 1);
 }
+
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
 }
+
 #kc-form-login {
   display: flex;
   flex-direction: column;
 }
+
 .login-pf a {
   color: var(--theme-action);
 }
 
 .login-pf {
   background: none;
-
   background-color: var(--theme-background-content) !important;
 }
+
 .login-pf-page .card-pf {
   padding: 3rem 5rem;
 }
+
 .login-pf body {
   background-image: none;
   background-color: var(--theme-background-content) !important;
@@ -53,19 +57,39 @@ body {
   font-size: 18px;
   order: 4;
 }
-#kc-form-options {
+
+.login-pf-settings #kc-form-options {
   display: none;
 }
+
+#kc-form-options .checkbox {
+  font-size: 14px;
+}
+
+#kc-form-options .checkbox label span {
+  margin-left: 20px;
+}
+
+#kc-form-options .checkbox input {
+  accent-color: #0300a5;
+  height: 25px;
+  width: 25px;
+  margin-top: 0;
+  margin-left: -20;
+}
+
 .login-pf-page .login-pf-header {
   margin-bottom: 8px;
 }
+
 .pf-c-button {
   border-radius: 5px;
   font-weight: 700;
   font-size: 18px;
-  padding: 15px 120px 15px 120px;
+  padding: 15px 120px;
   margin: 0 auto;
 }
+
 .pf-c-button.pf-m-primary {
   background-color: var(--theme-button);
   color: var(--theme-button-border);
@@ -80,7 +104,7 @@ body {
 }
 
 h1#kc-page-title {
-  margin: 10px 0 0 0;
+  margin: 10px 0 0;
   font-weight: 700;
   line-height: 29px;
   text-align: left;
@@ -94,7 +118,6 @@ h1#kc-page-title {
 }
 
 .login-pf-page .card-pf .kc-description-text {
-  font-size: 14px;
   color: #000;
   font-size: 14px;
   line-height: 22px;
@@ -117,12 +140,15 @@ div.kc-logo-text {
   padding: 0 30px;
   margin-bottom: 0;
 }
+
 #kc-header-wrapper {
   padding: 20px;
 }
+
 #kc-header-wrapper .uid2-logo {
   height: 30px;
 }
+
 #kc-content-wrapper {
   margin-top: 0;
 }
@@ -161,7 +187,7 @@ div.kc-logo-text {
 .card-pf {
   background: var(--theme-background-content);
   border: 1px solid var(--theme-border);
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 15%);
   border-radius: 8px;
   padding: 3rem 5rem;
   width: 623px;
@@ -181,13 +207,16 @@ div.kc-logo-text {
   align-items: center;
   justify-content: center;
 }
+
 #kc-registration {
   width: 200px;
 }
+
 .login-pf-page .login-pf-signup a {
   margin: 0;
 }
-/*phone*/
+
+/* phone */
 @media (max-width: 767px) {
   .centralize-content {
     justify-content: start;
@@ -202,6 +231,7 @@ div.kc-logo-text {
 
   .kc-social-grid {
     grid-column-end: 12;
+
     --pf-l-grid__item--GridColumnEnd: span 12;
   }
 

@@ -1,11 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-import { Participant, ParticipantCreationPartial } from '../entities/Participant';
+import { Approver } from '../entities/Approver';
+import {
+  Participant,
+  ParticipantCreationPartial,
+  ParticipantStatus,
+} from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
-import { findApproversByType } from './approversService';
+import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
@@ -51,6 +56,20 @@ export const fetchSharingParticipants = async (
 export const getSharingParticipants = async (participantSiteId: number): Promise<Participant[]> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   return fetchSharingParticipants(sharingListResponse);
+};
+
+export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {
+  const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
+  const participantsAwaitingApproval = await Participant.query()
+    .whereIn(
+      'id',
+      Participant.relatedQuery('types')
+        .whereIn('participantTypeId', approvableParticipantTypeIds)
+        .select('participantId')
+    )
+    .withGraphFetched('types')
+    .where('status', ParticipantStatus.AwaitingApproval);
+  return participantsAwaitingApproval;
 };
 
 export const addSharingParticipants = async (

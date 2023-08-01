@@ -8,7 +8,7 @@ describe('Participant Service Tests', () => {
   const withToken = useTestServer();
 
   beforeAll(() => {
-    routers!.participantsRouter.get('/:participantId/', (req: ParticipantRequest, res) => {
+    routers!.participantsRouter.router.get('/:participantId/', (req: ParticipantRequest, res) => {
       res.status(200).json(req.participant);
     });
   });

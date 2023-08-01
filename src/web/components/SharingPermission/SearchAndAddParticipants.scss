@@ -1,0 +1,28 @@
+.search-and-add-participants {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  flex-grow: 1;
+
+  h2 {
+    margin-top: 0;
+  }
+  .action-section {
+    margin-top: 24px;
+
+    p {
+      margin: 0 0 24px 0;
+      font-weight: 600;
+    }
+  }
+
+  .add-participant-dialog-search-bar {
+    padding-right: 70px;
+  }
+}
+
+.sharing-permission-actions .add-sharing-permission-button {
+  margin-left: 20px;
+  border: 1px solid var(--theme-action);
+  padding: 7px 21px;
+}

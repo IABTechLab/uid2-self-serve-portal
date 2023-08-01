@@ -1,3 +1,4 @@
+import { useKeycloak } from '@react-keycloak/web';
 import { useContext, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,7 @@ import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
+import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
@@ -18,7 +20,7 @@ import { TermsOfServiceRoute } from './termsOfService';
 
 import './dashboard.scss';
 
-export const DashboardRoutes: PortalRoute[] = [
+export const StandardRoutes: PortalRoute[] = [
   HomeRoute,
   SharingPermissionsRoute,
   AccountInformationRoute,
@@ -26,20 +28,29 @@ export const DashboardRoutes: PortalRoute[] = [
   EmailContactsRoute,
   TermsOfServiceRoute,
 ];
-const menu = DashboardRoutes.filter((r) => r.description);
+
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+
+export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
+
+const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const location = useLocation();
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const [showMustAccept, setShowMustAccept] = useState(false);
+  const { keycloak } = useKeycloak();
   const navigate = useNavigate();
-
-  const currentLocationDescription = menu.filter((m) => m.path === location.pathname)[0]
+  const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
+  const visibleMenu = standardMenu.concat(adminMenu);
+  const currentLocationDescription = visibleMenu.filter((m) => m.path === location.pathname)[0]
     .description;
 
   const handleAccept = async () => {
     await SetTermsAccepted();
+    // Force token refresh after role updated
+    await keycloak.updateToken(10000);
     await loadUser();
   };
   const handleCancel = () => {
@@ -53,18 +64,19 @@ function Dashboard() {
   }, [participant, navigate]);
   return (
     <div className='app-panel'>
-      <SideNav menu={menu} />
+      <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (
-          <Dialog open>
-            <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel} />
-            {showMustAccept && (
-              <div className='accept-error'>
-                You will not be able to access the portal unless you accept the terms of service.
-                You must scroll to the bottom of the terms of service before you can accept them.
-              </div>
-            )}
+          <Dialog open className='terms-conditions-dialog'>
+            <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
+              {showMustAccept && (
+                <div className='accept-error'>
+                  You will not be able to access the portal unless you accept the terms of service.
+                  You must scroll to the bottom of the terms of service before you can accept them.
+                </div>
+              )}
+            </TermsAndConditionsForm>
           </Dialog>
         ) : (
           <Outlet />
