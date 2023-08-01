@@ -2,7 +2,7 @@
   background: var(--theme-label-background);
   border-radius: 3px;
   padding: 4px 8px;
-  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .participant-checkbox {
@@ -24,4 +24,8 @@
 .participant-name-cell {
   display: flex;
   align-items: center;
+
+  .checkbox-label {
+    padding-right: 16px;
+  }
 }

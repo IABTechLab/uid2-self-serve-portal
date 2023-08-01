@@ -10,11 +10,14 @@ export default {
 
 const Template: ComponentStory<typeof ParticipantSearchBar> = (args) => {
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set([1, 3]));
+  const [open, setOpen] = useState<boolean>(false);
   return (
     <ParticipantSearchBar
       {...args}
       selectedParticipantIds={selectedParticipants}
       onSelectedChange={setSelectedParticipants}
+      open={open}
+      onToggleOpen={setOpen}
     />
   );
 };

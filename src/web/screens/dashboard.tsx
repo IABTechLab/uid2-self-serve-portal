@@ -1,3 +1,4 @@
+import { useKeycloak } from '@react-keycloak/web';
 import { useContext, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -39,6 +40,7 @@ function Dashboard() {
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const [showMustAccept, setShowMustAccept] = useState(false);
+  const { keycloak } = useKeycloak();
   const navigate = useNavigate();
   const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
   const visibleMenu = standardMenu.concat(adminMenu);
@@ -47,6 +49,8 @@ function Dashboard() {
 
   const handleAccept = async () => {
     await SetTermsAccepted();
+    // Force token refresh after role updated
+    await keycloak.updateToken(10000);
     await loadUser();
   };
   const handleCancel = () => {
@@ -64,14 +68,15 @@ function Dashboard() {
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (
-          <Dialog open>
-            <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel} />
-            {showMustAccept && (
-              <div className='accept-error'>
-                You will not be able to access the portal unless you accept the terms of service.
-                You must scroll to the bottom of the terms of service before you can accept them.
-              </div>
-            )}
+          <Dialog open className='terms-conditions-dialog'>
+            <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
+              {showMustAccept && (
+                <div className='accept-error'>
+                  You will not be able to access the portal unless you accept the terms of service.
+                  You must scroll to the bottom of the terms of service before you can accept them.
+                </div>
+              )}
+            </TermsAndConditionsForm>
           </Dialog>
         ) : (
           <Outlet />

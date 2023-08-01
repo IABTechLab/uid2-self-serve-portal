@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ParticipantDTO, ParticipantStatus } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading';
-import { GetParticipantByUserId } from '../services/participant';
+import { GetCurrentUsersParticipant } from '../services/participant';
 import { ApiError } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { CurrentUserContext } from './CurrentUserProvider';
@@ -41,7 +41,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       try {
         if (user) {
-          const p = await GetParticipantByUserId(user!.id);
+          const p = await GetCurrentUsersParticipant();
           setParticipant(p);
         }
       } catch (e: unknown) {

@@ -19,6 +19,7 @@ export const SSP_KK_SSL_RESOURCE = process.env.SSP_KK_SSL_RESOURCE ?? errorMessa
 export const SSP_KK_SSL_PUBLIC_CLIENT = process.env.SSP_KK_SSL_PUBLIC_CLIENT ?? errorMessage;
 export const SSP_KK_SSL_CONFIDENTIAL_PORT =
   process.env.SSP_KK_SSL_CONFIDENTIAL_PORT ?? errorMessage;
+export const SSP_KK_API_CLIENT_ID = process.env.SSP_KK_API_CLIENT_ID ?? errorMessage;
 export const SSP_WEB_BASE_URL = process.env.SSP_WEB_BASE_URL ?? 'http://localhost:3000/';
 
 // DB config
