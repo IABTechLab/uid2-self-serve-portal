@@ -1,7 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
-import { Dialog } from '../Core/Dialog';
 import BusinessContact from './BusinessContact';
 import BusinessContactDialog from './BusinessContactDialog';
 
