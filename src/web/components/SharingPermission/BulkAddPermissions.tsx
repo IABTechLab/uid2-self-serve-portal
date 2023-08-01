@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
@@ -23,14 +22,14 @@ import './BulkAddPermissions.scss';
 type BulkAddPermissionsProps = {
   participant: ParticipantDTO | null;
   participantTypes: ParticipantTypeDTO[];
-  sharingParticipants: AvailableParticipantDTO[];
+  hasSharingParticipants: boolean;
   onBulkAddSharingPermission: (selectedTypes: number[]) => Promise<void>;
 };
 
 export function BulkAddPermissions({
   participant,
   participantTypes,
-  sharingParticipants,
+  hasSharingParticipants,
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
   const [showRecommendedParticipants, setShowRecommendedParticipants] = useState(false);
@@ -159,7 +158,7 @@ export function BulkAddPermissions({
     // eslint-disable-next-line react/jsx-props-no-spreading
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSave)}>
-        {!sharingParticipants && (
+        {!hasSharingParticipants && (
           <Collapsible
             title='Bulk Add Permissions'
             content={recommendationContent}
@@ -168,7 +167,7 @@ export function BulkAddPermissions({
             className='bulk-add-permissions-recommendations-collapsible'
           />
         )}
-        {sharingParticipants && (
+        {hasSharingParticipants && (
           <Collapsible
             title='Bulk Add Permissions'
             content={collapsibleContent}

@@ -76,8 +76,8 @@ AllTypes.args = {
   ],
 };
 
-export const HasSharedParticipants = Template.bind({});
-HasSharedParticipants.args = {
+export const HasSharingParticipants = Template.bind({});
+HasSharingParticipants.args = {
   participant: {
     id: 1,
     name: 'Participant 1',
@@ -96,5 +96,5 @@ HasSharedParticipants.args = {
     { id: 4, typeName: 'DSP' },
     { id: 5, typeName: 'Data Provider' },
   ],
-  sharingParticipants: [{ id: 1, name: 'Test shared participant' }],
+  hasSharingParticipants: true,
 };
