@@ -24,6 +24,7 @@ button {
   background-color: var(--theme-disabled-button);
   border-color: var(--theme-disabled-button);
   color: var(--theme-disabled-button-text);
+  cursor: not-allowed;
 }
 
 .large-button {
