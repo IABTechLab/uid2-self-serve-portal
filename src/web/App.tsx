@@ -26,7 +26,7 @@ export function App() {
     else rootRef.current!.classList.remove('darkmode');
   };
   if (!initialized) return <Loading />;
-  const fullname =
+  const fullName =
     LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
       ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`
       : undefined;
@@ -37,7 +37,7 @@ export function App() {
           <div className='app' ref={rootRef}>
             <PortalHeader
               email={LoggedInUser?.profile?.email}
-              fullname={fullname}
+              fullName={fullName}
               setDarkMode={setDarkMode}
               logout={logout}
             />
