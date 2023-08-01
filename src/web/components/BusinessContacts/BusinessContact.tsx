@@ -6,16 +6,19 @@ import { Dialog } from '../Core/Dialog';
 import { InlineError } from '../Core/InlineError';
 import BusinessContactDialog from './BusinessContactDialog';
 
-type DeleteConfirmationDialogProps = {
+type DeleteBusinessContactDialogProps = {
   contact: BusinessContactResponse;
   onRemoveContact: () => Promise<void>;
 };
 
-function DeleteConfirmationDialog({ contact, onRemoveContact }: DeleteConfirmationDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
+function DeleteBusinessContactDialog({
+  contact,
+  onRemoveContact,
+}: DeleteBusinessContactDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleRemove = async () => {
-    setOpenConfirmation(false);
+    setOpenDialog(false);
     await onRemoveContact();
   };
 
@@ -27,8 +30,8 @@ function DeleteConfirmationDialog({ contact, onRemoveContact }: DeleteConfirmati
           <FontAwesomeIcon icon='trash-can' />
         </button>
       }
-      open={openConfirmation}
-      onOpenChange={setOpenConfirmation}
+      open={openDialog}
+      onOpenChange={setOpenDialog}
     >
       <ul className='dot-list'>
         <li>{contact.name}</li>
@@ -37,11 +40,7 @@ function DeleteConfirmationDialog({ contact, onRemoveContact }: DeleteConfirmati
         <button type='button' className='primary-button' onClick={handleRemove}>
           Delete Email Contact
         </button>
-        <button
-          type='button'
-          className='transparent-button'
-          onClick={() => setOpenConfirmation(false)}
-        >
+        <button type='button' className='transparent-button' onClick={() => setOpenDialog(false)}>
           Cancel
         </button>
       </div>
@@ -95,7 +94,10 @@ function BusinessContact({
               </button>
             }
           />
-          <DeleteConfirmationDialog onRemoveContact={handleRemoveEmailContact} contact={contact} />
+          <DeleteBusinessContactDialog
+            onRemoveContact={handleRemoveEmailContact}
+            contact={contact}
+          />
         </div>
       </td>
     </tr>
