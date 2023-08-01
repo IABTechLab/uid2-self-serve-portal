@@ -9,10 +9,12 @@ import {
   ParticipantSchema,
   ParticipantStatus,
 } from './entities/Participant';
+import { ParticipantTypeSchema } from './entities/ParticipantType';
 import { SharingAction } from './entities/SharingAuditTrail';
-import { UserRole } from './entities/User';
+import { User, User, UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { createNewUser, sendInviteEmail } from './services/kcUsersService';
+import { isApproverCheck } from './services/approversService';
+import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
   checkParticipantId,
@@ -56,11 +58,15 @@ export function createParticipantsRouter() {
     return res.status(200).json(participants.map(mapParticipantToAvailableParticipant));
   });
 
-  participantsRouter.get('/awaitingApproval', async (req: ParticipantRequest, res) => {
-    const email = String(req.auth?.payload?.email);
-    const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
-    return res.status(200).json(participantsAwaitingApproval);
-  });
+  participantsRouter.get(
+    '/awaitingApproval',
+    isApproverCheck,
+    async (req: ParticipantRequest, res) => {
+      const email = String(req.auth?.payload?.email);
+      const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
+      return res.status(200).json(participantsAwaitingApproval);
+    }
+  );
 
   participantsRouter.post('/', async (req, res) => {
     try {
@@ -223,6 +229,37 @@ export function createParticipantsRouter() {
       return res.status(200).json(users);
     }
   );
+
+  const ParticipantApprovalParser = ParticipantSchema.pick({
+    siteId: true,
+    name: true,
+    types: true,
+  }).extend({
+    types: z.array(ParticipantTypeSchema.pick({ id: true })),
+  });
+
+  participantsRouter.put(
+    '/:participantId/approve',
+    isApproverCheck,
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      const data = {
+        ...ParticipantApprovalParser.parse(req.body),
+        status: ParticipantStatus.Approved,
+      };
+      const kcAdminClient = await getKcAdminClient();
+      const users = await getAllUserFromParticipant(participant!);
+      const promises = [
+        ...users.map((user) =>
+          assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
+        ),
+        participant!.$query().upsertGraph(data),
+      ];
+      await Promise.all(promises);
+      return res.sendStatus(200);
+    }
+  );
+
   const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
 
