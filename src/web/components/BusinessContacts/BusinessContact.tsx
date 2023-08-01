@@ -2,8 +2,51 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
 import { InlineError } from '../Core/InlineError';
 import BusinessContactDialog from './BusinessContactDialog';
+
+type DeleteBusinessContactDialogProps = {
+  contact: BusinessContactResponse;
+  onRemoveContact: () => Promise<void>;
+};
+
+function DeleteBusinessContactDialog({
+  contact,
+  onRemoveContact,
+}: DeleteBusinessContactDialogProps) {
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleRemove = async () => {
+    setOpenDialog(false);
+    await onRemoveContact();
+  };
+
+  return (
+    <Dialog
+      title='Are you sure you want to delete this email contact?'
+      triggerButton={
+        <button className='icon-button' aria-label='delete' type='button'>
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
+      }
+      open={openDialog}
+      onOpenChange={setOpenDialog}
+    >
+      <ul className='dot-list'>
+        <li>{contact.name}</li>
+      </ul>
+      <div className='dialog-footer-section'>
+        <button type='button' className='primary-button' onClick={handleRemove}>
+          Delete Email Contact
+        </button>
+        <button type='button' className='transparent-button' onClick={() => setOpenDialog(false)}>
+          Cancel
+        </button>
+      </div>
+    </Dialog>
+  );
+}
 
 type BusinessContactProps = {
   contact: BusinessContactResponse;
@@ -51,14 +94,10 @@ function BusinessContact({
               </button>
             }
           />
-          <button
-            className='icon-button'
-            aria-label='delete'
-            type='button'
-            onClick={handleRemoveEmailContact}
-          >
-            <FontAwesomeIcon icon='trash-can' />
-          </button>
+          <DeleteBusinessContactDialog
+            onRemoveContact={handleRemoveEmailContact}
+            contact={contact}
+          />
         </div>
       </td>
     </tr>
