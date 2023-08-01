@@ -11,9 +11,9 @@ import {
 } from './entities/Participant';
 import { ParticipantTypeSchema } from './entities/ParticipantType';
 import { SharingAction } from './entities/SharingAuditTrail';
-import { User, User, UserRole } from './entities/User';
+import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { isApproverCheck } from './services/approversService';
+import { isApproverCheck } from './middleware/approversMiddleware';
 import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
