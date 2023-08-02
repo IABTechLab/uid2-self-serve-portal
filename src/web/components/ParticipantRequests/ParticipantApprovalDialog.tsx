@@ -54,7 +54,7 @@ function ParticipantApprovalDialog({
         />
         <TextInput
           inputName='siteId'
-          label='Site Id'
+          label='Site ID'
           type='number'
           rules={{ required: 'Please specify site id.' }}
         />
