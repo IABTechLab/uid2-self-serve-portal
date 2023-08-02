@@ -79,20 +79,24 @@ body {
 }
 
 .login-pf-page .login-pf-header {
-  margin-bottom: 8px;
+  margin-bottom: 24px;
 }
 
 .pf-c-button {
   border-radius: 5px;
   font-weight: 700;
   font-size: 18px;
-  padding: 15px 120px;
+  padding: 15px 11px;
   margin: 0 auto;
 }
 
 .pf-c-button.pf-m-primary {
   background-color: var(--theme-button);
   color: var(--theme-button-border);
+  min-width: 225px;
+}
+
+.pf-c-button.pf-m-block {
   width: auto;
 }
 
