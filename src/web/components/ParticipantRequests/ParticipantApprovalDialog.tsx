@@ -9,19 +9,19 @@ import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
-type ParticipantApprovalDialog = {
-  onApprove: () => Promise<void>;
+type ParticipantApprovalDialogProps = {
+  onApprove: (formData: ParticipantApprovalForm) => Promise<void>;
   participant: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
 };
-function ParticipantRequestDialog({
+function ParticipantApprovalDialog({
   onApprove,
   participant,
   participantTypes,
-}: ParticipantApprovalDialog) {
+}: ParticipantApprovalDialogProps) {
   const [open, setOpen] = useState(false);
   const onSubmit: SubmitHandler<ParticipantApprovalForm> = async (formData) => {
-    await onApprove();
+    await onApprove(formData);
     setOpen(false);
   };
 
@@ -52,6 +52,11 @@ function ParticipantRequestDialog({
           label='Participant Name'
           rules={{ required: 'Please specify participant name.' }}
         />
+        <TextInput
+          inputName='siteId'
+          label='Site Id'
+          rules={{ required: 'Please specify site id.' }}
+        />
         <CheckboxInput
           inputName='types'
           label='Participant Type'
@@ -65,3 +70,5 @@ function ParticipantRequestDialog({
     </Dialog>
   );
 }
+
+export default ParticipantApprovalDialog;

@@ -220,11 +220,12 @@ export async function UpdateEmailContact(
 export type ParticipantApprovalForm = {
   name: string;
   types: number[];
+  siteId: number;
 };
 
 export async function ApproveParticipant(participantId: number, formData: ParticipantApprovalForm) {
   try {
-    return await Promise.resolve();
+    await axios.put(`/participants/${participantId}/approve`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update email contact');
   }

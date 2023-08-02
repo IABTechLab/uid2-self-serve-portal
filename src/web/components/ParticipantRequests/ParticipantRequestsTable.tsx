@@ -1,3 +1,4 @@
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/participantsRouter';
 import { ParticipantRequestItem } from './ParticipantRequestItem';
 
@@ -5,6 +6,7 @@ import './ParticipantRequestsTable.scss';
 
 type ParticipantRequestsTableProps = {
   participantRequests: ParticipantRequestDTO[];
+  participantTypes: ParticipantTypeDTO[];
 };
 
 function NoParticipantRequests() {
@@ -19,7 +21,10 @@ function NoParticipantRequests() {
   );
 }
 
-export function ParticipantRequestsTable({ participantRequests }: ParticipantRequestsTableProps) {
+export function ParticipantRequestsTable({
+  participantRequests,
+  participantTypes,
+}: ParticipantRequestsTableProps) {
   return (
     <div className='participant-requests-container'>
       <table className='participant-requests-table'>
@@ -37,6 +42,7 @@ export function ParticipantRequestsTable({ participantRequests }: ParticipantReq
             <ParticipantRequestItem
               key={participantRequest.id}
               participantRequest={participantRequest}
+              participantTypes={participantTypes}
             />
           ))}
         </tbody>

@@ -1,29 +1,41 @@
 import { useState } from 'react';
 
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/participantsRouter';
+import { ApproveParticipant, ParticipantApprovalForm } from '../../services/participant';
 import { InlineError } from '../Core/InlineError';
+import ParticipantApprovalDialog from './ParticipantApprovalDialog';
 
 import './ParticipantRequestItem.scss';
 
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
+  participantTypes: ParticipantTypeDTO[];
 };
 
 export function ParticipantRequestItem({
   participantRequest: participant,
+  participantTypes,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
   function getParticipantTypes(
-    participantTypes?: ParticipantRequestProps['participantRequest']['types']
+    currentParticipantTypes?: ParticipantRequestProps['participantRequest']['types']
   ) {
-    if (!participantTypes) return null;
-    return participantTypes.map((pt) => (
+    if (!currentParticipantTypes) return null;
+    return currentParticipantTypes.map((pt) => (
       <div className='participant-request-type-label' key={pt.typeName}>
         {pt.typeName}
       </div>
     ));
   }
 
+  const handleApprove = async (formData: ParticipantApprovalForm) => {
+    try {
+      await ApproveParticipant(participant.id, formData);
+    } catch (err) {
+      setHasError(true);
+    }
+  };
   // TODO: update this when we have login uploading
   const logo = '/default-logo.svg';
   return (
@@ -42,9 +54,11 @@ export function ParticipantRequestItem({
       </td>
       <td>
         {hasError && <InlineError />}
-        <button type='button' className='transparent-button' onClick={() => {}}>
-          Approve
-        </button>
+        <ParticipantApprovalDialog
+          onApprove={handleApprove}
+          participant={participant}
+          participantTypes={participantTypes}
+        />
       </td>
     </tr>
   );
