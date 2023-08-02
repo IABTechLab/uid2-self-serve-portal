@@ -11,7 +11,7 @@ const Template: ComponentStory<typeof PortalHeader> = (args) => <PortalHeader {.
 
 export const ValidEmailAddress = Template.bind({});
 ValidEmailAddress.args = {
-  fullname: 'Test User',
+  fullName: 'Test User',
   email: 'test.user@example.com',
 };
 
