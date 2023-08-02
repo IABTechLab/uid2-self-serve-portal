@@ -52,7 +52,7 @@ export function ParticipantRequestItem({
       <td>
         <div className='participant-request-status'>{participant.status}</div>
       </td>
-      <td>
+      <td className='action'>
         {hasError && <InlineError />}
         <ParticipantApprovalDialog
           onApprove={handleApprove}

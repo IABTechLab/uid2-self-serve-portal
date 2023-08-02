@@ -55,6 +55,7 @@ function ParticipantApprovalDialog({
         <TextInput
           inputName='siteId'
           label='Site Id'
+          type='number'
           rules={{ required: 'Please specify site id.' }}
         />
         <CheckboxInput

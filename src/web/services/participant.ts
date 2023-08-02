@@ -220,12 +220,16 @@ export async function UpdateEmailContact(
 export type ParticipantApprovalForm = {
   name: string;
   types: number[];
-  siteId: number;
+  siteId: string;
 };
 
 export async function ApproveParticipant(participantId: number, formData: ParticipantApprovalForm) {
   try {
-    await axios.put(`/participants/${participantId}/approve`, formData);
+    await axios.put(`/participants/${participantId}/approve`, {
+      name: formData.name,
+      siteId: parseInt(formData.siteId, 10),
+      types: formData.types.map((typeId) => ({ id: typeId })),
+    });
   } catch (e: unknown) {
     throw backendError(e, 'Could not update email contact');
   }

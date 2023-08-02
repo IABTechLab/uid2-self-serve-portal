@@ -11,6 +11,12 @@
     th:first-of-type {
       padding-left: 106px;
     }
+
+    td.action {
+      font-size: 0.8125rem;
+      display: flex;
+      flex-wrap: wrap;
+    }
   }
   .no-participant-requests-container {
     margin-top: 15px;
