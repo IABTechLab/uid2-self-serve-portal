@@ -34,6 +34,10 @@ export function SearchAndAddParticipants({
     return new Set(sharingParticipants.map((p) => p.siteId));
   }, [sharingParticipants]);
 
+  const selectedParticipantList = useMemo(() => {
+    return availableParticipants.filter((p) => selectedParticipants.has(p.siteId!));
+  }, [availableParticipants, selectedParticipants]);
+
   const getSearchableParticipants = (resolvedParticipants: AvailableParticipantDTO[]) => {
     return resolvedParticipants.filter(
       (p) => p.id !== participant?.id && !sharingParticipantsSiteIds.has(p.siteId)
@@ -83,12 +87,15 @@ export function SearchAndAddParticipants({
             open={openConfirmation}
             onOpenChange={setOpenConfirmation}
           >
+            Adding the following participants:
             <ul className='dot-list'>
-              <li>Adding {getParticipantText(selectedParticipants.size)}</li>
+              {selectedParticipantList.map((selectedParticipant) => (
+                <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
+              ))}
             </ul>
             <div className='dialog-footer-section'>
               <button type='button' className='primary-button' onClick={onHandleAddParticipants}>
-                I acknowledge these changes
+                Save
               </button>
               <button
                 type='button'

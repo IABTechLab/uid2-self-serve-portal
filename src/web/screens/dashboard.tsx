@@ -72,8 +72,8 @@ function Dashboard() {
             <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
               {showMustAccept && (
                 <div className='accept-error'>
-                  You will not be able to access the portal unless you accept the terms of service.
-                  You must scroll to the bottom of the terms of service before you can accept them.
+                  Please review the Terms and Conditions document. When you’ve scrolled to the
+                  bottom, click <b>Accept Terms and Conditions</b>.
                 </div>
               )}
             </TermsAndConditionsForm>
