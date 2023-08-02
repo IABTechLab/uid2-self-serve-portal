@@ -587,6 +587,9 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": ["default-roles-self-serve-portal"],
+      "clientRoles": {
+        "self_serve_portal_apis": ["api-participant-member"]
+      },
       "notBefore": 0,
       "groups": []
     }

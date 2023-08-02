@@ -76,5 +76,5 @@ export const enrichWithUserFromParams = async (
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
-  return participant!.$relatedQuery('users');
+  return participant!.$relatedQuery('users').castTo<User[]>();
 };

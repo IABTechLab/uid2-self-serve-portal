@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-import { Approver } from '../entities/Approver';
 import {
   Participant,
   ParticipantCreationPartial,
