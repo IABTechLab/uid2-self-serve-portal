@@ -28,6 +28,7 @@ export function ParticipantRequestsTable({ participantRequests }: ParticipantReq
             <th>Participant Name</th>
             <th>Participant Type</th>
             <th>Participant Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
 

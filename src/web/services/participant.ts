@@ -216,3 +216,16 @@ export async function UpdateEmailContact(
     throw backendError(e, 'Could not update email contact');
   }
 }
+
+export type ParticipantApprovalForm = {
+  name: string;
+  types: number[];
+};
+
+export async function ApproveParticipant(participantId: number, formData: ParticipantApprovalForm) {
+  try {
+    return await Promise.resolve();
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update email contact');
+  }
+}

@@ -1,4 +1,7 @@
+import { useState } from 'react';
+
 import { ParticipantRequestDTO } from '../../../api/participantsRouter';
+import { InlineError } from '../Core/InlineError';
 
 import './ParticipantRequestItem.scss';
 
@@ -9,6 +12,7 @@ type ParticipantRequestProps = {
 export function ParticipantRequestItem({
   participantRequest: participant,
 }: ParticipantRequestProps) {
+  const [hasError, setHasError] = useState<boolean>(false);
   function getParticipantTypes(
     participantTypes?: ParticipantRequestProps['participantRequest']['types']
   ) {
@@ -35,6 +39,12 @@ export function ParticipantRequestItem({
       </td>
       <td>
         <div className='participant-request-status'>{participant.status}</div>
+      </td>
+      <td>
+        {hasError && <InlineError />}
+        <button type='button' className='transparent-button' onClick={() => {}}>
+          Approve
+        </button>
       </td>
     </tr>
   );
