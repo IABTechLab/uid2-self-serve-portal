@@ -7,13 +7,19 @@ import './Collapsible.scss';
 
 export type CollapsibleProps = {
   title: string;
-  content: ReactNode;
+  children: ReactNode;
   defaultOpen?: boolean;
   label?: string;
   className?: string;
 };
 
-export function Collapsible({ title, content, defaultOpen, label, className }: CollapsibleProps) {
+export function Collapsible({
+  title,
+  children: content,
+  defaultOpen,
+  label,
+  className,
+}: CollapsibleProps) {
   return (
     <RadixCollapsible.Root
       className={clsx('collapsible-root', className)}

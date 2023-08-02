@@ -97,17 +97,14 @@ function SharingPermissions() {
       <Suspense fallback={<Loading />}>
         <Await resolve={participants}>
           {(resolvedParticipants: AvailableParticipantDTO[]) => (
-            <Collapsible
-              title='Search and Add Permissions'
-              content={
-                <SearchAndAddParticipants
-                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
-                  sharingParticipants={sharingParticipants}
-                  availableParticipants={resolvedParticipants}
-                  participantTypes={participantTypes}
-                />
-              }
-            />
+            <Collapsible title='Search and Add Permissions'>
+              <SearchAndAddParticipants
+                onSharingPermissionsAdded={handleSharingPermissionsAdded}
+                sharingParticipants={sharingParticipants}
+                availableParticipants={resolvedParticipants}
+                participantTypes={participantTypes}
+              />
+            </Collapsible>
           )}
         </Await>
       </Suspense>

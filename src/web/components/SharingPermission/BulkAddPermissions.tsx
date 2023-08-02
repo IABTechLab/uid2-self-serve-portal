@@ -161,18 +161,20 @@ export function BulkAddPermissions({
         {!hasSharingParticipants && (
           <Collapsible
             title='Bulk Add Permissions'
-            content={recommendationContent}
             defaultOpen
             label='RECOMMENDATION'
             className='bulk-add-permissions-recommendations-collapsible'
-          />
+          >
+            {recommendationContent}
+          </Collapsible>
         )}
         {hasSharingParticipants && (
           <Collapsible
             title='Bulk Add Permissions'
-            content={collapsibleContent}
             defaultOpen={false}
-          />
+          >
+            {collapsibleContent}
+          </Collapsible>
         )}
       </form>
     </FormProvider>
