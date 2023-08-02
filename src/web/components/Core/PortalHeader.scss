@@ -16,11 +16,9 @@
 
   .profile-dropdown-button {
     all: unset;
-    font-weight: 700;
-    align-self: stretch;
-    border-bottom: 5px solid var(--theme-underline);
-    padding: 20px 3px 0;
-    margin-right: 80px;
+    font-weight: 600;
+    border-bottom: 5px solid var(--theme-button);
+    margin-right: 10px;
     svg {
       margin-left: 8px;
     }
@@ -56,9 +54,14 @@
       margin: 10px -5px;
     }
 
+    .clickable-item {
+      cursor: pointer;
+    }
+
     *:hover {
       outline: none;
     }
+
   }
 
   .theme-switch {
