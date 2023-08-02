@@ -72,7 +72,7 @@ function Dashboard() {
             <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
               {showMustAccept && (
                 <div className='accept-error'>
-                  Please review the Terms and Conditions document. When you&apos;ve scrolled to the
+                  Please review the Terms and Conditions document. When you’ve scrolled to the
                   bottom, click <b>Accept Terms and Conditions</b>.
                 </div>
               )}

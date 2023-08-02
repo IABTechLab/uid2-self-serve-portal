@@ -88,8 +88,8 @@ function SharingPermissions() {
     <div className='sharingPermissions'>
       <h1>Sharing Permissions</h1>
       <p>
-        Adding a sharing permission allows the participant you&apos;re sharing with to decrypt your
-        UID2 tokens.
+        Adding a sharing permission allows the participant you’re sharing with to decrypt your UID2
+        tokens.
         <br />
         <br />
         Note: This only enables the sharing permission. No data is sent.
