@@ -223,7 +223,10 @@ export type ParticipantApprovalForm = {
   siteId: string;
 };
 
-export async function ApproveParticipant(participantId: number, formData: ParticipantApprovalForm) {
+export async function ApproveParticipantRequest(
+  participantId: number,
+  formData: ParticipantApprovalForm
+) {
   try {
     await axios.put(`/participants/${participantId}/approve`, {
       name: formData.name,

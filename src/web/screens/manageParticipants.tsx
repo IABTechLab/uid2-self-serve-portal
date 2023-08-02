@@ -1,17 +1,34 @@
-import { Suspense } from 'react';
-import { Await, defer, useLoaderData } from 'react-router-dom';
+import { Suspense, useCallback } from 'react';
+import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/participantsRouter';
 import { Loading } from '../components/Core/Loading';
 import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
-import { GetParticipantsAwaitingApproval } from '../services/participant';
+import {
+  ApproveParticipantRequest,
+  GetParticipantsAwaitingApproval,
+  ParticipantApprovalForm,
+} from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
     results: [ParticipantRequestDTO[], ParticipantTypeDTO[]];
+  };
+
+  const reloader = useRevalidator();
+  const onParticipantRequestsUpdate = useCallback(() => {
+    reloader.revalidate();
+  }, [reloader]);
+
+  const handleApproveParticipantRequest = async (
+    participantId: number,
+    formData: ParticipantApprovalForm
+  ) => {
+    await ApproveParticipantRequest(participantId, formData);
+    onParticipantRequestsUpdate();
   };
 
   return (
@@ -28,6 +45,7 @@ function ManageParticipants() {
             <ParticipantRequestsTable
               participantRequests={participantRequests}
               participantTypes={participantTypes}
+              onApprove={handleApproveParticipantRequest}
             />
           )}
         </Await>

@@ -253,10 +253,15 @@ export function createParticipantsRouter() {
         ...users.map((user) =>
           assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
         ),
-        Participant.query().upsertGraph({
-          id: participant!.id!,
-          ...data,
-        }),
+        Participant.query().upsertGraph(
+          {
+            id: participant!.id!,
+            ...data,
+          },
+          {
+            relate: true,
+          }
+        ),
       ];
       await Promise.all(promises);
       return res.sendStatus(200);

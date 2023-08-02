@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/participantsRouter';
-import { ApproveParticipant, ParticipantApprovalForm } from '../../services/participant';
+import { ParticipantApprovalForm } from '../../services/participant';
 import { InlineError } from '../Core/InlineError';
 import ParticipantApprovalDialog from './ParticipantApprovalDialog';
 
@@ -11,11 +11,13 @@ import './ParticipantRequestItem.scss';
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
+  onApprove: (participantId: number, formData: ParticipantApprovalForm) => Promise<void>;
 };
 
 export function ParticipantRequestItem({
   participantRequest: participant,
   participantTypes,
+  onApprove,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
   function getParticipantTypes(
@@ -31,7 +33,7 @@ export function ParticipantRequestItem({
 
   const handleApprove = async (formData: ParticipantApprovalForm) => {
     try {
-      await ApproveParticipant(participant.id, formData);
+      await onApprove(participant.id, formData);
     } catch (err) {
       setHasError(true);
     }
