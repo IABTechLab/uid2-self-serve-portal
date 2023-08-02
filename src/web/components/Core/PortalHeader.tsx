@@ -17,14 +17,14 @@ import './PortalHeader.scss';
 
 export type PortalHeaderProps = {
   email: string | undefined;
-  fullname: string | undefined;
+  fullName: string | undefined;
   setDarkMode?: (darkMode: boolean) => void;
   logout: () => void;
 };
 
 export function PortalHeader({
   email,
-  fullname,
+  fullName,
   setDarkMode = undefined,
   logout,
 }: PortalHeaderProps) {
@@ -45,7 +45,7 @@ export function PortalHeader({
       </div>
       <DropdownMenu defaultOpen={false}>
         <DropdownMenuTrigger className='profile-dropdown-button'>
-          {email ? fullname : 'Not logged in'}
+          {email ? fullName : 'Not logged in'}
           <FontAwesomeIcon icon='chevron-down' />
         </DropdownMenuTrigger>
         <DropdownMenuContent className='profile-dropdown-content' align='end'>
@@ -65,14 +65,16 @@ export function PortalHeader({
                 name='dark-mode'
                 checked={darkToggleState}
                 onCheckedChange={onThemeToggle}
-                className='theme-toggle'
+                className='theme-toggle clickable-item'
               >
                 <Switch.Thumb className='thumb' />
               </Switch.Root>
             </div>
           </DropdownMenuItem>
           <DropdownMenuSeparator className='separator' />
-          <DropdownMenuItem onClick={logout}>Log out</DropdownMenuItem>
+          <DropdownMenuItem className='clickable-item' onClick={logout}>
+            Log out
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
