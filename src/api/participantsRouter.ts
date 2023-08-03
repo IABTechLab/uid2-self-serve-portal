@@ -2,6 +2,7 @@ import express, { Response } from 'express';
 import { z } from 'zod';
 
 import { createBusinessContactsRouter } from './businessContactsRouter';
+import { SharingAction } from './entities/AuditTrail';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -10,10 +11,10 @@ import {
   ParticipantStatus,
 } from './entities/Participant';
 import { ParticipantTypeSchema } from './entities/ParticipantType';
-import { SharingAction } from './entities/SharingAuditTrail';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { isApproverCheck } from './middleware/approversMiddleware';
+import { insertSharingAuditTrails, updateAuditTrailToProceed } from './services/auditTrailService';
 import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
@@ -24,10 +25,6 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
 } from './services/participantsService';
-import {
-  insertSharingAuditTrails,
-  updateAuditTrailsToProceed,
-} from './services/sharingAuditTrailService';
 import {
   createUserInPortal,
   findUserByEmail,
@@ -171,8 +168,8 @@ export function createParticipantsRouter() {
       }
       const { newParticipantSites } = sharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
-      const auditTrails = await insertSharingAuditTrails(
-        participant.id,
+      const auditTrail = await insertSharingAuditTrails(
+        participant,
         currentUser!.id,
         currentUser!.email,
         SharingAction.Add,
@@ -184,7 +181,7 @@ export function createParticipantsRouter() {
         newParticipantSites
       );
 
-      await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
+      await updateAuditTrailToProceed(auditTrail.id);
       return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
     }
   );
@@ -202,8 +199,8 @@ export function createParticipantsRouter() {
       }
       const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
-      const auditTrails = await insertSharingAuditTrails(
-        participant.id,
+      const auditTrail = await insertSharingAuditTrails(
+        participant,
         currentUser!.id,
         currentUser!.email,
         SharingAction.Delete,
@@ -215,7 +212,7 @@ export function createParticipantsRouter() {
         sharingSitesToRemove
       );
 
-      await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
+      await updateAuditTrailToProceed(auditTrail.id);
 
       return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
     }
