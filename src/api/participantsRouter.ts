@@ -249,21 +249,20 @@ export function createParticipantsRouter() {
       };
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
-      const promises = [
-        ...users.map((user) =>
+      await Promise.all(
+        users.map((user) =>
           assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
-        ),
-        Participant.query().upsertGraph(
-          {
-            id: participant!.id!,
-            ...data,
-          },
-          {
-            relate: true,
-          }
-        ),
-      ];
-      await Promise.all(promises);
+        )
+      );
+      await Participant.query().upsertGraph(
+        {
+          id: participant!.id!,
+          ...data,
+        },
+        {
+          relate: true,
+        }
+      );
       return res.sendStatus(200);
     }
   );
