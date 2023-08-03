@@ -33,7 +33,7 @@ function ParticipantApprovalDialog({
   return (
     <Dialog
       triggerButton={
-        <button type='button' onClick={() => {}}>
+        <button type='button' className='transparent-button'>
           Approve
         </button>
       }
