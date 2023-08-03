@@ -12,7 +12,7 @@ export enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
 }
 
-export type AuditTrailEventData = UpdateSharingPermissionEventData | string;
+export type AuditTrailEventData = UpdateSharingPermissionEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
@@ -42,6 +42,10 @@ export class AuditTrail extends BaseModel {
       },
     },
   };
+
+  static get jsonAttributes() {
+    return ['eventData'];
+  }
 
   id!: number;
   userId!: number;

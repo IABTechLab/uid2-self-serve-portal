@@ -62,7 +62,10 @@ async function migrateSharingAuditTrails(knex: Knex) {
 function mapAuditTrailsToSharingAuditTrails(
   auditTrail: AuditTrailDTO & { created_at: Date; updated_at: Date }
 ): SharingAuditTrail[] {
-  const eventData = JSON.parse(auditTrail.eventData as string) as UpdateSharingPermissionEventData;
+  // Has to parse the field as knex return it as string
+  const eventData = JSON.parse(
+    auditTrail.eventData as unknown as string
+  ) as UpdateSharingPermissionEventData;
   return eventData.sharingPermissions.map((siteId) => ({
     action: eventData.action,
     userId: auditTrail.userId,
