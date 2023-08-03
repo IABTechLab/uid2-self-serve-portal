@@ -54,7 +54,6 @@
                 <#if message.type = 'info'><span class="${properties.kcFeedbackInfoIcon!}"></span></#if>
             </div>
                 <span class="${properties.kcAlertTitleClass!}">${kcSanitize(message.summary)?no_esc}
-                <br/><#if message.summary == 'You haven’t verified your email.  You must complete this step before logging in.'> <a href="${url.loginAction}">${msg("requestEmailVerification")}</a></#if>
                 </span>
 
         </div>
