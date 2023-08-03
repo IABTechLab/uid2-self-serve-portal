@@ -24,11 +24,13 @@ export function ParticipantRequestItem({
   const logo = '/default-logo.svg';
   return (
     <tr className='participant-request-item'>
-      <td className='participant-request-name-cell'>
-        <img src={logo} alt={participant.name} className='participant-request-logo' />
-        <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
-          {participant.name}
-        </label>
+      <td>
+        <div className='participant-request-name-cell'>
+          <img src={logo} alt={participant.name} className='participant-request-logo' />
+          <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
+            {participant.name}
+          </label>
+        </div>
       </td>
       <td>
         <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>

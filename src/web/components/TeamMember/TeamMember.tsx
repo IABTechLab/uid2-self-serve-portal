@@ -117,33 +117,35 @@ function TeamMember({
       <td>{person.email}</td>
       <td>{person.role}</td>
       <td className='action'>
-        {hasError && <InlineError />}
-        <div>
-          {person.acceptedTerms || (
-            <button
-              type='button'
-              className={clsx('invite-button', {
-                clickable: reinviteState === InviteState.initial,
-                error: reinviteState === InviteState.error,
-              })}
-              onClick={() => onResendInvite()}
-            >
-              {reinviteState === InviteState.initial && 'Resend Invitation'}
-              {reinviteState === InviteState.inProgress && 'Sending...'}
-              {reinviteState === InviteState.sent && 'Invitation Sent'}
-              {reinviteState === InviteState.error && 'Try again later'}
-            </button>
-          )}
-          <TeamMemberDialog
-            onUpdateTeamMember={handleUpdateUser}
-            person={person}
-            triggerButton={
-              <button className='icon-button' aria-label='edit' type='button'>
-                <FontAwesomeIcon icon='pencil' />
+        <div className='action-cell'>
+          {hasError && <InlineError />}
+          <div>
+            {person.acceptedTerms || (
+              <button
+                type='button'
+                className={clsx('invite-button', {
+                  clickable: reinviteState === InviteState.initial,
+                  error: reinviteState === InviteState.error,
+                })}
+                onClick={() => onResendInvite()}
+              >
+                {reinviteState === InviteState.initial && 'Resend Invitation'}
+                {reinviteState === InviteState.inProgress && 'Sending...'}
+                {reinviteState === InviteState.sent && 'Invitation Sent'}
+                {reinviteState === InviteState.error && 'Try again later'}
               </button>
-            }
-          />
-          <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
+            )}
+            <TeamMemberDialog
+              onUpdateTeamMember={handleUpdateUser}
+              person={person}
+              triggerButton={
+                <button className='icon-button' aria-label='edit' type='button'>
+                  <FontAwesomeIcon icon='pencil' />
+                </button>
+              }
+            />
+            <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
+          </div>
         </div>
       </td>
     </tr>
