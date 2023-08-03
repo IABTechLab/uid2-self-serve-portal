@@ -34,8 +34,9 @@ function ManageParticipants() {
   return (
     <div>
       <h1>Manage Participants</h1>
-      <p>View and manage UID2 Portal participant requests and information.</p>
-      <h2>Participant Requests</h2>
+      <p className='heading-details'>
+        View and manage UID2 Portal participant requests and information.
+      </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.results}>
           {([participantRequests, participantTypes]: [
