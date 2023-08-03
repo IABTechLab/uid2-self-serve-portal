@@ -19,7 +19,7 @@ function NoParticipant() {
     <div className='no-participants-container'>
       <img src='/group-icon.svg' alt='group-icon' />
       <div className='no-participants-text'>
-        <h1>No Participants</h1>
+        <h2>No Participants</h2>
         <span>You don&apos;t have any sharing permissions yet.</span>
       </div>
     </div>
