@@ -9,8 +9,8 @@ import './accountPending.scss';
 
 const awaitingApproval = (
   <p>
-    Thank you! We’ve sent a confirmation message to the email you gave us. Please verify and then
-    we’ll review your request.
+    Thank you! We’ve sent your account request for approval. As soon as it’s approved, we’ll send
+    you a confirmation email.
   </p>
 );
 
