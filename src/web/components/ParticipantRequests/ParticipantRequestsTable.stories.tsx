@@ -62,6 +62,12 @@ ParticipantRequests.args = {
   },
 };
 
+export const WithErrorWhenApprove = Template.bind({});
+WithErrorWhenApprove.args = {
+  ...ParticipantRequests.args,
+  onApprove: async (id, form) => Promise.reject(new Error()),
+};
+
 export const NoParticipantRequests = Template.bind({});
 NoParticipantRequests.args = {
   participantRequests: [],

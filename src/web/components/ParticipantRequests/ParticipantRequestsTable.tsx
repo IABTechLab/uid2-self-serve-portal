@@ -36,7 +36,7 @@ export function ParticipantRequestsTable({
             <th>Participant Name</th>
             <th>Participant Type</th>
             <th>Participant Status</th>
-            <th>Actions</th>
+            <th className='action'>Actions</th>
           </tr>
         </thead>
 
