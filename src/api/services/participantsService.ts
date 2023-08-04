@@ -7,6 +7,7 @@ import {
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
+import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
 import {
@@ -35,7 +36,6 @@ export const sendNewParticipantEmail = async (
     requestor: `${requestor.firstName} ${requestor.lastName}`,
     requestorEmail: requestor.email,
     jobFunction: requestor.role,
-    link: SSP_WEB_BASE_URL,
   };
 
   const approvers = await findApproversByType(typeIds);
@@ -106,6 +106,17 @@ export const deleteSharingParticipants = async (
 const idParser = z.object({
   participantId: z.coerce.number(),
 });
+
+export const sendParticipantApprovedEmail = async (users: User[]) => {
+  const emailService = createEmailService();
+  const emailArgs: EmailArgs = {
+    subject: 'Your account has been confirmed',
+    templateData: { link: SSP_WEB_BASE_URL },
+    template: 'accountHasBeenConfirmed',
+    to: users.map((user) => ({ name: user.fullName(), email: user.email })),
+  };
+  emailService.sendEmail(emailArgs);
+};
 
 const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);
