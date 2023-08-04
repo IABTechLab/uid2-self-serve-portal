@@ -51,7 +51,7 @@ export class AuditTrail extends BaseModel {
   userId!: number;
   participantId!: number;
   userEmail!: string;
-  proceed!: boolean;
+  succeeded!: boolean;
   event!: AuditTrailEvents;
   eventData!: AuditTrailEventData;
 }

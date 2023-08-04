@@ -36,7 +36,7 @@ function mapSharingAuditTrailToAuditTrails(
     participantId: sharingAuditTrail.participantId,
     event: AuditTrailEvents.UpdateSharingPermissions,
     eventData,
-    proceed: sharingAuditTrail.proceed,
+    succeeded: sharingAuditTrail.proceed,
     created_at: sharingAuditTrail.created_at,
     updated_at: sharingAuditTrail.updated_at,
   };
@@ -72,7 +72,7 @@ function mapAuditTrailsToSharingAuditTrails(
     userEmail: auditTrail.userEmail,
     participantId: auditTrail.participantId,
     sharingParticipantSiteId: siteId,
-    proceed: auditTrail.proceed,
+    proceed: auditTrail.succeeded,
     created_at: auditTrail.created_at,
     updated_at: auditTrail.updated_at,
   }));
@@ -99,7 +99,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('userEmail');
     table.string('event');
     table.jsonb('eventData');
-    table.boolean('proceed').defaultTo(false);
+    table.boolean('succeeded').defaultTo(false);
     table.timestamps(true, true);
   });
 

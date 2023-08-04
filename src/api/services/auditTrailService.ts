@@ -1,4 +1,4 @@
-import { AuditTrail, AuditTrailEvents, SharingAction } from '../entities/AuditTrail';
+import { AuditTrail, AuditTrailDTO, AuditTrailEvents, SharingAction } from '../entities/AuditTrail';
 import { Participant } from '../entities/Participant';
 import { getLoggers } from '../helpers/loggingHelpers';
 
@@ -10,17 +10,18 @@ export const insertSharingAuditTrails = async (
   siteIds: number[]
 ) => {
   try {
-    const sharingAuditTrail = {
+    const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
       participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.UpdateSharingPermissions,
       eventData: {
-        siteId: participant.siteId,
+        siteId: participant.siteId!,
         action,
         sharingPermissions: siteIds,
       },
-    } as AuditTrail;
+      succeeded: false,
+    };
 
     return await AuditTrail.query().insert(sharingAuditTrail);
   } catch (error) {
@@ -31,5 +32,5 @@ export const insertSharingAuditTrails = async (
 };
 
 export const updateAuditTrailToProceed = async (id: number) => {
-  return AuditTrail.query().patch({ proceed: true }).where('id', id);
+  return AuditTrail.query().patch({ succeeded: true }).where('id', id);
 };
