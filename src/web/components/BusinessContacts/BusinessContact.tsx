@@ -83,21 +83,23 @@ function BusinessContact({
       <td>{contact.emailAlias}</td>
       <td>{contact.contactType}</td>
       <td className='action'>
-        {hasError && <InlineError />}
-        <div>
-          <BusinessContactDialog
-            onFormSubmit={handleUpdateEmailContact}
-            contact={contact}
-            triggerButton={
-              <button className='icon-button' aria-label='edit' type='button'>
-                <FontAwesomeIcon icon='pencil' />
-              </button>
-            }
-          />
-          <DeleteBusinessContactDialog
-            onRemoveContact={handleRemoveEmailContact}
-            contact={contact}
-          />
+        <div className='action-cell'>
+          {hasError && <InlineError />}
+          <div>
+            <BusinessContactDialog
+              onFormSubmit={handleUpdateEmailContact}
+              contact={contact}
+              triggerButton={
+                <button className='icon-button' aria-label='edit' type='button'>
+                  <FontAwesomeIcon icon='pencil' />
+                </button>
+              }
+            />
+            <DeleteBusinessContactDialog
+              onRemoveContact={handleRemoveEmailContact}
+              contact={contact}
+            />
+          </div>
         </div>
       </td>
     </tr>
