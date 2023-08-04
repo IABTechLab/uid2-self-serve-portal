@@ -23,6 +23,7 @@ import {
   getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
+  sendParticipantApprovedEmail,
 } from './services/participantsService';
 import {
   insertSharingAuditTrails,
@@ -263,6 +264,7 @@ export function createParticipantsRouter() {
           relate: true,
         }
       );
+      await sendParticipantApprovedEmail(users);
       return res.sendStatus(200);
     }
   );
