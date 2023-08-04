@@ -32,8 +32,8 @@ table {
     padding-bottom: 12px;
   }
   tbody {
-    tr {
-      border-bottom: 1px solid var(--theme-table-border);
+    tr:nth-of-type(2n) {
+      background-color: var(--theme-background-table-header);
     }
   }
 }
