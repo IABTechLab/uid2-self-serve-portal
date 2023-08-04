@@ -9,7 +9,11 @@ import {
 import { ParticipantType } from '../entities/ParticipantType';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
-import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
+import {
+  findApproversByType,
+  getApprovableParticipantTypeIds,
+  isUserAnApprover,
+} from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
@@ -105,12 +109,18 @@ const idParser = z.object({
 
 const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);
-  const participant = await Participant.query().findById(participantId);
+  const participant = await Participant.query().findById(participantId).withGraphFetched('types');
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }
 
-  if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, participantId))) {
+  const currentUserEmail = req.auth?.payload?.email as string;
+  if (
+    !(
+      (await isUserAnApprover(currentUserEmail)) ||
+      (await isUserBelongsToParticipant(currentUserEmail, participantId))
+    )
+  ) {
     return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
   }
 
