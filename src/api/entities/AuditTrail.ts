@@ -10,14 +10,19 @@ export enum SharingAction {
 
 export enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
+  ApproveAccount = 'ApproveAccount',
 }
 
-export type AuditTrailEventData = UpdateSharingPermissionEventData;
+export type AuditTrailEventData = UpdateSharingPermissionEventData | ApproveAccountEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
   action: SharingAction;
   sharingPermissions: number[];
+};
+
+export type ApproveAccountEventData = {
+  siteId: number;
 };
 
 export class AuditTrail extends BaseModel {

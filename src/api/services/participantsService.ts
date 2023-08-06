@@ -103,10 +103,6 @@ export const deleteSharingParticipants = async (
   return fetchSharingParticipants(response);
 };
 
-const idParser = z.object({
-  participantId: z.coerce.number(),
-});
-
 export const sendParticipantApprovedEmail = async (users: User[]) => {
   const emailService = createEmailService();
   const emailArgs: EmailArgs = {
@@ -117,6 +113,10 @@ export const sendParticipantApprovedEmail = async (users: User[]) => {
   };
   emailService.sendEmail(emailArgs);
 };
+
+const idParser = z.object({
+  participantId: z.coerce.number(),
+});
 
 const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);

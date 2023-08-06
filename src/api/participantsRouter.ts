@@ -14,7 +14,11 @@ import { ParticipantTypeSchema } from './entities/ParticipantType';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { isApproverCheck } from './middleware/approversMiddleware';
-import { insertSharingAuditTrails, updateAuditTrailToProceed } from './services/auditTrailService';
+import {
+  insertApproveAccountAuditTrails,
+  insertSharingAuditTrails,
+  updateAuditTrailToProceed,
+} from './services/auditTrailService';
 import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
@@ -245,6 +249,12 @@ export function createParticipantsRouter() {
         ...ParticipantApprovalParser.parse(req.body),
         status: ParticipantStatus.Approved,
       };
+
+      const auditTrail = await insertApproveAccountAuditTrails(
+        participant!,
+        req.auth?.payload?.email as string,
+        data.siteId!
+      );
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
       await Promise.all(
@@ -262,6 +272,7 @@ export function createParticipantsRouter() {
         }
       );
       await sendParticipantApprovedEmail(users);
+      await updateAuditTrailToProceed(auditTrail.id);
       return res.sendStatus(200);
     }
   );
