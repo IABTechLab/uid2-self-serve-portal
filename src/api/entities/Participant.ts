@@ -78,3 +78,11 @@ export const ParticipantCreationPartial = ParticipantSchema.pick({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   users: z.array(UserCreationPartial).optional(),
 });
+
+export const ParticipantApprovalPartial = ParticipantSchema.pick({
+  siteId: true,
+  name: true,
+  types: true,
+}).extend({
+  types: z.array(ParticipantTypeSchema.pick({ id: true })),
+});

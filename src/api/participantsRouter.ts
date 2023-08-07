@@ -5,16 +5,20 @@ import { createBusinessContactsRouter } from './businessContactsRouter';
 import { SharingAction } from './entities/AuditTrail';
 import {
   Participant,
+  ParticipantApprovalPartial,
   ParticipantCreationPartial,
   ParticipantDTO,
   ParticipantSchema,
   ParticipantStatus,
 } from './entities/Participant';
-import { ParticipantTypeSchema } from './entities/ParticipantType';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
 import { isApproverCheck } from './middleware/approversMiddleware';
-import { insertSharingAuditTrails, updateAuditTrailToProceed } from './services/auditTrailService';
+import {
+  insertApproveAccountAuditTrail,
+  insertSharingAuditTrails,
+  updateAuditTrailToProceed,
+} from './services/auditTrailService';
 import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
@@ -228,23 +232,21 @@ export function createParticipantsRouter() {
     }
   );
 
-  const ParticipantApprovalParser = ParticipantSchema.pick({
-    siteId: true,
-    name: true,
-    types: true,
-  }).extend({
-    types: z.array(ParticipantTypeSchema.pick({ id: true })),
-  });
-
   participantsRouter.put(
     '/:participantId/approve',
     isApproverCheck,
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       const data = {
-        ...ParticipantApprovalParser.parse(req.body),
+        ...ParticipantApprovalPartial.parse(req.body),
         status: ParticipantStatus.Approved,
       };
+
+      const auditTrail = await insertApproveAccountAuditTrail(
+        participant!,
+        req.auth?.payload?.email as string,
+        data
+      );
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
       await Promise.all(
@@ -262,6 +264,7 @@ export function createParticipantsRouter() {
         }
       );
       await sendParticipantApprovedEmail(users);
+      await updateAuditTrailToProceed(auditTrail.id);
       return res.sendStatus(200);
     }
   );
