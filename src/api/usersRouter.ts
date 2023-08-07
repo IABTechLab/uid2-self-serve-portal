@@ -1,6 +1,7 @@
 import express from 'express';
 import { z } from 'zod';
 
+import { Participant, ParticipantStatus } from './entities/Participant';
 import { UserRole } from './entities/User';
 import { getLoggers } from './helpers/loggingHelpers';
 import { getKcAdminClient } from './keycloakAdminClient';
@@ -27,6 +28,21 @@ export function createUsersRouter() {
   });
 
   usersRouter.put('/current/acceptTerms', async (req: UserRequest, res) => {
+    if (!req.user?.participantId) {
+      return res.status(403).json({
+        message: 'Unauthorized. You do not have the necessary permissions.',
+        errorHash: req.headers.traceId,
+      });
+    }
+
+    const participant = await Participant.query().findById(req.user.participantId!);
+    if (!participant || participant.status !== ParticipantStatus.Approved) {
+      return res.status(403).json({
+        message: 'Unauthorized. You do not have the necessary permissions.',
+        errorHash: req.headers.traceId,
+      });
+    }
+
     const kcAdminClient = await getKcAdminClient();
     const promises = [
       req.user!.$query().patch({ acceptedTerms: true }),
