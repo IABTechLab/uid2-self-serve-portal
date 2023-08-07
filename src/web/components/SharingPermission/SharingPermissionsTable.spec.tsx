@@ -28,11 +28,11 @@ describe('SharingPermissionsTable', () => {
     expect(searchInput).toHaveValue('Participant 1');
   });
 
-  it('renders delete permissions button when there are permission select', () => {
+  it('renders delete permissions button when there are permissions selected', () => {
     render(<SharedWithParticipants />);
 
-    const firstParticipantItem = screen.getByText('Participant 1');
-    fireEvent.click(firstParticipantItem);
+    const firstCheckbox = screen.getAllByRole('checkbox')[0];
+    fireEvent.click(firstCheckbox);
 
     expect(screen.getByText('Delete Permissions')).toBeInTheDocument();
   });

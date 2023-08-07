@@ -2,6 +2,10 @@
   margin-top: 30px;
   border-radius: 5px;
 
+  .dialog-body-section {
+    font-weight: 400;
+  }
+
   .sharing-permissions-table-header-container {
     display: flex;
     justify-content: space-between;
@@ -47,7 +51,7 @@
     tr th {
       background-color: var(--theme-background-sidepanel);
       font-size: 0.875rem;
-      line-height: 1rem;
+      line-height: 1.5;
     }
 
     &.selected tr th {

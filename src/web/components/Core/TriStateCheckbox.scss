@@ -20,4 +20,8 @@
   &-icon {
     color: var(--theme-radio-active);
   }
+
+  button[data-disabled] {
+    background-color: var(--theme-disabled-button);
+  }
 }

@@ -33,3 +33,12 @@ Unchecked.args = {
     console.log('checkbox clicked');
   },
 };
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  status: TriStateCheckboxState.unchecked,
+  onClick: () => {
+    console.log('checkbox clicked');
+  },
+  disabled: true,
+};

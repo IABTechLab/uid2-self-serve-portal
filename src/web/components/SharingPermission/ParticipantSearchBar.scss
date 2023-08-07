@@ -52,6 +52,10 @@
   .search-bar-participants {
     padding: 20px;
 
+    tr {
+      background: none !important;
+    }
+
     th,
     td {
       background: none;
