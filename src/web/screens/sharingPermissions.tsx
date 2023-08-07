@@ -98,18 +98,14 @@ function SharingPermissions() {
         <Await resolve={participants}>
           {(resolvedParticipants: AvailableParticipantDTO[]) => (
             <div className='search-and-add-permissions-collapsible'>
-              <Collapsible
-                title='Search and Add Permissions'
-                content={
-                  <SearchAndAddParticipants
-                    onSharingPermissionsAdded={handleSharingPermissionsAdded}
-                    sharingParticipants={sharingParticipants}
-                    availableParticipants={resolvedParticipants}
-                    participantTypes={participantTypes}
-                  />
-                }
-                defaultOpen
-              />
+              <Collapsible title='Search and Add Permissions' defaultOpen>
+                <SearchAndAddParticipants
+                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
+                  sharingParticipants={sharingParticipants}
+                  availableParticipants={resolvedParticipants}
+                  participantTypes={participantTypes}
+                />
+              </Collapsible>
             </div>
           )}
         </Await>

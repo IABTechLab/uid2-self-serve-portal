@@ -1,19 +1,30 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as RadixCollapsible from '@radix-ui/react-collapsible';
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 import './Collapsible.scss';
 
 export type CollapsibleProps = {
   title: string;
-  content: ReactNode;
+  children: ReactNode;
   defaultOpen?: boolean;
   label?: string;
+  className?: string;
 };
 
-export function Collapsible({ title, content, defaultOpen, label }: CollapsibleProps) {
+export function Collapsible({
+  title,
+  children: content,
+  defaultOpen,
+  label,
+  className,
+}: CollapsibleProps) {
   return (
-    <RadixCollapsible.Root className='collapsible-root' defaultOpen={defaultOpen}>
+    <RadixCollapsible.Root
+      className={clsx('collapsible-root', className)}
+      defaultOpen={defaultOpen}
+    >
       <RadixCollapsible.Trigger className='collapsible-trigger'>
         <div className='collapsible-header'>
           <h2>{title}</h2>

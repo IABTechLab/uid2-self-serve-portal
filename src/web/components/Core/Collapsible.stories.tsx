@@ -12,21 +12,21 @@ const Template: ComponentStory<typeof Collapsible> = (args) => <Collapsible {...
 export const Open = Template.bind({});
 Open.args = {
   title: 'Test Collapsible Title',
-  content: 'Test Collapsible Content',
+  children: 'Test Collapsible Content',
   defaultOpen: true,
 };
 
 export const Collapsed = Template.bind({});
 Collapsed.args = {
   title: 'Test Collapsible Title',
-  content: 'Test Collapsible Content',
+  children: 'Test Collapsible Content',
   defaultOpen: false,
 };
 
 export const WithLabel = Template.bind({});
 WithLabel.args = {
   title: 'Test Collapsible Title',
-  content: 'Test Collapsible Content',
+  children: 'Test Collapsible Content',
   defaultOpen: true,
   label: 'TEST LABEL',
 };
