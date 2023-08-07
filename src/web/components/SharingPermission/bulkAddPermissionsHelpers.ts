@@ -48,21 +48,6 @@ export const getRecommendedTypeFromParticipant = (participantTypeNames: string[]
   return formatStringsWithSeparator(result);
 };
 
-export const hasUncheckedDefaultParticipantTypeRecommendation = (
-  participantTypeNames: string[],
-  publisherChecked: boolean,
-  advertiserChecked: boolean,
-  DSPChecked: boolean,
-  dataProviderChecked: boolean
-) => {
-  if (!publisherChecked && getDefaultPublisherCheckboxState(participantTypeNames)) return true;
-  if (!advertiserChecked && getDefaultAdvertiserCheckboxState(participantTypeNames)) return true;
-  if (!DSPChecked && getDefaultDSPCheckboxState(participantTypeNames)) return true;
-  if (!dataProviderChecked && getDefaultDataProviderCheckboxState(participantTypeNames))
-    return true;
-  return false;
-};
-
 export const getCheckedParticipantTypeIds = (
   data: BulkAddPermissionsForm,
   participantTypes: ParticipantTypeDTO[]

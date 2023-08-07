@@ -14,7 +14,6 @@ import {
   getDefaultDSPCheckboxState,
   getDefaultPublisherCheckboxState,
   getRecommendationMessageFromTypeNames,
-  hasUncheckedDefaultParticipantTypeRecommendation,
 } from './bulkAddPermissionsHelpers';
 
 import './BulkAddPermissions.scss';
@@ -135,13 +134,8 @@ export function BulkAddPermissions({
       <div className='bulk-add-permissions-body'>
         {bulkAddPermissionsMessage}
         {participantTypeCheckboxes}
-        {hasUncheckedDefaultParticipantTypeRecommendation(
-          currentParticipantTypeNames,
-          watchPublisherChecked,
-          watchAdvertiserChecked,
-          watchDSPChecked,
-          watchDataProviderChecked
-        ) && (
+        {/* Change this condition once we have APIs to get the which types have been shared with */}
+        {false && (
           <div className='remove-recommended-type-warning'>
             <Banner
               type='warning'
@@ -169,10 +163,7 @@ export function BulkAddPermissions({
           </Collapsible>
         )}
         {hasSharingParticipants && (
-          <Collapsible
-            title='Bulk Add Permissions'
-            defaultOpen={false}
-          >
+          <Collapsible title='Bulk Add Permissions' defaultOpen={false}>
             {collapsibleContent}
           </Collapsible>
         )}
