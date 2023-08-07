@@ -14,9 +14,10 @@ type TriStateCheckboxProps = {
   status: Checkbox.CheckedState;
   onClick: () => void;
   className?: string;
+  disabled?: boolean;
 };
 
-export function TriStateCheckbox({ status, onClick, className }: TriStateCheckboxProps) {
+export function TriStateCheckbox({ status, onClick, className, disabled }: TriStateCheckboxProps) {
   const getCheckboxIcon = () => {
     switch (status) {
       case TriStateCheckboxState.checked:
@@ -35,6 +36,7 @@ export function TriStateCheckbox({ status, onClick, className }: TriStateCheckbo
         className={clsx(className, {
           uncheck: status === TriStateCheckboxState.unchecked,
         })}
+        disabled={disabled}
       >
         <Checkbox.Indicator>{getCheckboxIcon()}</Checkbox.Indicator>
       </Checkbox.Root>
