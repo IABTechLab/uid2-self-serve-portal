@@ -1,7 +1,27 @@
-import { AuditTrail, AuditTrailDTO, AuditTrailEvents, SharingAction } from '../entities/AuditTrail';
-import { Participant } from '../entities/Participant';
+import { z } from 'zod';
+
+import {
+  ApproveAccountEventData,
+  AuditTrail,
+  AuditTrailDTO,
+  AuditTrailEvents,
+  SharingAction,
+} from '../entities/AuditTrail';
+import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
 import { getLoggers } from '../helpers/loggingHelpers';
 import { findUserByEmail } from './usersService';
+
+const arraysHaveSameElements = (a: unknown[], b: unknown[]): boolean => {
+  const aSet = new Set(a);
+  const bSet = new Set(b);
+
+  if (aSet.size !== bSet.size) return false;
+
+  for (const elem of aSet) {
+    if (!bSet.has(elem)) return false;
+  }
+  return true;
+};
 
 export const insertSharingAuditTrails = async (
   participant: Participant,
@@ -32,20 +52,35 @@ export const insertSharingAuditTrails = async (
   }
 };
 
-export const insertApproveAccountAuditTrails = async (
+export const insertApproveAccountAuditTrail = async (
   participant: Participant,
   userEmail: string,
-  siteId: number
+  data: z.infer<typeof ParticipantApprovalPartial>
 ) => {
   const user = await findUserByEmail(userEmail);
+  const eventData: ApproveAccountEventData = {
+    siteId: data.siteId!,
+  };
+
+  if (data.name !== participant.name) {
+    eventData.newName = data.name;
+    eventData.oldName = participant.name;
+  }
+
+  const oldTypeIds = participant.types!.map((type) => type.id);
+  const newTypeIds = data.types.map((type) => type.id);
+
+  if (!arraysHaveSameElements(oldTypeIds, newTypeIds)) {
+    eventData.oldTypeIds = oldTypeIds;
+    eventData.newTypeIds = newTypeIds;
+  }
+
   return AuditTrail.query().insert({
     participantId: participant?.id!,
     userId: user?.id!,
     userEmail,
     event: AuditTrailEvents.ApproveAccount,
-    eventData: {
-      siteId,
-    },
+    eventData,
     succeeded: false,
   });
 };
