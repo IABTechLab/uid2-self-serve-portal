@@ -26,9 +26,14 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
   // TODO: update this when we have login uploading
   const logo = '/default-logo.svg';
   return (
-    <tr onClick={onClick}>
+    <tr className='participant-item'>
       <td>
-        <TriStateCheckbox onClick={onClick} status={checked} className='participant-checkbox' />
+        <TriStateCheckbox
+          onClick={onClick}
+          status={checked}
+          className='participant-checkbox'
+          disabled={addedBy === 'Auto'} // addedBy is currently hardcoded to 'Manual'
+        />
       </td>
       <td className='participant-name-cell'>
         <img src={logo} alt={participant.name} className='participant-logo' />

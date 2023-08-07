@@ -52,9 +52,31 @@ ParticipantRequests.args = {
       status: ParticipantStatus.AwaitingApproval,
     },
   ],
+  participantTypes: [
+    { id: 1, typeName: 'Type 1' },
+    { id: 2, typeName: 'Type 2' },
+    { id: 3, typeName: 'Type 3' },
+  ],
+  onApprove: async (id, form) => {
+    console.log(JSON.stringify(form));
+  },
+};
+
+export const WithErrorWhenApprove = Template.bind({});
+WithErrorWhenApprove.args = {
+  ...ParticipantRequests.args,
+  onApprove: async (id, form) => Promise.reject(new Error()),
 };
 
 export const NoParticipantRequests = Template.bind({});
 NoParticipantRequests.args = {
   participantRequests: [],
+  participantTypes: [
+    { id: 1, typeName: 'Type 1' },
+    { id: 2, typeName: 'Type 2' },
+    { id: 3, typeName: 'Type 3' },
+  ],
+  onApprove: async (id, form) => {
+    console.log(JSON.stringify(form));
+  },
 };

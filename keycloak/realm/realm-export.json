@@ -587,6 +587,9 @@
       "disableableCredentialTypes": [],
       "requiredActions": [],
       "realmRoles": ["default-roles-self-serve-portal"],
+      "clientRoles": {
+        "self_serve_portal_apis": ["api-participant-member"]
+      },
       "notBefore": 0,
       "groups": []
     }
@@ -1473,8 +1476,8 @@
     "port": "1025",
     "host": "mailhog",
     "replyTo": "",
-    "from": "test@self-serve-portal.com",
-    "fromDisplayName": "",
+    "from": "noreply@unifiedid.com",
+    "fromDisplayName": "UID2 Service (do not reply)",
     "envelopeFrom": "",
     "ssl": "false"
   },
@@ -2333,7 +2336,7 @@
     "actionTokenGeneratedByUserLifespan-execute-actions": "",
     "actionTokenGeneratedByUserLifespan-verify-email": "",
     "clientOfflineSessionIdleTimeout": "0",
-    "userProfileEnabled": "true",
+    "userProfileEnabled": "false",
     "actionTokenGeneratedByUserLifespan-reset-credentials": "",
     "cibaInterval": "5",
     "realmReusableOtpCode": "false",

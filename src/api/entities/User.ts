@@ -21,6 +21,15 @@ export class User extends BaseModel {
   static get tableName() {
     return 'users';
   }
+
+  static get virtualAttributes() {
+    return ['fullName'];
+  }
+
+  fullName() {
+    return `${this.firstName} ${this.lastName}`;
+  }
+
   static relationMappings = {
     participant: {
       relation: Model.BelongsToOneRelation,

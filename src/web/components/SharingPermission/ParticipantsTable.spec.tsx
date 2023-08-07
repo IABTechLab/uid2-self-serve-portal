@@ -12,12 +12,12 @@ describe('ParticipantsTable', () => {
     expect(screen.getByText('Participant 2')).toBeInTheDocument();
   });
 
-  it('calls onSelectedChange when a participant is clicked', () => {
+  it('calls onSelectedChange when a participant is selected', () => {
     const mockOnSelectedChange = jest.fn();
     render(<Default onSelectedChange={mockOnSelectedChange} />);
 
-    const firstParticipantItem = screen.getByText('Participant 1');
-    fireEvent.click(firstParticipantItem);
+    const firstCheckbox = screen.getAllByRole('checkbox')[0];
+    fireEvent.click(firstCheckbox);
 
     expect(mockOnSelectedChange).toHaveBeenCalled();
   });

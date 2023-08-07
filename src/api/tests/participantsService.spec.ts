@@ -81,6 +81,12 @@ describe('Participant Service Tests', () => {
         name: 'Test Participant',
         location: 'Test Location',
         allowSharing: true,
+        types: [
+          {
+            id: 1,
+            typeName: 'DSP',
+          },
+        ],
       });
     });
   });

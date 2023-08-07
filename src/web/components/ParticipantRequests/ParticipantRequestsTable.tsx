@@ -1,10 +1,14 @@
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/participantsRouter';
+import { ParticipantApprovalForm } from '../../services/participant';
 import { ParticipantRequestItem } from './ParticipantRequestItem';
 
 import './ParticipantRequestsTable.scss';
 
 type ParticipantRequestsTableProps = {
   participantRequests: ParticipantRequestDTO[];
+  participantTypes: ParticipantTypeDTO[];
+  onApprove: (participantId: number, formData: ParticipantApprovalForm) => Promise<void>;
 };
 
 function NoParticipantRequests() {
@@ -19,7 +23,11 @@ function NoParticipantRequests() {
   );
 }
 
-export function ParticipantRequestsTable({ participantRequests }: ParticipantRequestsTableProps) {
+export function ParticipantRequestsTable({
+  participantRequests,
+  participantTypes,
+  onApprove,
+}: ParticipantRequestsTableProps) {
   return (
     <div className='participant-requests-container'>
       <table className='participant-requests-table'>
@@ -28,6 +36,7 @@ export function ParticipantRequestsTable({ participantRequests }: ParticipantReq
             <th>Participant Name</th>
             <th>Participant Type</th>
             <th>Participant Status</th>
+            <th className='action'>Actions</th>
           </tr>
         </thead>
 
@@ -36,6 +45,8 @@ export function ParticipantRequestsTable({ participantRequests }: ParticipantReq
             <ParticipantRequestItem
               key={participantRequest.id}
               participantRequest={participantRequest}
+              participantTypes={participantTypes}
+              onApprove={onApprove}
             />
           ))}
         </tbody>

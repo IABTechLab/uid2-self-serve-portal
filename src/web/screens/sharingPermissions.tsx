@@ -87,9 +87,9 @@ function SharingPermissions() {
   return (
     <div className='sharingPermissions'>
       <h1>Sharing Permissions</h1>
-      <p>
-        Adding a sharing permission only allows the participant you&apos;re sharing with to decrypt
-        your encrypted UID2s.
+      <p className='heading-details'>
+        Adding a sharing permission allows the participant you’re sharing with to decrypt your UID2
+        tokens.
         <br />
         <br />
         Note: This only enables the sharing permission. No data is sent.
@@ -97,14 +97,16 @@ function SharingPermissions() {
       <Suspense fallback={<Loading />}>
         <Await resolve={participants}>
           {(resolvedParticipants: AvailableParticipantDTO[]) => (
-            <Collapsible title='Search and Add Permissions'>
-              <SearchAndAddParticipants
-                onSharingPermissionsAdded={handleSharingPermissionsAdded}
-                sharingParticipants={sharingParticipants}
-                availableParticipants={resolvedParticipants}
-                participantTypes={participantTypes}
-              />
-            </Collapsible>
+            <div className='search-and-add-permissions-collapsible'>
+              <Collapsible title='Search and Add Permissions' defaultOpen>
+                <SearchAndAddParticipants
+                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
+                  sharingParticipants={sharingParticipants}
+                  availableParticipants={resolvedParticipants}
+                  participantTypes={participantTypes}
+                />
+              </Collapsible>
+            </div>
           )}
         </Await>
       </Suspense>

@@ -12,6 +12,9 @@
   --theme-button: #cdf200;
   --theme-action: #0459fd;
   --theme-input-border: #b8b8b8;
+  --theme-text: #030a40;
+  --theme-warning-background: rgba(183, 194, 234, 0.45);
+  --theme-warning-icon: rgba(112, 133, 212, 1);
 }
 
 body {
@@ -76,20 +79,24 @@ body {
 }
 
 .login-pf-page .login-pf-header {
-  margin-bottom: 8px;
+  margin-bottom: 24px;
 }
 
 .pf-c-button {
   border-radius: 5px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 18px;
-  padding: 15px 120px;
+  padding: 11px 15px;
   margin: 0 auto;
 }
 
 .pf-c-button.pf-m-primary {
   background-color: var(--theme-button);
   color: var(--theme-button-border);
+  min-width: 225px;
+}
+
+.pf-c-button.pf-m-block {
   width: auto;
 }
 
@@ -207,6 +214,7 @@ div.kc-logo-text {
 
 #kc-registration {
   width: 200px;
+  font-weight: 500;
 }
 
 .login-pf-page .login-pf-signup a {
@@ -235,6 +243,37 @@ div.kc-logo-text {
   .kc-social-grid .kc-social-icon-text {
     left: -15px;
   }
+}
+
+.pf-c-alert {
+  padding: 22px 30px;
+  border-radius: 10px;
+  margin-bottom: 41px;
+  width: 623px;
+  border: none;
+}
+
+.alert-warning {
+  background-color: var(--theme-warning-background);
+}
+
+.pf-c-alert__title {
+  color: var(--theme-text);
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.pf-c-alert.pf-m-warning {
+  --pf-c-alert__icon--Color: var(--theme-warning-icon);
+}
+
+.pf-c-alert__icon {
+  font-size: 1.5rem;
+}
+
+.pf-c-button.pf-m-primary:disabled {
+  color: var(--pf-c-button--disabled--Color);
+  background-color: var(--pf-c-button--disabled--BackgroundColor);
 }
 
 /* End Recovery codes */

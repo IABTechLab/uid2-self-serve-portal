@@ -1,9 +1,10 @@
 .sharing-permissions-table {
   margin-top: 30px;
-  border: 1px solid var(--theme-border);
   border-radius: 5px;
-  padding: 0 20px 20px 20px;
-  box-shadow: 0px 4px 4px var(--theme-box-shadow);
+
+  .dialog-body-section {
+    font-weight: 400;
+  }
 
   .sharing-permissions-table-header-container {
     display: flex;
@@ -50,7 +51,7 @@
     tr th {
       background-color: var(--theme-background-sidepanel);
       font-size: 0.875rem;
-      line-height: 1rem;
+      line-height: 1.5;
     }
 
     &.selected tr th {
@@ -62,17 +63,13 @@
       padding-left: 10px;
       width: 21px;
     }
-
-    tr:nth-of-type(2n) {
-      background-color: var(--theme-background-table-header);
-    }
   }
 
   .no-participants-container {
     margin-top: 16px;
     border: 1px solid var(--theme-border);
     border-radius: 5px;
-    padding: 36px;
+    padding: 20px 20px 36px;
     width: 100%;
     display: flex;
     box-sizing: border-box;

@@ -2,6 +2,7 @@ import express, { Response } from 'express';
 import { z } from 'zod';
 
 import { createBusinessContactsRouter } from './businessContactsRouter';
+import { SharingAction } from './entities/AuditTrail';
 import {
   Participant,
   ParticipantCreationPartial,
@@ -9,10 +10,12 @@ import {
   ParticipantSchema,
   ParticipantStatus,
 } from './entities/Participant';
-import { SharingAction } from './entities/SharingAuditTrail';
+import { ParticipantTypeSchema } from './entities/ParticipantType';
 import { UserRole } from './entities/User';
 import { getKcAdminClient } from './keycloakAdminClient';
-import { createNewUser, sendInviteEmail } from './services/kcUsersService';
+import { isApproverCheck } from './middleware/approversMiddleware';
+import { insertSharingAuditTrails, updateAuditTrailToProceed } from './services/auditTrailService';
+import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
 import {
   addSharingParticipants,
   checkParticipantId,
@@ -21,11 +24,8 @@ import {
   getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
+  sendParticipantApprovedEmail,
 } from './services/participantsService';
-import {
-  insertSharingAuditTrails,
-  updateAuditTrailsToProceed,
-} from './services/sharingAuditTrailService';
 import {
   createUserInPortal,
   findUserByEmail,
@@ -56,11 +56,15 @@ export function createParticipantsRouter() {
     return res.status(200).json(participants.map(mapParticipantToAvailableParticipant));
   });
 
-  participantsRouter.get('/awaitingApproval', async (req: ParticipantRequest, res) => {
-    const email = String(req.auth?.payload?.email);
-    const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
-    return res.status(200).json(participantsAwaitingApproval);
-  });
+  participantsRouter.get(
+    '/awaitingApproval',
+    isApproverCheck,
+    async (req: ParticipantRequest, res) => {
+      const email = String(req.auth?.payload?.email);
+      const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
+      return res.status(200).json(participantsAwaitingApproval);
+    }
+  );
 
   participantsRouter.post('/', async (req, res) => {
     try {
@@ -165,8 +169,8 @@ export function createParticipantsRouter() {
       }
       const { newParticipantSites } = sharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
-      const auditTrails = await insertSharingAuditTrails(
-        participant.id,
+      const auditTrail = await insertSharingAuditTrails(
+        participant,
         currentUser!.id,
         currentUser!.email,
         SharingAction.Add,
@@ -178,7 +182,7 @@ export function createParticipantsRouter() {
         newParticipantSites
       );
 
-      await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
+      await updateAuditTrailToProceed(auditTrail.id);
       return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
     }
   );
@@ -196,8 +200,8 @@ export function createParticipantsRouter() {
       }
       const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
-      const auditTrails = await insertSharingAuditTrails(
-        participant.id,
+      const auditTrail = await insertSharingAuditTrails(
+        participant,
         currentUser!.id,
         currentUser!.email,
         SharingAction.Delete,
@@ -209,7 +213,7 @@ export function createParticipantsRouter() {
         sharingSitesToRemove
       );
 
-      await updateAuditTrailsToProceed(auditTrails.map((a) => a.id));
+      await updateAuditTrailToProceed(auditTrail.id);
 
       return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
     }
@@ -223,6 +227,45 @@ export function createParticipantsRouter() {
       return res.status(200).json(users);
     }
   );
+
+  const ParticipantApprovalParser = ParticipantSchema.pick({
+    siteId: true,
+    name: true,
+    types: true,
+  }).extend({
+    types: z.array(ParticipantTypeSchema.pick({ id: true })),
+  });
+
+  participantsRouter.put(
+    '/:participantId/approve',
+    isApproverCheck,
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      const data = {
+        ...ParticipantApprovalParser.parse(req.body),
+        status: ParticipantStatus.Approved,
+      };
+      const kcAdminClient = await getKcAdminClient();
+      const users = await getAllUserFromParticipant(participant!);
+      await Promise.all(
+        users.map((user) =>
+          assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
+        )
+      );
+      await Participant.query().upsertGraph(
+        {
+          id: participant!.id!,
+          ...data,
+        },
+        {
+          relate: true,
+        }
+      );
+      await sendParticipantApprovedEmail(users);
+      return res.sendStatus(200);
+    }
+  );
+
   const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
 

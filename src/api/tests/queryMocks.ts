@@ -1,5 +1,6 @@
 import { QueryBuilder } from 'objection';
 
+import { Approver } from '../entities/Approver';
 import { BusinessContact, ContactType } from '../entities/BusinessContact';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
@@ -14,6 +15,12 @@ export const mockParticipant = (participant: Partial<Participant> | null = {}) =
             name: 'Test Participant',
             location: 'Test Location',
             allowSharing: true,
+            types: [
+              {
+                id: 1,
+                typeName: 'DSP',
+              },
+            ],
             ...participant,
           }
     )
@@ -56,4 +63,26 @@ export const mockBusinessContact = (businessContact: Partial<BusinessContact> | 
           }
     )
   );
+};
+
+type PartialApproverOrNull = Partial<Approver> | null;
+export const mockApprover = (approver: PartialApproverOrNull | PartialApproverOrNull[] = {}) => {
+  const approvers = Array.isArray(approver) ? approver : [approver];
+  approvers.forEach((a) => {
+    jest.spyOn(Approver, 'query').mockReturnValueOnce(
+      QueryBuilder.forClass(Approver).resolve(
+        a === null
+          ? undefined
+          : [
+              {
+                id: 1,
+                email: 'test_user@example.com',
+                displayName: 'Test Admin',
+                participantTypeId: 1,
+                ...a,
+              },
+            ]
+      )
+    );
+  });
 };

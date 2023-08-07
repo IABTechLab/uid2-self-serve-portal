@@ -19,12 +19,13 @@ function NoParticipant() {
     <div className='no-participants-container'>
       <img src='/group-icon.svg' alt='group-icon' />
       <div className='no-participants-text'>
-        <h1>No Participants</h1>
+        <h2>No Participants</h2>
         <span>You don&apos;t have any sharing permissions yet.</span>
       </div>
     </div>
   );
 }
+
 export function SharingPermissionsTable({
   sharingParticipants,
   onDeleteSharingPermission,
@@ -56,7 +57,7 @@ export function SharingPermissionsTable({
     ) : (
       <th colSpan={3}>
         <Dialog
-          title='Are you sure you want to Delete these Permissions'
+          title='Are you sure you want to delete these permissions?'
           triggerButton={
             <button className='transparent-button sharing-permission-delete-button' type='button'>
               <FontAwesomeIcon
@@ -69,11 +70,16 @@ export function SharingPermissionsTable({
           open={openConfirmation}
           onOpenChange={setOpenConfirmation}
         >
-          <ul className='dot-list'>
-            {selectedParticipantList.map((participant) => (
-              <li key={participant.id}>{participant.name}</li>
-            ))}
-          </ul>
+          <div className='dialog-body-section'>
+            <ul className='dot-list'>
+              {selectedParticipantList.map((participant) => (
+                <li key={participant.id}>{participant.name}</li>
+              ))}
+            </ul>
+            <p>
+              Note: Sharing will continue with participants that are shared via &quot;Auto&quot;.
+            </p>
+          </div>
           <div className='dialog-footer-section'>
             <button type='button' className='primary-button' onClick={handleDeletePermissions}>
               I want to Remove Permissions
