@@ -8,6 +8,8 @@ There are often easier ways to do this in dev if you don't want to follow the ma
 
 If you're creating a PR with manual steps, please add the steps to the Next section. When doing a deployment, increase the version in `package.json`, create a section for that version number, and move any pending manual changes to that new section.
 
+Don't delete old sections - just leave them towards the bottom of the file, and add new things at the top.
+
 ## Next (pending changes for the next coming release)
 
 None yet!
