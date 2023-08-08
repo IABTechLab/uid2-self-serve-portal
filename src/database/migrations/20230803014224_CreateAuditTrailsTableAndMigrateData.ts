@@ -1,12 +1,16 @@
 /* eslint-disable camelcase */
 import { Knex } from 'knex';
 
-import {
-  AuditTrailDTO,
-  AuditTrailEvents,
-  SharingAction,
-  UpdateSharingPermissionEventData,
-} from '../../api/entities/AuditTrail';
+enum SharingAction {
+  Add = 'add',
+  Delete = 'delete',
+}
+
+type UpdateSharingPermissionEventData = {
+  siteId: number;
+  action: SharingAction;
+  sharingPermissions: number[];
+};
 
 type SharingAuditTrail = {
   action: SharingAction;
@@ -18,6 +22,22 @@ type SharingAuditTrail = {
   proceed: boolean;
   created_at: Date;
   updated_at: Date;
+};
+
+enum AuditTrailEvents {
+  UpdateSharingPermissions = 'UpdateSharingPermissions',
+}
+
+type AuditTrailEventData = UpdateSharingPermissionEventData;
+
+type AuditTrailDTO = {
+  id: number;
+  userId: number;
+  participantId: number;
+  userEmail: string;
+  succeeded: boolean;
+  event: AuditTrailEvents;
+  eventData: AuditTrailEventData;
 };
 
 function mapSharingAuditTrailToAuditTrails(
