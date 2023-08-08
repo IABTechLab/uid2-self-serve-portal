@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/participantsRouter';
+import { ParticipantRequestDTO } from '../../../api/routes/participantsRouter';
 import { ParticipantApprovalForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';

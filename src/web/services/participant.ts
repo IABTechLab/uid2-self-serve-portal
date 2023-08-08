@@ -4,7 +4,10 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
-import { AvailableParticipantDTO, ParticipantRequestDTO } from '../../api/participantsRouter';
+import {
+  AvailableParticipantDTO,
+  ParticipantRequestDTO,
+} from '../../api/routes/participantsRouter';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 

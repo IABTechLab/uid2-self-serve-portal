@@ -2,7 +2,7 @@ import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../api/participantsRouter';
+import { ParticipantRequestDTO } from '../../api/routes/participantsRouter';
 import { Loading } from '../components/Core/Loading';
 import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
 import {

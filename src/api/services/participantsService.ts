@@ -20,7 +20,7 @@ import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
 
 export interface ParticipantRequest extends Request {
-  participant?: Participant;
+  participant: Participant;
 }
 
 export const sendNewParticipantEmail = async (

@@ -5,8 +5,8 @@ import { BusinessContact } from '../entities/BusinessContact';
 import { Participant } from '../entities/Participant';
 
 export interface BusinessContactRequest extends Request {
-  participant?: Participant;
-  businessContact?: BusinessContact;
+  participant: Participant;
+  businessContact: BusinessContact;
 }
 
 const contactIdParser = z.object({

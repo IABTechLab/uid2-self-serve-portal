@@ -22,8 +22,8 @@ import {
 } from './envars';
 import { getLoggers } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
-import { createParticipantsRouter } from './participantsRouter';
-import { createUsersRouter } from './usersRouter';
+import { createParticipantsRouter } from './routes/participantsRouter';
+import { createUsersRouter } from './routes/usersRouter';
 
 const BASE_REQUEST_PATH = '/api';
 

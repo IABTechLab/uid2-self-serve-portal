@@ -1,5 +1,5 @@
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/participantsRouter';
+import { ParticipantRequestDTO } from '../../../api/routes/participantsRouter';
 import { ParticipantApprovalForm } from '../../services/participant';
 import { ParticipantRequestItem } from './ParticipantRequestItem';
 

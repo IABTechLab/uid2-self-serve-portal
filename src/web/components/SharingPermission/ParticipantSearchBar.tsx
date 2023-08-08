@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routes/participantsRouter';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 

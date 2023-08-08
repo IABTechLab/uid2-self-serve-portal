@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routes/participantsRouter';
 import { ParticipantsTable } from './ParticipantsTable';
 
 export default {

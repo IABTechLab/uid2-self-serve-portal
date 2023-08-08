@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/participantsRouter';
+import { ParticipantRequestDTO } from '../../../api/routes/participantsRouter';
 import { ParticipantApprovalForm } from '../../services/participant';
 import { InlineError } from '../Core/InlineError';
 import ParticipantApprovalDialog from './ParticipantApprovalDialog';

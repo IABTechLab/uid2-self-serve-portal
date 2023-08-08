@@ -1,22 +1,22 @@
 import express from 'express';
 import { z } from 'zod';
 
-import { UserRole } from './entities/User';
-import { getLoggers } from './helpers/loggingHelpers';
-import { getKcAdminClient } from './keycloakAdminClient';
+import { UserRole } from '../entities/User';
+import { getLoggers } from '../helpers/loggingHelpers';
+import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignClientRoleToUser,
   deleteUserByEmail,
   queryUsersByEmail,
   sendInviteEmail,
   updateUserProfile,
-} from './services/kcUsersService';
+} from '../services/kcUsersService';
 import {
   enrichCurrentUser,
   enrichUserWithIsApprover,
   enrichWithUserFromParams,
   UserRequest,
-} from './services/usersService';
+} from '../services/usersService';
 
 export function createUsersRouter() {
   const usersRouter = express.Router();

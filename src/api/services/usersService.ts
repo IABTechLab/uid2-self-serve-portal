@@ -40,7 +40,7 @@ export const isUserBelongsToParticipant = async (email: string, participantId: n
 };
 
 export interface UserRequest extends Request {
-  user?: User;
+  user: User;
 }
 
 const userIdParser = z.object({

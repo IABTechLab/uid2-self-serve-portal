@@ -1,8 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { createBusinessContactsRouter } from './businessContactsRouter';
-import { SharingAction } from './entities/AuditTrail';
+import { SharingAction } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
@@ -10,16 +9,16 @@ import {
   ParticipantDTO,
   ParticipantSchema,
   ParticipantStatus,
-} from './entities/Participant';
-import { UserRole } from './entities/User';
-import { getKcAdminClient } from './keycloakAdminClient';
-import { isApproverCheck } from './middleware/approversMiddleware';
+} from '../entities/Participant';
+import { UserRole } from '../entities/User';
+import { getKcAdminClient } from '../keycloakAdminClient';
+import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
   updateAuditTrailToProceed,
-} from './services/auditTrailService';
-import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
+} from '../services/auditTrailService';
+import { assignClientRoleToUser, createNewUser, sendInviteEmail } from '../services/kcUsersService';
 import {
   addSharingParticipants,
   checkParticipantId,
@@ -29,12 +28,13 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
-} from './services/participantsService';
+} from '../services/participantsService';
 import {
   createUserInPortal,
   findUserByEmail,
   getAllUserFromParticipant,
-} from './services/usersService';
+} from '../services/usersService';
+import { createBusinessContactsRouter } from './businessContactsRouter';
 
 export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
 
@@ -114,7 +114,7 @@ export function createParticipantsRouter() {
         await createUserInPortal({
           email,
           role,
-          participantId: participant!.id,
+          participantId: participant.id,
           firstName,
           lastName,
         });
@@ -138,7 +138,7 @@ export function createParticipantsRouter() {
       const { location } = participantParser.parse(req.body);
 
       const { participant } = req;
-      await participant!.$query().patch({ location });
+      await participant.$query().patch({ location });
       return res.status(200).json(participant);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -152,7 +152,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      if (!participant?.siteId) {
+      if (!participant.siteId) {
         return res.status(400).send('Site id is not set');
       }
       const sharingParticipants = await getSharingParticipants(participant.siteId);
@@ -199,7 +199,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/delete',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      if (!participant?.siteId) {
+      if (!participant.siteId) {
         return res.status(400).send('Site id is not set');
       }
       const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
@@ -227,7 +227,7 @@ export function createParticipantsRouter() {
     '/:participantId/users',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const users = await getAllUserFromParticipant(participant!);
+      const users = await getAllUserFromParticipant(participant);
       return res.status(200).json(users);
     }
   );
@@ -243,7 +243,7 @@ export function createParticipantsRouter() {
       };
 
       const auditTrail = await insertApproveAccountAuditTrail(
-        participant!,
+        participant,
         req.auth?.payload?.email as string,
         data
       );
@@ -256,7 +256,7 @@ export function createParticipantsRouter() {
       );
       await Participant.query().upsertGraph(
         {
-          id: participant!.id!,
+          id: participant.id,
           ...data,
         },
         {

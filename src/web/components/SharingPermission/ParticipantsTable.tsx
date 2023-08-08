@@ -2,7 +2,7 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routes/participantsRouter';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
 
