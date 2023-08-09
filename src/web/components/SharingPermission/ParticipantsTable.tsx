@@ -4,8 +4,8 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  Header,
   RowSelectionState,
+  SortingState,
   Table,
   useReactTable,
 } from '@tanstack/react-table';
@@ -25,7 +25,6 @@ type ParticipantsTableProps = {
   selectedParticipantIds?: Set<number>;
   tableHeader: (table: Table<AvailableParticipantDTO>) => ReactNode;
   className?: string;
-  hideCheckboxIfNoItem?: boolean;
   showAddedByColumn?: boolean;
 };
 
@@ -37,13 +36,12 @@ export function ParticipantsTable({
   onSelectedChange,
   selectedParticipantIds = new Set(),
   className,
-  hideCheckboxIfNoItem,
   showAddedByColumn,
 }: ParticipantsTableProps) {
   const defaultSelected: RowSelectionState = setToObject(selectedParticipantIds);
   const [rowSelection, setRowSelection] = useState(defaultSelected);
   const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([]);
-  const showCheckbox = !hideCheckboxIfNoItem || (hideCheckboxIfNoItem && !!participants.length);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
     data: participants,
@@ -54,7 +52,10 @@ export function ParticipantsTable({
     globalFilterFn,
     onRowSelectionChange: setRowSelection,
     getRowId: (originalRow) => String(originalRow.siteId!),
+    enableSorting: true,
+    onSortingChange: setSorting,
     state: {
+      sorting,
       columnFilters,
       globalFilter: filterText,
       rowSelection,
@@ -80,22 +81,9 @@ export function ParticipantsTable({
     ]);
   }, [selectedTypeIds]);
 
-  const renderCheckboxHeader = (header?: Header<AvailableParticipantDTO, unknown>) => {
-    return header ? flexRender(header.column.columnDef.header, header.getContext()) : null;
-  };
-
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            <th key={headerGroup.headers.at(0)?.id}>
-              {showCheckbox && renderCheckboxHeader(headerGroup.headers.at(0))}
-            </th>
-            {tableHeader(table)}
-          </tr>
-        ))}
-      </thead>
+      <thead>{tableHeader(table)}</thead>
       <tbody>
         {table.getRowModel().rows.map((participantRow) => (
           <tr key={participantRow.id} className='participant-item'>

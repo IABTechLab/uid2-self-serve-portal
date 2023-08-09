@@ -13,6 +13,15 @@ table {
   }
   th {
     background-color: var(--theme-background-table-header);
+
+    button {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sortable-table-header svg {
+      margin-left: 5px;
+    }
   }
   th:first-of-type,
   td:first-of-type {

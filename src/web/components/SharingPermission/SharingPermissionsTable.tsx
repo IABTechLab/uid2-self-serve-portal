@@ -1,10 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Table } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { ReactNode, useMemo, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantsTable } from './ParticipantsTable';
+import { renderCheckboxHeader, renderTableHeader } from './ParticipantsTableHelper';
 
 import './SharingPermissionsTable.scss';
 
@@ -47,54 +49,63 @@ export function SharingPermissionsTable({
     return sharingParticipants.filter((p) => checkedParticipants.has(p.siteId!));
   }, [checkedParticipants, sharingParticipants]);
 
-  const tableHeader = () =>
-    !hasParticipantSelected ? (
-      <>
-        <th>Participant Name</th>
-        <th>Participant Type</th>
-        <th>Added By</th>
-      </>
-    ) : (
-      <th colSpan={3}>
-        <Dialog
-          title='Are you sure you want to delete these permissions?'
-          triggerButton={
-            <button className='transparent-button sharing-permission-delete-button' type='button'>
-              <FontAwesomeIcon
-                icon={['far', 'trash-can']}
-                className='sharing-permission-trashcan-icon'
-              />
-              Delete Permissions
-            </button>
-          }
-          open={openConfirmation}
-          onOpenChange={setOpenConfirmation}
-        >
-          <div className='dialog-body-section'>
-            <ul className='dot-list'>
-              {selectedParticipantList.map((participant) => (
-                <li key={participant.id}>{participant.name}</li>
-              ))}
-            </ul>
-            <p>
-              Note: Sharing will continue with participants that are shared via &quot;Auto&quot;.
-            </p>
-          </div>
-          <div className='dialog-footer-section'>
-            <button type='button' className='primary-button' onClick={handleDeletePermissions}>
-              I want to Remove Permissions
-            </button>
-            <button
-              type='button'
-              className='transparent-button'
-              onClick={() => setOpenConfirmation(false)}
+  const tableHeader = (table: Table<AvailableParticipantDTO>) => {
+    const showCheckbox = !!sharingParticipants.length;
+    if (hasParticipantSelected) {
+      const headerGroup = table.getHeaderGroups().at(0);
+      return (
+        <tr key={headerGroup?.id}>
+          <th key={headerGroup?.headers.at(0)?.id}>
+            {showCheckbox && renderCheckboxHeader(headerGroup?.headers.at(0))}
+          </th>
+          <th colSpan={3}>
+            <Dialog
+              title='Are you sure you want to delete these permissions?'
+              triggerButton={
+                <button
+                  className='transparent-button sharing-permission-delete-button'
+                  type='button'
+                >
+                  <FontAwesomeIcon
+                    icon={['far', 'trash-can']}
+                    className='sharing-permission-trashcan-icon'
+                  />
+                  Delete Permissions
+                </button>
+              }
+              open={openConfirmation}
+              onOpenChange={setOpenConfirmation}
             >
-              Cancel
-            </button>
-          </div>
-        </Dialog>
-      </th>
-    );
+              <div className='dialog-body-section'>
+                <ul className='dot-list'>
+                  {selectedParticipantList.map((participant) => (
+                    <li key={participant.id}>{participant.name}</li>
+                  ))}
+                </ul>
+                <p>
+                  Note: Sharing will continue with participants that are shared via
+                  &quot;Auto&quot;.
+                </p>
+              </div>
+              <div className='dialog-footer-section'>
+                <button type='button' className='primary-button' onClick={handleDeletePermissions}>
+                  I want to Remove Permissions
+                </button>
+                <button
+                  type='button'
+                  className='transparent-button'
+                  onClick={() => setOpenConfirmation(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </Dialog>
+          </th>
+        </tr>
+      );
+    }
+    return renderTableHeader(table, showCheckbox);
+  };
 
   return (
     <div className='sharing-permissions-table'>
@@ -120,7 +131,6 @@ export function SharingPermissionsTable({
         filterText={filterText}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
-        hideCheckboxIfNoItem
         className={clsx('shared-participants-table', { selected: hasParticipantSelected })}
       />
       {!sharingParticipants.length && <NoParticipant />}

@@ -1,5 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { createColumnHelper, FilterFn, Table } from '@tanstack/react-table';
+import { createColumnHelper, FilterFn, flexRender, Header, Table } from '@tanstack/react-table';
 import { z } from 'zod';
 
 import { ParticipantTypeDTO, ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
@@ -57,6 +58,36 @@ export const globalFilterFn: FilterFn<AvailableParticipantDTO> = (
 
   return value?.toLowerCase().includes(search);
 };
+
+export const renderCheckboxHeader = (header?: Header<AvailableParticipantDTO, unknown>) => {
+  return header ? flexRender(header.column.columnDef.header, header.getContext()) : null;
+};
+
+const renderSortableHeader = (header: Header<AvailableParticipantDTO, unknown>) => (
+  <button
+    type='button'
+    className='sortable-table-header'
+    onClick={header.column.getToggleSortingHandler()}
+  >
+    {flexRender(header.column.columnDef.header, header.getContext())}
+    <FontAwesomeIcon icon='sort' className='' />
+  </button>
+);
+
+export const renderTableHeader = (table: Table<AvailableParticipantDTO>, showCheckbox: boolean) =>
+  table.getHeaderGroups().map((headerGroup) => (
+    <tr key={headerGroup.id}>
+      {headerGroup.headers.map((header) => {
+        return (
+          <th key={header.id}>
+            {header.id === 'checkbox'
+              ? showCheckbox && renderCheckboxHeader(header)
+              : renderSortableHeader(header)}
+          </th>
+        );
+      })}
+    </tr>
+  ));
 
 const logo = '/default-logo.svg';
 

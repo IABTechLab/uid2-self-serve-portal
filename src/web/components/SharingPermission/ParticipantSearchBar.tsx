@@ -6,6 +6,7 @@ import { ChangeEvent, useState } from 'react';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
 import { ParticipantsTable } from './ParticipantsTable';
+import { renderCheckboxHeader } from './ParticipantsTableHelper';
 import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
@@ -44,10 +45,16 @@ export function ParticipantSearchBar({
   };
   const tableHeader = (table: Table<AvailableParticipantDTO>) => {
     const filteredParticipants = table.getFilteredRowModel().rows;
+    const headerGroup = table.getHeaderGroups().at(0);
     return (
-      <th colSpan={3}>
-        <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
-      </th>
+      <tr key={headerGroup?.id}>
+        <th key={headerGroup?.headers.at(0)?.id}>
+          {renderCheckboxHeader(headerGroup?.headers.at(0))}
+        </th>
+        <th colSpan={3}>
+          <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
+        </th>
+      </tr>
     );
   };
 
