@@ -7,4 +7,42 @@
   th:nth-of-type(2) {
     padding-left: 66px;
   }
+
+  .participant-item {
+    button[role='checkbox'] {
+      width: 21px;
+      height: 21px;
+    }
+    .participant-type-label {
+      background: var(--theme-label-background);
+      border-radius: 3px;
+      padding: 4px 8px;
+      margin-right: 8px;
+    }
+
+    .participant-checkbox {
+      margin-right: 16px;
+    }
+
+    .participant-logo {
+      width: 50px;
+      margin-right: 16px;
+    }
+
+    .participant-types {
+      display: flex;
+      align-items: center;
+      font-size: 0.625rem;
+      line-height: 0.75rem;
+    }
+
+    .participant-name-cell {
+      display: flex;
+      align-items: center;
+
+      .checkbox-label {
+        padding-right: 16px;
+      }
+    }
+  }
 }

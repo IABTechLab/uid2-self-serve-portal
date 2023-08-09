@@ -1,10 +1,16 @@
-import { CheckedState } from '@radix-ui/react-checkbox';
+import {
+  ColumnFilter,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import clsx from 'clsx';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
-import { ParticipantItem } from './ParticipantItem';
+import { columns, globalFilterFn } from './ParticipantsTableHelper';
 
 import './ParticipantsTable.scss';
 
@@ -13,7 +19,6 @@ type ParticipantsTableProps = {
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
-  selectedParticipantIds?: Set<number>;
   tableHeader: (filteredParticipants: AvailableParticipantDTO[]) => ReactNode;
   className?: string;
   hideCheckboxIfNoItem?: boolean;
@@ -26,90 +31,85 @@ export function ParticipantsTable({
   filterText,
   selectedTypeIds,
   onSelectedChange,
-  selectedParticipantIds = new Set(),
   className,
   hideCheckboxIfNoItem,
   showAddedByColumn,
 }: ParticipantsTableProps) {
-  const [filteredParticipants, setFilteredParticipants] = useState(participants);
-  const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    TriStateCheckboxState.unchecked
-  );
-
-  const handleCheckboxChange = () => {
-    if (selectAllState === TriStateCheckboxState.unchecked) {
-      onSelectedChange(new Set(filteredParticipants.map((p) => p.siteId!)));
-    } else {
-      onSelectedChange(new Set());
-    }
-  };
-
-  useEffect(() => {
-    let filtered = participants;
-
-    if (selectedTypeIds && selectedTypeIds.size > 0) {
-      filtered = filtered.filter((p) => p.types?.some((t) => selectedTypeIds.has(t.id)));
-    }
-
-    if (filterText) {
-      filtered = filtered.filter((p) => p.name.toLowerCase().includes(filterText.toLowerCase()));
-    }
-
-    setFilteredParticipants(filtered);
-  }, [participants, filterText, selectedTypeIds]);
-
-  const isSelectedAll = useMemo(() => {
-    if (!filteredParticipants.length) return false;
-    return filteredParticipants.every((p) => selectedParticipantIds.has(p.siteId!));
-  }, [filteredParticipants, selectedParticipantIds]);
-
-  useEffect(() => {
-    if (isSelectedAll) {
-      setSelectAllState(TriStateCheckboxState.checked);
-    } else if (selectedParticipantIds.size > 0) {
-      setSelectAllState(TriStateCheckboxState.indeterminate as CheckedState);
-    } else {
-      setSelectAllState(TriStateCheckboxState.unchecked);
-    }
-  }, [selectedParticipantIds.size, isSelectedAll]);
-
-  const handleCheckChange = (participant: AvailableParticipantDTO) => {
-    const newCheckedItems = new Set(selectedParticipantIds);
-    if (newCheckedItems.has(participant.siteId!)) {
-      newCheckedItems.delete(participant.siteId!);
-    } else {
-      newCheckedItems.add(participant.siteId!);
-    }
-
-    onSelectedChange(newCheckedItems);
-  };
-
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([]);
   const showCheckbox = !hideCheckboxIfNoItem || (hideCheckboxIfNoItem && !!participants.length);
+
+  const table = useReactTable({
+    data: participants,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    globalFilterFn,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      columnFilters,
+      globalFilter: filterText,
+      rowSelection,
+    },
+    initialState: {
+      columnVisibility: {
+        addedBy: !!showAddedByColumn,
+      },
+    },
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
+  });
+
+  useEffect(() => {
+    const selectedSiteIds = table.getSelectedRowModel().flatRows.map((row) => row.original.siteId!);
+    onSelectedChange(new Set(selectedSiteIds));
+  }, [onSelectedChange, table, rowSelection]);
+
+  useEffect(() => {
+    setColumnFilters([
+      {
+        id: 'types',
+        value: selectedTypeIds,
+      },
+    ]);
+  }, [selectedTypeIds]);
+
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>
-        <tr>
-          <th>
-            {showCheckbox && (
-              <TriStateCheckbox
-                onClick={handleCheckboxChange}
-                status={selectAllState}
-                className='participant-checkbox'
-              />
-            )}
-          </th>
-          {tableHeader(filteredParticipants)}
-        </tr>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <th key={header.id}>
+                {header.id === 'checkbox' && !showCheckbox
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </th>
+            ))}
+          </tr>
+        ))}
+        {/* <tr>
+  <th>
+    {showCheckbox && (
+      <TriStateCheckbox
+        onClick={handleCheckboxChange}
+        status={selectAllState}
+        className='participant-checkbox'
+      />
+    )}
+  </th>
+  {tableHeader(filteredParticipants)}
+</tr> */}
       </thead>
       <tbody>
-        {filteredParticipants.map((participant) => (
-          <ParticipantItem
-            addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
-            key={participant.id}
-            participant={participant}
-            onClick={() => handleCheckChange(participant)}
-            checked={!!selectedParticipantIds.has(participant.siteId!)}
-          />
+        {table.getRowModel().rows.map((participantRow) => (
+          <tr key={participantRow.id} className='participant-item'>
+            {participantRow.getVisibleCells().map((cell) => (
+              <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+            ))}
+          </tr>
         ))}
       </tbody>
     </table>

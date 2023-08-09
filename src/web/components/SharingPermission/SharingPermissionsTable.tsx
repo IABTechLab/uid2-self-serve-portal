@@ -118,7 +118,6 @@ export function SharingPermissionsTable({
         showAddedByColumn
         participants={sharingParticipants}
         filterText={filterText}
-        selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
         hideCheckboxIfNoItem

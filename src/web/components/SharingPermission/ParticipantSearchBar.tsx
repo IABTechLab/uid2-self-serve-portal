@@ -12,7 +12,6 @@ import './ParticipantSearchBar.scss';
 type ParticipantSearchBarProps = {
   participants: AvailableParticipantDTO[];
   participantTypes: ParticipantTypeDTO[];
-  selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   open: boolean;
   onToggleOpen: (open: boolean) => void;
@@ -20,7 +19,6 @@ type ParticipantSearchBarProps = {
 
 export function ParticipantSearchBar({
   participants,
-  selectedParticipantIds,
   onSelectedChange,
   participantTypes,
   open,
@@ -70,7 +68,6 @@ export function ParticipantSearchBar({
             participants={participants}
             filterText={filterText}
             selectedTypeIds={selectedTypeIds}
-            selectedParticipantIds={selectedParticipantIds}
             onSelectedChange={onSelectedChange}
             className='search-bar-participants'
             tableHeader={tableHeader}
