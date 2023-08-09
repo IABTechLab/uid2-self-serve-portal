@@ -94,6 +94,43 @@ export function createParticipantsRouter() {
     }
   });
 
+  participantsRouter.put(
+    '/:participantId/approve',
+    isApproverCheck,
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      const data = {
+        ...ParticipantApprovalPartial.parse(req.body),
+        status: ParticipantStatus.Approved,
+      };
+
+      const auditTrail = await insertApproveAccountAuditTrail(
+        participant!,
+        req.auth?.payload?.email as string,
+        data
+      );
+      const kcAdminClient = await getKcAdminClient();
+      const users = await getAllUserFromParticipant(participant!);
+      await Promise.all(
+        users.map((user) =>
+          assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
+        )
+      );
+      await Participant.query().upsertGraph(
+        {
+          id: participant!.id!,
+          ...data,
+        },
+        {
+          relate: true,
+        }
+      );
+      await sendParticipantApprovedEmail(users);
+      await updateAuditTrailToProceed(auditTrail.id);
+      return res.sendStatus(200);
+    }
+  );
+
   participantsRouter.use('/:participantId', checkParticipantId);
 
   const invitationParser = z.object({
@@ -229,43 +266,6 @@ export function createParticipantsRouter() {
       const { participant } = req;
       const users = await getAllUserFromParticipant(participant!);
       return res.status(200).json(users);
-    }
-  );
-
-  participantsRouter.put(
-    '/:participantId/approve',
-    isApproverCheck,
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
-      const data = {
-        ...ParticipantApprovalPartial.parse(req.body),
-        status: ParticipantStatus.Approved,
-      };
-
-      const auditTrail = await insertApproveAccountAuditTrail(
-        participant!,
-        req.auth?.payload?.email as string,
-        data
-      );
-      const kcAdminClient = await getKcAdminClient();
-      const users = await getAllUserFromParticipant(participant!);
-      await Promise.all(
-        users.map((user) =>
-          assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
-        )
-      );
-      await Participant.query().upsertGraph(
-        {
-          id: participant!.id!,
-          ...data,
-        },
-        {
-          relate: true,
-        }
-      );
-      await sendParticipantApprovedEmail(users);
-      await updateAuditTrailToProceed(auditTrail.id);
-      return res.sendStatus(200);
     }
   );
 
