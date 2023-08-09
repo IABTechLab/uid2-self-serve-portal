@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 
 import './ParticipantItem.scss';

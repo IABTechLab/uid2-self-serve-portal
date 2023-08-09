@@ -2,7 +2,7 @@ import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
 import { StatusPopup } from '../components/Core/StatusPopup';
