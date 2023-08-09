@@ -25,6 +25,16 @@ const getCheckboxStatus = (table: Table<AvailableParticipantDTO>) => {
   return TriStateCheckboxState.unchecked;
 };
 
+export function setToObject<T>(inputSet: Set<T>) {
+  const resultObject: { [key: string]: true } = {};
+
+  for (const item of inputSet) {
+    resultObject[String(item)] = true;
+  }
+
+  return resultObject;
+}
+
 const columnHelper = createColumnHelper<AvailableParticipantDTO>();
 const filteredByType: FilterFn<AvailableParticipantDTO> = (
   row,

@@ -14,6 +14,7 @@ const Template: ComponentStory<typeof ParticipantSearchBar> = (args) => {
   return (
     <ParticipantSearchBar
       {...args}
+      selectedParticipantIds={selectedParticipants}
       onSelectedChange={setSelectedParticipants}
       open={open}
       onToggleOpen={setOpen}

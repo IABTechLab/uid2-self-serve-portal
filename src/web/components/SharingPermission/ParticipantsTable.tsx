@@ -5,6 +5,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   Header,
+  RowSelectionState,
   Table,
   useReactTable,
 } from '@tanstack/react-table';
@@ -12,7 +13,7 @@ import clsx from 'clsx';
 import { ReactNode, useEffect, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/participantsRouter';
-import { columns, globalFilterFn } from './ParticipantsTableHelper';
+import { columns, globalFilterFn, setToObject } from './ParticipantsTableHelper';
 
 import './ParticipantsTable.scss';
 
@@ -21,6 +22,7 @@ type ParticipantsTableProps = {
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
+  selectedParticipantIds?: Set<number>;
   tableHeader: (table: Table<AvailableParticipantDTO>) => ReactNode;
   className?: string;
   hideCheckboxIfNoItem?: boolean;
@@ -33,11 +35,13 @@ export function ParticipantsTable({
   filterText,
   selectedTypeIds,
   onSelectedChange,
+  selectedParticipantIds = new Set(),
   className,
   hideCheckboxIfNoItem,
   showAddedByColumn,
 }: ParticipantsTableProps) {
-  const [rowSelection, setRowSelection] = useState({});
+  const defaultSelected: RowSelectionState = setToObject(selectedParticipantIds);
+  const [rowSelection, setRowSelection] = useState(defaultSelected);
   const [columnFilters, setColumnFilters] = useState<ColumnFilter[]>([]);
   const showCheckbox = !hideCheckboxIfNoItem || (hideCheckboxIfNoItem && !!participants.length);
 
@@ -49,6 +53,7 @@ export function ParticipantsTable({
     getSortedRowModel: getSortedRowModel(),
     globalFilterFn,
     onRowSelectionChange: setRowSelection,
+    getRowId: (originalRow) => String(originalRow.siteId!),
     state: {
       columnFilters,
       globalFilter: filterText,
@@ -64,6 +69,7 @@ export function ParticipantsTable({
   useEffect(() => {
     const selectedSiteIds = table.getSelectedRowModel().flatRows.map((row) => row.original.siteId!);
     onSelectedChange(new Set(selectedSiteIds));
+    console.log(rowSelection);
   }, [onSelectedChange, table, rowSelection]);
 
   useEffect(() => {
