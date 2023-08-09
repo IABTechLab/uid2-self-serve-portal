@@ -69,7 +69,6 @@ export function ParticipantsTable({
   useEffect(() => {
     const selectedSiteIds = table.getSelectedRowModel().flatRows.map((row) => row.original.siteId!);
     onSelectedChange(new Set(selectedSiteIds));
-    console.log(rowSelection);
   }, [onSelectedChange, table, rowSelection]);
 
   useEffect(() => {
