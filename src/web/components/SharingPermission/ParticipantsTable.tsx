@@ -59,9 +59,6 @@ export function ParticipantsTable({
         addedBy: !!showAddedByColumn,
       },
     },
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: false,
   });
 
   useEffect(() => {
