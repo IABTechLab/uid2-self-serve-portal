@@ -4,6 +4,8 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
+  Header,
+  Table,
   useReactTable,
 } from '@tanstack/react-table';
 import clsx from 'clsx';
@@ -19,7 +21,7 @@ type ParticipantsTableProps = {
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
-  tableHeader: (filteredParticipants: AvailableParticipantDTO[]) => ReactNode;
+  tableHeader: (table: Table<AvailableParticipantDTO>) => ReactNode;
   className?: string;
   hideCheckboxIfNoItem?: boolean;
   showAddedByColumn?: boolean;
@@ -76,32 +78,21 @@ export function ParticipantsTable({
     ]);
   }, [selectedTypeIds]);
 
+  const renderCheckboxHeader = (header?: Header<AvailableParticipantDTO, unknown>) => {
+    return header ? flexRender(header.column.columnDef.header, header.getContext()) : null;
+  };
+
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th key={header.id}>
-                {header.id === 'checkbox' && !showCheckbox
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </th>
-            ))}
+            <th key={headerGroup.headers.at(0)?.id}>
+              {showCheckbox && renderCheckboxHeader(headerGroup.headers.at(0))}
+            </th>
+            {tableHeader(table)}
           </tr>
         ))}
-        {/* <tr>
-  <th>
-    {showCheckbox && (
-      <TriStateCheckbox
-        onClick={handleCheckboxChange}
-        status={selectAllState}
-        className='participant-checkbox'
-      />
-    )}
-  </th>
-  {tableHeader(filteredParticipants)}
-</tr> */}
       </thead>
       <tbody>
         {table.getRowModel().rows.map((participantRow) => (

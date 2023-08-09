@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Table } from '@tanstack/react-table';
 import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 
@@ -39,11 +40,14 @@ export function ParticipantSearchBar({
       onToggleOpen(true);
     }
   };
-  const tableHeader = (filteredParticipants: AvailableParticipantDTO[]) => (
-    <th colSpan={3}>
-      <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
-    </th>
-  );
+  const tableHeader = (table: Table<AvailableParticipantDTO>) => {
+    const filteredParticipants = table.getFilteredRowModel().rows;
+    return (
+      <th colSpan={3}>
+        <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
+      </th>
+    );
+  };
 
   return (
     <div className={clsx('search-bar', { clicked: open })}>
