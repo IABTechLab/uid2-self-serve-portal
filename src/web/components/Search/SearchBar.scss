@@ -5,20 +5,15 @@
   }
 
   .search-bar-input-container {
-    // display: flex;
-    // align-items: center;
-    // justify-content: space-between;
     position: relative;
     border-bottom: 2px solid var(--theme-action);
     padding: 14px 11px;
 
     svg {
       position: absolute;
-      right: 14px;
+      right: 11px;
       top: 50%;
       transform: translateY(-50%);
-
-      // top: 19px;
     }
 
     ::placeholder {

@@ -39,13 +39,13 @@
       padding-top: 19px;
     }
 
+    tr:last-of-type td {
+      padding-bottom: 19px;
+    }
+
     tr th:first-of-type,
     tbody tr td:first-of-type {
       padding-left: 20px;
-    }
-
-    tr:last-of-type td {
-      padding-bottom: 19px;
     }
   }
 
