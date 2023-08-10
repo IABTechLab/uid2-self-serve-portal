@@ -126,12 +126,7 @@ const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next
   }
 
   const currentUserEmail = req.auth?.payload?.email as string;
-  if (
-    !(
-      (await isUserAnApprover(currentUserEmail)) ||
-      (await isUserBelongsToParticipant(currentUserEmail, participantId))
-    )
-  ) {
+  if (!(await isUserBelongsToParticipant(currentUserEmail, participantId))) {
     return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
   }
 
