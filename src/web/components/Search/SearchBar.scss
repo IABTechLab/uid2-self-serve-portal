@@ -36,4 +36,11 @@
   .search-bar-input {
     width: 100%;
   }
+
+  .search-bar-results {
+    background: var(--theme-background-content);
+    box-shadow: 0 4px 8px var(--theme-box-shadow);
+    border-radius: 0 0 10px 10px;
+    border: 1px solid var(--theme-action);
+  }
 }
