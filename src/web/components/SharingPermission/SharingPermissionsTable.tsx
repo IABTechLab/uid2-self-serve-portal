@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ReactNode, useMemo, useState } from 'react';
 
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantsTable } from './ParticipantsTable';
 

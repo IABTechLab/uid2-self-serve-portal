@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { Dialog } from '../Core/Dialog';
 import { ParticipantSearchBar } from './ParticipantSearchBar';

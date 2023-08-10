@@ -1,8 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { createBusinessContactsRouter } from './businessContactsRouter';
-import { SharingAction } from './entities/AuditTrail';
+import { SharingAction } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
@@ -10,16 +9,16 @@ import {
   ParticipantDTO,
   ParticipantSchema,
   ParticipantStatus,
-} from './entities/Participant';
-import { UserRole } from './entities/User';
-import { getKcAdminClient } from './keycloakAdminClient';
-import { isApproverCheck } from './middleware/approversMiddleware';
+} from '../entities/Participant';
+import { UserRole } from '../entities/User';
+import { getKcAdminClient } from '../keycloakAdminClient';
+import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
   updateAuditTrailToProceed,
-} from './services/auditTrailService';
-import { assignClientRoleToUser, createNewUser, sendInviteEmail } from './services/kcUsersService';
+} from '../services/auditTrailService';
+import { assignClientRoleToUser, createNewUser, sendInviteEmail } from '../services/kcUsersService';
 import {
   addSharingParticipants,
   checkParticipantId,
@@ -29,12 +28,13 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
-} from './services/participantsService';
+} from '../services/participantsService';
 import {
   createUserInPortal,
   findUserByEmail,
   getAllUserFromParticipant,
-} from './services/usersService';
+} from '../services/usersService';
+import { createBusinessContactsRouter } from './businessContactsRouter';
 
 export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
 
