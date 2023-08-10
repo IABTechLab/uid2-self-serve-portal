@@ -12,7 +12,6 @@ export const basicSearchBar: ComponentStory<typeof SearchBarContainer> = (args) 
     <SearchBarInput />
   </SearchBarContainer>
 );
-basicSearchBar.args = {};
 
 export const searchBarWithResults: ComponentStory<typeof SearchBarContainer> = (args) => (
   <SearchBarContainer {...args}>
@@ -22,4 +21,3 @@ export const searchBarWithResults: ComponentStory<typeof SearchBarContainer> = (
     </SearchBarResults>
   </SearchBarContainer>
 );
-basicSearchBar.args = {};
