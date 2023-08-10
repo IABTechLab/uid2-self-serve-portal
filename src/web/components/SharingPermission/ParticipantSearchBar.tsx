@@ -1,9 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ChangeEvent, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 import { ParticipantsTable } from './ParticipantsTable';
 import { TypeFilter } from './TypeFilter';
 
@@ -48,20 +48,17 @@ export function ParticipantSearchBar({
   );
 
   return (
-    <div className={clsx('search-bar', { clicked: open })}>
-      <div className='search-bar-input-container'>
-        <input
-          type='text'
-          className='search-bar-input'
-          onClick={() => onToggleOpen(true)}
-          onChange={handleFilterTextChange}
-          placeholder='Search Participants'
-          value={filterText}
-        />
-        <FontAwesomeIcon icon='search' className='search-icon' />
-      </div>
+    <SearchBarContainer className={clsx('participants-search-bar')}>
+      <SearchBarInput
+        className='participants-search-input'
+        onClick={() => onToggleOpen(true)}
+        onChange={handleFilterTextChange}
+        placeholder='Search Participants'
+        fullBorder={open}
+        value={filterText}
+      />
       {open && (
-        <div className='search-bar-dropdown'>
+        <SearchBarResults className='participants-search-results'>
           <div className='search-bar-type-filter'>
             <div className='search-bar-type-filter-title'>Only show me:</div>
             <TypeFilter onFilterChange={handleFilterChange} types={participantTypes} />
@@ -79,8 +76,8 @@ export function ParticipantSearchBar({
           {/* <div className='search-bar-footer'>
             <a className='outside-link' href='/'>Participant Not Appearing in Search?</a>
           </div> */}
-        </div>
+        </SearchBarResults>
       )}
-    </div>
+    </SearchBarContainer>
   );
 }
