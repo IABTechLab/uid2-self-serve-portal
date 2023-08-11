@@ -12,7 +12,7 @@ export const TriStateCheckboxState = {
 
 type TriStateCheckboxProps = {
   status: Checkbox.CheckedState;
-  onClick: () => void;
+  onClick: (state?: Checkbox.CheckedState) => void;
   className?: string;
   disabled?: boolean;
 };
