@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
 
@@ -20,7 +21,7 @@ type ParticipantsTableProps = {
   showAddedByColumn?: boolean;
 };
 
-export function ParticipantsTable({
+function ParticipantsTableContent({
   tableHeader,
   participants,
   filterText,
@@ -32,8 +33,13 @@ export function ParticipantsTable({
   showAddedByColumn,
 }: ParticipantsTableProps) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
+  const { sortData } = useSortable<AvailableParticipantDTO>();
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
     TriStateCheckboxState.unchecked
+  );
+  const sortedData = useMemo(
+    () => sortData(filteredParticipants),
+    [filteredParticipants, sortData]
   );
 
   const handleCheckboxChange = () => {
@@ -102,7 +108,7 @@ export function ParticipantsTable({
         </tr>
       </thead>
       <tbody>
-        {filteredParticipants.map((participant) => (
+        {sortedData.map((participant) => (
           <ParticipantItem
             addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
             key={participant.id}
@@ -113,5 +119,16 @@ export function ParticipantsTable({
         ))}
       </tbody>
     </table>
+  );
+}
+
+export function ParticipantsTable(props: ParticipantsTableProps) {
+  return (
+    <SortableProvider>
+      <ParticipantsTableContent
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...props}
+      />
+    </SortableProvider>
   );
 }
