@@ -18,13 +18,16 @@ const SortableContext = createContext<SortableContextSetter<any>>({
   sortKey: null,
   sortOrder: undefined,
   toggleSort: () => {
+    // eslint-disable-next-line no-console
     console.error('SortableContext is not available');
   },
   customSortFn: null,
   setCustomSortFn: () => {
+    // eslint-disable-next-line no-console
     console.error('SortableContext setCustomSortFn is not available');
   },
   sortData: () => {
+    // eslint-disable-next-line no-console
     console.error('SortableContext sortData is not available');
     return [];
   },
