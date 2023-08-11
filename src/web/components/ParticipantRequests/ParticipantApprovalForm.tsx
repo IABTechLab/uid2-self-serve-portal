@@ -3,26 +3,30 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { ParticipantApprovalForm } from '../../services/participant';
-import { Dialog } from '../Core/Dialog';
+import { ParticipantApprovalFormDetails } from '../../services/participant';
+import { useSiteList } from '../../services/site';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
+import { Input } from '../Input/Input';
 import { TextInput } from '../Input/TextInput';
+import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 
-type ParticipantApprovalDialogProps = {
-  onApprove: (formData: ParticipantApprovalForm) => Promise<void>;
+import './ParticipantApprovalForm.scss';
+
+type ParticipantApprovalFormProps = {
+  onApprove: (formData: ParticipantApprovalFormDetails) => Promise<void>;
   participant: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
 };
-function ParticipantApprovalDialog({
+function ParticipantApprovalForm({
   onApprove,
   participant,
   participantTypes,
-}: ParticipantApprovalDialogProps) {
-  const [open, setOpen] = useState(false);
-  const onSubmit: SubmitHandler<ParticipantApprovalForm> = async (formData) => {
+}: ParticipantApprovalFormProps) {
+  const { sites } = useSiteList();
+  const [searchText, setSearchText] = useState(participant.name);
+  const onSubmit: SubmitHandler<ParticipantApprovalFormDetails> = async (formData) => {
     await onApprove(formData);
-    setOpen(false);
   };
 
   const formatParticipantToFormValues = useMemo(
@@ -31,18 +35,24 @@ function ParticipantApprovalDialog({
   );
 
   return (
-    <Dialog
-      triggerButton={
-        <button type='button' className='transparent-button'>
-          Approve
-        </button>
-      }
-      title='Approve Participant Request'
-      closeButton='Cancel'
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <Form<ParticipantApprovalForm>
+    <div className='participant-approval-form'>
+      <div>
+        To approve a participant please search Site IDs to see if they are already signed up.
+      </div>
+      <ul>
+        <li>{participant.name}</li>
+      </ul>
+      <SearchBarContainer>
+        <Input inputName='participantSearch' label='Search Participant Name to find Site ID'>
+          <SearchBarInput inputClassName='search-input' fullBorder value={searchText} />
+        </Input>
+        <SearchBarResults>
+          {sites?.map((s) => (
+            <div>{s.name}</div>
+          ))}
+        </SearchBarResults>
+      </SearchBarContainer>
+      <Form<ParticipantApprovalFormDetails>
         onSubmit={onSubmit}
         submitButtonText='Approve Participant'
         defaultValues={formatParticipantToFormValues}
@@ -68,8 +78,8 @@ function ParticipantApprovalDialog({
           rules={{ required: 'Please specify Participant type.' }}
         />
       </Form>
-    </Dialog>
+    </div>
   );
 }
 
-export default ParticipantApprovalDialog;
+export default ParticipantApprovalForm;

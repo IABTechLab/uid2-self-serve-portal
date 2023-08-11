@@ -101,6 +101,17 @@ export async function GetParticipantsAwaitingApproval() {
   }
 }
 
+export async function GetAllSites() {
+  try {
+    const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load participants awaiting approval');
+  }
+}
+
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   try {
     await axios.post(`/participants/${participantId}/invite`, formData);
@@ -220,7 +231,7 @@ export async function UpdateEmailContact(
   }
 }
 
-export type ParticipantApprovalForm = {
+export type ParticipantApprovalFormDetails = {
   name: string;
   types: number[];
   siteId: string;
@@ -228,7 +239,7 @@ export type ParticipantApprovalForm = {
 
 export async function ApproveParticipantRequest(
   participantId: number,
-  formData: ParticipantApprovalForm
+  formData: ParticipantApprovalFormDetails
 ) {
   try {
     await axios.put(`/participants/${participantId}/approve`, {

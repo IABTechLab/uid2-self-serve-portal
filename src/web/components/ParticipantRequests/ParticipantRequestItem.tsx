@@ -2,16 +2,17 @@ import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { ParticipantApprovalForm } from '../../services/participant';
+import { ParticipantApprovalFormDetails } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
 import { InlineError } from '../Core/InlineError';
-import ParticipantApprovalDialog from './ParticipantApprovalDialog';
+import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantRequestItem.scss';
 
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
-  onApprove: (participantId: number, formData: ParticipantApprovalForm) => Promise<void>;
+  onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
 };
 
 export function ParticipantRequestItem({
@@ -20,6 +21,8 @@ export function ParticipantRequestItem({
   onApprove,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+
   function getParticipantTypes(
     currentParticipantTypes?: ParticipantRequestProps['participantRequest']['types']
   ) {
@@ -31,7 +34,7 @@ export function ParticipantRequestItem({
     ));
   }
 
-  const handleApprove = async (formData: ParticipantApprovalForm) => {
+  const handleApprove = async (formData: ParticipantApprovalFormDetails) => {
     try {
       await onApprove(participant.id, formData);
     } catch (err) {
@@ -59,11 +62,23 @@ export function ParticipantRequestItem({
       <td className='action'>
         <div className='action-cell'>
           {hasError && <InlineError />}
-          <ParticipantApprovalDialog
-            onApprove={handleApprove}
-            participant={participant}
-            participantTypes={participantTypes}
-          />
+          <Dialog
+            triggerButton={
+              <button type='button' className='transparent-button'>
+                Approve
+              </button>
+            }
+            title='Approve Participant Request'
+            closeButton='Cancel'
+            open={open}
+            onOpenChange={setOpen}
+          >
+            <ParticipantApprovalForm
+              onApprove={handleApprove}
+              participant={participant}
+              participantTypes={participantTypes}
+            />
+          </Dialog>
         </div>
       </td>
     </tr>
