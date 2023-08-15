@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { ChangeEvent, useMemo, useState } from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
+import { SiteDTO } from '../../../api/services/adminServiceClient';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { Form } from '../Core/Form';
@@ -25,14 +26,28 @@ function ParticipantApprovalForm({
 }: ParticipantApprovalFormProps) {
   const { sites } = useSiteList();
   const [searchText, setSearchText] = useState(participant.name);
-  const onSubmit: SubmitHandler<ParticipantApprovalFormDetails> = async (formData) => {
-    await onApprove(formData);
+  const [selectedSite, setSelectedSite] = useState<SiteDTO>();
+
+  const formMethods = useForm<ParticipantApprovalFormDetails>({
+    defaultValues: { name: participant.name, types: participant.types?.map((t) => t.id) },
+  });
+  const { register, handleSubmit, setValue } = formMethods;
+
+  const onSubmit = async (data: ParticipantApprovalFormDetails) => {
+    await onApprove(data);
   };
 
-  const formatParticipantToFormValues = useMemo(
-    () => ({ name: participant.name, types: participant.types?.map((t) => t.id) }),
-    [participant]
-  );
+  const onSiteClick = (site: SiteDTO) => {
+    setValue('siteId', site.id);
+    setSelectedSite(site);
+  };
+
+  const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    // This feature still under development :)
+    // setSearchText(event.target.value);
+  };
+
+  const getSiteText = (site: SiteDTO) => `${site.name} (Site ID ${site.id})`;
 
   return (
     <div className='participant-approval-form'>
@@ -44,40 +59,50 @@ function ParticipantApprovalForm({
       </ul>
       <SearchBarContainer>
         <Input inputName='participantSearch' label='Search Participant Name to find Site ID'>
-          <SearchBarInput inputClassName='search-input' fullBorder value={searchText} />
+          <SearchBarInput
+            inputClassName='search-input'
+            fullBorder
+            value={!selectedSite ? searchText : getSiteText(selectedSite)}
+            onChange={onSearchInputChange}
+            onFocus={() => setSelectedSite(undefined)}
+          />
         </Input>
-        <SearchBarResults>
-          {sites?.map((s) => (
-            <div>{s.name}</div>
-          ))}
-        </SearchBarResults>
+        {!selectedSite && (
+          <SearchBarResults className='site-search-results'>
+            {sites?.map((s) => (
+              <button type='button' className='text-button' onClick={() => onSiteClick(s)}>
+                {getSiteText(s)}
+              </button>
+            ))}
+          </SearchBarResults>
+        )}
       </SearchBarContainer>
-      <Form<ParticipantApprovalFormDetails>
-        onSubmit={onSubmit}
-        submitButtonText='Approve Participant'
-        defaultValues={formatParticipantToFormValues}
-      >
-        <TextInput
-          inputName='name'
-          label='Participant Name'
-          rules={{ required: 'Please specify participant name.' }}
-        />
-        <TextInput
-          inputName='siteId'
-          label='Site ID'
-          type='number'
-          rules={{ required: 'Please specify site id.' }}
-        />
-        <CheckboxInput
-          inputName='types'
-          label='Participant Type'
-          options={participantTypes.map((p) => ({
-            optionLabel: p.typeName,
-            value: p.id,
-          }))}
-          rules={{ required: 'Please specify Participant type.' }}
-        />
-      </Form>
+      {!!selectedSite && (
+        <FormProvider {...formMethods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextInput
+              inputName='name'
+              label='Participant Name'
+              rules={{ required: 'Please specify participant name.' }}
+            />
+            <input type='hidden' {...register('siteId')} />
+            <CheckboxInput
+              inputName='types'
+              label='Participant Type'
+              rules={{ required: 'Please specify Participant type.' }}
+              options={participantTypes.map((p) => ({
+                optionLabel: p.typeName,
+                value: p.id,
+              }))}
+            />
+            <div className='form-footer'>
+              <button type='submit' className='primary-button'>
+                Approve Participant
+              </button>
+            </div>
+          </form>
+        </FormProvider>
+      )}
     </div>
   );
 }

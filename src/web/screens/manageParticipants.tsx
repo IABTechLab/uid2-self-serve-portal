@@ -3,7 +3,7 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { SiteListResponse } from '../../api/services/adminServiceClient';
+import { SiteDTO } from '../../api/services/adminServiceClient';
 import { Loading } from '../components/Core/Loading';
 import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
 import {
@@ -17,7 +17,7 @@ import { PortalRoute } from './routeUtils';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
-    results: [ParticipantRequestDTO[], ParticipantTypeDTO[], SiteListResponse];
+    results: [ParticipantRequestDTO[], ParticipantTypeDTO[], SiteDTO[]];
   };
 
   const reloader = useRevalidator();

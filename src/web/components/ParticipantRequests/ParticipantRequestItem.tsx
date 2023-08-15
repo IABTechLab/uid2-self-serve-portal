@@ -44,43 +44,43 @@ export function ParticipantRequestItem({
   // TODO: update this when we have login uploading
   const logo = '/default-logo.svg';
   return (
-    <tr className='participant-request-item'>
-      <td>
-        <div className='participant-request-name-cell'>
-          <img src={logo} alt={participant.name} className='participant-request-logo' />
-          <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
-            {participant.name}
-          </label>
-        </div>
-      </td>
-      <td>
-        <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
-      </td>
-      <td>
-        <div className='participant-request-status'>{participant.status}</div>
-      </td>
-      <td className='action'>
-        <div className='action-cell'>
-          {hasError && <InlineError />}
-          <Dialog
-            triggerButton={
-              <button type='button' className='transparent-button'>
-                Approve
-              </button>
-            }
-            title='Approve Participant Request'
-            closeButton='Cancel'
-            open={open}
-            onOpenChange={setOpen}
-          >
-            <ParticipantApprovalForm
-              onApprove={handleApprove}
-              participant={participant}
-              participantTypes={participantTypes}
-            />
-          </Dialog>
-        </div>
-      </td>
-    </tr>
+    <>
+      <tr className='participant-request-item'>
+        <td>
+          <div className='participant-request-name-cell'>
+            <img src={logo} alt={participant.name} className='participant-request-logo' />
+            <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
+              {participant.name}
+            </label>
+          </div>
+        </td>
+        <td>
+          <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
+        </td>
+        <td>
+          <div className='participant-request-status'>{participant.status}</div>
+        </td>
+        <td className='action'>
+          <div className='action-cell'>
+            {hasError && <InlineError />}
+            <button type='button' className='transparent-button' onClick={() => setOpen(true)}>
+              Approve
+            </button>
+          </div>
+        </td>
+      </tr>
+      <Dialog
+        title='Approve Participant Request'
+        closeButton='Cancel'
+        open={open}
+        onOpenChange={setOpen}
+      >
+        <ParticipantApprovalForm
+          onApprove={handleApprove}
+          participant={participant}
+          participantTypes={participantTypes}
+        />
+      </Dialog>
+    </>
   );
 }

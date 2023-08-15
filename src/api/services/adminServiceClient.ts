@@ -58,15 +58,15 @@ export const updateSharingList = async (
 };
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
-export type SiteListResponse = {
+export type SiteDTO = {
   id: number;
   name: string;
   enabled: boolean;
   roles: [ClientRole];
   client_count: number;
-}[];
+};
 
 export const getSiteList = async () => {
-  const response = await adminServiceClient.get<SiteListResponse>('/api/site/list');
+  const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
   return response.data;
 };

@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Middleware, SWRConfig, SWRHook } from 'swr';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { SiteListResponse } from '../../../api/services/adminServiceClient';
+import { SiteDTO } from '../../../api/services/adminServiceClient';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
@@ -11,7 +11,7 @@ export default {
   component: ParticipantApprovalForm,
 } as ComponentMeta<typeof ParticipantApprovalForm>;
 
-const response: SiteListResponse = [
+const response: SiteDTO[] = [
   {
     id: 2,
     name: 'Test Site',
@@ -43,7 +43,10 @@ ParticipantApproval.args = {
   participant: {
     id: 1,
     name: 'Participant 1',
-    types: [{ id: 1, typeName: 'Type 1' }],
+    types: [
+      { id: 1, typeName: 'Type 1' },
+      { id: 2, typeName: 'Type 2' },
+    ],
     status: ParticipantStatus.AwaitingApproval,
   },
   participantTypes: [

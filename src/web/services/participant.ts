@@ -234,7 +234,7 @@ export async function UpdateEmailContact(
 export type ParticipantApprovalFormDetails = {
   name: string;
   types: number[];
-  siteId: string;
+  siteId: number;
 };
 
 export async function ApproveParticipantRequest(
@@ -244,7 +244,7 @@ export async function ApproveParticipantRequest(
   try {
     await axios.put(`/participants/${participantId}/approve`, {
       name: formData.name,
-      siteId: parseInt(formData.siteId, 10),
+      siteId: formData.siteId,
       types: formData.types.map((typeId) => ({ id: typeId })),
     });
   } catch (e: unknown) {
