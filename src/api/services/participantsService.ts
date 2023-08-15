@@ -52,7 +52,7 @@ export const fetchSharingParticipants = async (
   sharingListResponse: SharingListResponse
 ): Promise<Participant[]> => {
   return Participant.query()
-    .whereIn('siteId', sharingListResponse.allowlist)
+    .whereIn('siteId', sharingListResponse.allowed_sites)
     .withGraphFetched('types');
 };
 
@@ -80,7 +80,7 @@ export const addSharingParticipants = async (
   siteIds: number[]
 ): Promise<Participant[]> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  const newSharingSet = new Set([...sharingListResponse.allowlist, ...siteIds]);
+  const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
   const response = await updateSharingList(participantSiteId, sharingListResponse.hash, [
     ...newSharingSet,
   ]);
@@ -92,7 +92,7 @@ export const deleteSharingParticipants = async (
   siteIds: number[]
 ): Promise<Participant[]> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  const newSharingList = sharingListResponse.allowlist.filter(
+  const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
   const response = await updateSharingList(
