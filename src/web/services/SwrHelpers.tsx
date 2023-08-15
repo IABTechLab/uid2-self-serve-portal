@@ -22,11 +22,10 @@ function createTestSWRProvider(url: string) {
   return TestSWRProvider;
 }
 
-export function createSwrHook<TResponseType>(endpoint: string) {
-  const fetcher = async () => {
-    const result = await axios.get<TResponseType>(endpoint);
-    return result.data;
-  };
+export function createSwrHook<TResponseType>(
+  endpoint: string,
+  fetcher: () => Promise<TResponseType>
+) {
   const useSWRHook = () => {
     const { data, ...rest } = useSWR(endpoint, fetcher);
     return {
