@@ -1,12 +1,11 @@
-import { ChangeEvent, useMemo, useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { ChangeEvent, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { SiteDTO } from '../../../api/services/adminServiceClient';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
-import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { Input } from '../Input/Input';
 import { TextInput } from '../Input/TextInput';
@@ -25,7 +24,7 @@ function ParticipantApprovalForm({
   participantTypes,
 }: ParticipantApprovalFormProps) {
   const { sites } = useSiteList();
-  const [searchText, setSearchText] = useState(participant.name);
+  const [searchText] = useState(participant.name);
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
 
   const formMethods = useForm<ParticipantApprovalFormDetails>({

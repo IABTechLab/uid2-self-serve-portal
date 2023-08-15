@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { PropsWithChildren } from 'react';
 import useSWR, { Middleware, preload, SWRConfig, SWRHook } from 'swr';
 
