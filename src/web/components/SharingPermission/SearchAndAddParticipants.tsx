@@ -69,7 +69,7 @@ export function SearchAndAddParticipants({
       </div>
       <div className='action-section'>
         {selectedParticipants.size > 0 && (
-          <p>{getParticipantText(selectedParticipants.size)} added</p>
+          <p>{getParticipantText(selectedParticipants.size)} selected</p>
         )}
         <Dialog
           title='Please review the following changes'
