@@ -8,7 +8,7 @@ export function createSitesRouter() {
 
   sitesRouter.use('/', isApproverCheck);
 
-  sitesRouter.get('/', async (req, res) => {
+  sitesRouter.get('/', async (_req, res) => {
     const sites = await getSiteList();
     return res.status(200).json(sites);
   });
