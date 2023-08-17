@@ -70,3 +70,17 @@ export const updateSharingList = async (
     throw error;
   }
 };
+
+type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
+export type SiteDTO = {
+  id: number;
+  name: string;
+  enabled: boolean;
+  roles: ClientRole[];
+  client_count: number;
+};
+
+export const getSiteList = async () => {
+  const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
+  return response.data;
+};

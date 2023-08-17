@@ -1,0 +1,12 @@
+.participant-approval-form {
+  .site-search-results {
+    padding: 10px;
+
+    & > button {
+      margin: 10px;
+      display: block;
+      font-weight: normal;
+      color: var(--theme-primary);
+    }
+  }
+}
