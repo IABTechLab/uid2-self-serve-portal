@@ -1,11 +1,35 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
+import { useEffect, useRef } from 'react';
 
 import './SearchBar.scss';
 
-type SearchBarContainerProps = React.PropsWithChildren<{ className?: string }>;
-export function SearchBarContainer({ children, className }: SearchBarContainerProps) {
-  return <div className={clsx('search-bar', className)}>{children}</div>;
+type SearchBarContainerProps = React.PropsWithChildren<{
+  className?: string;
+  handleOnBlur: () => void;
+}>;
+export function SearchBarContainer({ children, className, handleOnBlur }: SearchBarContainerProps) {
+  const componentRef = useRef<HTMLDivElement>(null);
+  const handleClick = (event: MouseEvent) => {
+    if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
+      handleOnBlur();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div ref={componentRef} className={clsx('search-bar', className)}>
+      {children}
+    </div>
+  );
 }
 
 type SearchBarInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
