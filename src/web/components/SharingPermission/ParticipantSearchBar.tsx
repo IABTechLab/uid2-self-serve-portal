@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
@@ -50,7 +50,7 @@ export function ParticipantSearchBar({
   return (
     <SearchBarContainer
       className={clsx('participants-search-bar')}
-      handleOnBlur={() => onToggleOpen(false)}
+      handleOnBlur={useCallback(() => onToggleOpen(false), [onToggleOpen])}
     >
       <SearchBarInput
         className='participants-search-input'
