@@ -12,11 +12,13 @@ export function SearchBarContainer({ children, className, handleOnBlur }: Search
   const componentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!handleOnBlur) {
+      return;
+    }
+
     const handleClick = (event: MouseEvent) => {
       if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
-        if (handleOnBlur) {
-          handleOnBlur();
-        }
+        handleOnBlur();
       }
     };
 
