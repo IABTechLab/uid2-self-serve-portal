@@ -4,7 +4,7 @@ import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../env
 import { getLoggers } from '../helpers/loggingHelpers';
 
 export type SharingListResponse = {
-  allowlist: number[];
+  allowed_sites: number[];
   hash: number;
 };
 
@@ -29,7 +29,8 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
     return response.status === 200
       ? response.data
       : {
-          allowlist: [],
+          // eslint-disable-next-line camelcase
+          allowed_sites: [],
           hash: 0,
         };
   } catch (error: unknown) {
@@ -45,14 +46,41 @@ export const updateSharingList = async (
   sharingList: number[]
 ): Promise<SharingListResponse> => {
   try {
-    const response = await adminServiceClient.post(`/api/sharing/list/${siteId}`, {
-      allowlist: sharingList,
-      hash,
-    });
-    return response.data;
+    const response = await adminServiceClient.post<SharingListResponse>(
+      `/api/sharing/list/${siteId}`,
+      {
+        // eslint-disable-next-line camelcase
+        allowed_sites: sharingList,
+        hash,
+      },
+      {
+        validateStatus: (status) => (status >= 200 && status < 300) || status === 404,
+      }
+    );
+    return response.status === 200
+      ? response.data
+      : {
+          // eslint-disable-next-line camelcase
+          allowed_sites: [],
+          hash: 0,
+        };
   } catch (error: unknown) {
     const [logger] = getLoggers();
     logger.error(`Update ACLs failed: ${error}`);
     throw error;
   }
+};
+
+type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
+export type SiteDTO = {
+  id: number;
+  name: string;
+  enabled: boolean;
+  roles: ClientRole[];
+  client_count: number;
+};
+
+export const getSiteList = async () => {
+  const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
+  return response.data;
 };

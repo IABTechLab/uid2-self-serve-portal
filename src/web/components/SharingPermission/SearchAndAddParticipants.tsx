@@ -53,7 +53,6 @@ export function SearchAndAddParticipants({
 
   const handleSelectedParticipantChanged = (selectedItems: Set<number>) => {
     setSelectedParticipants(selectedItems);
-    setOpenSearchResult(false);
   };
 
   return (
@@ -68,46 +67,44 @@ export function SearchAndAddParticipants({
           onToggleOpen={setOpenSearchResult}
         />
       </div>
-      {!openSearchResult && (
-        <div className='action-section'>
-          {selectedParticipants.size > 0 && (
-            <p>{getParticipantText(selectedParticipants.size)} added</p>
-          )}
-          <Dialog
-            title='Please review the following changes'
-            triggerButton={
-              <button
-                type='button'
-                className='primary-button add-participant-button'
-                disabled={!selectedParticipants.size}
-              >
-                Add Participants
-              </button>
-            }
-            open={openConfirmation}
-            onOpenChange={setOpenConfirmation}
-          >
-            Adding the following participants:
-            <ul className='dot-list'>
-              {selectedParticipantList.map((selectedParticipant) => (
-                <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
-              ))}
-            </ul>
-            <div className='dialog-footer-section'>
-              <button type='button' className='primary-button' onClick={onHandleAddParticipants}>
-                Save
-              </button>
-              <button
-                type='button'
-                className='transparent-button'
-                onClick={() => setOpenConfirmation(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </Dialog>
-        </div>
-      )}
+      <div className='action-section'>
+        {selectedParticipants.size > 0 && (
+          <p>{getParticipantText(selectedParticipants.size)} selected</p>
+        )}
+        <Dialog
+          title='Please review the following changes'
+          triggerButton={
+            <button
+              type='button'
+              className='primary-button add-participant-button'
+              disabled={!selectedParticipants.size}
+            >
+              Add Participants
+            </button>
+          }
+          open={openConfirmation}
+          onOpenChange={setOpenConfirmation}
+        >
+          Adding the following participants:
+          <ul className='dot-list'>
+            {selectedParticipantList.map((selectedParticipant) => (
+              <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
+            ))}
+          </ul>
+          <div className='dialog-footer-section'>
+            <button type='button' className='primary-button' onClick={onHandleAddParticipants}>
+              Save
+            </button>
+            <button
+              type='button'
+              className='transparent-button'
+              onClick={() => setOpenConfirmation(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </Dialog>
+      </div>
     </div>
   );
 }

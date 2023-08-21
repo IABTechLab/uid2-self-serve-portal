@@ -48,7 +48,10 @@ export function ParticipantSearchBar({
   );
 
   return (
-    <SearchBarContainer className={clsx('participants-search-bar')}>
+    <SearchBarContainer
+      className={clsx('participants-search-bar')}
+      handleOnBlur={() => onToggleOpen(false)}
+    >
       <SearchBarInput
         className='participants-search-input'
         onClick={() => onToggleOpen(true)}

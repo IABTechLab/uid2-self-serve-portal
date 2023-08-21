@@ -69,7 +69,12 @@ export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
         {standardMenu
           .filter((m) => m.location === 'footer')
           .map((m) => (
-            <MenuItem path={m.path} description={m.description} linkClass='outside-link' />
+            <MenuItem
+              key={m.path}
+              path={m.path}
+              description={m.description}
+              linkClass='outside-link'
+            />
           ))}
         <li className='side-nav-item version-info'>UID2 Self-Serve Portal v.{config.version}</li>
       </NavigationMenuList>
