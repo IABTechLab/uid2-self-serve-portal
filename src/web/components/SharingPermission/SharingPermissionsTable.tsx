@@ -4,6 +4,7 @@ import { ReactNode, useMemo, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { Dialog } from '../Core/Dialog';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
@@ -50,7 +51,7 @@ export function SharingPermissionsTable({
   const tableHeader = () =>
     !hasParticipantSelected ? (
       <>
-        <th>Participant Name</th>
+        <SortableTableHeader<AvailableParticipantDTO> sortKey='name' header='Participant Name' />
         <th>Participant Type</th>
         <th>Added By</th>
       </>
