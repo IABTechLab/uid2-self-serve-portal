@@ -125,10 +125,7 @@ function ParticipantsTableContent({
 export function ParticipantsTable(props: ParticipantsTableProps) {
   return (
     <SortableProvider>
-      <ParticipantsTableContent
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...props}
-      />
+      <ParticipantsTableContent {...props} />
     </SortableProvider>
   );
 }
