@@ -6,24 +6,26 @@ import './SearchBar.scss';
 
 type SearchBarContainerProps = React.PropsWithChildren<{
   className?: string;
-  handleOnBlur: () => void;
+  handleOnBlur?: () => void;
 }>;
 export function SearchBarContainer({ children, className, handleOnBlur }: SearchBarContainerProps) {
   const componentRef = useRef<HTMLDivElement>(null);
-  const handleClick = (event: MouseEvent) => {
-    if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
-      handleOnBlur();
-    }
-  };
 
   useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
+        if (handleOnBlur) {
+          handleOnBlur();
+        }
+      }
+    };
+
     document.addEventListener('click', handleClick);
 
     return () => {
       document.removeEventListener('click', handleClick);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleOnBlur]);
 
   return (
     <div ref={componentRef} className={clsx('search-bar', className)}>
