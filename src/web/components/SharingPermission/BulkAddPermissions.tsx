@@ -1,40 +1,45 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import {
   BulkAddPermissionsForm,
-  getCheckedParticipantTypeIds,
+  getCheckedParticipantTypeNames,
   getDefaultAdvertiserCheckboxState,
   getDefaultDataProviderCheckboxState,
   getDefaultDSPCheckboxState,
   getDefaultPublisherCheckboxState,
   getRecommendationMessageFromTypeNames,
+  getRecommendedTypeFromParticipant,
+  hasUncheckedASharedType,
 } from './bulkAddPermissionsHelpers';
 
 import './BulkAddPermissions.scss';
 
 type BulkAddPermissionsProps = {
   participant: ParticipantDTO | null;
-  participantTypes: ParticipantTypeDTO[];
   hasSharingParticipants: boolean;
-  onBulkAddSharingPermission: (selectedTypes: number[]) => Promise<void>;
+  onBulkAddSharingPermission: (selectedTypes: string[]) => Promise<void>;
+  sharedTypes: string[];
 };
 
 export function BulkAddPermissions({
   participant,
-  participantTypes,
   hasSharingParticipants,
+  sharedTypes,
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
   const [showRecommendedParticipants, setShowRecommendedParticipants] = useState(false);
+
   const currentParticipantTypeNames = participant?.types
     ? participant.types.map((p) => p.typeName ?? '')
     : [];
+
+  const recommendedTypes = getRecommendedTypeFromParticipant(currentParticipantTypeNames);
+
   const formMethods = useForm<BulkAddPermissionsForm>({
     defaultValues: {
       publisherChecked: getDefaultPublisherCheckboxState(currentParticipantTypeNames),
@@ -48,8 +53,18 @@ export function BulkAddPermissions({
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { isDirty },
   } = formMethods;
+
+  useEffect(() => {
+    if (sharedTypes && sharedTypes.length > 0) {
+      setValue('publisherChecked', sharedTypes.includes('publisher'));
+      setValue('advertiserChecked', sharedTypes.includes('advertiser'));
+      setValue('DSPChecked', sharedTypes.includes('dsp'));
+      setValue('dataProviderChecked', sharedTypes.includes('data_provider'));
+    }
+  }, [sharedTypes, setValue]);
 
   const watchPublisherChecked = watch('publisherChecked');
   const watchAdvertiserChecked = watch('advertiserChecked');
@@ -57,58 +72,13 @@ export function BulkAddPermissions({
   const watchDataProviderChecked = watch('dataProviderChecked');
 
   const handleSave = (data: BulkAddPermissionsForm) => {
-    onBulkAddSharingPermission(getCheckedParticipantTypeIds(data, participantTypes));
+    onBulkAddSharingPermission(getCheckedParticipantTypeNames(data));
   };
 
   const onToggleViewRecommendedParticipants = () => {
     setShowRecommendedParticipants((prevToggle) => !prevToggle);
     // TODO: show/hide the actual participants
   };
-
-  const bulkAddPermissionsMessage = (
-    <>
-      <b>{getRecommendationMessageFromTypeNames(currentParticipantTypeNames)}</b>
-      <p>
-        Allow all current and future participants within a participation type to decrypt your UID2
-        tokens.
-      </p>
-    </>
-  );
-
-  const viewRecommendedParticipantsButton = (
-    <button
-      type='button'
-      className='text-button bulk-add-permissions-view-recommendations-button'
-      onClick={onToggleViewRecommendedParticipants}
-    >
-      {showRecommendedParticipants ? 'Hide Participants' : 'View Participants'}
-    </button>
-  );
-
-  const participantTypeCheckboxes = (
-    <div className='participant-type-checkbox-section'>
-      <FormStyledCheckbox
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...register('publisherChecked')}
-      />
-      <span className='checkbox-label'>Publisher</span>
-      <FormStyledCheckbox
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...register('advertiserChecked')}
-      />
-      <span className='checkbox-label'>Advertiser</span>
-      <FormStyledCheckbox
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...register('DSPChecked')}
-      />
-      <span className='checkbox-label'>DSP</span>
-      <FormStyledCheckbox
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...register('dataProviderChecked')}
-      />
-      <span className='checkbox-label'>Data Provider</span>
-    </div>
-  );
 
   const saveRecommendationsButton = (
     <div className='bulk-add-permissions-footer'>
@@ -118,13 +88,41 @@ export function BulkAddPermissions({
     </div>
   );
 
+  const commonContent = (
+    <>
+      <b>{getRecommendationMessageFromTypeNames(currentParticipantTypeNames, recommendedTypes)}</b>
+      <p>
+        Allow all current and future participants within a participation type to decrypt your UID2
+        tokens.
+      </p>
+      <div className='participant-type-checkbox-section'>
+        <FormStyledCheckbox {...register('publisherChecked')} data-testid='publisher' />
+        <span className='checkbox-label'>Publisher</span>
+        <FormStyledCheckbox {...register('advertiserChecked')} data-testid='advertiser' />
+        <span className='checkbox-label'>Advertiser</span>
+        <FormStyledCheckbox {...register('DSPChecked')} data-testid='dsp' />
+        <span className='checkbox-label'>DSP</span>
+        <FormStyledCheckbox {...register('dataProviderChecked')} data-testid='data-provider' />
+        <span className='checkbox-label'>Data Provider</span>
+      </div>
+      {(watchPublisherChecked ||
+        watchAdvertiserChecked ||
+        watchDSPChecked ||
+        watchDataProviderChecked) && (
+        <button
+          type='button'
+          className='text-button bulk-add-permissions-view-recommendations-button'
+          onClick={onToggleViewRecommendedParticipants}
+        >
+          {showRecommendedParticipants ? 'Hide Participants' : 'View Participants'}
+        </button>
+      )}
+    </>
+  );
+
   const recommendationContent = (
     <div className='bulk-add-permissions'>
-      <div className='bulk-add-permissions-body'>
-        {bulkAddPermissionsMessage}
-        {participantTypeCheckboxes}
-        {viewRecommendedParticipantsButton}
-      </div>
+      <div className='bulk-add-permissions-body'>{commonContent}</div>
       {saveRecommendationsButton}
     </div>
   );
@@ -132,10 +130,14 @@ export function BulkAddPermissions({
   const collapsibleContent = (
     <div className='bulk-add-permissions'>
       <div className='bulk-add-permissions-body'>
-        {bulkAddPermissionsMessage}
-        {participantTypeCheckboxes}
-        {/* Change this condition once we have APIs to get the which types have been shared with */}
-        {false && (
+        {commonContent}
+        {hasUncheckedASharedType(
+          sharedTypes,
+          watchPublisherChecked,
+          watchAdvertiserChecked,
+          watchDSPChecked,
+          watchDataProviderChecked
+        ) && (
           <div className='remove-recommended-type-warning'>
             <Banner
               type='warning'
@@ -149,7 +151,6 @@ export function BulkAddPermissions({
   );
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSave)}>
         {!hasSharingParticipants && (

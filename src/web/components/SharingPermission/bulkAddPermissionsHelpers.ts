@@ -1,4 +1,3 @@
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
 export type BulkAddPermissionsForm = {
@@ -31,40 +30,63 @@ export const getDefaultDataProviderCheckboxState = (participantTypeNames: string
 export const getRecommendedTypeFromParticipant = (participantTypeNames: string[]) => {
   const uniqueTypes = new Set<string>();
   if (getDefaultPublisherCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('Publishers');
+    uniqueTypes.add('publisher');
   }
   if (getDefaultAdvertiserCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('Advertisers');
+    uniqueTypes.add('advertiser');
   }
   if (getDefaultDSPCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('DSPs');
+    uniqueTypes.add('dsp');
   }
   if (getDefaultDataProviderCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('Data Providers');
+    uniqueTypes.add('data_provider');
   }
-  const result = Array.from(uniqueTypes);
-  if (result.length === 4) return 'participants';
-
-  return formatStringsWithSeparator(result);
+  return Array.from(uniqueTypes);
 };
 
-export const getCheckedParticipantTypeIds = (
-  data: BulkAddPermissionsForm,
-  participantTypes: ParticipantTypeDTO[]
+const getParticipantTypeNamesMessage = (recommendedTypes: string[]) => {
+  if (recommendedTypes.length === 4) return 'participants';
+  const friendlyNames: Record<string, string> = {
+    publisher: 'Publishers',
+    advertiser: 'Advertisers',
+    dsp: 'DSPs',
+    // eslint-disable-next-line camelcase
+    data_provider: 'Data Providers',
+  };
+
+  const formattedNames = recommendedTypes.map((type) => friendlyNames[type]);
+  return formatStringsWithSeparator(formattedNames);
+};
+
+export const hasUncheckedASharedType = (
+  sharedTypes: string[],
+  publisherChecked: boolean,
+  advertiserChecked: boolean,
+  DSPChecked: boolean,
+  dataProviderChecked: boolean
 ) => {
+  if (!publisherChecked && sharedTypes.includes('publisher')) return true;
+  if (!advertiserChecked && sharedTypes.includes('advertiser')) return true;
+  if (!DSPChecked && sharedTypes.includes('dsp')) return true;
+  if (!dataProviderChecked && sharedTypes.includes('data_provider')) return true;
+  return false;
+};
+
+export const getCheckedParticipantTypeNames = (data: BulkAddPermissionsForm) => {
   const ids = [];
-  if (data.publisherChecked)
-    ids.push(participantTypes.find((x) => x.typeName === 'Publisher')?.id!);
-  if (data.advertiserChecked)
-    ids.push(participantTypes.find((x) => x.typeName === 'Advertiser')?.id!);
-  if (data.DSPChecked) ids.push(participantTypes.find((x) => x.typeName === 'DSP')?.id!);
-  if (data.dataProviderChecked)
-    ids.push(participantTypes.find((x) => x.typeName === 'Data Provider')?.id!);
+  if (data.publisherChecked) ids.push('publisher');
+  if (data.advertiserChecked) ids.push('advertiser');
+
+  if (data.DSPChecked) ids.push('dsp');
+  if (data.dataProviderChecked) ids.push('data_provider');
   return ids;
 };
 
-export const getRecommendationMessageFromTypeNames = (participantTypeNames: string[]) => {
+export const getRecommendationMessageFromTypeNames = (
+  participantTypeNames: string[],
+  recommendedTypes: string[]
+) => {
   return `As ${getArticle(participantTypeNames[0])} ${formatStringsWithSeparator(
     participantTypeNames
-  )}, we recommend you share with all ${getRecommendedTypeFromParticipant(participantTypeNames)}.`;
+  )}, we recommend you share with all ${getParticipantTypeNamesMessage(recommendedTypes)}.`;
 };
