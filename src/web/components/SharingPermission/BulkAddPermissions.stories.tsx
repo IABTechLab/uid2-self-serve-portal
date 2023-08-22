@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof BulkAddPermissions> = (args) => (
   <BulkAddPermissions {...args} />
 );
 
-const onBulkAddSharingPermission = (ids: number[]) => Promise.resolve(console.log(ids));
+const onBulkAddSharingPermission = (types: string[]) => Promise.resolve(console.log(types));
 
 export const Publisher = Template.bind({});
 Publisher.args = {
@@ -24,12 +24,7 @@ Publisher.args = {
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
+  sharedTypes: [],
 };
 
 export const AdvertiserAndDSP = Template.bind({});
@@ -45,12 +40,7 @@ AdvertiserAndDSP.args = {
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
+  sharedTypes: [],
 };
 
 export const AllTypes = Template.bind({});
@@ -68,16 +58,11 @@ AllTypes.args = {
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
+  sharedTypes: [],
 };
 
-export const HasSharingParticipants = Template.bind({});
-HasSharingParticipants.args = {
+export const HasSharedWithPublisher = Template.bind({});
+HasSharedWithPublisher.args = {
   participant: {
     id: 1,
     name: 'Participant 1',
@@ -90,11 +75,6 @@ HasSharingParticipants.args = {
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
   hasSharingParticipants: true,
+  sharedTypes: ['publisher'],
 };
