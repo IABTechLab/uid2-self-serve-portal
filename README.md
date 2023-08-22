@@ -233,4 +233,16 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
     where u.email = @email
     ```
 
-14. Return to the UI and you should be good to go!
+14. Grant participant permission to your account
+
+    - Open the Keycloak Admin Console (http://localhost:18080/admin/) and log in as an administrator (see above).
+    - Change the realm to `self-serve-portal`
+    - Click Users
+    - Select your account
+    - Click Role Mapping
+    - Click Assign Role
+    - Filter by Clients
+    - Choose `add-participant-member` and click Assign
+    - You may need to log out and back into the UI
+
+15. Return to the UI and you should be good to go!
