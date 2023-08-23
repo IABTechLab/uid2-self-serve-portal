@@ -1,37 +1,37 @@
-.participant-item {
+.participant-item-with-checkbox {
   button[role='checkbox'] {
     width: 21px;
     height: 21px;
   }
-  .participant-type-label {
-    background: var(--theme-label-background);
-    border-radius: 3px;
-    padding: 4px 8px;
-    margin-right: 8px;
-  }
-
   .participant-checkbox {
     margin-right: 16px;
   }
+}
 
-  .participant-logo {
-    width: 50px;
-    margin-right: 16px;
-  }
+.participant-type-label {
+  background: var(--theme-label-background);
+  border-radius: 3px;
+  padding: 4px 8px;
+  margin-right: 8px;
+}
 
-  .participant-types {
-    display: flex;
-    align-items: center;
-    font-size: 0.625rem;
-    line-height: 0.75rem;
-  }
+.participant-logo {
+  width: 50px;
+  margin-right: 16px;
+}
 
-  .participant-name-cell {
-    display: flex;
-    align-items: center;
+.participant-types {
+  display: flex;
+  align-items: center;
+  font-size: 0.625rem;
+  line-height: 0.75rem;
+}
 
-    .checkbox-label {
-      padding-right: 16px;
-    }
+.participant-name-cell {
+  display: flex;
+  align-items: center;
+
+  .checkbox-label {
+    padding-right: 16px;
   }
 }
