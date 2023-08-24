@@ -12,6 +12,7 @@ import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
+import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
@@ -22,6 +23,7 @@ import './dashboard.scss';
 
 export const StandardRoutes: PortalRoute[] = [
   HomeRoute,
+  LogoutRoute,
   SharingPermissionsRoute,
   AccountInformationRoute,
   TeamMembersRoute,
