@@ -233,4 +233,6 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
     where u.email = @email
     ```
 
-14. Return to the UI and you should be good to go!
+14. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
+
+15. Return to the UI and you should be good to go!
