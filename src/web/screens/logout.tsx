@@ -10,7 +10,7 @@ function Logout() {
   return <h1>Logging out...</h1>;
 }
 export const LogoutRoute: PortalRoute = {
-  path: '/Logout',
+  path: '/logout',
   description: 'Logout',
   element: <Logout />,
 };
