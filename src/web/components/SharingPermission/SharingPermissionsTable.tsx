@@ -81,7 +81,7 @@ export function SharingPermissionsTable({
             icon={['far', 'trash-can']}
             className='sharing-permission-trashcan-icon'
           />
-          Delete Permissions({selectedParticipantList.length})
+          Delete Permissions ({selectedParticipantList.length})
         </button>
       }
       open={openConfirmation}
@@ -93,11 +93,10 @@ export function SharingPermissionsTable({
             <li key={participant.id}>{participant.name}</li>
           ))}
         </ul>
-        <p>Note: Sharing will continue with participants that are shared via &quot;Auto&quot;.</p>
       </div>
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleDeletePermissions}>
-          I want to Remove Permissions
+          Delete Permissions
         </button>
         <button
           type='button'

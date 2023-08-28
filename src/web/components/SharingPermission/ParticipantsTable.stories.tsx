@@ -15,7 +15,6 @@ export const Default = Template.bind({});
 Default.args = {
   tableHeader: () => (
     <>
-      <th> </th>
       <th>Participant Name</th>
       <th>Participant Type</th>
     </>
@@ -26,4 +25,10 @@ Default.args = {
   ] as AvailableParticipantDTO[],
   filterText: '',
   onSelectedChange: (selectedItems: Set<number>) => console.log('Selected items:', selectedItems),
+};
+
+export const HideSelectAllCheckbox = Template.bind({});
+HideSelectAllCheckbox.args = {
+  ...Default.args,
+  hideSelectAllCheckbox: true,
 };
