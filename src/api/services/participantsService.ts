@@ -4,12 +4,14 @@ import { z } from 'zod';
 import {
   Participant,
   ParticipantCreationPartial,
+  ParticipantDTO,
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
-import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
+import { getSharingList, updateSharingList } from './adminServiceClient';
+import { SharingListResponse } from './adminServiceHelpers';
 import {
   findApproversByType,
   getApprovableParticipantTypeIds,
@@ -71,8 +73,18 @@ export const getParticipantsAwaitingApproval = async (email: string): Promise<Pa
         .select('participantId')
     )
     .withGraphFetched('types')
+    .withGraphFetched('users')
     .where('status', ParticipantStatus.AwaitingApproval);
   return participantsAwaitingApproval;
+};
+
+type SiteIdType = NonNullable<ParticipantDTO['siteId']>;
+export const GetAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
+  const sites = await Participant.query()
+    .whereNotNull('siteId')
+    .select('siteId')
+    .castTo<Required<Pick<ParticipantDTO, 'siteId'>>[]>();
+  return sites.map((s) => s.siteId);
 };
 
 export const addSharingParticipants = async (

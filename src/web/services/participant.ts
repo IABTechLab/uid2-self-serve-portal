@@ -223,6 +223,7 @@ export async function UpdateEmailContact(
 export type ParticipantApprovalFormDetails = {
   name: string;
   types: number[];
+  apiRoles: string[];
   siteId: number;
 };
 

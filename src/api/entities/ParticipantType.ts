@@ -28,6 +28,13 @@ export class ParticipantType extends BaseModel {
 
 export type ParticipantTypeDTO = ModelObjectOpt<ParticipantType>;
 
+export const ParticipantTypeData = {
+  DSP: { typeName: 'DSP', id: 1 },
+  Advertiser: { typeName: 'Advertiser', id: 2 },
+  DataProvider: { typeName: 'Data Provider', id: 3 },
+  Publisher: { typeName: 'Publisher', id: 4 },
+};
+
 export const ParticipantTypeSchema = z.object({
   id: z.number(),
   typeName: z.string().optional(),

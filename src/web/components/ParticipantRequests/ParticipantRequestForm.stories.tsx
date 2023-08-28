@@ -2,7 +2,9 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { Middleware, SWRConfig, SWRHook } from 'swr';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { SiteDTO } from '../../../api/services/adminServiceClient';
+import { ParticipantTypeData } from '../../../api/entities/ParticipantType';
+import { UserRole } from '../../../api/entities/User';
+import { AllowedSiteRoles, SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
@@ -48,12 +50,13 @@ ParticipantApproval.args = {
       { id: 2, typeName: 'Type 2' },
     ],
     status: ParticipantStatus.AwaitingApproval,
+    requestingUser: {
+      email: 'test@example.com',
+      fullName: 'Test User',
+      role: UserRole.MediaBuyer,
+    },
   },
-  participantTypes: [
-    { id: 1, typeName: 'Type 1' },
-    { id: 2, typeName: 'Type 2' },
-    { id: 3, typeName: 'Type 3' },
-  ],
+  participantTypes: Object.values(ParticipantTypeData),
   onApprove: async (form) => {
     console.log(JSON.stringify(form));
   },

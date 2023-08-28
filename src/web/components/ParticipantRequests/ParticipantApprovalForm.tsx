@@ -3,7 +3,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { SiteDTO } from '../../../api/services/adminServiceClient';
+import {
+  ClientRolesWithDescriptions,
+  GetRecommendedRoles,
+  SiteDTO,
+} from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -12,6 +16,11 @@ import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 
 import './ParticipantApprovalForm.scss';
+
+const apiRoleOptions = Object.entries(ClientRolesWithDescriptions).map((r) => ({
+  optionLabel: r[1],
+  value: r[0],
+}));
 
 type ParticipantApprovalFormProps = {
   onApprove: (formData: ParticipantApprovalFormDetails) => Promise<void>;
@@ -28,7 +37,10 @@ function ParticipantApprovalForm({
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
 
   const formMethods = useForm<ParticipantApprovalFormDetails>({
-    defaultValues: { name: participant.name, types: participant.types?.map((t) => t.id) },
+    defaultValues: {
+      name: participant.name,
+      types: participant.types?.map((t) => t.id),
+    },
   });
   const { register, handleSubmit, setValue } = formMethods;
 
@@ -38,6 +50,7 @@ function ParticipantApprovalForm({
 
   const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
+    setValue('apiRoles', site.roles);
     setSelectedSite(site);
   };
 
@@ -94,6 +107,27 @@ function ParticipantApprovalForm({
                 value: p.id,
               }))}
             />
+            <CheckboxInput inputName='apiRoles' label='API Availability' options={apiRoleOptions} />
+            <div className='recommended-roles'>
+              Recommended based on type: {GetRecommendedRoles(participant.types ?? []).join(', ')}
+            </div>
+            <Input inputName='readonly-requestor-name' label='Requestor Name'>
+              <input
+                className='input-container'
+                disabled
+                value={participant.requestingUser.fullName}
+              />
+            </Input>
+            <Input inputName='readonly-requestor-email' label='Requestor Email'>
+              <input
+                className='input-container'
+                disabled
+                value={participant.requestingUser.email}
+              />
+            </Input>
+            <Input inputName='readonly-requestor-job' label='Job Function'>
+              <input className='input-container' disabled value={participant.requestingUser.role} />
+            </Input>
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
                 Approve Participant
