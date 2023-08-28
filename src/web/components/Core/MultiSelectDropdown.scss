@@ -1,7 +1,7 @@
 .multi-select-dropdown {
   & > button {
     border-radius: 16px;
-    border: 1px solid #0300a5;
+    border: 1px solid var(--theme-radio-background);
     padding: 5px 12px;
   }
 
