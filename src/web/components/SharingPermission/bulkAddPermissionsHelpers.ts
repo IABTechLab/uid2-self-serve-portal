@@ -1,3 +1,4 @@
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
 export type BulkAddPermissionsForm = {
@@ -89,4 +90,25 @@ export const getRecommendationMessageFromTypeNames = (
   return `As ${getArticle(participantTypeNames[0])} ${formatStringsWithSeparator(
     participantTypeNames
   )}, we recommend you share with all ${getParticipantTypeNamesMessage(recommendedTypes)}.`;
+};
+
+export const getFilteredParticipantsByType = (
+  participants: AvailableParticipantDTO[],
+  publisherChecked: boolean,
+  advertiserChecked: boolean,
+  DSPChecked: boolean,
+  dataProviderChecked: boolean
+) => {
+  return participants.filter((p) => {
+    const selectedTypes = p.types!.map((type) => type.typeName);
+    if (
+      (publisherChecked && selectedTypes.includes('Publisher')) ||
+      (advertiserChecked && selectedTypes.includes('Advertiser')) ||
+      (DSPChecked && selectedTypes.includes('DSP')) ||
+      (dataProviderChecked && selectedTypes.includes('Data Provider'))
+    ) {
+      return true;
+    }
+    return false;
+  });
 };

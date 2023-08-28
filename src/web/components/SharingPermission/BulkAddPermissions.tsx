@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
+import { withoutRef } from '../Core/Form';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import {
   BulkAddPermissionsForm,
@@ -12,16 +14,19 @@ import {
   getDefaultDataProviderCheckboxState,
   getDefaultDSPCheckboxState,
   getDefaultPublisherCheckboxState,
+  getFilteredParticipantsByType,
   getRecommendationMessageFromTypeNames,
   getRecommendedTypeFromParticipant,
   hasUncheckedASharedType,
 } from './bulkAddPermissionsHelpers';
+import { ParticipantItemSimple } from './ParticipantItem';
 
 import './BulkAddPermissions.scss';
 
 type BulkAddPermissionsProps = {
   participant: ParticipantDTO | null;
   hasSharingParticipants: boolean;
+  availableParticipants: AvailableParticipantDTO[];
   onBulkAddSharingPermission: (selectedTypes: string[]) => Promise<void>;
   sharedTypes: string[];
 };
@@ -29,11 +34,11 @@ type BulkAddPermissionsProps = {
 export function BulkAddPermissions({
   participant,
   hasSharingParticipants,
+  availableParticipants,
   sharedTypes,
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
   const [showRecommendedParticipants, setShowRecommendedParticipants] = useState(false);
-
   const currentParticipantTypeNames = participant?.types
     ? participant.types.map((p) => p.typeName ?? '')
     : [];
@@ -71,19 +76,40 @@ export function BulkAddPermissions({
   const watchDSPChecked = watch('DSPChecked');
   const watchDataProviderChecked = watch('dataProviderChecked');
 
+  const hasCheckedType = useCallback(() => {
+    return (
+      watchPublisherChecked || watchAdvertiserChecked || watchDSPChecked || watchDataProviderChecked
+    );
+  }, [watchPublisherChecked, watchAdvertiserChecked, watchDSPChecked, watchDataProviderChecked]);
+
+  const filteredParticipants = useMemo(() => {
+    return getFilteredParticipantsByType(
+      availableParticipants,
+      watchPublisherChecked,
+      watchAdvertiserChecked,
+      watchDSPChecked,
+      watchDataProviderChecked
+    );
+  }, [
+    availableParticipants,
+    watchPublisherChecked,
+    watchAdvertiserChecked,
+    watchDSPChecked,
+    watchDataProviderChecked,
+  ]);
+
+  useEffect(() => {
+    if (!hasCheckedType()) setShowRecommendedParticipants(false);
+  }, [hasCheckedType]);
+
   const handleSave = (data: BulkAddPermissionsForm) => {
     onBulkAddSharingPermission(getCheckedParticipantTypeNames(data));
   };
 
-  const onToggleViewRecommendedParticipants = () => {
-    setShowRecommendedParticipants((prevToggle) => !prevToggle);
-    // TODO: show/hide the actual participants
-  };
-
-  const saveRecommendationsButton = (
+  const savePermissionsButton = (
     <div className='bulk-add-permissions-footer'>
       <button type='submit' className='primary-button bulk-add-permissions-submit-button'>
-        Save Recommendations
+        Save Permissions
       </button>
     </div>
   );
@@ -96,26 +122,40 @@ export function BulkAddPermissions({
         tokens.
       </p>
       <div className='participant-type-checkbox-section'>
-        <FormStyledCheckbox {...register('publisherChecked')} data-testid='publisher' />
+        <FormStyledCheckbox {...withoutRef(register('publisherChecked'))} data-testid='publisher' />
         <span className='checkbox-label'>Publisher</span>
-        <FormStyledCheckbox {...register('advertiserChecked')} data-testid='advertiser' />
+        <FormStyledCheckbox
+          {...withoutRef(register('advertiserChecked'))}
+          data-testid='advertiser'
+        />
         <span className='checkbox-label'>Advertiser</span>
-        <FormStyledCheckbox {...register('DSPChecked')} data-testid='dsp' />
+        <FormStyledCheckbox {...withoutRef(register('DSPChecked'))} data-testid='dsp' />
         <span className='checkbox-label'>DSP</span>
-        <FormStyledCheckbox {...register('dataProviderChecked')} data-testid='data-provider' />
+        <FormStyledCheckbox
+          {...withoutRef(register('dataProviderChecked'))}
+          data-testid='data-provider'
+        />
         <span className='checkbox-label'>Data Provider</span>
       </div>
-      {(watchPublisherChecked ||
-        watchAdvertiserChecked ||
-        watchDSPChecked ||
-        watchDataProviderChecked) && (
+      {hasCheckedType() && (
         <button
           type='button'
           className='text-button bulk-add-permissions-view-recommendations-button'
-          onClick={onToggleViewRecommendedParticipants}
+          onClick={() => setShowRecommendedParticipants((prevToggle) => !prevToggle)}
         >
           {showRecommendedParticipants ? 'Hide Participants' : 'View Participants'}
         </button>
+      )}
+      {showRecommendedParticipants && hasCheckedType() && (
+        <table className='bulk-add-permissions-participants-table'>
+          <tbody>
+            {filteredParticipants.map((p) => (
+              <tr key={p.id}>
+                <ParticipantItemSimple participant={p} />
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </>
   );
@@ -123,7 +163,7 @@ export function BulkAddPermissions({
   const recommendationContent = (
     <div className='bulk-add-permissions'>
       <div className='bulk-add-permissions-body'>{commonContent}</div>
-      {saveRecommendationsButton}
+      {savePermissionsButton}
     </div>
   );
 
@@ -146,7 +186,7 @@ export function BulkAddPermissions({
           </div>
         )}
       </div>
-      {isDirty && saveRecommendationsButton}
+      {isDirty && savePermissionsButton}
     </div>
   );
 

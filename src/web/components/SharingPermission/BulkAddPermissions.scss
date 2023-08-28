@@ -41,6 +41,23 @@
     .bulk-add-permissions-view-recommendations-button {
       padding-top: 20px;
     }
+
+    .bulk-add-permissions-participants-table {
+      display: flex;
+      padding: 10px 0;
+      margin-top: 20px;
+      border: 1px solid var(--theme-border);
+      border-radius: 5px;
+      max-height: 410px;
+      overflow: auto;
+
+      td:first-of-type {
+        padding-left: 32px;
+      }
+      tr {
+        background-color: white;
+      }
+    }
   }
 
   .bulk-add-permissions-footer {
