@@ -35,7 +35,6 @@ export function SharingPermissionsTable({
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [filteredParticipants, setFilteredParticipants] = useState(sharingParticipants);
-  const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
     TriStateCheckboxState.unchecked
   );
@@ -44,10 +43,6 @@ export function SharingPermissionsTable({
     onDeleteSharingPermission(Array.from(checkedParticipants));
     setCheckedParticipants(new Set());
     setOpenConfirmation(false);
-  };
-
-  const handleTypeFilterChange = (typeIds: Set<number>) => {
-    setSelectedTypeIds(typeIds);
   };
 
   const selectedParticipantList = useMemo(() => {
@@ -77,45 +72,42 @@ export function SharingPermissionsTable({
     }
   }, [checkedParticipants.size, isSelectedAll]);
 
-  const deletePermissionBtn = useMemo(
-    () => (
-      <Dialog
-        title='Are you sure you want to delete these permissions?'
-        triggerButton={
-          <button className='transparent-button sharing-permission-delete-button' type='button'>
-            <FontAwesomeIcon
-              icon={['far', 'trash-can']}
-              className='sharing-permission-trashcan-icon'
-            />
-            Delete Permissions({selectedParticipantList.length})
-          </button>
-        }
-        open={openConfirmation}
-        onOpenChange={setOpenConfirmation}
-      >
-        <div className='dialog-body-section'>
-          <ul className='dot-list'>
-            {selectedParticipantList.map((participant) => (
-              <li key={participant.id}>{participant.name}</li>
-            ))}
-          </ul>
-          <p>Note: Sharing will continue with participants that are shared via &quot;Auto&quot;.</p>
-        </div>
-        <div className='dialog-footer-section'>
-          <button type='button' className='primary-button' onClick={handleDeletePermissions}>
-            I want to Remove Permissions
-          </button>
-          <button
-            type='button'
-            className='transparent-button'
-            onClick={() => setOpenConfirmation(false)}
-          >
-            Cancel
-          </button>
-        </div>
-      </Dialog>
-    ),
-    [handleDeletePermissions, openConfirmation, selectedParticipantList]
+  const deletePermissionBtn = (
+    <Dialog
+      title='Are you sure you want to delete these permissions?'
+      triggerButton={
+        <button className='transparent-button sharing-permission-delete-button' type='button'>
+          <FontAwesomeIcon
+            icon={['far', 'trash-can']}
+            className='sharing-permission-trashcan-icon'
+          />
+          Delete Permissions({selectedParticipantList.length})
+        </button>
+      }
+      open={openConfirmation}
+      onOpenChange={setOpenConfirmation}
+    >
+      <div className='dialog-body-section'>
+        <ul className='dot-list'>
+          {selectedParticipantList.map((participant) => (
+            <li key={participant.id}>{participant.name}</li>
+          ))}
+        </ul>
+        <p>Note: Sharing will continue with participants that are shared via &quot;Auto&quot;.</p>
+      </div>
+      <div className='dialog-footer-section'>
+        <button type='button' className='primary-button' onClick={handleDeletePermissions}>
+          I want to Remove Permissions
+        </button>
+        <button
+          type='button'
+          className='transparent-button'
+          onClick={() => setOpenConfirmation(false)}
+        >
+          Cancel
+        </button>
+      </div>
+    </Dialog>
   );
 
   const tableHeader = () => (
@@ -153,7 +145,6 @@ export function SharingPermissionsTable({
         showAddedByColumn
         participants={sharingParticipants}
         filterText={filterText}
-        selectedTypeIds={selectedTypeIds}
         selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
