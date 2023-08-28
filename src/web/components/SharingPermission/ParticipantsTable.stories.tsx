@@ -15,6 +15,7 @@ export const Default = Template.bind({});
 Default.args = {
   tableHeader: () => (
     <>
+      <th> </th>
       <th>Participant Name</th>
       <th>Participant Type</th>
     </>
