@@ -17,8 +17,9 @@ type ParticipantsTableProps = {
   selectedParticipantIds?: Set<number>;
   tableHeader: (filteredParticipants: AvailableParticipantDTO[]) => ReactNode;
   className?: string;
-  hideCheckboxIfNoItem?: boolean;
+  hideSelectAllCheckbox?: boolean;
   showAddedByColumn?: boolean;
+  onFilteredParticipantChanged?: (filteredParticipants: AvailableParticipantDTO[]) => void;
 };
 
 function ParticipantsTableContent({
@@ -29,8 +30,9 @@ function ParticipantsTableContent({
   onSelectedChange,
   selectedParticipantIds = new Set(),
   className,
-  hideCheckboxIfNoItem,
+  hideSelectAllCheckbox,
   showAddedByColumn,
+  onFilteredParticipantChanged,
 }: ParticipantsTableProps) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
   const { sortData } = useSortable<AvailableParticipantDTO>();
@@ -62,7 +64,8 @@ function ParticipantsTableContent({
     }
 
     setFilteredParticipants(filtered);
-  }, [participants, filterText, selectedTypeIds]);
+    if (onFilteredParticipantChanged) onFilteredParticipantChanged(filtered);
+  }, [participants, filterText, selectedTypeIds, onFilteredParticipantChanged]);
 
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length) return false;
@@ -90,13 +93,12 @@ function ParticipantsTableContent({
     onSelectedChange(newCheckedItems);
   };
 
-  const showCheckbox = !hideCheckboxIfNoItem || (hideCheckboxIfNoItem && !!participants.length);
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>
         <tr>
           <th>
-            {showCheckbox && (
+            {!hideSelectAllCheckbox && (
               <TriStateCheckbox
                 onClick={handleCheckboxChange}
                 status={selectAllState}
