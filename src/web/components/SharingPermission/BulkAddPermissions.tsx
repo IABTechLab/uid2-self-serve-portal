@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
@@ -39,7 +39,6 @@ export function BulkAddPermissions({
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
   const [showRecommendedParticipants, setShowRecommendedParticipants] = useState(false);
-  const [filteredParticipants, setFilteredParticipants] = useState(availableParticipants);
   const currentParticipantTypeNames = participant?.types
     ? participant.types.map((p) => p.typeName ?? '')
     : [];
@@ -83,15 +82,13 @@ export function BulkAddPermissions({
     );
   }, [watchPublisherChecked, watchAdvertiserChecked, watchDSPChecked, watchDataProviderChecked]);
 
-  useEffect(() => {
-    setFilteredParticipants(
-      getFilteredParticipantsByType(
-        availableParticipants,
-        watchPublisherChecked,
-        watchAdvertiserChecked,
-        watchDSPChecked,
-        watchDataProviderChecked
-      )
+  const filteredParticipants = useMemo(() => {
+    return getFilteredParticipantsByType(
+      availableParticipants,
+      watchPublisherChecked,
+      watchAdvertiserChecked,
+      watchDSPChecked,
+      watchDataProviderChecked
     );
   }, [
     availableParticipants,
