@@ -113,6 +113,7 @@ function SharingPermissions() {
       <SharingPermissionsTable
         sharingParticipants={sharingParticipants}
         onDeleteSharingPermission={handleDeleteSharingPermission}
+        participantTypes={participantTypes}
       />
       {statusPopup && (
         <StatusPopup

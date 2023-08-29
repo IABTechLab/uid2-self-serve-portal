@@ -2,8 +2,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useMemo, useState } from 'react';
 
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { Dialog } from '../Core/Dialog';
+import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
@@ -13,6 +15,7 @@ import './SharingPermissionsTable.scss';
 type SharingPermissionsTableProps = {
   sharingParticipants: AvailableParticipantDTO[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
+  participantTypes: ParticipantTypeDTO[];
 };
 
 function NoParticipant() {
@@ -30,6 +33,7 @@ function NoParticipant() {
 export function SharingPermissionsTable({
   sharingParticipants,
   onDeleteSharingPermission,
+  participantTypes,
 }: SharingPermissionsTableProps) {
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
@@ -38,12 +42,17 @@ export function SharingPermissionsTable({
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
     TriStateCheckboxState.unchecked
   );
+  const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
 
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(Array.from(checkedParticipants));
     setCheckedParticipants(new Set());
     setOpenConfirmation(false);
   };
+
+  const participantTypeOptions = useMemo(() => {
+    return participantTypes.map((v) => ({ id: v.id, name: v.typeName }));
+  }, [participantTypes]);
 
   const selectedParticipantList = useMemo(() => {
     return sharingParticipants.filter((p) => checkedParticipants.has(p.siteId!));
@@ -128,6 +137,11 @@ export function SharingPermissionsTable({
             className='participant-checkbox'
           />
           {checkedParticipants.size > 0 && deletePermissionBtn}
+          <MultiSelectDropdown
+            title='Participant Type'
+            options={participantTypeOptions}
+            onSelectedChange={setSelectedTypeIds}
+          />
         </div>
         <div className='sharing-permissions-search-bar-container'>
           <input
@@ -144,6 +158,7 @@ export function SharingPermissionsTable({
         showAddedByColumn
         participants={sharingParticipants}
         filterText={filterText}
+        selectedTypeIds={selectedTypeIds}
         selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
