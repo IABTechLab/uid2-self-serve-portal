@@ -3,6 +3,8 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
 import { useCallback, useMemo, useState } from 'react';
 
+import { formatStringsWithSeparator } from '../../utils/textHelpers';
+
 import './MultiSelectDropdown.scss';
 
 type SelectOption = {
@@ -26,10 +28,9 @@ export function MultiSelectDropdown({
 
   const joinedItemsName = useMemo(
     () =>
-      options
-        .filter((o) => selectedItems.has(o.id))
-        .map((item) => item.name)
-        .join(','),
+      formatStringsWithSeparator(
+        options.filter((o) => selectedItems.has(o.id)).map((item) => item.name)
+      ),
     [options, selectedItems]
   );
 

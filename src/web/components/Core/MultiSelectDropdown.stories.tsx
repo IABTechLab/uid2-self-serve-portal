@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { MultiSelectDropdown } from './MultiSelectDropdown';
 
 export default {
-  title: 'Shared Components/MultiSelectDropdown',
+  title: 'Shared Components/Multi-Select Dropdown',
   component: MultiSelectDropdown,
 } as ComponentMeta<typeof MultiSelectDropdown>;
 
