@@ -3,10 +3,12 @@ import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
+import { SiteDTO } from '../../api/services/adminServiceClient';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
+import { fetchAndConvertSitesToParticipants } from '../components/SharingPermission/SharingPermissionsHelpers';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
@@ -30,8 +32,8 @@ function SharingPermissions() {
   const { participant } = useContext(ParticipantContext);
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
-  const { participants, participantTypes } = useLoaderData() as {
-    participants: AvailableParticipantDTO[];
+  const { fetchPromises, participantTypes } = useLoaderData() as {
+    fetchPromises: [AvailableParticipantDTO[], AvailableParticipantDTO[]];
     participantTypes: ParticipantTypeDTO[];
   };
 
@@ -95,26 +97,32 @@ function SharingPermissions() {
         Note: This only enables the sharing permission. No data is sent.
       </p>
       <Suspense fallback={<Loading />}>
-        <Await resolve={participants}>
-          {(resolvedParticipants: AvailableParticipantDTO[]) => (
-            <div className='search-and-add-permissions-collapsible'>
-              <Collapsible title='Search and Add Permissions' defaultOpen>
-                <SearchAndAddParticipants
-                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
-                  sharingParticipants={sharingParticipants}
-                  availableParticipants={resolvedParticipants}
-                  participantTypes={participantTypes}
-                />
-              </Collapsible>
-            </div>
+        <Await resolve={fetchPromises}>
+          {([resolvedParticipants, sitesList]: [
+            AvailableParticipantDTO[],
+            AvailableParticipantDTO[]
+          ]) => (
+            <>
+              <div className='search-and-add-permissions-collapsible'>
+                <Collapsible title='Search and Add Permissions' defaultOpen>
+                  <SearchAndAddParticipants
+                    onSharingPermissionsAdded={handleSharingPermissionsAdded}
+                    sharingParticipants={sharingParticipants}
+                    availableParticipants={resolvedParticipants}
+                    participantTypes={participantTypes}
+                  />
+                </Collapsible>
+              </div>
+              <SharingPermissionsTable
+                sitesList={sitesList}
+                sharingParticipants={sharingParticipants}
+                onDeleteSharingPermission={handleDeleteSharingPermission}
+                participantTypes={participantTypes}
+              />
+            </>
           )}
         </Await>
       </Suspense>
-      <SharingPermissionsTable
-        sharingParticipants={sharingParticipants}
-        onDeleteSharingPermission={handleDeleteSharingPermission}
-        participantTypes={participantTypes}
-      />
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}
@@ -134,6 +142,8 @@ export const SharingPermissionsRoute: PortalRoute = {
   loader: async () => {
     const participants = GetAllAvailableParticipants();
     const participantTypes = await GetAllParticipantTypes();
-    return defer({ participants, participantTypes });
+    const sitesList = fetchAndConvertSitesToParticipants(participantTypes);
+    const promises = Promise.all([participants, sitesList]);
+    return defer({ fetchPromises: promises, participantTypes });
   },
 };
