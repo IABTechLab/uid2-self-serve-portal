@@ -9,20 +9,4 @@
   padding: 3px 8px;
   width: fit-content;
   color: var(--theme-title);
-
-  &.Success {
-    background-color: var(--theme-success-background);
-  }
-
-  &.Error {
-    background-color: var(--theme-error-background);
-  }
-
-  &.Info {
-    background-color: var(--theme-info-background);
-  }
-
-  &.Warning {
-    background-color: var(--theme-warning-background);
-  }
 }

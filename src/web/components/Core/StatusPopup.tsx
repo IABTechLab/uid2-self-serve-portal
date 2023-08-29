@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect } from 'react';
 
 import './StatusPopup.scss';
+import './Messages.scss';
 
 export interface StatusPopupProps {
   message: string;
@@ -50,7 +51,7 @@ export function StatusPopup({
   };
 
   return show ? (
-    <div className={`status-popup ${status}`}>
+    <div className={`status-popup message-container ${status}`}>
       <div className={`status-popup-title-container ${status}`}>
         <div className='status-popup-title-left'>
           {getIcon()}

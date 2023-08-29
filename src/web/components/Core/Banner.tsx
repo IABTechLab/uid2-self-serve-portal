@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
 import './Banner.scss';
+import './Messages.scss';
 
 export type BannerProps = {
   message: string;
@@ -40,7 +41,7 @@ export function Banner({ message, type }: BannerProps) {
   };
 
   return (
-    <div className={clsx('banner-container', type)}>
+    <div className={clsx('banner-container message-container', type)}>
       {getIcon()}
       <span data-testid='banner-message' className='banner-text'>
         {message}

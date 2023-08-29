@@ -9,35 +9,6 @@
   background: var(--theme-background-content);
   box-shadow: 0px 6px 12px var(--theme-box-shadow);
   border-radius: 10px;
-
-  &.Success {
-    background-color: var(--theme-success-background);
-    svg {
-      color: var(--theme-success-icon);
-    }
-  }
-
-  &.Error {
-    background-color: var(--theme-error-background);
-    svg {
-      color: var(--theme-error-icon);
-    }
-  }
-
-  &.Info {
-    background-color: var(--theme-info-background);
-    svg {
-      color: var(--theme-info-icon);
-    }
-  }
-
-  &.Warning {
-    background-color: var(--theme-warning-background);
-    svg {
-      color: var(--theme-warning-icon);
-      background: radial-gradient(black 35%, transparent 30%);
-    }
-  }
 }
 
 .status-popup-title-container {
