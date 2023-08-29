@@ -98,7 +98,7 @@ export const getFilteredParticipantsByType = (
   advertiserChecked: boolean,
   DSPChecked: boolean,
   dataProviderChecked: boolean
-) => {
+): AvailableParticipantDTO[] => {
   return participants.filter((p) => {
     const selectedTypes = p.types!.map((type) => type.typeName);
     if (

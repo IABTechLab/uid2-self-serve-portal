@@ -3,13 +3,18 @@ import { useEffect } from 'react';
 
 import './StatusPopup.scss';
 
-interface StatusPopupProps {
+export interface StatusPopupProps {
   message: string;
-  status: 'Success' | 'Error' | 'Info';
+  status: 'Success' | 'Error' | 'Info' | 'Warning';
   displayDuration?: number;
   show: boolean;
   setShow: (show: boolean) => void;
 }
+
+export type StatusNotificationType = {
+  message: string;
+  type: 'Success' | 'Error' | 'Info' | 'Warning';
+};
 
 export function StatusPopup({
   message,
@@ -36,6 +41,8 @@ export function StatusPopup({
         return <FontAwesomeIcon icon='circle-check' />;
       case 'Error':
         return <FontAwesomeIcon icon='exclamation-circle' />;
+      case 'Warning':
+        return <FontAwesomeIcon icon='exclamation-triangle' />;
       case 'Info':
       default:
         return <FontAwesomeIcon icon='circle-info' />;
@@ -44,17 +51,21 @@ export function StatusPopup({
 
   return show ? (
     <div className={`status-popup ${status}`}>
-      <button
-        className='popup-close-button icon-button'
-        aria-label='Close'
-        type='button'
-        onClick={() => setShow(false)}
-      >
-        <FontAwesomeIcon className='popup-close-icon' icon='xmark' />
-      </button>
       <div className={`status-popup-title-container ${status}`}>
-        {getIcon()}
-        <span className='status-popup-title'>{status}</span>
+        <div className='status-popup-title-left'>
+          {getIcon()}
+          <span className='status-popup-title'>{status}</span>
+        </div>
+        <div className='status-popup-title-right'>
+          <button
+            className='popup-close-button icon-button'
+            aria-label='Close'
+            type='button'
+            onClick={() => setShow(false)}
+          >
+            <FontAwesomeIcon className='popup-close-icon' icon='xmark' />
+          </button>
+        </div>
       </div>
       <div className='status-popup-message'>{message}</div>
     </div>

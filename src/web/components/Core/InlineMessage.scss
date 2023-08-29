@@ -1,0 +1,28 @@
+.inline-error {
+  margin: 0 8px;
+}
+
+.inline-message {
+  font-size: 0.625rem;
+  font-weight: 600;
+  border-radius: 3px;
+  padding: 3px 8px;
+  width: fit-content;
+  color: var(--theme-title);
+
+  &.Success {
+    background-color: var(--theme-success-background);
+  }
+
+  &.Error {
+    background-color: var(--theme-error-background);
+  }
+
+  &.Info {
+    background-color: var(--theme-info-background);
+  }
+
+  &.Warning {
+    background-color: var(--theme-warning-background);
+  }
+}

@@ -5,36 +5,41 @@
   padding: 12px 20px;
   gap: 15px;
 
+  svg {
+    font-size: 1rem;
+  }
+
   .banner-text {
     font-weight: 600;
     color: var(--theme-button-text);
   }
 
-  &.info {
-    background: var(--theme-banner-info-background);
-
-    .banner-icon {
-      color: var(--theme-banner-info-icon);
+  &.Success {
+    background-color: var(--theme-success-background);
+    svg {
+      color: var(--theme-success-icon);
     }
   }
 
-  &.warning {
-    background: var(--theme-banner-warning-background);
-
-    .banner-icon {
-      color: var(--theme-banner-warning-icon);
+  &.Error {
+    background-color: var(--theme-error-background);
+    svg {
+      color: var(--theme-error-icon);
     }
   }
 
-  &.error {
-    background: var(--theme-banner-error-background);
-
-    .banner-text {
-      color: white;
+  &.Info {
+    background-color: var(--theme-info-background);
+    svg {
+      color: var(--theme-info-icon);
     }
+  }
 
-    .banner-icon {
-      color: white;
+  &.Warning {
+    background-color: var(--theme-warning-background);
+    svg {
+      color: var(--theme-warning-icon);
+      background: radial-gradient(black 35%, transparent 30%);
     }
   }
 }

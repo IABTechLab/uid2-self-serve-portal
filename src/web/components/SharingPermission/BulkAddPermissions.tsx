@@ -2,7 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import {
+  AvailableParticipantDTO,
+  ParticipantRequestDTO,
+} from '../../../api/routers/participantsRouter';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
 import { withoutRef } from '../Core/Form';
@@ -82,7 +85,7 @@ export function BulkAddPermissions({
     );
   }, [watchPublisherChecked, watchAdvertiserChecked, watchDSPChecked, watchDataProviderChecked]);
 
-  const filteredParticipants = useMemo(() => {
+  const filteredParticipants: AvailableParticipantDTO[] = useMemo(() => {
     return getFilteredParticipantsByType(
       availableParticipants,
       watchPublisherChecked,
@@ -180,7 +183,7 @@ export function BulkAddPermissions({
         ) && (
           <div className='remove-recommended-type-warning'>
             <Banner
-              type='warning'
+              type='Warning'
               message='If you remove the sharing permissions for a participant type, all sharing permissions of that type are removed, including future participants of that type.'
             />
           </div>

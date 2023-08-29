@@ -1,28 +1,47 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
 import './Banner.scss';
 
-type BannerProps = {
+export type BannerProps = {
   message: string;
-  type: 'info' | 'warning' | 'error';
+  type: 'Info' | 'Warning' | 'Error' | 'Success';
 };
 
 export function Banner({ message, type }: BannerProps) {
-  let icon: IconProp;
-  if (type === 'error') {
-    icon = 'exclamation-triangle';
-  } else {
-    icon = 'circle-info';
-  }
+  const getIcon = () => {
+    switch (type) {
+      case 'Success':
+        return (
+          <FontAwesomeIcon icon='circle-check' data-testid='banner-icon' className='banner-icon' />
+        );
+      case 'Error':
+        return (
+          <FontAwesomeIcon
+            icon='exclamation-circle'
+            data-testid='banner-icon'
+            className='banner-icon'
+          />
+        );
+      case 'Warning':
+        return (
+          <FontAwesomeIcon
+            icon='exclamation-triangle'
+            data-testid='banner-icon'
+            className='banner-icon'
+          />
+        );
+      case 'Info':
+      default:
+        return (
+          <FontAwesomeIcon icon='circle-info' data-testid='banner-icon' className='banner-icon' />
+        );
+    }
+  };
 
   return (
     <div className={clsx('banner-container', type)}>
-      {type === 'warning' && <img src='/warning.svg' alt='warning' className='uid2-logo' />}
-      {type !== 'warning' && (
-        <FontAwesomeIcon icon={icon} data-testid='banner-icon' className='banner-icon' />
-      )}
+      {getIcon()}
       <span data-testid='banner-message' className='banner-text'>
         {message}
       </span>
