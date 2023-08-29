@@ -195,6 +195,7 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 
 ## Setting up UI Dev Environment
 
+The following steps describe the minimal steps required to successfully log in to the portal UI. If you require a fully-functional portal, please perform the following steps as well as the steps described below in [Connecting to local admin service](README.md#connecting-to-local-admin-service).
 1. Set up Docker, as described above: [Docker](README.md#docker)
 2. Update your `SSP_KK_SECRET` by following the steps above: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
 3. Run the following to install dependencies:
@@ -236,3 +237,12 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 14. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 
 15. Return to the UI and you should be good to go!
+
+### Connecting to local admin service
+Functionality relating to Sharing Permissions will require the admin service to be run locally. Perform the following steps to standup the admin service to develop and test admin-related functionality on the portal.
+
+1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
+1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally. 
+1. Ensure that you have a key in `admins.json` in `uid2-admin` with the `SHARING_PORTAL` role, and that key is in your `.env` as `SSP_ADMIN_SERVICE_CLIENT_KEY`. 
+    - You should be able to use an existing key in `admins.json`, rather than having to create a new one. 
+    - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file. 
