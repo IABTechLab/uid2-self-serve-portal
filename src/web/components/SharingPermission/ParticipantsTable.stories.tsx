@@ -20,9 +20,15 @@ Default.args = {
     </>
   ),
   participants: [
-    { id: 1, name: 'Participant 1', types: [{ id: 1, typeName: 'Type 1' }] },
-    { id: 2, name: 'Participant 2', types: [{ id: 2, typeName: 'Type 2' }] },
+    { siteId: 1, name: 'Participant 1', types: [{ id: 1, typeName: 'Type 1' }] },
+    { siteId: 2, name: 'Participant 2', types: [{ id: 2, typeName: 'Type 2' }] },
   ] as AvailableParticipantDTO[],
   filterText: '',
   onSelectedChange: (selectedItems: Set<number>) => console.log('Selected items:', selectedItems),
+};
+
+export const HideSelectAllCheckbox = Template.bind({});
+HideSelectAllCheckbox.args = {
+  ...Default.args,
+  hideSelectAllCheckbox: true,
 };

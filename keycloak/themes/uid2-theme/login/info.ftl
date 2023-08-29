@@ -8,14 +8,29 @@
         </#if>
     <#elseif section = "form">
     <div id="kc-info-message">
-        <p class="instruction">${message.summary}<#if requiredActions??><#list requiredActions>: <b><#items as reqActionItem>${kcSanitize(msg("requiredAction.${reqActionItem}"))?no_esc}<#sep>, </#items></b></#list><#else></#if></p>
+        <p class="instruction">
+          <#if requiredActions??>
+            <#list requiredActions><#items as reqActionItem>${kcSanitize(msg("requiredAction.${reqActionItem}"))?no_esc}<#sep>, </#items></#list>
+          <#elseif message.summary = "Your account has been approved">
+            ${msg("accountUpdatedInstruction")}
+          </#if>
+        </p>
+
         <#if skipLink??>
         <#else>
             <#if pageRedirectUri?has_content>
+              <#if message.summary = "Your account has been approved">
+                <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
+                  <a class="${properties.kcButtonClass!} ${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" href="${pageRedirectUri}">${kcSanitize(msg("doLogIn"))?no_esc}</a>
+                </div>
+              <#else>
               <p><a href="${pageRedirectUri}">${kcSanitize(msg("backToApplication"))?no_esc}</a></p>
+              </#if>
             <#elseif actionUri?has_content>
-              <p><a id="proceedWithAction" href="${actionUri}">${kcSanitize(msg("proceedWithAction"))?no_esc}</a></p>
-              <script>document.getElementById('proceedWithAction').click()</script>
+              <div id="kc-form-buttons" class="${properties.kcFormButtonsClass!}">
+                <a id="proceedWithAction" class="${properties.kcButtonClass!} ${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonLargeClass!}" href="${actionUri}">${kcSanitize(msg("proceedWithAction"))?no_esc}</a>
+                <script>document.getElementById('proceedWithAction').click()</script>
+              </div>
             <#elseif (client.baseUrl)?has_content>
               <p><a href="${client.baseUrl}">${kcSanitize(msg("backToApplication"))?no_esc}</a></p>
             </#if>

@@ -34,6 +34,6 @@ describe('SharingPermissionsTable', () => {
     const firstCheckbox = screen.getAllByRole('checkbox')[0];
     fireEvent.click(firstCheckbox);
 
-    expect(screen.getByText('Delete Permissions')).toBeInTheDocument();
+    expect(screen.getByText(/Delete Permissions/i)).toBeInTheDocument();
   });
 });

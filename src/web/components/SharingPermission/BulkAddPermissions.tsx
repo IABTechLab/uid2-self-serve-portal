@@ -153,7 +153,7 @@ export function BulkAddPermissions({
         <table className='bulk-add-permissions-participants-table'>
           <tbody>
             {filteredParticipants.map((p) => (
-              <tr key={p.id}>
+              <tr key={p.siteId}>
                 <ParticipantItemSimple participant={p} />
               </tr>
             ))}

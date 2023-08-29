@@ -13,6 +13,7 @@ export type PortalRoute = RouteObject & {
   element: JSX.Element;
   description: string;
   location?: 'default' | 'footer';
+  isHidden?: boolean;
 };
 
 export const makePrivateRoute = (route: PortalRoute | RouteObject): PortalRoute => {

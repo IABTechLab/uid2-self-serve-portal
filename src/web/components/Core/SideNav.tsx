@@ -14,9 +14,10 @@ function MenuItem({
   path,
   description,
   linkClass,
-}: Pick<PortalRoute, 'path' | 'description'> & { linkClass?: string }) {
+  isHidden,
+}: Pick<PortalRoute, 'path' | 'description' | 'isHidden'> & { linkClass?: string }) {
   return (
-    <NavigationMenuItem key={path} className='side-nav-item'>
+    <NavigationMenuItem key={path} className={`side-nav-item ${isHidden ? 'hidden' : ''}`}>
       <NavLink to={path} className={linkClass}>
         {description}
       </NavLink>
