@@ -84,7 +84,11 @@ export function MultiSelectDropdown({
           {title}: {selectedItemsString}
           {open ? <FontAwesomeIcon icon='chevron-up' /> : <FontAwesomeIcon icon='chevron-down' />}
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content className='multi-select-dropdown-content' sideOffset={10}>
+        <DropdownMenu.Content
+          className='multi-select-dropdown-content'
+          sideOffset={10}
+          align='start'
+        >
           {options.map(checkboxItem)}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
