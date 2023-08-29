@@ -15,13 +15,11 @@ export const SharedWithParticipants = Template.bind({});
 SharedWithParticipants.args = {
   sharingParticipants: [
     {
-      id: 1,
       name: 'Participant 1',
       types: [{ id: 1, typeName: 'Type 1' }],
       siteId: 1,
     },
     {
-      id: 2,
       name: 'Participant 2',
       types: [
         { id: 1, typeName: 'Type 1' },
@@ -30,7 +28,6 @@ SharedWithParticipants.args = {
       siteId: 2,
     },
     {
-      id: 3,
       name: 'Participant 3',
       types: [
         { id: 1, typeName: 'Type 1' },
@@ -40,7 +37,6 @@ SharedWithParticipants.args = {
       siteId: 3,
     },
     {
-      id: 4,
       name: 'Participant 4',
       types: [
         { id: 1, typeName: 'Type 1' },

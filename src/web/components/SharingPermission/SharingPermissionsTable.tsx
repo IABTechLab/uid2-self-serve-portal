@@ -74,7 +74,7 @@ export function SharingPermissionsTable({
           <div className='dialog-body-section'>
             <ul className='dot-list'>
               {selectedParticipantList.map((participant) => (
-                <li key={participant.id}>{participant.name}</li>
+                <li key={participant.siteId}>{participant.name}</li>
               ))}
             </ul>
             <p>
