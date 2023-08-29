@@ -1,6 +1,8 @@
 /* Patternfly CSS places a "bg-login.jpg" as the background on this ".login-pf" class.
    This clashes with the "keycloak-bg.png' background defined on the body below.
    Therefore the Patternfly background must be set to none. */
+/* stylelint-disable custom-property-pattern */
+/* stylelint-disable selector-class-pattern */
 :root {
   --theme-primary: black;
   --theme-background-header: #fff;
@@ -13,12 +15,22 @@
   --theme-action: #0459fd;
   --theme-input-border: #b8b8b8;
   --theme-text: #030a40;
-  --theme-warning-background: rgba(183, 194, 234, 0.45);
-  --theme-warning-icon: rgba(112, 133, 212, 1);
+  --theme-warning-background: rgb(183 194 234 / 45%);
+  --theme-warning-icon: rgb(112 133 212);
 }
 
 body {
   font-family: Inter, sans-serif;
+}
+
+.card-pf {
+  background: var(--theme-background-content);
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 4px 14px rgb(0 0 0 / 15%);
+  border-radius: 8px;
+  padding: 3rem 5rem;
+  width: 623px;
+  box-sizing: border-box;
 }
 
 #kc-form-login {
@@ -196,18 +208,12 @@ div.kc-logo-text {
   display: flex;
 }
 
-.login-pf-page .login-pf-brand {
-  margin-top: 0;
+.login-pf-page .login-pf-signup a {
+  margin: 0;
 }
 
-.card-pf {
-  background: var(--theme-background-content);
-  border: 1px solid var(--theme-border);
-  box-shadow: 0 4px 14px rgb(0 0 0 / 15%);
-  border-radius: 8px;
-  padding: 3rem 5rem;
-  width: 623px;
-  box-sizing: border-box;
+.login-pf-page .login-pf-brand {
+  margin-top: 0;
 }
 
 .centralize-content {
@@ -230,10 +236,6 @@ div.kc-logo-text {
 
 #kc-registration a {
   display: block;
-}
-
-.login-pf-page .login-pf-signup a {
-  margin: 0;
 }
 
 /* phone */
