@@ -2,7 +2,7 @@ import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation';
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
-import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_LOGOUT_URL } from '../envars';
+import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
 export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
   return kcAdminClient.users.find({
@@ -29,6 +29,7 @@ export const createNewUser = async (
   });
 };
 
+const logoutUrl = new URL('logout', SSP_WEB_BASE_URL).href;
 export const sendInviteEmail = async (
   kcAdminClient: KeycloakAdminClient,
   user: UserRepresentation
@@ -37,7 +38,7 @@ export const sendInviteEmail = async (
     id: user.id!,
     clientId: SSP_KK_SSL_RESOURCE,
     actions: [RequiredActionAlias.UPDATE_PASSWORD],
-    redirectUri: SSP_WEB_LOGOUT_URL,
+    redirectUri: logoutUrl,
   });
 };
 

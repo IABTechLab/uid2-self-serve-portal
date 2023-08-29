@@ -21,7 +21,6 @@ export const SSP_KK_SSL_CONFIDENTIAL_PORT =
   process.env.SSP_KK_SSL_CONFIDENTIAL_PORT ?? errorMessage;
 export const SSP_KK_API_CLIENT_ID = process.env.SSP_KK_API_CLIENT_ID ?? errorMessage;
 export const SSP_WEB_BASE_URL = process.env.SSP_WEB_BASE_URL ?? 'http://localhost:3000/';
-export const SSP_WEB_LOGOUT_URL = process.env.SSP_WEB_LOGOUT_URL ?? 'http://localhost:3000/logout';
 
 // DB config
 export const SSP_DB_HOST = process.env.SSP_DB_HOST ?? 'localhost';
