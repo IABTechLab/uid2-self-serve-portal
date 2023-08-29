@@ -26,7 +26,7 @@ export function ParticipantItemSimple({ participant }: ParticipantItemSimpleProp
     <>
       <td className='participant-name-cell'>
         <img src={logo} alt={participant.name} className='participant-logo' />
-        <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
+        <label htmlFor={`checkbox-${participant.siteId}`} className='checkbox-label'>
           {participant.name}
         </label>
       </td>
@@ -43,12 +43,7 @@ type ParticipantItemProps = ParticipantItemSimpleProps & {
   addedBy?: string;
 };
 
-export function ParticipantItem({
-  participant,
-  onClick,
-  checked,
-  addedBy,
-}: ParticipantItemProps) {
+export function ParticipantItem({ participant, onClick, checked, addedBy }: ParticipantItemProps) {
   return (
     <tr className='participant-item-with-checkbox'>
       <td>
