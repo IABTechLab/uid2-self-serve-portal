@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import './MultiSelectDropdown.scss';
 
@@ -24,8 +24,17 @@ export function MultiSelectDropdown({
   const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
   const [open, setOpen] = useState<boolean>(false);
 
-  const selectedCount =
-    selectedItems.size && selectedItems.size < options.length ? selectedItems.size : 'All';
+  const joinedItemsName = useMemo(
+    () =>
+      options
+        .filter((o) => selectedItems.has(o.id))
+        .map((item) => item.name)
+        .join(','),
+    [options, selectedItems]
+  );
+
+  const selectedItemsString =
+    selectedItems.size && selectedItems.size < options.length ? joinedItemsName : 'All';
 
   const onOptionToggle = useCallback(
     (id: number) => {
@@ -68,10 +77,10 @@ export function MultiSelectDropdown({
   );
 
   return (
-    <div className='multi-select-dropdown'>
+    <div className={clsx('multi-select-dropdown', { active: !!selectedItems.size })}>
       <DropdownMenu.Root open={open} onOpenChange={setOpen}>
         <DropdownMenu.Trigger className='multi-select-dropdown-trigger'>
-          {title}: {selectedCount}
+          {title}: {selectedItemsString}
           {open ? <FontAwesomeIcon icon='chevron-up' /> : <FontAwesomeIcon icon='chevron-down' />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className='multi-select-dropdown-content' sideOffset={10}>

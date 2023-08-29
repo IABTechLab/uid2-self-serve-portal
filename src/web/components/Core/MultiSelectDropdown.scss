@@ -5,6 +5,11 @@
     padding: 5px 12px;
   }
 
+  &.active > button {
+    background-color: var(--theme-radio-background);
+    color: var(--theme-background-content);
+  }
+
   &-trigger svg {
     margin-left: 10px;
   }
