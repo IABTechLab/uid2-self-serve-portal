@@ -61,4 +61,10 @@ export const NotShared = Template.bind({});
 NotShared.args = {
   sharingParticipants: [],
   onDeleteSharingPermission: () => Promise.resolve(),
+  participantTypes: [
+    { id: 1, typeName: 'Type 1' },
+    { id: 2, typeName: 'Type 2' },
+    { id: 3, typeName: 'Type 3' },
+    { id: 4, typeName: 'Type 4' },
+  ],
 };
