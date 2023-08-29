@@ -35,7 +35,6 @@ SharedWithParticipants.args = {
       siteId: 4,
     },
     {
-      id: 5,
       name: 'Participant 5',
       types: [
         { id: 1, typeName: 'Type 1' },
