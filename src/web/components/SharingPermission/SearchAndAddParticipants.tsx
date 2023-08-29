@@ -79,13 +79,13 @@ export function SearchAndAddParticipants({
               className='primary-button add-participant-button'
               disabled={!selectedParticipants.size}
             >
-              Add Participants
+              Add Permissions
             </button>
           }
           open={openConfirmation}
           onOpenChange={setOpenConfirmation}
         >
-          Adding the following participants:
+          Adding permissions for the following participants:
           <ul className='dot-list'>
             {selectedParticipantList.map((selectedParticipant) => (
               <li key={selectedParticipant.id}>{selectedParticipant.name}</li>

@@ -136,15 +136,28 @@ export async function GetSharingParticipants(
   }
 }
 
+export async function GetSharedTypes(participantId?: number): Promise<string[]> {
+  try {
+    const result = await axios.get<string[]>(
+      `/participants/${participantId ?? 'current'}/sharedTypes`
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load shared types for this participant');
+  }
+}
+
 export async function AddSharingParticipants(
   participantId: number,
-  newParticipantSites: number[]
+  newParticipantSites: number[],
+  newTypes: string[]
 ): Promise<AvailableParticipantDTO[]> {
   try {
     const result = await axios.post<AvailableParticipantDTO[]>(
       `/participants/${participantId}/sharingPermission/add`,
       {
         newParticipantSites,
+        newTypes,
       }
     );
     return result.data;
@@ -155,13 +168,15 @@ export async function AddSharingParticipants(
 
 export async function DeleteSharingParticipants(
   participantId: number,
-  sharingSitesToRemove: number[]
+  sharingSitesToRemove: number[],
+  types: string[]
 ): Promise<AvailableParticipantDTO[]> {
   try {
     const result = await axios.post<AvailableParticipantDTO[]>(
       `/participants/${participantId}/sharingPermission/delete`,
       {
         sharingSitesToRemove,
+        types,
       }
     );
     return result.data;

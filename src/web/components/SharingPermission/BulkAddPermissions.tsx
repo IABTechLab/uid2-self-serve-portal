@@ -64,10 +64,10 @@ export function BulkAddPermissions({
 
   useEffect(() => {
     if (sharedTypes && sharedTypes.length > 0) {
-      setValue('publisherChecked', sharedTypes.includes('publisher'));
-      setValue('advertiserChecked', sharedTypes.includes('advertiser'));
-      setValue('DSPChecked', sharedTypes.includes('dsp'));
-      setValue('dataProviderChecked', sharedTypes.includes('data_provider'));
+      setValue('publisherChecked', sharedTypes.includes('PUBLISHER'));
+      setValue('advertiserChecked', sharedTypes.includes('ADVERTISER'));
+      setValue('DSPChecked', sharedTypes.includes('DSP'));
+      setValue('dataProviderChecked', sharedTypes.includes('DATA_PROVIDER'));
     }
   }, [sharedTypes, setValue]);
 
@@ -186,14 +186,14 @@ export function BulkAddPermissions({
           </div>
         )}
       </div>
-      {isDirty && savePermissionsButton}
+      {savePermissionsButton}
     </div>
   );
 
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSave)}>
-        {!hasSharingParticipants && (
+        {!hasSharingParticipants && sharedTypes.length === 0 && (
           <Collapsible
             title='Bulk Add Permissions'
             defaultOpen
@@ -203,7 +203,7 @@ export function BulkAddPermissions({
             {recommendationContent}
           </Collapsible>
         )}
-        {hasSharingParticipants && (
+        {(hasSharingParticipants || sharedTypes.length > 0) && (
           <Collapsible title='Bulk Add Permissions' defaultOpen={false}>
             {collapsibleContent}
           </Collapsible>
