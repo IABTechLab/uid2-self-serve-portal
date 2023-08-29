@@ -13,4 +13,5 @@ export const LogoutRoute: PortalRoute = {
   path: '/logout',
   description: 'Logout',
   element: <Logout />,
+  isHidden: true,
 };

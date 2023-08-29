@@ -26,3 +26,9 @@ Default.args = {
   filterText: '',
   onSelectedChange: (selectedItems: Set<number>) => console.log('Selected items:', selectedItems),
 };
+
+export const HideSelectAllCheckbox = Template.bind({});
+HideSelectAllCheckbox.args = {
+  ...Default.args,
+  hideSelectAllCheckbox: true,
+};
