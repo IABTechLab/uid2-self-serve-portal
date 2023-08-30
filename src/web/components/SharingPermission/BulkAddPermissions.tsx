@@ -2,10 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import {
-  AvailableParticipantDTO,
-  ParticipantRequestDTO,
-} from '../../../api/routers/participantsRouter';
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
 import { withoutRef } from '../Core/Form';
@@ -85,7 +82,7 @@ export function BulkAddPermissions({
     );
   }, [watchPublisherChecked, watchAdvertiserChecked, watchDSPChecked, watchDataProviderChecked]);
 
-  const filteredParticipants: AvailableParticipantDTO[] = useMemo(() => {
+  const filteredParticipants = useMemo(() => {
     return getFilteredParticipantsByType(
       availableParticipants,
       watchPublisherChecked,
