@@ -1,7 +1,6 @@
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
-import { ClientType, SiteDTO } from '../../../api/services/adminServiceClient';
-import { preloadSiteList } from '../../services/site';
+import { ParticipantTypeDTO } from '../entities/ParticipantType';
+import { AvailableParticipantDTO } from '../routers/participantsRouter';
+import { ClientType, SiteDTO } from '../services/adminServiceClient';
 
 export const mapClientTypeToParticipantType = (
   clientTypes: ClientType[],
@@ -26,13 +25,4 @@ export const convertSiteToAvailableParticipantDTO = (
     siteId: site.id,
     types: mapClientTypeToParticipantType(site.types, participantTypes),
   };
-};
-
-export const fetchAndConvertSitesToParticipants = async (
-  participantTypes: ParticipantTypeDTO[]
-): Promise<AvailableParticipantDTO[]> => {
-  const siteList = await preloadSiteList();
-  return siteList.map((site: SiteDTO) =>
-    convertSiteToAvailableParticipantDTO(site, participantTypes)
-  );
 };

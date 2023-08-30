@@ -1,8 +1,8 @@
-import { ClientType, SiteDTO } from '../../../api/services/adminServiceClient';
 import {
   convertSiteToAvailableParticipantDTO,
   mapClientTypeToParticipantType,
-} from './SharingPermissionsHelpers';
+} from '../helpers/siteConvertingHelpers';
+import { ClientType, SiteDTO } from '../services/adminServiceClient';
 
 describe('Sharing Permission Helper Tests', () => {
   const participantTypes = [

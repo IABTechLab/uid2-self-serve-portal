@@ -3,12 +3,10 @@ import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
-import { SiteDTO } from '../../api/services/adminServiceClient';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
 import { StatusPopup } from '../components/Core/StatusPopup';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
-import { fetchAndConvertSitesToParticipants } from '../components/SharingPermission/SharingPermissionsHelpers';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
@@ -18,6 +16,7 @@ import {
   GetSharingParticipants,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
+import { preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
@@ -32,9 +31,8 @@ function SharingPermissions() {
   const { participant } = useContext(ParticipantContext);
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
-  const { fetchPromises, participantTypes } = useLoaderData() as {
-    fetchPromises: [AvailableParticipantDTO[], AvailableParticipantDTO[]];
-    participantTypes: ParticipantTypeDTO[];
+  const data = useLoaderData() as {
+    results: [AvailableParticipantDTO[], ParticipantTypeDTO[], AvailableParticipantDTO[]];
   };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
@@ -97,10 +95,10 @@ function SharingPermissions() {
         Note: This only enables the sharing permission. No data is sent.
       </p>
       <Suspense fallback={<Loading />}>
-        <Await resolve={fetchPromises}>
-          {([resolvedParticipants, sitesList]: [
+        <Await resolve={data.results}>
+          {([resolvedParticipants, participantTypes]: [
             AvailableParticipantDTO[],
-            AvailableParticipantDTO[]
+            ParticipantTypeDTO[]
           ]) => (
             <>
               <div className='search-and-add-permissions-collapsible'>
@@ -114,7 +112,6 @@ function SharingPermissions() {
                 </Collapsible>
               </div>
               <SharingPermissionsTable
-                sitesList={sitesList}
                 sharingParticipants={sharingParticipants}
                 onDeleteSharingPermission={handleDeleteSharingPermission}
                 participantTypes={participantTypes}
@@ -141,9 +138,9 @@ export const SharingPermissionsRoute: PortalRoute = {
   path: '/dashboard/sharing',
   loader: async () => {
     const participants = GetAllAvailableParticipants();
-    const participantTypes = await GetAllParticipantTypes();
-    const sitesList = fetchAndConvertSitesToParticipants(participantTypes);
-    const promises = Promise.all([participants, sitesList]);
-    return defer({ fetchPromises: promises, participantTypes });
+    const participantTypes = GetAllParticipantTypes();
+    const sites = preloadAvailableSiteList();
+    const promises = Promise.all([participants, participantTypes, sites]);
+    return defer({ results: promises });
   },
 };
