@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
-import { useAvailableSiteList } from '../../services/site';
 import { Dialog } from '../Core/Dialog';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
@@ -36,7 +35,6 @@ export function SharingPermissionsTable({
   onDeleteSharingPermission,
   participantTypes,
 }: SharingPermissionsTableProps) {
-  const { sites } = useAvailableSiteList();
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
   const [openConfirmation, setOpenConfirmation] = useState(false);
@@ -46,7 +44,6 @@ export function SharingPermissionsTable({
   );
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
 
-  console.log(sites);
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(Array.from(checkedParticipants));
     setCheckedParticipants(new Set());
