@@ -32,7 +32,7 @@ function SharingPermissions() {
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
   const data = useLoaderData() as {
-    results: [AvailableParticipantDTO[], ParticipantTypeDTO[], AvailableParticipantDTO[]];
+    results: [AvailableParticipantDTO[], ParticipantTypeDTO[]];
   };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
@@ -136,11 +136,11 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
-  loader: async () => {
+  loader: () => {
     const participants = GetAllAvailableParticipants();
     const participantTypes = GetAllParticipantTypes();
-    const sites = preloadAvailableSiteList();
-    const promises = Promise.all([participants, participantTypes, sites]);
+    preloadAvailableSiteList();
+    const promises = Promise.all([participants, participantTypes]);
     return defer({ results: promises });
   },
 };
