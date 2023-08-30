@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { SiteDTO } from '../../../api/services/adminServiceClient';
+import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -94,6 +94,23 @@ function ParticipantApprovalForm({
                 value: p.id,
               }))}
             />
+            <Input inputName='readonly-requestor-name' label='Requestor Name'>
+              <input
+                className='input-container'
+                disabled
+                value={participant.requestingUser.fullName}
+              />
+            </Input>
+            <Input inputName='readonly-requestor-email' label='Requestor Email'>
+              <input
+                className='input-container'
+                disabled
+                value={participant.requestingUser.email}
+              />
+            </Input>
+            <Input inputName='readonly-requestor-job' label='Job Function'>
+              <input className='input-container' disabled value={participant.requestingUser.role} />
+            </Input>
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
                 Approve Participant
