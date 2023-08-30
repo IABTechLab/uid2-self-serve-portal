@@ -1,5 +1,6 @@
 import {
   convertSiteToAvailableParticipantDTO,
+  hasSharerRole,
   mapClientTypeToParticipantType,
 } from '../helpers/siteConvertingHelpers';
 import { ClientType, SiteDTO } from '../services/adminServiceClient';
@@ -69,6 +70,47 @@ describe('Sharing Permission Helper Tests', () => {
           },
         ],
       });
+    });
+  });
+
+  describe('#hasSharerRole', () => {
+    it('should return true if site is DSP', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: [],
+        types: ['DSP'],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      expect(hasSharerRole(site)).toBeTruthy();
+    });
+
+    it('should return true if site has SHARER role', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: ['SHARER'],
+        types: ['PUBLISHER'],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      expect(hasSharerRole(site)).toBeTruthy();
+    });
+
+    it('should return false if types are empty', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: ['SHARER', 'GENERATOR'],
+        types: [],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      expect(hasSharerRole(site)).toBeFalsy();
     });
   });
 });

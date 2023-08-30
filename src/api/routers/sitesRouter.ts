@@ -1,7 +1,10 @@
 import express from 'express';
 
 import { ParticipantType } from '../entities/ParticipantType';
-import { convertSiteToAvailableParticipantDTO } from '../helpers/siteConvertingHelpers';
+import {
+  convertSiteToAvailableParticipantDTO,
+  hasSharerRole,
+} from '../helpers/siteConvertingHelpers';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { getSiteList, SiteDTO } from '../services/adminServiceClient';
 
@@ -15,7 +18,7 @@ export function createSitesRouter() {
 
   sitesRouter.get('/available', async (_req, res) => {
     const sites = await getSiteList();
-    const availableSites = sites.filter((s) => !!s.types.length);
+    const availableSites = sites.filter(hasSharerRole);
     const participantTypes = await ParticipantType.query();
     const availableParticipants = availableSites.map((site: SiteDTO) =>
       convertSiteToAvailableParticipantDTO(site, participantTypes)
