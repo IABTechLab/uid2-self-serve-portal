@@ -10,11 +10,7 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
-import {
-  findApproversByType,
-  getApprovableParticipantTypeIds,
-  isUserAnApprover,
-} from './approversService';
+import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';

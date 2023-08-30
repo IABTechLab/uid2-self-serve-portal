@@ -12,7 +12,6 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
   DeleteSharingParticipants,
-  GetAllAvailableParticipants,
   GetSharingParticipants,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
@@ -31,9 +30,7 @@ function SharingPermissions() {
   const { participant } = useContext(ParticipantContext);
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
-  const data = useLoaderData() as {
-    results: [AvailableParticipantDTO[], ParticipantTypeDTO[]];
-  };
+  const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     try {
@@ -95,26 +92,22 @@ function SharingPermissions() {
         Note: This only enables the sharing permission. No data is sent.
       </p>
       <Suspense fallback={<Loading />}>
-        <Await resolve={data.results}>
-          {([resolvedParticipants, participantTypes]: [
-            AvailableParticipantDTO[],
-            ParticipantTypeDTO[]
-          ]) => (
+        <Await resolve={participantTypes}>
+          {(resolvedParticipantTypes: ParticipantTypeDTO[]) => (
             <>
               <div className='search-and-add-permissions-collapsible'>
                 <Collapsible title='Search and Add Permissions' defaultOpen>
                   <SearchAndAddParticipants
                     onSharingPermissionsAdded={handleSharingPermissionsAdded}
                     sharingParticipants={sharingParticipants}
-                    availableParticipants={resolvedParticipants}
-                    participantTypes={participantTypes}
+                    participantTypes={resolvedParticipantTypes}
                   />
                 </Collapsible>
               </div>
               <SharingPermissionsTable
                 sharingParticipants={sharingParticipants}
                 onDeleteSharingPermission={handleDeleteSharingPermission}
-                participantTypes={participantTypes}
+                participantTypes={resolvedParticipantTypes}
               />
             </>
           )}
@@ -137,10 +130,8 @@ export const SharingPermissionsRoute: PortalRoute = {
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
   loader: () => {
-    const participants = GetAllAvailableParticipants();
     const participantTypes = GetAllParticipantTypes();
     preloadAvailableSiteList();
-    const promises = Promise.all([participants, participantTypes]);
-    return defer({ results: promises });
+    return defer({ participantTypes });
   },
 };
