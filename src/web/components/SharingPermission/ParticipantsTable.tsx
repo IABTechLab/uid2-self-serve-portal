@@ -113,7 +113,7 @@ function ParticipantsTableContent({
         {sortedData.map((participant) => (
           <ParticipantItem
             addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
-            key={participant.id}
+            key={participant.siteId}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
             checked={!!selectedParticipantIds.has(participant.siteId!)}

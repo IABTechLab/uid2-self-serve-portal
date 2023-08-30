@@ -37,7 +37,7 @@ import {
 } from '../services/usersService';
 import { createBusinessContactsRouter } from './businessContactsRouter';
 
-export type AvailableParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'siteId' | 'types'>;
+export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'siteId' | 'types'>>;
 
 export type ParticipantRequestDTO = Pick<
   ParticipantDTO,

@@ -20,7 +20,7 @@ const Template: ComponentStory<typeof ParticipantItemSimple> = (args) => (
 export const Default = Template.bind({});
 Default.args = {
   participant: {
-    id: 1,
+    siteId: 1,
     name: 'Participant 1',
     types: [{ id: 2, typeName: 'Type 2' }],
   },

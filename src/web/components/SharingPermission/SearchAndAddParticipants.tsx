@@ -40,7 +40,7 @@ export function SearchAndAddParticipants({
 
   const getSearchableParticipants = (resolvedParticipants: AvailableParticipantDTO[]) => {
     return resolvedParticipants.filter(
-      (p) => p.id !== participant?.id && !sharingParticipantsSiteIds.has(p.siteId)
+      (p) => p.siteId !== participant?.siteId && !sharingParticipantsSiteIds.has(p.siteId)
     );
   };
 
@@ -88,7 +88,7 @@ export function SearchAndAddParticipants({
           Adding permissions for the following participants:
           <ul className='dot-list'>
             {selectedParticipantList.map((selectedParticipant) => (
-              <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
+              <li key={selectedParticipant.siteId}>{selectedParticipant.name}</li>
             ))}
           </ul>
           <div className='dialog-footer-section'>
