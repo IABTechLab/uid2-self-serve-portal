@@ -187,6 +187,6 @@ HasSharedWithPublisher.args = {
   },
   onBulkAddSharingPermission,
   hasSharingParticipants: true,
-  sharedTypes: ['publisher'],
+  sharedTypes: ['PUBLISHER'],
   availableParticipants,
 };
