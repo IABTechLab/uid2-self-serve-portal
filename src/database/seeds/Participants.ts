@@ -12,16 +12,18 @@ const sampleData: Optional<
   {
     name: 'Publisher example',
     allowSharing: true,
-    status: ParticipantStatus.AwaitingSigning,
+    status: ParticipantStatus.Approved,
     type: 'Publisher',
     location: 'Sydney',
+    siteId: 124,
   },
   {
     name: 'DSP example',
-    status: ParticipantStatus.AwaitingApproval,
+    status: ParticipantStatus.Approved,
     type: 'DSP',
     allowSharing: true,
     location: 'Sydney',
+    siteId: 123,
   },
   {
     name: 'DP example',
@@ -29,12 +31,28 @@ const sampleData: Optional<
     allowSharing: true,
     type: 'Data Provider',
     location: 'Sydney',
+    siteId: 125,
   },
   {
     name: 'Advertiser example',
     allowSharing: true,
     status: ParticipantStatus.Approved,
     type: 'Advertiser',
+    location: 'Sydney',
+    siteId: 126,
+  },
+  {
+    name: 'AwaitingApproval example',
+    status: ParticipantStatus.AwaitingApproval,
+    type: 'DSP',
+    allowSharing: true,
+    location: 'Sydney',
+  },
+  {
+    name: 'AwaitingSigning example',
+    allowSharing: true,
+    status: ParticipantStatus.AwaitingSigning,
+    type: 'Publisher',
     location: 'Sydney',
   },
 ];
@@ -48,6 +66,7 @@ export async function CreateParticipant(
     .insert({
       name: details.name,
       status: details.status,
+      siteId: details.siteId,
     })
     .returning('id');
   const participantType = await knex('participantTypes').where('typeName', type);
