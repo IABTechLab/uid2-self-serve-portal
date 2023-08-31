@@ -8,14 +8,14 @@ import {
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { getSiteList } from '../services/adminServiceClient';
 import { SiteDTO } from '../services/adminServiceHelpers';
-import { GetAttachedSiteIDs } from '../services/participantsService';
+import { getAttachedSiteIDs } from '../services/participantsService';
 
 export function createSitesRouter() {
   const sitesRouter = express.Router();
 
   sitesRouter.get('/unattached/', isApproverCheck, async (_req, res) => {
     const allSitesPromise = getSiteList();
-    const attachedSitesPromise = GetAttachedSiteIDs();
+    const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
     return res.status(200).json(allSites.filter((s) => !attachedSites.includes(s.id)));
   });

@@ -42,13 +42,6 @@ const sampleData: Optional<
     siteId: 126,
   },
   {
-    name: 'AwaitingApproval example',
-    status: ParticipantStatus.AwaitingApproval,
-    type: 'DSP',
-    allowSharing: true,
-    location: 'Sydney',
-  },
-  {
     name: 'AwaitingSigning example',
     allowSharing: true,
     status: ParticipantStatus.AwaitingSigning,

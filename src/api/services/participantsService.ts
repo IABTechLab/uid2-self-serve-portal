@@ -72,14 +72,13 @@ export const getParticipantsAwaitingApproval = async (email: string): Promise<Pa
         .whereIn('participantTypeId', approvableParticipantTypeIds)
         .select('participantId')
     )
-    .withGraphFetched('types')
-    .withGraphFetched('users')
+    .withGraphFetched('[types, users]')
     .where('status', ParticipantStatus.AwaitingApproval);
   return participantsAwaitingApproval;
 };
 
 type SiteIdType = NonNullable<ParticipantDTO['siteId']>;
-export const GetAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
+export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
   const sites = await Participant.query()
     .whereNotNull('siteId')
     .select('siteId')
