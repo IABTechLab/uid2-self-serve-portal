@@ -4,15 +4,12 @@
   flex-direction: column;
 
   .highlight {
-    background-color: yellow;
+    background-color: var(--theme-search-highlight);
   }
 
   .search-bar {
     display: flex;
     flex-direction: column;
-
-    .input-field {
-    }
 
     .site-search-results {
       flex-grow: 1;

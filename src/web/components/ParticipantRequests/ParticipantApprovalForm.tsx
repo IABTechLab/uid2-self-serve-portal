@@ -79,7 +79,7 @@ function ParticipantApprovalForm({
 
   useEffect(() => {
     setSiteSearchResults(fuse?.search(searchText ?? participant.name));
-  }, [sites]);
+  }, [fuse, participant.name, searchText]);
 
   const formMethods = useForm<ParticipantApprovalFormDetails>({
     defaultValues: { name: participant.name, types: participant.types?.map((t) => t.id) },
@@ -97,8 +97,6 @@ function ParticipantApprovalForm({
 
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
-    const matches = fuse?.search(event.target.value);
-    setSiteSearchResults(matches);
   };
 
   return (
