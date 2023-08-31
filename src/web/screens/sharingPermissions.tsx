@@ -12,10 +12,10 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
   DeleteSharingParticipants,
-  GetAllAvailableParticipants,
   GetSharingParticipants,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
+import { preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
@@ -25,10 +25,7 @@ function SharingPermissions() {
   const { participant } = useContext(ParticipantContext);
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-  const { participants, participantTypes } = useLoaderData() as {
-    participants: AvailableParticipantDTO[];
-    participantTypes: ParticipantTypeDTO[];
-  };
+  const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     try {
@@ -90,26 +87,27 @@ function SharingPermissions() {
         Note: This only enables the sharing permission. No data is sent.
       </p>
       <Suspense fallback={<Loading />}>
-        <Await resolve={participants}>
-          {(resolvedParticipants: AvailableParticipantDTO[]) => (
-            <div className='search-and-add-permissions-collapsible'>
-              <Collapsible title='Search and Add Permissions' defaultOpen>
-                <SearchAndAddParticipants
-                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
-                  sharingParticipants={sharingParticipants}
-                  availableParticipants={resolvedParticipants}
-                  participantTypes={participantTypes}
-                />
-              </Collapsible>
-            </div>
+        <Await resolve={participantTypes}>
+          {(resolvedParticipantTypes: ParticipantTypeDTO[]) => (
+            <>
+              <div className='search-and-add-permissions-collapsible'>
+                <Collapsible title='Search and Add Permissions' defaultOpen>
+                  <SearchAndAddParticipants
+                    onSharingPermissionsAdded={handleSharingPermissionsAdded}
+                    sharingParticipants={sharingParticipants}
+                    participantTypes={resolvedParticipantTypes}
+                  />
+                </Collapsible>
+              </div>
+              <SharingPermissionsTable
+                sharingParticipants={sharingParticipants}
+                onDeleteSharingPermission={handleDeleteSharingPermission}
+                participantTypes={resolvedParticipantTypes}
+              />
+            </>
           )}
         </Await>
       </Suspense>
-      <SharingPermissionsTable
-        sharingParticipants={sharingParticipants}
-        onDeleteSharingPermission={handleDeleteSharingPermission}
-        participantTypes={participantTypes}
-      />
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}
@@ -126,9 +124,9 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
-  loader: async () => {
-    const participants = GetAllAvailableParticipants();
-    const participantTypes = await GetAllParticipantTypes();
-    return defer({ participants, participantTypes });
+  loader: () => {
+    const participantTypes = GetAllParticipantTypes();
+    preloadAvailableSiteList();
+    return defer({ participantTypes });
   },
 };

@@ -72,11 +72,13 @@ export const updateSharingList = async (
 };
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
+export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
 export type SiteDTO = {
   id: number;
   name: string;
   enabled: boolean;
   roles: ClientRole[];
+  types: ClientType[];
   client_count: number;
 };
 

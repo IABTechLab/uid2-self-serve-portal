@@ -1,5 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { TestAvailableSiteListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
 
 export default {
@@ -7,8 +9,32 @@ export default {
   component: SharingPermissionsTable,
 } as ComponentMeta<typeof SharingPermissionsTable>;
 
+const response: AvailableParticipantDTO[] = [
+  {
+    name: 'Site 1',
+    types: [{ id: 1, typeName: 'Type 1' }],
+    siteId: 10,
+  },
+  {
+    name: 'Site 2',
+    types: [{ id: 2, typeName: 'Type 2' }],
+    siteId: 11,
+  },
+  {
+    name: 'Site 3',
+    types: [{ id: 3, typeName: 'Type 3' }],
+    siteId: 12,
+  },
+  {
+    name: 'Site 4',
+    types: [{ id: 4, typeName: 'Type 4' }],
+    siteId: 13,
+  },
+];
 const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
-  <SharingPermissionsTable {...args} />
+  <TestAvailableSiteListProvider response={response}>
+    <SharingPermissionsTable {...args} />
+  </TestAvailableSiteListProvider>
 );
 
 export const SharedWithParticipants = Template.bind({});

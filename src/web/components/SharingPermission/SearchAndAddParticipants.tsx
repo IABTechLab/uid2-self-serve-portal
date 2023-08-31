@@ -3,7 +3,9 @@ import { useContext, useMemo, useState } from 'react';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
+import { useAvailableSiteList } from '../../services/site';
 import { Dialog } from '../Core/Dialog';
+import { Loading } from '../Core/Loading';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 import './SearchAndAddParticipants.scss';
@@ -11,15 +13,14 @@ import './SearchAndAddParticipants.scss';
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
   sharingParticipants: AvailableParticipantDTO[];
-  availableParticipants: AvailableParticipantDTO[];
   participantTypes: ParticipantTypeDTO[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
   sharingParticipants,
-  availableParticipants,
   participantTypes,
 }: SearchAndAddParticipantsProps) {
+  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
   const [openConfirmation, setOpenConfirmation] = useState(false);
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
   const [openSearchResult, setOpenSearchResult] = useState<boolean>(false);
@@ -35,7 +36,7 @@ export function SearchAndAddParticipants({
   }, [sharingParticipants]);
 
   const selectedParticipantList = useMemo(() => {
-    return availableParticipants.filter((p) => selectedParticipants.has(p.siteId!));
+    return (availableParticipants ?? []).filter((p) => selectedParticipants.has(p.siteId!));
   }, [availableParticipants, selectedParticipants]);
 
   const getSearchableParticipants = (resolvedParticipants: AvailableParticipantDTO[]) => {
@@ -55,12 +56,14 @@ export function SearchAndAddParticipants({
     setSelectedParticipants(selectedItems);
   };
 
+  if (isLoading) return <Loading />;
+
   return (
     <div className='search-and-add-participants'>
       <div className='add-participant-dialog-search-bar'>
         <ParticipantSearchBar
           selectedParticipantIds={selectedParticipants}
-          participants={getSearchableParticipants(availableParticipants)}
+          participants={getSearchableParticipants(availableParticipants!)}
           onSelectedChange={handleSelectedParticipantChanged}
           participantTypes={participantTypes}
           open={openSearchResult}
