@@ -17,8 +17,6 @@ import {
   getApprovableParticipantTypeIds,
   isUserAnApprover,
 } from './approversService';
-import { getSharingList, SharingListResponse, updateSharingList } from './adminServiceClient';
-import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';

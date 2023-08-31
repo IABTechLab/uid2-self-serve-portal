@@ -4,9 +4,8 @@ import {
   ParticipantTypeDTO,
 } from '../entities/ParticipantType';
 
-export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
-
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
+export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
 type AvailableClientRole = Exclude<ClientRole, 'OPTOUT'>;
 export const ClientRolesWithDescriptions: Record<AvailableClientRole, string> = {
   GENERATOR: 'Generator',

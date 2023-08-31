@@ -1,21 +1,17 @@
 import express from 'express';
 
-import { Participant } from '../entities/Participant';
-import { isApproverCheck } from '../middleware/approversMiddleware';
-import { getSiteList } from '../services/adminServiceClient';
-import { GetAttachedSiteIDs } from '../services/participantsService';
 import { ParticipantType } from '../entities/ParticipantType';
 import {
   convertSiteToAvailableParticipantDTO,
   hasSharerRole,
 } from '../helpers/siteConvertingHelpers';
 import { isApproverCheck } from '../middleware/approversMiddleware';
-import { getSiteList, SiteDTO } from '../services/adminServiceClient';
+import { getSiteList } from '../services/adminServiceClient';
+import { SiteDTO } from '../services/adminServiceHelpers';
+import { GetAttachedSiteIDs } from '../services/participantsService';
 
 export function createSitesRouter() {
   const sitesRouter = express.Router();
-
-  sitesRouter.use('/', );
 
   sitesRouter.get('/unattached/', isApproverCheck, async (_req, res) => {
     const allSitesPromise = getSiteList();

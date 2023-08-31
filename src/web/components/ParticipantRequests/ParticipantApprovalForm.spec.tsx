@@ -7,7 +7,7 @@ import { HighlightedResult } from './ParticipantApprovalForm';
 const createResult = (text: string, indices: [number, number][]) => {
   const result: Fuse.FuseResult<SiteDTO> = {
     // eslint-disable-next-line camelcase
-    item: { name: text, id: 1, enabled: true, roles: [], client_count: 1 },
+    item: { name: text, id: 1, enabled: true, roles: [], types: [], client_count: 1 },
     matches: [
       {
         indices,

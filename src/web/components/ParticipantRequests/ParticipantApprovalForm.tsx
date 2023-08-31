@@ -28,13 +28,13 @@ const getSpans = (matches: [number, number][], totalLength: number) => {
       },
       [{ start: -1, end: -1, highlight: false }]
     )
-    .slice(1); // ?
+    .slice(1);
   const finalSpan = {
     start: matches.length > 0 ? matches[matches.length - 1][1] + 1 : 0,
     end: totalLength - 1,
     highlight: false,
   };
-  return [...spans, finalSpan]; // ?
+  return [...spans, finalSpan];
 };
 
 type HighlightedResultProps = {
@@ -73,8 +73,6 @@ function ParticipantApprovalForm({
         : null,
     [sites]
   );
-  console.log('Participant:', participant);
-  console.log('Sites:', sites);
   const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteDTO>[]>();
   const [searchText, setSearchText] = useState(participant.name);
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
@@ -100,7 +98,6 @@ function ParticipantApprovalForm({
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
     const matches = fuse?.search(event.target.value);
-    console.log('Matches', matches);
     setSiteSearchResults(matches);
   };
 

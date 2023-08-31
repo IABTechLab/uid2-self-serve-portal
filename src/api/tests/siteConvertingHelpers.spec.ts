@@ -3,7 +3,7 @@ import {
   hasSharerRole,
   mapClientTypeToParticipantType,
 } from '../helpers/siteConvertingHelpers';
-import { ClientType, SiteDTO } from '../services/adminServiceClient';
+import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
 
 describe('Sharing Permission Helper Tests', () => {
   const participantTypes = [

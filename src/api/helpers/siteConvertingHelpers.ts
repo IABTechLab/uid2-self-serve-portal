@@ -1,6 +1,6 @@
 import { ParticipantTypeDTO } from '../entities/ParticipantType';
 import { AvailableParticipantDTO } from '../routers/participantsRouter';
-import { ClientType, SiteDTO } from '../services/adminServiceClient';
+import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
 
 export const mapClientTypeToParticipantType = (
   clientTypes: ClientType[],
