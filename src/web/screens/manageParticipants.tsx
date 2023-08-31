@@ -3,7 +3,7 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { SiteDTO } from '../../api/services/adminServiceClient';
+import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
 import {

@@ -10,7 +10,7 @@ import {
   ParticipantSchema,
   ParticipantStatus,
 } from '../entities/Participant';
-import { UserRole } from '../entities/User';
+import { UserDTO, UserRole } from '../entities/User';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
@@ -41,7 +41,9 @@ export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'si
 export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
   'id' | 'name' | 'siteId' | 'types' | 'status'
->;
+> & {
+  requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
+};
 
 function mapParticipantToAvailableParticipant(participant: Participant) {
   return {
@@ -49,6 +51,26 @@ function mapParticipantToAvailableParticipant(participant: Participant) {
     name: participant.name,
     siteId: participant.siteId,
     types: participant.types,
+  };
+}
+
+function mapParticipantToApprovalRequest(participant: Participant): ParticipantRequestDTO {
+  if (!participant.users || participant.users.length === 0)
+    throw Error('Found a participant with no requesting user.');
+
+  // There should usually only be one user at this point - but if there are multiple, the first one is preferred.
+  const firstUser = participant.users.sort((a, b) => a.id - b.id)[0];
+  return {
+    id: participant.id,
+    name: participant.name,
+    siteId: participant.siteId,
+    types: participant.types,
+    status: participant.status,
+    requestingUser: {
+      email: firstUser.email,
+      role: firstUser.role,
+      fullName: firstUser.fullName(),
+    },
   };
 }
 
@@ -61,7 +83,10 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res) => {
       const email = String(req.auth?.payload?.email);
       const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
-      return res.status(200).json(participantsAwaitingApproval);
+      const result: ParticipantRequestDTO[] = participantsAwaitingApproval.map(
+        mapParticipantToApprovalRequest
+      );
+      return res.status(200).json(result);
     }
   );
 
