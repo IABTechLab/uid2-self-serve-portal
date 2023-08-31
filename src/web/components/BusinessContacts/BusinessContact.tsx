@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
-import { InlineError } from '../Core/InlineError';
+import { InlineMessage } from '../Core/InlineMessage';
 import BusinessContactDialog from './BusinessContactDialog';
 
 type DeleteBusinessContactDialogProps = {
@@ -84,7 +84,7 @@ function BusinessContact({
       <td>{contact.contactType}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineError />}
+          {hasError && <InlineMessage message='An error has occurred' type='Error' />}
           <div>
             <BusinessContactDialog
               onFormSubmit={handleUpdateEmailContact}
