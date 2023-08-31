@@ -1,8 +1,4 @@
-import {
-  ParticipantType,
-  ParticipantTypeData,
-  ParticipantTypeDTO,
-} from '../entities/ParticipantType';
+import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
 export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
@@ -27,14 +23,14 @@ export type SharingListResponse = {
   hash: number;
 };
 
-export const AllowedSiteRoles: Record<number, AvailableClientRole[]> = {
-  [ParticipantTypeData.Advertiser.id]: ['MAPPER', 'SHARER'],
-  [ParticipantTypeData.DataProvider.id]: ['MAPPER', 'SHARER'],
-  [ParticipantTypeData.DSP.id]: ['ID_READER', 'SHARER'],
-  [ParticipantTypeData.Publisher.id]: ['GENERATOR', 'SHARER'],
+const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
+  [ParticipantTypeData.Advertiser.typeName]: ['MAPPER', 'SHARER'],
+  [ParticipantTypeData.DataProvider.typeName]: ['MAPPER', 'SHARER'],
+  [ParticipantTypeData.DSP.typeName]: ['ID_READER', 'SHARER'],
+  [ParticipantTypeData.Publisher.typeName]: ['GENERATOR', 'SHARER'],
 };
 
 export function GetRecommendedRoles(roles: ParticipantTypeDTO[]) {
-  const recommendedRolesWithDuplicates = roles.flatMap((r) => AllowedSiteRoles[r.id]);
+  const recommendedRolesWithDuplicates = roles.flatMap((r) => AllowedSiteRoles[r.typeName]);
   return [...new Set(recommendedRolesWithDuplicates)];
 }
