@@ -34,7 +34,7 @@ export function StatusPopup({
         clearTimeout(timer);
       }
     };
-  }, [displayDuration, setShow, show]);
+  }, [displayDuration, setShow, show, status, message]);
 
   const getIcon = () => {
     switch (status) {
@@ -53,7 +53,7 @@ export function StatusPopup({
   return show ? (
     <div className={`status-popup message-container ${status}`}>
       <div className={`status-popup-title-container ${status}`}>
-        <div className='status-popup-title-left'>
+        <div>
           {getIcon()}
           <span className='status-popup-title'>{status}</span>
         </div>
