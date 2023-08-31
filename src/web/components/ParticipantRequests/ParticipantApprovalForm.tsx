@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Fuse from 'fuse.js';
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
@@ -14,6 +14,46 @@ import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 
 import './ParticipantApprovalForm.scss';
+
+const getSpans = (matches: [number, number][], totalLength: number) => {
+  const spans = matches
+    .reduce(
+      (acc, next) => {
+        const gapFromPrevious = {
+          start: acc[acc.length - 1].end + 1,
+          end: next[0] - 1,
+          highlight: false,
+        };
+        return [...acc, gapFromPrevious, { start: next[0], end: next[1], highlight: true }];
+      },
+      [{ start: -1, end: -1, highlight: false }]
+    )
+    .slice(1); // ?
+  const finalSpan = {
+    start: matches.length > 0 ? matches[matches.length - 1][1] + 1 : 0,
+    end: totalLength - 1,
+    highlight: false,
+  };
+  return [...spans, finalSpan]; // ?
+};
+
+type HighlightedResultProps = {
+  result: Fuse.FuseResult<SiteDTO>;
+};
+export function HighlightedResult({ result }: HighlightedResultProps) {
+  const text = `${result.item.name} (Site ID ${result.item.id})`;
+  if (!result.matches || result.matches.length < 1) return <span>{text}</span>;
+  const spans = getSpans([...result.matches[0].indices], result.item.name.length);
+  return (
+    <>
+      {spans.map((s) => (
+        <span key={`${s.start}-${s.end}`} className={clsx({ highlight: s.highlight })}>
+          {result.item.name.slice(s.start, s.end + 1)}
+        </span>
+      ))}
+    </>
+  );
+}
 
 type ParticipantApprovalFormProps = {
   onApprove: (formData: ParticipantApprovalFormDetails) => Promise<void>;
@@ -35,9 +75,13 @@ function ParticipantApprovalForm({
   );
   console.log('Participant:', participant);
   console.log('Sites:', sites);
-  const [siteSearchResults, setSiteSearchResults] = useState(() => fuse?.search(participant.name));
+  const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteDTO>[]>();
   const [searchText, setSearchText] = useState(participant.name);
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
+
+  useEffect(() => {
+    setSiteSearchResults(fuse?.search(searchText ?? participant.name));
+  }, [sites]);
 
   const formMethods = useForm<ParticipantApprovalFormDetails>({
     defaultValues: { name: participant.name, types: participant.types?.map((t) => t.id) },
@@ -58,39 +102,6 @@ function ParticipantApprovalForm({
     const matches = fuse?.search(event.target.value);
     console.log('Matches', matches);
     setSiteSearchResults(matches);
-  };
-
-  const getSpans = (matches: [number, number][], totalLength: number) => {
-    const spans = matches
-      .reduce(
-        (acc, next) => {
-          const gapFromPrevious = {
-            start: acc[acc.length - 1].end + 1,
-            end: next[0] - 1,
-            highlight: false,
-          };
-          return [...acc, gapFromPrevious, { start: next[0], end: next[1], highlight: true }];
-        },
-        [{ start: -1, end: -1, highlight: false }]
-      )
-      .slice(1); // ?
-    const finalSpan = {
-      start: matches[matches.length - 1][1] + 1,
-      end: totalLength - 1,
-      highlight: false,
-    };
-    return [...spans, finalSpan]; // ?
-  };
-  const getSiteText = (result: Fuse.FuseResult<SiteDTO>) => {
-    const text = `${result.item.name} (Site ID ${result.item.id})`;
-    if (!result.matches || result.matches.length < 1) return text;
-    const spans = getSpans([...result.matches[0].indices], result.item.name.length);
-    console.log(spans, result.item.name);
-    return spans.map((s) => (
-      <span className={clsx({ highlight: s.highlight })}>
-        {result.item.name.slice(s.start, s.end + 1)}
-      </span>
-    ));
   };
 
   return (
@@ -115,7 +126,7 @@ function ParticipantApprovalForm({
           <SearchBarResults className='site-search-results'>
             {siteSearchResults?.map((s) => (
               <button type='button' className='text-button' onClick={() => onSiteClick(s.item)}>
-                {getSiteText(s)} (Site ID: {s.item.id})
+                <HighlightedResult result={s} /> (Site ID: {s.item.id})
               </button>
             ))}
           </SearchBarResults>
