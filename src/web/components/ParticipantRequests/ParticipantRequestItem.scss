@@ -36,12 +36,4 @@
   flex-direction: column;
   overflow-y: scroll;
   height: 100%;
-
-  & > * {
-    flex-shrink: 0;
-  }
-
-  & .participant-approval-form {
-    flex-shrink: 1;
-  }
 }

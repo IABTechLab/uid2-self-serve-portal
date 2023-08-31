@@ -1,26 +1,22 @@
 .participant-approval-form {
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
-
-  & > * {
-    flex-shrink: 0;
-  }
 
   .highlight {
     background-color: yellow;
   }
 
   .search-bar {
-    flex: 1 1 auto;
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
 
     .input-field {
-      flex-shrink: 0;
     }
 
     .site-search-results {
-      flex: 1 1 auto;
+      flex-grow: 1;
       overflow: scroll;
     }
   }
