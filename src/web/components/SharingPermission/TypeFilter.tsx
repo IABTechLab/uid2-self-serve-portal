@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 
@@ -26,22 +25,19 @@ export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) 
 type TypeFilterProps = {
   types: ParticipantTypeDTO[];
   onFilterChange: (selectedTypeIds: Set<number>) => void;
+  selectedTypeIds: Set<number>;
 };
 
-export function TypeFilter({ types, onFilterChange }: TypeFilterProps) {
-  const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
-
+export function TypeFilter({ types, onFilterChange, selectedTypeIds }: TypeFilterProps) {
   const handleTypeSelect = (typeId: number) => {
-    setSelectedTypeIds((prevState) => {
-      const newSelectedTypeIds = new Set(prevState);
-      if (newSelectedTypeIds.has(typeId)) {
-        newSelectedTypeIds.delete(typeId);
-      } else {
-        newSelectedTypeIds.add(typeId);
-      }
-      onFilterChange(newSelectedTypeIds);
-      return newSelectedTypeIds;
-    });
+    const newSelectedTypeIds = new Set(selectedTypeIds);
+    if (newSelectedTypeIds.has(typeId)) {
+      newSelectedTypeIds.delete(typeId);
+    } else {
+      newSelectedTypeIds.add(typeId);
+    }
+    onFilterChange(newSelectedTypeIds);
+    return newSelectedTypeIds;
   };
 
   return (
