@@ -30,3 +30,17 @@
     align-items: center;
   }
 }
+
+.participants-request-dialog {
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    flex-shrink: 0;
+  }
+
+  & .participant-approval-form {
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+}

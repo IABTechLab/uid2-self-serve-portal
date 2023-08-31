@@ -1,4 +1,6 @@
-import { ChangeEvent, useState } from 'react';
+import clsx from 'clsx';
+import Fuse from 'fuse.js';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
@@ -24,7 +26,17 @@ function ParticipantApprovalForm({
   participantTypes,
 }: ParticipantApprovalFormProps) {
   const { sites } = useSiteList();
-  const [searchText] = useState(participant.name);
+  const fuse = useMemo(
+    () =>
+      sites
+        ? new Fuse(sites!, { keys: ['name'], includeMatches: true, findAllMatches: true })
+        : null,
+    [sites]
+  );
+  console.log('Participant:', participant);
+  console.log('Sites:', sites);
+  const [siteSearchResults, setSiteSearchResults] = useState(() => fuse?.search(participant.name));
+  const [searchText, setSearchText] = useState(participant.name);
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
 
   const formMethods = useForm<ParticipantApprovalFormDetails>({
@@ -42,11 +54,44 @@ function ParticipantApprovalForm({
   };
 
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    // This feature still under development :)
-    // setSearchText(event.target.value);
+    setSearchText(event.target.value);
+    const matches = fuse?.search(event.target.value);
+    console.log('Matches', matches);
+    setSiteSearchResults(matches);
   };
 
-  const getSiteText = (site: SiteDTO) => `${site.name} (Site ID ${site.id})`;
+  const getSpans = (matches: [number, number][], totalLength: number) => {
+    const spans = matches
+      .reduce(
+        (acc, next) => {
+          const gapFromPrevious = {
+            start: acc[acc.length - 1].end + 1,
+            end: next[0] - 1,
+            highlight: false,
+          };
+          return [...acc, gapFromPrevious, { start: next[0], end: next[1], highlight: true }];
+        },
+        [{ start: -1, end: -1, highlight: false }]
+      )
+      .slice(1); // ?
+    const finalSpan = {
+      start: matches[matches.length - 1][1] + 1,
+      end: totalLength - 1,
+      highlight: false,
+    };
+    return [...spans, finalSpan]; // ?
+  };
+  const getSiteText = (result: Fuse.FuseResult<SiteDTO>) => {
+    const text = `${result.item.name} (Site ID ${result.item.id})`;
+    if (!result.matches || result.matches.length < 1) return text;
+    const spans = getSpans([...result.matches[0].indices], result.item.name.length);
+    console.log(spans, result.item.name);
+    return spans.map((s) => (
+      <span className={clsx({ highlight: s.highlight })}>
+        {result.item.name.slice(s.start, s.end + 1)}
+      </span>
+    ));
+  };
 
   return (
     <div className='participant-approval-form'>
@@ -61,16 +106,16 @@ function ParticipantApprovalForm({
           <SearchBarInput
             inputClassName='search-input'
             fullBorder
-            value={!selectedSite ? searchText : getSiteText(selectedSite)}
+            value={!selectedSite ? searchText : `${selectedSite.name} (Site ID ${selectedSite.id})`}
             onChange={onSearchInputChange}
             onFocus={() => setSelectedSite(undefined)}
           />
         </Input>
         {!selectedSite && (
           <SearchBarResults className='site-search-results'>
-            {sites?.map((s) => (
-              <button type='button' className='text-button' onClick={() => onSiteClick(s)}>
-                {getSiteText(s)}
+            {siteSearchResults?.map((s) => (
+              <button type='button' className='text-button' onClick={() => onSiteClick(s.item)}>
+                {getSiteText(s)} (Site ID: {s.item.id})
               </button>
             ))}
           </SearchBarResults>

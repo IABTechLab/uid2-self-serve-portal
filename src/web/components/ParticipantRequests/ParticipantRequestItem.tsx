@@ -74,6 +74,7 @@ export function ParticipantRequestItem({
         closeButton='Cancel'
         open={open}
         onOpenChange={setOpen}
+        className='participants-request-dialog'
       >
         <ParticipantApprovalForm
           onApprove={handleApprove}

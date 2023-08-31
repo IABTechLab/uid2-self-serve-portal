@@ -1,4 +1,31 @@
 .participant-approval-form {
+  display: flex;
+  flex-direction: column;
+
+  & > * {
+    flex-shrink: 0;
+  }
+
+  .highlight {
+    background-color: yellow;
+  }
+
+  .search-bar {
+    flex: 1 1 auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    .input-field {
+      flex-shrink: 0;
+    }
+
+    .site-search-results {
+      flex: 1 1 auto;
+      overflow: scroll;
+    }
+  }
+
   .site-search-results {
     padding: 10px;
 
