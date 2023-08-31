@@ -5,7 +5,7 @@ import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
-import { StatusPopup } from '../components/Core/StatusPopup';
+import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -20,16 +20,11 @@ import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
 
-type StatusPopupType = {
-  message: string;
-  type: 'Success' | 'Error' | 'Info';
-};
-
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant } = useContext(ParticipantContext);
   const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
-  const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
+  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
   const { participants, participantTypes } = useLoaderData() as {
     participants: AvailableParticipantDTO[];
     participantTypes: ParticipantTypeDTO[];
