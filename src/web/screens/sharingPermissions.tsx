@@ -109,7 +109,7 @@ function SharingPermissions() {
           selectedTypes.length === 1
             ? '1 Participant type'
             : `${selectedTypes.length} Participant types`
-        } saved to your sharing permissions`,
+        } saved to Your Sharing Permissions`,
       });
       // TODO AddSharingParticipants doesn't yet return the correct types yet, so commenting out for now
       // setSharingParticipants(response);
