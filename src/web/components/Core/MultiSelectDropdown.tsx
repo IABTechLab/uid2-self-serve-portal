@@ -57,6 +57,7 @@ export function MultiSelectDropdown({
       const checked = selectedItems.has(option.id);
       return (
         <DropdownMenu.CheckboxItem
+          key={option.id}
           className='multi-select-dropdown-checkbox-item'
           checked={selectedItems.has(option.id)}
           onCheckedChange={() => onOptionToggle(option.id)}

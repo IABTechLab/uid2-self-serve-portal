@@ -77,11 +77,6 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
-  participantsRouter.get('/available', async (_req, res) => {
-    const participants = await Participant.query().whereNotNull('siteId').withGraphFetched('types');
-    return res.status(200).json(participants.map(mapParticipantToAvailableParticipant));
-  });
-
   participantsRouter.get(
     '/awaitingApproval',
     isApproverCheck,

@@ -9,7 +9,7 @@
   --theme-background-sidepanel: #f2f2f3;
   --theme-background-content: #fff;
   --theme-background-table-header: #f2f2f3;
-  --theme-background-row: #F2F2F3B2;
+  --theme-background-row: #f2f2f3b2;
   --theme-table-border: #d9d9d9;
   --theme-border: #dcdee1;
   --theme-button-text: #030a40;
@@ -22,22 +22,24 @@
   --theme-radio-active: #fff;
   --theme-backdrop: rgb(255 255 255 / 80%);
   --theme-select-mouseover: #dcdee1;
-  --theme-info-icon: #b7c2ea;
-  --theme-info-content: #035959;
   --theme-success: #058a04;
+
+  --theme-info-background: #b7c2ea;
+  --theme-error-background: #facec5;
+  --theme-success-background: #c0d5d5;
+  --theme-warning-background: #fefcd3;
+  --theme-info-icon: #7085d4;
+  --theme-error-icon: #e52900;
+  --theme-success-icon: #035959;
+  --theme-warning-icon: #ffdb1d;
+
   --theme-label-background: #c0d6ff;
   --theme-search-bar-background: rgb(112 133 212 / 15%);
-  --theme-banner-info-background: #b7c2ea;
-  --theme-banner-warning-background: rgba(247, 208, 49, 0.3);
-  --theme-banner-warning-icon: rgba(247, 208, 49, 1);
-  --theme-banner-error-background: rgba(255, 0, 0, 0.8);
-  --theme-banner-info-icon: #7085d4;
   --theme-scrollbar: #c0d6ff;
   --theme-error: red;
   --theme-disabled-button-text: #878787;
   --theme-disabled-button: #d9d9d9;
   --theme-label: rgba(120, 204, 0, 0.4);
-  --theme-error-label-background: rgba(253, 4, 4, 0.25);
   --theme-divider: #030a40;
   --theme-footer-divider: #0300a5;
   --theme-disabled-checkbox: #f2f2f3;

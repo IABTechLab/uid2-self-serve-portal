@@ -4,7 +4,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
-import { InlineError } from '../Core/InlineError';
+import { InlineMessage } from '../Core/InlineMessage';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantRequestItem.scss';
@@ -62,7 +62,7 @@ export function ParticipantRequestItem({
         </td>
         <td className='action'>
           <div className='action-cell'>
-            {hasError && <InlineError />}
+            {hasError && <InlineMessage message='An error has occurred' type='Error' />}
             <button type='button' className='transparent-button' onClick={() => setOpen(true)}>
               Approve
             </button>

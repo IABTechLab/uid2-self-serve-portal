@@ -4,6 +4,8 @@ import {
   ParticipantTypeDTO,
 } from '../entities/ParticipantType';
 
+export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
+
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
 type AvailableClientRole = Exclude<ClientRole, 'OPTOUT'>;
 export const ClientRolesWithDescriptions: Record<AvailableClientRole, string> = {
@@ -17,7 +19,7 @@ export type SiteDTO = {
   name: string;
   enabled: boolean;
   roles: ClientRole[];
-  // TODO: types: string[];
+  types: ClientType[];
   client_count: number;
 };
 

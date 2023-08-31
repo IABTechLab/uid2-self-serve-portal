@@ -180,7 +180,7 @@ export function BulkAddPermissions({
         ) && (
           <div className='remove-recommended-type-warning'>
             <Banner
-              type='warning'
+              type='Warning'
               message='If you remove the sharing permissions for a participant type, all sharing permissions of that type are removed, including future participants of that type.'
             />
           </div>

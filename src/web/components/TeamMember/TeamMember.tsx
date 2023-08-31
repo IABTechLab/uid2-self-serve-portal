@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog';
-import { InlineError } from '../Core/InlineError';
+import { InlineMessage } from '../Core/InlineMessage';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type DeleteConfirmationDialogProps = {
@@ -118,7 +118,7 @@ function TeamMember({
       <td>{person.role}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineError />}
+          {hasError && <InlineMessage message='An error has occurred' type='Error' />}
           <div>
             {person.acceptedTerms || (
               <button

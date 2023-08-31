@@ -79,17 +79,6 @@ export async function GetCurrentUsersParticipant() {
   }
 }
 
-export async function GetAllAvailableParticipants() {
-  try {
-    const result = await axios.get<AvailableParticipantDTO[]>(`/participants/available`, {
-      validateStatus: (status) => status === 200,
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load participants');
-  }
-}
-
 export async function GetParticipantsAwaitingApproval() {
   try {
     const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
