@@ -4,23 +4,24 @@ import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
 import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
-const endpoint = `/sites/unattached/`;
+const unattachedEndpoint = `/sites/unattached/`;
 const fetcher = async () => {
   try {
-    const result = await axios.get<SiteDTO[]>(endpoint);
+    const result = await axios.get<SiteDTO[]>(unattachedEndpoint);
     return result.data;
   } catch {
     return [];
   }
 };
-const swrHook = createSwrHook<SiteDTO[]>(endpoint, fetcher);
+const swrHook = createSwrHook<SiteDTO[]>(unattachedEndpoint, fetcher);
 export const useSiteList = swrHook.hookFunction;
 export const preloadSiteList = swrHook.preloadFunction;
 export const TestSiteListProvider = swrHook.TestDataProvider;
 
+const availableEndpoint = `/sites/available`;
 const availableSiteFetcher = async () => {
   try {
-    const result = await axios.get<AvailableParticipantDTO[]>(`${endpoint}/available`);
+    const result = await axios.get<AvailableParticipantDTO[]>(availableEndpoint);
     return result.data;
   } catch {
     return [];
@@ -28,7 +29,7 @@ const availableSiteFetcher = async () => {
 };
 
 const availableSiteSwrHook = createSwrHook<AvailableParticipantDTO[]>(
-  `${endpoint}/available`,
+  availableEndpoint,
   availableSiteFetcher
 );
 export const useAvailableSiteList = availableSiteSwrHook.hookFunction;
