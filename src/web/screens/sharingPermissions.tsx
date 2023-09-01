@@ -32,6 +32,7 @@ function SharingPermissions() {
     participants: AvailableParticipantDTO[];
     participantTypes: ParticipantTypeDTO[];
   };
+  const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
 
   const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
     try {
@@ -156,13 +157,6 @@ function SharingPermissions() {
           )}
         </Await>
       </Suspense>
-      {(sharingParticipants.length > 0 || sharedTypes.length > 0) && (
-        <SharingPermissionsTable
-          sharingParticipants={sharingParticipants}
-          onDeleteSharingPermission={handleDeleteSharingPermission}
-          participantTypes={participantTypes}
-        />
-      )}
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}
@@ -179,9 +173,9 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
-  loader: async () => {
-    const participants = GetAllAvailableParticipants();
-    const participantTypes = await GetAllParticipantTypes();
-    return defer({ participants, participantTypes });
+  loader: () => {
+    const participantTypes = GetAllParticipantTypes();
+    preloadAvailableSiteList();
+    return defer({ participantTypes });
   },
 };

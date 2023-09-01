@@ -1,5 +1,4 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { Middleware, SWRConfig, SWRHook } from 'swr';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { SiteDTO } from '../../../api/services/adminServiceClient';
@@ -17,6 +16,7 @@ const response: SiteDTO[] = [
     name: 'Test Site',
     enabled: true,
     roles: ['SHARER'],
+    types: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
   },
@@ -25,6 +25,7 @@ const response: SiteDTO[] = [
     name: 'Test Four',
     enabled: true,
     roles: ['SHARER'],
+    types: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
   },
