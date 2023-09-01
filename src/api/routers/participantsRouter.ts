@@ -13,6 +13,7 @@ import {
 import { UserRole } from '../entities/User';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
+import { getSharingList } from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
@@ -24,8 +25,6 @@ import {
   checkParticipantId,
   deleteSharingParticipants,
   getParticipantsAwaitingApproval,
-  getSharedTypes,
-  getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
@@ -190,18 +189,6 @@ export function createParticipantsRouter() {
       }
       const sharingList = await getSharingList(participant.siteId);
       return res.status(200).json(sharingList);
-    }
-  );
-
-  participantsRouter.get(
-    '/:participantId/sharedTypes',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
-      if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
-      }
-      const sharedTypes = await getSharedTypes(participant.siteId);
-      return res.status(200).json(sharedTypes);
     }
   );
 

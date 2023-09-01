@@ -13,9 +13,7 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
   DeleteSharingParticipants,
-  GetAllAvailableParticipants,
-  GetSharedTypes,
-  GetSharingParticipants,
+  GetSharingList,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { PortalRoute } from './routeUtils';
@@ -79,50 +77,17 @@ function SharingPermissions() {
     }
   };
 
-  const loadSharingParticipants = useCallback(async () => {
-    const response = await GetSharingParticipants(participant!.id);
-    setSharingParticipants(response);
-  }, [participant]);
+  const loadSharingList = useCallback(async () => {
+    const response = await GetSharingList(participant!.id);
+    setSharedSiteIds(response.allowed_sites);
+    setSharedTypes(response.allowed_types);
 
-  const loadSharedTypes = useCallback(async () => {
-    const response = await GetSharedTypes(participant!.id);
-    console.log('------------GetSharedTypes response', response);
-    setSharedTypes(response);
+    console.log('loadSharingParticipants response', response);
   }, [participant]);
 
   useEffect(() => {
-    loadSharingParticipants();
-    loadSharedTypes();
-  }, [loadSharingParticipants, loadSharedTypes]);
-
-  const handleBulkAddSharingPermission = async (selectedTypes: string[]) => {
-    try {
-      console.log('selectedTypes', selectedTypes);
-
-      // move this into useEffect instead?
-      const sharedSiteIds = sharingParticipants.map((sp) => sp.siteId!); // can I do ! here?
-      // call new api
-      const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
-      setStatusPopup({
-        type: 'Success',
-        message: `${
-          // eslint-disable-next-line no-nested-ternary
-          selectedTypes.length === 1
-            ? '1 Participant type'
-            : `${selectedTypes.length} Participant types`
-        } saved to Your Sharing Permissions`,
-      });
-      // TODO AddSharingParticipants doesn't yet return the correct types yet, so commenting out for now
-      // setSharingParticipants(response);
-    } catch (e) {
-      setStatusPopup({
-        type: 'Error',
-        message: `Save Sharing Permissions Failed`,
-      });
-    } finally {
-      setShowStatusPopup(true);
-    }
-  };
+    loadSharingList();
+  }, [loadSharingList]);
 
   return (
     <div className='sharingPermissions'>

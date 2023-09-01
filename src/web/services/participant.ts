@@ -114,7 +114,7 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
-export async function GetSharingParticipants(participantId?: number): Promise<SharingListResponse> {
+export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
   try {
     const result = await axios.get<SharingListResponse>(
       `/participants/${participantId ?? 'current'}/sharingPermission`
@@ -122,17 +122,6 @@ export async function GetSharingParticipants(participantId?: number): Promise<Sh
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load sharing participants');
-  }
-}
-
-export async function GetSharedTypes(participantId?: number): Promise<string[]> {
-  try {
-    const result = await axios.get<string[]>(
-      `/participants/${participantId ?? 'current'}/sharedTypes`
-    );
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load shared types for this participant');
   }
 }
 
