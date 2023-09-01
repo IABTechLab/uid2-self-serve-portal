@@ -14,7 +14,7 @@ const fetcher = async () => {
     return [];
   }
 };
-const swrHook = createSwrHook<SiteDTO[]>(endpoint, fetcher);
+const swrHook = createSwrHook<SiteDTO[]>(`${endpoint}/unattached/`, fetcher);
 export const useSiteList = swrHook.hookFunction;
 export const preloadSiteList = swrHook.preloadFunction;
 export const TestSiteListProvider = swrHook.TestDataProvider;
