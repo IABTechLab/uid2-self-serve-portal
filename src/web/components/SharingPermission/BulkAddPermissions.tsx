@@ -2,10 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { ClientType } from '../../../api/services/adminServiceClient';
+import { useAvailableSiteList } from '../../services/site';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
 import { withoutRef } from '../Core/Form';
+import { Loading } from '../Core/Loading';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import {
   BulkAddPermissionsForm,
@@ -25,16 +27,14 @@ import './BulkAddPermissions.scss';
 
 type BulkAddPermissionsProps = {
   participant: ParticipantDTO | null;
-  hasSharingParticipants: boolean;
-  availableParticipants: AvailableParticipantDTO[];
+  hasSharedSiteIds: boolean;
   onBulkAddSharingPermission: (selectedTypes: string[]) => Promise<void>;
-  sharedTypes: string[];
+  sharedTypes: ClientType[];
 };
 
 export function BulkAddPermissions({
   participant,
-  hasSharingParticipants,
-  availableParticipants,
+  hasSharedSiteIds,
   sharedTypes,
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
@@ -42,6 +42,8 @@ export function BulkAddPermissions({
   const currentParticipantTypeNames = participant?.types
     ? participant.types.map((p) => p.typeName ?? '')
     : [];
+  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
+  console.log(sharedTypes);
 
   const recommendedTypes = getRecommendedTypeFromParticipant(currentParticipantTypeNames);
 
@@ -54,13 +56,7 @@ export function BulkAddPermissions({
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { isDirty },
-  } = formMethods;
+  const { register, handleSubmit, watch, setValue } = formMethods;
 
   useEffect(() => {
     if (sharedTypes && sharedTypes.length > 0) {
@@ -84,7 +80,7 @@ export function BulkAddPermissions({
 
   const filteredParticipants = useMemo(() => {
     return getFilteredParticipantsByType(
-      availableParticipants,
+      availableParticipants || [],
       watchPublisherChecked,
       watchAdvertiserChecked,
       watchDSPChecked,
@@ -190,10 +186,12 @@ export function BulkAddPermissions({
     </div>
   );
 
+  if (isLoading) return <Loading />;
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSave)}>
-        {!hasSharingParticipants && sharedTypes.length === 0 && (
+        {!hasSharedSiteIds && sharedTypes.length === 0 && (
           <Collapsible
             title='Bulk Add Permissions'
             defaultOpen
@@ -203,7 +201,7 @@ export function BulkAddPermissions({
             {recommendationContent}
           </Collapsible>
         )}
-        {(hasSharingParticipants || sharedTypes.length > 0) && (
+        {(hasSharedSiteIds || sharedTypes.length > 0) && (
           <Collapsible title='Bulk Add Permissions' defaultOpen={false}>
             {collapsibleContent}
           </Collapsible>
