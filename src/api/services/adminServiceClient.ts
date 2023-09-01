@@ -6,7 +6,7 @@ import { getLoggers } from '../helpers/loggingHelpers';
 
 export type SharingListResponse = {
   allowed_sites: number[];
-  allowed_types: string[];
+  allowed_types: ClientType[];
   hash: number;
 };
 
