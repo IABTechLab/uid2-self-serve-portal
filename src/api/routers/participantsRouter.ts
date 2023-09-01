@@ -234,7 +234,7 @@ export function createParticipantsRouter() {
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
-      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
+      return res.status(200).json(sharingParticipants);
     }
   );
 
@@ -268,7 +268,7 @@ export function createParticipantsRouter() {
 
       await updateAuditTrailToProceed(auditTrail.id);
 
-      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
+      return res.status(200).json(sharingParticipants);
     }
   );
 

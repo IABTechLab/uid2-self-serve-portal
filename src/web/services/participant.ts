@@ -4,10 +4,12 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
+import { convertClientTypesToParticipantTypeNames } from '../../api/helpers/siteConvertingHelpers';
 import {
   AvailableParticipantDTO,
   ParticipantRequestDTO,
 } from '../../api/routers/participantsRouter';
+import { SharingListResponse } from '../../api/services/adminServiceClient';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -79,17 +81,6 @@ export async function GetCurrentUsersParticipant() {
   }
 }
 
-export async function GetAllAvailableParticipants() {
-  try {
-    const result = await axios.get<AvailableParticipantDTO[]>(`/participants/available`, {
-      validateStatus: (status) => status === 200,
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load participants');
-  }
-}
-
 export async function GetParticipantsAwaitingApproval() {
   try {
     const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
@@ -123,11 +114,9 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
-export async function GetSharingParticipants(
-  participantId?: number
-): Promise<AvailableParticipantDTO[]> {
+export async function GetSharingParticipants(participantId?: number): Promise<SharingListResponse> {
   try {
-    const result = await axios.get<AvailableParticipantDTO[]>(
+    const result = await axios.get<SharingListResponse>(
       `/participants/${participantId ?? 'current'}/sharingPermission`
     );
     return result.data;
@@ -151,9 +140,9 @@ export async function AddSharingParticipants(
   participantId: number,
   newParticipantSites: number[],
   newTypes: string[]
-): Promise<AvailableParticipantDTO[]> {
+): Promise<SharingListResponse> {
   try {
-    const result = await axios.post<AvailableParticipantDTO[]>(
+    const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/add`,
       {
         newParticipantSites,
@@ -170,9 +159,9 @@ export async function DeleteSharingParticipants(
   participantId: number,
   sharingSitesToRemove: number[],
   types: string[]
-): Promise<AvailableParticipantDTO[]> {
+): Promise<SharingListResponse> {
   try {
-    const result = await axios.post<AvailableParticipantDTO[]>(
+    const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/delete`,
       {
         sharingSitesToRemove,
