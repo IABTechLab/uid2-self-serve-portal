@@ -74,7 +74,11 @@ export function SharingPermissionsTable({
 
   const handleCheckboxChange = () => {
     if (selectAllState === TriStateCheckboxState.unchecked) {
-      setCheckedParticipants(new Set(filteredParticipants.map((p) => p.siteId!)));
+      const selectedSiteIds = new Set<number>();
+      filteredParticipants.forEach((p) => {
+        if (p.addedBy !== 'Auto') selectedSiteIds.add(p.siteId);
+      });
+      setCheckedParticipants(selectedSiteIds);
     } else {
       setCheckedParticipants(new Set());
     }
@@ -82,7 +86,9 @@ export function SharingPermissionsTable({
 
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length) return false;
-    return filteredParticipants.every((p) => checkedParticipants.has(p.siteId!));
+    return filteredParticipants
+      .filter((p) => p.addedBy !== 'Auto')
+      .every((p) => checkedParticipants.has(p.siteId!));
   }, [filteredParticipants, checkedParticipants]);
 
   useEffect(() => {
@@ -105,7 +111,7 @@ export function SharingPermissionsTable({
             icon={['far', 'trash-can']}
             className='sharing-permission-trashcan-icon'
           />
-          Delete Permissions ({selectedParticipantList.length})
+          Delete Permissions
         </button>
       }
       open={openConfirmation}
