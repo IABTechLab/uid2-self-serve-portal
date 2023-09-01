@@ -41,7 +41,6 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types);
-      // console.log('handleBulkAddSharingPermission response', response);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -62,7 +61,6 @@ function SharingPermissions() {
         } added to Your Sharing Permissions`,
       });
       setSharedSiteIds(response.allowed_sites);
-      // console.log('handleSharingPermissionsAdded response', response);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -86,7 +84,6 @@ function SharingPermissions() {
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
         } deleted`,
       });
-      // console.log('handleDeleteSharingPermission response', response);
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
       setStatusPopup({
@@ -102,8 +99,6 @@ function SharingPermissions() {
     const response = await GetSharingList(participant!.id);
     setSharedSiteIds(response.allowed_sites);
     setSharedTypes(response.allowed_types);
-
-    // console.log('loadSharingParticipants response', response);
   }, [participant]);
 
   useEffect(() => {
