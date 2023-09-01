@@ -2,6 +2,7 @@ import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
+import { ClientType } from '../../api/services/adminServiceClient';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
@@ -23,7 +24,7 @@ function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
-  const [sharedTypes, setSharedTypes] = useState<string[]>([]);
+  const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
   const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
 
@@ -41,7 +42,7 @@ function SharingPermissions() {
             : `${selectedTypes.length} Participant types`
         } saved to Your Sharing Permissions`,
       });
-      setSharedSiteIds(response.allowed_sites);
+      setSharedTypes(response.allowed_types);
       console.log('handleBulkAddSharingPermission response', response);
     } catch (e) {
       setStatusPopup({
