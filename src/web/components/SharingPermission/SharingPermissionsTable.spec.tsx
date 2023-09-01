@@ -3,15 +3,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import * as stories from './SharingPermissionsTable.stories';
 
-const { SharedWithParticipants, NotShared } = composeStories(stories);
+const { SharedWithParticipants } = composeStories(stories);
 
 describe('SharingPermissionsTable', () => {
-  it('renders correctly when not shared with any participant', () => {
-    render(<NotShared />);
-    expect(screen.getByText('No Participants')).toBeInTheDocument();
-    expect(screen.getByText("You don't have any sharing permissions yet.")).toBeInTheDocument();
-  });
-
   it('renders correctly with shared participants', () => {
     render(<SharedWithParticipants />);
     expect(screen.getByText('Participant 1')).toBeInTheDocument();

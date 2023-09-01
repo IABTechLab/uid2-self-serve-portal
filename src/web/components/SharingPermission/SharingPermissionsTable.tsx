@@ -3,41 +3,55 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useMemo, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { useAvailableSiteList } from '../../services/site';
 import { Dialog } from '../Core/Dialog';
+import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
-import { ParticipantsTable } from './ParticipantsTable';
+import { ParticipantsTable, SharingParticipant } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
 
 type SharingPermissionsTableProps = {
-  sharingParticipants: AvailableParticipantDTO[];
+  sharedSiteIds: number[];
+  sharedTypes: string[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
   participantTypes: ParticipantTypeDTO[];
 };
 
-function NoParticipant() {
-  return (
-    <div className='no-participants-container'>
-      <img src='/group-icon.svg' alt='group-icon' />
-      <div className='no-participants-text'>
-        <h2>No Participants</h2>
-        <span>You don&apos;t have any sharing permissions yet.</span>
-      </div>
-    </div>
-  );
-}
-
 export function SharingPermissionsTable({
-  sharingParticipants,
+  sharedSiteIds,
+  sharedTypes,
   onDeleteSharingPermission,
   participantTypes,
 }: SharingPermissionsTableProps) {
+  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
   const [openConfirmation, setOpenConfirmation] = useState(false);
+  const siteIds = useMemo(() => new Set(sharedSiteIds), [sharedSiteIds]);
+
+  const sharingParticipants: SharingParticipant[] = useMemo(() => {
+    const sharedParticipantType = new Set(sharedTypes);
+    const sharingLists: SharingParticipant[] = [];
+
+    availableParticipants?.forEach((p) => {
+      const manualAdded = siteIds.has(p.siteId);
+      const autoAdded = p.types.some((t) =>
+        sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))
+      );
+      if (autoAdded || manualAdded) {
+        const addedBy = autoAdded ? 'Auto' : 'Manual';
+        sharingLists.push({
+          ...p,
+          addedBy: autoAdded && manualAdded ? 'Manual / Auto' : addedBy,
+        });
+      }
+    });
+    return sharingLists;
+  }, [availableParticipants, sharedTypes, siteIds]);
+
   const [filteredParticipants, setFilteredParticipants] = useState(sharingParticipants);
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
     TriStateCheckboxState.unchecked
@@ -81,6 +95,7 @@ export function SharingPermissionsTable({
     }
   }, [checkedParticipants.size, isSelectedAll]);
 
+  if (isLoading) return <Loading />;
   const deletePermissionBtn = (
     <Dialog
       title='Are you sure you want to delete these permissions?'
@@ -120,9 +135,9 @@ export function SharingPermissionsTable({
 
   const tableHeader = () => (
     <>
-      <SortableTableHeader<AvailableParticipantDTO> sortKey='name' header='Participant Name' />
+      <SortableTableHeader<SharingParticipant> sortKey='name' header='Participant Name' />
       <th>Participant Type</th>
-      <th>Added By</th>
+      <SortableTableHeader<SharingParticipant> sortKey='addedBy' header='Added By' />
     </>
   );
 
@@ -166,7 +181,6 @@ export function SharingPermissionsTable({
         className='shared-participants-table'
         hideSelectAllCheckbox
       />
-      {!sharingParticipants.length && <NoParticipant />}
     </div>
   );
 }

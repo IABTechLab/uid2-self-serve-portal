@@ -99,11 +99,15 @@ function SharingPermissions() {
                   />
                 </Collapsible>
               </div>
-              <SharingPermissionsTable
-                sharingParticipants={sharingParticipants}
-                onDeleteSharingPermission={handleDeleteSharingPermission}
-                participantTypes={resolvedParticipantTypes}
-              />
+              {/* TODO: not show this table if sharedSiteIds and sharedTypes are empty */}
+              {false && (
+                <SharingPermissionsTable
+                  sharedSiteIds={[]}
+                  sharedTypes={[]}
+                  onDeleteSharingPermission={handleDeleteSharingPermission}
+                  participantTypes={resolvedParticipantTypes}
+                />
+              )}
             </>
           )}
         </Await>

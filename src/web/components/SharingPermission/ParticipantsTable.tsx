@@ -9,20 +9,34 @@ import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
 
-type ParticipantsTableProps = {
-  participants: AvailableParticipantDTO[];
+export type SharingParticipant = AvailableParticipantDTO & {
+  addedBy: 'Manual' | 'Auto' | 'Manual / Auto';
+};
+
+type ParticipantsTableBaseProps<T> = {
+  participants: T[];
   filterText: string;
   selectedTypeIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   selectedParticipantIds?: Set<number>;
-  tableHeader: (filteredParticipants: AvailableParticipantDTO[]) => ReactNode;
+  tableHeader: (filteredParticipants: T[]) => ReactNode;
   className?: string;
   hideSelectAllCheckbox?: boolean;
   showAddedByColumn?: boolean;
-  onFilteredParticipantChanged?: (filteredParticipants: AvailableParticipantDTO[]) => void;
+  onFilteredParticipantChanged?: (filteredParticipants: T[]) => void;
 };
 
-function ParticipantsTableContent({
+type DetermineParticipantsType<ShowColumn extends boolean> = ShowColumn extends true
+  ? SharingParticipant
+  : AvailableParticipantDTO;
+
+type ParticipantsTableProps<ShowColumn extends boolean> = ParticipantsTableBaseProps<
+  DetermineParticipantsType<ShowColumn>
+> & {
+  showAddedByColumn: ShowColumn;
+};
+
+function ParticipantsTableContent<ShowColumn extends boolean>({
   tableHeader,
   participants,
   filterText,
@@ -33,7 +47,7 @@ function ParticipantsTableContent({
   hideSelectAllCheckbox,
   showAddedByColumn,
   onFilteredParticipantChanged,
-}: ParticipantsTableProps) {
+}: ParticipantsTableProps<ShowColumn>) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
   const { sortData } = useSortable<AvailableParticipantDTO>();
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
@@ -112,7 +126,7 @@ function ParticipantsTableContent({
       <tbody>
         {sortedData.map((participant) => (
           <ParticipantItem
-            addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
+            addedBy={showAddedByColumn ? (participant as SharingParticipant).addedBy : undefined}
             key={participant.siteId}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
@@ -124,7 +138,9 @@ function ParticipantsTableContent({
   );
 }
 
-export function ParticipantsTable(props: ParticipantsTableProps) {
+export function ParticipantsTable<ShowColumn extends boolean>(
+  props: ParticipantsTableProps<ShowColumn>
+) {
   return (
     <SortableProvider>
       <ParticipantsTableContent {...props} />

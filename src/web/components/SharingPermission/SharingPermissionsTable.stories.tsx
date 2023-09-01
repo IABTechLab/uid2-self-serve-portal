@@ -12,23 +12,39 @@ export default {
 const response: AvailableParticipantDTO[] = [
   {
     name: 'Site 1',
-    types: [{ id: 1, typeName: 'Type 1' }],
+    types: [{ id: 1, typeName: 'Publisher' }],
     siteId: 10,
   },
   {
     name: 'Site 2',
-    types: [{ id: 2, typeName: 'Type 2' }],
+    types: [{ id: 2, typeName: 'Advertiser' }],
     siteId: 11,
   },
   {
     name: 'Site 3',
-    types: [{ id: 3, typeName: 'Type 3' }],
+    types: [{ id: 3, typeName: 'Data Provider' }],
     siteId: 12,
   },
   {
     name: 'Site 4',
-    types: [{ id: 4, typeName: 'Type 4' }],
+    types: [{ id: 4, typeName: 'DSP' }],
     siteId: 13,
+  },
+  {
+    name: 'Site 5',
+    types: [
+      { id: 1, typeName: 'Publisher' },
+      { id: 4, typeName: 'DSP' },
+    ],
+    siteId: 14,
+  },
+  {
+    name: 'Site 6',
+    types: [
+      { id: 1, typeName: 'Advertiser' },
+      { id: 4, typeName: 'Data Provider' },
+    ],
+    siteId: 15,
   },
 ];
 const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
@@ -39,53 +55,13 @@ const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
 
 export const SharedWithParticipants = Template.bind({});
 SharedWithParticipants.args = {
-  sharingParticipants: [
-    {
-      name: 'Participant 1',
-      types: [{ id: 1, typeName: 'Type 1' }],
-      siteId: 1,
-    },
-    {
-      name: 'Participant 2',
-      types: [{ id: 2, typeName: 'Type 2' }],
-      siteId: 2,
-    },
-    {
-      name: 'Participant 3',
-      types: [{ id: 3, typeName: 'Type 3' }],
-      siteId: 3,
-    },
-    {
-      name: 'Participant 4',
-      types: [{ id: 4, typeName: 'Type 4' }],
-      siteId: 4,
-    },
-    {
-      name: 'Participant 5',
-      types: [
-        { id: 1, typeName: 'Type 1' },
-        { id: 4, typeName: 'Type 4' },
-      ],
-      siteId: 5,
-    },
-  ],
+  sharedSiteIds: [10, 11, 12, 14, 15],
+  sharedTypes: ['DSP'],
   onDeleteSharingPermission: () => Promise.resolve(),
   participantTypes: [
-    { id: 1, typeName: 'Type 1' },
-    { id: 2, typeName: 'Type 2' },
-    { id: 3, typeName: 'Type 3' },
-    { id: 4, typeName: 'Type 4' },
-  ],
-};
-
-export const NotShared = Template.bind({});
-NotShared.args = {
-  sharingParticipants: [],
-  onDeleteSharingPermission: () => Promise.resolve(),
-  participantTypes: [
-    { id: 1, typeName: 'Type 1' },
-    { id: 2, typeName: 'Type 2' },
-    { id: 3, typeName: 'Type 3' },
-    { id: 4, typeName: 'Type 4' },
+    { id: 1, typeName: 'Publisher' },
+    { id: 2, typeName: 'Advertiser' },
+    { id: 3, typeName: 'Data Provider' },
+    { id: 4, typeName: 'DSP' },
   ],
 };
