@@ -43,7 +43,6 @@ export function BulkAddPermissions({
     ? participant.types.map((p) => p.typeName ?? '')
     : [];
   const { sites: availableParticipants, isLoading } = useAvailableSiteList();
-  console.log(sharedTypes);
 
   const recommendedTypes = getRecommendedTypeFromParticipant(currentParticipantTypeNames);
 

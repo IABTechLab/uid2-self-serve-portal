@@ -23,30 +23,6 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
         validateStatus: (status) => (status >= 200 && status < 300) || status === 404,
       }
     );
-    // console.log(`/api/sharing/list/${siteId} response`, response);
-    return response.status === 200
-      ? response.data
-      : {
-          allowed_sites: [],
-          allowed_types: [],
-          hash: 0,
-        };
-  } catch (error: unknown) {
-    const [logger] = getLoggers();
-    logger.error(`Get ACLs failed: ${error}`);
-    throw error;
-  }
-};
-
-export const getSharingTypes = async (siteId: number): Promise<SharingListResponse> => {
-  try {
-    const response = await adminServiceClient.get<SharingListResponse>(
-      `/api/sharing/list/${siteId}`,
-      {
-        validateStatus: (status) => (status >= 200 && status < 300) || status === 404,
-      }
-    );
-    console.log(`--------- get /api/sharing/list/${siteId} response`, response);
     return response.status === 200
       ? response.data
       : {
@@ -68,7 +44,6 @@ export const updateSharingList = async (
   typeList: string[]
 ): Promise<SharingListResponse> => {
   try {
-    // console.log('-------- typeList', typeList);
     const response = await adminServiceClient.post<SharingListResponse>(
       `/api/sharing/list/${siteId}`,
       {
@@ -80,8 +55,6 @@ export const updateSharingList = async (
         validateStatus: (status) => (status >= 200 && status < 300) || status === 404,
       }
     );
-    console.log(`--------- post /api/sharing/list/${siteId} response`, response);
-
     return response.status === 200
       ? response.data
       : {

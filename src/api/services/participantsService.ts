@@ -10,14 +10,12 @@ import {
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
-import { getSharingList, getSharingTypes, updateSharingList } from './adminServiceClient';
+import { getSharingList, updateSharingList } from './adminServiceClient';
 import { SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
-
-export type ParticipantWithSharedTypes = Participant & { sharedTypes: string[] };
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -46,11 +44,6 @@ export const sendNewParticipantEmail = async (
     to: approvers.map((a) => ({ name: a.displayName, email: a.email })),
   };
   emailService.sendEmail(emailArgs);
-};
-
-export const getSharedTypes = async (participantSiteId: number): Promise<string[]> => {
-  const sharingTypesResponse = await getSharingTypes(participantSiteId);
-  return sharingTypesResponse.allowed_types;
 };
 
 export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {

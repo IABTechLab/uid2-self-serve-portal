@@ -4,7 +4,6 @@ import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
 import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
-// TODO fix this so approvals works
 const endpoint = `/sites/`;
 const fetcher = async () => {
   try {

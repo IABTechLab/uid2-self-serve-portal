@@ -31,9 +31,6 @@ function SharingPermissions() {
 
   const handleSaveSharingType = async (selectedTypes: string[]) => {
     try {
-      console.log('selectedTypes', selectedTypes);
-      console.log('sharedSiteIds', sharedSiteIds);
-
       const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
       setStatusPopup({
         type: 'Success',
@@ -44,7 +41,7 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types);
-      console.log('handleBulkAddSharingPermission response', response);
+      // console.log('handleBulkAddSharingPermission response', response);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -57,9 +54,6 @@ function SharingPermissions() {
 
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
-      console.log('sharedTypes', sharedTypes);
-      console.log('sharedSiteIds', sharedSiteIds);
-
       const response = await AddSharingParticipants(participant!.id, selectedSiteIds, sharedTypes);
       setStatusPopup({
         type: 'Success',
@@ -68,7 +62,7 @@ function SharingPermissions() {
         } added to Your Sharing Permissions`,
       });
       setSharedSiteIds(response.allowed_sites);
-      console.log('handleSharingPermissionsAdded response', response);
+      // console.log('handleSharingPermissionsAdded response', response);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -92,7 +86,7 @@ function SharingPermissions() {
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
         } deleted`,
       });
-      console.log('handleDeleteSharingPermission response', response);
+      // console.log('handleDeleteSharingPermission response', response);
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
       setStatusPopup({
@@ -109,7 +103,7 @@ function SharingPermissions() {
     setSharedSiteIds(response.allowed_sites);
     setSharedTypes(response.allowed_types);
 
-    console.log('loadSharingParticipants response', response);
+    // console.log('loadSharingParticipants response', response);
   }, [participant]);
 
   useEffect(() => {

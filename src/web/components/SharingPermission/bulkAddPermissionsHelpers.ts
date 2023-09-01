@@ -1,13 +1,6 @@
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
-// export enum ParticipantType {
-//   PUBLISHER = 'PUBLISHER',
-//   ADVERTISER = 'ADVERTISER',
-//   DSP = 'DSP',
-//   DATA_PROVIDER = 'DATA_PROVIDER',
-// }
-
 export type BulkAddPermissionsForm = {
   publisherChecked: boolean;
   advertiserChecked: boolean;
