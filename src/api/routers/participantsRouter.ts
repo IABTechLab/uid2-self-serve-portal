@@ -188,8 +188,8 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const sharingParticipants = await getSharingParticipants(participant.siteId);
-      return res.status(200).json(sharingParticipants);
+      const sharingList = await getSharingList(participant.siteId);
+      return res.status(200).json(sharingList);
     }
   );
 
