@@ -1,4 +1,22 @@
 .participant-approval-form {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+
+  .highlight {
+    background-color: var(--theme-search-highlight);
+  }
+
+  .search-bar {
+    display: flex;
+    flex-direction: column;
+
+    .site-search-results {
+      flex-grow: 1;
+      overflow: scroll;
+    }
+  }
+
   .site-search-results {
     padding: 10px;
 

@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeSchema } from './ParticipantType';
-import { UserCreationPartial, UserSchema } from './User';
+import { User, UserCreationPartial, UserSchema } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -53,11 +53,13 @@ export class Participant extends BaseModel {
   siteId?: number;
   location?: string;
   types?: ParticipantType[];
+  users?: User[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
-export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types'> & {
+export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'> & {
   types?: ModelObjectOpt<ParticipantType>[];
+  users?: ModelObjectOpt<User>[];
 };
 
 export const ParticipantSchema = z.object({

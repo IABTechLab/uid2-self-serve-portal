@@ -28,6 +28,14 @@ export class ParticipantType extends BaseModel {
 
 export type ParticipantTypeDTO = ModelObjectOpt<ParticipantType>;
 
+// TODO: How do we sync these with the database? I've omitted ID for now to make things safer
+export const ParticipantTypeData = {
+  DSP: { typeName: 'DSP' },
+  Advertiser: { typeName: 'Advertiser' },
+  DataProvider: { typeName: 'Data Provider' },
+  Publisher: { typeName: 'Publisher' },
+};
+
 export const ParticipantTypeSchema = z.object({
   id: z.number(),
   typeName: z.string().optional(),

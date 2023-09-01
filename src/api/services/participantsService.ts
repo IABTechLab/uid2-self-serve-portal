@@ -4,17 +4,14 @@ import { z } from 'zod';
 import {
   Participant,
   ParticipantCreationPartial,
+  ParticipantDTO,
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
-import {
-  getSharingList,
-  getSharingTypes,
-  SharingListResponse,
-  updateSharingList,
-} from './adminServiceClient';
+import { getSharingList, getSharingTypes, updateSharingList } from './adminServiceClient';
+import { SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
@@ -65,9 +62,18 @@ export const getParticipantsAwaitingApproval = async (email: string): Promise<Pa
         .whereIn('participantTypeId', approvableParticipantTypeIds)
         .select('participantId')
     )
-    .withGraphFetched('types')
+    .withGraphFetched('[types, users]')
     .where('status', ParticipantStatus.AwaitingApproval);
   return participantsAwaitingApproval;
+};
+
+type SiteIdType = NonNullable<ParticipantDTO['siteId']>;
+export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
+  const sites = await Participant.query()
+    .whereNotNull('siteId')
+    .select('siteId')
+    .castTo<Required<Pick<ParticipantDTO, 'siteId'>>[]>();
+  return sites.map((s) => s.siteId);
 };
 
 export const addSharingParticipants = async (

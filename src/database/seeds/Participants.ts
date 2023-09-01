@@ -7,7 +7,7 @@ import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
   ParticipantsType & { type: string },
-  'id' | 'location' | 'siteId' | 'types'
+  'id' | 'location' | 'siteId' | 'types' | 'users'
 >[] = [
   {
     name: 'Publisher example',
@@ -42,13 +42,6 @@ const sampleData: Optional<
     siteId: 126,
   },
   {
-    name: 'AwaitingApproval example',
-    status: ParticipantStatus.AwaitingApproval,
-    type: 'DSP',
-    allowSharing: true,
-    location: 'Sydney',
-  },
-  {
     name: 'AwaitingSigning example',
     allowSharing: true,
     status: ParticipantStatus.AwaitingSigning,
@@ -59,7 +52,10 @@ const sampleData: Optional<
 
 export async function CreateParticipant(
   knex: Knex,
-  details: Optional<ParticipantsType, 'id' | 'allowSharing' | 'location' | 'siteId' | 'types'>,
+  details: Optional<
+    ParticipantsType,
+    'id' | 'allowSharing' | 'location' | 'siteId' | 'types' | 'users'
+  >,
   type: string
 ) {
   const participant = await knex('participants')

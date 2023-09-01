@@ -9,8 +9,8 @@ import { CreateParticipant } from './Participants';
 type UserType = ModelObject<User>;
 
 const sampleParticipant = {
-  name: 'Publisher for user seeds',
-  status: ParticipantStatus.AwaitingSigning,
+  name: 'Awaiting Approval',
+  status: ParticipantStatus.AwaitingApproval,
   allowSharing: true,
   location: 'Sydney',
 };

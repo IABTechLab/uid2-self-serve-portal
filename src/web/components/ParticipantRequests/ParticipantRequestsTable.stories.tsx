@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
+import { UserRole } from '../../../api/entities/User';
+import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantRequestsTable } from './ParticipantRequestsTable';
 
 export default {
@@ -13,6 +15,12 @@ const Template: ComponentStory<typeof ParticipantRequestsTable> = (args) => (
 );
 
 export const ParticipantRequests = Template.bind({});
+
+const requestingUser: ParticipantRequestDTO['requestingUser'] = {
+  email: 'text@example.com',
+  fullName: 'Test User',
+  role: UserRole.Engineering,
+};
 ParticipantRequests.args = {
   participantRequests: [
     {
@@ -20,6 +28,7 @@ ParticipantRequests.args = {
       name: 'Participant 1',
       types: [{ id: 1, typeName: 'Type 1' }],
       status: ParticipantStatus.AwaitingApproval,
+      requestingUser,
     },
     {
       id: 1,
@@ -29,6 +38,7 @@ ParticipantRequests.args = {
         { id: 2, typeName: 'Type 2' },
       ],
       status: ParticipantStatus.AwaitingApproval,
+      requestingUser,
     },
     {
       id: 1,
@@ -39,6 +49,7 @@ ParticipantRequests.args = {
         { id: 3, typeName: 'Type 3' },
       ],
       status: ParticipantStatus.AwaitingApproval,
+      requestingUser,
     },
     {
       id: 1,
@@ -50,6 +61,7 @@ ParticipantRequests.args = {
         { id: 4, typeName: 'Type 4' },
       ],
       status: ParticipantStatus.AwaitingApproval,
+      requestingUser,
     },
   ],
   participantTypes: [

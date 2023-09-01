@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
-import { SiteDTO } from '../../api/services/adminServiceClient';
+import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
-const endpoint = `/sites`;
+const endpoint = `/sites/unattached/`;
 const fetcher = async () => {
   try {
     const result = await axios.get<SiteDTO[]>(endpoint);

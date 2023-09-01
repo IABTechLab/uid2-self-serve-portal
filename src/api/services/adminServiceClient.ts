@@ -3,12 +3,7 @@ import axios from 'axios';
 
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-
-export type SharingListResponse = {
-  allowed_sites: number[];
-  allowed_types: ClientType[];
-  hash: number;
-};
+import { SharingListResponse, SiteDTO } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -99,17 +94,6 @@ export const updateSharingList = async (
     logger.error(`Update ACLs failed: ${error}`);
     throw error;
   }
-};
-
-type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
-export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
-export type SiteDTO = {
-  id: number;
-  name: string;
-  enabled: boolean;
-  roles: ClientRole[];
-  types: ClientType[];
-  client_count: number;
 };
 
 export const getSiteList = async () => {
