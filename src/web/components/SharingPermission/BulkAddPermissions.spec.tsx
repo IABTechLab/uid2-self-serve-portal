@@ -6,9 +6,9 @@ import * as stories from './BulkAddPermissions.stories';
 const { Publisher, HasSharedWithPublisher } = composeStories(stories);
 
 describe('BulkAddPermissions', () => {
-  it('DSP checkbox is initially checked for a Publisher', () => {
+  it('DSP checkbox is initially checked for a Publisher', async () => {
     render(<Publisher />);
-    const dspCheckbox = screen.getByTestId('dsp');
+    const dspCheckbox = await screen.findByTestId('dsp');
 
     expect(dspCheckbox).toHaveAttribute('data-state', 'checked');
   });
