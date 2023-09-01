@@ -4,7 +4,8 @@ import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
 import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
-const endpoint = `/sites/unattached/`;
+// TODO fix this so approvals works
+const endpoint = `/sites/`;
 const fetcher = async () => {
   try {
     const result = await axios.get<SiteDTO[]>(endpoint);
