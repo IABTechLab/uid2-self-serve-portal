@@ -43,15 +43,6 @@ export type ParticipantRequestDTO = Pick<
   'id' | 'name' | 'siteId' | 'types' | 'status'
 >;
 
-function mapParticipantToAvailableParticipant(participant: Participant) {
-  return {
-    id: participant.id,
-    name: participant.name,
-    siteId: participant.siteId,
-    types: participant.types,
-  };
-}
-
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
