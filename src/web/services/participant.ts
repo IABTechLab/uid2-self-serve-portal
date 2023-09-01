@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { SharingListResponse } from '../../api/services/adminServiceClient';
+import { SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 

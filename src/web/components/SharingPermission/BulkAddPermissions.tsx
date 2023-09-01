@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ClientType } from '../../../api/services/adminServiceClient';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { useAvailableSiteList } from '../../services/site';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
