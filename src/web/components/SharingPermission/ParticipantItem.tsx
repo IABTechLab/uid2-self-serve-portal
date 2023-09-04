@@ -51,7 +51,7 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
           onClick={onClick}
           status={checked}
           className='participant-checkbox'
-          disabled={!!addedBy && !addedBy.includes('Manually Added')} // addedBy is currently hardcoded to 'Manual'
+          disabled={!!addedBy && !addedBy.includes('Manually Added')}
         />
       </td>
       <ParticipantItemSimple participant={participant} />
