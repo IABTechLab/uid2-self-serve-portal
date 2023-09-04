@@ -1,8 +1,9 @@
+/* eslint-disable camelcase */
 import axios from 'axios';
 
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-import { SharingListResponse, SiteDTO } from './adminServiceHelpers';
+import { ClientType, SharingListResponse, SiteDTO } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -25,8 +26,8 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
     return response.status === 200
       ? response.data
       : {
-          // eslint-disable-next-line camelcase
           allowed_sites: [],
+          allowed_types: [],
           hash: 0,
         };
   } catch (error: unknown) {
@@ -39,14 +40,15 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
 export const updateSharingList = async (
   siteId: number,
   hash: number,
-  sharingList: number[]
+  siteList: number[],
+  typeList: ClientType[]
 ): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.post<SharingListResponse>(
       `/api/sharing/list/${siteId}`,
       {
-        // eslint-disable-next-line camelcase
-        allowed_sites: sharingList,
+        allowed_sites: siteList,
+        allowed_types: typeList,
         hash,
       },
       {
@@ -56,8 +58,8 @@ export const updateSharingList = async (
     return response.status === 200
       ? response.data
       : {
-          // eslint-disable-next-line camelcase
           allowed_sites: [],
+          allowed_types: [],
           hash: 0,
         };
   } catch (error: unknown) {

@@ -22,5 +22,17 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["linebreaks"]
+  "cSpell.words": [
+    "Approvable",
+    "camelcase",
+    "clsx",
+    "collapsibles",
+    "envars",
+    "fontawesome",
+    "fortawesome",
+    "linebreaks",
+    "loglevel",
+    "OPTOUT",
+    "testid"
+  ]
 }

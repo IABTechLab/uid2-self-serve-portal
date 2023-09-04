@@ -11,12 +11,8 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getSharingList, updateSharingList } from './adminServiceClient';
-import { SharingListResponse } from './adminServiceHelpers';
-import {
-  findApproversByType,
-  getApprovableParticipantTypeIds,
-  isUserAnApprover,
-} from './approversService';
+import { ClientType, SharingListResponse } from './adminServiceHelpers';
+import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
@@ -50,19 +46,6 @@ export const sendNewParticipantEmail = async (
   emailService.sendEmail(emailArgs);
 };
 
-export const fetchSharingParticipants = async (
-  sharingListResponse: SharingListResponse
-): Promise<Participant[]> => {
-  return Participant.query()
-    .whereIn('siteId', sharingListResponse.allowed_sites)
-    .withGraphFetched('types');
-};
-
-export const getSharingParticipants = async (participantSiteId: number): Promise<Participant[]> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
-  return fetchSharingParticipants(sharingListResponse);
-};
-
 export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {
   const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
   const participantsAwaitingApproval = await Participant.query()
@@ -88,30 +71,30 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 
 export const addSharingParticipants = async (
   participantSiteId: number,
-  siteIds: number[]
-): Promise<Participant[]> => {
+  siteIds: number[],
+  types: ClientType[]
+): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
-  const response = await updateSharingList(participantSiteId, sharingListResponse.hash, [
-    ...newSharingSet,
-  ]);
-  return fetchSharingParticipants(response);
+  const response = await updateSharingList(
+    participantSiteId,
+    sharingListResponse.hash,
+    [...newSharingSet],
+    types
+  );
+  return response;
 };
 
 export const deleteSharingParticipants = async (
   participantSiteId: number,
-  siteIds: number[]
-): Promise<Participant[]> => {
+  siteIds: number[],
+  types: ClientType[]
+): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
-  const response = await updateSharingList(
-    participantSiteId,
-    sharingListResponse.hash,
-    newSharingList
-  );
-  return fetchSharingParticipants(response);
+  return updateSharingList(participantSiteId, sharingListResponse.hash, newSharingList, types);
 };
 
 export const sendParticipantApprovedEmail = async (users: User[]) => {

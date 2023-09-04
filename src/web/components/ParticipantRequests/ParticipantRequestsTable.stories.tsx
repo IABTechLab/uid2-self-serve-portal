@@ -69,7 +69,7 @@ ParticipantRequests.args = {
     { id: 2, typeName: 'Type 2' },
     { id: 3, typeName: 'Type 3' },
   ],
-  onApprove: async (id, form) => {
+  onApprove: async (_id, form) => {
     console.log(JSON.stringify(form));
   },
 };
@@ -77,7 +77,7 @@ ParticipantRequests.args = {
 export const WithErrorWhenApprove = Template.bind({});
 WithErrorWhenApprove.args = {
   ...ParticipantRequests.args,
-  onApprove: async (id, form) => Promise.reject(new Error()),
+  onApprove: async (_id, _form) => Promise.reject(new Error()),
 };
 
 export const NoParticipantRequests = Template.bind({});
@@ -88,7 +88,7 @@ NoParticipantRequests.args = {
     { id: 2, typeName: 'Type 2' },
     { id: 3, typeName: 'Type 3' },
   ],
-  onApprove: async (id, form) => {
+  onApprove: async (_id, form) => {
     console.log(JSON.stringify(form));
   },
 };

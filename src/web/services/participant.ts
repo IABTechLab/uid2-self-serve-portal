@@ -4,10 +4,8 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
-import {
-  AvailableParticipantDTO,
-  ParticipantRequestDTO,
-} from '../../api/routers/participantsRouter';
+import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
+import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -112,11 +110,9 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
-export async function GetSharingParticipants(
-  participantId?: number
-): Promise<AvailableParticipantDTO[]> {
+export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
   try {
-    const result = await axios.get<AvailableParticipantDTO[]>(
+    const result = await axios.get<SharingListResponse>(
       `/participants/${participantId ?? 'current'}/sharingPermission`
     );
     return result.data;
@@ -127,13 +123,15 @@ export async function GetSharingParticipants(
 
 export async function AddSharingParticipants(
   participantId: number,
-  newParticipantSites: number[]
-): Promise<AvailableParticipantDTO[]> {
+  newParticipantSites: number[],
+  newTypes: ClientType[]
+): Promise<SharingListResponse> {
   try {
-    const result = await axios.post<AvailableParticipantDTO[]>(
+    const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/add`,
       {
         newParticipantSites,
+        newTypes,
       }
     );
     return result.data;
@@ -144,13 +142,15 @@ export async function AddSharingParticipants(
 
 export async function DeleteSharingParticipants(
   participantId: number,
-  sharingSitesToRemove: number[]
-): Promise<AvailableParticipantDTO[]> {
+  sharingSitesToRemove: number[],
+  types: ClientType[]
+): Promise<SharingListResponse> {
   try {
-    const result = await axios.post<AvailableParticipantDTO[]>(
+    const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/delete`,
       {
         sharingSitesToRemove,
+        types,
       }
     );
     return result.data;

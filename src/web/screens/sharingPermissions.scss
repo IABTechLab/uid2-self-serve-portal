@@ -2,8 +2,11 @@
   .dialog-title {
     margin-right: 36px;
   }
-  
-  .search-and-add-permissions-collapsible {
+
+  .bulk-add-and-search-collapsibles {
+    display: flex;
+    flex-direction: column;
     margin-top: 30px;
+    gap: 30px;
   }
 }

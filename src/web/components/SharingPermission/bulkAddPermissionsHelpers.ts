@@ -1,4 +1,5 @@
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
 export type BulkAddPermissionsForm = {
@@ -31,16 +32,16 @@ export const getDefaultDataProviderCheckboxState = (participantTypeNames: string
 export const getRecommendedTypeFromParticipant = (participantTypeNames: string[]) => {
   const uniqueTypes = new Set<string>();
   if (getDefaultPublisherCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('publisher');
+    uniqueTypes.add('PUBLISHER');
   }
   if (getDefaultAdvertiserCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('advertiser');
+    uniqueTypes.add('ADVERTISER');
   }
   if (getDefaultDSPCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('dsp');
+    uniqueTypes.add('DSP');
   }
   if (getDefaultDataProviderCheckboxState(participantTypeNames)) {
-    uniqueTypes.add('data_provider');
+    uniqueTypes.add('DATA_PROVIDER');
   }
   return Array.from(uniqueTypes);
 };
@@ -48,11 +49,11 @@ export const getRecommendedTypeFromParticipant = (participantTypeNames: string[]
 const getParticipantTypeNamesMessage = (recommendedTypes: string[]) => {
   if (recommendedTypes.length === 4) return 'participants';
   const friendlyNames: Record<string, string> = {
-    publisher: 'Publishers',
-    advertiser: 'Advertisers',
-    dsp: 'DSPs',
+    PUBLISHER: 'Publishers',
+    ADVERTISER: 'Advertisers',
+    DSP: 'DSPs',
     // eslint-disable-next-line camelcase
-    data_provider: 'Data Providers',
+    DATA_PROVIDER: 'Data Providers',
   };
 
   const formattedNames = recommendedTypes.map((type) => friendlyNames[type]);
@@ -60,26 +61,25 @@ const getParticipantTypeNamesMessage = (recommendedTypes: string[]) => {
 };
 
 export const hasUncheckedASharedType = (
-  sharedTypes: string[],
+  sharedTypes: ClientType[],
   publisherChecked: boolean,
   advertiserChecked: boolean,
   DSPChecked: boolean,
   dataProviderChecked: boolean
 ) => {
-  if (!publisherChecked && sharedTypes.includes('publisher')) return true;
-  if (!advertiserChecked && sharedTypes.includes('advertiser')) return true;
-  if (!DSPChecked && sharedTypes.includes('dsp')) return true;
-  if (!dataProviderChecked && sharedTypes.includes('data_provider')) return true;
+  if (!publisherChecked && sharedTypes.includes('PUBLISHER')) return true;
+  if (!advertiserChecked && sharedTypes.includes('ADVERTISER')) return true;
+  if (!DSPChecked && sharedTypes.includes('DSP')) return true;
+  if (!dataProviderChecked && sharedTypes.includes('DATA_PROVIDER')) return true;
   return false;
 };
 
 export const getCheckedParticipantTypeNames = (data: BulkAddPermissionsForm) => {
-  const ids = [];
-  if (data.publisherChecked) ids.push('publisher');
-  if (data.advertiserChecked) ids.push('advertiser');
-
-  if (data.DSPChecked) ids.push('dsp');
-  if (data.dataProviderChecked) ids.push('data_provider');
+  const ids = [] as ClientType[];
+  if (data.publisherChecked) ids.push('PUBLISHER');
+  if (data.advertiserChecked) ids.push('ADVERTISER');
+  if (data.DSPChecked) ids.push('DSP');
+  if (data.dataProviderChecked) ids.push('DATA_PROVIDER');
   return ids;
 };
 
