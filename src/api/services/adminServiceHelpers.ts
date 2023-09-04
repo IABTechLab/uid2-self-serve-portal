@@ -14,7 +14,7 @@ export type SiteDTO = {
   name: string;
   enabled: boolean;
   roles: ClientRole[];
-  types: ClientType[];
+  clientTypes?: ClientType[];
   client_count: number;
 };
 
