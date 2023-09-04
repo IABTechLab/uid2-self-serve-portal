@@ -133,14 +133,13 @@ function SharingPermissions() {
                     participantTypes={resolvedParticipantTypes}
                   />
                 </Collapsible>
-                {(sharedSiteIds.length > 0 || sharedTypes.length > 0) && (
-                  <SharingPermissionsTable
-                    sharedSiteIds={sharedSiteIds}
-                    sharedTypes={sharedTypes}
-                    onDeleteSharingPermission={handleDeleteSharingSite}
-                    participantTypes={resolvedParticipantTypes}
-                  />
-                )}
+                {/* TODO: hide sharing permission table once we have the recommendation flag */}
+                <SharingPermissionsTable
+                  sharedSiteIds={sharedSiteIds}
+                  sharedTypes={sharedTypes}
+                  onDeleteSharingPermission={handleDeleteSharingSite}
+                  participantTypes={resolvedParticipantTypes}
+                />
               </>
             )}
           </Await>

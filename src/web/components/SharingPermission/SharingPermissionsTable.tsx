@@ -153,8 +153,7 @@ export function SharingPermissionsTableContent({
   );
 
   return (
-    <div className='sharing-permissions-table'>
-      <h2>Your Sharing Permissions</h2>
+    <>
       <div className='sharing-permissions-table-header-container'>
         <div className='sharing-permission-actions'>
           <TriStateCheckbox
@@ -198,7 +197,7 @@ export function SharingPermissionsTableContent({
         onFilteredParticipantChanged={setFilteredParticipants}
         hideSelectAllCheckbox
       />
-    </div>
+    </>
   );
 }
 
@@ -241,13 +240,18 @@ export function SharingPermissionsTable({
   const sharingParticipants = getSharingParticipants();
 
   if (isLoading) return <Loading />;
-  return sharingParticipants.length ? (
-    <SharingPermissionsTableContent
-      sharingParticipants={getSharingParticipants()}
-      onDeleteSharingPermission={onDeleteSharingPermission}
-      participantTypes={participantTypes}
-    />
-  ) : (
-    <NoParticipant />
+  return (
+    <div className='sharing-permissions-table'>
+      <h2>Your Sharing Permissions</h2>
+      {sharingParticipants.length ? (
+        <SharingPermissionsTableContent
+          sharingParticipants={getSharingParticipants()}
+          onDeleteSharingPermission={onDeleteSharingPermission}
+          participantTypes={participantTypes}
+        />
+      ) : (
+        <NoParticipant />
+      )}
+    </div>
   );
 }
