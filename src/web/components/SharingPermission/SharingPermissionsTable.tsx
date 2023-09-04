@@ -10,7 +10,8 @@ import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
-import { ParticipantsTable, SharingParticipant } from './ParticipantsTable';
+import { isAddedByManual, MANUALLY_ADDED, SharingParticipant } from './bulkAddPermissionsHelpers';
+import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
 
@@ -39,7 +40,7 @@ export function SharingPermissionsTable({
 
     availableParticipants?.forEach((p) => {
       const sources = [];
-      if (siteIds.has(p.siteId)) sources.push('Manually Added');
+      if (siteIds.has(p.siteId)) sources.push(MANUALLY_ADDED);
       p.types.forEach((t) => {
         if (sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))) {
           sources.push(t.typeName);
@@ -79,7 +80,7 @@ export function SharingPermissionsTable({
     if (selectAllState === TriStateCheckboxState.unchecked) {
       const selectedSiteIds = new Set<number>();
       filteredParticipants.forEach((p) => {
-        if (p.addedBy.includes('Manually Added')) selectedSiteIds.add(p.siteId);
+        if (isAddedByManual(p)) selectedSiteIds.add(p.siteId);
       });
       setCheckedParticipants(selectedSiteIds);
     } else {
@@ -90,7 +91,7 @@ export function SharingPermissionsTable({
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length || !checkedParticipants.size) return false;
     return filteredParticipants
-      .filter((p) => p.addedBy.includes('Manually Added'))
+      .filter(isAddedByManual)
       .every((p) => checkedParticipants.has(p.siteId!));
   }, [filteredParticipants, checkedParticipants]);
 

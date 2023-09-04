@@ -40,7 +40,7 @@ function SharingPermissions() {
             : `${selectedTypes.length} Participant types`
         } saved to Your Sharing Permissions`,
       });
-      setSharedTypes(response.allowed_types);
+      setSharedTypes(response.allowed_types ?? []);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -98,7 +98,7 @@ function SharingPermissions() {
   const loadSharingList = useCallback(async () => {
     const response = await GetSharingList(participant!.id);
     setSharedSiteIds(response.allowed_sites);
-    setSharedTypes(response.allowed_types);
+    setSharedTypes(response.allowed_types ?? []);
   }, [participant]);
 
   useEffect(() => {

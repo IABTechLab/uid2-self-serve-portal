@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
+import { isAddedByType } from './bulkAddPermissionsHelpers';
 
 import './ParticipantItem.scss';
 
@@ -51,7 +52,7 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
           onClick={onClick}
           status={checked}
           className='participant-checkbox'
-          disabled={!!addedBy && !addedBy.includes('Manually Added')}
+          disabled={isAddedByType(addedBy)}
         />
       </td>
       <ParticipantItemSimple participant={participant} />

@@ -6,13 +6,10 @@ import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { SharingParticipant } from './bulkAddPermissionsHelpers';
 import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
-
-export type SharingParticipant = AvailableParticipantDTO & {
-  addedBy: string[];
-};
 
 type ParticipantsTableBaseProps<T> = {
   participants: T[];
