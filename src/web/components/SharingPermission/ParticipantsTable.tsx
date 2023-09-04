@@ -111,7 +111,7 @@ function ParticipantsTableContent<ShowColumn extends boolean>({
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>
-        <tr>
+        <tr className='participant-item-with-checkbox'>
           <th>
             {!hideSelectAllCheckbox && (
               <TriStateCheckbox
