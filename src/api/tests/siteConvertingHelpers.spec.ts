@@ -55,7 +55,7 @@ describe('Sharing Permission Helper Tests', () => {
         name: 'Test Site',
         enabled: true,
         roles: ['SHARER'],
-        types: ['PUBLISHER'],
+        clientTypes: ['PUBLISHER'],
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
@@ -80,7 +80,7 @@ describe('Sharing Permission Helper Tests', () => {
         name: 'Test Site',
         enabled: true,
         roles: [],
-        types: ['DSP'],
+        clientTypes: ['DSP'],
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
@@ -93,20 +93,32 @@ describe('Sharing Permission Helper Tests', () => {
         name: 'Test Site',
         enabled: true,
         roles: ['SHARER'],
-        types: ['PUBLISHER'],
+        clientTypes: ['PUBLISHER'],
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
       expect(hasSharerRole(site)).toBeTruthy();
     });
 
-    it('should return false if types are empty', () => {
+    it('should return false if clientTypes are empty', () => {
       const site = {
         id: 2,
         name: 'Test Site',
         enabled: true,
         roles: ['SHARER', 'GENERATOR'],
-        types: [],
+        clientTypes: [],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      expect(hasSharerRole(site)).toBeFalsy();
+    });
+
+    it('should return false if clientTypes not exists', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: ['SHARER', 'GENERATOR'],
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
