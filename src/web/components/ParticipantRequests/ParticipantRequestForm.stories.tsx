@@ -17,7 +17,7 @@ const response: SiteDTO[] = [
     name: 'Test Site',
     enabled: true,
     roles: ['SHARER'],
-    types: ['PUBLISHER'],
+    clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
   },
@@ -26,7 +26,7 @@ const response: SiteDTO[] = [
     name: 'Test Four',
     enabled: true,
     roles: ['SHARER'],
-    types: ['PUBLISHER'],
+    clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
   },
