@@ -10,6 +10,7 @@ export default {
 const Template: ComponentStory<typeof TypeFilter> = (args) => <TypeFilter {...args} />;
 
 export const Default = Template.bind({});
+
 Default.args = {
   types: [
     { id: 1, typeName: 'Type 1' },
@@ -19,4 +20,5 @@ Default.args = {
   onFilterChange: (selectedTypeIds: Set<number>) => {
     console.log('Selected type IDs: ', Array.from(selectedTypeIds));
   },
+  selectedTypeIds: new Set(),
 };

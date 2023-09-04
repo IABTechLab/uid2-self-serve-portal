@@ -64,7 +64,11 @@ export function ParticipantSearchBar({
         <SearchBarResults className='participants-search-results'>
           <div className='search-bar-type-filter'>
             <div className='search-bar-type-filter-title'>Only show me:</div>
-            <TypeFilter onFilterChange={handleFilterChange} types={participantTypes} />
+            <TypeFilter
+              onFilterChange={handleFilterChange}
+              types={participantTypes}
+              selectedTypeIds={selectedTypeIds}
+            />
           </div>
           <ParticipantsTable
             participants={participants}
