@@ -1,7 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { SiteDTO } from '../../../api/services/adminServiceClient';
+import { UserRole } from '../../../api/entities/User';
+import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
@@ -16,7 +17,7 @@ const response: SiteDTO[] = [
     name: 'Test Site',
     enabled: true,
     roles: ['SHARER'],
-    types: ['PUBLISHER'],
+    clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
   },
@@ -25,7 +26,7 @@ const response: SiteDTO[] = [
     name: 'Test Four',
     enabled: true,
     roles: ['SHARER'],
-    types: ['PUBLISHER'],
+    clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
   },
@@ -49,6 +50,11 @@ ParticipantApproval.args = {
       { id: 2, typeName: 'Type 2' },
     ],
     status: ParticipantStatus.AwaitingApproval,
+    requestingUser: {
+      email: 'test@example.com',
+      fullName: 'Test User',
+      role: UserRole.MediaBuyer,
+    },
   },
   participantTypes: [
     { id: 1, typeName: 'Type 1' },

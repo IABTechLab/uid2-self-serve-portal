@@ -1,6 +1,6 @@
 import { ParticipantTypeDTO } from '../entities/ParticipantType';
 import { AvailableParticipantDTO } from '../routers/participantsRouter';
-import { ClientType, SiteDTO } from '../services/adminServiceClient';
+import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
 
 export const mapClientTypeToParticipantType = (
   clientTypes: ClientType[],
@@ -23,12 +23,12 @@ export const convertSiteToAvailableParticipantDTO = (
   return {
     name: site.name,
     siteId: site.id,
-    types: mapClientTypeToParticipantType(site.types, participantTypes),
+    types: mapClientTypeToParticipantType(site.clientTypes ?? [], participantTypes),
   };
 };
 
 export const hasSharerRole = (site: SiteDTO): boolean => {
-  if (!site.types.length) return false;
-  if (site.roles.includes('SHARER') || site.types.includes('DSP')) return true;
+  if (!site.clientTypes || site.clientTypes.length) return false;
+  if (site.roles.includes('SHARER') || site.clientTypes?.includes('DSP')) return true;
   return false;
 };

@@ -12,12 +12,12 @@ import './SearchAndAddParticipants.scss';
 
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
-  sharingParticipants: AvailableParticipantDTO[];
+  sharedSiteIds: number[];
   participantTypes: ParticipantTypeDTO[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
-  sharingParticipants,
+  sharedSiteIds,
   participantTypes,
 }: SearchAndAddParticipantsProps) {
   const { sites: availableParticipants, isLoading } = useAvailableSiteList();
@@ -32,8 +32,8 @@ export function SearchAndAddParticipants({
   };
 
   const sharingParticipantsSiteIds = useMemo(() => {
-    return new Set(sharingParticipants.map((p) => p.siteId));
-  }, [sharingParticipants]);
+    return new Set(sharedSiteIds);
+  }, [sharedSiteIds]);
 
   const selectedParticipantList = useMemo(() => {
     return (availableParticipants ?? []).filter((p) => selectedParticipants.has(p.siteId!));
@@ -82,13 +82,13 @@ export function SearchAndAddParticipants({
               className='primary-button add-participant-button'
               disabled={!selectedParticipants.size}
             >
-              Add Participants
+              Add Permissions
             </button>
           }
           open={openConfirmation}
           onOpenChange={setOpenConfirmation}
         >
-          Adding the following participants:
+          Adding permissions for the following participants:
           <ul className='dot-list'>
             {selectedParticipantList.map((selectedParticipant) => (
               <li key={selectedParticipant.siteId}>{selectedParticipant.name}</li>

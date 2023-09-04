@@ -10,9 +10,10 @@ import {
   ParticipantSchema,
   ParticipantStatus,
 } from '../entities/Participant';
-import { UserRole } from '../entities/User';
+import { UserDTO, UserRole } from '../entities/User';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
+import { getSharingList } from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
@@ -24,7 +25,6 @@ import {
   checkParticipantId,
   deleteSharingParticipants,
   getParticipantsAwaitingApproval,
-  getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
@@ -41,14 +41,29 @@ export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'si
 export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
   'id' | 'name' | 'siteId' | 'types' | 'status'
->;
+> & {
+  requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
+};
 
-function mapParticipantToAvailableParticipant(participant: Participant) {
+export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
+
+function mapParticipantToApprovalRequest(participant: Participant): ParticipantRequestDTO {
+  if (!participant.users || participant.users.length === 0)
+    throw Error('Found a participant with no requesting user.');
+
+  // There should usually only be one user at this point - but if there are multiple, the first one is preferred.
+  const firstUser = participant.users.sort((a, b) => a.id - b.id)[0];
   return {
     id: participant.id,
     name: participant.name,
     siteId: participant.siteId,
     types: participant.types,
+    status: participant.status,
+    requestingUser: {
+      email: firstUser.email,
+      role: firstUser.role,
+      fullName: firstUser.fullName(),
+    },
   };
 }
 
@@ -61,7 +76,10 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res) => {
       const email = String(req.auth?.payload?.email);
       const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
-      return res.status(200).json(participantsAwaitingApproval);
+      const result: ParticipantRequestDTO[] = participantsAwaitingApproval.map(
+        mapParticipantToApprovalRequest
+      );
+      return res.status(200).json(result);
     }
   );
 
@@ -187,13 +205,14 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const sharingParticipants = await getSharingParticipants(participant.siteId);
-      return res.status(200).json(sharingParticipants);
+      const sharingList = await getSharingList(participant.siteId);
+      return res.status(200).json(sharingList);
     }
   );
 
   const sharingRelationParser = z.object({
     newParticipantSites: z.array(z.number()),
+    newTypes: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -203,7 +222,7 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { newParticipantSites } = sharingRelationParser.parse(req.body);
+      const { newParticipantSites, newTypes } = sharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
@@ -215,16 +234,18 @@ export function createParticipantsRouter() {
 
       const sharingParticipants = await addSharingParticipants(
         participant.siteId,
-        newParticipantSites
+        newParticipantSites,
+        newTypes
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
-      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
+      return res.status(200).json(sharingParticipants);
     }
   );
 
   const removeSharingRelationParser = z.object({
     sharingSitesToRemove: z.array(z.number()),
+    types: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -234,7 +255,7 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
+      const { sharingSitesToRemove, types } = removeSharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
@@ -246,12 +267,13 @@ export function createParticipantsRouter() {
 
       const sharingParticipants = await deleteSharingParticipants(
         participant.siteId,
-        sharingSitesToRemove
+        sharingSitesToRemove,
+        types
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
 
-      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
+      return res.status(200).json(sharingParticipants);
     }
   );
 
