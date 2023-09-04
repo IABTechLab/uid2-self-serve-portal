@@ -52,7 +52,7 @@ AddedByManual.args = {
   },
   onClick: () => {},
   checked: false,
-  addedBy: 'Manual',
+  addedBy: 'Manually Added',
 };
 
 export const AddedByAuto = Template.bind({});
@@ -67,7 +67,7 @@ AddedByAuto.args = {
   },
   onClick: () => {},
   checked: false,
-  addedBy: 'Auto',
+  addedBy: 'DSP, Advertiser and Publisher',
 };
 
 export const AddedByAutoAndManual = Template.bind({});
@@ -82,5 +82,5 @@ AddedByAutoAndManual.args = {
   },
   onClick: () => {},
   checked: false,
-  addedBy: 'Auto/Manual',
+  addedBy: 'DSP and Manually Added',
 };

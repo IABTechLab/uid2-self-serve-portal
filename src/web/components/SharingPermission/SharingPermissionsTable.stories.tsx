@@ -42,7 +42,8 @@ const response: AvailableParticipantDTO[] = [
     name: 'Site 6',
     types: [
       { id: 1, typeName: 'Advertiser' },
-      { id: 4, typeName: 'Data Provider' },
+      { id: 3, typeName: 'Data Provider' },
+      { id: 4, typeName: 'DSP' },
     ],
     siteId: 15,
   },
@@ -56,7 +57,7 @@ const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
 export const SharedWithParticipants = Template.bind({});
 SharedWithParticipants.args = {
   sharedSiteIds: [10, 11, 12, 14, 15],
-  sharedTypes: ['DSP'],
+  sharedTypes: ['DSP', 'DATA_PROVIDER'],
   onDeleteSharingPermission: () => Promise.resolve(),
   participantTypes: [
     { id: 1, typeName: 'Publisher' },

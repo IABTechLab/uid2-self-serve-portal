@@ -6,7 +6,7 @@ export const getArticle = (word: string): string => {
   return isVowel(firstLetter) ? 'an' : 'a';
 };
 
-export const formatStringsWithSeparator = (strings: string[]) => {
+export const formatStringsWithSeparator = (strings: string[]): string => {
   if (strings.length === 2) {
     return strings.join(' and ');
   }
@@ -14,5 +14,5 @@ export const formatStringsWithSeparator = (strings: string[]) => {
     const lastCommaIndex = strings.length - 1;
     return `${strings.slice(0, lastCommaIndex).join(', ')} and ${strings[lastCommaIndex]}`;
   }
-  return strings;
+  return strings.length ? strings[0] : '';
 };

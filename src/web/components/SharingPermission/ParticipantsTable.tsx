@@ -4,13 +4,14 @@ import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
+import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
 
 export type SharingParticipant = AvailableParticipantDTO & {
-  addedBy: 'Manual' | 'Auto' | 'Manual / Auto';
+  addedBy: string[];
 };
 
 type ParticipantsTableBaseProps<T> = {
@@ -126,7 +127,11 @@ function ParticipantsTableContent<ShowColumn extends boolean>({
       <tbody>
         {sortedData.map((participant) => (
           <ParticipantItem
-            addedBy={showAddedByColumn ? (participant as SharingParticipant).addedBy : undefined}
+            addedBy={
+              showAddedByColumn
+                ? formatStringsWithSeparator((participant as SharingParticipant).addedBy)
+                : undefined
+            }
             key={participant.siteId}
             participant={participant}
             onClick={() => handleCheckChange(participant)}

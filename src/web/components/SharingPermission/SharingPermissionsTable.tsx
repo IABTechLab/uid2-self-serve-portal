@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { useAvailableSiteList } from '../../services/site';
+import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
@@ -37,15 +38,17 @@ export function SharingPermissionsTable({
     const sharingLists: SharingParticipant[] = [];
 
     availableParticipants?.forEach((p) => {
-      const manualAdded = siteIds.has(p.siteId);
-      const autoAdded = p.types.some((t) =>
-        sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))
-      );
-      if (autoAdded || manualAdded) {
-        const addedBy = autoAdded ? 'Auto' : 'Manual';
+      const sources = [];
+      if (siteIds.has(p.siteId)) sources.push('Manually Added');
+      p.types.forEach((t) => {
+        if (sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))) {
+          sources.push(t.typeName);
+        }
+      });
+      if (sources.length) {
         sharingLists.push({
           ...p,
-          addedBy: autoAdded && manualAdded ? 'Manual / Auto' : addedBy,
+          addedBy: sources,
         });
       }
     });
@@ -76,7 +79,7 @@ export function SharingPermissionsTable({
     if (selectAllState === TriStateCheckboxState.unchecked) {
       const selectedSiteIds = new Set<number>();
       filteredParticipants.forEach((p) => {
-        if (p.addedBy !== 'Auto') selectedSiteIds.add(p.siteId);
+        if (p.addedBy.includes('Manually Added')) selectedSiteIds.add(p.siteId);
       });
       setCheckedParticipants(selectedSiteIds);
     } else {
@@ -87,9 +90,18 @@ export function SharingPermissionsTable({
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length) return false;
     return filteredParticipants
-      .filter((p) => p.addedBy !== 'Auto')
+      .filter((p) => p.addedBy.includes('Manually Added'))
       .every((p) => checkedParticipants.has(p.siteId!));
   }, [filteredParticipants, checkedParticipants]);
+
+  const showDeletionNotice = (participant: SharingParticipant) => {
+    const remainSources = participant.addedBy.filter((source) => source !== 'Manually Added');
+    if (remainSources.length) {
+      return (
+        <span> (This site will remain shared by {formatStringsWithSeparator(remainSources)})</span>
+      );
+    }
+  };
 
   useEffect(() => {
     if (isSelectedAll) {
@@ -120,7 +132,10 @@ export function SharingPermissionsTable({
       <div className='dialog-body-section'>
         <ul className='dot-list'>
           {selectedParticipantList.map((participant) => (
-            <li key={participant.siteId}>{participant.name}</li>
+            <li key={participant.siteId}>
+              {participant.name}
+              {showDeletionNotice(participant)}
+            </li>
           ))}
         </ul>
       </div>
@@ -143,7 +158,7 @@ export function SharingPermissionsTable({
     <>
       <SortableTableHeader<SharingParticipant> sortKey='name' header='Participant Name' />
       <th>Participant Type</th>
-      <SortableTableHeader<SharingParticipant> sortKey='addedBy' header='Added By' />
+      <SortableTableHeader<SharingParticipant> sortKey='addedBy' header='Source' />
     </>
   );
 
