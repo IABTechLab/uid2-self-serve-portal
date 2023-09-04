@@ -88,7 +88,7 @@ export function SharingPermissionsTable({
   };
 
   const isSelectedAll = useMemo(() => {
-    if (!filteredParticipants.length) return false;
+    if (!filteredParticipants.length || !checkedParticipants.size) return false;
     return filteredParticipants
       .filter((p) => p.addedBy.includes('Manually Added'))
       .every((p) => checkedParticipants.has(p.siteId!));
