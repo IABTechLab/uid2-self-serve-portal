@@ -15,6 +15,18 @@ import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
 
+function NoParticipant() {
+  return (
+    <div className='no-participants-container'>
+      <img src='/group-icon.svg' alt='group-icon' />
+      <div className='no-participants-text'>
+        <h2>No Participants</h2>
+        <span>You don&apos;t have any sharing permissions yet.</span>
+      </div>
+    </div>
+  );
+}
+
 type DeletePermissionDialogProps = {
   onDeleteSharingPermission: () => void;
   selectedParticipantList: SharingParticipant[];
@@ -226,12 +238,16 @@ export function SharingPermissionsTable({
     });
     return sharingLists;
   };
+  const sharingParticipants = getSharingParticipants();
+
   if (isLoading) return <Loading />;
-  return (
+  return sharingParticipants.length ? (
     <SharingPermissionsTableContent
       sharingParticipants={getSharingParticipants()}
       onDeleteSharingPermission={onDeleteSharingPermission}
       participantTypes={participantTypes}
     />
+  ) : (
+    <NoParticipant />
   );
 }
