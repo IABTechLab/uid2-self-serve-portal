@@ -8,7 +8,7 @@ export default {
   component: ParticipantsTable,
 } as ComponentMeta<typeof ParticipantsTable>;
 const Template: ComponentStory<typeof ParticipantsTable> = (args) => {
-  return <ParticipantsTable {...args} />;
+  return <ParticipantsTable<AvailableParticipantDTO> {...args} />;
 };
 
 export const Default = Template.bind({});

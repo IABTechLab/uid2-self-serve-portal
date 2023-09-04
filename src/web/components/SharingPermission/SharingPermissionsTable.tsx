@@ -191,8 +191,7 @@ export function SharingPermissionsTable({
           <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
         </div>
       </div>
-      <ParticipantsTable
-        showAddedByColumn
+      <ParticipantsTable<SharingParticipant>
         participants={sharingParticipants}
         filterText={filterText}
         selectedTypeIds={selectedTypeIds}

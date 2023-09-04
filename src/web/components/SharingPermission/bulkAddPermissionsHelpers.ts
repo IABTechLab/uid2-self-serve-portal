@@ -13,11 +13,13 @@ export type SharingParticipant = AvailableParticipantDTO & {
   addedBy: string[];
 };
 
-export const MANUALLY_ADDED = 'Manually Added';
-
-export const isAddedByType = (addedBy?: string): boolean => {
-  return !!addedBy && addedBy.includes(MANUALLY_ADDED);
+export const isSharingParticipant = (
+  participant: AvailableParticipantDTO | SharingParticipant
+): participant is SharingParticipant => {
+  return 'addedBy' in participant;
 };
+
+export const MANUALLY_ADDED = 'Manually Added';
 
 export const isAddedByManual = (participant: SharingParticipant) => {
   return participant.addedBy.includes(MANUALLY_ADDED);

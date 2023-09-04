@@ -66,8 +66,7 @@ export function ParticipantSearchBar({
             <div className='search-bar-type-filter-title'>Only show me:</div>
             <TypeFilter onFilterChange={handleFilterChange} types={participantTypes} />
           </div>
-          <ParticipantsTable
-            showAddedByColumn={false}
+          <ParticipantsTable<AvailableParticipantDTO>
             participants={participants}
             filterText={filterText}
             selectedTypeIds={selectedTypeIds}

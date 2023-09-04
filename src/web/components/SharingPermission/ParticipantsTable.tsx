@@ -4,14 +4,15 @@ import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
-import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { SharingParticipant } from './bulkAddPermissionsHelpers';
 import { ParticipantItem } from './ParticipantItem';
 
 import './ParticipantsTable.scss';
 
-type ParticipantsTableBaseProps<T> = {
+type ParticipantTSType = AvailableParticipantDTO | SharingParticipant;
+
+type ParticipantsTableProps<T extends ParticipantTSType> = {
   participants: T[];
   filterText: string;
   selectedTypeIds?: Set<number>;
@@ -20,21 +21,10 @@ type ParticipantsTableBaseProps<T> = {
   tableHeader: (filteredParticipants: T[]) => ReactNode;
   className?: string;
   hideSelectAllCheckbox?: boolean;
-  showAddedByColumn?: boolean;
   onFilteredParticipantChanged?: (filteredParticipants: T[]) => void;
 };
 
-type DetermineParticipantsType<ShowColumn extends boolean> = ShowColumn extends true
-  ? SharingParticipant
-  : AvailableParticipantDTO;
-
-type ParticipantsTableProps<ShowColumn extends boolean> = ParticipantsTableBaseProps<
-  DetermineParticipantsType<ShowColumn>
-> & {
-  showAddedByColumn: ShowColumn;
-};
-
-function ParticipantsTableContent<ShowColumn extends boolean>({
+function ParticipantsTableContent<T extends ParticipantTSType>({
   tableHeader,
   participants,
   filterText,
@@ -43,9 +33,8 @@ function ParticipantsTableContent<ShowColumn extends boolean>({
   selectedParticipantIds = new Set(),
   className,
   hideSelectAllCheckbox,
-  showAddedByColumn,
   onFilteredParticipantChanged,
-}: ParticipantsTableProps<ShowColumn>) {
+}: ParticipantsTableProps<T>) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
   const { sortData } = useSortable<AvailableParticipantDTO>();
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
@@ -124,11 +113,6 @@ function ParticipantsTableContent<ShowColumn extends boolean>({
       <tbody>
         {sortedData.map((participant) => (
           <ParticipantItem
-            addedBy={
-              showAddedByColumn
-                ? formatStringsWithSeparator((participant as SharingParticipant).addedBy)
-                : undefined
-            }
             key={participant.siteId}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
@@ -140,12 +124,10 @@ function ParticipantsTableContent<ShowColumn extends boolean>({
   );
 }
 
-export function ParticipantsTable<ShowColumn extends boolean>(
-  props: ParticipantsTableProps<ShowColumn>
-) {
+export function ParticipantsTable<T extends ParticipantTSType>(props: ParticipantsTableProps<T>) {
   return (
     <SortableProvider>
-      <ParticipantsTableContent {...props} />
+      <ParticipantsTableContent<T> {...props} />
     </SortableProvider>
   );
 }
