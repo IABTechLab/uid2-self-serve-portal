@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { useAvailableSiteList } from '../../services/site';
@@ -15,85 +15,20 @@ import { ParticipantsTable } from './ParticipantsTable';
 
 import './SharingPermissionsTable.scss';
 
-type SharingPermissionsTableProps = {
-  sharedSiteIds: number[];
-  sharedTypes: string[];
-  onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
-  participantTypes: ParticipantTypeDTO[];
+type DeletePermissionDialogProps = {
+  onDeleteSharingPermission: () => void;
+  selectedParticipantList: SharingParticipant[];
 };
-
-export function SharingPermissionsTable({
-  sharedSiteIds,
-  sharedTypes,
+function DeletePermissionDialog({
   onDeleteSharingPermission,
-  participantTypes,
-}: SharingPermissionsTableProps) {
-  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
-  const [filterText, setFilterText] = useState('');
-  const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
+  selectedParticipantList,
+}: DeletePermissionDialogProps) {
   const [openConfirmation, setOpenConfirmation] = useState(false);
-  const siteIds = useMemo(() => new Set(sharedSiteIds), [sharedSiteIds]);
-
-  const sharingParticipants: SharingParticipant[] = useMemo(() => {
-    const sharedParticipantType = new Set(sharedTypes);
-    const sharingLists: SharingParticipant[] = [];
-
-    availableParticipants?.forEach((p) => {
-      const sources = [];
-      if (siteIds.has(p.siteId)) sources.push(MANUALLY_ADDED);
-      p.types.forEach((t) => {
-        if (sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))) {
-          sources.push(t.typeName);
-        }
-      });
-      if (sources.length) {
-        sharingLists.push({
-          ...p,
-          addedBy: sources,
-        });
-      }
-    });
-    return sharingLists;
-  }, [availableParticipants, sharedTypes, siteIds]);
-
-  const [filteredParticipants, setFilteredParticipants] = useState(sharingParticipants);
-  const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    TriStateCheckboxState.unchecked
-  );
-  const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
 
   const handleDeletePermissions = () => {
-    onDeleteSharingPermission(Array.from(checkedParticipants));
-    setCheckedParticipants(new Set());
+    onDeleteSharingPermission();
     setOpenConfirmation(false);
   };
-
-  const participantTypeOptions = useMemo(() => {
-    return participantTypes.map((v) => ({ id: v.id, name: v.typeName }));
-  }, [participantTypes]);
-
-  const selectedParticipantList = useMemo(() => {
-    return sharingParticipants.filter((p) => checkedParticipants.has(p.siteId!));
-  }, [checkedParticipants, sharingParticipants]);
-
-  const handleCheckboxChange = () => {
-    if (selectAllState === TriStateCheckboxState.unchecked) {
-      const selectedSiteIds = new Set<number>();
-      filteredParticipants.forEach((p) => {
-        if (isAddedByManual(p)) selectedSiteIds.add(p.siteId);
-      });
-      setCheckedParticipants(selectedSiteIds);
-    } else {
-      setCheckedParticipants(new Set());
-    }
-  };
-
-  const isSelectedAll = useMemo(() => {
-    if (!filteredParticipants.length || !checkedParticipants.size) return false;
-    return filteredParticipants
-      .filter(isAddedByManual)
-      .every((p) => checkedParticipants.has(p.siteId!));
-  }, [filteredParticipants, checkedParticipants]);
 
   const showDeletionNotice = (participant: SharingParticipant) => {
     const remainSources = participant.addedBy.filter((source) => source !== 'Manually Added');
@@ -104,18 +39,7 @@ export function SharingPermissionsTable({
     }
   };
 
-  useEffect(() => {
-    if (isSelectedAll) {
-      setSelectAllState(TriStateCheckboxState.checked);
-    } else if (checkedParticipants.size > 0) {
-      setSelectAllState(TriStateCheckboxState.indeterminate as CheckedState);
-    } else {
-      setSelectAllState(TriStateCheckboxState.unchecked);
-    }
-  }, [checkedParticipants.size, isSelectedAll]);
-
-  if (isLoading) return <Loading />;
-  const deletePermissionBtn = (
+  return (
     <Dialog
       title='Are you sure you want to delete these permissions?'
       triggerButton={
@@ -154,6 +78,59 @@ export function SharingPermissionsTable({
       </div>
     </Dialog>
   );
+}
+
+type SharingPermissionsTableContentProps = {
+  sharingParticipants: SharingParticipant[];
+  onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
+  participantTypes: ParticipantTypeDTO[];
+};
+
+export function SharingPermissionsTableContent({
+  sharingParticipants,
+  onDeleteSharingPermission,
+  participantTypes,
+}: SharingPermissionsTableContentProps) {
+  const [filterText, setFilterText] = useState('');
+  const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
+  const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
+  const [filteredParticipants, setFilteredParticipants] = useState(sharingParticipants);
+
+  const isSelectedAll = () => {
+    if (!filteredParticipants.length || !checkedParticipants.size) return false;
+    return filteredParticipants
+      .filter(isAddedByManual)
+      .every((p) => checkedParticipants.has(p.siteId!));
+  };
+
+  const getSelectAllState = () => {
+    if (isSelectedAll()) {
+      return TriStateCheckboxState.checked;
+    }
+    if (checkedParticipants.size > 0) {
+      return TriStateCheckboxState.indeterminate as CheckedState;
+    }
+    return TriStateCheckboxState.unchecked;
+  };
+
+  const handleDeletePermissions = () => {
+    onDeleteSharingPermission(Array.from(checkedParticipants));
+    setCheckedParticipants(new Set());
+  };
+
+  const participantTypeOptions = participantTypes.map((v) => ({ id: v.id, name: v.typeName }));
+
+  const handleCheckboxChange = () => {
+    if (getSelectAllState() === TriStateCheckboxState.unchecked) {
+      const selectedSiteIds = new Set<number>();
+      filteredParticipants.forEach((p) => {
+        if (isAddedByManual(p)) selectedSiteIds.add(p.siteId);
+      });
+      setCheckedParticipants(selectedSiteIds);
+    } else {
+      setCheckedParticipants(new Set());
+    }
+  };
 
   const tableHeader = () => (
     <>
@@ -170,10 +147,17 @@ export function SharingPermissionsTable({
         <div className='sharing-permission-actions'>
           <TriStateCheckbox
             onClick={handleCheckboxChange}
-            status={selectAllState}
+            status={getSelectAllState()}
             className='participant-checkbox'
           />
-          {checkedParticipants.size > 0 && deletePermissionBtn}
+          {checkedParticipants.size > 0 && (
+            <DeletePermissionDialog
+              onDeleteSharingPermission={handleDeletePermissions}
+              selectedParticipantList={sharingParticipants.filter((p) =>
+                checkedParticipants.has(p.siteId!)
+              )}
+            />
+          )}
           <MultiSelectDropdown
             title='Participant Type'
             options={participantTypeOptions}
@@ -198,10 +182,56 @@ export function SharingPermissionsTable({
         selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
-        onFilteredParticipantChanged={setFilteredParticipants}
         className='shared-participants-table'
+        onFilteredParticipantChanged={setFilteredParticipants}
         hideSelectAllCheckbox
       />
     </div>
+  );
+}
+
+type SharingPermissionsTableProps = {
+  sharedSiteIds: number[];
+  sharedTypes: string[];
+  onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
+  participantTypes: ParticipantTypeDTO[];
+};
+
+export function SharingPermissionsTable({
+  sharedSiteIds,
+  sharedTypes,
+  onDeleteSharingPermission,
+  participantTypes,
+}: SharingPermissionsTableProps) {
+  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
+  const getSharingParticipants = () => {
+    const siteIds = new Set(sharedSiteIds);
+    const sharedParticipantType = new Set(sharedTypes);
+    const sharingLists: SharingParticipant[] = [];
+
+    availableParticipants?.forEach((p) => {
+      const sources = [];
+      if (siteIds.has(p.siteId)) sources.push(MANUALLY_ADDED);
+      p.types.forEach((t) => {
+        if (sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))) {
+          sources.push(t.typeName);
+        }
+      });
+      if (sources.length) {
+        sharingLists.push({
+          ...p,
+          addedBy: sources,
+        });
+      }
+    });
+    return sharingLists;
+  };
+  if (isLoading) return <Loading />;
+  return (
+    <SharingPermissionsTableContent
+      sharingParticipants={getSharingParticipants()}
+      onDeleteSharingPermission={onDeleteSharingPermission}
+      participantTypes={participantTypes}
+    />
   );
 }
