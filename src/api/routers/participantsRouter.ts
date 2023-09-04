@@ -13,6 +13,7 @@ import {
 import { UserDTO, UserRole } from '../entities/User';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
+import { getSharingList } from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
@@ -24,7 +25,6 @@ import {
   checkParticipantId,
   deleteSharingParticipants,
   getParticipantsAwaitingApproval,
-  getSharingParticipants,
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
@@ -45,14 +45,7 @@ export type ParticipantRequestDTO = Pick<
   requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
 };
 
-function mapParticipantToAvailableParticipant(participant: Participant) {
-  return {
-    id: participant.id,
-    name: participant.name,
-    siteId: participant.siteId,
-    types: participant.types,
-  };
-}
+export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
 
 function mapParticipantToApprovalRequest(participant: Participant): ParticipantRequestDTO {
   if (!participant.users || participant.users.length === 0)
@@ -212,13 +205,14 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const sharingParticipants = await getSharingParticipants(participant.siteId);
-      return res.status(200).json(sharingParticipants);
+      const sharingList = await getSharingList(participant.siteId);
+      return res.status(200).json(sharingList);
     }
   );
 
   const sharingRelationParser = z.object({
     newParticipantSites: z.array(z.number()),
+    newTypes: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -228,7 +222,7 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { newParticipantSites } = sharingRelationParser.parse(req.body);
+      const { newParticipantSites, newTypes } = sharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
@@ -240,16 +234,18 @@ export function createParticipantsRouter() {
 
       const sharingParticipants = await addSharingParticipants(
         participant.siteId,
-        newParticipantSites
+        newParticipantSites,
+        newTypes
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
-      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
+      return res.status(200).json(sharingParticipants);
     }
   );
 
   const removeSharingRelationParser = z.object({
     sharingSitesToRemove: z.array(z.number()),
+    types: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -259,7 +255,7 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
+      const { sharingSitesToRemove, types } = removeSharingRelationParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
@@ -271,12 +267,13 @@ export function createParticipantsRouter() {
 
       const sharingParticipants = await deleteSharingParticipants(
         participant.siteId,
-        sharingSitesToRemove
+        sharingSitesToRemove,
+        types
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
 
-      return res.status(200).json(sharingParticipants.map(mapParticipantToAvailableParticipant));
+      return res.status(200).json(sharingParticipants);
     }
   );
 
