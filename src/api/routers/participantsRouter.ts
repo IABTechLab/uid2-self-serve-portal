@@ -45,14 +45,7 @@ export type ParticipantRequestDTO = Pick<
   requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
 };
 
-function mapParticipantToAvailableParticipant(participant: Participant) {
-  return {
-    id: participant.id,
-    name: participant.name,
-    siteId: participant.siteId,
-    types: participant.types,
-  };
-}
+export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
 
 function mapParticipantToApprovalRequest(participant: Participant): ParticipantRequestDTO {
   if (!participant.users || participant.users.length === 0)
@@ -219,7 +212,7 @@ export function createParticipantsRouter() {
 
   const sharingRelationParser = z.object({
     newParticipantSites: z.array(z.number()),
-    newTypes: z.array(z.string()),
+    newTypes: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -252,7 +245,7 @@ export function createParticipantsRouter() {
 
   const removeSharingRelationParser = z.object({
     sharingSitesToRemove: z.array(z.number()),
-    types: z.array(z.string()),
+    types: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(

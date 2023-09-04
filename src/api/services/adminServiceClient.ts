@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-import { SharingListResponse, SiteDTO } from './adminServiceHelpers';
+import { ClientType, SharingListResponse, SiteDTO } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -41,7 +41,7 @@ export const updateSharingList = async (
   siteId: number,
   hash: number,
   siteList: number[],
-  typeList: string[]
+  typeList: ClientType[]
 ): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.post<SharingListResponse>(

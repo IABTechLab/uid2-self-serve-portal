@@ -29,7 +29,7 @@ function SharingPermissions() {
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
   const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
 
-  const handleSaveSharingType = async (selectedTypes: string[]) => {
+  const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
       const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
       setStatusPopup({

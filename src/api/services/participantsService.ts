@@ -11,7 +11,7 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getSharingList, updateSharingList } from './adminServiceClient';
-import { SharingListResponse } from './adminServiceHelpers';
+import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
@@ -72,7 +72,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const addSharingParticipants = async (
   participantSiteId: number,
   siteIds: number[],
-  types: string[]
+  types: ClientType[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
@@ -88,7 +88,7 @@ export const addSharingParticipants = async (
 export const deleteSharingParticipants = async (
   participantSiteId: number,
   siteIds: number[],
-  types: string[]
+  types: ClientType[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingList = sharingListResponse.allowed_sites.filter(

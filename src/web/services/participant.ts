@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { SharingListResponse } from '../../api/services/adminServiceHelpers';
+import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -124,7 +124,7 @@ export async function GetSharingList(participantId?: number): Promise<SharingLis
 export async function AddSharingParticipants(
   participantId: number,
   newParticipantSites: number[],
-  newTypes: string[]
+  newTypes: ClientType[]
 ): Promise<SharingListResponse> {
   try {
     const result = await axios.post<SharingListResponse>(
@@ -143,7 +143,7 @@ export async function AddSharingParticipants(
 export async function DeleteSharingParticipants(
   participantId: number,
   sharingSitesToRemove: number[],
-  types: string[]
+  types: ClientType[]
 ): Promise<SharingListResponse> {
   try {
     const result = await axios.post<SharingListResponse>(

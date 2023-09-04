@@ -1,4 +1,5 @@
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
 export type BulkAddPermissionsForm = {
@@ -60,7 +61,7 @@ const getParticipantTypeNamesMessage = (recommendedTypes: string[]) => {
 };
 
 export const hasUncheckedASharedType = (
-  sharedTypes: string[],
+  sharedTypes: ClientType[],
   publisherChecked: boolean,
   advertiserChecked: boolean,
   DSPChecked: boolean,
@@ -74,7 +75,7 @@ export const hasUncheckedASharedType = (
 };
 
 export const getCheckedParticipantTypeNames = (data: BulkAddPermissionsForm) => {
-  const ids = [];
+  const ids = [] as ClientType[];
   if (data.publisherChecked) ids.push('PUBLISHER');
   if (data.advertiserChecked) ids.push('ADVERTISER');
   if (data.DSPChecked) ids.push('DSP');

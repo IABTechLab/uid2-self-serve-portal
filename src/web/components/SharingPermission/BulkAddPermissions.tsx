@@ -28,7 +28,7 @@ import './BulkAddPermissions.scss';
 type BulkAddPermissionsProps = {
   participant: ParticipantDTO | null;
   hasSharedSiteIds: boolean;
-  onBulkAddSharingPermission: (selectedTypes: string[]) => Promise<void>;
+  onBulkAddSharingPermission: (selectedTypes: ClientType[]) => Promise<void>;
   sharedTypes: ClientType[];
 };
 
