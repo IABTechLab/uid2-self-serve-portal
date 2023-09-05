@@ -5,5 +5,13 @@
   "semi": true,
   "singleQuote": true,
   "jsxSingleQuote": true,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "*.hbs",
+      "options": {
+        "parser": "html"
+      }
+    }
+  ]
 }
