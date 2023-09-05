@@ -110,9 +110,12 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
-export async function CompleteRecommendations(participantId: number) {
+export async function CompleteRecommendations(participantId: number): Promise<ParticipantDTO> {
   try {
-    await axios.put(`/participants/${participantId}/completeRecommendations`);
+    const result = await axios.put<ParticipantDTO>(
+      `/participants/${participantId}/completeRecommendations`
+    );
+    return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
   }

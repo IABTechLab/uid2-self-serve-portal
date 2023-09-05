@@ -282,7 +282,7 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       await participant!.$query().update({ completedRecommendations: true });
-      return res.sendStatus(200);
+      return res.status(200).json(participant);
     }
   );
 

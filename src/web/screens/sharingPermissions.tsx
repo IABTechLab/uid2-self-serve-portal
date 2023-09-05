@@ -14,7 +14,6 @@ import {
   AddSharingParticipants,
   CompleteRecommendations,
   DeleteSharingParticipants,
-  GetCurrentUsersParticipant,
   GetSharingList,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
@@ -44,8 +43,7 @@ function SharingPermissions() {
       });
       setSharedTypes(response.allowed_types ?? []);
       if (!participant?.completedRecommendations) {
-        await CompleteRecommendations(participant!.id);
-        const updatedParticipant = await GetCurrentUsersParticipant();
+        const updatedParticipant = await CompleteRecommendations(participant!.id);
         setParticipant(updatedParticipant);
       }
     } catch (e) {
