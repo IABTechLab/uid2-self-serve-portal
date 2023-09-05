@@ -8,7 +8,7 @@ import {
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { getSiteList } from '../services/adminServiceClient';
 import { SiteDTO } from '../services/adminServiceHelpers';
-import { getAttachedSiteIDs } from '../services/participantsService';
+import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/participantsService';
 
 export function createSitesRouter() {
   const sitesRouter = express.Router();
@@ -24,8 +24,9 @@ export function createSitesRouter() {
     const sites = await getSiteList();
     const availableSites = sites.filter(hasSharerRole);
     const participantTypes = await ParticipantType.query();
+    const matchedParticipants = await getParticipantsBySiteIds(availableSites.map((s) => s.id));
     const availableParticipants = availableSites.map((site: SiteDTO) =>
-      convertSiteToAvailableParticipantDTO(site, participantTypes)
+      convertSiteToAvailableParticipantDTO(site, participantTypes, matchedParticipants)
     );
     return res.status(200).json(availableParticipants);
   });

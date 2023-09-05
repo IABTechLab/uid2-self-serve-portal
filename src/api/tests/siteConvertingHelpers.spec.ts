@@ -1,3 +1,4 @@
+import { Participant } from '../entities/Participant';
 import {
   convertSiteToAvailableParticipantDTO,
   hasSharerRole,
@@ -59,9 +60,45 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      const convertedType = convertSiteToAvailableParticipantDTO(site, participantTypes);
+      const convertedType = convertSiteToAvailableParticipantDTO(site, participantTypes, []);
       expect(convertedType).toEqual({
         name: 'Test Site',
+        siteId: 2,
+        types: [
+          {
+            id: 2,
+            typeName: 'Publisher',
+          },
+        ],
+      });
+    });
+
+    it('should return participant from db if participant has portal account', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: ['SHARER'],
+        clientTypes: ['PUBLISHER'],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      const participant = {
+        id: 100,
+        name: 'Participant Name',
+        siteId: 2,
+        types: [
+          {
+            id: 2,
+            typeName: 'Publisher',
+          },
+        ],
+      } as Participant;
+      const convertedType = convertSiteToAvailableParticipantDTO(site, participantTypes, [
+        participant,
+      ]);
+      expect(convertedType).toEqual({
+        name: 'Participant Name',
         siteId: 2,
         types: [
           {
