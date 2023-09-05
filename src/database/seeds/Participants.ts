@@ -16,6 +16,7 @@ const sampleData: Optional<
     type: 'Publisher',
     location: 'Sydney',
     siteId: 124,
+    completedRecommendationsWorkflow: false,
   },
   {
     name: 'DSP example',
@@ -24,6 +25,7 @@ const sampleData: Optional<
     allowSharing: true,
     location: 'Sydney',
     siteId: 123,
+    completedRecommendationsWorkflow: false,
   },
   {
     name: 'DP example',
@@ -32,6 +34,7 @@ const sampleData: Optional<
     type: 'Data Provider',
     location: 'Sydney',
     siteId: 125,
+    completedRecommendationsWorkflow: false,
   },
   {
     name: 'Advertiser example',
@@ -40,6 +43,7 @@ const sampleData: Optional<
     type: 'Advertiser',
     location: 'Sydney',
     siteId: 126,
+    completedRecommendationsWorkflow: false,
   },
   {
     name: 'AwaitingSigning example',
@@ -47,6 +51,7 @@ const sampleData: Optional<
     status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
     location: 'Sydney',
+    completedRecommendationsWorkflow: false,
   },
 ];
 

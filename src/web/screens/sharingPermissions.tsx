@@ -14,6 +14,7 @@ import {
   AddSharingParticipants,
   DeleteSharingParticipants,
   GetSharingList,
+  SetCompletedRecommendationsWorkflowFlag,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadAvailableSiteList } from '../services/site';
@@ -41,6 +42,7 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types);
+      await SetCompletedRecommendationsWorkflowFlag(participant!.id);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -119,7 +121,6 @@ function SharingPermissions() {
         <BulkAddPermissions
           participant={participant}
           sharedTypes={sharedTypes ?? []}
-          hasSharedSiteIds={sharedSiteIds.length > 0}
           onBulkAddSharingPermission={handleSaveSharingType}
         />
         <Suspense fallback={<Loading />}>

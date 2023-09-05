@@ -27,14 +27,12 @@ import './BulkAddPermissions.scss';
 
 type BulkAddPermissionsProps = {
   participant: ParticipantDTO | null;
-  hasSharedSiteIds: boolean;
   onBulkAddSharingPermission: (selectedTypes: ClientType[]) => Promise<void>;
   sharedTypes: ClientType[];
 };
 
 export function BulkAddPermissions({
   participant,
-  hasSharedSiteIds,
   sharedTypes,
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
@@ -190,7 +188,7 @@ export function BulkAddPermissions({
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSave)}>
-        {!hasSharedSiteIds && sharedTypes.length === 0 && (
+        {!participant?.completedRecommendationsWorkflow && (
           <Collapsible
             title='Bulk Add Permissions'
             defaultOpen
@@ -200,7 +198,7 @@ export function BulkAddPermissions({
             {recommendationContent}
           </Collapsible>
         )}
-        {(hasSharedSiteIds || sharedTypes.length > 0) && (
+        {participant?.completedRecommendationsWorkflow && (
           <Collapsible title='Bulk Add Permissions' defaultOpen={false}>
             {collapsibleContent}
           </Collapsible>

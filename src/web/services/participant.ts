@@ -140,6 +140,19 @@ export async function AddSharingParticipants(
   }
 }
 
+export async function SetCompletedRecommendationsWorkflowFlag(
+  participantId: number
+): Promise<SharingListResponse> {
+  try {
+    const result = await axios.post<SharingListResponse>(
+      `/participants/${participantId}/completedRecommendationsWorkflow`
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update participant');
+  }
+}
+
 export async function DeleteSharingParticipants(
   participantId: number,
   sharingSitesToRemove: number[],
