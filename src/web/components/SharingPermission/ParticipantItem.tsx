@@ -2,7 +2,13 @@ import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
+import {
+  isAddedByManual,
+  isSharingParticipant,
+  SharingParticipant,
+} from './ParticipantTableHelper';
 
 import './ParticipantItem.scss';
 
@@ -16,7 +22,7 @@ function getParticipantTypes(participantTypes?: z.infer<typeof ParticipantTypeSc
 }
 
 type ParticipantItemSimpleProps = {
-  participant: AvailableParticipantDTO;
+  participant: AvailableParticipantDTO | SharingParticipant;
 };
 
 export function ParticipantItemSimple({ participant }: ParticipantItemSimpleProps) {
@@ -40,10 +46,9 @@ export function ParticipantItemSimple({ participant }: ParticipantItemSimpleProp
 type ParticipantItemProps = ParticipantItemSimpleProps & {
   onClick: () => void;
   checked: boolean;
-  addedBy?: string;
 };
 
-export function ParticipantItem({ participant, onClick, checked, addedBy }: ParticipantItemProps) {
+export function ParticipantItem({ participant, onClick, checked }: ParticipantItemProps) {
   return (
     <tr className='participant-item-with-checkbox'>
       <td>
@@ -51,11 +56,13 @@ export function ParticipantItem({ participant, onClick, checked, addedBy }: Part
           onClick={onClick}
           status={checked}
           className='participant-checkbox'
-          disabled={addedBy === 'Auto'} // addedBy is currently hardcoded to 'Manual'
+          disabled={isSharingParticipant(participant) && !isAddedByManual(participant)}
         />
       </td>
       <ParticipantItemSimple participant={participant} />
-      {addedBy && <td>{addedBy}</td>}
+      {isSharingParticipant(participant) && (
+        <td>{formatStringsWithSeparator(participant.addedBy)}</td>
+      )}
     </tr>
   );
 }

@@ -49,10 +49,10 @@ AddedByManual.args = {
       { id: 3, typeName: 'Type 3' },
       { id: 4, typeName: 'Type 4' },
     ],
+    addedBy: ['Manually Added'],
   },
   onClick: () => {},
   checked: false,
-  addedBy: 'Manual',
 };
 
 export const AddedByAuto = Template.bind({});
@@ -64,10 +64,10 @@ AddedByAuto.args = {
       { id: 3, typeName: 'Type 3' },
       { id: 4, typeName: 'Type 4' },
     ],
+    addedBy: ['DSP'],
   },
   onClick: () => {},
   checked: false,
-  addedBy: 'Auto',
 };
 
 export const AddedByAutoAndManual = Template.bind({});
@@ -79,8 +79,8 @@ AddedByAutoAndManual.args = {
       { id: 3, typeName: 'Type 3' },
       { id: 4, typeName: 'Type 4' },
     ],
+    addedBy: ['Manually Added', 'DSP'],
   },
   onClick: () => {},
   checked: false,
-  addedBy: 'Auto/Manual',
 };
