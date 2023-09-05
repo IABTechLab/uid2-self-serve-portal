@@ -3,8 +3,10 @@ import { ChangeEvent, useCallback, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 import { ParticipantsTable } from './ParticipantsTable';
+import { filterParticipants, getSelectAllState, isSelectedAll } from './ParticipantTableHelper';
 import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
@@ -20,7 +22,7 @@ type ParticipantSearchBarProps = {
 
 export function ParticipantSearchBar({
   participants,
-  selectedParticipantIds,
+  selectedParticipantIds = new Set(),
   onSelectedChange,
   participantTypes,
   open,
@@ -28,6 +30,11 @@ export function ParticipantSearchBar({
 }: ParticipantSearchBarProps) {
   const [filterText, setFilterText] = useState('');
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
+  const filteredParticipants = filterParticipants(participants, filterText, selectedTypeIds);
+  const checkboxStatus = getSelectAllState(
+    isSelectedAll(filteredParticipants, selectedParticipantIds),
+    selectedParticipantIds
+  );
 
   const handleFilterChange = (typeIds: Set<number>) => {
     setSelectedTypeIds(typeIds);
@@ -41,10 +48,34 @@ export function ParticipantSearchBar({
       onToggleOpen(true);
     }
   };
-  const tableHeader = (filteredParticipants: AvailableParticipantDTO[]) => (
-    <th colSpan={3}>
-      <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
-    </th>
+
+  const handleCheckboxChange = () => {
+    if (checkboxStatus === TriStateCheckboxState.unchecked) {
+      const selectedSiteIds = new Set<number>();
+      filteredParticipants.forEach((p) => {
+        selectedSiteIds.add(p.siteId);
+      });
+      onSelectedChange(selectedSiteIds);
+    } else {
+      onSelectedChange(new Set());
+    }
+  };
+
+  const tableHeader = (
+    <thead>
+      <tr className='participant-item-with-checkbox'>
+        <th>
+          <TriStateCheckbox
+            onClick={handleCheckboxChange}
+            status={checkboxStatus}
+            className='participant-checkbox'
+          />
+        </th>
+        <th colSpan={3}>
+          <span className='select-all'>Select All {filteredParticipants.length} Participants</span>
+        </th>
+      </tr>
+    </thead>
   );
 
   return (
@@ -70,10 +101,8 @@ export function ParticipantSearchBar({
               selectedTypeIds={selectedTypeIds}
             />
           </div>
-          <ParticipantsTable
-            participants={participants}
-            filterText={filterText}
-            selectedTypeIds={selectedTypeIds}
+          <ParticipantsTable<AvailableParticipantDTO>
+            participants={filteredParticipants}
             selectedParticipantIds={selectedParticipantIds}
             onSelectedChange={onSelectedChange}
             className='search-bar-participants'

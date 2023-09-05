@@ -28,7 +28,7 @@ export const convertSiteToAvailableParticipantDTO = (
 };
 
 export const hasSharerRole = (site: SiteDTO): boolean => {
-  if (!site.clientTypes || site.clientTypes.length) return false;
+  if (!site.clientTypes || !site.clientTypes.length) return false;
   if (site.roles.includes('SHARER') || site.clientTypes?.includes('DSP')) return true;
   return false;
 };

@@ -42,7 +42,7 @@ function SharingPermissions() {
             : `${selectedTypes.length} Participant types`
         } saved to Your Sharing Permissions`,
       });
-      setSharedTypes(response.allowed_types);
+      setSharedTypes(response.allowed_types ?? []);
       if (!participant?.completedRecommendations) {
         await CompleteRecommendations(participant!.id);
         const updatedParticipant = await GetCurrentUsersParticipant();
@@ -105,7 +105,7 @@ function SharingPermissions() {
   const loadSharingList = useCallback(async () => {
     const response = await GetSharingList(participant!.id);
     setSharedSiteIds(response.allowed_sites);
-    setSharedTypes(response.allowed_types);
+    setSharedTypes(response.allowed_types ?? []);
   }, [participant]);
 
   useEffect(() => {
@@ -139,9 +139,11 @@ function SharingPermissions() {
                     participantTypes={resolvedParticipantTypes}
                   />
                 </Collapsible>
+                {/* TODO: Update this to use recommendation flag to hide sharing permission table once we have that */}
                 {(sharedSiteIds.length > 0 || sharedTypes.length > 0) && (
                   <SharingPermissionsTable
-                    sharingParticipants={[]} // TODO: Jingyi to fix on her branch
+                    sharedSiteIds={sharedSiteIds}
+                    sharedTypes={sharedTypes}
                     onDeleteSharingPermission={handleDeleteSharingSite}
                     participantTypes={resolvedParticipantTypes}
                   />
@@ -151,6 +153,7 @@ function SharingPermissions() {
           </Await>
         </Suspense>
       </div>
+
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}

@@ -1,86 +1,30 @@
-import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
-import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
+import { ParticipantTSType } from './ParticipantTableHelper';
 
 import './ParticipantsTable.scss';
 
-type ParticipantsTableProps = {
-  participants: AvailableParticipantDTO[];
-  filterText: string;
-  selectedTypeIds?: Set<number>;
+type ParticipantsTableProps<T extends ParticipantTSType> = {
+  tableHeader: ReactNode;
+  participants: T[];
   onSelectedChange: (selectedItems: Set<number>) => void;
   selectedParticipantIds?: Set<number>;
-  tableHeader: (filteredParticipants: AvailableParticipantDTO[]) => ReactNode;
   className?: string;
-  hideSelectAllCheckbox?: boolean;
-  showAddedByColumn?: boolean;
-  onFilteredParticipantChanged?: (filteredParticipants: AvailableParticipantDTO[]) => void;
 };
 
-function ParticipantsTableContent({
+function ParticipantsTableContent<T extends ParticipantTSType>({
   tableHeader,
   participants,
-  filterText,
-  selectedTypeIds,
   onSelectedChange,
   selectedParticipantIds = new Set(),
   className,
-  hideSelectAllCheckbox,
-  showAddedByColumn,
-  onFilteredParticipantChanged,
-}: ParticipantsTableProps) {
-  const [filteredParticipants, setFilteredParticipants] = useState(participants);
+}: ParticipantsTableProps<T>) {
   const { sortData } = useSortable<AvailableParticipantDTO>();
-  const [selectAllState, setSelectAllState] = useState<CheckedState>(
-    TriStateCheckboxState.unchecked
-  );
-  const sortedData = useMemo(
-    () => sortData(filteredParticipants),
-    [filteredParticipants, sortData]
-  );
-
-  const handleCheckboxChange = () => {
-    if (selectAllState === TriStateCheckboxState.unchecked) {
-      onSelectedChange(new Set(filteredParticipants.map((p) => p.siteId!)));
-    } else {
-      onSelectedChange(new Set());
-    }
-  };
-
-  useEffect(() => {
-    let filtered = participants;
-
-    if (selectedTypeIds && selectedTypeIds.size > 0) {
-      filtered = filtered.filter((p) => p.types?.some((t) => selectedTypeIds.has(t.id)));
-    }
-
-    if (filterText) {
-      filtered = filtered.filter((p) => p.name.toLowerCase().includes(filterText.toLowerCase()));
-    }
-
-    setFilteredParticipants(filtered);
-    if (onFilteredParticipantChanged) onFilteredParticipantChanged(filtered);
-  }, [participants, filterText, selectedTypeIds, onFilteredParticipantChanged]);
-
-  const isSelectedAll = useMemo(() => {
-    if (!filteredParticipants.length) return false;
-    return filteredParticipants.every((p) => selectedParticipantIds.has(p.siteId!));
-  }, [filteredParticipants, selectedParticipantIds]);
-
-  useEffect(() => {
-    if (isSelectedAll) {
-      setSelectAllState(TriStateCheckboxState.checked);
-    } else if (selectedParticipantIds.size > 0) {
-      setSelectAllState(TriStateCheckboxState.indeterminate as CheckedState);
-    } else {
-      setSelectAllState(TriStateCheckboxState.unchecked);
-    }
-  }, [selectedParticipantIds.size, isSelectedAll]);
+  const sortedData = sortData(participants);
 
   const handleCheckChange = (participant: AvailableParticipantDTO) => {
     const newCheckedItems = new Set(selectedParticipantIds);
@@ -95,24 +39,10 @@ function ParticipantsTableContent({
 
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
-      <thead>
-        <tr>
-          <th>
-            {!hideSelectAllCheckbox && (
-              <TriStateCheckbox
-                onClick={handleCheckboxChange}
-                status={selectAllState}
-                className='participant-checkbox'
-              />
-            )}
-          </th>
-          {tableHeader(filteredParticipants)}
-        </tr>
-      </thead>
+      {tableHeader}
       <tbody>
         {sortedData.map((participant) => (
           <ParticipantItem
-            addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
             key={participant.siteId}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
@@ -124,10 +54,10 @@ function ParticipantsTableContent({
   );
 }
 
-export function ParticipantsTable(props: ParticipantsTableProps) {
+export function ParticipantsTable<T extends ParticipantTSType>(props: ParticipantsTableProps<T>) {
   return (
     <SortableProvider>
-      <ParticipantsTableContent {...props} />
+      <ParticipantsTableContent<T> {...props} />
     </SortableProvider>
   );
 }
