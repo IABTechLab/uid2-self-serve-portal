@@ -5,7 +5,7 @@ import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { GetSharingParticipants } from '../services/participant';
+import { GetSharingList } from '../services/participant';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
@@ -15,12 +15,14 @@ function Home() {
   const [loading, setIsLoading] = useState<boolean>(true);
   const [sharingPermissionsCount, setSharingPermissionsCount] = useState<number>(0);
   const [hasError, setHasError] = useState<boolean>(false);
+
   useEffect(() => {
     const getSharingParticipantsCount = async () => {
       setIsLoading(true);
       try {
-        const sharingPermissions = await GetSharingParticipants();
-        setSharingPermissionsCount(sharingPermissions.length);
+        const sharingList = await GetSharingList();
+        // TODO include the sites from allowed_types in the count
+        setSharingPermissionsCount(sharingList.allowed_sites.length);
       } catch (e: unknown) {
         log.error(e);
         setHasError(true);
@@ -30,6 +32,7 @@ function Home() {
     };
     if (LoggedInUser) getSharingParticipantsCount();
   }, [LoggedInUser]);
+
   return (
     <>
       <h1>Welcome back, {LoggedInUser?.profile.firstName}</h1>
@@ -47,6 +50,7 @@ function Home() {
     </>
   );
 }
+
 export const HomeRoute: PortalRoute = {
   path: '/',
   description: 'Home',

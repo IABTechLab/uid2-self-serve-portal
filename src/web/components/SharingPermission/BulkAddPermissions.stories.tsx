@@ -1,6 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
+import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
 
 export default {
@@ -8,11 +10,46 @@ export default {
   component: BulkAddPermissions,
 } as ComponentMeta<typeof BulkAddPermissions>;
 
+const response: AvailableParticipantDTO[] = [
+  {
+    siteId: 1,
+    name: 'Test Publisher',
+    types: [{ id: 4, typeName: 'Publisher' }],
+  },
+  {
+    siteId: 2,
+    name: 'Test Advertiser',
+    types: [{ id: 2, typeName: 'Advertiser' }],
+  },
+  {
+    siteId: 3,
+    name: 'Test DSP',
+    types: [{ id: 1, typeName: 'DSP' }],
+  },
+  {
+    siteId: 4,
+    name: 'Test Data Provider',
+    types: [{ id: 3, typeName: 'Data Provider' }],
+  },
+  {
+    siteId: 5,
+    name: 'Test with all types',
+    types: [
+      { id: 4, typeName: 'Publisher' },
+      { id: 2, typeName: 'Advertiser' },
+      { id: 1, typeName: 'DSP' },
+      { id: 3, typeName: 'Data Provider' },
+    ],
+  },
+];
+
 const Template: ComponentStory<typeof BulkAddPermissions> = (args) => (
-  <BulkAddPermissions {...args} />
+  <TestAvailableSiteListProvider response={response}>
+    <BulkAddPermissions {...args} />
+  </TestAvailableSiteListProvider>
 );
 
-const onBulkAddSharingPermission = (ids: number[]) => Promise.resolve(console.log(ids));
+const onBulkAddSharingPermission = (types: string[]) => Promise.resolve(console.log(types));
 
 export const Publisher = Template.bind({});
 Publisher.args = {
@@ -24,12 +61,7 @@ Publisher.args = {
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
+  sharedTypes: [],
 };
 
 export const AdvertiserAndDSP = Template.bind({});
@@ -39,18 +71,13 @@ AdvertiserAndDSP.args = {
     name: 'Participant 1',
     types: [
       { id: 3, typeName: 'Advertiser' },
-      { id: 4, typeName: 'DSP' },
+      { id: 1, typeName: 'DSP' },
     ],
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
+  sharedTypes: [],
 };
 
 export const AllTypes = Template.bind({});
@@ -61,40 +88,30 @@ AllTypes.args = {
     types: [
       { id: 2, typeName: 'Publisher' },
       { id: 3, typeName: 'Advertiser' },
-      { id: 4, typeName: 'DSP' },
-      { id: 5, typeName: 'Data Provider' },
+      { id: 1, typeName: 'DSP' },
+      { id: 4, typeName: 'Data Provider' },
     ],
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
+  sharedTypes: [],
 };
 
-export const HasSharingParticipants = Template.bind({});
-HasSharingParticipants.args = {
+export const HasSharedWithPublisher = Template.bind({});
+HasSharedWithPublisher.args = {
   participant: {
     id: 1,
     name: 'Participant 1',
     types: [
       { id: 2, typeName: 'Publisher' },
       { id: 3, typeName: 'Advertiser' },
-      { id: 4, typeName: 'DSP' },
+      { id: 1, typeName: 'DSP' },
     ],
     allowSharing: true,
     status: ParticipantStatus.Approved,
   },
   onBulkAddSharingPermission,
-  participantTypes: [
-    { id: 2, typeName: 'Publisher' },
-    { id: 3, typeName: 'Advertiser' },
-    { id: 4, typeName: 'DSP' },
-    { id: 5, typeName: 'Data Provider' },
-  ],
-  hasSharingParticipants: true,
+  hasSharedSiteIds: true,
+  sharedTypes: ['PUBLISHER'],
 };

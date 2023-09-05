@@ -4,10 +4,8 @@ import { z } from 'zod';
 
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
-import {
-  AvailableParticipantDTO,
-  ParticipantRequestDTO,
-} from '../../api/routers/participantsRouter';
+import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
+import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -79,17 +77,6 @@ export async function GetCurrentUsersParticipant() {
   }
 }
 
-export async function GetAllAvailableParticipants() {
-  try {
-    const result = await axios.get<AvailableParticipantDTO[]>(`/participants/available`, {
-      validateStatus: (status) => status === 200,
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load participants');
-  }
-}
-
 export async function GetParticipantsAwaitingApproval() {
   try {
     const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
@@ -123,11 +110,9 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
-export async function GetSharingParticipants(
-  participantId?: number
-): Promise<AvailableParticipantDTO[]> {
+export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
   try {
-    const result = await axios.get<AvailableParticipantDTO[]>(
+    const result = await axios.get<SharingListResponse>(
       `/participants/${participantId ?? 'current'}/sharingPermission`
     );
     return result.data;
@@ -138,13 +123,15 @@ export async function GetSharingParticipants(
 
 export async function AddSharingParticipants(
   participantId: number,
-  newParticipantSites: number[]
-): Promise<AvailableParticipantDTO[]> {
+  newParticipantSites: number[],
+  newTypes: ClientType[]
+): Promise<SharingListResponse> {
   try {
-    const result = await axios.post<AvailableParticipantDTO[]>(
+    const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/add`,
       {
         newParticipantSites,
+        newTypes,
       }
     );
     return result.data;
@@ -155,13 +142,15 @@ export async function AddSharingParticipants(
 
 export async function DeleteSharingParticipants(
   participantId: number,
-  sharingSitesToRemove: number[]
-): Promise<AvailableParticipantDTO[]> {
+  sharingSitesToRemove: number[],
+  types: ClientType[]
+): Promise<SharingListResponse> {
   try {
-    const result = await axios.post<AvailableParticipantDTO[]>(
+    const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/delete`,
       {
         sharingSitesToRemove,
+        types,
       }
     );
     return result.data;
@@ -220,20 +209,20 @@ export async function UpdateEmailContact(
   }
 }
 
-export type ParticipantApprovalForm = {
+export type ParticipantApprovalFormDetails = {
   name: string;
   types: number[];
-  siteId: string;
+  siteId: number;
 };
 
 export async function ApproveParticipantRequest(
   participantId: number,
-  formData: ParticipantApprovalForm
+  formData: ParticipantApprovalFormDetails
 ) {
   try {
     await axios.put(`/participants/${participantId}/approve`, {
       name: formData.name,
-      siteId: parseInt(formData.siteId, 10),
+      siteId: formData.siteId,
       types: formData.types.map((typeId) => ({ id: typeId })),
     });
   } catch (e: unknown) {

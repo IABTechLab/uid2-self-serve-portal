@@ -76,7 +76,7 @@ async function migrateSharingAuditTrails(knex: Knex) {
     .select(knex.raw(`string_agg(sharingParticipantSiteId, ',') siteIds`), ...groupByColumns)
     .groupBy(groupByColumns);
   const auditTrails = sharingAuditTrails.map(mapSharingAuditTrailToAuditTrails);
-  await knex('auditTrails').insert(auditTrails);
+  if (auditTrails.length > 0) await knex('auditTrails').insert(auditTrails);
 }
 
 function mapAuditTrailsToSharingAuditTrails(

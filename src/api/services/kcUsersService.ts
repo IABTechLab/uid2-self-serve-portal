@@ -29,6 +29,7 @@ export const createNewUser = async (
   });
 };
 
+const logoutUrl = new URL('logout', SSP_WEB_BASE_URL).href;
 export const sendInviteEmail = async (
   kcAdminClient: KeycloakAdminClient,
   user: UserRepresentation
@@ -37,7 +38,7 @@ export const sendInviteEmail = async (
     id: user.id!,
     clientId: SSP_KK_SSL_RESOURCE,
     actions: [RequiredActionAlias.UPDATE_PASSWORD],
-    redirectUri: SSP_WEB_BASE_URL,
+    redirectUri: logoutUrl,
   });
 };
 

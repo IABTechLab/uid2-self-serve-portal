@@ -2,49 +2,65 @@ import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
+import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
 import { Loading } from '../components/Core/Loading';
-import { StatusPopup } from '../components/Core/StatusPopup';
+import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
+import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
   DeleteSharingParticipants,
-  GetAllAvailableParticipants,
-  GetSharingParticipants,
+  GetSharingList,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
+import { preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
 
-type StatusPopupType = {
-  message: string;
-  type: 'Success' | 'Error' | 'Info';
-};
-
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant } = useContext(ParticipantContext);
-  const [sharingParticipants, setSharingParticipants] = useState<AvailableParticipantDTO[]>([]);
-  const [statusPopup, setStatusPopup] = useState<StatusPopupType>();
-  const { participants, participantTypes } = useLoaderData() as {
-    participants: AvailableParticipantDTO[];
-    participantTypes: ParticipantTypeDTO[];
+  const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
+  const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
+  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
+  const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
+
+  const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
+    try {
+      const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
+      setStatusPopup({
+        type: 'Success',
+        message: `${
+          selectedTypes.length === 1
+            ? '1 Participant type'
+            : `${selectedTypes.length} Participant types`
+        } saved to Your Sharing Permissions`,
+      });
+      setSharedTypes(response.allowed_types);
+    } catch (e) {
+      setStatusPopup({
+        type: 'Error',
+        message: `Save Sharing Permissions Failed`,
+      });
+    } finally {
+      setShowStatusPopup(true);
+    }
   };
 
-  const handleSharingPermissionsAdded = async (selectedSiteIds: number[]) => {
+  const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
+      const response = await AddSharingParticipants(participant!.id, selectedSiteIds, sharedTypes);
       setStatusPopup({
         type: 'Success',
         message: `${
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
         } added to Your Sharing Permissions`,
       });
-      setSharingParticipants(response);
+      setSharedSiteIds(response.allowed_sites);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -55,16 +71,20 @@ function SharingPermissions() {
     }
   };
 
-  const handleDeleteSharingPermission = async (siteIdsToDelete: number[]) => {
+  const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
-      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
+      const response = await DeleteSharingParticipants(
+        participant!.id,
+        siteIdsToDelete,
+        sharedTypes
+      );
       setStatusPopup({
         type: 'Success',
         message: `${siteIdsToDelete.length} sharing ${
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
         } deleted`,
       });
-      setSharingParticipants(response);
+      setSharedSiteIds(response.allowed_sites);
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -75,14 +95,15 @@ function SharingPermissions() {
     }
   };
 
-  const loadSharingParticipants = useCallback(async () => {
-    const response = await GetSharingParticipants(participant!.id);
-    setSharingParticipants(response);
+  const loadSharingList = useCallback(async () => {
+    const response = await GetSharingList(participant!.id);
+    setSharedSiteIds(response.allowed_sites);
+    setSharedTypes(response.allowed_types);
   }, [participant]);
 
   useEffect(() => {
-    loadSharingParticipants();
-  }, [loadSharingParticipants]);
+    loadSharingList();
+  }, [loadSharingList]);
 
   return (
     <div className='sharingPermissions'>
@@ -94,26 +115,36 @@ function SharingPermissions() {
         <br />
         Note: This only enables the sharing permission. No data is sent.
       </p>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={participants}>
-          {(resolvedParticipants: AvailableParticipantDTO[]) => (
-            <div className='search-and-add-permissions-collapsible'>
-              <Collapsible title='Search and Add Permissions' defaultOpen>
-                <SearchAndAddParticipants
-                  onSharingPermissionsAdded={handleSharingPermissionsAdded}
-                  sharingParticipants={sharingParticipants}
-                  availableParticipants={resolvedParticipants}
-                  participantTypes={participantTypes}
-                />
-              </Collapsible>
-            </div>
-          )}
-        </Await>
-      </Suspense>
-      <SharingPermissionsTable
-        sharingParticipants={sharingParticipants}
-        onDeleteSharingPermission={handleDeleteSharingPermission}
-      />
+      <div className='bulk-add-and-search-collapsibles'>
+        <BulkAddPermissions
+          participant={participant}
+          sharedTypes={sharedTypes ?? []}
+          hasSharedSiteIds={sharedSiteIds.length > 0}
+          onBulkAddSharingPermission={handleSaveSharingType}
+        />
+        <Suspense fallback={<Loading />}>
+          <Await resolve={participantTypes}>
+            {(resolvedParticipantTypes: ParticipantTypeDTO[]) => (
+              <>
+                <Collapsible title='Search and Add Permissions' defaultOpen>
+                  <SearchAndAddParticipants
+                    onSharingPermissionsAdded={handleAddSharingSite}
+                    sharedSiteIds={sharedSiteIds}
+                    participantTypes={resolvedParticipantTypes}
+                  />
+                </Collapsible>
+                {(sharedSiteIds.length > 0 || sharedTypes.length > 0) && (
+                  <SharingPermissionsTable
+                    sharingParticipants={[]} // TODO: Jingyi to fix on her branch
+                    onDeleteSharingPermission={handleDeleteSharingSite}
+                    participantTypes={resolvedParticipantTypes}
+                  />
+                )}
+              </>
+            )}
+          </Await>
+        </Suspense>
+      </div>
       {statusPopup && (
         <StatusPopup
           status={statusPopup!.type}
@@ -130,9 +161,9 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
-  loader: async () => {
-    const participants = GetAllAvailableParticipants();
-    const participantTypes = await GetAllParticipantTypes();
-    return defer({ participants, participantTypes });
+  loader: () => {
+    const participantTypes = GetAllParticipantTypes();
+    preloadAvailableSiteList();
+    return defer({ participantTypes });
   },
 };

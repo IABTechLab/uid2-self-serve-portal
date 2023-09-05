@@ -3,19 +3,21 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
+import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
 import {
   ApproveParticipantRequest,
   GetParticipantsAwaitingApproval,
-  ParticipantApprovalForm,
+  ParticipantApprovalFormDetails,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
+import { preloadSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
-    results: [ParticipantRequestDTO[], ParticipantTypeDTO[]];
+    results: [ParticipantRequestDTO[], ParticipantTypeDTO[], SiteDTO[]];
   };
 
   const reloader = useRevalidator();
@@ -25,7 +27,7 @@ function ManageParticipants() {
 
   const handleApproveParticipantRequest = async (
     participantId: number,
-    formData: ParticipantApprovalForm
+    formData: ParticipantApprovalFormDetails
   ) => {
     await ApproveParticipantRequest(participantId, formData);
     onParticipantRequestsUpdate();
@@ -62,7 +64,8 @@ export const ManageParticipantsRoute: PortalRoute = {
   loader: async () => {
     const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
     const participantTypes = GetAllParticipantTypes();
-    const promises = Promise.all([participantsAwaitingApproval, participantTypes]);
+    const sitesList = preloadSiteList();
+    const promises = Promise.all([participantsAwaitingApproval, participantTypes, sitesList]);
     return defer({
       results: promises,
     });

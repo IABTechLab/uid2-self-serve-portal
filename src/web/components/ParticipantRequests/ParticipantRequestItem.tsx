@@ -2,16 +2,17 @@ import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { ParticipantApprovalForm } from '../../services/participant';
-import { InlineError } from '../Core/InlineError';
-import ParticipantApprovalDialog from './ParticipantApprovalDialog';
+import { ParticipantApprovalFormDetails } from '../../services/participant';
+import { Dialog } from '../Core/Dialog';
+import { InlineMessage } from '../Core/InlineMessage';
+import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantRequestItem.scss';
 
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
-  onApprove: (participantId: number, formData: ParticipantApprovalForm) => Promise<void>;
+  onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
 };
 
 export function ParticipantRequestItem({
@@ -20,6 +21,8 @@ export function ParticipantRequestItem({
   onApprove,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+
   function getParticipantTypes(
     currentParticipantTypes?: ParticipantRequestProps['participantRequest']['types']
   ) {
@@ -31,7 +34,7 @@ export function ParticipantRequestItem({
     ));
   }
 
-  const handleApprove = async (formData: ParticipantApprovalForm) => {
+  const handleApprove = async (formData: ParticipantApprovalFormDetails) => {
     try {
       await onApprove(participant.id, formData);
     } catch (err) {
@@ -41,31 +44,44 @@ export function ParticipantRequestItem({
   // TODO: update this when we have login uploading
   const logo = '/default-logo.svg';
   return (
-    <tr className='participant-request-item'>
-      <td>
-        <div className='participant-request-name-cell'>
-          <img src={logo} alt={participant.name} className='participant-request-logo' />
-          <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
-            {participant.name}
-          </label>
-        </div>
-      </td>
-      <td>
-        <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
-      </td>
-      <td>
-        <div className='participant-request-status'>{participant.status}</div>
-      </td>
-      <td className='action'>
-        <div className='action-cell'>
-          {hasError && <InlineError />}
-          <ParticipantApprovalDialog
-            onApprove={handleApprove}
-            participant={participant}
-            participantTypes={participantTypes}
-          />
-        </div>
-      </td>
-    </tr>
+    <>
+      <tr className='participant-request-item'>
+        <td>
+          <div className='participant-request-name-cell'>
+            <img src={logo} alt={participant.name} className='participant-request-logo' />
+            <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
+              {participant.name}
+            </label>
+          </div>
+        </td>
+        <td>
+          <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
+        </td>
+        <td>
+          <div className='participant-request-status'>{participant.status}</div>
+        </td>
+        <td className='action'>
+          <div className='action-cell'>
+            {hasError && <InlineMessage message='An error has occurred' type='Error' />}
+            <button type='button' className='transparent-button' onClick={() => setOpen(true)}>
+              Approve
+            </button>
+          </div>
+        </td>
+      </tr>
+      <Dialog
+        title='Approve Participant Request'
+        closeButton='Cancel'
+        open={open}
+        onOpenChange={setOpen}
+        className='participants-request-dialog'
+      >
+        <ParticipantApprovalForm
+          onApprove={handleApprove}
+          participant={participant}
+          participantTypes={participantTypes}
+        />
+      </Dialog>
+    </>
   );
 }

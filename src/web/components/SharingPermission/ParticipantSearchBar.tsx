@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useCallback, useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
@@ -48,7 +48,10 @@ export function ParticipantSearchBar({
   );
 
   return (
-    <SearchBarContainer className={clsx('participants-search-bar')}>
+    <SearchBarContainer
+      className={clsx('participants-search-bar')}
+      handleOnBlur={useCallback(() => onToggleOpen(false), [onToggleOpen])}
+    >
       <SearchBarInput
         className='participants-search-input'
         onClick={() => onToggleOpen(true)}
@@ -61,7 +64,11 @@ export function ParticipantSearchBar({
         <SearchBarResults className='participants-search-results'>
           <div className='search-bar-type-filter'>
             <div className='search-bar-type-filter-title'>Only show me:</div>
-            <TypeFilter onFilterChange={handleFilterChange} types={participantTypes} />
+            <TypeFilter
+              onFilterChange={handleFilterChange}
+              types={participantTypes}
+              selectedTypeIds={selectedTypeIds}
+            />
           </div>
           <ParticipantsTable
             participants={participants}

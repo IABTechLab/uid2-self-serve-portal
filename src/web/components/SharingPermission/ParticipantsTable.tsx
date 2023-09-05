@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantItem } from './ParticipantItem';
 
@@ -16,11 +17,12 @@ type ParticipantsTableProps = {
   selectedParticipantIds?: Set<number>;
   tableHeader: (filteredParticipants: AvailableParticipantDTO[]) => ReactNode;
   className?: string;
-  hideCheckboxIfNoItem?: boolean;
+  hideSelectAllCheckbox?: boolean;
   showAddedByColumn?: boolean;
+  onFilteredParticipantChanged?: (filteredParticipants: AvailableParticipantDTO[]) => void;
 };
 
-export function ParticipantsTable({
+function ParticipantsTableContent({
   tableHeader,
   participants,
   filterText,
@@ -28,12 +30,18 @@ export function ParticipantsTable({
   onSelectedChange,
   selectedParticipantIds = new Set(),
   className,
-  hideCheckboxIfNoItem,
+  hideSelectAllCheckbox,
   showAddedByColumn,
+  onFilteredParticipantChanged,
 }: ParticipantsTableProps) {
   const [filteredParticipants, setFilteredParticipants] = useState(participants);
+  const { sortData } = useSortable<AvailableParticipantDTO>();
   const [selectAllState, setSelectAllState] = useState<CheckedState>(
     TriStateCheckboxState.unchecked
+  );
+  const sortedData = useMemo(
+    () => sortData(filteredParticipants),
+    [filteredParticipants, sortData]
   );
 
   const handleCheckboxChange = () => {
@@ -56,7 +64,8 @@ export function ParticipantsTable({
     }
 
     setFilteredParticipants(filtered);
-  }, [participants, filterText, selectedTypeIds]);
+    if (onFilteredParticipantChanged) onFilteredParticipantChanged(filtered);
+  }, [participants, filterText, selectedTypeIds, onFilteredParticipantChanged]);
 
   const isSelectedAll = useMemo(() => {
     if (!filteredParticipants.length) return false;
@@ -84,13 +93,12 @@ export function ParticipantsTable({
     onSelectedChange(newCheckedItems);
   };
 
-  const showCheckbox = !hideCheckboxIfNoItem || (hideCheckboxIfNoItem && !!participants.length);
   return (
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       <thead>
         <tr>
           <th>
-            {showCheckbox && (
+            {!hideSelectAllCheckbox && (
               <TriStateCheckbox
                 onClick={handleCheckboxChange}
                 status={selectAllState}
@@ -102,10 +110,10 @@ export function ParticipantsTable({
         </tr>
       </thead>
       <tbody>
-        {filteredParticipants.map((participant) => (
+        {sortedData.map((participant) => (
           <ParticipantItem
             addedBy={showAddedByColumn ? 'Manual' : undefined} // TODO: Update this once we have auto add functionality
-            key={participant.id}
+            key={participant.siteId}
             participant={participant}
             onClick={() => handleCheckChange(participant)}
             checked={!!selectedParticipantIds.has(participant.siteId!)}
@@ -113,5 +121,13 @@ export function ParticipantsTable({
         ))}
       </tbody>
     </table>
+  );
+}
+
+export function ParticipantsTable(props: ParticipantsTableProps) {
+  return (
+    <SortableProvider>
+      <ParticipantsTableContent {...props} />
+    </SortableProvider>
   );
 }

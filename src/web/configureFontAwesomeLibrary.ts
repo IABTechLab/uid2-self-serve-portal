@@ -12,6 +12,9 @@ import {
   faMinus,
   faPencil,
   faSearch,
+  faSort,
+  faSortDown,
+  faSortUp,
   faTrashCan,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
@@ -33,4 +36,7 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faSearch);
   library.add(faMinus);
   library.add(faExclamationTriangle);
+  library.add(faSort);
+  library.add(faSortUp);
+  library.add(faSortDown);
 }
