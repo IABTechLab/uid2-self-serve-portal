@@ -139,8 +139,7 @@ function SharingPermissions() {
                     participantTypes={resolvedParticipantTypes}
                   />
                 </Collapsible>
-                {/* TODO: Update this to use recommendation flag to hide sharing permission table once we have that */}
-                {(sharedSiteIds.length > 0 || sharedTypes.length > 0) && (
+                {participant?.completedRecommendations && (
                   <SharingPermissionsTable
                     sharedSiteIds={sharedSiteIds}
                     sharedTypes={sharedTypes}
