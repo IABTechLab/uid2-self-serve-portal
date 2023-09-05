@@ -42,7 +42,8 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types);
-      await SetCompletedRecommendationsWorkflowFlag(participant!.id);
+      if (!participant?.completedRecommendationsWorkflow)
+        await SetCompletedRecommendationsWorkflowFlag(participant!.id);
     } catch (e) {
       setStatusPopup({
         type: 'Error',

@@ -277,12 +277,12 @@ export function createParticipantsRouter() {
     }
   );
 
-  participantsRouter.post(
+  participantsRouter.put(
     '/:participantId/completedRecommendationsWorkflow',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       await participant!.$query().update({ completedRecommendationsWorkflow: true });
-      return res.status(200).json(participant);
+      return res.status(200).json(participant?.completedRecommendationsWorkflow);
     }
   );
 
