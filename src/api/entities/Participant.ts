@@ -70,7 +70,6 @@ export const ParticipantSchema = z.object({
   types: z.array(ParticipantTypeSchema).optional(),
   users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
-  completedRecommendations: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
 });

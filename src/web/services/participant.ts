@@ -110,6 +110,14 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
+export async function CompleteRecommendations(participantId: number) {
+  try {
+    await axios.put(`/participants/${participantId}/completeRecommendations`);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update participant');
+  }
+}
+
 export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
   try {
     const result = await axios.get<SharingListResponse>(
@@ -137,17 +145,6 @@ export async function AddSharingParticipants(
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not add sharing participants');
-  }
-}
-
-export async function CompleteRecommendations(participantId: number): Promise<boolean> {
-  try {
-    const result = await axios.put<boolean>(
-      `/participants/${participantId}/completeRecommendations`
-    );
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not update participant');
   }
 }
 
