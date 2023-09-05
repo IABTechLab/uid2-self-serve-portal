@@ -137,7 +137,7 @@ function SharingPermissions() {
                     participantTypes={resolvedParticipantTypes}
                   />
                 </Collapsible>
-                {participant?.completedRecommendations && (
+                {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
                   <SharingPermissionsTable
                     sharedSiteIds={sharedSiteIds}
                     sharedTypes={sharedTypes}
