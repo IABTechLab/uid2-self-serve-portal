@@ -140,10 +140,10 @@ export async function AddSharingParticipants(
   }
 }
 
-export async function SetCompletedRecommendationsWorkflowFlag(participantId: number): Promise<boolean> {
+export async function CompleteRecommendations(participantId: number): Promise<boolean> {
   try {
     const result = await axios.put<boolean>(
-      `/participants/${participantId}/completedRecommendationsWorkflow`
+      `/participants/${participantId}/completeRecommendations`
     );
     return result.data;
   } catch (e: unknown) {

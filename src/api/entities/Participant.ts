@@ -50,7 +50,7 @@ export class Participant extends BaseModel {
   name!: string;
   status!: ParticipantStatus;
   allowSharing!: boolean;
-  completedRecommendationsWorkflow!: boolean;
+  completedRecommendations!: boolean;
   siteId?: number;
   location?: string;
   types?: ParticipantType[];
@@ -70,7 +70,7 @@ export const ParticipantSchema = z.object({
   types: z.array(ParticipantTypeSchema).optional(),
   users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
-  completedRecommendationsWorkflow: z.boolean(),
+  completedRecommendations: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
 });

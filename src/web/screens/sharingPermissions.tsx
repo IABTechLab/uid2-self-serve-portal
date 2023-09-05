@@ -12,9 +12,9 @@ import { SharingPermissionsTable } from '../components/SharingPermission/Sharing
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
+  CompleteRecommendations,
   DeleteSharingParticipants,
   GetSharingList,
-  SetCompletedRecommendationsWorkflowFlag,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadAvailableSiteList } from '../services/site';
@@ -42,8 +42,7 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types);
-      if (!participant?.completedRecommendationsWorkflow)
-        await SetCompletedRecommendationsWorkflowFlag(participant!.id);
+      if (!participant?.completedRecommendations) await CompleteRecommendations(participant!.id);
     } catch (e) {
       setStatusPopup({
         type: 'Error',

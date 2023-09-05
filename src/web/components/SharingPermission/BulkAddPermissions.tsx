@@ -188,7 +188,7 @@ export function BulkAddPermissions({
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSave)}>
-        {!participant?.completedRecommendationsWorkflow && (
+        {!participant?.completedRecommendations && (
           <Collapsible
             title='Bulk Add Permissions'
             defaultOpen
@@ -198,7 +198,7 @@ export function BulkAddPermissions({
             {recommendationContent}
           </Collapsible>
         )}
-        {participant?.completedRecommendationsWorkflow && (
+        {participant?.completedRecommendations && (
           <Collapsible title='Bulk Add Permissions' defaultOpen={false}>
             {collapsibleContent}
           </Collapsible>

@@ -278,11 +278,11 @@ export function createParticipantsRouter() {
   );
 
   participantsRouter.put(
-    '/:participantId/completedRecommendationsWorkflow',
+    '/:participantId/completeRecommendations',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      await participant!.$query().update({ completedRecommendationsWorkflow: true });
-      return res.status(200).json(participant?.completedRecommendationsWorkflow);
+      await participant!.$query().update({ completedRecommendations: true });
+      return res.status(200).json(participant?.completedRecommendations);
     }
   );
 
