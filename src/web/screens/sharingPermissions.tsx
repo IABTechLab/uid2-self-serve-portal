@@ -101,10 +101,10 @@ function SharingPermissions() {
   };
 
   const loadSharingList = useCallback(async () => {
-    const response = await GetSharingList(participant!.id);
+    const response = await GetSharingList(participant?.id);
     setSharedSiteIds(response.allowed_sites);
     setSharedTypes(response.allowed_types ?? []);
-  }, [participant]);
+  }, []);
 
   useEffect(() => {
     loadSharingList();
