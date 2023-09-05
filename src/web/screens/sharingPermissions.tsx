@@ -14,6 +14,7 @@ import {
   AddSharingParticipants,
   CompleteRecommendations,
   DeleteSharingParticipants,
+  GetCurrentUsersParticipant,
   GetSharingList,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
@@ -24,7 +25,7 @@ import './sharingPermissions.scss';
 
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
-  const { participant } = useContext(ParticipantContext);
+  const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
@@ -42,7 +43,11 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types);
-      if (!participant?.completedRecommendations) await CompleteRecommendations(participant!.id);
+      if (!participant?.completedRecommendations) {
+        await CompleteRecommendations(participant!.id);
+        const updatedParticipant = await GetCurrentUsersParticipant();
+        setParticipant(updatedParticipant);
+      }
     } catch (e) {
       setStatusPopup({
         type: 'Error',
