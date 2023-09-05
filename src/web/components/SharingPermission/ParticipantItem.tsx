@@ -8,7 +8,7 @@ import {
   isAddedByManual,
   isSharingParticipant,
   SharingParticipant,
-} from './bulkAddPermissionsHelpers';
+} from './ParticipantTableHelper';
 
 import './ParticipantItem.scss';
 

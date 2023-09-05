@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import { useState } from 'react';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
@@ -10,8 +9,15 @@ import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
-import { isAddedByManual, MANUALLY_ADDED, SharingParticipant } from './bulkAddPermissionsHelpers';
 import { ParticipantsTable } from './ParticipantsTable';
+import {
+  filterParticipants,
+  getSelectAllState,
+  isAddedByManual,
+  isSelectedAll,
+  MANUALLY_ADDED,
+  SharingParticipant,
+} from './ParticipantTableHelper';
 
 import './SharingPermissionsTable.scss';
 
@@ -106,24 +112,16 @@ export function SharingPermissionsTableContent({
   const [filterText, setFilterText] = useState('');
   const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
   const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
-  const [filteredParticipants, setFilteredParticipants] = useState(sharingParticipants);
+  const filteredParticipants = filterParticipants(sharingParticipants, filterText, selectedTypeIds);
 
-  const isSelectedAll = () => {
-    if (!filteredParticipants.length || !checkedParticipants.size) return false;
-    return filteredParticipants
-      .filter(isAddedByManual)
-      .every((p) => checkedParticipants.has(p.siteId!));
+  const isSelectedAllManualAddedParticipant = () => {
+    return isSelectedAll(filteredParticipants.filter(isAddedByManual), checkedParticipants);
   };
 
-  const getSelectAllState = () => {
-    if (isSelectedAll()) {
-      return TriStateCheckboxState.checked;
-    }
-    if (checkedParticipants.size > 0) {
-      return TriStateCheckboxState.indeterminate as CheckedState;
-    }
-    return TriStateCheckboxState.unchecked;
-  };
+  const checkboxStatus = getSelectAllState(
+    isSelectedAllManualAddedParticipant(),
+    checkedParticipants
+  );
 
   const handleDeletePermissions = () => {
     onDeleteSharingPermission(Array.from(checkedParticipants));
@@ -133,7 +131,7 @@ export function SharingPermissionsTableContent({
   const participantTypeOptions = participantTypes.map((v) => ({ id: v.id, name: v.typeName }));
 
   const handleCheckboxChange = () => {
-    if (getSelectAllState() === TriStateCheckboxState.unchecked) {
+    if (checkboxStatus === TriStateCheckboxState.unchecked) {
       const selectedSiteIds = new Set<number>();
       filteredParticipants.forEach((p) => {
         if (isAddedByManual(p)) selectedSiteIds.add(p.siteId);
@@ -144,12 +142,15 @@ export function SharingPermissionsTableContent({
     }
   };
 
-  const tableHeader = () => (
-    <>
-      <SortableTableHeader<SharingParticipant> sortKey='name' header='Participant Name' />
-      <th>Participant Type</th>
-      <SortableTableHeader<SharingParticipant> sortKey='addedBy' header='Source' />
-    </>
+  const tableHeader = (
+    <thead>
+      <tr className='participant-item-with-checkbox'>
+        <th> </th>
+        <SortableTableHeader<SharingParticipant> sortKey='name' header='Participant Name' />
+        <th>Participant Type</th>
+        <SortableTableHeader<SharingParticipant> sortKey='addedBy' header='Source' />
+      </tr>
+    </thead>
   );
 
   return (
@@ -158,7 +159,7 @@ export function SharingPermissionsTableContent({
         <div className='sharing-permission-actions'>
           <TriStateCheckbox
             onClick={handleCheckboxChange}
-            status={getSelectAllState()}
+            status={checkboxStatus}
             className='participant-checkbox'
           />
           {checkedParticipants.size > 0 && (
@@ -187,15 +188,11 @@ export function SharingPermissionsTableContent({
         </div>
       </div>
       <ParticipantsTable<SharingParticipant>
-        participants={sharingParticipants}
-        filterText={filterText}
-        selectedTypeIds={selectedTypeIds}
+        participants={filteredParticipants}
         selectedParticipantIds={checkedParticipants}
         onSelectedChange={setCheckedParticipants}
         tableHeader={tableHeader}
         className='shared-participants-table'
-        onFilteredParticipantChanged={setFilteredParticipants}
-        hideSelectAllCheckbox
       />
     </>
   );

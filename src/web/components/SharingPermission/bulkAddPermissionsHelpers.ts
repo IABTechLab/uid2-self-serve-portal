@@ -9,22 +9,6 @@ export type BulkAddPermissionsForm = {
   dataProviderChecked: boolean;
 };
 
-export type SharingParticipant = AvailableParticipantDTO & {
-  addedBy: string[];
-};
-
-export const isSharingParticipant = (
-  participant: AvailableParticipantDTO | SharingParticipant
-): participant is SharingParticipant => {
-  return 'addedBy' in participant;
-};
-
-export const MANUALLY_ADDED = 'Manually Added';
-
-export const isAddedByManual = (participant: SharingParticipant) => {
-  return participant.addedBy.includes(MANUALLY_ADDED);
-};
-
 export const getDefaultPublisherCheckboxState = (participantTypeNames: string[]) => {
   const publisherRelatedTypes = ['Data Provider'];
   return participantTypeNames.some((type) => publisherRelatedTypes.includes(type));
