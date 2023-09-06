@@ -1,3 +1,4 @@
+import { Participant } from '../entities/Participant';
 import { ParticipantTypeDTO } from '../entities/ParticipantType';
 import { AvailableParticipantDTO } from '../routers/participantsRouter';
 import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
@@ -18,12 +19,17 @@ export const mapClientTypeToParticipantType = (
 
 export const convertSiteToAvailableParticipantDTO = (
   site: SiteDTO,
-  participantTypes: ParticipantTypeDTO[]
+  participantTypes: ParticipantTypeDTO[],
+  participants: Participant[]
 ): AvailableParticipantDTO => {
+  const matchedParticipant = participants.find((p) => p.siteId === site.id);
   return {
-    name: site.name,
+    name: matchedParticipant ? matchedParticipant.name : site.name,
     siteId: site.id,
-    types: mapClientTypeToParticipantType(site.clientTypes ?? [], participantTypes),
+    types:
+      matchedParticipant && matchedParticipant.types
+        ? matchedParticipant.types
+        : mapClientTypeToParticipantType(site.clientTypes ?? [], participantTypes),
   };
 };
 
