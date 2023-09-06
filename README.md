@@ -239,7 +239,7 @@ The following steps describe the minimal steps required to successfully log in t
 15. Return to the UI and you should be good to go!
 
 ### Connecting to local admin service
-Functionality relating to Sharing Permissions will require the admin service to be run locally. Perform the following steps to standup the admin service to develop and test admin-related functionality on the portal.
+Functionality relating to Sharing Permissions will require the admin service to be running locally. Perform the following steps to standup the admin service to develop and test admin-related functionality on the portal.
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
 1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally. 
