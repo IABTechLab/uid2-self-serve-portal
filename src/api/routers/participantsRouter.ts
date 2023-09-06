@@ -277,6 +277,15 @@ export function createParticipantsRouter() {
     }
   );
 
+  participantsRouter.put(
+    '/:participantId/completeRecommendations',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      await participant!.$query().update({ completedRecommendations: true });
+      return res.status(200).json(participant);
+    }
+  );
+
   participantsRouter.get(
     '/:participantId/users',
     async (req: ParticipantRequest, res: Response) => {

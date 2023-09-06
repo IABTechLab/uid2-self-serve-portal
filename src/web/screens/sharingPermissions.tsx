@@ -12,6 +12,7 @@ import { SharingPermissionsTable } from '../components/SharingPermission/Sharing
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddSharingParticipants,
+  CompleteRecommendations,
   DeleteSharingParticipants,
   GetSharingList,
 } from '../services/participant';
@@ -23,7 +24,7 @@ import './sharingPermissions.scss';
 
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
-  const { participant } = useContext(ParticipantContext);
+  const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
@@ -41,6 +42,10 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types ?? []);
+      if (!participant?.completedRecommendations) {
+        const updatedParticipant = await CompleteRecommendations(participant!.id);
+        setParticipant(updatedParticipant);
+      }
     } catch (e) {
       setStatusPopup({
         type: 'Error',
@@ -96,10 +101,10 @@ function SharingPermissions() {
   };
 
   const loadSharingList = useCallback(async () => {
-    const response = await GetSharingList(participant!.id);
+    const response = await GetSharingList();
     setSharedSiteIds(response.allowed_sites);
     setSharedTypes(response.allowed_types ?? []);
-  }, [participant]);
+  }, []);
 
   useEffect(() => {
     loadSharingList();
@@ -119,7 +124,6 @@ function SharingPermissions() {
         <BulkAddPermissions
           participant={participant}
           sharedTypes={sharedTypes ?? []}
-          hasSharedSiteIds={sharedSiteIds.length > 0}
           onBulkAddSharingPermission={handleSaveSharingType}
         />
         <Suspense fallback={<Loading />}>
@@ -133,8 +137,7 @@ function SharingPermissions() {
                     participantTypes={resolvedParticipantTypes}
                   />
                 </Collapsible>
-                {/* TODO: Update this to use recommendation flag to hide sharing permission table once we have that */}
-                {(sharedSiteIds.length > 0 || sharedTypes.length > 0) && (
+                {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
                   <SharingPermissionsTable
                     sharedSiteIds={sharedSiteIds}
                     sharedTypes={sharedTypes}

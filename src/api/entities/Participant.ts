@@ -50,6 +50,7 @@ export class Participant extends BaseModel {
   name!: string;
   status!: ParticipantStatus;
   allowSharing!: boolean;
+  completedRecommendations!: boolean;
   siteId?: number;
   location?: string;
   types?: ParticipantType[];

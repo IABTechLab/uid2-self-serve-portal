@@ -18,7 +18,7 @@ function SharingPermissionCard({ sharingPermissionsCount, hasError }: SharingPer
         ) : (
           <div>
             <div className='permissions-count'>{sharingPermissionsCount}</div>
-            <span>TOTAL PERMISSIONS</span>{' '}
+            <span>MANUAL PERMISSIONS</span>
           </div>
         )}
         <div className='divider' />
