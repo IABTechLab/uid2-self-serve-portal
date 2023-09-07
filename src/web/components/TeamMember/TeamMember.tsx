@@ -6,6 +6,7 @@ import { useCallback, useState } from 'react';
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
+import { StatusNotificationType, StatusPopup } from '../Core/StatusPopup';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type DeleteConfirmationDialogProps = {
@@ -74,6 +75,14 @@ function TeamMember({
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [hasError, setHasError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('An error has ocurred');
+  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
+  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
+
+  const setErrorInfo = (e: Error) => {
+    setHasError(true);
+    setErrorMessage(e.message);
+  };
 
   const onResendInvite = useCallback(async () => {
     if (reinviteState !== InviteState.initial) {
@@ -85,24 +94,30 @@ function TeamMember({
     try {
       await resendInvite(person.id);
       setInviteState(InviteState.sent);
-    } catch {
+    } catch (e) {
+      setErrorInfo(e as Error);
       setInviteState(InviteState.error);
+      setStatusPopup({
+        type: 'Error',
+        message: (e as Error).message,
+      });
+      setShowStatusPopup(true);
     }
   }, [person.id, reinviteState, resendInvite]);
 
   const handleRemoveUser = async () => {
     try {
       await onRemoveTeamMember(person.id);
-    } catch {
-      setHasError(true);
+    } catch (e) {
+      setErrorInfo(e as Error);
     }
   };
 
   const handleUpdateUser = async (formData: UpdateTeamMemberForm) => {
     try {
       await onUpdateTeamMember(person.id, formData);
-    } catch {
-      setHasError(true);
+    } catch (e) {
+      setErrorInfo(e as Error);
     }
   };
 
@@ -118,7 +133,7 @@ function TeamMember({
       <td>{person.role}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineMessage message='An error has occurred' type='Error' />}
+          {hasError && <InlineMessage message={errorMessage} type='Error' />}
           <div>
             {person.acceptedTerms || (
               <button
@@ -146,6 +161,14 @@ function TeamMember({
             />
             <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
           </div>
+          {statusPopup && (
+            <StatusPopup
+              status={statusPopup!.type}
+              show={showStatusPopup}
+              setShow={setShowStatusPopup}
+              message={statusPopup!.message}
+            />
+          )}
         </div>
       </td>
     </tr>
