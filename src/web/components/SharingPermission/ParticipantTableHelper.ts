@@ -13,7 +13,7 @@ export const isSharingParticipant = (
   return 'addedBy' in participant;
 };
 
-export const MANUALLY_ADDED = 'Manually Added';
+export const MANUALLY_ADDED = 'Manual';
 
 export const isAddedByManual = (participant: SharingParticipant) => {
   return participant.addedBy.includes(MANUALLY_ADDED);
@@ -55,4 +55,23 @@ export function getSelectAllState(selectAll: boolean, checkedElement: Set<number
     return TriStateCheckboxState.indeterminate as CheckedState;
   }
   return TriStateCheckboxState.unchecked;
+}
+
+export function formatSourceColumn(sources: string[]) {
+  let sourceField = '';
+  const sourcesCopy = [...sources];
+  const manualIndex = sourcesCopy.indexOf(MANUALLY_ADDED);
+
+  if (manualIndex !== -1) {
+    sourceField = MANUALLY_ADDED;
+    sourcesCopy.splice(manualIndex, 1);
+  }
+
+  if (sourcesCopy.length > 0) {
+    if (sourceField) {
+      sourceField += ' and ';
+    }
+    sourceField += `Auto: ${sourcesCopy.join(', ')}`;
+  }
+  return sourceField;
 }

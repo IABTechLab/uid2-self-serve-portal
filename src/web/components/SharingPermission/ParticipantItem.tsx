@@ -2,9 +2,9 @@ import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
-import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import {
+  formatSourceColumn,
   isAddedByManual,
   isSharingParticipant,
   SharingParticipant,
@@ -60,9 +60,7 @@ export function ParticipantItem({ participant, onClick, checked }: ParticipantIt
         />
       </td>
       <ParticipantItemSimple participant={participant} />
-      {isSharingParticipant(participant) && (
-        <td>{formatStringsWithSeparator(participant.addedBy)}</td>
-      )}
+      {isSharingParticipant(participant) && <td>{formatSourceColumn(participant.addedBy)}</td>}
     </tr>
   );
 }
