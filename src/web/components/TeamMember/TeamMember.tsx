@@ -4,6 +4,7 @@ import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { ApiError } from '../../utils/apiError';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { StatusNotificationType, StatusPopup } from '../Core/StatusPopup';
@@ -74,13 +75,11 @@ function TeamMember({
   onUpdateTeamMember,
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
-  const [hasError, setHasError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('An error has ocurred');
+  const [errorMessage, setErrorMessage] = useState<string>();
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const setErrorInfo = (e: Error) => {
-    setHasError(true);
     setErrorMessage(e.message);
   };
 
@@ -93,13 +92,20 @@ function TeamMember({
     setInviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id);
+      setStatusPopup({
+        type: 'Success',
+        message: `Invitation sent`,
+      });
+      setShowStatusPopup(true);
       setInviteState(InviteState.sent);
     } catch (e) {
       setErrorInfo(e as Error);
       setInviteState(InviteState.error);
+      const err = e as Error;
+      const hash = Object.hasOwn(err, 'errorHash') ? `: (${(e as ApiError).errorHash})` : '';
       setStatusPopup({
         type: 'Error',
-        message: (e as Error).message,
+        message: `${err.message}${hash}`,
       });
       setShowStatusPopup(true);
     }
@@ -133,7 +139,7 @@ function TeamMember({
       <td>{person.role}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineMessage message={errorMessage} type='Error' />}
+          {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
             {person.acceptedTerms || (
               <button

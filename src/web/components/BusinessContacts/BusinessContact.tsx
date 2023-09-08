@@ -59,11 +59,9 @@ function BusinessContact({
   onRemoveEmailContact,
   onUpdateEmailContact,
 }: BusinessContactProps) {
-  const [hasError, setHasError] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('An error has ocurred');
+  const [errorMessage, setErrorMessage] = useState<string>();
 
   const setErrorInfo = (e: Error) => {
-    setHasError(true);
     setErrorMessage(e.message);
   };
 
@@ -90,7 +88,7 @@ function BusinessContact({
       <td>{contact.contactType}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineMessage message={errorMessage} type='Error' />}
+          {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
             <BusinessContactDialog
               onFormSubmit={handleUpdateEmailContact}

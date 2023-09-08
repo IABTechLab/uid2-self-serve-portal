@@ -28,7 +28,6 @@ export function BusinessContacts() {
   }, [reloader]);
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-  const [popupDuration, setPopupDuration] = useState<number>(3000);
 
   const handleErrorPopup = (e: Error) => {
     const hash = Object.hasOwn(e, 'errorHash') ? `: (${(e as ApiError).errorHash})` : '';
@@ -37,7 +36,6 @@ export function BusinessContacts() {
       message: `${e.message}${hash}`,
     });
     setShowStatusPopup(true);
-    setPopupDuration(10000);
     throw new Error(e.message);
   };
 
@@ -47,7 +45,6 @@ export function BusinessContacts() {
       message,
     });
     setShowStatusPopup(true);
-    setPopupDuration(3000);
   };
 
   const handleRemoveEmailContact = async (contactId: number) => {
@@ -111,7 +108,6 @@ export function BusinessContacts() {
           show={showStatusPopup}
           setShow={setShowStatusPopup}
           message={statusPopup!.message}
-          displayDuration={popupDuration}
         />
       )}
     </div>

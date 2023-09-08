@@ -32,7 +32,6 @@ function TeamMembers() {
   }, [reloader]);
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-  const [popupDuration, setPopupDuration] = useState<number>(3000);
 
   const handleErrorPopup = (e: Error) => {
     const hash = Object.hasOwn(e, 'errorHash') ? `: (${(e as ApiError).errorHash})` : '';
@@ -41,7 +40,6 @@ function TeamMembers() {
       message: `${e.message}${hash}`,
     });
     setShowStatusPopup(true);
-    setPopupDuration(10000);
     throw new Error(e.message);
   };
 
@@ -51,7 +49,6 @@ function TeamMembers() {
       message,
     });
     setShowStatusPopup(true);
-    setPopupDuration(3000);
   };
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
@@ -66,7 +63,7 @@ function TeamMembers() {
     try {
       const response = await RemoveUser(userId);
       if (response.statusText === 'OK') {
-        handleSuccessPopup('Team member removedfdg dfghdfg hdfgh dfgh drf hdf gh dfg hdf gh.');
+        handleSuccessPopup('Team member removed.');
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
@@ -112,7 +109,6 @@ function TeamMembers() {
           show={showStatusPopup}
           setShow={setShowStatusPopup}
           message={statusPopup!.message}
-          displayDuration={popupDuration}
         />
       )}
     </>
