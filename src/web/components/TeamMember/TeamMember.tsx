@@ -102,7 +102,8 @@ function TeamMember({
       setErrorInfo(e as Error);
       setInviteState(InviteState.error);
       const err = e as Error;
-      const hash = Object.hasOwn(err, 'errorHash') ? `: (${(e as ApiError).errorHash})` : '';
+      const hasHash = Object.hasOwn(err, 'errorHash') && (e as ApiError).errorHash;
+      const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
       setStatusPopup({
         type: 'Error',
         message: `${err.message}${hash}`,

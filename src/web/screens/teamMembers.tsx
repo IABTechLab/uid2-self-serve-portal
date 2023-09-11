@@ -34,7 +34,8 @@ function TeamMembers() {
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const handleErrorPopup = (e: Error) => {
-    const hash = Object.hasOwn(e, 'errorHash') ? `: (${(e as ApiError).errorHash})` : '';
+    const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
+    const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
     setStatusPopup({
       type: 'Error',
       message: `${e.message}${hash}`,
