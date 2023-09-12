@@ -1,7 +1,8 @@
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
+import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import {
   AddEmailContact,
   BusinessContactForm,
@@ -10,6 +11,7 @@ import {
   RemoveEmailContact,
   UpdateEmailContact,
 } from '../services/participant';
+import { ApiError } from '../utils/apiError';
 import { PortalRoute } from './routeUtils';
 
 import './emailContacts.scss';
@@ -24,20 +26,62 @@ export function BusinessContacts() {
   const handleBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
+  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
+  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
+
+  const handleErrorPopup = (e: Error) => {
+    const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
+    const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
+    setStatusPopup({
+      type: 'Error',
+      message: `${e.message}${hash}`,
+    });
+    setShowStatusPopup(true);
+    throw new Error(e.message);
+  };
+
+  const handleSuccessPopup = (message: string) => {
+    setStatusPopup({
+      type: 'Success',
+      message,
+    });
+    setShowStatusPopup(true);
+  };
 
   const handleRemoveEmailContact = async (contactId: number) => {
-    await RemoveEmailContact(contactId);
-    handleBusinessContactUpdated();
+    try {
+      const response = await RemoveEmailContact(contactId);
+      if (response.statusText === 'OK') {
+        handleSuccessPopup('Email contact removed.');
+      }
+      handleBusinessContactUpdated();
+    } catch (e: unknown) {
+      handleErrorPopup(e as Error);
+    }
   };
 
   const handleUpdateEmailContact = async (contactId: number, formData: BusinessContactForm) => {
-    await UpdateEmailContact(contactId, formData);
-    handleBusinessContactUpdated();
+    try {
+      const response = await UpdateEmailContact(contactId, formData);
+      if (response.statusText === 'OK') {
+        handleSuccessPopup('Email contact updated.');
+      }
+      handleBusinessContactUpdated();
+    } catch (e: unknown) {
+      handleErrorPopup(e as Error);
+    }
   };
 
   const handleAddEmailContact = async (formData: BusinessContactForm) => {
-    await AddEmailContact(formData);
-    handleBusinessContactUpdated();
+    try {
+      const response = await AddEmailContact(formData);
+      if (response.statusText === 'OK') {
+        handleSuccessPopup('Email contact added.');
+      }
+      handleBusinessContactUpdated();
+    } catch (e: unknown) {
+      handleErrorPopup(e as Error);
+    }
   };
 
   return (
@@ -59,6 +103,14 @@ export function BusinessContacts() {
           )}
         </Await>
       </Suspense>
+      {statusPopup && (
+        <StatusPopup
+          status={statusPopup!.type}
+          show={showStatusPopup}
+          setShow={setShowStatusPopup}
+          message={statusPopup!.message}
+        />
+      )}
     </div>
   );
 }

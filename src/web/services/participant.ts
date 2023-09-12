@@ -90,7 +90,7 @@ export async function GetParticipantsAwaitingApproval() {
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   try {
-    await axios.post(`/participants/${participantId}/invite`, formData);
+    return await axios.post(`/participants/${participantId}/invite`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not invite participants');
   }
@@ -180,7 +180,10 @@ export type BusinessContactForm = {
 
 export async function AddEmailContact(formData: BusinessContactForm, participantId?: number) {
   try {
-    await axios.post(`/participants/${participantId ?? 'current'}/businessContacts`, formData);
+    return await axios.post(
+      `/participants/${participantId ?? 'current'}/businessContacts`,
+      formData
+    );
   } catch (e: unknown) {
     throw backendError(e, 'Could not add email contact');
   }
@@ -199,7 +202,9 @@ export async function GetEmailContacts(participantId?: number) {
 
 export async function RemoveEmailContact(contactId: number, participantId?: number) {
   try {
-    await axios.delete(`/participants/${participantId ?? 'current'}/businessContacts/${contactId}`);
+    return await axios.delete(
+      `/participants/${participantId ?? 'current'}/businessContacts/${contactId}`
+    );
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete email contact');
   }
@@ -211,7 +216,7 @@ export async function UpdateEmailContact(
   participantId?: number
 ) {
   try {
-    await axios.put(
+    return await axios.put(
       `/participants/${participantId ?? 'current'}/businessContacts/${contactId}`,
       formData
     );

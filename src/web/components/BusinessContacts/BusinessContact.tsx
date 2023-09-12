@@ -59,21 +59,25 @@ function BusinessContact({
   onRemoveEmailContact,
   onUpdateEmailContact,
 }: BusinessContactProps) {
-  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
+
+  const setErrorInfo = (e: Error) => {
+    setErrorMessage(e.message);
+  };
 
   const handleRemoveEmailContact = async () => {
     try {
       await onRemoveEmailContact(contact.id);
-    } catch {
-      setHasError(true);
+    } catch (e) {
+      setErrorInfo(e as Error);
     }
   };
 
   const handleUpdateEmailContact = async (formData: BusinessContactForm) => {
     try {
       await onUpdateEmailContact(contact.id, formData);
-    } catch {
-      setHasError(true);
+    } catch (e) {
+      setErrorInfo(e as Error);
     }
   };
 
@@ -84,7 +88,7 @@ function BusinessContact({
       <td>{contact.contactType}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineMessage message='An error has occurred' type='Error' />}
+          {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
             <BusinessContactDialog
               onFormSubmit={handleUpdateEmailContact}

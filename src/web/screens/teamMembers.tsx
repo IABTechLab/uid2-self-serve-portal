@@ -1,6 +1,7 @@
-import { Suspense, useCallback, useContext } from 'react';
+import { Suspense, useCallback, useContext, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
+import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -14,6 +15,7 @@ import {
   UpdateUser,
   UserResponse,
 } from '../services/userAccount';
+import { ApiError } from '../utils/apiError';
 import { PortalRoute } from './routeUtils';
 
 function Loading() {
@@ -28,21 +30,59 @@ function TeamMembers() {
   const onTeamMembersUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
+  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
+  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
+
+  const handleErrorPopup = (e: Error) => {
+    const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
+    const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
+    setStatusPopup({
+      type: 'Error',
+      message: `${e.message}${hash}`,
+    });
+    setShowStatusPopup(true);
+    throw new Error(e.message);
+  };
+
+  const handleSuccessPopup = (message: string) => {
+    setStatusPopup({
+      type: 'Success',
+      message,
+    });
+    setShowStatusPopup(true);
+  };
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
-    await InviteTeamMember(formData, participant!.id);
+    const response = await InviteTeamMember(formData, participant!.id);
+    if (response.statusText === 'Created') {
+      handleSuccessPopup('Team member added.');
+    }
     onTeamMembersUpdated();
   };
 
   const handleRemoveTeamMember = async (userId: number) => {
-    await RemoveUser(userId);
-    onTeamMembersUpdated();
+    try {
+      const response = await RemoveUser(userId);
+      if (response.statusText === 'OK') {
+        handleSuccessPopup('Team member removed.');
+      }
+      onTeamMembersUpdated();
+    } catch (e: unknown) {
+      handleErrorPopup(e as Error);
+    }
   };
 
   const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
-    await UpdateUser(userId, formData);
-    if (LoggedInUser?.user?.id === userId) await loadUser();
-    onTeamMembersUpdated();
+    try {
+      const response = await UpdateUser(userId, formData);
+      if (response.statusText === 'OK') {
+        handleSuccessPopup('Team member updated.');
+      }
+      onTeamMembersUpdated();
+      if (LoggedInUser?.user?.id === userId) await loadUser();
+    } catch (e: unknown) {
+      handleErrorPopup(e as Error);
+    }
   };
 
   return (
@@ -64,6 +104,14 @@ function TeamMembers() {
           )}
         </Await>
       </Suspense>
+      {statusPopup && (
+        <StatusPopup
+          status={statusPopup!.type}
+          show={showStatusPopup}
+          setShow={setShowStatusPopup}
+          message={statusPopup!.message}
+        />
+      )}
     </>
   );
 }

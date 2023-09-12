@@ -48,9 +48,9 @@ export async function GetLoggedInUserAccount(): Promise<UserWithIsApprover | nul
 
 export async function ResendInvite(id: number): Promise<void> {
   try {
-    await axios.post(`/users/${id}/resendInvitation`);
+    return await axios.post(`/users/${id}/resendInvitation`);
   } catch (e: unknown) {
-    const error = backendError(e, 'Unable to resent invite.');
+    const error = backendError(e, 'Unable to resend invite.');
     log.error(error);
     throw error;
   }
@@ -72,7 +72,7 @@ export async function GetAllUsersOfParticipant(participantId?: number) {
 
 export async function RemoveUser(id: number) {
   try {
-    await axios.delete(`/users/${id}`);
+    return await axios.delete(`/users/${id}`);
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete user');
   }
@@ -80,7 +80,7 @@ export async function RemoveUser(id: number) {
 
 export async function UpdateUser(id: number, formData: UpdateTeamMemberForm) {
   try {
-    await axios.patch(`/users/${id}`, formData);
+    return await axios.patch(`/users/${id}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update user');
   }
@@ -88,7 +88,7 @@ export async function UpdateUser(id: number, formData: UpdateTeamMemberForm) {
 
 export async function SetTermsAccepted() {
   try {
-    await axios.put('/users/current/acceptTerms');
+    return await axios.put('/users/current/acceptTerms');
   } catch (e: unknown) {
     throw backendError(e, 'Unable to mark terms as accepted.');
   }

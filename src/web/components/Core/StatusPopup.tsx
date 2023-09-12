@@ -17,24 +17,23 @@ export type StatusNotificationType = {
   type: 'Success' | 'Error' | 'Info' | 'Warning';
 };
 
-export function StatusPopup({
-  message,
-  status,
-  displayDuration = 3000,
-  show,
-  setShow,
-}: StatusPopupProps) {
+export function StatusPopup({ message, status, displayDuration, show, setShow }: StatusPopupProps) {
+  let duration = displayDuration;
+  if (!duration) {
+    duration = status === 'Error' ? 10000 : 3000;
+  }
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (show) {
-      timer = setTimeout(() => setShow(false), displayDuration);
+      timer = setTimeout(() => setShow(false), duration);
     }
     return () => {
       if (timer) {
         clearTimeout(timer);
       }
     };
-  }, [displayDuration, setShow, show, status, message]);
+  }, [displayDuration, setShow, show, status, message, duration]);
 
   const getIcon = () => {
     switch (status) {

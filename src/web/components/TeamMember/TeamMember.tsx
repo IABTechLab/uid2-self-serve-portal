@@ -4,8 +4,10 @@ import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { ApiError } from '../../utils/apiError';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
+import { StatusNotificationType, StatusPopup } from '../Core/StatusPopup';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type DeleteConfirmationDialogProps = {
@@ -73,7 +75,13 @@ function TeamMember({
   onUpdateTeamMember,
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
-  const [hasError, setHasError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
+  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
+
+  const setErrorInfo = (e: Error) => {
+    setErrorMessage(e.message);
+  };
 
   const onResendInvite = useCallback(async () => {
     if (reinviteState !== InviteState.initial) {
@@ -84,25 +92,39 @@ function TeamMember({
     setInviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id);
+      setStatusPopup({
+        type: 'Success',
+        message: `Invitation sent`,
+      });
+      setShowStatusPopup(true);
       setInviteState(InviteState.sent);
-    } catch {
+    } catch (e) {
+      setErrorInfo(e as Error);
       setInviteState(InviteState.error);
+      const err = e as Error;
+      const hasHash = Object.hasOwn(err, 'errorHash') && (e as ApiError).errorHash;
+      const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
+      setStatusPopup({
+        type: 'Error',
+        message: `${err.message}${hash}`,
+      });
+      setShowStatusPopup(true);
     }
   }, [person.id, reinviteState, resendInvite]);
 
   const handleRemoveUser = async () => {
     try {
       await onRemoveTeamMember(person.id);
-    } catch {
-      setHasError(true);
+    } catch (e) {
+      setErrorInfo(e as Error);
     }
   };
 
   const handleUpdateUser = async (formData: UpdateTeamMemberForm) => {
     try {
       await onUpdateTeamMember(person.id, formData);
-    } catch {
-      setHasError(true);
+    } catch (e) {
+      setErrorInfo(e as Error);
     }
   };
 
@@ -118,7 +140,7 @@ function TeamMember({
       <td>{person.role}</td>
       <td className='action'>
         <div className='action-cell'>
-          {hasError && <InlineMessage message='An error has occurred' type='Error' />}
+          {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
             {person.acceptedTerms || (
               <button
@@ -146,6 +168,14 @@ function TeamMember({
             />
             <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
           </div>
+          {statusPopup && (
+            <StatusPopup
+              status={statusPopup!.type}
+              show={showStatusPopup}
+              setShow={setShowStatusPopup}
+              message={statusPopup!.message}
+            />
+          )}
         </div>
       </td>
     </tr>
