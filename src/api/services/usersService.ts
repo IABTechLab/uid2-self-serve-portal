@@ -67,7 +67,9 @@ export const enrichWithUserFromParams = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-  if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, user.participantId))) {
+  if (
+    !(await isUserBelongsToParticipant(req.auth?.payload?.email as string, user.participantId!))
+  ) {
     return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }
 

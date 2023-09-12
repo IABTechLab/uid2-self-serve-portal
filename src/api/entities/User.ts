@@ -47,7 +47,7 @@ export class User extends BaseModel {
   location?: string;
   phone?: string;
   role!: UserRole;
-  participantId!: number;
+  participantId?: number | null;
   acceptedTerms!: boolean;
 }
 
@@ -60,7 +60,7 @@ export const UserSchema = z.object({
   lastName: z.string(),
   location: z.string().optional(),
   phone: z.string().optional(),
-  participantId: z.number().optional(),
+  participantId: z.number().optional().nullable(),
   role: z.nativeEnum(UserRole).optional(),
   acceptedTerms: z.boolean(),
 });
