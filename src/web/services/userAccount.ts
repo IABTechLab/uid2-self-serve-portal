@@ -80,8 +80,7 @@ export async function RemoveUser(id: number) {
 
 export async function UpdateUser(id: number, formData: UpdateTeamMemberForm) {
   try {
-    const response = await axios.patch(`/users/${id}`, formData);
-    return response;
+    return await axios.patch(`/users/${id}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update user');
   }
