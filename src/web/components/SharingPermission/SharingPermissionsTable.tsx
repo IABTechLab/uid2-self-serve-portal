@@ -50,7 +50,7 @@ function DeletePermissionDialog({
 
   const showDeletionNotice = (participant: SharingParticipant) => {
     const remainSources = (
-      participant.addedBy.filter((source) => source !== 'Manual') as ParticipantTypeDTO[]
+      participant.addedBy.filter((source) => source !== MANUALLY_ADDED) as ParticipantTypeDTO[]
     ).map((t) => t.typeName); // Unfortunately I couldn't find a good way to avoid "as" here
     if (remainSources.length) {
       return (
