@@ -49,7 +49,7 @@ function DeletePermissionDialog({
   };
 
   const showDeletionNotice = (participant: SharingParticipant) => {
-    const remainSources = participant.addedBy.filter((source) => source !== 'Manually Added');
+    const remainSources = participant.addedBy.filter((source) => source !== MANUALLY_ADDED);
     if (remainSources.length) {
       return (
         <span> (This site will remain shared by {formatStringsWithSeparator(remainSources)})</span>
