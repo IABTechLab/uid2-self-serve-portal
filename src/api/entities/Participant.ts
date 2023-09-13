@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
-import { ParticipantType, ParticipantTypeSchema } from './ParticipantType';
+import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
 import { User, UserCreationPartial, UserSchema } from './User';
 
 export enum ParticipantStatus {
@@ -59,7 +59,7 @@ export class Participant extends BaseModel {
 
 // TODO: Can ModelObjectOpt do relationships automatically?
 export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'> & {
-  types?: ModelObjectOpt<ParticipantType>[];
+  types?: ParticipantTypeDTO[];
   users?: ModelObjectOpt<User>[];
 };
 

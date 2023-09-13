@@ -49,7 +49,9 @@ function DeletePermissionDialog({
   };
 
   const showDeletionNotice = (participant: SharingParticipant) => {
-    const remainSources = participant.addedBy.filter((source) => source !== 'Manually Added');
+    const remainSources = (
+      participant.addedBy.filter((source) => source !== MANUALLY_ADDED) as ParticipantTypeDTO[]
+    ).map((t) => t.typeName); // Unfortunately I couldn't find a good way to avoid "as" here
     if (remainSources.length) {
       return (
         <span> (This site will remain shared by {formatStringsWithSeparator(remainSources)})</span>
@@ -218,11 +220,11 @@ export function SharingPermissionsTable({
     const sharingLists: SharingParticipant[] = [];
 
     availableParticipants?.forEach((p) => {
-      const sources = [];
+      const sources: SharingParticipant['addedBy'] = [];
       if (siteIds.has(p.siteId)) sources.push(MANUALLY_ADDED);
       p.types.forEach((t) => {
         if (sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))) {
-          sources.push(t.typeName);
+          sources.push(t);
         }
       });
       if (sources.length) {
