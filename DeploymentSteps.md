@@ -12,6 +12,8 @@ Don't delete old sections - just leave them towards the bottom of the file, and 
 
 ## Next (pending changes for the next coming release)
 
+## 0.6.0
+
 1. Email templates need to be released to SendGrid. There are no new ones so mappings shouldn't need to be updated.
 2. Keycloak needs to be updated to get the new Keycloak email theme.
 
