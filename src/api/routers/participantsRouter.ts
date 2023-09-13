@@ -281,8 +281,12 @@ export function createParticipantsRouter() {
     '/:participantId/completeRecommendations',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      await participant!.$query().update({ completedRecommendations: true });
-      return res.status(200).json(participant);
+      const updatedParticipant = await Participant.query()
+        .patchAndFetchById(participant!.id, {
+          completedRecommendations: true,
+        })
+        .withGraphFetched('types');
+      return res.status(200).json(updatedParticipant);
     }
   );
 
