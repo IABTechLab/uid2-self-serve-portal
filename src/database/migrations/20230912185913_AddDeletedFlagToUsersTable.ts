@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('deleted').defaultTo(false).notNullable();
   });
 
-  // Update existing rows to have the default value for 'completedRecommendations'
+  // Update existing rows to have the default value for 'deleted'
   await knex('users').update({ deleted: false });
 }
 

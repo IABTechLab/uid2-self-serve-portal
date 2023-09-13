@@ -9,7 +9,7 @@ import { isUserAnApprover } from './approversService';
 export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query().findOne('email', email);
+  return User.query().findOne('email', email).where('deleted', 0);
 };
 
 export const enrichUserWithIsApprover = async (user: User) => {
@@ -29,6 +29,7 @@ export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTer
 export const isUserBelongsToParticipant = async (email: string, participantId: number) => {
   const user = await User.query()
     .where('email', email)
+    .where('deleted', 0)
     .andWhere('participantId', participantId)
     .first();
 
@@ -78,5 +79,5 @@ export const enrichWithUserFromParams = async (
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
-  return participant!.$relatedQuery('users').castTo<User[]>();
+  return participant!.$relatedQuery('users').where('deleted', 0).castTo<User[]>();
 };
