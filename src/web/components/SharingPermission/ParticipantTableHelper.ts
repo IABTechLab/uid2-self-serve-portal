@@ -1,10 +1,12 @@
 import { CheckedState } from '@radix-ui/react-checkbox';
 
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { TriStateCheckboxState } from '../Core/TriStateCheckbox';
 
+export const MANUALLY_ADDED = 'Manual';
 export type SharingParticipant = AvailableParticipantDTO & {
-  addedBy: string[];
+  addedBy: (ParticipantTypeDTO | typeof MANUALLY_ADDED)[];
 };
 
 export const isSharingParticipant = (
@@ -12,8 +14,6 @@ export const isSharingParticipant = (
 ): participant is SharingParticipant => {
   return 'addedBy' in participant;
 };
-
-export const MANUALLY_ADDED = 'Manual';
 
 export const isAddedByManual = (participant: SharingParticipant) => {
   return participant.addedBy.includes(MANUALLY_ADDED);
@@ -57,21 +57,21 @@ export function getSelectAllState(selectAll: boolean, checkedElement: Set<number
   return TriStateCheckboxState.unchecked;
 }
 
-export function formatSourceColumn(sources: string[]) {
+export function formatSourceColumn(sources: SharingParticipant['addedBy']) {
   let sourceField = '';
-  const sourcesCopy = [...sources];
-  const manualIndex = sourcesCopy.indexOf(MANUALLY_ADDED);
+  const sourcesText = [...sources.map((s) => (s === MANUALLY_ADDED ? MANUALLY_ADDED : s.typeName))];
+  const manualIndex = sourcesText.indexOf(MANUALLY_ADDED);
 
   if (manualIndex !== -1) {
     sourceField = MANUALLY_ADDED;
-    sourcesCopy.splice(manualIndex, 1);
+    sourcesText.splice(manualIndex, 1);
   }
 
-  if (sourcesCopy.length > 0) {
+  if (sourcesText.length > 0) {
     if (sourceField) {
       sourceField += ' and ';
     }
-    sourceField += `Auto: ${sourcesCopy.join(', ')}`;
+    sourceField += `Auto: ${sourcesText.join(', ')}`;
   }
   return sourceField;
 }
