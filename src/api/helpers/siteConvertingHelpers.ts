@@ -26,15 +26,17 @@ export const convertSiteToAvailableParticipantDTO = (
   return {
     name: matchedParticipant ? matchedParticipant.name : site.name,
     siteId: site.id,
-    types:
-      matchedParticipant && matchedParticipant.types
-        ? matchedParticipant.types
-        : mapClientTypeToParticipantType(site.clientTypes ?? [], participantTypes),
+    types: mapClientTypeToParticipantType(site.clientTypes ?? [], participantTypes),
   };
 };
 
-export const hasSharerRole = (site: SiteDTO): boolean => {
-  if (!site.clientTypes || !site.clientTypes.length) return false;
-  if (site.roles.includes('SHARER') || site.clientTypes?.includes('DSP')) return true;
+export const canBeSharedWith = (site: SiteDTO): boolean => {
+  if (
+    (site.roles.includes('SHARER') ||
+      site.roles.includes('ID_READER') ||
+      site.clientTypes?.includes('DSP')) &&
+    !site.roles.includes('OPTOUT')
+  )
+    return true;
   return false;
 };

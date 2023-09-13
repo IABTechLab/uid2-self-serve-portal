@@ -1,7 +1,7 @@
 import { Participant } from '../entities/Participant';
 import {
   convertSiteToAvailableParticipantDTO,
-  hasSharerRole,
+  canBeSharedWith,
   mapClientTypeToParticipantType,
 } from '../helpers/siteConvertingHelpers';
 import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
@@ -121,7 +121,7 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      expect(hasSharerRole(site)).toBeTruthy();
+      expect(canBeSharedWith(site)).toBeTruthy();
     });
 
     it('should return true if site has SHARER role', () => {
@@ -134,7 +134,7 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      expect(hasSharerRole(site)).toBeTruthy();
+      expect(canBeSharedWith(site)).toBeTruthy();
     });
 
     it('should return false if clientTypes are empty', () => {
@@ -147,7 +147,7 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      expect(hasSharerRole(site)).toBeFalsy();
+      expect(canBeSharedWith(site)).toBeFalsy();
     });
 
     it('should return false if clientTypes not exists', () => {
@@ -159,7 +159,7 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      expect(hasSharerRole(site)).toBeFalsy();
+      expect(canBeSharedWith(site)).toBeFalsy();
     });
   });
 });
