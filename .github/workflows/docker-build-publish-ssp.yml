@@ -4,8 +4,7 @@ on: [push, workflow_dispatch] # remove push after test it
 jobs:
   check:
     runs-on: ubuntu-latest
-    name: Check email template updates and get package version
-    steps:
+    name: Check email template updates
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Get all email templates that have changed
@@ -15,13 +14,8 @@ jobs:
           files_yaml: |
             emailTemplates:
               - 'emailTemplates/**.hbs'
-      - name: Get Package Version
-        id: version
-        run: |
-          echo "::set-output name=package_version::$(cat package.json | jq -r '.version')"
     outputs:
       emailTemplatesUpdated: ${{ steps.changed-files.emailTemplates_any_changed }}
-      packageVersion: ${{ steps.version.outputs.package_version }}
   sync-email-templates:
     needs: [check]
     if: needs.check.outputs.emailTemplatesUpdated == 'true'
@@ -35,32 +29,27 @@ jobs:
       contents: read
       packages: write
     name: Publish API/UI Docker Image
-    needs: [check, sync-email-templates]
+    needs: [sync-email-templates]
     if: always() && (needs.sync-email-templates.result == 'success' || needs.sync-email-templates.result == 'skipped') # Run build-ssportal is sync email template is skipped
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: 'iabtechlab/uid2-ssportal' # env context is not available to job.if
-      VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal
   build-migration:
     permissions:
       contents: read
       packages: write
     name: Publish SSPortal DB migration
-    needs: [check]
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: 'iabtechlab/uid2-ssportal-migration'
-      VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal_migration
   build-keycloak:
     permissions:
       contents: read
       packages: write
     name: Publish SSPortal Keycloak
-    needs: [check]
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: 'iabtechlab/uid2-ssportal-keycloak'
-      VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_keycloak
