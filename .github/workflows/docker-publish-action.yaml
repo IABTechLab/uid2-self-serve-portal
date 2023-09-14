@@ -2,18 +2,21 @@ on:
   workflow_call:
     inputs:
       IMAGE_NAME:
-        required: false
+        required: true
+        type: string
       VERSION:
         required: true
+        type: string
       DOCKERFILE:
         required: false
+        type: string
 
 env:
   REGISTRY: ghcr.io
 
 jobs:
   build-publish-docker:
-    permissions:
+\    permissions:
       contents: read
       packages: write
     steps:
