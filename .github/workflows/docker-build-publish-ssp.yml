@@ -36,7 +36,7 @@ jobs:
       packages: write
     name: Publish API/UI Docker Image
     needs: [check, sync-email-templates]
-    if: always() && (needs.sync-email-template.result == 'success') # Run build-ssportal is sync email template is skipped
+    if: always() && (needs.sync-email-templates:.result == 'success' || needs.sync-email-templates:A.result == 'skipped') # Run build-ssportal is sync email template is skipped
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: 'iabtechlab/uid2-ssportal' # env context is not available to job.if
@@ -57,7 +57,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    name: Publish SSPortal DB migration
+    name: Publish SSPortal Keycloak
     needs: [check]
     uses: ./.github/workflows/docker-publish-action.yml
     with:
