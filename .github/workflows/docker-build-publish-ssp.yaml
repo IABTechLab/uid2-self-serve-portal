@@ -41,6 +41,7 @@ jobs:
   build-ssportal:
     name: Publish API/UI Docker Image
     needs: [check, sync-email-templates]
+    if: always() && (needs.sync-email-template.result == 'success') # Run build-ssportal is sync email template is skipped
     runs-on: ubuntu-latest
     uses: ./.github/workflows/docker-publish-action.yaml
     with:
