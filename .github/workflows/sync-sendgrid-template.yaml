@@ -8,7 +8,7 @@ on:
         default: false
 jobs:
   sync-templates-in-sendgrid:
-    uses: ./.github/workflows/actions/sync-sendgrid-template-action.yaml
+    uses: ./.github/workflows/sync-sendgrid-template-action.yaml
     with:
       FORCE_SYNC_ALL: '${{ github.event.inputs.forceSyncAll }}'
     secrets:

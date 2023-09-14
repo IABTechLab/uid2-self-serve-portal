@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Sync email templates to sendgrid
     if: needs.check.outputs.emailTemplatesUpdated == 'true'
-    uses: ./.github/workflows/actions/sync-sendgrid-template-action.yaml
+    uses: ./.github/workflows/sync-sendgrid-template-action.yaml
     with:
       FORCE_SYNC_ALL: 'true'
     secrets:
@@ -43,7 +43,7 @@ jobs:
     name: Publish API/UI Docker Image
     needs: [check, sync-email-templates]
     runs-on: ubuntu-latest
-    uses: ./.github/workflows/actions/docker-publish-action.yaml
+    uses: ./.github/workflows/docker-publish-action.yaml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_SSPORTAL}}
       VERSION: ${{needs.check.packageVersion}}
@@ -54,7 +54,7 @@ jobs:
     name: Publish SSPortal DB migration
     needs: [check]
     runs-on: ubuntu-latest
-    uses: ./.github/workflows/actions/docker-publish-action.yaml
+    uses: ./.github/workflows/docker-publish-action.yaml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_MIGRATION}}
       VERSION: ${{needs.check.packageVersion}}
@@ -65,7 +65,7 @@ jobs:
     name: Publish SSPortal DB migration
     needs: [check]
     runs-on: ubuntu-latest
-    uses: ./.github/workflows/actions/docker-publish-action.yaml
+    uses: ./.github/workflows/docker-publish-action.yaml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_KEYCLOAK}}
       VERSION: ${{needs.check.packageVersion}}
