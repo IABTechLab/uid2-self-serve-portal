@@ -1,0 +1,74 @@
+name: Build and Publish Self-serve Portal
+on: [push, workflow_dispatch] # remove push after test it
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME_SSPORTAL: iabtechlab/uid2-ssportal
+  IMAGE_NAME_MIGRATION: iabtechlab/uid2-ssportal-migration
+  IMAGE_NAME_KEYCLOAK: iabtechlab/uid2-ssportal-keycloak
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    name: Check email template updates and get package version
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Get all email templates that have changed
+        id: changed-files
+        uses: tj-actions/changed-files@v39
+        with:
+          files_yaml: |
+            emailTemplates:
+              - 'emailTemplates/**.hbs'
+      - name: Get Package Version
+        id: version
+        run: |
+          echo "::set-output name=package_version::$(cat package.json | jq -r '.version')"
+    outputs:
+      emailTemplatesUpdated: ${{ steps.changed-files.emailTemplates_any_changed }}
+      packageVersion: ${{ steps.version.outputs.package_version }}
+  sync-email-templates:
+    needs: [check]
+    runs-on: ubuntu-latest
+    name: Sync email templates to sendgrid
+    if: needs.check.outputs.emailTemplatesUpdated == 'true'
+    uses: ./.github/workflows/actions/sync-sendgrid-template-action.yaml
+    with:
+      FORCE_SYNC_ALL: 'true'
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+  build-ssportal:
+    name: Publish API/UI Docker Image
+    needs: [check, sync-email-templates]
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/actions/docker-publish-action.yaml
+    with:
+      IMAGE_NAME: ${{env.IMAGE_NAME_SSPORTAL}}
+      VERSION: ${{needs.check.packageVersion}}
+      DOCKERFILE: Dockerfile_ssportal
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build-migration:
+    name: Publish SSPortal DB migration
+    needs: [check]
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/actions/docker-publish-action.yaml
+    with:
+      IMAGE_NAME: ${{env.IMAGE_NAME_MIGRATION}}
+      VERSION: ${{needs.check.packageVersion}}
+      DOCKERFILE: Dockerfile_ssportal_migration
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  build-keycloak:
+    name: Publish SSPortal DB migration
+    needs: [check]
+    runs-on: ubuntu-latest
+    uses: ./.github/workflows/actions/docker-publish-action.yaml
+    with:
+      IMAGE_NAME: ${{env.IMAGE_NAME_KEYCLOAK}}
+      VERSION: ${{needs.check.packageVersion}}
+      DOCKERFILE: Dockerfile_keycloak
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

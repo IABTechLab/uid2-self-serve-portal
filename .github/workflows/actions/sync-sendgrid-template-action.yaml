@@ -1,11 +1,16 @@
 name: Sync handlebars template with SendGrid
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
-      forceSyncAll:
+      FORCE_SYNC_ALL:
         description: Force sync all files in templates dir (Useful for initial synchronization)
         required: false
         default: false
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+      SENDGRID_API_KEY:
+        required: true
 jobs:
   sendgrid_sync:
     runs-on: ubuntu-latest
@@ -19,7 +24,7 @@ jobs:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           sendgridApiKey: ${{ secrets.SENDGRID_API_KEY }}
           templatesDir: 'emailTemplates/'
-          forceSyncAll: '${{ github.event.inputs.forceSyncAll }}'
+          forceSyncAll: '${{ inputs.FORCE_SYNC_ALL }}'
       - name: Write template id mapping
         uses: DamianReeves/write-file-action@master
         with:
