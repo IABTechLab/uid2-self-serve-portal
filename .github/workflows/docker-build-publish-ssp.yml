@@ -1,5 +1,5 @@
 name: Build and Publish Self-serve Portal
-on: [push, workflow_dispatch] # remove push after test it
+on: workflow_dispatch
 
 jobs:
   check:
