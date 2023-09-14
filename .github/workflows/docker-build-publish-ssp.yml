@@ -30,7 +30,6 @@ jobs:
       packageVersion: ${{ steps.version.outputs.package_version }}
   sync-email-templates:
     needs: [check]
-    runs-on: ubuntu-latest
     if: needs.check.outputs.emailTemplatesUpdated == 'true'
     uses: ./.github/workflows/sync-sendgrid-template-action.yml
     with:

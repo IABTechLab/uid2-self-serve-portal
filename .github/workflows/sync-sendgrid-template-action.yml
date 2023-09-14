@@ -3,15 +3,14 @@ on:
   workflow_call:
     inputs:
       FORCE_SYNC_ALL:
-        description: Force sync all files in templates dir (Useful for initial synchronization)
         required: false
-        default: 'false'
         type: string
     secrets:
       SENDGRID_API_KEY:
         required: true
 jobs:
   sendgrid_sync:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
