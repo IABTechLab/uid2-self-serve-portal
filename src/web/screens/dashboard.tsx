@@ -12,6 +12,7 @@ import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
+import { TokenKeysRoute } from './keyPairs';
 import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
@@ -31,7 +32,7 @@ export const StandardRoutes: PortalRoute[] = [
   TermsOfServiceRoute,
 ];
 
-export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute, TokenKeysRoute];
 
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 

@@ -73,3 +73,9 @@ export const getSiteList = async () => {
   const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
   return response.data;
 };
+
+export const getKeyPairsList = () => {
+  return 'yes';
+  // const response = await adminServiceClient.get('/api/client_side_keypairs/list');
+  // return response.data;
+};
