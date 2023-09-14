@@ -37,7 +37,6 @@ jobs:
     with:
       FORCE_SYNC_ALL: 'true'
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
   build-ssportal:
     name: Publish API/UI Docker Image
@@ -48,8 +47,6 @@ jobs:
       IMAGE_NAME: ${{env.IMAGE_NAME_SSPORTAL}}
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-migration:
     name: Publish SSPortal DB migration
     needs: [check]
@@ -59,8 +56,6 @@ jobs:
       IMAGE_NAME: ${{env.IMAGE_NAME_MIGRATION}}
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal_migration
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build-keycloak:
     name: Publish SSPortal DB migration
     needs: [check]
@@ -70,5 +65,3 @@ jobs:
       IMAGE_NAME: ${{env.IMAGE_NAME_KEYCLOAK}}
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_keycloak
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -7,9 +7,6 @@ on:
         required: true
       DOCKERFILE:
         required: false
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 env:
   REGISTRY: ghcr.io

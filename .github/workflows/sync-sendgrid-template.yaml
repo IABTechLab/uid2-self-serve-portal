@@ -12,5 +12,4 @@ jobs:
     with:
       FORCE_SYNC_ALL: '${{ github.event.inputs.forceSyncAll }}'
     secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
