@@ -31,37 +31,45 @@ jobs:
   sync-email-templates:
     needs: [check]
     runs-on: ubuntu-latest
-    name: Sync email templates to sendgrid
     if: needs.check.outputs.emailTemplatesUpdated == 'true'
-    uses: ./.github/workflows/sync-sendgrid-template-action.yaml
+    uses: ./.github/workflows/sync-sendgrid-template-action.yml
     with:
       FORCE_SYNC_ALL: 'true'
     secrets:
       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
   build-ssportal:
+    permissions:
+      contents: read
+      packages: write
     name: Publish API/UI Docker Image
     needs: [check, sync-email-templates]
     if: always() && (needs.sync-email-template.result == 'success') # Run build-ssportal is sync email template is skipped
     runs-on: ubuntu-latest
-    uses: ./.github/workflows/docker-publish-action.yaml
+    uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_SSPORTAL}}
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal
   build-migration:
+    permissions:
+      contents: read
+      packages: write
     name: Publish SSPortal DB migration
     needs: [check]
     runs-on: ubuntu-latest
-    uses: ./.github/workflows/docker-publish-action.yaml
+    uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_MIGRATION}}
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal_migration
   build-keycloak:
+    permissions:
+      contents: read
+      packages: write
     name: Publish SSPortal DB migration
     needs: [check]
     runs-on: ubuntu-latest
-    uses: ./.github/workflows/docker-publish-action.yaml
+    uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_KEYCLOAK}}
       VERSION: ${{needs.check.packageVersion}}
