@@ -1,5 +1,5 @@
 name: Self-serve Portal CI
-on: [push, workflow_dispatch]
+on: workflow_dispatch
 
 jobs:
   check-email-templates:
