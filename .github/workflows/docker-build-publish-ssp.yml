@@ -5,6 +5,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     name: Check email template updates
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Get all email templates that have changed
@@ -18,6 +19,7 @@ jobs:
       emailTemplatesUpdated: ${{ steps.changed-files.emailTemplates_any_changed }}
   sync-email-templates:
     needs: [check]
+    name: Sync handlebars template with SendGrid
     if: needs.check.outputs.emailTemplatesUpdated == 'true'
     uses: ./.github/workflows/sync-sendgrid-template-action.yml
     with:
