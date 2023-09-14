@@ -26,7 +26,7 @@ export function createBusinessContactsRouter() {
     const data = BusinessContactsDTO.parse(req.body);
     const { participant } = req;
     const newContact = await participant!.$relatedQuery('businessContacts').insert(data);
-    return res.status(200).json(newContact);
+    return res.status(201).json(newContact);
   });
 
   businessContactsRouter.use('/:contactId', hasBusinessContactAccess);

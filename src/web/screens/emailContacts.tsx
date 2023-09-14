@@ -75,7 +75,7 @@ export function BusinessContacts() {
   const handleAddEmailContact = async (formData: BusinessContactForm) => {
     try {
       const response = await AddEmailContact(formData);
-      if (response.status === 200) {
+      if (response.status === 201) {
         handleSuccessPopup('Email contact added.');
       }
       handleBusinessContactUpdated();
