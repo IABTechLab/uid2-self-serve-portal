@@ -43,7 +43,6 @@ jobs:
     name: Publish API/UI Docker Image
     needs: [check, sync-email-templates]
     if: always() && (needs.sync-email-template.result == 'success') # Run build-ssportal is sync email template is skipped
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_SSPORTAL}}
@@ -55,7 +54,6 @@ jobs:
       packages: write
     name: Publish SSPortal DB migration
     needs: [check]
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_MIGRATION}}
@@ -67,7 +65,6 @@ jobs:
       packages: write
     name: Publish SSPortal DB migration
     needs: [check]
-    runs-on: ubuntu-latest
     uses: ./.github/workflows/docker-publish-action.yml
     with:
       IMAGE_NAME: ${{env.IMAGE_NAME_KEYCLOAK}}
