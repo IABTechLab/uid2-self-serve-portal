@@ -22,6 +22,7 @@ import {
 } from './envars';
 import { getLoggers } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
+import { createKeyPairRouter } from './routers/keyPairRouter';
 import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
@@ -59,6 +60,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     participantsRouter: createParticipantsRouter(),
     usersRouter: createUsersRouter(),
     sitesRouter: createSitesRouter(),
+    keyPairRouter: createKeyPairRouter(),
   };
   const router = routers.rootRouter;
   app.use((req, res, next) => {
@@ -130,6 +132,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   router.use('/users', routers.usersRouter);
   router.use('/participants', routers.participantsRouter.router);
   router.use('/sites', routers.sitesRouter);
+  router.use('/keypairs', routers.keyPairRouter);
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });

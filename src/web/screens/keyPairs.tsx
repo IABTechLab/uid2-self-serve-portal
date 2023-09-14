@@ -1,10 +1,11 @@
 import { Suspense, useCallback, useContext, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
+import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 // import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { GetKeyPairs } from '../services/keyPairsServices';
+import { GetKeyPairs, KeyPairResponse } from '../services/keyPairsServices';
 // import { ParticipantContext } from '../contexts/ParticipantProvider';
 // import { InviteTeamMember } from '../services/participant';
 // import {
@@ -23,7 +24,7 @@ function Loading() {
   return <div>Loading tokens and keys...</div>;
 }
 
-function TeamMembers() {
+function KeyPairs() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const data = useLoaderData() as { keyPairs: string }; // as { users: UserResponse[] };
   // const data = useLoaderData() as { users: UserResponse[] };
@@ -93,7 +94,7 @@ function TeamMembers() {
       <p className='heading-details'>View and manage Tokens and Keys.</p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.keyPairs}>
-          {(keyPairs) => <h4>{keyPairs}</h4>}
+          {(keyPairs: KeyPairResponse) => <h4>{keyPairs[0].subscription_id}</h4>}
           {/* {(users: UserResponse[]) => (
             <TeamMembersTable
               teamMembers={users}
@@ -117,9 +118,9 @@ function TeamMembers() {
   );
 }
 
-export const TokenKeysRoute: PortalRoute = {
-  description: 'Token Keys',
-  element: <TeamMembers />,
+export const KeyPairRoute: PortalRoute = {
+  description: 'Key',
+  element: <KeyPairs />,
   path: '/dashboard/keyPairs',
   loader: () => {
     const keyPairs = GetKeyPairs();
