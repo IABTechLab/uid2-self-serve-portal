@@ -54,7 +54,7 @@ function TeamMembers() {
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
     const response = await InviteTeamMember(formData, participant!.id);
-    if (response.statusText === 'Created') {
+    if (response.status === 201) {
       handleSuccessPopup('Team member added.');
     }
     onTeamMembersUpdated();
@@ -63,7 +63,7 @@ function TeamMembers() {
   const handleRemoveTeamMember = async (userId: number) => {
     try {
       const response = await RemoveUser(userId);
-      if (response.statusText === 'OK') {
+      if (response.status === 200) {
         handleSuccessPopup('Team member removed.');
       }
       onTeamMembersUpdated();
@@ -75,7 +75,7 @@ function TeamMembers() {
   const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
     try {
       const response = await UpdateUser(userId, formData);
-      if (response.statusText === 'OK') {
+      if (response.status === 200) {
         handleSuccessPopup('Team member updated.');
       }
       onTeamMembersUpdated();
