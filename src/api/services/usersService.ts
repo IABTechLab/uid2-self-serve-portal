@@ -9,7 +9,7 @@ import { isUserAnApprover } from './approversService';
 export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query().findOne('email', email);
+  return User.query().findOne('email', email).where('deleted', 0);
 };
 
 export const enrichUserWithIsApprover = async (user: User) => {
@@ -29,6 +29,7 @@ export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTer
 export const isUserBelongsToParticipant = async (email: string, participantId: number) => {
   const user = await User.query()
     .where('email', email)
+    .andWhere('deleted', 0)
     .andWhere('participantId', participantId)
     .first();
 
@@ -67,7 +68,9 @@ export const enrichWithUserFromParams = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-  if (!(await isUserBelongsToParticipant(req.auth?.payload?.email as string, user.participantId))) {
+  if (
+    !(await isUserBelongsToParticipant(req.auth?.payload?.email as string, user.participantId!))
+  ) {
     return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }
 

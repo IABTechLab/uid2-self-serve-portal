@@ -158,7 +158,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   });
 
   router.all('/*', (req, res) => {
-    res.json({ message: `${req.method} not allowed on this route` }).status(405);
+    res.status(404).json({ message: `Route not found.` });
   });
 
   app.use(BASE_REQUEST_PATH, router);

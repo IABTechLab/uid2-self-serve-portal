@@ -51,7 +51,7 @@ export function BusinessContacts() {
   const handleRemoveEmailContact = async (contactId: number) => {
     try {
       const response = await RemoveEmailContact(contactId);
-      if (response.statusText === 'OK') {
+      if (response.status === 200) {
         handleSuccessPopup('Email contact removed.');
       }
       handleBusinessContactUpdated();
@@ -63,7 +63,7 @@ export function BusinessContacts() {
   const handleUpdateEmailContact = async (contactId: number, formData: BusinessContactForm) => {
     try {
       const response = await UpdateEmailContact(contactId, formData);
-      if (response.statusText === 'OK') {
+      if (response.status === 200) {
         handleSuccessPopup('Email contact updated.');
       }
       handleBusinessContactUpdated();
@@ -75,7 +75,7 @@ export function BusinessContacts() {
   const handleAddEmailContact = async (formData: BusinessContactForm) => {
     try {
       const response = await AddEmailContact(formData);
-      if (response.statusText === 'OK') {
+      if (response.status === 201) {
         handleSuccessPopup('Email contact added.');
       }
       handleBusinessContactUpdated();
