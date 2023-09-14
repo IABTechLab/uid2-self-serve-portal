@@ -142,7 +142,7 @@ const enrichCurrentParticipant = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-  const participant = await Participant.query().findById(user.participantId);
+  const participant = await Participant.query().findById(user.participantId!);
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }

@@ -1,4 +1,5 @@
 import express from 'express';
+import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 
 import { Participant, ParticipantStatus } from '../entities/Participant';
@@ -83,13 +84,27 @@ export function createUsersRouter() {
     return res.sendStatus(200);
   });
 
+  type DeletedUser = {
+    email: string;
+    participantId: number | null;
+    deleted: boolean;
+  };
+
   usersRouter.delete('/:userId', async (req: UserRequest, res) => {
     const { user } = req;
     if (req.auth?.payload?.email === user?.email) {
       return res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
     }
     const kcAdminClient = await getKcAdminClient();
-    await Promise.all([deleteUserByEmail(kcAdminClient!, user?.email!), user!.$query().delete()]);
+    const data: DeletedUser = {
+      email: `${user?.email}-removed-${uuid()}`,
+      participantId: null,
+      deleted: true,
+    };
+    await Promise.all([
+      deleteUserByEmail(kcAdminClient!, user?.email!),
+      user!.$query().patch(data),
+    ]);
 
     return res.sendStatus(200);
   });
