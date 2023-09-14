@@ -3,7 +3,6 @@ on: [push, workflow_dispatch] # remove push after test it
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME_SSPORTAL: iabtechlab/uid2-ssportal
   IMAGE_NAME_MIGRATION: iabtechlab/uid2-ssportal-migration
   IMAGE_NAME_KEYCLOAK: iabtechlab/uid2-ssportal-keycloak
 
@@ -45,7 +44,7 @@ jobs:
     if: always() && (needs.sync-email-template.result == 'success') # Run build-ssportal is sync email template is skipped
     uses: ./.github/workflows/docker-publish-action.yml
     with:
-      IMAGE_NAME: ${{env.IMAGE_NAME_SSPORTAL}}
+      IMAGE_NAME: 'iabtechlab/uid2-ssportal' # env context is not available to job.if
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal
   build-migration:
