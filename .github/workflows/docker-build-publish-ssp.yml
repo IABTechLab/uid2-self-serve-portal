@@ -1,11 +1,6 @@
 name: Build and Publish Self-serve Portal
 on: [push, workflow_dispatch] # remove push after test it
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME_MIGRATION: iabtechlab/uid2-ssportal-migration
-  IMAGE_NAME_KEYCLOAK: iabtechlab/uid2-ssportal-keycloak
-
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -55,7 +50,7 @@ jobs:
     needs: [check]
     uses: ./.github/workflows/docker-publish-action.yml
     with:
-      IMAGE_NAME: ${{env.IMAGE_NAME_MIGRATION}}
+      IMAGE_NAME: 'iabtechlab/uid2-ssportal-migration'
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_ssportal_migration
   build-keycloak:
@@ -66,6 +61,6 @@ jobs:
     needs: [check]
     uses: ./.github/workflows/docker-publish-action.yml
     with:
-      IMAGE_NAME: ${{env.IMAGE_NAME_KEYCLOAK}}
+      IMAGE_NAME: 'iabtechlab/uid2-ssportal-keycloak'
       VERSION: ${{needs.check.packageVersion}}
       DOCKERFILE: Dockerfile_keycloak
