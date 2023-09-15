@@ -6,7 +6,7 @@ jobs:
     name: Publish API/UI Docker Image
     uses: ./.github/workflows/docker-publish-action.yml
     with:
-      IMAGE_NAME: 'iabtechlab/uid2-ssportal' # env context is not available to job.if
+      IMAGE_NAME: 'iabtechlab/uid2-ssportal'
       DOCKERFILE: Dockerfile_ssportal
   build-migration:
     name: Publish SSPortal DB migration
