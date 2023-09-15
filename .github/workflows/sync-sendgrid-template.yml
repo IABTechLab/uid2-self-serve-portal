@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
     inputs:
-      forceSyncAll:
+      FORCE_SYNC_ALL:
         description: Force sync all files in templates dir (Useful for initial synchronization)
         required: false
         default: false
@@ -9,6 +9,6 @@ jobs:
   sync-templates-in-sendgrid:
     uses: ./.github/workflows/sync-sendgrid-template-action.yml
     with:
-      FORCE_SYNC_ALL: '${{ github.event.inputs.forceSyncAll }}'
+      FORCE_SYNC_ALL: '${{ github.event.inputs.FORCE_SYNC_ALL }}'
     secrets:
       SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
