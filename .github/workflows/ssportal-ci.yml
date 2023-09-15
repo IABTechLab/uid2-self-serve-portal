@@ -7,7 +7,7 @@ jobs:
     name: Check email template updates
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Get all email templates that have changed
         id: changed-files
         uses: tj-actions/changed-files@v39
