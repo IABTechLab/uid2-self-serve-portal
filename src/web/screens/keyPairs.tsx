@@ -3,9 +3,11 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
+import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
+import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 // import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { GetKeyPairs, KeyPairResponse } from '../services/keyPairsServices';
+import { GetKeyPairs } from '../services/keyPairsServices';
 // import { ParticipantContext } from '../contexts/ParticipantProvider';
 // import { InviteTeamMember } from '../services/participant';
 // import {
@@ -94,7 +96,7 @@ function KeyPairs() {
       <p className='heading-details'>View and manage Tokens and Keys.</p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.keyPairs}>
-          {(keyPairs: KeyPairResponse) => <h4>{keyPairs[0].subscription_id}</h4>}
+          {(keyPairs: KeyPairModel[]) => <KeyPairsTable keyPairs={keyPairs} />}
           {/* {(users: UserResponse[]) => (
             <TeamMembersTable
               teamMembers={users}
@@ -119,7 +121,7 @@ function KeyPairs() {
 }
 
 export const KeyPairRoute: PortalRoute = {
-  description: 'Key',
+  description: 'Key Pairs',
   element: <KeyPairs />,
   path: '/dashboard/keyPairs',
   loader: () => {

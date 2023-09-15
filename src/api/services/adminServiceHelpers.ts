@@ -26,7 +26,7 @@ export type SharingListResponse = {
 
 export type KeyPairDTO = {
   contact?: string;
-  created: Date;
+  created: number;
   disabled: boolean;
   public_key: string;
   site_id: number;

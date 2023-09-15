@@ -1,0 +1,85 @@
+.key-pairs {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .key-pairs-table {
+    margin-top: 28px;
+    font-size: 0.875rem;
+
+    thead {
+      font-weight: 700;
+      border: none;
+    }
+
+    .subscription-id {
+      width: 20%;
+    }
+
+    .site-id {
+      width: 15%;
+    }
+
+    .public-key {
+      width: 55%;
+    }
+
+    .created {
+      width: 10%;
+    }
+
+    th.action {
+      text-align: end;
+      padding-left: 140px;
+    }
+
+    td {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+
+    .action {
+      padding-right: 80px;
+    }
+
+    .action-cell {
+      font-size: 0.8125rem;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      align-items: baseline;
+
+      .invite-button {
+        &.clickable {
+          cursor: pointer;
+          color: var(--theme-action);
+        }
+
+        &.error {
+          color: var(--theme-error);
+        }
+
+        border: none;
+        white-space: nowrap;
+        align-items: center;
+        padding: 0 10px;
+      }
+
+      svg {
+        font-size: 1rem;
+      }
+    }
+
+    .name-cell {
+      display: flex;
+      align-items: center;
+      .pending-label {
+        background: var(--theme-label);
+        font-size: 0.625rem;
+        border-radius: 3px;
+        padding: 3px 8px;
+        margin-left: 10px;
+      }
+    }
+  }
+}
