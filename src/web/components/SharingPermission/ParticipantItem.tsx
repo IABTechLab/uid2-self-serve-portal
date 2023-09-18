@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
-import { SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { ClientTypeDescriptions, SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import {
   formatSourceColumn,
@@ -17,7 +17,7 @@ function getParticipantTypes(siteTypes?: SiteDTO['clientTypes']) {
   if (!siteTypes) return null;
   return siteTypes.map((pt) => (
     <div className='participant-type-label' key={pt}>
-      {pt}
+      {ClientTypeDescriptions[pt]}
     </div>
   ));
 }
