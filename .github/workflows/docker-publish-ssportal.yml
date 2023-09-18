@@ -1,4 +1,4 @@
-name: Self-serve Portal CI
+name: Build and Publish Self-serve Portal Images
 on: workflow_dispatch
 
 jobs:
