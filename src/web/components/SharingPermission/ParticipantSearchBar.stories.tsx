@@ -24,31 +24,30 @@ const Template: ComponentStory<typeof ParticipantSearchBar> = (args) => {
 
 export const SearchBar = Template.bind({});
 SearchBar.args = {
-  participants: [
+  sites: [
     {
-      siteId: 1,
+      id: 1,
       name: 'Participant 1',
-      types: [{ id: 1, typeName: 'Type 1' }],
+      clientTypes: ['DSP'],
+      canBeSharedWith: true,
     },
     {
-      siteId: 2,
+      id: 2,
       name: 'Participant 2',
-      types: [{ id: 2, typeName: 'Type 2' }],
+      clientTypes: ['PUBLISHER'],
+      canBeSharedWith: true,
     },
     {
-      siteId: 3,
+      id: 3,
       name: 'Participant 3',
-      types: [{ id: 3, typeName: 'Type 3' }],
+      clientTypes: ['DATA_PROVIDER'],
+      canBeSharedWith: true,
     },
     {
-      siteId: 4,
+      id: 4,
       name: 'Participant 4',
-      types: [{ id: 2, typeName: 'Type 2' }],
+      clientTypes: ['PUBLISHER'],
+      canBeSharedWith: true,
     },
-  ],
-  participantTypes: [
-    { id: 1, typeName: 'Type 1' },
-    { id: 2, typeName: 'Type 2' },
-    { id: 3, typeName: 'Type 3' },
   ],
 };

@@ -1,7 +1,13 @@
 import { Participant } from '../entities/Participant';
 import { ParticipantTypeDTO } from '../entities/ParticipantType';
-import { AvailableParticipantDTO } from '../routers/participantsRouter';
 import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
+
+export type SharingSiteDTO = Pick<SiteDTO, 'clientTypes' | 'id' | 'name'> & {
+  canBeSharedWith: boolean;
+};
+export type SharingSiteWithSource = SharingSiteDTO & {
+  addedBy: (ClientType | 'Manual')[];
+};
 
 export const mapClientTypeToParticipantType = (
   clientTypes: ClientType[],
@@ -17,19 +23,6 @@ export const mapClientTypeToParticipantType = (
   return types;
 };
 
-export const convertSiteToAvailableParticipantDTO = (
-  site: SiteDTO,
-  participantTypes: ParticipantTypeDTO[],
-  participants: Participant[]
-): AvailableParticipantDTO => {
-  const matchedParticipant = participants.find((p) => p.siteId === site.id);
-  return {
-    name: matchedParticipant ? matchedParticipant.name : site.name,
-    siteId: site.id,
-    types: mapClientTypeToParticipantType(site.clientTypes ?? [], participantTypes),
-  };
-};
-
 export const canBeSharedWith = (site: SiteDTO): boolean => {
   if (
     (site.roles.includes('SHARER') ||
@@ -39,4 +32,17 @@ export const canBeSharedWith = (site: SiteDTO): boolean => {
   )
     return true;
   return false;
+};
+
+export const convertSiteToSharingSiteDTO = (
+  site: SiteDTO,
+  participants: Participant[]
+): SharingSiteDTO => {
+  const matchedParticipant = participants.find((p) => p.siteId === site.id);
+  return {
+    name: matchedParticipant ? matchedParticipant.name : site.name,
+    id: site.id,
+    clientTypes: site.clientTypes,
+    canBeSharedWith: canBeSharedWith(site),
+  };
 };

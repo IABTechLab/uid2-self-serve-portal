@@ -1,35 +1,36 @@
 import { CheckedState } from '@radix-ui/react-checkbox';
 
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
+import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import { TriStateCheckboxState } from '../Core/TriStateCheckbox';
 
 export const MANUALLY_ADDED = 'Manual';
-export type SharingParticipant = AvailableParticipantDTO & {
-  addedBy: (ParticipantTypeDTO | typeof MANUALLY_ADDED)[];
+export type SharingParticipant = SharingSiteDTO & {
+  addedBy: (ClientType | typeof MANUALLY_ADDED)[];
 };
 
 export const isSharingParticipant = (
-  participant: AvailableParticipantDTO | SharingParticipant
-): participant is SharingParticipant => {
-  return 'addedBy' in participant;
+  site: SharingSiteDTO | SharingSiteWithSource
+): site is SharingSiteWithSource => {
+  return 'addedBy' in site;
 };
 
-export const isAddedByManual = (participant: SharingParticipant) => {
-  return participant.addedBy.includes(MANUALLY_ADDED);
+export const isAddedByManual = (site: SharingSiteWithSource) => {
+  return site.addedBy.includes(MANUALLY_ADDED);
 };
 
-export type ParticipantTSType = AvailableParticipantDTO | SharingParticipant;
+export type ParticipantTSType = SharingSiteDTO;
 
-export function filterParticipants<T extends ParticipantTSType>(
-  participants: T[],
+export function filterSites<TSharingSite extends SharingSiteDTO>(
+  sites: TSharingSite[],
   filterText: string,
-  selectedTypeIds?: Set<number>
-) {
-  let filtered = participants;
+  selectedTypeIds?: Set<ClientType>
+): TSharingSite[] {
+  let filtered = sites;
 
   if (selectedTypeIds && selectedTypeIds.size > 0) {
-    filtered = filtered.filter((p) => p.types?.some((t) => selectedTypeIds.has(t.id)));
+    filtered = filtered.filter((p) => p.clientTypes?.some((t) => selectedTypeIds.has(t)));
   }
 
   if (filterText) {
@@ -44,7 +45,7 @@ export function isSelectedAll(
   checkedParticipants: Set<number>
 ) {
   if (!filteredParticipants.length || !checkedParticipants.size) return false;
-  return filteredParticipants.every((p) => checkedParticipants.has(p.siteId!));
+  return filteredParticipants.every((p) => checkedParticipants.has(p.id));
 }
 
 export function getSelectAllState(selectAll: boolean, checkedElement: Set<number>) {
@@ -59,19 +60,19 @@ export function getSelectAllState(selectAll: boolean, checkedElement: Set<number
 
 export function formatSourceColumn(sources: SharingParticipant['addedBy']) {
   let sourceField = '';
-  const sourcesText = [...sources.map((s) => (s === MANUALLY_ADDED ? MANUALLY_ADDED : s.typeName))];
-  const manualIndex = sourcesText.indexOf(MANUALLY_ADDED);
-
+  const manualIndex = sources.indexOf(MANUALLY_ADDED);
   if (manualIndex !== -1) {
     sourceField = MANUALLY_ADDED;
-    sourcesText.splice(manualIndex, 1);
   }
 
-  if (sourcesText.length > 0) {
+  const sourcesWithoutManual = sources.filter((s) => s !== MANUALLY_ADDED) as ClientType[];
+  if (sourcesWithoutManual.length > 0) {
     if (sourceField) {
       sourceField += ' and ';
     }
-    sourceField += `Auto: ${sourcesText.join(', ')}`;
+    sourceField += `Auto: ${sourcesWithoutManual
+      .map((source) => ClientTypeDescriptions[source])
+      .join(', ')}`;
   }
   return sourceField;
 }

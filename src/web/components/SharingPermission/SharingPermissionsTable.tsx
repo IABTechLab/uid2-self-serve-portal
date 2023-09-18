@@ -1,8 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { useAvailableSiteList } from '../../services/site';
+import { SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
+import {
+  ClientType,
+  ClientTypeDescriptions,
+  ClientTypes,
+} from '../../../api/services/adminServiceHelpers';
+import { useAllSitesList } from '../../services/site';
 import { formatStringsWithSeparator } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { Loading } from '../Core/Loading';
@@ -11,7 +16,7 @@ import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
-  filterParticipants,
+  filterSites,
   getSelectAllState,
   isAddedByManual,
   isSelectedAll,
@@ -35,11 +40,11 @@ function NoParticipant() {
 
 type DeletePermissionDialogProps = {
   onDeleteSharingPermission: () => void;
-  selectedParticipantList: SharingParticipant[];
+  selectedSiteList: SharingSiteWithSource[];
 };
 function DeletePermissionDialog({
   onDeleteSharingPermission,
-  selectedParticipantList,
+  selectedSiteList,
 }: DeletePermissionDialogProps) {
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
@@ -48,10 +53,8 @@ function DeletePermissionDialog({
     setOpenConfirmation(false);
   };
 
-  const showDeletionNotice = (participant: SharingParticipant) => {
-    const remainSources = (
-      participant.addedBy.filter((source) => source !== MANUALLY_ADDED) as ParticipantTypeDTO[]
-    ).map((t) => t.typeName); // Unfortunately I couldn't find a good way to avoid "as" here
+  const showDeletionNotice = (participant: SharingSiteWithSource) => {
+    const remainSources = participant.addedBy.filter((source) => source !== MANUALLY_ADDED);
     if (remainSources.length) {
       return (
         <span> (This site will remain shared by {formatStringsWithSeparator(remainSources)})</span>
@@ -76,8 +79,8 @@ function DeletePermissionDialog({
     >
       <div className='dialog-body-section'>
         <ul className='dot-list'>
-          {selectedParticipantList.map((participant) => (
-            <li key={participant.siteId}>
+          {selectedSiteList.map((participant) => (
+            <li key={participant.id}>
               {participant.name}
               {showDeletionNotice(participant)}
             </li>
@@ -101,46 +104,43 @@ function DeletePermissionDialog({
 }
 
 type SharingPermissionsTableContentProps = {
-  sharingParticipants: SharingParticipant[];
+  sharingSites: SharingSiteWithSource[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
-  participantTypes: ParticipantTypeDTO[];
 };
 
 export function SharingPermissionsTableContent({
-  sharingParticipants,
+  sharingSites,
   onDeleteSharingPermission,
-  participantTypes,
 }: SharingPermissionsTableContentProps) {
   const [filterText, setFilterText] = useState('');
-  const [checkedParticipants, setCheckedParticipants] = useState<Set<number>>(new Set());
-  const [selectedTypeIds, setSelectedTypeIds] = useState(new Set<number>());
-  const filteredParticipants = filterParticipants(sharingParticipants, filterText, selectedTypeIds);
+  const [checkedSites, setCheckedSites] = useState<Set<number>>(new Set());
+  const [selectedTypes, setSelectedTypes] = useState(new Set<ClientType>());
+  const filteredSites = filterSites(sharingSites, filterText, selectedTypes);
 
   const isSelectedAllManualAddedParticipant = () => {
-    return isSelectedAll(filteredParticipants.filter(isAddedByManual), checkedParticipants);
+    return isSelectedAll(filteredSites.filter(isAddedByManual), checkedSites);
   };
 
-  const checkboxStatus = getSelectAllState(
-    isSelectedAllManualAddedParticipant(),
-    checkedParticipants
-  );
+  const checkboxStatus = getSelectAllState(isSelectedAllManualAddedParticipant(), checkedSites);
 
   const handleDeletePermissions = () => {
-    onDeleteSharingPermission(Array.from(checkedParticipants));
-    setCheckedParticipants(new Set());
+    onDeleteSharingPermission(Array.from(checkedSites));
+    setCheckedSites(new Set());
   };
-
-  const participantTypeOptions = participantTypes.map((v) => ({ id: v.id, name: v.typeName }));
+  const siteTypeOptions = ClientTypes.map((type) => ({
+    id: type,
+    name: ClientTypeDescriptions[type],
+  }));
 
   const handleCheckboxChange = () => {
     if (checkboxStatus === TriStateCheckboxState.unchecked) {
       const selectedSiteIds = new Set<number>();
-      filteredParticipants.forEach((p) => {
-        if (isAddedByManual(p)) selectedSiteIds.add(p.siteId);
+      filteredSites.forEach((site) => {
+        if (isAddedByManual(site)) selectedSiteIds.add(site.id);
       });
-      setCheckedParticipants(selectedSiteIds);
+      setCheckedSites(selectedSiteIds);
     } else {
-      setCheckedParticipants(new Set());
+      setCheckedSites(new Set());
     }
   };
 
@@ -164,18 +164,16 @@ export function SharingPermissionsTableContent({
             status={checkboxStatus}
             className='participant-checkbox'
           />
-          {checkedParticipants.size > 0 && (
+          {checkedSites.size > 0 && (
             <DeletePermissionDialog
               onDeleteSharingPermission={handleDeletePermissions}
-              selectedParticipantList={sharingParticipants.filter((p) =>
-                checkedParticipants.has(p.siteId!)
-              )}
+              selectedSiteList={sharingSites.filter((p) => checkedSites.has(p.id))}
             />
           )}
           <MultiSelectDropdown
             title='Participant Type'
-            options={participantTypeOptions}
-            onSelectedChange={setSelectedTypeIds}
+            options={siteTypeOptions}
+            onSelectedChange={setSelectedTypes}
           />
         </div>
         <div className='sharing-permissions-search-bar-container'>
@@ -189,10 +187,10 @@ export function SharingPermissionsTableContent({
           <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
         </div>
       </div>
-      <ParticipantsTable<SharingParticipant>
-        participants={filteredParticipants}
-        selectedParticipantIds={checkedParticipants}
-        onSelectedChange={setCheckedParticipants}
+      <ParticipantsTable
+        sites={filteredSites}
+        selectedParticipantIds={checkedSites}
+        onSelectedChange={setCheckedSites}
         tableHeader={tableHeader}
         className='shared-participants-table'
       />
@@ -202,51 +200,43 @@ export function SharingPermissionsTableContent({
 
 type SharingPermissionsTableProps = {
   sharedSiteIds: number[];
-  sharedTypes: string[];
+  sharedTypes: ClientType[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
-  participantTypes: ParticipantTypeDTO[];
 };
 
 export function SharingPermissionsTable({
   sharedSiteIds,
   sharedTypes,
   onDeleteSharingPermission,
-  participantTypes,
 }: SharingPermissionsTableProps) {
-  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
-  const getSharingParticipants = () => {
-    const siteIds = new Set(sharedSiteIds);
-    const sharedParticipantType = new Set(sharedTypes);
-    const sharingLists: SharingParticipant[] = [];
-
-    availableParticipants?.forEach((p) => {
-      const sources: SharingParticipant['addedBy'] = [];
-      if (siteIds.has(p.siteId)) sources.push(MANUALLY_ADDED);
-      p.types.forEach((t) => {
-        if (sharedParticipantType.has(t.typeName.toLocaleUpperCase().replace(' ', '_'))) {
-          sources.push(t);
-        }
-      });
-      if (sources.length) {
-        sharingLists.push({
+  const { sites, isLoading } = useAllSitesList();
+  const getSharingParticipants: () => SharingSiteWithSource[] = () => {
+    return sites!
+      .map((p) => {
+        const maybeManualArray: typeof MANUALLY_ADDED[] = sharedSiteIds.includes(p.id)
+          ? [MANUALLY_ADDED]
+          : [];
+        const includedTypes =
+          p.clientTypes?.filter((partTypes) => sharedTypes.includes(partTypes)) ?? [];
+        return {
           ...p,
-          addedBy: sources,
-        });
-      }
-    });
-    return sharingLists;
+          addedBy: [...includedTypes, ...maybeManualArray],
+        };
+      })
+      .filter((site) => site.addedBy.length > 0);
   };
-  const sharingParticipants = getSharingParticipants();
 
   if (isLoading) return <Loading />;
+  const sharingParticipants = getSharingParticipants();
+  console.log('SHARED', sharedSiteIds, sharedTypes);
+  console.log('-------------', sites, sharingParticipants);
   return (
     <div className='sharing-permissions-table'>
       <h2>Your Sharing Permissions</h2>
       {sharingParticipants.length ? (
         <SharingPermissionsTableContent
-          sharingParticipants={getSharingParticipants()}
+          sharingSites={getSharingParticipants()}
           onDeleteSharingPermission={onDeleteSharingPermission}
-          participantTypes={participantTypes}
         />
       ) : (
         <NoParticipant />

@@ -1,3 +1,4 @@
+import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
@@ -93,19 +94,18 @@ export const getRecommendationMessageFromTypeNames = (
 };
 
 export const getFilteredParticipantsByType = (
-  participants: AvailableParticipantDTO[],
+  participants: SharingSiteDTO[],
   publisherChecked: boolean,
   advertiserChecked: boolean,
   DSPChecked: boolean,
   dataProviderChecked: boolean
 ) => {
   return participants.filter((p) => {
-    const selectedTypes = p.types!.map((type) => type.typeName);
     if (
-      (publisherChecked && selectedTypes.includes('Publisher')) ||
-      (advertiserChecked && selectedTypes.includes('Advertiser')) ||
-      (DSPChecked && selectedTypes.includes('DSP')) ||
-      (dataProviderChecked && selectedTypes.includes('Data Provider'))
+      (publisherChecked && p.clientTypes?.includes('PUBLISHER')) ||
+      (advertiserChecked && p.clientTypes?.includes('ADVERTISER')) ||
+      (DSPChecked && p.clientTypes?.includes('DSP')) ||
+      (dataProviderChecked && p.clientTypes?.includes('DATA_PROVIDER'))
     ) {
       return true;
     }

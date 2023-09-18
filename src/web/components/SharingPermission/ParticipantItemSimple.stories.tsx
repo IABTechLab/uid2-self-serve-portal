@@ -19,9 +19,10 @@ const Template: ComponentStory<typeof ParticipantItemSimple> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  participant: {
-    siteId: 1,
+  site: {
+    id: 1,
     name: 'Participant 1',
-    types: [{ id: 2, typeName: 'Type 2' }],
+    clientTypes: ['DSP'],
+    canBeSharedWith: true,
   },
 };
