@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
+import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
@@ -10,36 +11,36 @@ export default {
   component: BulkAddPermissions,
 } as ComponentMeta<typeof BulkAddPermissions>;
 
-const response: AvailableParticipantDTO[] = [
+const response: SharingSiteDTO[] = [
   {
-    siteId: 1,
+    id: 1,
     name: 'Test Publisher',
-    types: [{ id: 4, typeName: 'Publisher' }],
+    clientTypes: ['PUBLISHER'],
+    canBeSharedWith: true,
   },
   {
-    siteId: 2,
+    id: 2,
     name: 'Test Advertiser',
-    types: [{ id: 2, typeName: 'Advertiser' }],
+    clientTypes: ['ADVERTISER'],
+    canBeSharedWith: true,
   },
   {
-    siteId: 3,
+    id: 3,
     name: 'Test DSP',
-    types: [{ id: 1, typeName: 'DSP' }],
+    clientTypes: ['DSP'],
+    canBeSharedWith: true,
   },
   {
-    siteId: 4,
+    id: 4,
     name: 'Test Data Provider',
-    types: [{ id: 3, typeName: 'Data Provider' }],
+    clientTypes: ['DATA_PROVIDER'],
+    canBeSharedWith: true,
   },
   {
-    siteId: 5,
+    id: 5,
     name: 'Test with all types',
-    types: [
-      { id: 4, typeName: 'Publisher' },
-      { id: 2, typeName: 'Advertiser' },
-      { id: 1, typeName: 'DSP' },
-      { id: 3, typeName: 'Data Provider' },
-    ],
+    clientTypes: ['PUBLISHER', 'ADVERTISER', 'DSP', 'DATA_PROVIDER'],
+    canBeSharedWith: true,
   },
 ];
 
