@@ -1,4 +1,3 @@
-name: Sync handlebars template with SendGrid
 on:
   workflow_call:
     inputs:
