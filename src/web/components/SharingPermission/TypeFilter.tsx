@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import { ClientType } from '../../../api/services/adminServiceHelpers';
+import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 
 import './TypeFilter.scss';
 
@@ -17,7 +17,7 @@ export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) 
       className={clsx('type-button', { selected: isSelected })}
       onClick={() => onTypeSelect(type)}
     >
-      {type}
+      {ClientTypeDescriptions[type]}
     </button>
   );
 }
