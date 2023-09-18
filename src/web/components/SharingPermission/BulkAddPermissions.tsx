@@ -56,13 +56,13 @@ export function BulkAddPermissions({
   const { register, handleSubmit, watch, setValue } = formMethods;
 
   useEffect(() => {
-    if (sharedTypes && sharedTypes.length > 0) {
+    if (participant?.completedRecommendations) {
       setValue('publisherChecked', sharedTypes.includes('PUBLISHER'));
       setValue('advertiserChecked', sharedTypes.includes('ADVERTISER'));
       setValue('DSPChecked', sharedTypes.includes('DSP'));
       setValue('dataProviderChecked', sharedTypes.includes('DATA_PROVIDER'));
     }
-  }, [sharedTypes, setValue]);
+  }, [sharedTypes, setValue, participant?.completedRecommendations]);
 
   const watchPublisherChecked = watch('publisherChecked');
   const watchAdvertiserChecked = watch('advertiserChecked');
