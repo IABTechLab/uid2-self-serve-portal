@@ -60,6 +60,7 @@ function DeletePermissionDialog({
     if (remainSourceDescriptions.length) {
       return (
         <span>
+          {' '}
           (This site will remain shared by {formatStringsWithSeparator(remainSourceDescriptions)})
         </span>
       );
