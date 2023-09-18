@@ -1,37 +1,36 @@
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { ParticipantItem } from './ParticipantItem';
-import { ParticipantTSType } from './ParticipantTableHelper';
 
 import './ParticipantsTable.scss';
 
-type ParticipantsTableProps<T extends ParticipantTSType> = {
+type ParticipantsTableProps = {
   tableHeader: ReactNode;
-  participants: T[];
+  sites: SharingSiteDTO[];
   onSelectedChange: (selectedItems: Set<number>) => void;
   selectedParticipantIds?: Set<number>;
   className?: string;
 };
 
-function ParticipantsTableContent<T extends ParticipantTSType>({
+function ParticipantsTableContent({
   tableHeader,
-  participants,
+  sites,
   onSelectedChange,
   selectedParticipantIds = new Set(),
   className,
-}: ParticipantsTableProps<T>) {
-  const { sortData } = useSortable<AvailableParticipantDTO>();
-  const sortedData = sortData(participants);
+}: ParticipantsTableProps) {
+  const { sortData } = useSortable<SharingSiteDTO>();
+  const sortedData = sortData(sites);
 
-  const handleCheckChange = (participant: AvailableParticipantDTO) => {
+  const handleCheckChange = (site: SharingSiteDTO) => {
     const newCheckedItems = new Set(selectedParticipantIds);
-    if (newCheckedItems.has(participant.siteId!)) {
-      newCheckedItems.delete(participant.siteId!);
+    if (newCheckedItems.has(site.id)) {
+      newCheckedItems.delete(site.id);
     } else {
-      newCheckedItems.add(participant.siteId!);
+      newCheckedItems.add(site.id);
     }
 
     onSelectedChange(newCheckedItems);
@@ -43,10 +42,10 @@ function ParticipantsTableContent<T extends ParticipantTSType>({
       <tbody>
         {sortedData.map((participant) => (
           <ParticipantItem
-            key={participant.siteId}
-            participant={participant}
+            key={participant.id}
+            site={participant}
             onClick={() => handleCheckChange(participant)}
-            checked={!!selectedParticipantIds.has(participant.siteId!)}
+            checked={!!selectedParticipantIds.has(participant.id)}
           />
         ))}
       </tbody>
@@ -54,10 +53,10 @@ function ParticipantsTableContent<T extends ParticipantTSType>({
   );
 }
 
-export function ParticipantsTable<T extends ParticipantTSType>(props: ParticipantsTableProps<T>) {
+export function ParticipantsTable(props: ParticipantsTableProps) {
   return (
     <SortableProvider>
-      <ParticipantsTableContent<T> {...props} />
+      <ParticipantsTableContent {...props} />
     </SortableProvider>
   );
 }

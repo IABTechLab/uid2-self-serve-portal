@@ -1,7 +1,6 @@
 import { useContext, useMemo, useState } from 'react';
 
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { useAvailableSiteList } from '../../services/site';
 import { Dialog } from '../Core/Dialog';
@@ -13,47 +12,45 @@ import './SearchAndAddParticipants.scss';
 type SearchAndAddParticipantsProps = {
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
   sharedSiteIds: number[];
-  participantTypes: ParticipantTypeDTO[];
 };
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
   sharedSiteIds,
-  participantTypes,
 }: SearchAndAddParticipantsProps) {
-  const { sites: availableParticipants, isLoading } = useAvailableSiteList();
+  const { sites, isLoading } = useAvailableSiteList();
   const [openConfirmation, setOpenConfirmation] = useState(false);
-  const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set());
+  const [selectedSites, setSelectedSites] = useState<Set<number>>(new Set());
   const [openSearchResult, setOpenSearchResult] = useState<boolean>(false);
   const { participant } = useContext(ParticipantContext);
-  const onHandleAddParticipants = () => {
+  const onHandleAddSites = () => {
     setOpenConfirmation(false);
-    setSelectedParticipants(new Set());
-    onSharingPermissionsAdded(Array.from(selectedParticipants));
+    setSelectedSites(new Set());
+    onSharingPermissionsAdded(Array.from(selectedSites));
   };
 
-  const sharingParticipantsSiteIds = useMemo(() => {
+  const sharingSiteIds = useMemo(() => {
     return new Set(sharedSiteIds);
   }, [sharedSiteIds]);
 
-  const selectedParticipantList = useMemo(() => {
-    return (availableParticipants ?? []).filter((p) => selectedParticipants.has(p.siteId!));
-  }, [availableParticipants, selectedParticipants]);
+  const selectedSiteList = useMemo(() => {
+    return (sites ?? []).filter((site) => selectedSites.has(site.id!));
+  }, [sites, selectedSites]);
 
-  const getSearchableParticipants = (resolvedParticipants: AvailableParticipantDTO[]) => {
-    return resolvedParticipants.filter(
-      (p) => p.siteId !== participant?.siteId && !sharingParticipantsSiteIds.has(p.siteId)
+  const getSearchableSites = (resolvedSites: SharingSiteDTO[]) => {
+    return resolvedSites.filter(
+      (site) => site.id !== participant?.siteId && !sharingSiteIds.has(site.id)
     );
   };
 
-  const getParticipantText = (participantCount: number): string => {
-    if (participantCount === 1) {
+  const getSitesText = (siteCount: number): string => {
+    if (siteCount === 1) {
       return '1 Participant';
     }
-    return `${participantCount} Participants`;
+    return `${siteCount} Participants`;
   };
 
-  const handleSelectedParticipantChanged = (selectedItems: Set<number>) => {
-    setSelectedParticipants(selectedItems);
+  const handleSelectedSitesChanged = (selectedItems: Set<number>) => {
+    setSelectedSites(selectedItems);
   };
 
   if (isLoading) return <Loading />;
@@ -62,25 +59,22 @@ export function SearchAndAddParticipants({
     <div className='search-and-add-participants'>
       <div className='add-participant-dialog-search-bar'>
         <ParticipantSearchBar
-          selectedParticipantIds={selectedParticipants}
-          participants={getSearchableParticipants(availableParticipants!)}
-          onSelectedChange={handleSelectedParticipantChanged}
-          participantTypes={participantTypes}
+          selectedParticipantIds={selectedSites}
+          sites={getSearchableSites(sites!)}
+          onSelectedChange={handleSelectedSitesChanged}
           open={openSearchResult}
           onToggleOpen={setOpenSearchResult}
         />
       </div>
       <div className='action-section'>
-        {selectedParticipants.size > 0 && (
-          <p>{getParticipantText(selectedParticipants.size)} selected</p>
-        )}
+        {selectedSites.size > 0 && <p>{getSitesText(selectedSites.size)} selected</p>}
         <Dialog
           title='Please review the following changes'
           triggerButton={
             <button
               type='button'
               className='primary-button add-participant-button'
-              disabled={!selectedParticipants.size}
+              disabled={!selectedSites.size}
             >
               Add Permissions
             </button>
@@ -90,12 +84,12 @@ export function SearchAndAddParticipants({
         >
           Adding permissions for the following participants:
           <ul className='dot-list'>
-            {selectedParticipantList.map((selectedParticipant) => (
-              <li key={selectedParticipant.siteId}>{selectedParticipant.name}</li>
+            {selectedSiteList.map((selectedParticipant) => (
+              <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
             ))}
           </ul>
           <div className='dialog-footer-section'>
-            <button type='button' className='primary-button' onClick={onHandleAddParticipants}>
+            <button type='button' className='primary-button' onClick={onHandleAddSites}>
               Save
             </button>
             <button

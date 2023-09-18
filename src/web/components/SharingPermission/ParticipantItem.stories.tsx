@@ -17,10 +17,11 @@ const Template: ComponentStory<typeof ParticipantItem> = (args) => (
 
 export const Checked = Template.bind({});
 Checked.args = {
-  participant: {
-    siteId: 1,
+  site: {
+    id: 1,
     name: 'Participant 1',
-    types: [{ id: 2, typeName: 'Type 2' }],
+    clientTypes: ['DSP'],
+    canBeSharedWith: true,
   },
   onClick: () => {},
   checked: true,
@@ -28,13 +29,11 @@ Checked.args = {
 
 export const Unchecked = Template.bind({});
 Unchecked.args = {
-  participant: {
-    siteId: 2,
+  site: {
+    id: 2,
     name: 'Participant 2',
-    types: [
-      { id: 3, typeName: 'Type 3' },
-      { id: 4, typeName: 'Type 4' },
-    ],
+    clientTypes: ['DSP'],
+    canBeSharedWith: true,
   },
   onClick: () => {},
   checked: false,
@@ -42,13 +41,11 @@ Unchecked.args = {
 
 export const AddedByManual = Template.bind({});
 AddedByManual.args = {
-  participant: {
-    siteId: 2,
+  site: {
+    id: 2,
     name: 'Participant 2',
-    types: [
-      { id: 3, typeName: 'Type 3' },
-      { id: 4, typeName: 'Type 4' },
-    ],
+    clientTypes: ['DSP'],
+    canBeSharedWith: true,
     addedBy: ['Manual'],
   },
   onClick: () => {},
@@ -57,14 +54,12 @@ AddedByManual.args = {
 
 export const AddedByAuto = Template.bind({});
 AddedByAuto.args = {
-  participant: {
-    siteId: 2,
+  site: {
+    id: 2,
     name: 'Participant 2',
-    types: [
-      { id: 3, typeName: 'Type 3' },
-      { id: 4, typeName: 'Type 4' },
-    ],
-    addedBy: [{ id: 1, typeName: 'DSP' }],
+    clientTypes: ['DSP', 'PUBLISHER'],
+    canBeSharedWith: true,
+    addedBy: ['DSP'],
   },
   onClick: () => {},
   checked: false,
@@ -72,14 +67,12 @@ AddedByAuto.args = {
 
 export const AddedByAutoAndManual = Template.bind({});
 AddedByAutoAndManual.args = {
-  participant: {
-    siteId: 2,
+  site: {
+    id: 2,
     name: 'Participant 2',
-    types: [
-      { id: 3, typeName: 'Type 3' },
-      { id: 4, typeName: 'Type 4' },
-    ],
-    addedBy: ['Manual', { id: 1, typeName: 'DSP' }, { id: 2, typeName: 'Publisher' }],
+    clientTypes: ['DSP', 'PUBLISHER'],
+    addedBy: ['Manual', 'DSP', 'PUBLISHER'],
+    canBeSharedWith: true,
   },
   onClick: () => {},
   checked: false,

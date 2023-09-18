@@ -1,43 +1,38 @@
-import { z } from 'zod';
-
-import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
+import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
+import { ClientTypeDescriptions, SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import {
   formatSourceColumn,
   isAddedByManual,
   isSharingParticipant,
-  SharingParticipant,
 } from './ParticipantTableHelper';
 
 import './ParticipantItem.scss';
 
-function getParticipantTypes(participantTypes?: z.infer<typeof ParticipantTypeSchema>[]) {
-  if (!participantTypes) return null;
-  return participantTypes.map((pt) => (
-    <div className='participant-type-label' key={pt.typeName}>
-      {pt.typeName}
+function getParticipantTypes(siteTypes?: SiteDTO['clientTypes']) {
+  if (!siteTypes) return null;
+  return siteTypes.map((pt) => (
+    <div className='participant-type-label' key={pt}>
+      {ClientTypeDescriptions[pt]}
     </div>
   ));
 }
 
 type ParticipantItemSimpleProps = {
-  participant: AvailableParticipantDTO | SharingParticipant;
+  site: SharingSiteDTO | SharingSiteWithSource;
 };
 
-export function ParticipantItemSimple({ participant }: ParticipantItemSimpleProps) {
+export function ParticipantItemSimple({ site }: ParticipantItemSimpleProps) {
   const logo = '/default-logo.svg';
 
   return (
     <>
       <td className='participant-name-cell'>
-        <img src={logo} alt={participant.name} className='participant-logo' />
-        <label htmlFor={`checkbox-${participant.siteId}`} className='checkbox-label'>
-          {participant.name}
-        </label>
+        <img src={logo} alt={site.name} className='participant-logo' />
+        <label className='checkbox-label'>{site.name}</label>
       </td>
       <td>
-        <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+        <div className='participant-types'>{getParticipantTypes(site.clientTypes)}</div>
       </td>
     </>
   );
@@ -48,7 +43,7 @@ type ParticipantItemProps = ParticipantItemSimpleProps & {
   checked: boolean;
 };
 
-export function ParticipantItem({ participant, onClick, checked }: ParticipantItemProps) {
+export function ParticipantItem({ site, onClick, checked }: ParticipantItemProps) {
   return (
     <tr className='participant-item-with-checkbox'>
       <td>
@@ -56,11 +51,11 @@ export function ParticipantItem({ participant, onClick, checked }: ParticipantIt
           onClick={onClick}
           status={checked}
           className='participant-checkbox'
-          disabled={isSharingParticipant(participant) && !isAddedByManual(participant)}
+          disabled={isSharingParticipant(site) && !isAddedByManual(site)}
         />
       </td>
-      <ParticipantItemSimple participant={participant} />
-      {isSharingParticipant(participant) && <td>{formatSourceColumn(participant.addedBy)}</td>}
+      <ParticipantItemSimple site={site} />
+      {isSharingParticipant(site) && <td>{formatSourceColumn(site.addedBy)}</td>}
     </tr>
   );
 }

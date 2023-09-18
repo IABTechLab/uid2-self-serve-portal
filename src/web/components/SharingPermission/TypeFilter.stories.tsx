@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TypeFilter } from './TypeFilter';
 
 export default {
@@ -12,12 +13,8 @@ const Template: ComponentStory<typeof TypeFilter> = (args) => <TypeFilter {...ar
 export const Default = Template.bind({});
 
 Default.args = {
-  types: [
-    { id: 1, typeName: 'Type 1' },
-    { id: 2, typeName: 'Type 2' },
-    { id: 3, typeName: 'Type 3' },
-  ],
-  onFilterChange: (selectedTypeIds: Set<number>) => {
+  types: ['DSP', 'PUBLISHER', 'DATA_PROVIDER'],
+  onFilterChange: (selectedTypeIds: Set<ClientType>) => {
     console.log('Selected type IDs: ', Array.from(selectedTypeIds));
   },
   selectedTypeIds: new Set(),

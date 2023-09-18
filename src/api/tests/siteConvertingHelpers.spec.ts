@@ -1,7 +1,7 @@
 import { Participant } from '../entities/Participant';
 import {
-  convertSiteToAvailableParticipantDTO,
   canBeSharedWith,
+  convertSiteToSharingSiteDTO,
   mapClientTypeToParticipantType,
 } from '../helpers/siteConvertingHelpers';
 import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
@@ -60,20 +60,16 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      const convertedType = convertSiteToAvailableParticipantDTO(site, participantTypes, []);
+      const convertedType = convertSiteToSharingSiteDTO(site, []);
       expect(convertedType).toEqual({
         name: 'Test Site',
-        siteId: 2,
-        types: [
-          {
-            id: 2,
-            typeName: 'Publisher',
-          },
-        ],
+        id: 2,
+        clientTypes: ['PUBLISHER'],
+        canBeSharedWith: true,
       });
     });
 
-    it('should return participant from db if participant has portal account', () => {
+    it('should use participant name from db if participant has portal account', () => {
       const site = {
         id: 2,
         name: 'Test Site',
@@ -94,18 +90,12 @@ describe('Sharing Permission Helper Tests', () => {
           },
         ],
       } as Participant;
-      const convertedType = convertSiteToAvailableParticipantDTO(site, participantTypes, [
-        participant,
-      ]);
+      const convertedType = convertSiteToSharingSiteDTO(site, [participant]);
       expect(convertedType).toEqual({
         name: 'Participant Name',
-        siteId: 2,
-        types: [
-          {
-            id: 2,
-            typeName: 'Publisher',
-          },
-        ],
+        id: 2,
+        types: ['PUBLISHER'],
+        canBeSharedWith: true,
       });
     });
   });
@@ -135,31 +125,6 @@ describe('Sharing Permission Helper Tests', () => {
         client_count: 1,
       } as SiteDTO;
       expect(canBeSharedWith(site)).toBeTruthy();
-    });
-
-    it('should return false if clientTypes are empty', () => {
-      const site = {
-        id: 2,
-        name: 'Test Site',
-        enabled: true,
-        roles: ['SHARER', 'GENERATOR'],
-        clientTypes: [],
-        // eslint-disable-next-line camelcase
-        client_count: 1,
-      } as SiteDTO;
-      expect(canBeSharedWith(site)).toBeFalsy();
-    });
-
-    it('should return false if clientTypes not exists', () => {
-      const site = {
-        id: 2,
-        name: 'Test Site',
-        enabled: true,
-        roles: ['SHARER', 'GENERATOR'],
-        // eslint-disable-next-line camelcase
-        client_count: 1,
-      } as SiteDTO;
-      expect(canBeSharedWith(site)).toBeFalsy();
     });
   });
 });

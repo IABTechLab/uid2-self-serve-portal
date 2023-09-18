@@ -1,13 +1,13 @@
 import clsx from 'clsx';
 
-import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
+import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 
 import './TypeFilter.scss';
 
 type TypeButtonProps = {
-  type: ParticipantTypeDTO;
+  type: ClientType;
   isSelected: boolean;
-  onTypeSelect: (selectedTypeId: number) => void;
+  onTypeSelect: (selectedTypeId: ClientType) => void;
 };
 
 export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) {
@@ -15,21 +15,21 @@ export function TypeButton({ type, isSelected, onTypeSelect }: TypeButtonProps) 
     <button
       type='button'
       className={clsx('type-button', { selected: isSelected })}
-      onClick={() => onTypeSelect(type.id)}
+      onClick={() => onTypeSelect(type)}
     >
-      {type.typeName}
+      {ClientTypeDescriptions[type]}
     </button>
   );
 }
 
 type TypeFilterProps = {
-  types: ParticipantTypeDTO[];
-  onFilterChange: (selectedTypeIds: Set<number>) => void;
-  selectedTypeIds: Set<number>;
+  types: ClientType[];
+  onFilterChange: (selectedTypeIds: Set<ClientType>) => void;
+  selectedTypeIds: Set<ClientType>;
 };
 
 export function TypeFilter({ types, onFilterChange, selectedTypeIds }: TypeFilterProps) {
-  const handleTypeSelect = (typeId: number) => {
+  const handleTypeSelect = (typeId: ClientType) => {
     const newSelectedTypeIds = new Set(selectedTypeIds);
     if (newSelectedTypeIds.has(typeId)) {
       newSelectedTypeIds.delete(typeId);
@@ -44,9 +44,9 @@ export function TypeFilter({ types, onFilterChange, selectedTypeIds }: TypeFilte
     <div className='type-filter'>
       {types.map((type) => (
         <TypeButton
-          key={type.id}
+          key={type}
           type={type}
-          isSelected={selectedTypeIds.has(type.id)}
+          isSelected={selectedTypeIds.has(type)}
           onTypeSelect={handleTypeSelect}
         />
       ))}
