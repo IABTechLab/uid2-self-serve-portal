@@ -53,10 +53,16 @@ function DeletePermissionDialog({
   };
 
   const showDeletionNotice = (participant: SharingSiteWithSource) => {
-    const remainSources = participant.addedBy.filter((source) => source !== MANUALLY_ADDED);
-    if (remainSources.length) {
+    const remainSources = participant.addedBy.filter(
+      (source) => source !== MANUALLY_ADDED
+    ) as ClientType[];
+    const remainSourceDescriptions = remainSources.map((x) => ClientTypeDescriptions[x]);
+    if (remainSourceDescriptions.length) {
       return (
-        <span> (This site will remain shared by {formatStringsWithSeparator(remainSources)})</span>
+        <span>
+          {' '}
+          (This site will remain shared by {formatStringsWithSeparator(remainSourceDescriptions)})
+        </span>
       );
     }
   };
