@@ -1,7 +1,6 @@
 import { CheckedState } from '@radix-ui/react-checkbox';
 
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import { TriStateCheckboxState } from '../Core/TriStateCheckbox';
 

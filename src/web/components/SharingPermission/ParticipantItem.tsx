@@ -1,8 +1,4 @@
-import { z } from 'zod';
-
-import { ParticipantTypeSchema } from '../../../api/entities/ParticipantType';
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { ClientTypeDescriptions, SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import {

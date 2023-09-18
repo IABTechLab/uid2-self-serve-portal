@@ -1,5 +1,4 @@
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 

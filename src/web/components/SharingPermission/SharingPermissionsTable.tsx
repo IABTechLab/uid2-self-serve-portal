@@ -228,8 +228,6 @@ export function SharingPermissionsTable({
 
   if (isLoading) return <Loading />;
   const sharingParticipants = getSharingParticipants();
-  console.log('SHARED', sharedSiteIds, sharedTypes);
-  console.log('-------------', sites, sharingParticipants);
   return (
     <div className='sharing-permissions-table'>
       <h2>Your Sharing Permissions</h2>

@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { SharingSiteDTO } from '../../api/helpers/siteConvertingHelpers';
-import { AvailableParticipantDTO } from '../../api/routers/participantsRouter';
 import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
