@@ -11,6 +11,7 @@ import {
   faExclamationTriangle,
   faMinus,
   faPencil,
+  faPlus,
   faSearch,
   faSort,
   faSortDown,
@@ -39,4 +40,5 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faSort);
   library.add(faSortUp);
   library.add(faSortDown);
+  library.add(faPlus);
 }
