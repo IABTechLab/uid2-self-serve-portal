@@ -21,7 +21,6 @@ import {
   isAddedByManual,
   isSelectedAll,
   MANUALLY_ADDED,
-  SharingParticipant,
 } from './ParticipantTableHelper';
 
 import './SharingPermissionsTable.scss';
@@ -148,9 +147,9 @@ export function SharingPermissionsTableContent({
     <thead>
       <tr className='participant-item-with-checkbox'>
         <th> </th>
-        <SortableTableHeader<SharingParticipant> sortKey='name' header='Participant Name' />
+        <SortableTableHeader<SharingSiteWithSource> sortKey='name' header='Participant Name' />
         <th>Participant Type</th>
-        <SortableTableHeader<SharingParticipant> sortKey='addedBy' header='Source' />
+        <SortableTableHeader<SharingSiteWithSource> sortKey='addedBy' header='Source' />
       </tr>
     </thead>
   );

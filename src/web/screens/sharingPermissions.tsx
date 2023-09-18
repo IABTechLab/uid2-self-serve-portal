@@ -14,7 +14,6 @@ import {
   DeleteSharingParticipants,
   GetSharingList,
 } from '../services/participant';
-import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
@@ -155,9 +154,8 @@ export const SharingPermissionsRoute: PortalRoute = {
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
   loader: () => {
-    const participantTypes = GetAllParticipantTypes();
     preloadAvailableSiteList();
     preloadAllSitesList();
-    return defer({ participantTypes });
+    return null;
   },
 };

@@ -5,9 +5,6 @@ import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminS
 import { TriStateCheckboxState } from '../Core/TriStateCheckbox';
 
 export const MANUALLY_ADDED = 'Manual';
-export type SharingParticipant = SharingSiteDTO & {
-  addedBy: (ClientType | typeof MANUALLY_ADDED)[];
-};
 
 export const isSharingParticipant = (
   site: SharingSiteDTO | SharingSiteWithSource
@@ -18,8 +15,6 @@ export const isSharingParticipant = (
 export const isAddedByManual = (site: SharingSiteWithSource) => {
   return site.addedBy.includes(MANUALLY_ADDED);
 };
-
-export type ParticipantTSType = SharingSiteDTO;
 
 export function filterSites<TSharingSite extends SharingSiteDTO>(
   sites: TSharingSite[],
@@ -40,7 +35,7 @@ export function filterSites<TSharingSite extends SharingSiteDTO>(
 }
 
 export function isSelectedAll(
-  filteredParticipants: ParticipantTSType[],
+  filteredParticipants: SharingSiteDTO[],
   checkedParticipants: Set<number>
 ) {
   if (!filteredParticipants.length || !checkedParticipants.size) return false;
@@ -57,7 +52,7 @@ export function getSelectAllState(selectAll: boolean, checkedElement: Set<number
   return TriStateCheckboxState.unchecked;
 }
 
-export function formatSourceColumn(sources: SharingParticipant['addedBy']) {
+export function formatSourceColumn(sources: SharingSiteWithSource['addedBy']) {
   let sourceField = '';
   const manualIndex = sources.indexOf(MANUALLY_ADDED);
   if (manualIndex !== -1) {

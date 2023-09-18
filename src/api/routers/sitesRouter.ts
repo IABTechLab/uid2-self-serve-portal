@@ -25,19 +25,19 @@ export function createSitesRouter() {
     const sites = await getSiteList();
     const availableSites = sites.filter(canBeSharedWith);
     const matchedParticipants = await getParticipantsBySiteIds(availableSites.map((s) => s.id));
-    const availableParticipants: SharingSiteDTO[] = availableSites.map((site: SiteDTO) =>
+    const availableSharingSites: SharingSiteDTO[] = availableSites.map((site: SiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)
     );
-    return res.status(200).json(availableParticipants);
+    return res.status(200).json(availableSharingSites);
   });
 
   sitesRouter.get('/', async (_req, res) => {
     const sites = await getSiteList();
     const matchedParticipants = await getParticipantsBySiteIds(sites.map((s) => s.id));
-    const availableParticipants: SharingSiteDTO[] = sites.map((site: SiteDTO) =>
+    const sharingSites: SharingSiteDTO[] = sites.map((site: SiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)
     );
-    return res.status(200).json(availableParticipants);
+    return res.status(200).json(sharingSites);
   });
 
   return sitesRouter;
