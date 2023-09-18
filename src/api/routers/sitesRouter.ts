@@ -1,6 +1,5 @@
 import express from 'express';
 
-import { ParticipantType } from '../entities/ParticipantType';
 import {
   canBeSharedWith,
   convertSiteToSharingSiteDTO,
