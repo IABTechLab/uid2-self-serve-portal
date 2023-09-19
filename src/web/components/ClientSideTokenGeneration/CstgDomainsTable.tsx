@@ -86,7 +86,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
     <Dialog
       title='Are you sure you want to delete these domains?'
       triggerButton={
-        <button className='transparent-button cstg-domains-management-delete-button' type='button'>
+        <button className='transparent-button table-action-button' type='button'>
           <FontAwesomeIcon icon={['far', 'trash-can']} className='cstg-domains-management-icon' />
           Delete Domains
         </button>
@@ -171,7 +171,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
   return (
     <div className='cstg-domains-management'>
       <h2>Top-level Domains</h2>
-      <div className='cstg-domains-management-actions'>
+      <div className='table-actions'>
         <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
         {selectedDomains.length > 0 && (
           <DeleteDomainDialog
@@ -180,7 +180,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
           />
         )}
         <button
-          className='transparent-button cstg-domains-management-delete-button'
+          className='transparent-button table-action-button'
           type='button'
           disabled={showNewRow}
           onClick={onAddRow}

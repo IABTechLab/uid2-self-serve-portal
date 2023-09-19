@@ -55,3 +55,16 @@ table {
     }
   }
 }
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-left: 11px;
+  margin-bottom: 10px;
+
+  .table-action-button {
+    color: var(--theme-table-action-button);
+    padding: 0;
+  }
+}
