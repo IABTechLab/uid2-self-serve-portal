@@ -12,7 +12,7 @@ function Loading() {
 }
 
 function KeyPairs() {
-  const data = useLoaderData() as { keyPairs: string }; // as { users: UserResponse[] };
+  const data = useLoaderData() as { keyPairs: Promise<KeyPairModel[]> };
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
