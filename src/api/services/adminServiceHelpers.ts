@@ -2,6 +2,14 @@ import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/Participant
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
 export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
+export const ClientTypeDescriptions: Record<ClientType, string> = {
+  ADVERTISER: 'Advertiser',
+  DATA_PROVIDER: 'Data Provider',
+  DSP: 'DSP',
+  PUBLISHER: 'Publisher',
+};
+export const ClientTypes: ClientType[] = Object.keys(ClientTypeDescriptions) as ClientType[];
+
 type AvailableClientRole = Exclude<ClientRole, 'OPTOUT'>;
 export const ClientRolesWithDescriptions: Record<AvailableClientRole, string> = {
   GENERATOR: 'Generator',

@@ -1,10 +1,7 @@
-import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
-import { Await, defer, useLoaderData } from 'react-router-dom';
+import { useCallback, useContext, useEffect, useState } from 'react';
 
-import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
-import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
@@ -16,8 +13,7 @@ import {
   DeleteSharingParticipants,
   GetSharingList,
 } from '../services/participant';
-import { GetAllParticipantTypes } from '../services/participantType';
-import { preloadAvailableSiteList } from '../services/site';
+import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
@@ -28,7 +24,6 @@ function SharingPermissions() {
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-  const { participantTypes } = useLoaderData() as { participantTypes: ParticipantTypeDTO[] };
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
@@ -126,29 +121,19 @@ function SharingPermissions() {
           sharedTypes={sharedTypes ?? []}
           onBulkAddSharingPermission={handleSaveSharingType}
         />
-        <Suspense fallback={<Loading />}>
-          <Await resolve={participantTypes}>
-            {(resolvedParticipantTypes: ParticipantTypeDTO[]) => (
-              <>
-                <Collapsible title='Search and Add Permissions' defaultOpen>
-                  <SearchAndAddParticipants
-                    onSharingPermissionsAdded={handleAddSharingSite}
-                    sharedSiteIds={sharedSiteIds}
-                    participantTypes={resolvedParticipantTypes}
-                  />
-                </Collapsible>
-                {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
-                  <SharingPermissionsTable
-                    sharedSiteIds={sharedSiteIds}
-                    sharedTypes={sharedTypes}
-                    onDeleteSharingPermission={handleDeleteSharingSite}
-                    participantTypes={resolvedParticipantTypes}
-                  />
-                )}
-              </>
-            )}
-          </Await>
-        </Suspense>
+        <Collapsible title='Search and Add Permissions' defaultOpen>
+          <SearchAndAddParticipants
+            onSharingPermissionsAdded={handleAddSharingSite}
+            sharedSiteIds={sharedSiteIds}
+          />
+        </Collapsible>
+        {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
+          <SharingPermissionsTable
+            sharedSiteIds={sharedSiteIds}
+            sharedTypes={sharedTypes}
+            onDeleteSharingPermission={handleDeleteSharingSite}
+          />
+        )}
       </div>
 
       {statusPopup && (
@@ -168,8 +153,8 @@ export const SharingPermissionsRoute: PortalRoute = {
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
   loader: () => {
-    const participantTypes = GetAllParticipantTypes();
     preloadAvailableSiteList();
-    return defer({ participantTypes });
+    preloadAllSitesList();
+    return null;
   },
 };

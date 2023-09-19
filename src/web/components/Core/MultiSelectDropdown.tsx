@@ -7,23 +7,23 @@ import { formatStringsWithSeparator } from '../../utils/textHelpers';
 
 import './MultiSelectDropdown.scss';
 
-type SelectOption = {
-  id: number;
+type SelectOption<TValue> = {
+  id: TValue;
   name: string;
 };
 
-type MultiSelectDropdownProps = {
+type MultiSelectDropdownProps<TValue> = {
   title: string;
-  options: SelectOption[];
-  onSelectedChange: (selected: Set<number>) => void;
+  options: SelectOption<TValue>[];
+  onSelectedChange: (selected: Set<TValue>) => void;
 };
 
-export function MultiSelectDropdown({
+export function MultiSelectDropdown<TValue>({
   title,
   options,
   onSelectedChange,
-}: MultiSelectDropdownProps) {
-  const [selectedItems, setSelectedItems] = useState<Set<number>>(new Set());
+}: MultiSelectDropdownProps<TValue>) {
+  const [selectedItems, setSelectedItems] = useState<Set<TValue>>(new Set());
   const [open, setOpen] = useState<boolean>(false);
 
   const joinedItemsName = useMemo(
@@ -38,7 +38,7 @@ export function MultiSelectDropdown({
     selectedItems.size && selectedItems.size < options.length ? joinedItemsName : 'All';
 
   const onOptionToggle = useCallback(
-    (id: number) => {
+    (id: TValue) => {
       const newCheckedItems = new Set(selectedItems);
       if (newCheckedItems.has(id)) {
         newCheckedItems.delete(id);
@@ -53,11 +53,11 @@ export function MultiSelectDropdown({
   );
 
   const checkboxItem = useCallback(
-    (option: SelectOption) => {
+    (option: SelectOption<TValue>) => {
       const checked = selectedItems.has(option.id);
       return (
         <DropdownMenu.CheckboxItem
-          key={option.id}
+          key={option.name}
           className='multi-select-dropdown-checkbox-item'
           checked={selectedItems.has(option.id)}
           onCheckedChange={() => onOptionToggle(option.id)}

@@ -1,9 +1,15 @@
-name: Publish API/UI Docker Image
-on: workflow_dispatch
+on:
+  workflow_call:
+    inputs:
+      IMAGE_NAME:
+        required: true
+        type: string
+      DOCKERFILE:
+        required: true
+        type: string
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME_UID2: iabtechlab/uid2-ssportal
 
 jobs:
   build-publish-docker:
@@ -13,7 +19,7 @@ jobs:
       packages: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Get Package Version
         id: version
         run: |
@@ -24,20 +30,18 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker (UID2)
+      - name: Extract metadata (tags, labels) for Docker (${{ inputs.IMAGE_NAME }})
         id: meta-uid2
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_UID2 }}
+          images: ${{ env.REGISTRY }}/${{ inputs.IMAGE_NAME }}
           tags: |
             type=sha,prefix=${{ steps.version.outputs.package_version }}-,format=short
-      - name: Build and push Docker image (UID2)
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      - name: Build and push Docker image (${{ inputs.IMAGE_NAME }})
+        uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile_ssportal
-          push:
-            true
-            #tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:
+          file: ${{ inputs.DOCKERFILE }}
+          push: true
           tags: ${{ steps.meta-uid2.outputs.tags }}
           labels: ${{ steps.meta-uid2.outputs.labels }}

@@ -36,7 +36,7 @@ export function BulkAddPermissions({
   sharedTypes,
   onBulkAddSharingPermission,
 }: BulkAddPermissionsProps) {
-  const [showRecommendedParticipants, setShowRecommendedParticipants] = useState(false);
+  const [showRecommendedSiteTypes, setShowRecommendedSiteTypes] = useState(false);
   const currentParticipantTypeNames = participant?.types
     ? participant.types.map((p) => p.typeName ?? '')
     : [];
@@ -56,13 +56,13 @@ export function BulkAddPermissions({
   const { register, handleSubmit, watch, setValue } = formMethods;
 
   useEffect(() => {
-    if (sharedTypes && sharedTypes.length > 0) {
+    if (participant?.completedRecommendations) {
       setValue('publisherChecked', sharedTypes.includes('PUBLISHER'));
       setValue('advertiserChecked', sharedTypes.includes('ADVERTISER'));
       setValue('DSPChecked', sharedTypes.includes('DSP'));
       setValue('dataProviderChecked', sharedTypes.includes('DATA_PROVIDER'));
     }
-  }, [sharedTypes, setValue]);
+  }, [sharedTypes, setValue, participant?.completedRecommendations]);
 
   const watchPublisherChecked = watch('publisherChecked');
   const watchAdvertiserChecked = watch('advertiserChecked');
@@ -92,7 +92,7 @@ export function BulkAddPermissions({
   ]);
 
   useEffect(() => {
-    if (!hasCheckedType()) setShowRecommendedParticipants(false);
+    if (!hasCheckedType()) setShowRecommendedSiteTypes(false);
   }, [hasCheckedType]);
 
   const handleSave = (data: BulkAddPermissionsForm) => {
@@ -134,17 +134,17 @@ export function BulkAddPermissions({
         <button
           type='button'
           className='text-button bulk-add-permissions-view-recommendations-button'
-          onClick={() => setShowRecommendedParticipants((prevToggle) => !prevToggle)}
+          onClick={() => setShowRecommendedSiteTypes((prevToggle) => !prevToggle)}
         >
-          {showRecommendedParticipants ? 'Hide Participants' : 'View Participants'}
+          {showRecommendedSiteTypes ? 'Hide Participants' : 'View Participants'}
         </button>
       )}
-      {showRecommendedParticipants && hasCheckedType() && (
+      {showRecommendedSiteTypes && hasCheckedType() && (
         <table className='bulk-add-permissions-participants-table'>
           <tbody>
             {filteredParticipants.map((p) => (
-              <tr key={p.siteId}>
-                <ParticipantItemSimple participant={p} />
+              <tr key={p.id}>
+                <ParticipantItemSimple site={p} />
               </tr>
             ))}
           </tbody>
