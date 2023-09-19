@@ -12,20 +12,28 @@
       border: none;
     }
 
+    .description {
+      width: 30%;
+    }
+
     .subscription-id {
-      width: 20%;
+      width: 10%;
     }
 
     .site-id {
-      width: 15%;
+      width: 5%;
     }
 
     .public-key {
-      width: 55%;
+      width: 40%;
     }
 
     .created {
       width: 10%;
+    }
+
+    .disabled {
+      width: 5%;
     }
 
     th.action {

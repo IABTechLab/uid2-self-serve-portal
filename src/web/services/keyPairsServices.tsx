@@ -8,7 +8,6 @@ export async function GetKeyPairs() {
   try {
     const result = await axios.get<KeyPairDTO[]>(`/keypairs/list`);
     if (result.status === 200) {
-      // will this handle an empty array properly?
       return (result.data as KeyPairDTO[]).map(mapKeyPairDTOToModel);
     }
   } catch (e: unknown) {

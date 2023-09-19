@@ -12,7 +12,7 @@ import { SetTermsAccepted } from '../services/userAccount';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
-import { KeyPairRoute } from './keyPairs';
+import { KeyPairRoute } from './keyPairsScreen';
 import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
