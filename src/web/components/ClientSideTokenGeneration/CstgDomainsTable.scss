@@ -6,10 +6,11 @@
       padding-left: 10px;
       width: 21px;
     }
+
     th.action {
       text-align: end;
-      padding-left: 140px;
     }
+
     tr {
       .tristate-checkbox {
         margin-right: 16px;
@@ -24,8 +25,8 @@
       }
     }
 
-    .domain {
-      min-width: 220px;
+    .action {
+      width: 20%;
     }
 
     .action-cell {
