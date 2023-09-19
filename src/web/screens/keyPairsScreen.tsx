@@ -1,7 +1,6 @@
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
-import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { GetKeyPairs } from '../services/keyPairsServices';
@@ -13,8 +12,6 @@ function Loading() {
 
 function KeyPairs() {
   const data = useLoaderData() as { keyPairs: Promise<KeyPairModel[]> };
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   return (
     <>
@@ -25,14 +22,6 @@ function KeyPairs() {
           {(keyPairs: KeyPairModel[]) => <KeyPairsTable keyPairs={keyPairs} />}
         </Await>
       </Suspense>
-      {statusPopup && (
-        <StatusPopup
-          status={statusPopup!.type}
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={statusPopup!.message}
-        />
-      )}
     </>
   );
 }
