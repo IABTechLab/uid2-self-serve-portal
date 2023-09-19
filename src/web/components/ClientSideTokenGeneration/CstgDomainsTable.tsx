@@ -21,14 +21,13 @@ function NoApprovedDomains() {
 
 type CstgDomainItemProps = {
   domain: string;
-  index: number;
   onClick: () => void;
   onDelete: () => void;
-  onAdd: (newDomain: string, index: number) => void;
+  onAdd: (newDomain: string) => void;
   checked: boolean;
 };
 
-function CstgDomainItem({ index, domain, onClick, onDelete, onAdd, checked }: CstgDomainItemProps) {
+function CstgDomainItem({ domain, onClick, onDelete, onAdd, checked }: CstgDomainItemProps) {
   const [newDomain, setNewDomain] = useState('');
   const isNewRow = domain === '';
   return (
@@ -48,12 +47,8 @@ function CstgDomainItem({ index, domain, onClick, onDelete, onAdd, checked }: Cs
       <td className='action'>
         <div className='action-cell'>
           {isNewRow ? (
-            <button
-              type='button'
-              className='transparent-button'
-              onClick={() => onAdd(newDomain, index)}
-            >
-              Add
+            <button type='button' className='transparent-button' onClick={() => onAdd(newDomain)}>
+              Save
             </button>
           ) : (
             <button type='button' className='transparent-button' onClick={onDelete}>
@@ -121,7 +116,7 @@ type CstgDomainsTableProps = {
 export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableProps) {
   const [tableData, setTableData] = useState<string[]>(domains);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
-  const isSelectedAll = domains.every((d) => selectedDomains.includes(d));
+  const isSelectedAll = tableData.filter((r) => r !== '').every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
       return TriStateCheckboxState.checked;
@@ -136,15 +131,22 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
 
   const handleCheckboxChange = () => {
     if (checkboxStatus === TriStateCheckboxState.unchecked) {
-      setSelectedDomains(domains);
+      setSelectedDomains(tableData.filter((r) => r !== ''));
     } else {
       setSelectedDomains([]);
     }
   };
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
-  const handleDeleteDomains = (deleteDomains: string[]) => {
+  const handleBulkDeleteDomains = (deleteDomains: string[]) => {
     onUpdateDomains(domains.filter((domain) => deleteDomains.includes(domain)));
+  };
+
+  const handleDeleteDomain = async (deleteDomain: string, index: number) => {
+    await onUpdateDomains(tableData.filter((domain) => domain !== deleteDomain && domain !== ''));
+    const newTableData = [...tableData];
+    newTableData.splice(index, 1);
+    setTableData(newTableData);
   };
 
   const handleSelectDomain = (domain: string) => {
@@ -160,7 +162,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
   };
 
   const handleAddNewDomain = (newDomain: string, index: number) => {
-    onUpdateDomains([...domains, newDomain]);
+    onUpdateDomains([...tableData.filter((r) => r !== ''), newDomain]);
     const newTableData = [...tableData];
     newTableData[index] = newDomain;
     setTableData(newTableData);
@@ -173,7 +175,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
         {selectedDomains.length > 0 && (
           <DeleteDomainDialog
-            onDeleteDomains={() => handleDeleteDomains(selectedDomains)}
+            onDeleteDomains={() => handleBulkDeleteDomains(selectedDomains)}
             selectedDomains={selectedDomains}
           />
         )}
@@ -197,17 +199,16 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         <tbody>
           {tableData.map((domain, index) => (
             <CstgDomainItem
-              index={index}
               domain={domain}
-              onAdd={handleAddNewDomain}
+              onAdd={(newDomain) => handleAddNewDomain(newDomain, index)}
               onClick={() => handleSelectDomain(domain)}
-              onDelete={() => handleDeleteDomains([domain])}
+              onDelete={() => handleDeleteDomain(domain, index)}
               checked={isDomainSelected(domain)}
             />
           ))}
         </tbody>
       </table>
-      {!domains.length && <NoApprovedDomains />}
+      {!tableData.length && <NoApprovedDomains />}
     </div>
   );
 }
