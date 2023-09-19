@@ -8,7 +8,6 @@ export default {
   component: TeamMemberDialog,
 } as Meta<typeof TeamMemberDialog>;
 
-// const Template: StoryObj<typeof TeamMemberDialog> = (args) => <TeamMemberDialog {...args} />;
 type Story = StoryObj<typeof TeamMemberDialog>;
 
 export const Default: Story = {
