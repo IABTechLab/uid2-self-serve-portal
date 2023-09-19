@@ -1,5 +1,6 @@
 .cstg-domains-management {
   .cstg-domains-table {
+    width: 100%;
     th:first-of-type,
     td:first-of-type {
       padding-left: 10px;
@@ -21,6 +22,10 @@
       .input-container {
         height: 26px;
       }
+    }
+
+    .domain {
+      min-width: 220px;
     }
 
     .action-cell {

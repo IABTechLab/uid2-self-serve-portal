@@ -9,13 +9,39 @@ import './CstgDomainsTable.scss';
 
 function NoApprovedDomains() {
   return (
-    <div className='no-participant-requests-container'>
+    <div className='no-table-data-container'>
       <img src='/group-icon.svg' alt='group-icon' />
-      <div className='no-participant-requests-text'>
+      <div className='no-table-data-text'>
         <h2>No Approved Domains</h2>
         <span>There are no approved domains.</span>
       </div>
     </div>
+  );
+}
+type CstgNewDomainRowProps = {
+  onAdd: (newDomain: string) => Promise<void>;
+};
+
+function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
+  const [newDomain, setNewDomain] = useState<string>('');
+  return (
+    <tr>
+      <td />
+      <td className='domain'>
+        <input
+          className='input-container'
+          value={newDomain}
+          onChange={(e) => setNewDomain(e.target.value)}
+        />
+      </td>
+      <td className='action'>
+        <div className='action-cell'>
+          <button type='button' className='transparent-button' onClick={() => onAdd(newDomain)}>
+            Save
+          </button>
+        </div>
+      </td>
+    </tr>
   );
 }
 
@@ -23,38 +49,21 @@ type CstgDomainItemProps = {
   domain: string;
   onClick: () => void;
   onDelete: () => void;
-  onAdd: (newDomain: string) => void;
   checked: boolean;
 };
 
-function CstgDomainItem({ domain, onClick, onDelete, onAdd, checked }: CstgDomainItemProps) {
-  const [newDomain, setNewDomain] = useState('');
-  const isNewRow = domain === '';
+function CstgDomainItem({ domain, onClick, onDelete, checked }: CstgDomainItemProps) {
   return (
     <tr>
-      <td>{!isNewRow && <TriStateCheckbox onClick={onClick} status={checked} />}</td>
       <td>
-        {isNewRow ? (
-          <input
-            className='input-container'
-            value={newDomain}
-            onChange={(e) => setNewDomain(e.target.value)}
-          />
-        ) : (
-          domain
-        )}
+        <TriStateCheckbox onClick={onClick} status={checked} />
       </td>
+      <td className='domain'>{domain}</td>
       <td className='action'>
         <div className='action-cell'>
-          {isNewRow ? (
-            <button type='button' className='transparent-button' onClick={() => onAdd(newDomain)}>
-              Save
-            </button>
-          ) : (
-            <button type='button' className='transparent-button' onClick={onDelete}>
-              Delete
-            </button>
-          )}
+          <button type='button' className='transparent-button' onClick={onDelete}>
+            Delete
+          </button>
         </div>
       </td>
     </tr>
@@ -108,15 +117,15 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
   );
 }
 
-type CstgDomainsTableProps = {
+export type CstgDomainsTableProps = {
   domains: string[];
   onUpdateDomains: (domains: string[]) => Promise<void>;
 };
 
 export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableProps) {
-  const [tableData, setTableData] = useState<string[]>(domains);
+  const [showNewRow, setShowNewRow] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
-  const isSelectedAll = tableData.filter((r) => r !== '').every((d) => selectedDomains.includes(d));
+  const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
       return TriStateCheckboxState.checked;
@@ -131,7 +140,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
 
   const handleCheckboxChange = () => {
     if (checkboxStatus === TriStateCheckboxState.unchecked) {
-      setSelectedDomains(tableData.filter((r) => r !== ''));
+      setSelectedDomains(domains);
     } else {
       setSelectedDomains([]);
     }
@@ -140,13 +149,6 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
 
   const handleBulkDeleteDomains = (deleteDomains: string[]) => {
     onUpdateDomains(domains.filter((domain) => deleteDomains.includes(domain)));
-  };
-
-  const handleDeleteDomain = async (deleteDomain: string, index: number) => {
-    await onUpdateDomains(tableData.filter((domain) => domain !== deleteDomain && domain !== ''));
-    const newTableData = [...tableData];
-    newTableData.splice(index, 1);
-    setTableData(newTableData);
   };
 
   const handleSelectDomain = (domain: string) => {
@@ -158,14 +160,12 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
   };
 
   const onAddRow = () => {
-    setTableData([...tableData, '']);
+    setShowNewRow(true);
   };
 
-  const handleAddNewDomain = (newDomain: string, index: number) => {
-    onUpdateDomains([...tableData.filter((r) => r !== ''), newDomain]);
-    const newTableData = [...tableData];
-    newTableData[index] = newDomain;
-    setTableData(newTableData);
+  const handleAddNewDomain = async (newDomain: string) => {
+    await onUpdateDomains([...domains, newDomain]);
+    setShowNewRow(false);
   };
 
   return (
@@ -182,6 +182,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         <button
           className='transparent-button cstg-domains-management-delete-button'
           type='button'
+          disabled={showNewRow}
           onClick={onAddRow}
         >
           <FontAwesomeIcon icon='plus' className='cstg-domains-management-icon' />
@@ -192,23 +193,24 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         <thead>
           <tr>
             <th> </th>
-            <th>Domain</th>
+            <th className='domain'>Domain</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {tableData.map((domain, index) => (
+          {domains.map((domain) => (
             <CstgDomainItem
+              key={domain}
               domain={domain}
-              onAdd={(newDomain) => handleAddNewDomain(newDomain, index)}
               onClick={() => handleSelectDomain(domain)}
-              onDelete={() => handleDeleteDomain(domain, index)}
+              onDelete={() => handleBulkDeleteDomains([domain])}
               checked={isDomainSelected(domain)}
             />
           ))}
+          {showNewRow && <CstgNewDomainRow onAdd={(newDomain) => handleAddNewDomain(newDomain)} />}
         </tbody>
       </table>
-      {!tableData.length && <NoApprovedDomains />}
+      {!domains.length && !showNewRow && <NoApprovedDomains />}
     </div>
   );
 }

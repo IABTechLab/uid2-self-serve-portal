@@ -42,6 +42,10 @@ button {
   color: var(--theme-action);
 }
 
+.transparent-button:disabled {
+  color: var(--theme-disabled-button-text);
+}
+
 .icon-button {
   font-family: inherit;
   border: none;
