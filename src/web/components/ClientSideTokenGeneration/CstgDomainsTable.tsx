@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import { getDomain } from 'tldts';
 
 import { Dialog } from '../Core/Dialog';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
@@ -24,15 +25,18 @@ type CstgNewDomainRowProps = {
 
 function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
   const [newDomain, setNewDomain] = useState<string>('');
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const tld = getDomain(input);
+    console.log('getdomain', tld);
+    setNewDomain(input);
+  };
+
   return (
     <tr>
       <td />
       <td className='domain'>
-        <input
-          className='input-container'
-          value={newDomain}
-          onChange={(e) => setNewDomain(e.target.value)}
-        />
+        <input className='input-container' value={newDomain} onChange={handleInputChange} />
       </td>
       <td className='action'>
         <div className='action-cell'>
