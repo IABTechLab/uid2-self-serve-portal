@@ -84,7 +84,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
 
   return (
     <Dialog
-      title='Are you sure you want to delete these permissions?'
+      title='Are you sure you want to delete these domains?'
       triggerButton={
         <button className='transparent-button cstg-domains-management-delete-button' type='button'>
           <FontAwesomeIcon icon={['far', 'trash-can']} className='cstg-domains-management-icon' />
