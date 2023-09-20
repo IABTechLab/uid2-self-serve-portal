@@ -53,24 +53,6 @@ table {
   }
 }
 
-.no-table-data-container {
-  margin-top: 15px;
-  border: 1px solid var(--theme-border);
-  border-radius: 5px;
-  padding: 33px 24px;
-  display: flex;
-  align-items: center;
-  gap: 33px;
-
-  h2 {
-    margin-top: 0;
-  }
-
-  .transparent-button {
-    padding: 0;
-  }
-}
-
 .table-actions {
   display: flex;
   align-items: center;

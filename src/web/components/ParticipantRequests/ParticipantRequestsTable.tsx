@@ -1,6 +1,7 @@
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
+import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ParticipantRequestItem } from './ParticipantRequestItem';
 
 import './ParticipantRequestsTable.scss';
@@ -13,13 +14,12 @@ type ParticipantRequestsTableProps = {
 
 function NoParticipantRequests() {
   return (
-    <div className='no-table-data-container'>
-      <img src='/group-icon.svg' alt='group-icon' />
-      <div>
-        <h2>No Participant Requests</h2>
-        <span>There are no participants that are awaiting approval.</span>
-      </div>
-    </div>
+    <TableNoDataPlaceholder
+      icon={<img src='/group-icon.svg' alt='group-icon' />}
+      title='No Participant Requests'
+    >
+      <span>There are no participants that are awaiting approval.</span>
+    </TableNoDataPlaceholder>
   );
 }
 

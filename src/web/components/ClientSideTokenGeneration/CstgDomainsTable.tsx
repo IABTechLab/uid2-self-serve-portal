@@ -3,22 +3,12 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import { useState } from 'react';
 
 import { Dialog } from '../Core/Dialog';
+import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { CstgDomainItem } from './CstgDomain';
 
 import './CstgDomainsTable.scss';
 
-function NoApprovedDomains() {
-  return (
-    <div className='no-table-data-container'>
-      <img src='/group-icon.svg' alt='group-icon' />
-      <div>
-        <h2>No Approved Domains</h2>
-        <span>There are no approved domains.</span>
-      </div>
-    </div>
-  );
-}
 type CstgNewDomainRowProps = {
   onAdd: (newDomain: string) => Promise<void>;
 };
@@ -186,7 +176,14 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
           {showNewRow && <CstgNewDomainRow onAdd={(newDomain) => handleAddNewDomain(newDomain)} />}
         </tbody>
       </table>
-      {!domains.length && !showNewRow && <NoApprovedDomains />}
+      {!domains.length && !showNewRow && (
+        <TableNoDataPlaceholder
+          icon={<img src='/group-icon.svg' alt='group-icon' />}
+          title='No Approved Domains'
+        >
+          <span>There are no approved domains.</span>
+        </TableNoDataPlaceholder>
+      )}
     </div>
   );
 }
