@@ -23,12 +23,10 @@ type ParticipantItemSimpleProps = {
 };
 
 export function ParticipantItemSimple({ site }: ParticipantItemSimpleProps) {
-  const logo = '/default-logo.svg';
-
   return (
     <>
       <td className='participant-name-cell'>
-        <img src={logo} alt={site.name} className='participant-logo' />
+        {/* <img src={logo} alt={site.name} className='participant-logo' /> */}
         <label className='checkbox-label'>{site.name}</label>
       </td>
       <td>
