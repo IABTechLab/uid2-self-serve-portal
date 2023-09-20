@@ -1,5 +1,4 @@
 import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
-import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { Loading } from '../components/Core/Loading';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
@@ -15,7 +14,7 @@ function KeyPairs() {
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs(participant!.siteId!);
     setKeyPairData(data);
-  }, []);
+  }, [participant]);
 
   useEffect(() => {
     loadKeyPairs();
