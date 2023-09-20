@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { Dialog } from '../Core/Dialog';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { CstgDomainItem } from './CstgDomain';
 
 import './CstgDomainsTable.scss';
 
@@ -38,31 +39,6 @@ function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
         <div className='action-cell'>
           <button type='button' className='transparent-button' onClick={() => onAdd(newDomain)}>
             Save
-          </button>
-        </div>
-      </td>
-    </tr>
-  );
-}
-
-type CstgDomainItemProps = {
-  domain: string;
-  onClick: () => void;
-  onDelete: () => void;
-  checked: boolean;
-};
-
-function CstgDomainItem({ domain, onClick, onDelete, checked }: CstgDomainItemProps) {
-  return (
-    <tr>
-      <td>
-        <TriStateCheckbox onClick={onClick} status={checked} />
-      </td>
-      <td className='domain'>{domain}</td>
-      <td className='action'>
-        <div className='action-cell'>
-          <button type='button' className='transparent-button' onClick={onDelete}>
-            Delete
           </button>
         </div>
       </td>
@@ -117,7 +93,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
   );
 }
 
-export type CstgDomainsTableProps = {
+type CstgDomainsTableProps = {
   domains: string[];
   onUpdateDomains: (domains: string[]) => Promise<void>;
 };
