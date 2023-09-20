@@ -3,7 +3,7 @@ import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
-import { GetKeyPairs } from '../services/keyPairsServices';
+import { GetKeyPairs } from '../services/keyPairService';
 import { PortalRoute } from './routeUtils';
 
 function Loading() {

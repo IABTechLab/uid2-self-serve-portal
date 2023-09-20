@@ -4,6 +4,11 @@ import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { mapKeyPairDTOToModel } from '../components/KeyPairs/KeyPairModel';
 import { backendError } from '../utils/apiError';
 
+export type AddKeyPairFormProps = {
+  siteId: number;
+  disabled: boolean;
+};
+
 export async function GetKeyPairs() {
   try {
     const result = await axios.get<KeyPairDTO[]>(`/keypairs/list`);
