@@ -124,7 +124,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
   const handleBulkDeleteDomains = (deleteDomains: string[]) => {
-    onUpdateDomains(domains.filter((domain) => deleteDomains.includes(domain)));
+    onUpdateDomains(domains.filter((domain) => !deleteDomains.includes(domain)));
   };
 
   const handleSelectDomain = (domain: string) => {
