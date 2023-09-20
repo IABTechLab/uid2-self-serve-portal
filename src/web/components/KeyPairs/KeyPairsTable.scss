@@ -12,38 +12,22 @@
       border: none;
     }
 
-    .description {
-      width: 30%;
+    th {
+      padding-right: 10px;
+
+      .action {
+        text-align: end;
+        padding-left: 140px;
+      }
     }
 
-    .subscription-id {
-      width: 10%;
-    }
-
-    .site-id {
-      width: 5%;
+    td {
+      padding: 15px 5px;
     }
 
     .public-key {
       width: 40%;
-    }
-
-    .created {
-      width: 10%;
-    }
-
-    .disabled {
-      width: 5%;
-    }
-
-    th.action {
-      text-align: end;
-      padding-left: 140px;
-    }
-
-    td {
-      padding-top: 15px;
-      padding-bottom: 15px;
+      overflow-wrap: anywhere;
     }
 
     .action {

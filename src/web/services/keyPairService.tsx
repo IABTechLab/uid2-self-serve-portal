@@ -4,9 +4,14 @@ import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { mapKeyPairDTOToModel } from '../components/KeyPairs/KeyPairModel';
 import { backendError } from '../utils/apiError';
 
-export async function GetKeyPairs() {
+export type AddKeyPairFormProps = {
+  siteId: number;
+  disabled: boolean;
+};
+
+export async function GetKeyPairs(siteId: number) {
   try {
-    const result = await axios.get<KeyPairDTO[]>(`/keypairs/list`);
+    const result = await axios.get<KeyPairDTO[]>(`/sites/${siteId}/list`);
     if (result.status === 200) {
       return (result.data as KeyPairDTO[]).map(mapKeyPairDTOToModel);
     }

@@ -1,37 +1,39 @@
-import { Suspense } from 'react';
+import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
 import { Await, defer, useLoaderData } from 'react-router-dom';
 
+import { Loading } from '../components/Core/Loading';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
-import { GetKeyPairs } from '../services/keyPairsServices';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
+import { GetKeyPairs } from '../services/keyPairService';
 import { PortalRoute } from './routeUtils';
 
-function Loading() {
-  return <div>Loading key pairs...</div>;
-}
-
 function KeyPairs() {
-  const data = useLoaderData() as { keyPairs: Promise<KeyPairModel[]> };
+  const { participant } = useContext(ParticipantContext);
+  const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
+
+  const loadKeyPairs = useCallback(async () => {
+    const data = await GetKeyPairs(participant!.siteId!);
+    setKeyPairData(data);
+  }, []);
+
+  useEffect(() => {
+    loadKeyPairs();
+  }, [loadKeyPairs]);
 
   return (
     <>
-      <h1>Key Pairs</h1>
-      <p className='heading-details'>View and manage Key Pairs.</p>
+      <h1>Client Side Integration</h1>
+      <p className='heading-details'>View and manage Keys.</p>
       <Suspense fallback={<Loading />}>
-        <Await resolve={data.keyPairs}>
-          {(keyPairs: KeyPairModel[]) => <KeyPairsTable keyPairs={keyPairs} />}
-        </Await>
+        <KeyPairsTable keyPairs={keyPairData} />
       </Suspense>
     </>
   );
 }
 
 export const KeyPairRoute: PortalRoute = {
-  description: 'Key Pairs',
+  description: 'Client Side Integration',
   element: <KeyPairs />,
   path: '/dashboard/keyPairs',
-  loader: () => {
-    const keyPairs = GetKeyPairs();
-    return defer({ keyPairs });
-  },
 };

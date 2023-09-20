@@ -6,9 +6,10 @@ import {
   SharingSiteDTO,
 } from '../helpers/siteConvertingHelpers';
 import { isApproverCheck } from '../middleware/approversMiddleware';
-import { getSiteList } from '../services/adminServiceClient';
+import { getKeyPairsList, getSiteList } from '../services/adminServiceClient';
 import { SiteDTO } from '../services/adminServiceHelpers';
 import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/participantsService';
+import { SiteRequest } from '../services/usersService';
 
 export function createSitesRouter() {
   const sitesRouter = express.Router();
@@ -37,6 +38,12 @@ export function createSitesRouter() {
       convertSiteToSharingSiteDTO(site, matchedParticipants)
     );
     return res.status(200).json(sharingSites);
+  });
+
+  sitesRouter.get('/:siteId/list', async (req: SiteRequest, res) => {
+    const { siteId } = req.params;
+    const allKeyPairs = await getKeyPairsList(siteId);
+    return res.status(200).json(allKeyPairs);
   });
 
   return sitesRouter;

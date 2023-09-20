@@ -8,8 +8,8 @@ export default {
 } as ComponentMeta<typeof KeyPair>;
 
 const Template: ComponentStory<typeof KeyPair> = (args) => (
-  <div className='portal-team'>
-    <table className='portal-team-table'>
+  <div className='key-pairs'>
+    <table className='key-pairs-table'>
       <tbody>
         <KeyPair {...args} />
       </tbody>

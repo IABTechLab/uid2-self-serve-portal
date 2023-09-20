@@ -4,7 +4,7 @@ import { KeyPairModel } from './KeyPairModel';
 import './KeyPairsTable.scss';
 
 type KeyPairTableProps = {
-  keyPairs: KeyPairModel[];
+  keyPairs: KeyPairModel[] | undefined;
 };
 
 function KeyPairsTable({ keyPairs }: KeyPairTableProps) {
@@ -21,11 +21,7 @@ function KeyPairsTable({ keyPairs }: KeyPairTableProps) {
             <th className='disabled'>Disabled</th>
           </tr>
         </thead>
-        <tbody>
-          {keyPairs.map((k) => (
-            <KeyPair key={k.publicKey} keyPair={k} />
-          ))}
-        </tbody>
+        <tbody>{keyPairs && keyPairs.map((k) => <KeyPair key={k.publicKey} keyPair={k} />)}</tbody>
       </table>
     </div>
   );
