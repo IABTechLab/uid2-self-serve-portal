@@ -13,9 +13,9 @@ type ParticipantRequestsTableProps = {
 
 function NoParticipantRequests() {
   return (
-    <div className='no-participant-requests-container'>
+    <div className='no-table-data-container'>
       <img src='/group-icon.svg' alt='group-icon' />
-      <div className='no-participant-requests-text'>
+      <div>
         <h2>No Participant Requests</h2>
         <span>There are no participants that are awaiting approval.</span>
       </div>

@@ -12,7 +12,7 @@ function NoApprovedDomains() {
   return (
     <div className='no-table-data-container'>
       <img src='/group-icon.svg' alt='group-icon' />
-      <div className='no-table-data-text'>
+      <div>
         <h2>No Approved Domains</h2>
         <span>There are no approved domains.</span>
       </div>

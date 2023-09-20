@@ -10,9 +10,9 @@ function NoEmailContact({
   onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
 }) {
   return (
-    <div className='no-contacts-container'>
+    <div className='no-table-data-container'>
       <img src='/email-icon.svg' alt='email-icon' />
-      <div className='no-contacts-text'>
+      <div>
         <h2>No Email Contacts</h2>
         <BusinessContactDialog
           onFormSubmit={onAddEmailContact}

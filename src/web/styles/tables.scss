@@ -60,14 +60,14 @@ table {
   padding: 33px 24px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 33px;
 
-  .table-data-text {
-    margin-left: 33px;
+  h2 {
+    margin-top: 0;
+  }
 
-    h2 {
-      margin-top: 0;
-    }
+  .transparent-button {
+    padding: 0;
   }
 }
 
