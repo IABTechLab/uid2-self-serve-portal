@@ -15,7 +15,6 @@ function KeyPairsTable({ keyPairs }: KeyPairTableProps) {
           <tr>
             <th className='description'>Description</th>
             <th className='subscription-id'>Subscription Id</th>
-            <th className='site-id'>Site Id</th>
             <th className='public-key'>Public Key</th>
             <th className='created'>Created</th>
             <th className='disabled'>Disabled</th>
