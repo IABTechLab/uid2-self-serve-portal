@@ -12,24 +12,6 @@
       text-align: end;
     }
 
-    tr {
-      .tristate-checkbox {
-        margin-right: 16px;
-      }
-
-      button[role='checkbox'] {
-        width: 21px;
-        height: 21px;
-      }
-      .input-container {
-        height: 26px;
-      }
-    }
-
-    button {
-      outline: none;
-    }
-
     .action {
       width: 20%;
     }
