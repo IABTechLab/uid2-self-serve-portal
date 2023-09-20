@@ -1,31 +1,19 @@
 .cstg-domains-management {
   .cstg-domains-table {
     width: 100%;
+
     th:first-of-type,
     td:first-of-type {
       padding-left: 10px;
       width: 21px;
     }
+
     th.action {
       text-align: end;
-      padding-left: 140px;
-    }
-    tr {
-      .tristate-checkbox {
-        margin-right: 16px;
-      }
-
-      button[role='checkbox'] {
-        width: 21px;
-        height: 21px;
-      }
-      .input-container {
-        height: 26px;
-      }
     }
 
-    .domain {
-      min-width: 220px;
+    .action {
+      width: 20%;
     }
 
     .action-cell {
@@ -33,24 +21,11 @@
       display: flex;
       justify-content: flex-end;
       flex-wrap: wrap;
-
-      button {
-        padding: 5px 0 5px 10px;
-      }
     }
-  }
 
-  .cstg-domains-management-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding-left: 11px;
-    margin-bottom: 10px;
-  }
-
-  .cstg-domains-management-delete-button {
-    color: var(--theme-radio-background);
-    padding: 0;
+    .action-cell > button {
+      padding: 5px 0 5px 10px;
+    }
   }
 
   .cstg-domains-management-icon {

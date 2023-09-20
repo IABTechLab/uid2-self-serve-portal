@@ -1,4 +1,5 @@
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import BusinessContact from './BusinessContact';
 import BusinessContactDialog from './BusinessContactDialog';
 
@@ -10,20 +11,19 @@ function NoEmailContact({
   onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
 }) {
   return (
-    <div className='no-contacts-container'>
-      <img src='/email-icon.svg' alt='email-icon' />
-      <div className='no-contacts-text'>
-        <h2>No Email Contacts</h2>
-        <BusinessContactDialog
-          onFormSubmit={onAddEmailContact}
-          triggerButton={
-            <button className='transparent-button' type='button'>
-              Add Email Contact
-            </button>
-          }
-        />
-      </div>
-    </div>
+    <TableNoDataPlaceholder
+      icon={<img src='/email-icon.svg' alt='email-icon' />}
+      title='No Email Contacts'
+    >
+      <BusinessContactDialog
+        onFormSubmit={onAddEmailContact}
+        triggerButton={
+          <button className='transparent-button' type='button'>
+            Add Email Contact
+          </button>
+        }
+      />
+    </TableNoDataPlaceholder>
   );
 }
 

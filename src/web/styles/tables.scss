@@ -36,22 +36,32 @@ table {
       background-color: var(--theme-background-row);
     }
   }
+
+  tr {
+    .tristate-checkbox {
+      margin-right: 16px;
+    }
+
+    button[role='checkbox'] {
+      width: 21px;
+      height: 21px;
+    }
+
+    .input-container {
+      height: 26px;
+    }
+  }
 }
 
-.no-table-data-container {
-  margin-top: 15px;
-  border: 1px solid var(--theme-border);
-  border-radius: 5px;
-  padding: 33px 24px;
+.table-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  padding-left: 11px;
+  margin-bottom: 10px;
 
-  .table-data-text {
-    margin-left: 33px;
-
-    h2 {
-      margin-top: 0;
-    }
+  .table-action-button {
+    color: var(--theme-table-action-button);
+    padding: 0;
   }
 }

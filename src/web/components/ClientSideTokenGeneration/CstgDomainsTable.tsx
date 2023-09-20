@@ -4,21 +4,12 @@ import { ChangeEvent, useState } from 'react';
 import { getDomain } from 'tldts';
 
 import { Dialog } from '../Core/Dialog';
+import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { CstgDomainItem } from './CstgDomain';
 
 import './CstgDomainsTable.scss';
 
-function NoApprovedDomains() {
-  return (
-    <div className='no-table-data-container'>
-      <img src='/group-icon.svg' alt='group-icon' />
-      <div className='no-table-data-text'>
-        <h2>No Approved Domains</h2>
-        <span>There are no approved domains.</span>
-      </div>
-    </div>
-  );
-}
 type CstgNewDomainRowProps = {
   onAdd: (newDomain: string) => Promise<void>;
 };
@@ -49,31 +40,6 @@ function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
   );
 }
 
-type CstgDomainItemProps = {
-  domain: string;
-  onClick: () => void;
-  onDelete: () => void;
-  checked: boolean;
-};
-
-function CstgDomainItem({ domain, onClick, onDelete, checked }: CstgDomainItemProps) {
-  return (
-    <tr>
-      <td>
-        <TriStateCheckbox onClick={onClick} status={checked} />
-      </td>
-      <td className='domain'>{domain}</td>
-      <td className='action'>
-        <div className='action-cell'>
-          <button type='button' className='transparent-button' onClick={onDelete}>
-            Delete
-          </button>
-        </div>
-      </td>
-    </tr>
-  );
-}
-
 type DeleteDomainDialogProps = {
   onDeleteDomains: () => void;
   selectedDomains: string[];
@@ -90,7 +56,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
     <Dialog
       title='Are you sure you want to delete these domains?'
       triggerButton={
-        <button className='transparent-button cstg-domains-management-delete-button' type='button'>
+        <button className='transparent-button table-action-button' type='button'>
           <FontAwesomeIcon icon={['far', 'trash-can']} className='cstg-domains-management-icon' />
           Delete Domains
         </button>
@@ -121,7 +87,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
   );
 }
 
-export type CstgDomainsTableProps = {
+type CstgDomainsTableProps = {
   domains: string[];
   onUpdateDomains: (domains: string[]) => Promise<void>;
 };
@@ -152,7 +118,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
   const handleBulkDeleteDomains = (deleteDomains: string[]) => {
-    onUpdateDomains(domains.filter((domain) => deleteDomains.includes(domain)));
+    onUpdateDomains(domains.filter((domain) => !deleteDomains.includes(domain)));
   };
 
   const handleSelectDomain = (domain: string) => {
@@ -175,7 +141,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
   return (
     <div className='cstg-domains-management'>
       <h2>Top-level Domains</h2>
-      <div className='cstg-domains-management-actions'>
+      <div className='table-actions'>
         <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
         {selectedDomains.length > 0 && (
           <DeleteDomainDialog
@@ -184,7 +150,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
           />
         )}
         <button
-          className='transparent-button cstg-domains-management-delete-button'
+          className='transparent-button table-action-button'
           type='button'
           disabled={showNewRow}
           onClick={onAddRow}
@@ -214,7 +180,14 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
           {showNewRow && <CstgNewDomainRow onAdd={(newDomain) => handleAddNewDomain(newDomain)} />}
         </tbody>
       </table>
-      {!domains.length && !showNewRow && <NoApprovedDomains />}
+      {!domains.length && !showNewRow && (
+        <TableNoDataPlaceholder
+          icon={<img src='/group-icon.svg' alt='group-icon' />}
+          title='No Approved Domains'
+        >
+          <span>There are no approved domains.</span>
+        </TableNoDataPlaceholder>
+      )}
     </div>
   );
 }

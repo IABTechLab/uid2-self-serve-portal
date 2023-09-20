@@ -10,6 +10,7 @@ module.exports = {
     'airbnb-typescript',
     'prettier',
     'plugin:react/jsx-runtime',
+    'plugin:storybook/recommended',
   ],
   parserOptions: {
     project: ['./tsconfig.json', './tsconfig.local.json'],

@@ -1,3 +1,4 @@
+name: Sync handlebars template with SendGrid
 on:
   workflow_dispatch:
     inputs:
