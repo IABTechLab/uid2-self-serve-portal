@@ -40,7 +40,7 @@ export function createSitesRouter() {
     return res.status(200).json(sharingSites);
   });
 
-  sitesRouter.get('/:siteId/list', async (req: SiteRequest, res) => {
+  sitesRouter.get('/:siteId/keypairs', async (req: SiteRequest, res) => {
     const { siteId } = req.params;
     const allKeyPairs = await getKeyPairsList(siteId);
     return res.status(200).json(allKeyPairs);

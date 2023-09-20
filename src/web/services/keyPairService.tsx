@@ -11,7 +11,7 @@ export type AddKeyPairFormProps = {
 
 export async function GetKeyPairs(siteId: number) {
   try {
-    const result = await axios.get<KeyPairDTO[]>(`/sites/${siteId}/list`);
+    const result = await axios.get<KeyPairDTO[]>(`/sites/${siteId}/keypairs`);
     if (result.status === 200) {
       return (result.data as KeyPairDTO[]).map(mapKeyPairDTOToModel);
     }
