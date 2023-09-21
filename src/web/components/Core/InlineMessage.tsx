@@ -1,10 +1,11 @@
 import clsx from 'clsx';
+import { ReactNode } from 'react';
 
 import './InlineMessage.scss';
 import './Messages.scss';
 
 export type InlineMessageProps = {
-  message: string;
+  message: ReactNode;
   type: 'Info' | 'Warning' | 'Error' | 'Success';
 };
 

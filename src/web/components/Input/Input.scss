@@ -3,25 +3,24 @@
   justify-content: stretch;
   flex-direction: column;
   margin-top: 1rem;
-}
 
-.input-label {
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  font-size: 0.8125rem;
-  line-height: 2rem;
-}
+  .input-container {
+    height: 45px;
+    box-sizing: border-box;
+    border: 1px solid var(--theme-input-border);
+    border-radius: 5px;
+    padding: 0.5rem;
+  }
 
-.input-container {
-  height: 45px;
-  box-sizing: border-box;
-  border: 1px solid var(--theme-input-border) !important;
-  border-radius: 5px;
-  padding: 0.5rem;
-}
-
-.input-container.withError {
-  border: 1px solid red !important;
+  .input-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    line-height: 2rem;
+  }
+  .input-container.withError {
+    border: 1px solid var(--theme-error-border);
+  }
 }
 
 .option-label {

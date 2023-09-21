@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { ChangeEvent, useState } from 'react';
+import clsx from 'clsx';
+import { ChangeEvent, ReactNode, useState } from 'react';
 import { getDomain } from 'tldts';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { Dialog } from '../Core/Dialog';
+import { InlineMessage } from '../Core/InlineMessage';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { CstgDomainItem } from './CstgDomain';
@@ -14,24 +17,77 @@ type CstgNewDomainRowProps = {
   onAdd: (newDomain: string) => Promise<void>;
 };
 
+type InputValidation = {
+  type: 'Error' | 'Warning';
+  message: ReactNode;
+};
+
 function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
   const [newDomain, setNewDomain] = useState<string>('');
+  const [validationResult, setValidationResult] = useState<InputValidation | null>();
+
+  const updateToNormalizedValue = (normalizedValue: string) => {
+    setNewDomain(normalizedValue);
+    setValidationResult(null);
+  };
+
+  const validateDomain = useDebouncedCallback((inputValue: string) => {
+    const topLevelDomain = getDomain(inputValue);
+    if (topLevelDomain) {
+      if (topLevelDomain !== newDomain)
+        setValidationResult({
+          type: 'Warning',
+          message: (
+            <>
+              Do you mean{' '}
+              <button
+                type='button'
+                className='transparent-button small-button'
+                onClick={() => updateToNormalizedValue(topLevelDomain)}
+              >
+                {topLevelDomain}
+              </button>
+            </>
+          ),
+        });
+    } else {
+      setValidationResult({
+        type: 'Error',
+        message: 'Invalid domain format',
+      });
+    }
+  }, 500);
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const tld = getDomain(input);
-    console.log('getdomain', tld);
     setNewDomain(input);
+    setValidationResult(null);
+    validateDomain(input);
   };
 
   return (
     <tr>
       <td />
       <td className='domain'>
-        <input className='input-container' value={newDomain} onChange={handleInputChange} />
+        <div className='domain-input-field'>
+          <input
+            className={clsx('input-container', validationResult?.type)}
+            value={newDomain}
+            onChange={handleInputChange}
+          />
+          {validationResult && (
+            <InlineMessage message={validationResult!.message} type={validationResult!.type} />
+          )}
+        </div>
       </td>
       <td className='action'>
         <div className='action-cell'>
-          <button type='button' className='transparent-button' onClick={() => onAdd(newDomain)}>
+          <button
+            type='button'
+            className='transparent-button'
+            onClick={() => onAdd(newDomain)}
+            disabled={!!validationResult}
+          >
             Save
           </button>
         </div>
