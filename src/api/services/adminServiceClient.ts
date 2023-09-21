@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-import { ClientType, SharingListResponse, SiteDTO } from './adminServiceHelpers';
+import { ClientType, KeyPairDTO, SharingListResponse, SiteDTO } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -69,7 +69,13 @@ export const updateSharingList = async (
   }
 };
 
-export const getSiteList = async () => {
+export const getSiteList = async (): Promise<SiteDTO[]> => {
   const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
+  return response.data;
+};
+
+export const getKeyPairsList = async (siteId: string): Promise<KeyPairDTO[]> => {
+  // convert this to use site-specific endpoint after UID2-1847
+  const response = await adminServiceClient.get<KeyPairDTO[]>('/api/client_side_keypairs/list');
   return response.data;
 };

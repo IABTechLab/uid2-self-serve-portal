@@ -44,6 +44,10 @@ export interface UserRequest extends Request {
   user?: User;
 }
 
+export interface SiteRequest extends Request {
+  siteId?: number;
+}
+
 const userIdParser = z.object({
   userId: z.coerce.number(),
 });
