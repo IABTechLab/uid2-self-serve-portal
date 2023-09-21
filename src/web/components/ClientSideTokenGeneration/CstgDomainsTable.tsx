@@ -15,6 +15,7 @@ import './CstgDomainsTable.scss';
 
 type CstgNewDomainRowProps = {
   onAdd: (newDomain: string) => Promise<void>;
+  onCancel: () => void;
 };
 
 type InputValidation = {
@@ -22,13 +23,19 @@ type InputValidation = {
   message: ReactNode;
 };
 
-function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
+function CstgNewDomainRow({ onAdd, onCancel }: CstgNewDomainRowProps) {
   const [newDomain, setNewDomain] = useState<string>('');
   const [validationResult, setValidationResult] = useState<InputValidation | null>();
 
   const updateToNormalizedValue = (normalizedValue: string) => {
     setNewDomain(normalizedValue);
     setValidationResult(null);
+  };
+
+  const handleCancel = () => {
+    setNewDomain('');
+    setValidationResult(null);
+    onCancel();
   };
 
   const validateDomain = useDebouncedCallback((inputValue: string) => {
@@ -67,7 +74,15 @@ function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
 
   return (
     <tr>
-      <td />
+      <td>
+        <button
+          className='icon-button domain-input-remove-button'
+          type='button'
+          onClick={handleCancel}
+        >
+          <FontAwesomeIcon icon='minus' />
+        </button>
+      </td>
       <td className='domain'>
         <div className='domain-input-field'>
           <input
@@ -185,8 +200,8 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
     }
   };
 
-  const onAddRow = () => {
-    setShowNewRow(true);
+  const toggleAddRow = () => {
+    setShowNewRow((prev) => !prev);
   };
 
   const handleAddNewDomain = async (newDomain: string) => {
@@ -209,7 +224,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
           className='transparent-button table-action-button'
           type='button'
           disabled={showNewRow}
-          onClick={onAddRow}
+          onClick={toggleAddRow}
         >
           <FontAwesomeIcon icon='plus' className='cstg-domains-management-icon' />
           Add Domain
@@ -233,7 +248,12 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
               checked={isDomainSelected(domain)}
             />
           ))}
-          {showNewRow && <CstgNewDomainRow onAdd={(newDomain) => handleAddNewDomain(newDomain)} />}
+          {showNewRow && (
+            <CstgNewDomainRow
+              onAdd={(newDomain) => handleAddNewDomain(newDomain)}
+              onCancel={toggleAddRow}
+            />
+          )}
         </tbody>
       </table>
       {!domains.length && !showNewRow && (

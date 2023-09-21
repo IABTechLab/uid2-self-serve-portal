@@ -40,6 +40,14 @@
       .input-container.Error {
         border: 1px solid var(--theme-error-border);
       }
+
+      .domain-input-remove-button {
+        padding: 0 0 0 2px;
+
+        svg {
+          color: var(--theme-table-action-button);
+        }
+      }
     }
 
     .action-cell > button {
