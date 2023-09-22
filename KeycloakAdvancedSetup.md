@@ -4,7 +4,9 @@ This document provides detailed instructions on more advanced Keycloak setup top
 
 ## Generating SSP_KK_SECRET
 
-You can obtain the `SSP_KK_SECRET` by generating a new client secret in the Keycloak admin portal. Here's how you can do it:
+It is preferred that you use the `SSP_KK_SECRET` that is stored in `.env`, and you set the secret in keycloak by [resetting your realm](./KeycloakAdvancedSetup.md#reset-realm). 
+
+However, if you must generate a new client secret, please do the following:
 
 1. Login to the Keycloak admin console.
 2. Ensure the realm dropdown has 'self-serve-portal' selected (rather than 'master'), then navigate to the "Clients" page and select the `self-serve-portal-apis`.
