@@ -36,4 +36,32 @@ table {
       background-color: var(--theme-background-row);
     }
   }
+
+  tr {
+    .tristate-checkbox {
+      margin-right: 16px;
+    }
+
+    button[role='checkbox'] {
+      width: 21px;
+      height: 21px;
+    }
+
+    .input-container {
+      height: 26px;
+    }
+  }
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-left: 11px;
+  margin-bottom: 10px;
+
+  .table-action-button {
+    color: var(--theme-table-action-button);
+    padding: 0;
+  }
 }

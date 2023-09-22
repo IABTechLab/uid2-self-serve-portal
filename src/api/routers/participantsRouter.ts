@@ -13,7 +13,7 @@ import {
 import { UserDTO, UserRole } from '../entities/User';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
-import { getSharingList } from '../services/adminServiceClient';
+import { addKeyPair, getSharingList } from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
@@ -215,6 +215,11 @@ export function createParticipantsRouter() {
     newTypes: z.array(ClientTypeEnum),
   });
 
+  const keyPairParser = z.object({
+    name: z.string(),
+    disabled: z.boolean(),
+  });
+
   participantsRouter.post(
     '/:participantId/sharingPermission/add',
     async (req: ParticipantRequest, res: Response) => {
@@ -240,6 +245,65 @@ export function createParticipantsRouter() {
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(200).json(sharingParticipants);
+    }
+  );
+
+  participantsRouter.post(
+    '/:participantId/keyPair/add',
+    // async (req: ParticipantRequest, res: Response) => {
+    //   const { participant } = req;
+    //   if (!participant?.siteId) {
+    //     return res.status(400).send('Site id is not set');
+    //   }
+
+    //   // const { newParticipantSites, newTypes } = sharingRelationParser.parse(req.body);
+    //   const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    //   // const auditTrail = await insertSharingAuditTrails(
+    //   //   participant,
+    //   //   currentUser!.id,
+    //   //   currentUser!.email,
+    //   //   SharingAction.Add,
+    //   //   newParticipantSites
+    //   // );
+
+    //   // const sharingParticipants = await addSharingParticipants(
+    //   //   participant.siteId,
+    //   //   newParticipantSites,
+    //   //   newTypes
+    //   // );
+
+    //   // await updateAuditTrailToProceed(auditTrail.id);
+    //   // return res.status(200).json(sharingParticipants);
+    //   console.log(currentUser);
+    // }
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+      const { name, disabled } = keyPairParser.parse(req.body);
+      // const { newParticipantSites, newTypes } = sharingRelationParser.parse(req.body);
+      // const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const keyPairs = await addKeyPair(participant.siteId, name, disabled);
+      return res.status(201).json(keyPairs);
+      // ** audit for adding keypair
+
+      // const auditTrail = await insertSharingAuditTrails(
+      //   participant,
+      //   currentUser!.id,
+      //   currentUser!.email,
+      //   SharingAction.Add,
+      //   newParticipantSites
+      // );
+
+      // const sharingParticipants = await addSharingParticipants(
+      //   participant.siteId,
+      //   newParticipantSites,
+      //   newTypes
+      // );
+
+      // await updateAuditTrailToProceed(auditTrail.id);
+      // return res.status(200).json(sharingParticipants);
     }
   );
 

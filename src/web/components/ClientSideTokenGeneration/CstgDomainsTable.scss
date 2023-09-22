@@ -1,0 +1,34 @@
+.cstg-domains-management {
+  .cstg-domains-table {
+    width: 100%;
+
+    th:first-of-type,
+    td:first-of-type {
+      padding-left: 10px;
+      width: 21px;
+    }
+
+    th.action {
+      text-align: end;
+    }
+
+    .action {
+      width: 20%;
+    }
+
+    .action-cell {
+      font-size: 0.8125rem;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .action-cell > button {
+      padding: 5px 0 5px 10px;
+    }
+  }
+
+  .cstg-domains-management-icon {
+    margin-right: 8px;
+  }
+}

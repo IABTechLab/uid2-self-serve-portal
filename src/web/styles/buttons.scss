@@ -4,6 +4,7 @@ button {
   border-radius: 5px;
   font-weight: 600;
   padding: 10px 20px;
+  outline: none;
   cursor: pointer;
 
   &.text-button {
@@ -40,6 +41,10 @@ button {
   border: none;
   background: none;
   color: var(--theme-action);
+}
+
+.transparent-button:disabled {
+  color: var(--theme-disabled-button-text);
 }
 
 .icon-button {

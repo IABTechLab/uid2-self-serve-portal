@@ -32,6 +32,11 @@ export type SharingListResponse = {
   hash: number;
 };
 
+export interface KeyPairRequest extends Request {
+  siteId: number;
+  disabled: boolean;
+}
+
 export type KeyPairDTO = {
   contact?: string;
   created: number;
@@ -39,7 +44,7 @@ export type KeyPairDTO = {
   public_key: string;
   site_id: number;
   subscription_id: string;
-  description?: string;
+  name?: string;
 };
 
 const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
