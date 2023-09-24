@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import clsx from 'clsx';
 import { ChangeEvent, ReactNode, useState } from 'react';
-import { getDomain } from 'tldts';
+import { parse } from 'tldts';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { Dialog } from '../Core/Dialog';
@@ -38,9 +38,22 @@ function CstgNewDomainRow({ onAdd, onCancel }: CstgNewDomainRowProps) {
     onCancel();
   };
 
+  type DomainProps = {
+    isIcann: boolean | null;
+    isPrivate: boolean | null;
+    domain: string | null;
+  };
+
+  type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
+
+  const isValidDomain = (domainProps: DomainProps): domainProps is ValidDomainProps => {
+    return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
+  };
+
   const validateDomain = useDebouncedCallback((inputValue: string) => {
-    const topLevelDomain = getDomain(inputValue);
-    if (topLevelDomain) {
+    const domainProps: DomainProps = parse(inputValue);
+    if (isValidDomain(domainProps)) {
+      const { domain: topLevelDomain } = domainProps;
       if (topLevelDomain !== newDomain)
         setValidationResult({
           type: 'Warning',
