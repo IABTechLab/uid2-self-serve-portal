@@ -85,7 +85,7 @@ export const addKeyPair = async (
   name: string, // to be added in UID2-1925
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
-  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add***', {
+  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
     site_id: siteId,
     disabled,
   });
