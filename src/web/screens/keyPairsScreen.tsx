@@ -9,7 +9,7 @@ import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPai
 import { ApiError } from '../utils/apiError';
 import { PortalRoute } from './routeUtils';
 
-function KeyPairs() {
+function KeyPairsScreen() {
   const { participant } = useContext(ParticipantContext);
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
@@ -77,6 +77,6 @@ function KeyPairs() {
 
 export const KeyPairRoute: PortalRoute = {
   description: 'Client Side Integration',
-  element: <KeyPairs />,
+  element: <KeyPairsScreen />,
   path: '/dashboard/keyPairs',
 };

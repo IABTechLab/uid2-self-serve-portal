@@ -1,19 +1,19 @@
 /* eslint-disable camelcase */
 import { Knex } from 'knex';
 
-enum SharingAction {
+enum AuditAction {
   Add = 'add',
   Delete = 'delete',
 }
 
 type UpdateSharingPermissionEventData = {
   siteId: number;
-  action: SharingAction;
+  action: AuditAction;
   sharingPermissions: number[];
 };
 
 type SharingAuditTrail = {
-  action: SharingAction;
+  action: AuditAction;
   siteIds?: string;
   sharingParticipantSiteId?: number;
   userId: number;

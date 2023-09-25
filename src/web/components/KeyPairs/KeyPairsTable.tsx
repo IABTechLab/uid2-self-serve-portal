@@ -25,7 +25,7 @@ function KeyPairsTable({ keyPairs, onAddKeyPair }: KeyPairTableProps) {
         </thead>
         <tbody>{keyPairs && keyPairs.map((k) => <KeyPair key={k.publicKey} keyPair={k} />)}</tbody>
       </table>
-      <div className='add-team-member'>
+      <div className='add-key-pair'>
         <KeyPairDialog
           onAddKeyPair={onAddKeyPair}
           triggerButton={

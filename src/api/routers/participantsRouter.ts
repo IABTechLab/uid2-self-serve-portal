@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { KeyPairAction, SharingAction } from '../entities/AuditTrail';
+import { AuditAction } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
@@ -234,7 +234,7 @@ export function createParticipantsRouter() {
         participant,
         currentUser!.id,
         currentUser!.email,
-        SharingAction.Add,
+        AuditAction.Add,
         newParticipantSites
       );
 
@@ -262,7 +262,7 @@ export function createParticipantsRouter() {
         participant,
         currentUser!.id,
         currentUser!.email,
-        KeyPairAction.Add,
+        AuditAction.Add,
         name,
         disabled
       );
@@ -305,7 +305,7 @@ export function createParticipantsRouter() {
         participant,
         currentUser!.id,
         currentUser!.email,
-        SharingAction.Delete,
+        AuditAction.Delete,
         sharingSitesToRemove
       );
 

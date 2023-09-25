@@ -1,13 +1,11 @@
 import { z } from 'zod';
 
-import { Disabled } from '../../web/components/Core/TriStateCheckbox.stories';
 import {
   ApproveAccountEventData,
+  AuditAction,
   AuditTrail,
   AuditTrailDTO,
   AuditTrailEvents,
-  KeyPairAction,
-  SharingAction,
 } from '../entities/AuditTrail';
 import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
 import { getLoggers } from '../helpers/loggingHelpers';
@@ -29,7 +27,7 @@ export const insertSharingAuditTrails = async (
   participant: Participant,
   userId: number,
   userEmail: string,
-  action: SharingAction,
+  action: AuditAction,
   siteIds: number[]
 ) => {
   try {
@@ -58,7 +56,7 @@ export const insertKeyPairAuditTrails = async (
   participant: Participant,
   userId: number,
   userEmail: string,
-  action: KeyPairAction,
+  action: AuditAction,
   name: string,
   disabled: boolean
 ) => {
