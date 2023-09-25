@@ -1,128 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import clsx from 'clsx';
-import { ChangeEvent, ReactNode, useState } from 'react';
-import { parse } from 'tldts';
-import { useDebouncedCallback } from 'use-debounce';
+import { useState } from 'react';
 
 import { Dialog } from '../Core/Dialog';
-import { InlineMessage } from '../Core/InlineMessage';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { CstgDomainItem } from './CstgDomain';
+import { CstgDomainInputRow } from './CstgDomainInputRow';
 
 import './CstgDomainsTable.scss';
-
-type CstgNewDomainRowProps = {
-  onAdd: (newDomain: string) => Promise<void>;
-  onCancel: () => void;
-};
-
-type InputValidation = {
-  type: 'Error' | 'Warning';
-  message: ReactNode;
-};
-
-function CstgNewDomainRow({ onAdd, onCancel }: CstgNewDomainRowProps) {
-  const [newDomain, setNewDomain] = useState<string>('');
-  const [validationResult, setValidationResult] = useState<InputValidation | null>();
-
-  const updateToNormalizedValue = (normalizedValue: string) => {
-    setNewDomain(normalizedValue);
-    setValidationResult(null);
-  };
-
-  const handleCancel = () => {
-    setNewDomain('');
-    setValidationResult(null);
-    onCancel();
-  };
-
-  type DomainProps = {
-    isIcann: boolean | null;
-    isPrivate: boolean | null;
-    domain: string | null;
-  };
-
-  type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
-
-  const isValidDomain = (domainProps: DomainProps): domainProps is ValidDomainProps => {
-    return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
-  };
-
-  const validateDomain = useDebouncedCallback((inputValue: string) => {
-    const domainProps: DomainProps = parse(inputValue);
-    if (isValidDomain(domainProps)) {
-      const { domain: topLevelDomain } = domainProps;
-      if (topLevelDomain !== newDomain)
-        setValidationResult({
-          type: 'Warning',
-          message: (
-            <>
-              Do you mean{' '}
-              <button
-                type='button'
-                className='transparent-button small-button'
-                onClick={() => updateToNormalizedValue(topLevelDomain)}
-              >
-                {topLevelDomain}
-              </button>
-            </>
-          ),
-        });
-    } else {
-      setValidationResult({
-        type: 'Error',
-        message: 'Invalid domain format',
-      });
-    }
-  }, 500);
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    setNewDomain(input);
-    setValidationResult(null);
-    validateDomain(input);
-  };
-
-  return (
-    <tr>
-      <td>
-        <button
-          className='icon-button domain-input-remove-button'
-          type='button'
-          onClick={handleCancel}
-        >
-          <FontAwesomeIcon icon='minus' />
-        </button>
-      </td>
-      <td className='domain'>
-        <div className='domain-input-field'>
-          <input
-            className={clsx('input-container', validationResult?.type)}
-            value={newDomain}
-            onChange={handleInputChange}
-          />
-          {validationResult && (
-            <InlineMessage message={validationResult!.message} type={validationResult!.type} />
-          )}
-        </div>
-      </td>
-      <td className='action'>
-        <div className='action-cell'>
-          <button
-            type='button'
-            className='transparent-button'
-            onClick={() => onAdd(newDomain)}
-            disabled={!!validationResult}
-          >
-            Save
-          </button>
-        </div>
-      </td>
-    </tr>
-  );
-}
 
 type DeleteDomainDialogProps = {
   onDeleteDomains: () => void;
@@ -262,7 +148,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
             />
           ))}
           {showNewRow && (
-            <CstgNewDomainRow
+            <CstgDomainInputRow
               onAdd={(newDomain) => handleAddNewDomain(newDomain)}
               onCancel={toggleAddRow}
             />

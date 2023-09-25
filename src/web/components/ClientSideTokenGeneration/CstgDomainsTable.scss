@@ -23,33 +23,6 @@
       flex-wrap: wrap;
     }
 
-    .domain-input-remove-button {
-      padding: 0 0 0 2px;
-
-      svg {
-        color: var(--theme-table-action-button);
-      }
-    }
-
-    .domain-input-field {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-
-      .input-container {
-        border-radius: 5px;
-        border: 1px solid var(--theme-input-border);
-      }
-
-      .input-container.Warning {
-        border: 1px solid var(--theme-warning-border);
-      }
-
-      .input-container.Error {
-        border: 1px solid var(--theme-error-border);
-      }
-    }
-
     .action-cell > button {
       padding: 5px 0 5px 10px;
     }
