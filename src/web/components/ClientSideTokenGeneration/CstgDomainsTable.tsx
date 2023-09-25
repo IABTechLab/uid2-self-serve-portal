@@ -110,7 +110,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
 
   return (
     <div className='cstg-domains-management'>
-      <h2>Top-level Domains</h2>
+      <h2>Top-Level Domains</h2>
       <div className='table-actions'>
         <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
         {selectedDomains.length > 0 && (
