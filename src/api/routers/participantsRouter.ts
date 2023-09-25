@@ -17,6 +17,7 @@ import { getSharingList } from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertSharingAuditTrails,
+  insertSharingTypesAuditTrail,
   updateAuditTrailToProceed,
 } from '../services/auditTrailService';
 import { assignClientRoleToUser, createNewUser, sendInviteEmail } from '../services/kcUsersService';
@@ -28,6 +29,7 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
+  UpdateSharingTypes,
 } from '../services/participantsService';
 import {
   createUserInPortal,
@@ -210,9 +212,8 @@ export function createParticipantsRouter() {
     }
   );
 
-  const sharingRelationParser = z.object({
+  const sharingSitesParser = z.object({
     newParticipantSites: z.array(z.number()),
-    newTypes: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -222,7 +223,7 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { newParticipantSites, newTypes } = sharingRelationParser.parse(req.body);
+      const { newParticipantSites } = sharingSitesParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
@@ -234,8 +235,7 @@ export function createParticipantsRouter() {
 
       const sharingParticipants = await addSharingParticipants(
         participant.siteId,
-        newParticipantSites,
-        newTypes
+        newParticipantSites
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
@@ -243,9 +243,8 @@ export function createParticipantsRouter() {
     }
   );
 
-  const removeSharingRelationParser = z.object({
+  const removeSharingSitesParser = z.object({
     sharingSitesToRemove: z.array(z.number()),
-    types: z.array(ClientTypeEnum),
   });
 
   participantsRouter.post(
@@ -255,7 +254,7 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { sharingSitesToRemove, types } = removeSharingRelationParser.parse(req.body);
+      const { sharingSitesToRemove } = removeSharingSitesParser.parse(req.body);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
@@ -267,9 +266,35 @@ export function createParticipantsRouter() {
 
       const sharingParticipants = await deleteSharingParticipants(
         participant.siteId,
-        sharingSitesToRemove,
+        sharingSitesToRemove
+      );
+
+      await updateAuditTrailToProceed(auditTrail.id);
+
+      return res.status(200).json(sharingParticipants);
+    }
+  );
+
+  const sharingTypesParser = z.object({
+    types: z.array(ClientTypeEnum),
+  });
+  participantsRouter.post(
+    '/:participantId/sharingPermission/shareWithTypes',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+      const { types } = sharingTypesParser.parse(req.body);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertSharingTypesAuditTrail(
+        participant,
+        currentUser!.id,
+        currentUser!.email,
         types
       );
+
+      const sharingParticipants = await UpdateSharingTypes(participant.siteId, types);
 
       await updateAuditTrailToProceed(auditTrail.id);
 

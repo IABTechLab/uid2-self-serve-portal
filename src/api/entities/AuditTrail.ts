@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 
+import { ClientType } from '../services/adminServiceHelpers';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 
@@ -10,15 +11,24 @@ export enum SharingAction {
 
 export enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
+  UpdateSharingTypes = 'UpdateSharingTypes',
   ApproveAccount = 'ApproveAccount',
 }
 
-export type AuditTrailEventData = UpdateSharingPermissionEventData | ApproveAccountEventData;
+export type AuditTrailEventData =
+  | UpdateSharingPermissionEventData
+  | ApproveAccountEventData
+  | UpdateSharingTypesEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
   action: SharingAction;
   sharingPermissions: number[];
+};
+
+export type UpdateSharingTypesEventData = {
+  siteId: number;
+  allowedTypes: ClientType[];
 };
 
 export type ApproveAccountEventData = {

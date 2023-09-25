@@ -75,8 +75,7 @@ export const getParticipantsBySiteIds = async (siteIds: number[]) => {
 
 export const addSharingParticipants = async (
   participantSiteId: number,
-  siteIds: number[],
-  types: ClientType[]
+  siteIds: number[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
@@ -84,21 +83,38 @@ export const addSharingParticipants = async (
     participantSiteId,
     sharingListResponse.hash,
     [...newSharingSet],
-    types
+    sharingListResponse.allowed_types
   );
   return response;
 };
 
 export const deleteSharingParticipants = async (
   participantSiteId: number,
-  siteIds: number[],
-  types: ClientType[]
+  siteIds: number[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
-  return updateSharingList(participantSiteId, sharingListResponse.hash, newSharingList, types);
+  return updateSharingList(
+    participantSiteId,
+    sharingListResponse.hash,
+    newSharingList,
+    sharingListResponse.allowed_types
+  );
+};
+
+export const UpdateSharingTypes = async (
+  participantSiteId: number,
+  types: ClientType[]
+): Promise<SharingListResponse> => {
+  const sharingListResponse = await getSharingList(participantSiteId);
+  return updateSharingList(
+    participantSiteId,
+    sharingListResponse.hash,
+    sharingListResponse.allowed_sites ?? [],
+    types
+  );
 };
 
 export const sendParticipantApprovedEmail = async (users: User[]) => {

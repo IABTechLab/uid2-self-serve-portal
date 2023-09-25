@@ -9,6 +9,7 @@ import {
 } from '../entities/AuditTrail';
 import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
 import { getLoggers } from '../helpers/loggingHelpers';
+import { ClientType } from './adminServiceHelpers';
 import { findUserByEmail } from './usersService';
 
 const arraysHaveSameElements = (a: unknown[], b: unknown[]): boolean => {
@@ -40,6 +41,33 @@ export const insertSharingAuditTrails = async (
         siteId: participant.siteId!,
         action,
         sharingPermissions: siteIds,
+      },
+      succeeded: false,
+    };
+
+    return await AuditTrail.query().insert(sharingAuditTrail);
+  } catch (error) {
+    const [logger] = getLoggers();
+    logger.error(`Audit trails inserted failed: ${error}`);
+    throw error;
+  }
+};
+
+export const insertSharingTypesAuditTrail = async (
+  participant: Participant,
+  userId: number,
+  userEmail: string,
+  types: ClientType[]
+) => {
+  try {
+    const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
+      participantId: participant.id,
+      userId,
+      userEmail,
+      event: AuditTrailEvents.UpdateSharingTypes,
+      eventData: {
+        siteId: participant.siteId!,
+        allowedTypes: types,
       },
       succeeded: false,
     };

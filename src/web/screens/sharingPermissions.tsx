@@ -12,6 +12,7 @@ import {
   CompleteRecommendations,
   DeleteSharingParticipants,
   GetSharingList,
+  UpdateSharingTypes,
 } from '../services/participant';
 import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
@@ -21,13 +22,13 @@ import './sharingPermissions.scss';
 function SharingPermissions() {
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
-  const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
+  const [sharedSiteIds, setSharedSiteIds] = useState<number[] | null>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
+      const response = await UpdateSharingTypes(participant!.id, selectedTypes);
       setStatusPopup({
         type: 'Success',
         message: `${
@@ -37,6 +38,7 @@ function SharingPermissions() {
         } saved to Your Sharing Permissions`,
       });
       setSharedTypes(response.allowed_types ?? []);
+      if (!sharedSiteIds) setSharedSiteIds(response.allowed_sites);
       if (!participant?.completedRecommendations) {
         const updatedParticipant = await CompleteRecommendations(participant!.id);
         setParticipant(updatedParticipant);
@@ -53,7 +55,7 @@ function SharingPermissions() {
 
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, selectedSiteIds, sharedTypes);
+      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
       setStatusPopup({
         type: 'Success',
         message: `${
@@ -73,11 +75,7 @@ function SharingPermissions() {
 
   const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
-      const response = await DeleteSharingParticipants(
-        participant!.id,
-        siteIdsToDelete,
-        sharedTypes
-      );
+      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
       setStatusPopup({
         type: 'Success',
         message: `${siteIdsToDelete.length} sharing ${
@@ -105,6 +103,19 @@ function SharingPermissions() {
     loadSharingList();
   }, [loadSharingList]);
 
+  const renderSharingPermissionTable = () => {
+    if (!participant?.completedRecommendations) return;
+    const tableSharedSiteIds = sharedSiteIds ?? [];
+    const tableSharedTypes = sharedSiteIds === null ? ['DSP' as ClientType] : sharedTypes;
+    return (
+      <SharingPermissionsTable
+        sharedSiteIds={tableSharedSiteIds}
+        sharedTypes={tableSharedTypes}
+        onDeleteSharingPermission={handleDeleteSharingSite}
+      />
+    );
+  };
+
   return (
     <div className='sharingPermissions'>
       <h1>Sharing Permissions</h1>
@@ -124,16 +135,10 @@ function SharingPermissions() {
         <Collapsible title='Search and Add Permissions' defaultOpen>
           <SearchAndAddParticipants
             onSharingPermissionsAdded={handleAddSharingSite}
-            sharedSiteIds={sharedSiteIds}
+            sharedSiteIds={sharedSiteIds ?? []}
           />
         </Collapsible>
-        {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
-          <SharingPermissionsTable
-            sharedSiteIds={sharedSiteIds}
-            sharedTypes={sharedTypes}
-            onDeleteSharingPermission={handleDeleteSharingSite}
-          />
-        )}
+        {renderSharingPermissionTable()}
       </div>
 
       {statusPopup && (
