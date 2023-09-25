@@ -32,11 +32,6 @@ export type SharingListResponse = {
   hash: number;
 };
 
-export interface KeyPairRequest extends Request {
-  siteId: number;
-  disabled: boolean;
-}
-
 export type KeyPairDTO = {
   contact?: string;
   created: number;
