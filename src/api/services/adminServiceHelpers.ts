@@ -27,7 +27,7 @@ export type SiteDTO = {
 };
 
 export type SharingListResponse = {
-  allowed_sites: number[];
+  allowed_sites: number[] | null;
   allowed_types: ClientType[];
   hash: number;
 };

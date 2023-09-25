@@ -22,7 +22,7 @@ function Home() {
       try {
         const sharingList = await GetSharingList();
         // TODO include the sites from allowed_types in the count
-        setSharingPermissionsCount(sharingList.allowed_sites.length);
+        setSharingPermissionsCount((sharingList.allowed_sites ?? []).length);
       } catch (e: unknown) {
         log.error(e);
         setHasError(true);

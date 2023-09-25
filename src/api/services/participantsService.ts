@@ -78,11 +78,12 @@ export const addSharingParticipants = async (
   siteIds: number[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
+  const existingSharedSites = sharingListResponse.allowed_sites ?? [];
+  const newSharingSet = new Set([...existingSharedSites, ...siteIds]);
   const response = await updateSharingList(
     participantSiteId,
     sharingListResponse.hash,
-    [...newSharingSet],
+    Array.from(newSharingSet),
     sharingListResponse.allowed_types
   );
   return response;
@@ -93,6 +94,7 @@ export const deleteSharingParticipants = async (
   siteIds: number[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
+  if (!sharingListResponse.allowed_sites) throw Error('The site is not shared with any sites');
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
