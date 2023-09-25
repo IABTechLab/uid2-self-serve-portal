@@ -1,19 +1,18 @@
 import axios from 'axios';
 
-import { KeyPairDTO, SharingListResponse } from '../../api/services/adminServiceHelpers';
+import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { mapKeyPairDTOToModel } from '../components/KeyPairs/KeyPairModel';
 import { backendError } from '../utils/apiError';
 
 export type AddKeyPairFormProps = {
   participantId: number;
-  // siteId: number;
   name?: string;
   disabled: boolean;
 };
 
-export async function GetKeyPairs(siteId: number) {
+export async function GetKeyPairs(participantId: number) {
   try {
-    const result = await axios.get<KeyPairDTO[]>(`/sites/${siteId}/keypairs`);
+    const result = await axios.get<KeyPairDTO[]>(`/participants/${participantId}/keyPairs`);
     if (result.status === 200) {
       return (result.data as KeyPairDTO[]).map(mapKeyPairDTOToModel);
     }

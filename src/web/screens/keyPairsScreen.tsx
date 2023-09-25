@@ -1,5 +1,4 @@
 import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
-import { useRevalidator } from 'react-router-dom';
 
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
@@ -15,13 +14,9 @@ function KeyPairs() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-  // const reloader = useRevalidator();
-  // const onKeyPairUpdated = useCallback(() => {
-  //   reloader.revalidate();
-  // }, [reloader]);
 
   const loadKeyPairs = useCallback(async () => {
-    const data = await GetKeyPairs(participant!.siteId!);
+    const data = await GetKeyPairs(participant!.id!);
     setKeyPairData(data);
   }, [participant]);
 

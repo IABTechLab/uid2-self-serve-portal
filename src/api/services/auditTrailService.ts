@@ -1,10 +1,12 @@
 import { z } from 'zod';
 
+import { Disabled } from '../../web/components/Core/TriStateCheckbox.stories';
 import {
   ApproveAccountEventData,
   AuditTrail,
   AuditTrailDTO,
   AuditTrailEvents,
+  KeyPairAction,
   SharingAction,
 } from '../entities/AuditTrail';
 import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
@@ -45,6 +47,37 @@ export const insertSharingAuditTrails = async (
     };
 
     return await AuditTrail.query().insert(sharingAuditTrail);
+  } catch (error) {
+    const [logger] = getLoggers();
+    logger.error(`Audit trails inserted failed: ${error}`);
+    throw error;
+  }
+};
+
+export const insertKeyPairAuditTrails = async (
+  participant: Participant,
+  userId: number,
+  userEmail: string,
+  action: KeyPairAction,
+  name: string,
+  disabled: boolean
+) => {
+  try {
+    const keyPairAuditTrail: Omit<AuditTrailDTO, 'id'> = {
+      participantId: participant.id,
+      userId,
+      userEmail,
+      event: AuditTrailEvents.ManageKeyPair,
+      eventData: {
+        siteId: participant.siteId!,
+        action,
+        name,
+        disabled,
+      },
+      succeeded: false,
+    };
+
+    return await AuditTrail.query().insert(keyPairAuditTrail);
   } catch (error) {
     const [logger] = getLoggers();
     logger.error(`Audit trails inserted failed: ${error}`);

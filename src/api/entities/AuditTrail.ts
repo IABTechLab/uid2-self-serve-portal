@@ -8,12 +8,22 @@ export enum SharingAction {
   Delete = 'delete',
 }
 
+export enum KeyPairAction {
+  Add = 'add',
+  Delete = 'delete',
+  Update = 'update',
+}
+
 export enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
   ApproveAccount = 'ApproveAccount',
+  ManageKeyPair = 'ManageKeyPair',
 }
 
-export type AuditTrailEventData = UpdateSharingPermissionEventData | ApproveAccountEventData;
+export type AuditTrailEventData =
+  | UpdateSharingPermissionEventData
+  | ApproveAccountEventData
+  | ManageKeyPairEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
@@ -27,6 +37,13 @@ export type ApproveAccountEventData = {
   newName?: string;
   oldTypeIds?: number[];
   newTypeIds?: number[];
+};
+
+export type ManageKeyPairEventData = {
+  siteId: number;
+  name: string;
+  disabled: boolean;
+  action: KeyPairAction;
 };
 
 export class AuditTrail extends BaseModel {

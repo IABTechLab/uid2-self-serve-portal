@@ -3,13 +3,7 @@ import axios from 'axios';
 
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-import {
-  ClientType,
-  KeyPairDTO,
-  KeyPairRequest,
-  SharingListResponse,
-  SiteDTO,
-} from './adminServiceHelpers';
+import { ClientType, KeyPairDTO, SharingListResponse, SiteDTO } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -80,7 +74,7 @@ export const getSiteList = async (): Promise<SiteDTO[]> => {
   return response.data;
 };
 
-export const getKeyPairsList = async (siteId: string): Promise<KeyPairDTO[]> => {
+export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
   // convert this to use site-specific endpoint after UID2-1847
   const response = await adminServiceClient.get<KeyPairDTO[]>('/api/client_side_keypairs/list');
   return response.data;
@@ -91,7 +85,7 @@ export const addKeyPair = async (
   name: string, // to be added in UID2-1925
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
-  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
+  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add***', {
     site_id: siteId,
     disabled,
   });
