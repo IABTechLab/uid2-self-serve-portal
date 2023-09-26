@@ -3,21 +3,26 @@ import { Model } from 'objection';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 
-export enum SharingAction {
+export enum AuditAction {
   Add = 'add',
   Delete = 'delete',
+  Update = 'update',
 }
 
 export enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
   ApproveAccount = 'ApproveAccount',
+  ManageKeyPair = 'ManageKeyPair',
 }
 
-export type AuditTrailEventData = UpdateSharingPermissionEventData | ApproveAccountEventData;
+export type AuditTrailEventData =
+  | UpdateSharingPermissionEventData
+  | ApproveAccountEventData
+  | ManageKeyPairEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
-  action: SharingAction;
+  action: AuditAction;
   sharingPermissions: number[];
 };
 
@@ -27,6 +32,13 @@ export type ApproveAccountEventData = {
   newName?: string;
   oldTypeIds?: number[];
   newTypeIds?: number[];
+};
+
+export type ManageKeyPairEventData = {
+  siteId: number;
+  name: string;
+  disabled: boolean;
+  action: AuditAction;
 };
 
 export class AuditTrail extends BaseModel {

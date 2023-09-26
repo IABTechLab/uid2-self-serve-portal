@@ -39,7 +39,7 @@ export type KeyPairDTO = {
   public_key: string;
   site_id: number;
   subscription_id: string;
-  description?: string;
+  name?: string;
 };
 
 const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
