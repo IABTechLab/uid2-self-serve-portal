@@ -39,11 +39,7 @@ function KeyPairDialog(props: KeyPairDialogProps) {
         defaultValues={keyPair}
       >
         <TextInput inputName='name' label='Name' />
-        <CheckboxInput
-          inputName='disabled'
-          label='Disabled'
-          options={[{ optionLabel: '', value: false }]}
-        />
+        <CheckboxInput inputName='disabled' options={[{ optionLabel: 'Disabled', value: false }]} />
       </Form>
     </Dialog>
   );

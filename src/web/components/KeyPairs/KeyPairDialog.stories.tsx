@@ -1,29 +1,33 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import KeyPairDialog from './KeyPairDialog';
 
-export default {
-  title: 'Key Pairs/Key Pair Dialog',
+const meta: Meta<typeof KeyPairDialog> = {
   component: KeyPairDialog,
-} as ComponentMeta<typeof KeyPairDialog>;
+  title: 'Key Pairs/Key Pair Dialog',
+};
+export default meta;
 
-const Template: ComponentStory<typeof KeyPairDialog> = (args) => <KeyPairDialog {...args} />;
+type Story = StoryObj<typeof KeyPairDialog>;
 
-export const Default = Template.bind({});
-Default.args = {
-  triggerButton: <button type='button'>Open</button>,
-  onAddKeyPair: (form) => Promise.resolve(console.log(`Add new key pair ${JSON.stringify(form)}`)),
+export const Default: Story = {
+  args: {
+    triggerButton: <button type='button'>Open</button>,
+    onAddKeyPair: (form) =>
+      Promise.resolve(console.log(`Add new key pair ${JSON.stringify(form)}`)),
+  },
 };
 
-export const WithKeyPair = Template.bind({});
-WithKeyPair.args = {
-  ...Default.args,
-  keyPair: {
-    subscriptionId: 'subscription 1',
-    siteId: 1234,
-    publicKey: 'public key 1',
-    created: new Date(),
-    createdString: new Date().toLocaleDateString(),
-    disabled: false,
+export const WithKeyPair: Story = {
+  args: {
+    ...Default.args,
+    keyPair: {
+      subscriptionId: 'subscription 1',
+      siteId: 1234,
+      publicKey: 'public key 1',
+      created: new Date(),
+      createdString: new Date().toLocaleDateString(),
+      disabled: false,
+    },
   },
 };
