@@ -9,7 +9,7 @@ export type KeyPairModel = {
   publicKey: string;
   siteId: number;
   subscriptionId: string;
-  description?: string;
+  name?: string;
 };
 
 export const mapKeyPairDTOToModel = (dto: KeyPairDTO): KeyPairModel => {
@@ -21,7 +21,7 @@ export const mapKeyPairDTOToModel = (dto: KeyPairDTO): KeyPairModel => {
     publicKey: dto.public_key as string,
     siteId: dto.site_id as number,
     subscriptionId: dto.subscription_id as string,
-    description: dto.description as string,
+    name: dto.name as string,
   };
   return model;
 };
@@ -34,7 +34,7 @@ export const mapKeyPairModelToDTO = (model: KeyPairModel): KeyPairDTO => {
     public_key: model.publicKey,
     site_id: model.siteId,
     subscription_id: model.subscriptionId,
-    description: model.description,
+    name: model.name,
   };
   return dto;
 };

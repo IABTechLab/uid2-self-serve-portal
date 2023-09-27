@@ -4,25 +4,28 @@ import { ClientType } from '../services/adminServiceHelpers';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 
-export enum SharingAction {
+export enum AuditAction {
   Add = 'add',
   Delete = 'delete',
+  Update = 'update',
 }
 
 export enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
   UpdateSharingTypes = 'UpdateSharingTypes',
   ApproveAccount = 'ApproveAccount',
+  ManageKeyPair = 'ManageKeyPair',
 }
 
 export type AuditTrailEventData =
   | UpdateSharingPermissionEventData
   | ApproveAccountEventData
-  | UpdateSharingTypesEventData;
+  | UpdateSharingTypesEventData
+  | ManageKeyPairEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
-  action: SharingAction;
+  action: AuditAction;
   sharingPermissions: number[];
 };
 
@@ -37,6 +40,13 @@ export type ApproveAccountEventData = {
   newName?: string;
   oldTypeIds?: number[];
   newTypeIds?: number[];
+};
+
+export type ManageKeyPairEventData = {
+  siteId: number;
+  name: string;
+  disabled: boolean;
+  action: AuditAction;
 };
 
 export class AuditTrail extends BaseModel {

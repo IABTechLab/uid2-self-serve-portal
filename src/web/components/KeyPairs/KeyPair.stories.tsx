@@ -17,8 +17,8 @@ const Template: ComponentStory<typeof KeyPair> = (args) => (
   </div>
 );
 
-export const keyPair = Template.bind({});
-keyPair.args = {
+export const KeyPairTemplate = Template.bind({});
+KeyPairTemplate.args = {
   keyPair: {
     subscriptionId: 'subscription 1',
     siteId: 1234,
