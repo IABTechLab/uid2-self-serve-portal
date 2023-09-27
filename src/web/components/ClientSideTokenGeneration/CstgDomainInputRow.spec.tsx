@@ -6,13 +6,14 @@ import * as stories from './CstgDomainInputRow.stories';
 
 const { Default } = composeStories(stories);
 
-const validationInlineBanner = async (bannerMessage: string) => {
-  expect(await screen.findByTestId('banner-message')).toHaveTextContent(bannerMessage);
+const validationInlineBanner = async (messageTestId: string) => {
+  expect(await screen.findByTestId(messageTestId)).toBeInTheDocument();
   expect(await screen.findByTestId('domain-input-save-btn')).toBeDisabled();
 };
 
 const validateRecommendDomain = async (recommendDomain: string) => {
-  await validationInlineBanner(recommendDomain);
+  await validationInlineBanner('domain-input-recommended-message');
+  expect(await screen.findByTestId('banner-message')).toHaveTextContent(recommendDomain);
 
   await userEvent.click(screen.getByTestId('domain-input-recommended-domain'));
   expect(screen.queryByTestId('banner-message')).not.toBeInTheDocument();
@@ -46,7 +47,7 @@ describe('CstgDomainInputRow', () => {
     render(<Default />);
 
     await userEvent.type(screen.getByTestId('domain-input-field'), 'https://abctest');
-    await validationInlineBanner('Invalid domain format');
+    await validationInlineBanner('domain-input-error-message');
   });
 
   it('renders error when user type in invalid suffix', async () => {
@@ -54,6 +55,6 @@ describe('CstgDomainInputRow', () => {
 
     await userEvent.type(screen.getByTestId('domain-input-field'), 'https://abctest.bbbbb');
 
-    await validationInlineBanner('Invalid domain format');
+    await validationInlineBanner('domain-input-error-message');
   });
 });
