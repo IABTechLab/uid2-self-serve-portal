@@ -53,23 +53,25 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
         setValidationResult({
           type: 'Warning',
           message: (
-            <>
-              Do you mean{' '}
+            <div className='domain-input-recommended-message'>
+              <span>
+                We only need the top level domain, do you mean <b>{topLevelDomain}</b>?
+              </span>
               <button
                 type='button'
                 data-testid='domain-input-recommended-domain'
                 className='transparent-button small-button'
                 onClick={() => updateToNormalizedValue(topLevelDomain)}
               >
-                {topLevelDomain}
+                Use Recommended Domain
               </button>
-            </>
+            </div>
           ),
         });
     } else {
       setValidationResult({
         type: 'Error',
-        message: 'Invalid domain format',
+        message: 'Invalid domain',
       });
     }
   }, 500);

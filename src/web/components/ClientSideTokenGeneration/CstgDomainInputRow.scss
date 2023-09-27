@@ -25,4 +25,14 @@
       border: 1px solid var(--theme-error-border);
     }
   }
+
+  .domain-input-recommended-message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    button {
+      font-size: 0.625rem;
+    }
+  }
 }
