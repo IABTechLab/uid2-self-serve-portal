@@ -24,7 +24,7 @@ export const WithTeamMembers: Story = {
         name: 'name added in UID2-1925',
         subscriptionId: 'subscription 1',
         siteId: 1234,
-        publicKey: 'UID2-X-L-MF',
+        publicKey: '',
         created: new Date(),
         createdString: new Date().toLocaleDateString(),
         disabled: false,
@@ -32,6 +32,15 @@ export const WithTeamMembers: Story = {
       {
         name: 'name added in UID2-1925',
         subscriptionId: 'subscription 2',
+        siteId: 5678,
+        publicKey: 'UID2-X-L-MFkwE+Bw==',
+        created: new Date(),
+        createdString: new Date().toLocaleDateString(),
+        disabled: false,
+      },
+      {
+        name: 'name added in UID2-1925',
+        subscriptionId: 'subscription 3',
         siteId: 5678,
         publicKey:
           'UID2-X-L-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQDQgAEQ6UZYyjvGEg5Cydtmzo/CvTOJc618g8iAOpBtDMO0GE7BZ2IWGwvkG6tdL1QBLXdwnICG+xZpOziF1Z6Cxc+Bw==',

@@ -55,15 +55,17 @@ function KeyPair({ keyPair }: KeyPairProps) {
       <td className='subscription-id'>{keyPair.subscriptionId}</td>
       <td className='public-key'>
         {getPublicKeyDisplay(keyPair.publicKey)}
-        <button
-          className='icon-button copy-button'
-          aria-label='copy'
-          type='button'
-          onClick={() => copyPublicKey(keyPair.publicKey)}
-          title='Copy public key to clipboard'
-        >
-          <FontAwesomeIcon icon='copy' />
-        </button>
+        {keyPair.publicKey.length > 0 && (
+          <button
+            className='icon-button copy-button'
+            aria-label='copy'
+            type='button'
+            onClick={() => copyPublicKey(keyPair.publicKey)}
+            title='Copy public key to clipboard'
+          >
+            <FontAwesomeIcon icon='copy' />
+          </button>
+        )}
         {showStatusPopup && (
           <StatusPopup
             status='Success'
