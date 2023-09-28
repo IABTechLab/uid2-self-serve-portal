@@ -58,7 +58,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
               data-testid='domain-input-recommended-message'
             >
               <span>
-                We only need the top-level domain, do you mean <b>{topLevelDomain}</b>?
+                We only need the top-level domain. Do you mean <b>{topLevelDomain}</b>?
               </span>
               <button
                 type='button'
@@ -66,7 +66,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
                 className='transparent-button small-button'
                 onClick={() => updateToNormalizedValue(topLevelDomain)}
               >
-                Use Recommended Domain
+                Use Recommended Domain Instead
               </button>
             </div>
           ),
