@@ -7,7 +7,6 @@ import './Popover.scss';
 export type PopoverProps = {
   triggerButton?: JSX.Element;
   children: ReactNode;
-  // closeButton?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   modal?: boolean;
@@ -17,7 +16,6 @@ export type PopoverProps = {
 export default function Popover({
   triggerButton,
   children,
-  // closeButton,
   open,
   onOpenChange,
   modal,

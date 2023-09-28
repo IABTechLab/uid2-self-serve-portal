@@ -11,9 +11,9 @@ function PublicKeyPopover(publicKey: string) {
       triggerButton={
         <button
           className='icon-button expand-button'
-          aria-label='popover'
+          aria-label='expand'
           type='button'
-          title='View full public key'
+          title='View public key'
         >
           ...
         </button>
