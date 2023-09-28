@@ -197,7 +197,7 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 
 The following steps describe the minimal steps required to successfully log in to the portal UI. If you require a fully-functional portal, please perform the following steps as well as the steps described below in [Connecting to local admin service](README.md#connecting-to-local-admin-service).
 1. Set up Docker, as described above: [Docker](README.md#docker)
-2. Update your `SSP_KK_SECRET` by following the steps above: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
+2. Ensure your `SSP_KK_SECRET` matches the value in the Keycloak admin console. If it does not, please try [Reset your keycloak realm](./KeycloakAdvancedSetup.md#reset-realm). If all else fails, manually generate your own secret by following: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
 3. Run the following to install dependencies:
    ```
    npm install

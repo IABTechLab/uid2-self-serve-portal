@@ -32,6 +32,16 @@ export type SharingListResponse = {
   hash: number;
 };
 
+export type KeyPairDTO = {
+  contact?: string;
+  created: number;
+  disabled: boolean;
+  public_key: string;
+  site_id: number;
+  subscription_id: string;
+  name?: string;
+};
+
 const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
   [ParticipantTypeData.Advertiser.typeName]: ['MAPPER', 'SHARER'],
   [ParticipantTypeData.DataProvider.typeName]: ['MAPPER', 'SHARER'],
