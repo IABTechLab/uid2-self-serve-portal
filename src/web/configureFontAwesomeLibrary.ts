@@ -6,6 +6,7 @@ import {
   faChevronUp,
   faCircleCheck as fasCircleCheck,
   faCircleInfo,
+  faCopy,
   faEllipsisH,
   faExclamationCircle,
   faExclamationTriangle,
@@ -41,4 +42,5 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faSortUp);
   library.add(faSortDown);
   library.add(faPlus);
+  library.add(faCopy);
 }

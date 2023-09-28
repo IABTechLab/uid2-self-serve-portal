@@ -49,9 +49,7 @@ export function ParticipantRequestItem({
         <td>
           <div className='participant-request-name-cell'>
             <img src={logo} alt={participant.name} className='participant-request-logo' />
-            <label htmlFor={`checkbox-${participant.id}`} className='checkbox-label'>
-              {participant.name}
-            </label>
+            {participant.name}
           </div>
         </td>
         <td>

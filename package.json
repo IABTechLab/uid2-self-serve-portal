@@ -24,6 +24,7 @@
     "@radix-ui/react-dropdown-menu": "^2.0.5",
     "@radix-ui/react-label": "^2.0.0",
     "@radix-ui/react-navigation-menu": "^1.1.1",
+    "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-radio-group": "^1.1.1",
     "@radix-ui/react-select": "^1.1.2",
     "@radix-ui/react-switch": "^1.0.1",
@@ -147,9 +148,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-typescript": "^7.21.0",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.0.0",
     "@storybook/addon-actions": "^7.4.2",
     "@storybook/addon-essentials": "^7.4.2",

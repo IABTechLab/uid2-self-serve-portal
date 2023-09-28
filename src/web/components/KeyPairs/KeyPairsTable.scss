@@ -1,3 +1,5 @@
+@import '../../styles/themes';
+
 .key-pairs {
   display: flex;
   flex-direction: column;
@@ -30,8 +32,17 @@
     }
 
     .public-key {
-      width: 40%;
       overflow-wrap: anywhere;
+
+      .expand-button {
+        color: var(--theme-action);
+        padding: 0;
+        font-size: 16px;
+      }
+
+      svg {
+        font-size: 1rem;
+      }
     }
 
     .action {
