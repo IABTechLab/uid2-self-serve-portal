@@ -1,28 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import Popover from '../Core/Popover';
 import { StatusPopup } from '../Core/StatusPopup';
 import { KeyPairModel } from './KeyPairModel';
-
-function PublicKeyPopover(publicKey: string) {
-  return (
-    <Popover
-      triggerButton={
-        <button
-          className='icon-button expand-button'
-          aria-label='expand'
-          type='button'
-          title='View public key'
-        >
-          ...
-        </button>
-      }
-    >
-      <div>{publicKey}</div>
-    </Popover>
-  );
-}
 
 type KeyPairProps = {
   keyPair: KeyPairModel;
@@ -31,8 +12,36 @@ type KeyPairProps = {
 function KeyPair({ keyPair }: KeyPairProps) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
 
-  const truncatePublicKeyForDisplay = (key: string): string => {
-    return key.substring(0, 20);
+  const getPublicKeyDisplay = (key: string): ReactNode => {
+    const popover = (
+      <Popover
+        triggerButton={
+          <button
+            className='icon-button expand-button'
+            aria-label='expand'
+            type='button'
+            title='View public key'
+          >
+            ...
+          </button>
+        }
+      >
+        <div>{key}</div>
+      </Popover>
+    );
+
+    const displayNode =
+      key.length < 20 ? (
+        <span>{key}</span>
+      ) : (
+        <>
+          {key.substring(0, 10)}
+          {popover}
+          {key.substring(key.length - 10, key.length)}
+        </>
+      );
+
+    return displayNode;
   };
 
   const copyPublicKey = (key: string): void => {
@@ -45,8 +54,7 @@ function KeyPair({ keyPair }: KeyPairProps) {
       <td className='name'>{keyPair.name ?? 'name placeholder until added in UID2-1925'}</td>
       <td className='subscription-id'>{keyPair.subscriptionId}</td>
       <td className='public-key'>
-        {truncatePublicKeyForDisplay(keyPair.publicKey)}
-        {PublicKeyPopover(keyPair.publicKey)}
+        {getPublicKeyDisplay(keyPair.publicKey)}
         <button
           className='icon-button copy-button'
           aria-label='copy'
