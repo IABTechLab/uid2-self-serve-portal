@@ -47,6 +47,10 @@ button {
   color: var(--theme-disabled-button-text);
 }
 
+.transparent-button.small-button {
+  padding: 0;
+}
+
 .icon-button {
   font-family: inherit;
   border: none;
