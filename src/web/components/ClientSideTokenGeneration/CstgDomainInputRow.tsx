@@ -8,6 +8,8 @@ import { InlineMessage } from '../Core/InlineMessage';
 
 import './CstgDomainInputRow.scss';
 
+const DELAY = 500;
+
 type CstgDomainInputRowProps = {
   onAdd: (newDomain: string) => Promise<void>;
   onCancel: () => void;
@@ -77,7 +79,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
         message: <span data-testid='domain-input-error-message'>Invalid domain</span>,
       });
     }
-  }, 500);
+  }, DELAY);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -94,7 +96,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
           type='button'
           onClick={handleCancel}
         >
-          <FontAwesomeIcon icon='minus' />
+          <FontAwesomeIcon icon='xmark' />
         </button>
       </td>
       <td className='domain'>

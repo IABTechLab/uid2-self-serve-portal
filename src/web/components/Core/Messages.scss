@@ -13,7 +13,7 @@
   &.Error {
     background-color: var(--theme-error-background);
     svg {
-      color: var(--theme-error-icon);
+      color: var(--theme-error);
     }
   }
 
@@ -27,7 +27,7 @@
   &.Warning {
     background-color: var(--theme-warning-background);
     svg {
-      color: var(--theme-warning-icon);
+      color: var(--theme-warning);
       background: radial-gradient(black 35%, transparent 30%);
     }
   }
