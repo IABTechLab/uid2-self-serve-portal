@@ -100,7 +100,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
         </button>
       </td>
       <td className='domain'>
-        <div className='domain-input-field'>
+        <div className='domain-input-wrapper'>
           <input
             data-testid='domain-input-field'
             className={clsx('input-container', validationResult?.type)}

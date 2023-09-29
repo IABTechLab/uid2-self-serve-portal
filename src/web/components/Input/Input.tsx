@@ -24,7 +24,7 @@ type InputProps = {
 };
 export function Input({ inputName, label, error, children }: InputProps) {
   return (
-    <div className='input-field' key={`${inputName}-input`}>
+    <div className='input-wrapper' key={`${inputName}-input`}>
       {label && (
         <Label.Root className='input-label' htmlFor={inputName}>
           {label}
