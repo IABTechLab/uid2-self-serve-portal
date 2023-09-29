@@ -94,7 +94,7 @@ export const deleteSharingParticipants = async (
   siteIds: number[]
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId);
-  if (!sharingListResponse.allowed_sites) throw Error('The site is not shared with any sites');
+  if (!sharingListResponse.allowed_sites) throw Error('There are no sharing sites to delete');
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
