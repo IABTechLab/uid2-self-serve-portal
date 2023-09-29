@@ -13,35 +13,29 @@ function KeyPair({ keyPair }: KeyPairProps) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
 
   const getPublicKeyDisplay = (key: string): ReactNode => {
-    const popover = (
-      <Popover
-        triggerButton={
-          <button
-            className='icon-button expand-button'
-            aria-label='expand'
-            type='button'
-            title='View public key'
-          >
-            ...
-          </button>
-        }
-      >
-        <div>{key}</div>
-      </Popover>
-    );
-
-    const displayNode =
-      key.length < 20 ? (
-        <span>{key}</span>
+    const node =
+      key.length > 20 ? (
+        <Popover
+          triggerButton={
+            <button
+              className='icon-button expand-button'
+              aria-label='expand'
+              type='button'
+              title='View public key'
+            >
+              {key.substring(0, 10)}
+              ...
+              {key.substring(key.length - 10, key.length)}
+            </button>
+          }
+        >
+          <div>{key}</div>
+        </Popover>
       ) : (
-        <>
-          {key.substring(0, 10)}
-          {popover}
-          {key.substring(key.length - 10, key.length)}
-        </>
+        key
       );
 
-    return displayNode;
+    return node;
   };
 
   const copyPublicKey = (key: string): void => {
