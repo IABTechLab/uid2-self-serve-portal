@@ -12,25 +12,34 @@ type KeyPairProps = {
 function KeyPair({ keyPair }: KeyPairProps) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
 
-  const getPublicKeyDisplay = (key: string): ReactNode => {
+  const getPublicKeyDisplay = (key: string): string => {
+    const display =
+      key.length > 20
+        ? `${key.substring(0, 10)}......${key.substring(key.length - 10, key.length)}`
+        : key;
+    return display;
+  };
+
+  const getPublicKeyViewButton = (key: string): ReactNode => {
     const node =
       key.length > 20 ? (
-        <Popover
-          triggerButton={
-            <button
-              className='icon-button expand-button'
-              aria-label='expand'
-              type='button'
-              title='View public key'
-            >
-              {key.substring(0, 10)}
-              ...
-              {key.substring(key.length - 10, key.length)}
-            </button>
-          }
-        >
-          <div>{key}</div>
-        </Popover>
+        <>
+          <Popover
+            triggerButton={
+              <button
+                className='icon-button expand-button'
+                aria-label='view key'
+                type='button'
+                title='View public key'
+              >
+                View
+              </button>
+            }
+          >
+            <div>{key}</div>
+          </Popover>
+          |
+        </>
       ) : (
         key
       );
@@ -49,6 +58,7 @@ function KeyPair({ keyPair }: KeyPairProps) {
       <td className='subscription-id'>{keyPair.subscriptionId}</td>
       <td className='public-key'>
         {getPublicKeyDisplay(keyPair.publicKey)}
+        {getPublicKeyViewButton(keyPair.publicKey)}
         {keyPair.publicKey.length > 0 && (
           <button
             className='icon-button copy-button'
@@ -57,7 +67,7 @@ function KeyPair({ keyPair }: KeyPairProps) {
             onClick={() => copyPublicKey(keyPair.publicKey)}
             title='Copy public key to clipboard'
           >
-            <FontAwesomeIcon icon='copy' />
+            Copy
           </button>
         )}
         {showStatusPopup && (

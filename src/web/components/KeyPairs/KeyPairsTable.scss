@@ -34,13 +34,10 @@
     .public-key {
       overflow-wrap: anywhere;
 
-      .expand-button {
+      .expand-button,
+      .copy-button {
         color: var(--theme-action);
-        padding: 0;
-        font-size: 1rem;
-      }
-
-      svg {
+        padding: 0 8px;
         font-size: 1rem;
       }
     }
