@@ -10,15 +10,15 @@ export default meta;
 
 type Story = StoryObj<typeof KeyPairsTable>;
 
-export const WithoutTeamMembers: Story = {
+export const WithoutKeyPairs: Story = {
   args: {
     keyPairs: [],
   },
 };
 
-export const WithTeamMembers: Story = {
+export const WithKeyPairs: Story = {
   args: {
-    ...WithoutTeamMembers.args,
+    ...WithoutKeyPairs.args,
     keyPairs: [
       {
         name: 'name added in UID2-1925',
