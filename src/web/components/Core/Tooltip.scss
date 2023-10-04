@@ -1,7 +1,10 @@
 .tooltip-trigger {
-  color: var(--theme-info-icon);
   border: none !important;
   padding: 0 5px !important;
+
+  .default-trigger {
+    color: var(--theme-info-icon);
+  }
 }
 
 .tooltip-content {

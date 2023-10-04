@@ -6,15 +6,22 @@ import './Tooltip.scss';
 
 type TooltipProps = {
   children: ReactNode;
+  trigger?: ReactNode;
   side?: 'top' | 'right' | 'bottom' | 'left';
   align?: 'center' | 'start' | 'end';
 };
-export function Tooltip({ children, side, align }: TooltipProps) {
+export function Tooltip({ children, trigger, side, align }: TooltipProps) {
   return (
     <TooltipPrimitive.Provider>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger className='tooltip-trigger' type='button'>
-          <FontAwesomeIcon icon='circle-info' data-testid='tooltip-info-icon' />
+          {trigger ?? (
+            <FontAwesomeIcon
+              icon='circle-info'
+              data-testid='tooltip-info-icon'
+              className='default-trigger'
+            />
+          )}
         </TooltipPrimitive.Trigger>
         <TooltipPrimitive.Content side={side} align={align} className='tooltip-content'>
           {children}

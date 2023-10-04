@@ -190,7 +190,7 @@ export function BulkAddPermissions({
       <form onSubmit={handleSubmit(handleSave)}>
         {!participant?.completedRecommendations && (
           <Collapsible
-            title='Bulk Add Permissions'
+            title='Add Permissions — Bulk'
             defaultOpen
             label='RECOMMENDATION'
             className='bulk-add-permissions-recommendations-collapsible'
@@ -199,7 +199,7 @@ export function BulkAddPermissions({
           </Collapsible>
         )}
         {participant?.completedRecommendations && (
-          <Collapsible title='Bulk Add Permissions' defaultOpen={false}>
+          <Collapsible title='Add Permissions — Bulk' defaultOpen={false}>
             {collapsibleContent}
           </Collapsible>
         )}

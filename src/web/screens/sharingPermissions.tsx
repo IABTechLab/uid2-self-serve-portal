@@ -121,11 +121,17 @@ function SharingPermissions() {
           sharedTypes={sharedTypes ?? []}
           onBulkAddSharingPermission={handleSaveSharingType}
         />
-        <Collapsible title='Search and Add Permissions' defaultOpen>
-          <SearchAndAddParticipants
-            onSharingPermissionsAdded={handleAddSharingSite}
-            sharedSiteIds={sharedSiteIds}
-          />
+        <Collapsible title='Add Permissions — Individual' defaultOpen>
+          <>
+            <p className='search-description'>
+              Add individual participants, using search, and click to grant them permission to
+              decrypt your UID2 tokens.
+            </p>
+            <SearchAndAddParticipants
+              onSharingPermissionsAdded={handleAddSharingSite}
+              sharedSiteIds={sharedSiteIds}
+            />
+          </>
         </Collapsible>
         {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
           <SharingPermissionsTable
