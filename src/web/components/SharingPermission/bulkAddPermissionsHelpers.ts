@@ -78,8 +78,7 @@ const hasPendingTypeChange = (
   type: ClientType,
   isChecked: boolean,
   sharedTypes: ClientType[]
-): boolean =>
-  (!isChecked && sharedTypes.includes(type)) || (isChecked && !sharedTypes.includes(type));
+): boolean => isChecked !== sharedTypes.includes(type);
 
 export const hasPendingTypeChanges = (
   sharedTypes: ClientType[],
