@@ -74,6 +74,28 @@ export const hasUncheckedASharedType = (
   return false;
 };
 
+const hasPendingTypeChange = (
+  type: ClientType,
+  isChecked: boolean,
+  sharedTypes: ClientType[]
+): boolean =>
+  (!isChecked && sharedTypes.includes(type)) || (isChecked && !sharedTypes.includes(type));
+
+export const hasPendingTypeChanges = (
+  sharedTypes: ClientType[],
+  publisherChecked: boolean,
+  advertiserChecked: boolean,
+  DSPChecked: boolean,
+  dataProviderChecked: boolean
+): boolean => {
+  return (
+    hasPendingTypeChange('PUBLISHER', publisherChecked, sharedTypes) ||
+    hasPendingTypeChange('ADVERTISER', advertiserChecked, sharedTypes) ||
+    hasPendingTypeChange('DSP', DSPChecked, sharedTypes) ||
+    hasPendingTypeChange('DATA_PROVIDER', dataProviderChecked, sharedTypes)
+  );
+};
+
 export const getCheckedParticipantTypeNames = (data: BulkAddPermissionsForm) => {
   const ids = [] as ClientType[];
   if (data.publisherChecked) ids.push('PUBLISHER');
