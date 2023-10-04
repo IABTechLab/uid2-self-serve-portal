@@ -74,12 +74,6 @@ export const hasUncheckedASharedType = (
   return false;
 };
 
-const hasPendingTypeChange = (
-  type: ClientType,
-  isChecked: boolean,
-  sharedTypes: ClientType[]
-): boolean => isChecked !== sharedTypes.includes(type);
-
 export const hasPendingTypeChanges = (
   sharedTypes: ClientType[],
   publisherChecked: boolean,
@@ -88,10 +82,10 @@ export const hasPendingTypeChanges = (
   dataProviderChecked: boolean
 ): boolean => {
   return (
-    hasPendingTypeChange('PUBLISHER', publisherChecked, sharedTypes) ||
-    hasPendingTypeChange('ADVERTISER', advertiserChecked, sharedTypes) ||
-    hasPendingTypeChange('DSP', DSPChecked, sharedTypes) ||
-    hasPendingTypeChange('DATA_PROVIDER', dataProviderChecked, sharedTypes)
+    publisherChecked !== sharedTypes.includes('PUBLISHER') ||
+    advertiserChecked !== sharedTypes.includes('ADVERTISER') ||
+    DSPChecked !== sharedTypes.includes('DSP') ||
+    dataProviderChecked !== sharedTypes.includes('DATA_PROVIDER')
   );
 };
 
