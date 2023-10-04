@@ -19,6 +19,7 @@ import {
   getFilteredParticipantsByType,
   getRecommendationMessageFromTypeNames,
   getRecommendedTypeFromParticipant,
+  hasPendingTypeChanges,
   hasUncheckedASharedType,
 } from './bulkAddPermissionsHelpers';
 import { ParticipantItemSimple } from './ParticipantItem';
@@ -101,7 +102,19 @@ export function BulkAddPermissions({
 
   const savePermissionsButton = (
     <div className='bulk-add-permissions-footer'>
-      <button type='submit' className='primary-button bulk-add-permissions-submit-button'>
+      <button
+        type='submit'
+        className='primary-button bulk-add-permissions-submit-button'
+        disabled={
+          !hasPendingTypeChanges(
+            sharedTypes,
+            watchPublisherChecked,
+            watchAdvertiserChecked,
+            watchDSPChecked,
+            watchDataProviderChecked
+          )
+        }
+      >
         Save Permissions
       </button>
     </div>
