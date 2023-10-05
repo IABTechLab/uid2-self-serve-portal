@@ -106,7 +106,7 @@ function SharingPermissions() {
   const renderSharingPermissionTable = () => {
     if (!participant?.completedRecommendations) return;
     const tableSharedSiteIds = sharedSiteIds ?? [];
-    const tableSharedTypes = sharedSiteIds === null ? ['DSP' as ClientType] : sharedTypes;
+    const tableSharedTypes: ClientType[] = sharedSiteIds === null ? ['DSP'] : sharedTypes;
     return (
       <SharingPermissionsTable
         sharedSiteIds={tableSharedSiteIds}
