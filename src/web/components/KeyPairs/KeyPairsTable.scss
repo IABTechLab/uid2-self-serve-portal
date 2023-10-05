@@ -1,3 +1,5 @@
+@import '../../styles/themes';
+
 .key-pairs {
   display: flex;
   flex-direction: column;
@@ -30,8 +32,14 @@
     }
 
     .public-key {
-      width: 40%;
       overflow-wrap: anywhere;
+
+      .expand-button,
+      .copy-button {
+        color: var(--theme-action);
+        padding: 0 8px;
+        font-size: 1rem;
+      }
     }
 
     .action {

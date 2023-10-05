@@ -6,35 +6,9 @@ import { Dialog } from '../Core/Dialog';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { CstgDomainItem } from './CstgDomain';
+import { CstgDomainInputRow } from './CstgDomainInputRow';
 
 import './CstgDomainsTable.scss';
-
-type CstgNewDomainRowProps = {
-  onAdd: (newDomain: string) => Promise<void>;
-};
-
-function CstgNewDomainRow({ onAdd }: CstgNewDomainRowProps) {
-  const [newDomain, setNewDomain] = useState<string>('');
-  return (
-    <tr>
-      <td />
-      <td className='domain'>
-        <input
-          className='input-container'
-          value={newDomain}
-          onChange={(e) => setNewDomain(e.target.value)}
-        />
-      </td>
-      <td className='action'>
-        <div className='action-cell'>
-          <button type='button' className='transparent-button' onClick={() => onAdd(newDomain)}>
-            Save
-          </button>
-        </div>
-      </td>
-    </tr>
-  );
-}
 
 type DeleteDomainDialogProps = {
   onDeleteDomains: () => void;
@@ -125,8 +99,8 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
     }
   };
 
-  const onAddRow = () => {
-    setShowNewRow(true);
+  const toggleAddRow = () => {
+    setShowNewRow((prev) => !prev);
   };
 
   const handleAddNewDomain = async (newDomain: string) => {
@@ -136,7 +110,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
 
   return (
     <div className='cstg-domains-management'>
-      <h2>Top-level Domains</h2>
+      <h2>Top-Level Domains</h2>
       <div className='table-actions'>
         <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
         {selectedDomains.length > 0 && (
@@ -149,7 +123,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
           className='transparent-button table-action-button'
           type='button'
           disabled={showNewRow}
-          onClick={onAddRow}
+          onClick={toggleAddRow}
         >
           <FontAwesomeIcon icon='plus' className='cstg-domains-management-icon' />
           Add Domain
@@ -173,7 +147,12 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
               checked={isDomainSelected(domain)}
             />
           ))}
-          {showNewRow && <CstgNewDomainRow onAdd={(newDomain) => handleAddNewDomain(newDomain)} />}
+          {showNewRow && (
+            <CstgDomainInputRow
+              onAdd={(newDomain) => handleAddNewDomain(newDomain)}
+              onCancel={toggleAddRow}
+            />
+          )}
         </tbody>
       </table>
       {!domains.length && !showNewRow && (

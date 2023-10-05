@@ -1,38 +1,53 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import KeyPairsTable from './KeyPairsTable';
 
-export default {
-  title: 'Key Pairs/Key Pairs Table',
+const meta: Meta<typeof KeyPairsTable> = {
   component: KeyPairsTable,
-} as ComponentMeta<typeof KeyPairsTable>;
+  title: 'Key Pairs/Key Pair Table',
+};
+export default meta;
 
-const Template: ComponentStory<typeof KeyPairsTable> = (args) => <KeyPairsTable {...args} />;
+type Story = StoryObj<typeof KeyPairsTable>;
 
-export const WithoutTeamMembers = Template.bind({});
-WithoutTeamMembers.args = {
-  keyPairs: [],
+export const WithoutKeyPairs: Story = {
+  args: {
+    keyPairs: [],
+  },
 };
 
-export const WithTeamMembers = Template.bind({});
-WithTeamMembers.args = {
-  ...WithoutTeamMembers.args,
-  keyPairs: [
-    {
-      subscriptionId: 'subscription 1',
-      siteId: 1234,
-      publicKey: 'public key 1',
-      created: new Date(),
-      createdString: new Date().toLocaleDateString(),
-      disabled: false,
-    },
-    {
-      subscriptionId: 'subscription 2',
-      siteId: 5678,
-      publicKey: 'public key 2',
-      created: new Date(),
-      createdString: new Date().toLocaleDateString(),
-      disabled: false,
-    },
-  ],
+export const WithKeyPairs: Story = {
+  args: {
+    ...WithoutKeyPairs.args,
+    keyPairs: [
+      {
+        name: 'name added in UID2-1925',
+        subscriptionId: 'subscription 1',
+        siteId: 1234,
+        publicKey: '',
+        created: new Date(),
+        createdString: new Date().toLocaleDateString(),
+        disabled: false,
+      },
+      {
+        name: 'name added in UID2-1925',
+        subscriptionId: 'subscription 2',
+        siteId: 5678,
+        publicKey: 'UID2-X-L-MFkwE+Bw==',
+        created: new Date(),
+        createdString: new Date().toLocaleDateString(),
+        disabled: false,
+      },
+      {
+        name: 'name added in UID2-1925',
+        subscriptionId: 'subscription 3',
+        siteId: 5678,
+        publicKey:
+          'UID2-X-L-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQDQgAEQ6UZYyjvGEg5Cydtmzo/CvTOJc618g8iAOpBtDMO0GE7BZ2IWGwvkG6tdL1QBLXdwnICG+xZpOziF1Z6Cxc+Bw==',
+        created: new Date(),
+        createdString: new Date().toLocaleDateString(),
+        disabled: false,
+      },
+    ],
+  },
 };

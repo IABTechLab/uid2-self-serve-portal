@@ -1,30 +1,35 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react';
 
 import KeyPair from './KeyPair';
 
-export default {
-  title: 'Key Pairs/Key Pair',
+const meta: Meta<typeof KeyPair> = {
   component: KeyPair,
-} as ComponentMeta<typeof KeyPair>;
+  title: 'Key Pairs/Key Pair',
+};
+export default meta;
 
-const Template: ComponentStory<typeof KeyPair> = (args) => (
-  <div className='key-pairs'>
-    <table className='key-pairs-table'>
-      <tbody>
-        <KeyPair {...args} />
-      </tbody>
-    </table>
-  </div>
-);
+type Story = StoryObj<typeof KeyPair>;
 
-export const KeyPairTemplate = Template.bind({});
-KeyPairTemplate.args = {
-  keyPair: {
-    subscriptionId: 'subscription 1',
-    siteId: 1234,
-    publicKey: 'public key 1',
-    created: new Date(),
-    createdString: new Date().toLocaleDateString(),
-    disabled: false,
-  },
+const keyPair = {
+  name: 'name added in UID2-1925',
+  subscriptionId: 'subscription 1',
+  siteId: 1234,
+  publicKey:
+    'UID2-X-L-MFkwEwYHKoZIj0CAQYIKoZIzj0DAQcDQgAEQ6UZYyjvGEg5Cydtmzo/CvTOJc618g8iAOpBtDMO0GE7BZ2IWGwvkG6tdL1QBLXdwnICG+xZpOziF1Z6Cxc+Bw==',
+  created: new Date(),
+  createdString: new Date().toLocaleDateString(),
+  disabled: false,
+};
+
+export const Default: Story = {
+  args: { keyPair },
+  render: (args) => (
+    <div className='key-pairs'>
+      <table className='key-pairs-table'>
+        <tbody>
+          <KeyPair {...args} />
+        </tbody>
+      </table>
+    </div>
+  ),
 };
