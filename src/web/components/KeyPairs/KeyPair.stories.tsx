@@ -11,7 +11,7 @@ export default meta;
 type Story = StoryObj<typeof KeyPair>;
 
 const keyPair = {
-  name: 'name added in UID2-1925',
+  name: 'name 1',
   subscriptionId: 'subscription 1',
   siteId: 1234,
   publicKey:
