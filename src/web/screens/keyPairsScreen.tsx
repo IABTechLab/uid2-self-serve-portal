@@ -17,7 +17,8 @@ function KeyPairsScreen() {
 
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs(participant!.id!);
-    setKeyPairData(data);
+    const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
+    setKeyPairData(sortedKeyPairs);
   }, [participant]);
 
   useEffect(() => {
