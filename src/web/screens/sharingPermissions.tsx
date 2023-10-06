@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
@@ -14,6 +14,8 @@ import {
   GetSharingList,
 } from '../services/participant';
 import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
+import { ApiError } from '../utils/apiError';
+import { useAsyncError } from '../utils/errorHandler';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
@@ -24,6 +26,7 @@ function SharingPermissions() {
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
+  const throwError = useAsyncError();
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
@@ -95,15 +98,18 @@ function SharingPermissions() {
     }
   };
 
-  const loadSharingList = useCallback(async () => {
-    const response = await GetSharingList();
-    setSharedSiteIds(response.allowed_sites);
-    setSharedTypes(response.allowed_types ?? []);
-  }, []);
-
   useEffect(() => {
+    const loadSharingList = async () => {
+      try {
+        const response = await GetSharingList();
+        setSharedSiteIds(response.allowed_sites);
+        setSharedTypes(response.allowed_types ?? []);
+      } catch (e: unknown) {
+        if (e instanceof ApiError) throwError(e);
+      }
+    };
     loadSharingList();
-  }, [loadSharingList]);
+  }, [throwError]);
 
   return (
     <div className='sharingPermissions'>
