@@ -30,7 +30,7 @@ export const WithSide: Story = {
 
 export const WithAlign: Story = {
   args: {
-    children: 'With end',
+    children: 'With align',
     align: 'start',
   },
 };
