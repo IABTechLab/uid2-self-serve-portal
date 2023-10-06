@@ -1,7 +1,8 @@
 .tooltip-trigger {
   border: none !important;
-  padding: 0 5px !important;
-
+  padding: 0 !important;
+  width: inherit;
+  
   .default-trigger {
     color: var(--theme-info-icon);
   }
