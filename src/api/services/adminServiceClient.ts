@@ -15,21 +15,22 @@ const adminServiceClient = axios.create({
   },
 });
 
+const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'allowed_types'> = {
+  allowed_types: ['DSP'],
+  allowed_sites: [],
+};
+
 export const getSharingList = async (siteId: number): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.get<SharingListResponse>(
       `/api/sharing/list/${siteId}`,
       {
-        validateStatus: (status) => (status >= 200 && status < 300) || status === 404,
+        validateStatus: (status) => status >= 200 && status < 300,
       }
     );
-    return response.status === 200
+    return response.data.allowed_sites
       ? response.data
-      : {
-          allowed_sites: [],
-          allowed_types: [],
-          hash: 0,
-        };
+      : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
   } catch (error: unknown) {
     const [logger] = getLoggers();
     logger.error(`Get ACLs failed: ${error}`);
@@ -52,16 +53,12 @@ export const updateSharingList = async (
         hash,
       },
       {
-        validateStatus: (status) => (status >= 200 && status < 300) || status === 404,
+        validateStatus: (status) => status >= 200 && status < 300,
       }
     );
-    return response.status === 200
+    return response.data.allowed_sites
       ? response.data
-      : {
-          allowed_sites: [],
-          allowed_types: [],
-          hash: 0,
-        };
+      : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
   } catch (error: unknown) {
     const [logger] = getLoggers();
     logger.error(`Update ACLs failed: ${error}`);
