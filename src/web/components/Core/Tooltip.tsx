@@ -12,7 +12,7 @@ type TooltipProps = {
 };
 export function Tooltip({ children, trigger, side, align }: TooltipProps) {
   return (
-    <TooltipPrimitive.Provider>
+    <TooltipPrimitive.Provider delayDuration={300}>
       <TooltipPrimitive.Root>
         <TooltipPrimitive.Trigger className='tooltip-trigger' type='button'>
           {trigger ?? (
