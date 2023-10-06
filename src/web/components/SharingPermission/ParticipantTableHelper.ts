@@ -64,7 +64,7 @@ export function formatSourceColumn(sources: SharingSiteWithSource['addedBy']) {
     if (sourceField) {
       sourceField += ' and ';
     }
-    sourceField += `Auto: ${sourcesWithoutManual
+    sourceField += `Bulk: ${sourcesWithoutManual
       .map((source) => ClientTypeDescriptions[source])
       .join(', ')}`;
   }

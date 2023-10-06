@@ -2,7 +2,6 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
-import { AvailableParticipantDTO } from '../../../api/routers/participantsRouter';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
 
