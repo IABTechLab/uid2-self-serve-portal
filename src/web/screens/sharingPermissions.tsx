@@ -13,7 +13,6 @@ import {
   DeleteSharingParticipants,
   GetSharingList,
 } from '../services/participant';
-import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
@@ -152,9 +151,4 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
-  loader: () => {
-    preloadAvailableSiteList();
-    preloadAllSitesList();
-    return null;
-  },
 };
