@@ -1,5 +1,7 @@
+import { ParticipantTypeData, ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
+import { GetAllParticipantTypes } from '../../services/participantType';
 import { formatStringsWithSeparator, getArticle } from '../../utils/textHelpers';
 
 export type BulkAddPermissionsForm = {
@@ -125,4 +127,14 @@ export const getFilteredParticipantsByType = (
     }
     return false;
   });
+};
+
+export const publisherHasUncheckedDSP = (
+  participantTypes: ParticipantTypeDTO[],
+  DSPChecked: boolean
+) => {
+  return (
+    participantTypes.some((type) => type.typeName === ParticipantTypeData.Publisher.typeName) &&
+    !DSPChecked
+  );
 };
