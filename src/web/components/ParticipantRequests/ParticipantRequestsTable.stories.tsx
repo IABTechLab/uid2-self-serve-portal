@@ -16,19 +16,19 @@ const Template: ComponentStory<typeof ParticipantRequestsTable> = (args) => (
 
 export const ParticipantRequests = Template.bind({});
 
-const requestingUser: ParticipantRequestDTO['requestingUser'] = {
-  email: 'text@example.com',
-  fullName: 'Test User',
-  role: UserRole.Engineering,
-};
 ParticipantRequests.args = {
   participantRequests: [
     {
       id: 1,
       name: 'Participant 1',
+
       types: [{ id: 1, typeName: 'Type 1' }],
       status: ParticipantStatus.AwaitingApproval,
-      requestingUser,
+      requestingUser: {
+        email: 'test1@example.com',
+        fullName: 'Test User  1',
+        role: UserRole.Engineering,
+      },
     },
     {
       id: 1,
@@ -38,7 +38,11 @@ ParticipantRequests.args = {
         { id: 2, typeName: 'Type 2' },
       ],
       status: ParticipantStatus.AwaitingApproval,
-      requestingUser,
+      requestingUser: {
+        email: 'test2@example.com',
+        fullName: 'Test User 2',
+        role: UserRole.BusinessDevelopment,
+      },
     },
     {
       id: 1,
@@ -49,7 +53,11 @@ ParticipantRequests.args = {
         { id: 3, typeName: 'Type 3' },
       ],
       status: ParticipantStatus.AwaitingApproval,
-      requestingUser,
+      requestingUser: {
+        email: 'test3@example.com',
+        fullName: 'Test User 3',
+        role: UserRole.Marketing,
+      },
     },
     {
       id: 1,
@@ -61,7 +69,11 @@ ParticipantRequests.args = {
         { id: 4, typeName: 'Type 4' },
       ],
       status: ParticipantStatus.AwaitingApproval,
-      requestingUser,
+      requestingUser: {
+        email: 'test4@example.com',
+        fullName: 'Test User 4',
+        role: UserRole.MediaBuyer,
+      },
     },
   ],
   participantTypes: [

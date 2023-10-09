@@ -23,7 +23,7 @@ function NoParticipantRequests() {
   );
 }
 
-export function ParticipantRequestsTable({
+export function AllParticipantsTable({
   participantRequests,
   participantTypes,
   onApprove,
@@ -35,10 +35,9 @@ export function ParticipantRequestsTable({
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Job Function</th>
             <th>Allowed API Roles</th>
+            <th>Name of Approver</th>
+            <th>Date of Approval</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>
