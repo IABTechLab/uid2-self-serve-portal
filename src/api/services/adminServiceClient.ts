@@ -75,8 +75,9 @@ export const getSiteList = async (): Promise<SiteDTO[]> => {
 };
 
 export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
-  // convert this to use site-specific endpoint after UID2-1847
-  const response = await adminServiceClient.get<KeyPairDTO[]>('/api/client_side_keypairs/list');
+  const response = await adminServiceClient.get<KeyPairDTO[]>(
+    `api/v2/sites/${siteId}/client-side-keypairs`
+  );
   return response.data;
 };
 
