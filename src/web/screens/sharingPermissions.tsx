@@ -12,6 +12,7 @@ import {
   CompleteRecommendations,
   DeleteSharingParticipants,
   GetSharingList,
+  UpdateSharingTypes,
 } from '../services/participant';
 import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
 import { PortalRoute } from './routeUtils';
@@ -27,7 +28,7 @@ function SharingPermissions() {
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
+      const response = await UpdateSharingTypes(participant!.id, selectedTypes);
       setStatusPopup({
         type: 'Success',
         message: `${
@@ -53,7 +54,7 @@ function SharingPermissions() {
 
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, selectedSiteIds, sharedTypes);
+      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
       setStatusPopup({
         type: 'Success',
         message: `${
@@ -73,11 +74,7 @@ function SharingPermissions() {
 
   const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
-      const response = await DeleteSharingParticipants(
-        participant!.id,
-        siteIdsToDelete,
-        sharedTypes
-      );
+      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
       setStatusPopup({
         type: 'Success',
         message: `${siteIdsToDelete.length} sharing ${
