@@ -14,7 +14,7 @@ export type KeyPairModel = {
 export const mapKeyPairDTOToModel = (dto: KeyPairDTO): KeyPairModel => {
   const model: KeyPairModel = {
     contact: dto.contact as string | undefined,
-    createdString: new Date(dto.created).toISOString().split('T')[0],
+    createdString: new Date(dto.created).toLocaleDateString(),
     created: new Date(dto.created),
     disabled: dto.disabled as boolean,
     publicKey: dto.publicKey as string,
