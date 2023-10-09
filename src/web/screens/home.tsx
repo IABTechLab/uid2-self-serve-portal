@@ -7,7 +7,7 @@ import DocumentationCard from '../components/Home/DocumentationCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetSharingList } from '../services/participant';
-import { preloadAvailableSiteList } from '../services/site';
+import { preloadAllSitesList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
@@ -26,21 +26,14 @@ function Home() {
         const sharingList = await GetSharingList();
         const manualSites = sharingList.allowed_sites;
         const allowedTypes = sharingList.allowed_types;
-        const allowedTypeMap = new Map<ClientType, boolean>();
+        const allowedTypeSet = new Set<ClientType>();
         allowedTypes.forEach((item) => {
-          allowedTypeMap.set(item, true);
+          allowedTypeSet.add(item);
         });
-        const siteList = await preloadAvailableSiteList();
+        const siteList = await preloadAllSitesList();
         const bulkSites = siteList.filter((item) => {
-          let found = false;
           const clientTypes = item.clientTypes || [];
-          for (let i = 0; i < clientTypes.length; i += 1) {
-            if (allowedTypeMap.get(clientTypes[i])) {
-              found = true;
-              break;
-            }
-          }
-          return found;
+          return clientTypes.some((clientType) => allowedTypeSet.has(clientType));
         });
         setSharingPermissionsCount(manualSites.length);
         setBulkPermissionsCount(bulkSites.length);
