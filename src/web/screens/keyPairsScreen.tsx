@@ -19,7 +19,8 @@ function KeyPairsScreen() {
     const data = await GetKeyPairs(participant!.id!);
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
-  }, [participant]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     loadKeyPairs();
