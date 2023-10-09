@@ -76,7 +76,7 @@ export const getSiteList = async (): Promise<SiteDTO[]> => {
 
 export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
   const response = await adminServiceClient.get<KeyPairDTO[]>(
-    `api/v2/sites/${siteId}/client-side-keypairs`
+    `/api/v2/sites/${siteId}/client-side-keypairs`
   );
   return response.data;
 };
