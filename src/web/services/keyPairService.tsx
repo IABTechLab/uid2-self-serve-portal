@@ -5,7 +5,7 @@ import { mapKeyPairDTOToModel } from '../components/KeyPairs/KeyPairModel';
 import { backendError } from '../utils/apiError';
 
 export type AddKeyPairFormProps = {
-  participantId: number;
+  participantId?: number;
   name?: string;
   disabled: boolean;
 };
@@ -26,7 +26,10 @@ export async function GetKeyPairs(participantId?: number) {
 export async function AddKeyPair(props: AddKeyPairFormProps) {
   try {
     const { participantId } = props;
-    const result = await axios.post(`/participants/${participantId}/keyPair/add`, props);
+    const result = await axios.post(
+      `/participants/${participantId ?? 'current'}/keyPair/add`,
+      props
+    );
     return result;
   } catch (e: unknown) {
     throw backendError(e, 'Could not add Key Pair');
