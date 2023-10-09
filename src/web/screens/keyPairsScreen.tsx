@@ -16,10 +16,9 @@ function KeyPairsScreen() {
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const loadKeyPairs = useCallback(async () => {
-    const data = await GetKeyPairs(participant!.id!);
+    const data = await GetKeyPairs();
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

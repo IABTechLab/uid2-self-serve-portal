@@ -10,9 +10,11 @@ export type AddKeyPairFormProps = {
   disabled: boolean;
 };
 
-export async function GetKeyPairs(participantId: number) {
+export async function GetKeyPairs(participantId?: number) {
   try {
-    const result = await axios.get<KeyPairDTO[]>(`/participants/${participantId}/keyPairs`);
+    const result = await axios.get<KeyPairDTO[]>(
+      `/participants/${participantId ?? 'current'}/keyPairs`
+    );
     if (result.status === 200) {
       return (result.data as KeyPairDTO[]).map(mapKeyPairDTOToModel);
     }
