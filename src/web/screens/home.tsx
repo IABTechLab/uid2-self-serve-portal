@@ -26,10 +26,7 @@ function Home() {
         const sharingList = await GetSharingList();
         const manualSites = sharingList.allowed_sites;
         const allowedTypes = sharingList.allowed_types;
-        const allowedTypeSet = new Set<ClientType>();
-        allowedTypes.forEach((item) => {
-          allowedTypeSet.add(item);
-        });
+        const allowedTypeSet = new Set<ClientType>(allowedTypes);
         const siteList = await preloadAllSitesList();
         const bulkSites = siteList.filter((item) => {
           const clientTypes = item.clientTypes || [];
