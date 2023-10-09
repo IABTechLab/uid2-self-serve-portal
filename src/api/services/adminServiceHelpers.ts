@@ -36,9 +36,9 @@ export type KeyPairDTO = {
   contact?: string;
   created: number;
   disabled: boolean;
-  public_key: string;
-  site_id: number;
-  subscription_id: string;
+  publicKey: string;
+  siteId: number;
+  subscriptionId: string;
   name?: string;
 };
 

@@ -1,25 +1,23 @@
-import { Suspense, useCallback, useContext, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
-import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
 import { ApiError } from '../utils/apiError';
 import { PortalRoute } from './routeUtils';
 
 function KeyPairsScreen() {
-  const { participant } = useContext(ParticipantContext);
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const loadKeyPairs = useCallback(async () => {
-    const data = await GetKeyPairs(participant!.id!);
+    const data = await GetKeyPairs();
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
-  }, [participant]);
+  }, []);
 
   useEffect(() => {
     loadKeyPairs();
@@ -47,7 +45,7 @@ function KeyPairsScreen() {
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name, disabled = false } = formData;
     try {
-      const response = await AddKeyPair({ name, disabled, participantId: participant?.id! });
+      const response = await AddKeyPair({ name, disabled });
       if (response.status === 201) {
         handleSuccessPopup('Key Pair added.');
         loadKeyPairs();
