@@ -13,6 +13,7 @@ import { Dialog } from '../Core/Dialog';
 import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
+import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
@@ -169,15 +170,26 @@ export function SharingPermissionsTableContent({
     </thead>
   );
 
+  const selectAllCheckbox = (
+    <TriStateCheckbox
+      onClick={handleCheckboxChange}
+      status={checkboxStatus}
+      disabled={disableCheckbox()}
+    />
+  );
+
   return (
     <>
       <div className='sharing-permissions-table-header-container'>
         <div className='sharing-permission-actions'>
-          <TriStateCheckbox
-            onClick={handleCheckboxChange}
-            status={checkboxStatus}
-            disabled={disableCheckbox()}
-          />
+          {disableCheckbox() ? (
+            <Tooltip trigger={selectAllCheckbox}>
+              Gray indicates participants selected in bulk permissions. To update, adjust bulk
+              permission settings.
+            </Tooltip>
+          ) : (
+            selectAllCheckbox
+          )}
           {checkedSites.size > 0 && (
             <DeletePermissionDialog
               onDeleteSharingPermission={handleDeletePermissions}
@@ -227,7 +239,7 @@ export function SharingPermissionsTable({
   const getSharingParticipants: () => SharingSiteWithSource[] = () => {
     return sites!
       .map((p) => {
-        const maybeManualArray: typeof MANUALLY_ADDED[] = sharedSiteIds.includes(p.id)
+        const maybeManualArray: (typeof MANUALLY_ADDED)[] = sharedSiteIds.includes(p.id)
           ? [MANUALLY_ADDED]
           : [];
         const includedTypes =
