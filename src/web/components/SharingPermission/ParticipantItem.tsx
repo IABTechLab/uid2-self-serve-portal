@@ -45,12 +45,7 @@ type ParticipantItemProps = ParticipantItemSimpleProps & {
 export function ParticipantItem({ site, onClick, checked }: ParticipantItemProps) {
   const checkboxDisabled = isSharingParticipant(site) && !isAddedByManual(site);
   const checkbox = (
-    <TriStateCheckbox
-      onClick={onClick}
-      status={checked}
-      className='participant-checkbox'
-      disabled={checkboxDisabled}
-    />
+    <TriStateCheckbox onClick={onClick} status={checked} disabled={checkboxDisabled} />
   );
   return (
     <tr className='participant-item-with-checkbox'>

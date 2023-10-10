@@ -149,6 +149,15 @@ export function SharingPermissionsTableContent({
     }
   };
 
+  const disableCheckbox = () => {
+    for (const site of filteredSites) {
+      if (isAddedByManual(site)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const tableHeader = (
     <thead>
       <tr className='participant-item-with-checkbox'>
@@ -167,7 +176,7 @@ export function SharingPermissionsTableContent({
           <TriStateCheckbox
             onClick={handleCheckboxChange}
             status={checkboxStatus}
-            className='participant-checkbox'
+            disabled={disableCheckbox()}
           />
           {checkedSites.size > 0 && (
             <DeletePermissionDialog
