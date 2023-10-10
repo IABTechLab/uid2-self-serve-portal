@@ -151,6 +151,14 @@ export function SharingPermissionsTableContent({
     }
   };
 
+  const selectAllCheckbox = (
+    <TriStateCheckbox
+      onClick={handleCheckboxChange}
+      status={checkboxStatus}
+      disabled={disableSelectAllCheckbox(filteredSites)}
+    />
+  );
+
   const tableHeader = (
     <thead>
       <tr className='participant-item-with-checkbox'>
@@ -160,14 +168,6 @@ export function SharingPermissionsTableContent({
         <SortableTableHeader<SharingSiteWithSource> sortKey='addedBy' header='Source' />
       </tr>
     </thead>
-  );
-
-  const selectAllCheckbox = (
-    <TriStateCheckbox
-      onClick={handleCheckboxChange}
-      status={checkboxStatus}
-      disabled={disableSelectAllCheckbox(filteredSites)}
-    />
   );
 
   return (
