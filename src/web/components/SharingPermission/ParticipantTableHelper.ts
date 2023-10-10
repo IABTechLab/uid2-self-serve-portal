@@ -16,6 +16,10 @@ export const isAddedByManual = (site: SharingSiteWithSource) => {
   return site.addedBy.includes(MANUALLY_ADDED);
 };
 
+export const disableSelectAllCheckbox = (sites: SharingSiteWithSource[]) => {
+  return !sites.some(isAddedByManual);
+};
+
 export function filterSites<TSharingSite extends SharingSiteDTO>(
   sites: TSharingSite[],
   filterText: string,

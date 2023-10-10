@@ -13,9 +13,11 @@ import { Dialog } from '../Core/Dialog';
 import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
+import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
+  disableSelectAllCheckbox,
   filterSites,
   getSelectAllState,
   isAddedByManual,
@@ -149,6 +151,14 @@ export function SharingPermissionsTableContent({
     }
   };
 
+  const selectAllCheckbox = (
+    <TriStateCheckbox
+      onClick={handleCheckboxChange}
+      status={checkboxStatus}
+      disabled={disableSelectAllCheckbox(filteredSites)}
+    />
+  );
+
   const tableHeader = (
     <thead>
       <tr className='participant-item-with-checkbox'>
@@ -164,11 +174,14 @@ export function SharingPermissionsTableContent({
     <>
       <div className='sharing-permissions-table-header-container'>
         <div className='sharing-permission-actions'>
-          <TriStateCheckbox
-            onClick={handleCheckboxChange}
-            status={checkboxStatus}
-            className='participant-checkbox'
-          />
+          {disableSelectAllCheckbox(filteredSites) ? (
+            <Tooltip trigger={selectAllCheckbox}>
+              Gray indicates participants selected in bulk permissions. To update, adjust bulk
+              permission settings.
+            </Tooltip>
+          ) : (
+            selectAllCheckbox
+          )}
           {checkedSites.size > 0 && (
             <DeletePermissionDialog
               onDeleteSharingPermission={handleDeletePermissions}
@@ -218,7 +231,7 @@ export function SharingPermissionsTable({
   const getSharingParticipants: () => SharingSiteWithSource[] = () => {
     return sites!
       .map((p) => {
-        const maybeManualArray: typeof MANUALLY_ADDED[] = sharedSiteIds.includes(p.id)
+        const maybeManualArray: (typeof MANUALLY_ADDED)[] = sharedSiteIds.includes(p.id)
           ? [MANUALLY_ADDED]
           : [];
         const includedTypes =
