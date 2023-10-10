@@ -1,11 +1,13 @@
 import log from 'loglevel';
 import { useContext, useEffect, useState } from 'react';
 
+import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetSharingList } from '../services/participant';
+import { preloadAllSitesList } from '../services/site';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
@@ -14,6 +16,7 @@ function Home() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const [loading, setIsLoading] = useState<boolean>(true);
   const [sharingPermissionsCount, setSharingPermissionsCount] = useState<number>(0);
+  const [bulkPermissionsCount, setBulkPermissionsCount] = useState<number>(0);
   const [hasError, setHasError] = useState<boolean>(false);
 
   useEffect(() => {
@@ -21,8 +24,16 @@ function Home() {
       setIsLoading(true);
       try {
         const sharingList = await GetSharingList();
-        // TODO include the sites from allowed_types in the count
-        setSharingPermissionsCount(sharingList.allowed_sites.length);
+        const manualSites = sharingList.allowed_sites;
+        const allowedTypes = sharingList.allowed_types;
+        const allowedTypeSet = new Set<ClientType>(allowedTypes);
+        const siteList = await preloadAllSitesList();
+        const bulkSites = siteList.filter((item) => {
+          const clientTypes = item.clientTypes || [];
+          return clientTypes.some((clientType) => allowedTypeSet.has(clientType));
+        });
+        setSharingPermissionsCount(manualSites.length);
+        setBulkPermissionsCount(bulkSites.length);
       } catch (e: unknown) {
         log.error(e);
         setHasError(true);
@@ -42,6 +53,7 @@ function Home() {
         ) : (
           <SharingPermissionCard
             sharingPermissionsCount={sharingPermissionsCount}
+            bulkPermissionsCount={bulkPermissionsCount}
             hasError={hasError}
           />
         )}

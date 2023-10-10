@@ -4,10 +4,15 @@ import './SharingPermissionCard.scss';
 
 type SharingPermissionCardProps = {
   sharingPermissionsCount?: number;
+  bulkPermissionsCount?: number;
   hasError: boolean;
 };
 
-function SharingPermissionCard({ sharingPermissionsCount, hasError }: SharingPermissionCardProps) {
+function SharingPermissionCard({
+  sharingPermissionsCount,
+  bulkPermissionsCount,
+  hasError,
+}: SharingPermissionCardProps) {
   return (
     <div className='sharing-permission-card'>
       <h2>Your Sharing Permissions</h2>
@@ -22,6 +27,10 @@ function SharingPermissionCard({ sharingPermissionsCount, hasError }: SharingPer
           </div>
         )}
         <div className='divider' />
+        <div>
+          <div className='permissions-count'>{bulkPermissionsCount}</div>
+          <span>AUTOMATIC PERMISSIONS</span>
+        </div>
       </div>
       <Link to='/dashboard/sharing'>
         <button className='primary-button small-button' type='button'>
