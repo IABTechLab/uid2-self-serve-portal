@@ -41,16 +41,15 @@ export function ParticipantRequestItem({
       setHasError(true);
     }
   };
-  // TODO: update this when we have login uploading
-  const logo = '/default-logo.svg';
+
   return (
     <>
       <tr className='participant-request-item'>
         <td>
-          <div className='participant-request--participant-name'>{participant.name}</div>
+          <div className='participant-name'>{participant.name}</div>
         </td>
         <td>
-          <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
+          <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
         </td>
         <td>
           <div className='participant-request-name'>{participant.requestingUser.fullName}</div>
@@ -60,9 +59,6 @@ export function ParticipantRequestItem({
         </td>
         <td>
           <div className='participant-request-job-function'>{participant.requestingUser.role}</div>
-        </td>
-        <td>
-          <div className='participant-request-api-roles'>{participant.status}</div>
         </td>
         <td className='action'>
           <div className='action-cell'>

@@ -38,7 +38,6 @@ export function ParticipantRequestsTable({
             <th>Name</th>
             <th>Email</th>
             <th>Job Function</th>
-            <th>Allowed API Roles</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>
