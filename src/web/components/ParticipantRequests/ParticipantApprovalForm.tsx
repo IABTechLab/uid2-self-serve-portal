@@ -126,7 +126,12 @@ function ParticipantApprovalForm({
         {!selectedSite && (
           <SearchBarResults className='site-search-results'>
             {siteSearchResults?.map((s) => (
-              <button type='button' className='text-button' onClick={() => onSiteClick(s.item)}>
+              <button
+                key={s.item.id}
+                type='button'
+                className='text-button'
+                onClick={() => onSiteClick(s.item)}
+              >
                 <HighlightedResult result={s} /> (Site ID: {s.item.id})
               </button>
             ))}

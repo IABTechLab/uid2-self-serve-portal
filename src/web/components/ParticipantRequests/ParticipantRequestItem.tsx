@@ -43,45 +43,43 @@ export function ParticipantRequestItem({
   };
 
   return (
-    <>
-      <tr className='participant-request-item'>
-        <td>
-          <div className='participant-name'>{participant.name}</div>
-        </td>
-        <td>
-          <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
-        </td>
-        <td>
-          <div className='participant-request-name'>{participant.requestingUser.fullName}</div>
-        </td>
-        <td>
-          <div className='participant-request-email'>{participant.requestingUser.email}</div>
-        </td>
-        <td>
-          <div className='participant-request-job-function'>{participant.requestingUser.role}</div>
-        </td>
-        <td className='action'>
-          <div className='action-cell'>
-            {hasError && <InlineMessage message='An error has occurred' type='Error' />}
-            <button type='button' className='transparent-button' onClick={() => setOpen(true)}>
-              Approve
-            </button>
-          </div>
-        </td>
-      </tr>
-      <Dialog
-        title='Approve Participant Request'
-        closeButton='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-        className='participants-request-dialog'
-      >
-        <ParticipantApprovalForm
-          onApprove={handleApprove}
-          participant={participant}
-          participantTypes={participantTypes}
-        />
-      </Dialog>
-    </>
+    <tr className='participant-request-item'>
+      <td>
+        <div className='participant-name'>{participant.name}</div>
+      </td>
+      <td>
+        <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+      </td>
+      <td>
+        <div className='participant-request-name'>{participant.requestingUser.fullName}</div>
+      </td>
+      <td>
+        <div className='participant-request-email'>{participant.requestingUser.email}</div>
+      </td>
+      <td>
+        <div className='participant-request-job-function'>{participant.requestingUser.role}</div>
+      </td>
+      <td className='action'>
+        <div className='action-cell'>
+          {hasError && <InlineMessage message='An error has occurred' type='Error' />}
+          <button type='button' className='transparent-button' onClick={() => setOpen(true)}>
+            Approve
+          </button>
+          <Dialog
+            title='Approve Participant Request'
+            closeButton='Cancel'
+            open={open}
+            onOpenChange={setOpen}
+            className='participants-request-dialog'
+          >
+            <ParticipantApprovalForm
+              onApprove={handleApprove}
+              participant={participant}
+              participantTypes={participantTypes}
+            />
+          </Dialog>
+        </div>
+      </td>
+    </tr>
   );
 }
