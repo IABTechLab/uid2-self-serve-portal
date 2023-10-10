@@ -21,7 +21,7 @@ export const WithKeyPairs: Story = {
     ...WithoutKeyPairs.args,
     keyPairs: [
       {
-        name: 'name added in UID2-1925',
+        name: 'keypair name 1',
         subscriptionId: 'subscription 1',
         siteId: 1234,
         publicKey: '',
@@ -30,7 +30,7 @@ export const WithKeyPairs: Story = {
         disabled: false,
       },
       {
-        name: 'name added in UID2-1925',
+        name: 'keypair name 2',
         subscriptionId: 'subscription 2',
         siteId: 5678,
         publicKey: 'UID2-X-L-MFkwE+Bw==',
@@ -39,7 +39,7 @@ export const WithKeyPairs: Story = {
         disabled: false,
       },
       {
-        name: 'name added in UID2-1925',
+        name: 'keypair name 3',
         subscriptionId: 'subscription 3',
         siteId: 5678,
         publicKey:

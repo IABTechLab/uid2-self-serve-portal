@@ -1,5 +1,6 @@
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientTypeDescriptions, SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import {
   formatSourceColumn,
@@ -42,15 +43,21 @@ type ParticipantItemProps = ParticipantItemSimpleProps & {
 };
 
 export function ParticipantItem({ site, onClick, checked }: ParticipantItemProps) {
+  const checkboxDisabled = isSharingParticipant(site) && !isAddedByManual(site);
+  const checkbox = (
+    <TriStateCheckbox onClick={onClick} status={checked} disabled={checkboxDisabled} />
+  );
   return (
     <tr className='participant-item-with-checkbox'>
       <td>
-        <TriStateCheckbox
-          onClick={onClick}
-          status={checked}
-          className='participant-checkbox'
-          disabled={isSharingParticipant(site) && !isAddedByManual(site)}
-        />
+        {checkboxDisabled ? (
+          <Tooltip trigger={checkbox}>
+            Gray indicates participants selected in bulk permissions. To update, adjust bulk
+            permission settings.
+          </Tooltip>
+        ) : (
+          checkbox
+        )}
       </td>
       <ParticipantItemSimple site={site} />
       {isSharingParticipant(site) && <td>{formatSourceColumn(site.addedBy)}</td>}

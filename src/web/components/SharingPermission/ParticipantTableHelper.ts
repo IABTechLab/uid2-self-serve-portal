@@ -16,6 +16,10 @@ export const isAddedByManual = (site: SharingSiteWithSource) => {
   return site.addedBy.includes(MANUALLY_ADDED);
 };
 
+export const disableSelectAllCheckbox = (sites: SharingSiteWithSource[]) => {
+  return !sites.some(isAddedByManual);
+};
+
 export function filterSites<TSharingSite extends SharingSiteDTO>(
   sites: TSharingSite[],
   filterText: string,
@@ -64,7 +68,7 @@ export function formatSourceColumn(sources: SharingSiteWithSource['addedBy']) {
     if (sourceField) {
       sourceField += ' and ';
     }
-    sourceField += `Auto: ${sourcesWithoutManual
+    sourceField += `Bulk: ${sourcesWithoutManual
       .map((source) => ClientTypeDescriptions[source])
       .join(', ')}`;
   }

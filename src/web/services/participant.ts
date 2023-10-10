@@ -134,15 +134,13 @@ export async function GetSharingList(participantId?: number): Promise<SharingLis
 
 export async function AddSharingParticipants(
   participantId: number,
-  newParticipantSites: number[],
-  newTypes: ClientType[]
+  newParticipantSites: number[]
 ): Promise<SharingListResponse> {
   try {
     const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/add`,
       {
         newParticipantSites,
-        newTypes,
       }
     );
     return result.data;
@@ -153,20 +151,35 @@ export async function AddSharingParticipants(
 
 export async function DeleteSharingParticipants(
   participantId: number,
-  sharingSitesToRemove: number[],
-  types: ClientType[]
+  sharingSitesToRemove: number[]
 ): Promise<SharingListResponse> {
   try {
     const result = await axios.post<SharingListResponse>(
       `/participants/${participantId}/sharingPermission/delete`,
       {
         sharingSitesToRemove,
-        types,
       }
     );
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete sharing participants');
+  }
+}
+
+export async function UpdateSharingTypes(
+  participantId: number,
+  types: ClientType[]
+): Promise<SharingListResponse> {
+  try {
+    const result = await axios.post<SharingListResponse>(
+      `/participants/${participantId}/sharingPermission/shareWithTypes`,
+      {
+        types,
+      }
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update sharing types');
   }
 }
 

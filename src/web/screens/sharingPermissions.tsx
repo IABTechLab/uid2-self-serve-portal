@@ -12,8 +12,8 @@ import {
   CompleteRecommendations,
   DeleteSharingParticipants,
   GetSharingList,
+  UpdateSharingTypes,
 } from '../services/participant';
-import { preloadAllSitesList, preloadAvailableSiteList } from '../services/site';
 import { ApiError } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { PortalRoute } from './routeUtils';
@@ -30,7 +30,7 @@ function SharingPermissions() {
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, sharedSiteIds, selectedTypes);
+      const response = await UpdateSharingTypes(participant!.id, selectedTypes);
       setStatusPopup({
         type: 'Success',
         message: `${
@@ -56,7 +56,7 @@ function SharingPermissions() {
 
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, selectedSiteIds, sharedTypes);
+      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
       setStatusPopup({
         type: 'Success',
         message: `${
@@ -76,11 +76,7 @@ function SharingPermissions() {
 
   const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
-      const response = await DeleteSharingParticipants(
-        participant!.id,
-        siteIdsToDelete,
-        sharedTypes
-      );
+      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
       setStatusPopup({
         type: 'Success',
         message: `${siteIdsToDelete.length} sharing ${
@@ -127,11 +123,17 @@ function SharingPermissions() {
           sharedTypes={sharedTypes ?? []}
           onBulkAddSharingPermission={handleSaveSharingType}
         />
-        <Collapsible title='Search and Add Permissions' defaultOpen>
-          <SearchAndAddParticipants
-            onSharingPermissionsAdded={handleAddSharingSite}
-            sharedSiteIds={sharedSiteIds}
-          />
+        <Collapsible title='Add Permissions — Individual' defaultOpen>
+          <>
+            <p className='search-description'>
+              Add individual participants, using search, and click to grant them permission to
+              decrypt your UID2 tokens.
+            </p>
+            <SearchAndAddParticipants
+              onSharingPermissionsAdded={handleAddSharingSite}
+              sharedSiteIds={sharedSiteIds}
+            />
+          </>
         </Collapsible>
         {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
           <SharingPermissionsTable
@@ -158,9 +160,4 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   path: '/dashboard/sharing',
-  loader: () => {
-    preloadAvailableSiteList();
-    preloadAllSitesList();
-    return null;
-  },
 };

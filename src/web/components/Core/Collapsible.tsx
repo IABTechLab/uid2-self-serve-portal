@@ -13,13 +13,7 @@ export type CollapsibleProps = {
   className?: string;
 };
 
-export function Collapsible({
-  title,
-  children: content,
-  defaultOpen,
-  label,
-  className,
-}: CollapsibleProps) {
+export function Collapsible({ title, children, defaultOpen, label, className }: CollapsibleProps) {
   return (
     <RadixCollapsible.Root
       className={clsx('collapsible-root', className)}
@@ -39,7 +33,7 @@ export function Collapsible({
         </div>
       </RadixCollapsible.Trigger>
       <RadixCollapsible.Content>
-        <div className='collapsible-content'>{content}</div>
+        <div className='collapsible-content'>{children}</div>
       </RadixCollapsible.Content>
     </RadixCollapsible.Root>
   );

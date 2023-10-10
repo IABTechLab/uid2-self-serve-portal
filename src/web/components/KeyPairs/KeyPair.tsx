@@ -53,7 +53,7 @@ function KeyPair({ keyPair }: KeyPairProps) {
 
   return (
     <tr>
-      <td className='name'>{keyPair.name ?? 'name placeholder until added in UID2-1925'}</td>
+      <td className='name'>{keyPair.name}</td>
       <td className='subscription-id'>{keyPair.subscriptionId}</td>
       <td className='public-key'>
         {getPublicKeyDisplay(keyPair.publicKey)}

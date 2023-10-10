@@ -63,11 +63,7 @@ export function ParticipantSearchBar({
     <thead>
       <tr className='participant-item-with-checkbox'>
         <th>
-          <TriStateCheckbox
-            onClick={handleCheckboxChange}
-            status={checkboxStatus}
-            className='participant-checkbox'
-          />
+          <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
         </th>
         <th colSpan={3}>
           <span className='select-all'>Select All {filteredSites.length} Participants</span>

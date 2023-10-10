@@ -1,12 +1,10 @@
 .account-info-content {
   margin-top: 32px;
-}
 
-.account-info-title {
-  margin-top: 24px !important;
-  margin-bottom: 8px;
-}
-
-.account-info-input {
-  max-width: 462px;
+  .account-info-title {
+    display: flex;
+    margin-top: 24px !important;
+    margin-bottom: 8px;
+    gap: 5px;
+  }
 }
