@@ -17,6 +17,7 @@ import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
+  disableSelectAllCheckbox,
   filterSites,
   getSelectAllState,
   isAddedByManual,
@@ -150,15 +151,6 @@ export function SharingPermissionsTableContent({
     }
   };
 
-  const disableCheckbox = () => {
-    for (const site of filteredSites) {
-      if (isAddedByManual(site)) {
-        return false;
-      }
-    }
-    return true;
-  };
-
   const tableHeader = (
     <thead>
       <tr className='participant-item-with-checkbox'>
@@ -174,7 +166,7 @@ export function SharingPermissionsTableContent({
     <TriStateCheckbox
       onClick={handleCheckboxChange}
       status={checkboxStatus}
-      disabled={disableCheckbox()}
+      disabled={disableSelectAllCheckbox(filteredSites)}
     />
   );
 
@@ -182,7 +174,7 @@ export function SharingPermissionsTableContent({
     <>
       <div className='sharing-permissions-table-header-container'>
         <div className='sharing-permission-actions'>
-          {disableCheckbox() ? (
+          {disableSelectAllCheckbox(filteredSites) ? (
             <Tooltip trigger={selectAllCheckbox}>
               Gray indicates participants selected in bulk permissions. To update, adjust bulk
               permission settings.
