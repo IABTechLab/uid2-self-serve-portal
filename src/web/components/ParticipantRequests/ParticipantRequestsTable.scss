@@ -1,5 +1,7 @@
-.participant-requests-container {
-  .participant-requests-table {
+.participant-requests-container,
+.approved-participant-container {
+  .participant-requests-table,
+  .approved-participants-table {
     width: 100%;
 
     tr th {

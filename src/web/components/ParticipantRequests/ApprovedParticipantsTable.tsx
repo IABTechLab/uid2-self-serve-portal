@@ -21,8 +21,8 @@ function NoParticipants() {
 
 export function ApprovedParticipantsTable({ participants }: ApprovedParticipantsTableProps) {
   return (
-    <div className='participant-requests-container'>
-      <table className='participant-requests-table'>
+    <div className='approved-participant-container'>
+      <table className='approved-participants-table'>
         <thead>
           <tr>
             <th>Participant Name</th>
