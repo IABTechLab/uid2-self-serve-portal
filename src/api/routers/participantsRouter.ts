@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import express, { Response } from 'express';
 import { z } from 'zod';
 
@@ -208,8 +209,15 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const sharingList = await getSharingList(participant.siteId);
-      return res.status(200).json(sharingList);
+      try {
+        const sharingList = await getSharingList(participant.siteId);
+        return res.status(200).json(sharingList);
+      } catch (err) {
+        if (err instanceof AxiosError && err.response?.status === 404) {
+          return res.status(404).send('This site does not have a keyset.');
+        }
+        throw err;
+      }
     }
   );
 

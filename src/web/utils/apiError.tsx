@@ -20,7 +20,7 @@ export function backendError(e: unknown, overrideMessage: string) {
 
     return new ApiError(overrideMessage, {
       errorHash: hash,
-      statusCode: e.status,
+      statusCode: e.status || e.response?.status,
     });
   }
   return Error(overrideMessage);

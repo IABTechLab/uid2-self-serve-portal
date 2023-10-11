@@ -1,7 +1,9 @@
 import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
+import { Dialog } from '../components/Core/Dialog';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
@@ -20,7 +22,36 @@ import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
 
+type NoKeySetErrorDialogProps = {
+  showDialog: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+function NoKeySetErrorDialog({ showDialog, onOpenChange }: NoKeySetErrorDialogProps) {
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    onOpenChange(false);
+    navigate(-1);
+  };
+  return (
+    <Dialog open={showDialog} onOpenChange={onOpenChange} title='Access Denied - Technical Issue'>
+      <div className='dialog-body-section' />
+      We&apos;re experiencing an issue on our end. Access to sharing permissions is currently
+      unavailable for you.
+      <br />
+      <br />
+      Please reach out to our support team for assistance.
+      <div className='dialog-footer-section'>
+        <button type='button' className='primary-button' onClick={handleBackClick}>
+          Back
+        </button>
+      </div>
+    </Dialog>
+  );
+}
+
 function SharingPermissions() {
+  const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
@@ -101,7 +132,13 @@ function SharingPermissions() {
         setSharedSiteIds(response.allowed_sites);
         setSharedTypes(response.allowed_types ?? []);
       } catch (e: unknown) {
-        if (e instanceof ApiError) throwError(e);
+        if (e instanceof ApiError) {
+          if (e.statusCode === 404) {
+            setShowErrorDialog(true);
+            return;
+          }
+          throwError(e);
+        }
       }
     };
     loadSharingList();
@@ -152,6 +189,7 @@ function SharingPermissions() {
           message={statusPopup!.message}
         />
       )}
+      <NoKeySetErrorDialog showDialog={showErrorDialog} onOpenChange={setShowErrorDialog} />
     </div>
   );
 }
