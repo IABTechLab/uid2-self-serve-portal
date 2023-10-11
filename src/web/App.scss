@@ -23,6 +23,10 @@
     .heading-details {
       margin: 4px 0;
     }
+
+    p[role='alert'] {
+      color: var(--theme-error);
+    }
   }
 
   .app-centralize {

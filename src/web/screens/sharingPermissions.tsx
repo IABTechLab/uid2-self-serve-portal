@@ -1,9 +1,7 @@
-import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ReactNode, useContext, useEffect, useState } from 'react';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
-import { Dialog } from '../components/Core/Dialog';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
@@ -22,36 +20,17 @@ import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
 
-type NoKeySetErrorDialogProps = {
-  showDialog: boolean;
-  onOpenChange: (open: boolean) => void;
-};
-function NoKeySetErrorDialog({ showDialog, onOpenChange }: NoKeySetErrorDialogProps) {
-  const navigate = useNavigate();
-
-  const handleBackClick = () => {
-    onOpenChange(false);
-    navigate(-1);
-  };
+function SharingPermissionPageContainer({ children }: { children: ReactNode }) {
   return (
-    <Dialog open={showDialog} onOpenChange={onOpenChange} title='Access Denied - Technical Issue'>
-      <div className='dialog-body-section' />
-      We&apos;re experiencing an issue on our end. Access to sharing permissions is currently
-      unavailable for you.
-      <br />
-      <br />
-      Please reach out to our support team for assistance.
-      <div className='dialog-footer-section'>
-        <button type='button' className='primary-button' onClick={handleBackClick}>
-          Back
-        </button>
-      </div>
-    </Dialog>
+    <div className='sharingPermissions'>
+      <h1>Sharing Permissions</h1>
+      {children}
+    </div>
   );
 }
 
 function SharingPermissions() {
-  const [showErrorDialog, setShowErrorDialog] = useState(false);
+  const [showNoKeySetError, setNoKeySetError] = useState(false);
   const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
@@ -134,7 +113,7 @@ function SharingPermissions() {
       } catch (e: unknown) {
         if (e instanceof ApiError) {
           if (e.statusCode === 404) {
-            setShowErrorDialog(true);
+            setNoKeySetError(true);
             return;
           }
           throwError(e);
@@ -144,9 +123,22 @@ function SharingPermissions() {
     loadSharingList();
   }, [throwError]);
 
+  if (showNoKeySetError) {
+    return (
+      <SharingPermissionPageContainer>
+        <p className='heading-details' role='alert'>
+          We&apos;re experiencing an issue on our end. Access to sharing permissions is currently
+          unavailable for you.
+          <br />
+          <br />
+          Please reach out to our support team for assistance.
+        </p>
+      </SharingPermissionPageContainer>
+    );
+  }
+
   return (
-    <div className='sharingPermissions'>
-      <h1>Sharing Permissions</h1>
+    <SharingPermissionPageContainer>
       <p className='heading-details'>
         Adding a sharing permission allows the participant you’re sharing with to decrypt your UID2
         tokens.
@@ -189,8 +181,7 @@ function SharingPermissions() {
           message={statusPopup!.message}
         />
       )}
-      <NoKeySetErrorDialog showDialog={showErrorDialog} onOpenChange={setShowErrorDialog} />
-    </div>
+    </SharingPermissionPageContainer>
   );
 }
 
