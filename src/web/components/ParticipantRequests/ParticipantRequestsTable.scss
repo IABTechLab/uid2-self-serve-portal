@@ -1,15 +1,13 @@
-.participant-requests-container {
-  .participant-requests-table {
+.participant-requests-container,
+.approved-participant-container {
+  .participant-requests-table,
+  .approved-participants-table {
     width: 100%;
 
     tr th {
       background-color: var(--theme-background-sidepanel);
       font-size: 0.875rem;
       line-height: 1.5;
-    }
-
-    th:first-of-type {
-      padding-left: 106px;
     }
 
     th.action {

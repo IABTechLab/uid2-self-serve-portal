@@ -2,19 +2,19 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
-import { ParticipantRequestsTable } from './ParticipantRequestsTable';
+import { ApprovedParticipantsTable } from './ApprovedParticipantsTable';
 
-const meta: Meta<typeof ParticipantRequestsTable> = {
-  component: ParticipantRequestsTable,
-  title: 'Manage Participants/Participant Requests Table',
+const meta: Meta<typeof ApprovedParticipantsTable> = {
+  component: ApprovedParticipantsTable,
+  title: 'Manage Participants/All Participants Table',
 };
 export default meta;
 
-type Story = StoryObj<typeof ParticipantRequestsTable>;
+type Story = StoryObj<typeof ApprovedParticipantsTable>;
 
-export const ParticipantRequests: Story = {
+export const AllParticipants: Story = {
   args: {
-    participantRequests: [
+    participants: [
       {
         id: 1,
         name: 'Participant 1',
@@ -73,36 +73,11 @@ export const ParticipantRequests: Story = {
         },
       },
     ],
-    participantTypes: [
-      { id: 1, typeName: 'Type 1' },
-      { id: 2, typeName: 'Type 2' },
-      { id: 3, typeName: 'Type 3' },
-    ],
-    onApprove: async (_id, form) => {
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(form));
-    },
   },
 };
 
-export const WithErrorWhenApprove: Story = {
+export const NoParticipants: Story = {
   args: {
-    ...ParticipantRequests.args,
-    onApprove: async (_id, _form) => Promise.reject(new Error()),
-  },
-};
-
-export const NoParticipantRequests: Story = {
-  args: {
-    participantRequests: [],
-    participantTypes: [
-      { id: 1, typeName: 'Type 1' },
-      { id: 2, typeName: 'Type 2' },
-      { id: 3, typeName: 'Type 3' },
-    ],
-    onApprove: async (_id, form) => {
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(form));
-    },
+    participants: [],
   },
 };
