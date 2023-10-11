@@ -23,7 +23,13 @@
   }
 
   .bulk-add-permissions-body {
-    padding-left: 10px;
+    padding: 0 10px;
+
+    .bulk-add-permissions-body-warnings {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
 
     .participant-type-checkbox-section {
       display: flex;

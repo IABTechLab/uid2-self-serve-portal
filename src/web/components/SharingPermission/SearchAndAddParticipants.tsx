@@ -57,15 +57,13 @@ export function SearchAndAddParticipants({
 
   return (
     <div className='search-and-add-participants'>
-      <div className='add-participant-dialog-search-bar'>
-        <ParticipantSearchBar
-          selectedParticipantIds={selectedSites}
-          sites={getSearchableSites(sites!)}
-          onSelectedChange={handleSelectedSitesChanged}
-          open={openSearchResult}
-          onToggleOpen={setOpenSearchResult}
-        />
-      </div>
+      <ParticipantSearchBar
+        selectedParticipantIds={selectedSites}
+        sites={getSearchableSites(sites!)}
+        onSelectedChange={handleSelectedSitesChanged}
+        open={openSearchResult}
+        onToggleOpen={setOpenSearchResult}
+      />
       <div className='action-section'>
         {selectedSites.size > 0 && <p>{getSitesText(selectedSites.size)} selected</p>}
         <Dialog

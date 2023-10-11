@@ -21,6 +21,7 @@ import {
   getRecommendedTypeFromParticipant,
   hasPendingTypeChanges,
   hasUncheckedASharedType,
+  publisherHasUncheckedDSP,
 } from './bulkAddPermissionsHelpers';
 import { ParticipantItemSimple } from './ParticipantItem';
 
@@ -177,20 +178,28 @@ export function BulkAddPermissions({
     <div className='bulk-add-permissions'>
       <div className='bulk-add-permissions-body'>
         {commonContent}
-        {hasUncheckedASharedType(
-          sharedTypes,
-          watchPublisherChecked,
-          watchAdvertiserChecked,
-          watchDSPChecked,
-          watchDataProviderChecked
-        ) && (
-          <div className='remove-recommended-type-warning'>
+        <div className='bulk-add-permissions-body-warnings'>
+          {hasUncheckedASharedType(
+            sharedTypes,
+            watchPublisherChecked,
+            watchAdvertiserChecked,
+            watchDSPChecked,
+            watchDataProviderChecked
+          ) && (
+            <div className='remove-recommended-type-warning'>
+              <Banner
+                type='Warning'
+                message='If you remove the sharing permissions for a participant type, all sharing permissions of that type are removed, including future participants of that type.'
+              />
+            </div>
+          )}
+          {publisherHasUncheckedDSP(participant!.types || [], watchDSPChecked) && (
             <Banner
               type='Warning'
-              message='If you remove the sharing permissions for a participant type, all sharing permissions of that type are removed, including future participants of that type.'
+              message='As a publisher, if you remove the sharing permission of DSPs, DSPs will no longer be able to decrypt your UID2 tokens. This means that DSPs cannot bid on any UID2 tokens you pass to them within the bid stream. Please proceed with caution.'
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
       {savePermissionsButton}
     </div>
