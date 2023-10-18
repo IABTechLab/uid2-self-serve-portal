@@ -1,3 +1,4 @@
+import expressWinston from 'express-winston';
 import winston from 'winston';
 import LokiTransport from 'winston-loki';
 
@@ -52,3 +53,17 @@ const errorLogger = winston.createLogger({
 export const getLoggers = () => {
   return [logger, errorLogger];
 };
+
+const headersToRedact = ['authorization'];
+
+export const getLoggingMiddleware = () =>
+  expressWinston.logger({
+    winstonInstance: logger,
+    headerBlacklist: headersToRedact,
+  });
+
+export const getErrorLoggingMiddleware = () =>
+  expressWinston.logger({
+    winstonInstance: errorLogger,
+    headerBlacklist: headersToRedact,
+  });
