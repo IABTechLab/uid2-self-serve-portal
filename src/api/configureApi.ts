@@ -5,7 +5,6 @@ import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimCheck, JWTPayload } from 'express-oauth2-jwt-bearer';
-import expressWinston from 'express-winston';
 import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
@@ -20,7 +19,11 @@ import {
   SSP_KK_SSL_REQUIRED,
   SSP_KK_SSL_RESOURCE,
 } from './envars';
-import { getLoggers } from './helpers/loggingHelpers';
+import {
+  getErrorLoggingMiddleware,
+  getLoggers,
+  getLoggingMiddleware,
+} from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
@@ -68,10 +71,9 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   app.use(cors()); // TODO: Make this more secure
   app.use(bodyParser.json());
 
+  app.use(getLoggingMiddleware());
+
   const [logger, errorLogger] = getLoggers();
-
-  app.use(expressWinston.logger(logger));
-
   if (useMetrics) {
     app.use(
       makeMetricsApiMiddleware(
@@ -163,7 +165,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
 
   app.use(BASE_REQUEST_PATH, router);
 
-  app.use(expressWinston.errorLogger(errorLogger));
+  app.use(getErrorLoggingMiddleware());
   const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     logger.error(`Fallback error handler invoked: ${err.message}`);
     if (err.statusCode === 401) {
