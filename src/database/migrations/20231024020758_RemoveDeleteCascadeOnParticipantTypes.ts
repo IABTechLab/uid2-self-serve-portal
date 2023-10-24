@@ -3,12 +3,12 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('participantsToTypes', (table) => {
     table.dropForeign('participantTypeId');
-    table.foreign('participantTypeId').references('participantTypes.id');
+    table.foreign('participantTypeId').references('participantTypes.id').onDelete('NO ACTION');
   });
 
   await knex.schema.alterTable('approvers', (table) => {
     table.dropForeign('participantTypeId');
-    table.foreign('participantTypeId').references('participantTypes.id');
+    table.foreign('participantTypeId').references('participantTypes.id').onDelete('NO ACTION');
   });
 }
 
