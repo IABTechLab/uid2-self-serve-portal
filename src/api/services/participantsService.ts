@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
 import {
@@ -105,7 +106,20 @@ export const deleteSharingParticipants = async (
   );
 };
 
-export const updateParticipantWithRequestTypes = async (
+const updateParticipantAssociatedRequestTypes = async (
+  participant: Participant,
+  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
+  trx: TransactionOrKnex
+) => {
+  const approvedTypeMappings = participantApprovalPartial.types.map((pt) => ({
+    participantId: participant.id,
+    participantTypeId: pt.id,
+  }));
+  await participant.$relatedQuery('types', trx).unrelate();
+  await trx('participantsToTypes').insert(approvedTypeMappings);
+};
+
+export const updateParticipantAndTypes = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
     status: ParticipantStatus;
@@ -117,12 +131,7 @@ export const updateParticipantWithRequestTypes = async (
     siteId: participantApprovalPartial.siteId,
     status: participantApprovalPartial.status,
   });
-  const approvedTypeMappings = participantApprovalPartial.types.map((pt) => ({
-    participantId: participant.id,
-    participantTypeId: pt.id,
-  }));
-  await participant.$relatedQuery('types', trx).unrelate();
-  await trx('participantsToTypes').insert(approvedTypeMappings);
+  await updateParticipantAssociatedRequestTypes(participant, participantApprovalPartial, trx);
   await trx.commit();
 };
 
