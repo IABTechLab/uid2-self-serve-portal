@@ -125,14 +125,14 @@ export const updateParticipantAndTypes = async (
     status: ParticipantStatus;
   }
 ) => {
-  const trx = await Participant.startTransaction();
-  await participant.$query(trx).patch({
-    name: participantApprovalPartial.name,
-    siteId: participantApprovalPartial.siteId,
-    status: participantApprovalPartial.status,
+  await Participant.transaction(async (trx) => {
+    await participant.$query(trx).patch({
+      name: participantApprovalPartial.name,
+      siteId: participantApprovalPartial.siteId,
+      status: participantApprovalPartial.status,
+    });
+    await updateParticipantAssociatedRequestTypes(participant, participantApprovalPartial, trx);
   });
-  await updateParticipantAssociatedRequestTypes(participant, participantApprovalPartial, trx);
-  await trx.commit();
 };
 
 export const UpdateSharingTypes = async (
