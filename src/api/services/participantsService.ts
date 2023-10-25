@@ -111,12 +111,8 @@ const updateParticipantAssociatedRequestTypes = async (
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
   trx: TransactionOrKnex
 ) => {
-  const approvedTypeMappings = participantApprovalPartial.types.map((pt) => ({
-    participantId: participant.id,
-    participantTypeId: pt.id,
-  }));
   await participant.$relatedQuery('types', trx).unrelate();
-  await trx('participantsToTypes').insert(approvedTypeMappings);
+  await participant.$relatedQuery('types', trx).relate(participantApprovalPartial.types);
 };
 
 export const updateParticipantAndTypes = async (
