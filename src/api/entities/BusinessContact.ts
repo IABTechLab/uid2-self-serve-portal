@@ -23,11 +23,11 @@ export class BusinessContact extends BaseModel {
     },
   };
 
-  id!: number;
-  name!: string;
-  emailAlias!: string;
-  contactType!: string;
-  participantId!: number;
+  declare id: number;
+  declare name: string;
+  declare emailAlias: string;
+  declare contactType: string;
+  declare participantId: number;
 }
 
 export const BusinessContactSchema = z.object({

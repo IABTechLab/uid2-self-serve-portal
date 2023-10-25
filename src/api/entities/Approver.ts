@@ -16,8 +16,8 @@ export class Approver extends BaseModel {
       },
     },
   };
-  id!: number;
-  email!: string;
-  participantTypeId!: number;
-  displayName!: string;
+  declare id: number;
+  declare email: string;
+  declare participantTypeId: number;
+  declare displayName: string;
 }

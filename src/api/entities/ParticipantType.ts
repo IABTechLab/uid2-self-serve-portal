@@ -22,8 +22,8 @@ export class ParticipantType extends BaseModel {
       },
     },
   };
-  id!: number;
-  typeName!: string;
+  declare id: number;
+  declare typeName: string;
 }
 
 export type ParticipantTypeDTO = ModelObjectOpt<ParticipantType>;

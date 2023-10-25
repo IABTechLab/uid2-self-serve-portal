@@ -76,13 +76,13 @@ export class AuditTrail extends BaseModel {
     return ['eventData'];
   }
 
-  id!: number;
-  userId!: number;
-  participantId!: number;
-  userEmail!: string;
-  succeeded!: boolean;
-  event!: AuditTrailEvents;
-  eventData!: AuditTrailEventData;
+  declare id: number;
+  declare userId: number;
+  declare participantId: number;
+  declare userEmail: string;
+  declare succeeded: boolean;
+  declare event: AuditTrailEvents;
+  declare eventData: AuditTrailEventData;
 }
 
 export type AuditTrailDTO = ModelObjectOpt<AuditTrail>;

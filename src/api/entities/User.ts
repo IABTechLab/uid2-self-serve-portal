@@ -40,15 +40,15 @@ export class User extends BaseModel {
       },
     },
   };
-  id!: number;
-  email!: string;
-  firstName!: string;
-  lastName!: string;
-  location?: string;
-  phone?: string;
-  role!: UserRole;
-  participantId?: number | null;
-  acceptedTerms!: boolean;
+  declare id: number;
+  declare email: string;
+  declare firstName: string;
+  declare lastName: string;
+  declare location?: string;
+  declare phone?: string;
+  declare role: UserRole;
+  declare participantId?: number | null;
+  declare acceptedTerms: boolean;
 }
 
 export type UserDTO = ModelObjectOpt<User>;
