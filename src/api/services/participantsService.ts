@@ -115,7 +115,7 @@ const updateParticipantAssociatedRequestTypes = async (
     participantId: participant.id,
     participantTypeId: pt.id,
   }));
-  console.log('participantId', participant.id, 'Types', participantApprovalPartial.types);
+  console.log('participant', participant, 'Types', participantApprovalPartial.types);
   const unrelateQuery = participant.$relatedQuery('types', trx).unrelate().toKnexQuery();
   console.log('unrelate SQL', unrelateQuery.toQuery());
   await participant.$relatedQuery('types', trx).unrelate();
@@ -136,11 +136,11 @@ export const updateParticipantAndTypes = async (
   }
 ) => {
   await Participant.transaction(async (trx) => {
-    // await participant.$query(trx).patch({
-    //   name: participantApprovalPartial.name,
-    //   siteId: participantApprovalPartial.siteId,
-    //   status: participantApprovalPartial.status,
-    // });
+    await participant.$query(trx).patch({
+      name: participantApprovalPartial.name,
+      siteId: participantApprovalPartial.siteId,
+      // status: participantApprovalPartial.status,
+    });
     await updateParticipantAssociatedRequestTypes(participant, participantApprovalPartial, trx);
   });
 };
