@@ -117,15 +117,15 @@ const updateParticipantAssociatedRequestTypes = async (
   }));
   console.log('participant', participant, 'Types', participantApprovalPartial.types);
   const unrelateQuery = participant.$relatedQuery('types', trx).unrelate().toKnexQuery();
-  console.log('unrelate SQL', unrelateQuery.toQuery());
+  console.log('unrelate SQL:', unrelateQuery.toQuery());
   await participant.$relatedQuery('types', trx).unrelate();
   const relateQuery = participant
     .$relatedQuery('types', trx)
     .relate(participantApprovalPartial.types)
     .toKnexQuery();
-  console.log('relate SQL', relateQuery.toQuery());
+  console.log('relate SQL:', relateQuery.toQuery());
   await participant.$relatedQuery('types', trx).relate(participantApprovalPartial.types);
-  console.log('inser SQL', trx('participantsToTypes').insert(approvedTypeMappings).toQuery());
+  console.log('insert SQL:', trx('participantsToTypes').insert(approvedTypeMappings).toQuery());
   // await trx('participantsToTypes').insert(approvedTypeMappings);
 };
 
