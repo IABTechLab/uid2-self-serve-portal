@@ -4,7 +4,23 @@ module.exports = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
-    '@storybook/preset-create-react-app',
+    {
+      name: '@storybook/preset-create-react-app',
+      options: {
+        babelOptions: {
+          presets: [['@babel/preset-typescript', { allowDeclareFields: true }]],
+          plugins: [
+            [
+              '@babel/plugin-transform-typescript',
+              {
+                allowDeclareFields: true,
+              },
+            ],
+            ['@babel/proposal-class-properties', { loose: true }],
+          ],
+        },
+      },
+    },
   ],
 
   framework: {
@@ -12,7 +28,6 @@ module.exports = {
     options: {},
   },
   staticDirs: ['../public'],
-
   docs: {
     autodocs: true,
   },
