@@ -1,6 +1,7 @@
 import '!style-loader!css-loader!sass-loader!./styles.scss';
 import { BrowserRouter } from 'react-router-dom';
 import { configureFontAwesomeLibrary } from '../src/web/configureFontAwesomeLibrary';
+import { Story } from '@storybook/react';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -13,7 +14,7 @@ export const parameters = {
 };
 
 export const decorators = [
-  (Story) => {
+  (Story: Story) => {
     configureFontAwesomeLibrary();
     return (
       <div className='app'>

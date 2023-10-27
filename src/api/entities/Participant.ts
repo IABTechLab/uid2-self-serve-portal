@@ -46,15 +46,15 @@ export class Participant extends BaseModel {
       },
     },
   };
-  id!: number;
-  name!: string;
-  status!: ParticipantStatus;
-  allowSharing!: boolean;
-  completedRecommendations!: boolean;
-  siteId?: number;
-  location?: string;
-  types?: ParticipantType[];
-  users?: User[];
+  declare id: number;
+  declare name: string;
+  declare status: ParticipantStatus;
+  declare allowSharing: boolean;
+  declare completedRecommendations: boolean;
+  declare siteId?: number;
+  declare location?: string;
+  declare types?: ParticipantType[];
+  declare users?: User[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
