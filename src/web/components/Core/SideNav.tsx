@@ -77,7 +77,7 @@ export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
               linkClass='outside-link'
             />
           ))}
-        <li className='side-nav-item version-info'>UID2 Self-Serve Portal v.{config.version}</li>
+        <li className='side-nav-item version-info'>UID2 Portal v.{config.version}</li>
       </NavigationMenuList>
     </NavigationMenu>
   );
