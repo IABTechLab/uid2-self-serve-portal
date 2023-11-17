@@ -167,9 +167,24 @@ export function BulkAddPermissions({
     </>
   );
 
+  const publisherUncheckDSPWarning = publisherHasUncheckedDSP(
+    participant!.types || [],
+    watchDSPChecked,
+    sharedTypes,
+    participant!.completedRecommendations
+  ) && (
+    <Banner
+      type='Warning'
+      message='As a publisher, if you remove the sharing permission of DSPs, DSPs will no longer be able to decrypt your UID2 tokens. This means that DSPs cannot bid on any UID2 tokens you pass to them within the bid stream. Please proceed with caution.'
+    />
+  );
+
   const recommendationContent = (
     <div className='bulk-add-permissions'>
-      <div className='bulk-add-permissions-body'>{commonContent}</div>
+      <div className='bulk-add-permissions-body'>
+        {commonContent}
+        <div className='bulk-add-permissions-body-warnings'>{publisherUncheckDSPWarning}</div>
+      </div>
       {savePermissionsButton}
     </div>
   );
@@ -186,19 +201,12 @@ export function BulkAddPermissions({
             watchDSPChecked,
             watchDataProviderChecked
           ) && (
-            <div className='remove-recommended-type-warning'>
-              <Banner
-                type='Warning'
-                message='If you remove the sharing permissions for a participant type, all sharing permissions of that type are removed, including future participants of that type.'
-              />
-            </div>
-          )}
-          {publisherHasUncheckedDSP(participant!.types || [], watchDSPChecked) && (
             <Banner
               type='Warning'
-              message='As a publisher, if you remove the sharing permission of DSPs, DSPs will no longer be able to decrypt your UID2 tokens. This means that DSPs cannot bid on any UID2 tokens you pass to them within the bid stream. Please proceed with caution.'
+              message='If you remove the sharing permissions for a participant type, all sharing permissions of that type are removed, including future participants of that type.'
             />
           )}
+          {publisherUncheckDSPWarning}
         </div>
       </div>
       {savePermissionsButton}

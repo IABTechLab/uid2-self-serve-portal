@@ -130,10 +130,13 @@ export const getFilteredParticipantsByType = (
 
 export const publisherHasUncheckedDSP = (
   participantTypes: ParticipantTypeDTO[],
-  DSPChecked: boolean
+  DSPChecked: boolean,
+  sharedTypes: ClientType[],
+  completedRecommendations: boolean
 ) => {
   return (
     participantTypes.some((type) => type.typeName === ParticipantTypeData.Publisher.typeName) &&
-    !DSPChecked
+    !DSPChecked &&
+    (sharedTypes.includes('DSP') || completedRecommendations === false)
   );
 };
