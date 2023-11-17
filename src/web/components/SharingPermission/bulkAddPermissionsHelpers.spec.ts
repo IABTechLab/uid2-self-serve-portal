@@ -3,100 +3,25 @@ import { publisherHasUncheckedDSP } from './bulkAddPermissionsHelpers';
 
 describe('Bulk add permission helper tests', () => {
   describe('#publisherHasUncheckedDSP', () => {
-    it('Returns true when DSP is unchecked, sharedTypes includes DSP, and completedRecommendations is false', () => {
-      const participantTypes = [{ id: 2, typeName: 'Publisher' }];
-      const DSPChecked = false;
-      const sharedTypes: ClientType[] = ['DSP'];
-      const completedRecommendations = false;
-
-      const result = publisherHasUncheckedDSP(
-        participantTypes,
-        DSPChecked,
-        sharedTypes,
-        completedRecommendations
-      );
-
-      expect(result).toBe(true);
-    });
-
-    it('Returns true when DSP is unchecked, sharedTypes includes DSP, and completedRecommendations is true', () => {
-      const participantTypes = [{ id: 2, typeName: 'Publisher' }];
-      const DSPChecked = false;
-      const sharedTypes: ClientType[] = ['DSP'];
-      const completedRecommendations = true;
-
-      const result = publisherHasUncheckedDSP(
-        participantTypes,
-        DSPChecked,
-        sharedTypes,
-        completedRecommendations
-      );
-
-      expect(result).toBe(true);
-    });
-
-    it('Returns true when DSP is unchecked, sharedTypes does not include DSP, and completedRecommendations is false', () => {
-      const participantTypes = [{ id: 2, typeName: 'Publisher' }];
-      const DSPChecked = false;
-      const sharedTypes: ClientType[] = ['ADVERTISER'];
-      const completedRecommendations = false;
-
-      const result = publisherHasUncheckedDSP(
-        participantTypes,
-        DSPChecked,
-        sharedTypes,
-        completedRecommendations
-      );
-
-      expect(result).toBe(true);
-    });
-
-    it('Returns false when DSP is unchecked, sharedTypes does not include DSP, and completedRecommendations is true', () => {
-      const participantTypes = [{ id: 2, typeName: 'Publisher' }];
-      const DSPChecked = false;
-      const sharedTypes: ClientType[] = ['ADVERTISER'];
-      const completedRecommendations = true;
-
-      const result = publisherHasUncheckedDSP(
-        participantTypes,
-        DSPChecked,
-        sharedTypes,
-        completedRecommendations
-      );
-
-      expect(result).toBe(false);
-    });
-
-    it('Returns false when participantTypes do not include Publisher', () => {
-      const participantTypes = [{ id: 3, typeName: 'Advertiser' }];
-      const DSPChecked = false;
-      const sharedTypes: ClientType[] = ['DSP'];
-      const completedRecommendations = false;
-
-      const result = publisherHasUncheckedDSP(
-        participantTypes,
-        DSPChecked,
-        sharedTypes,
-        completedRecommendations
-      );
-
-      expect(result).toBe(false);
-    });
-
-    it('Returns false when DSP is checked', () => {
-      const participantTypes = [{ id: 2, typeName: 'Publisher' }];
-      const DSPChecked = true;
-      const sharedTypes: ClientType[] = ['DSP'];
-      const completedRecommendations = false;
-
-      const result = publisherHasUncheckedDSP(
-        participantTypes,
-        DSPChecked,
-        sharedTypes,
-        completedRecommendations
-      );
-
-      expect(result).toBe(false);
-    });
+    const shareWithDsp: ClientType[] = ['DSP'];
+    const publisherType = { id: 2, typeName: 'Publisher' };
+    test.each([
+      [publisherType, false, shareWithDsp, false, true],
+      [publisherType, false, shareWithDsp, true, true],
+      [publisherType, false, [], true, false],
+      [{ id: 3, typeName: 'Advertiser' }, false, shareWithDsp, false, false],
+      [publisherType, true, shareWithDsp, false, false],
+    ])(
+      'Returns %p when participantTypes is %p, DSPChecked is %p, sharedTypes is %p, and completedRecommendations is %p',
+      (participantTypes, dspChecked, sharedTypes, completedRecommendations, expected) => {
+        const result = publisherHasUncheckedDSP(
+          [participantTypes],
+          dspChecked,
+          sharedTypes,
+          completedRecommendations
+        );
+        expect(result).toBe(expected);
+      }
+    );
   });
 });
