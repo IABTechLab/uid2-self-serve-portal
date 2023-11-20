@@ -28,7 +28,10 @@
     .bulk-add-permissions-body-warnings {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+
+      & > div {
+        margin-top: 20px;
+      }
     }
 
     .participant-type-checkbox-section {
@@ -38,10 +41,6 @@
       .checkbox-label {
         padding-right: 25px;
       }
-    }
-
-    .remove-recommended-type-warning {
-      padding-top: 20px;
     }
 
     .bulk-add-permissions-view-recommendations-button {
