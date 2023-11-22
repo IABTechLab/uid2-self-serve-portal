@@ -16,6 +16,7 @@ import {
   UserResponse,
 } from '../services/userAccount';
 import { ApiError } from '../utils/apiError';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 function Loading() {
@@ -123,6 +124,7 @@ function TeamMembers() {
 export const TeamMembersRoute: PortalRoute = {
   description: 'Team Members',
   element: <TeamMembers />,
+  errorElement: <RouteErrorBoundary />,
   path: '/dashboard/team',
   loader: () => {
     const users = GetAllUsersOfParticipant();

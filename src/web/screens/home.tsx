@@ -8,6 +8,7 @@ import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetSharingList } from '../services/participant';
 import { preloadAllSitesList } from '../services/site';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
@@ -67,4 +68,5 @@ export const HomeRoute: PortalRoute = {
   path: '/',
   description: 'Home',
   element: <Home />,
+  errorElement: <RouteErrorBoundary />,
 };

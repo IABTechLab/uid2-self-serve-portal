@@ -16,6 +16,7 @@ import {
 } from '../services/participant';
 import { ApiError } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
@@ -188,5 +189,6 @@ function SharingPermissions() {
 export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
+  errorElement: <RouteErrorBoundary />,
   path: '/dashboard/sharing',
 };

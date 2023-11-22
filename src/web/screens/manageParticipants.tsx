@@ -13,6 +13,7 @@ import {
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadSiteList } from '../services/site';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 function ManageParticipants() {
@@ -61,6 +62,7 @@ export const ManageParticipantsRoute: PortalRoute = {
   path: '/dashboard/manageParticipants',
   description: 'Manage Participants',
   element: <ManageParticipants />,
+  errorElement: <RouteErrorBoundary />,
   loader: async () => {
     const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
     const participantTypes = GetAllParticipantTypes();

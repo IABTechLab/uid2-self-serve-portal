@@ -9,6 +9,7 @@ import { TermsAndConditionsForm } from '../components/Core/TermsAndConditions';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { SetTermsAccepted } from '../services/userAccount';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { AccountInformationRoute } from './accountInformation';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
@@ -93,5 +94,6 @@ export const DashboardRoute: PortalRoute = {
   path: '/',
   description: 'Dashboard',
   element: <Dashboard />,
+  errorElement: <RouteErrorBoundary />,
   children: DashboardRoutes,
 };

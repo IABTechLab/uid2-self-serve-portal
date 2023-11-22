@@ -12,6 +12,7 @@ import {
   UpdateEmailContact,
 } from '../services/participant';
 import { ApiError } from '../utils/apiError';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './emailContacts.scss';
@@ -118,6 +119,7 @@ export function BusinessContacts() {
 export const EmailContactsRoute: PortalRoute = {
   description: 'Email Contacts',
   element: <BusinessContacts />,
+  errorElement: <RouteErrorBoundary />,
   path: '/dashboard/emailContacts',
   loader: () => {
     const emailContacts = GetEmailContacts();
