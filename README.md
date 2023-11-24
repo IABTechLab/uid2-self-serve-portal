@@ -104,7 +104,7 @@ For more advanced setup, see [Keycloak Advanced Setup](./KeycloakAdvancedSetup.m
 #### Tech Stack
 
 For logging, we use [Loki and Grafana](https://grafana.com/oss/loki/) to store and query logs.
-We use [winston](https://www.npmjs.com/package/express-winston) in our [express](https://www.npmjs.com/package/express) app to format and label our log outputs for ingestion into Loki.
+We use the [winston-express](https://www.npmjs.com/package/winston-express) helper for [express](https://www.npmjs.com/package/express) in order to log to [winston](https://github.com/winstonjs/winston) from the browser. It helps format and label our log outputs for ingestion into Loki.
 
 #### Development setup
 
