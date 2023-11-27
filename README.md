@@ -103,12 +103,12 @@ For more advanced setup, see [Keycloak Advanced Setup](./KeycloakAdvancedSetup.m
 
 #### Tech Stack
 
-For logging, we use [loki and grafana](https://grafana.com/oss/loki/) to store and query logs.
-We use winston in our express app to format and label our log outputs for ingestion into loki.
+For logging, we use [Loki and Grafana](https://grafana.com/oss/loki/) to store and query logs.
+We use the [winston-express](https://www.npmjs.com/package/winston-express) helper for [express](https://www.npmjs.com/package/express) in order to log to [winston](https://github.com/winstonjs/winston) from the browser. It helps format and label our log outputs for ingestion into Loki.
 
 #### Development setup
 
-For development purposes, we can can spawn docker images for loki/grafana/promtail to test and validate our loggings.
+For development purposes, we can can spawn docker images for Loki/Grafana/Promtail to test and validate our loggings.
 
 To do this, an optional docker file is provided `docker-compose.log-stack.yml` in the root folder. This ensures that typical development workflows (that don't need logger stack) don't spawn these additional containers unnecessarily.
 
@@ -118,17 +118,19 @@ To instantiate the logging stack, use the following command:-
 docker compose -f docker-compose.yml -f docker-compose.log-stack.yml up
 ```
 
-This will spawn 3 additional containers for promtail, loki and grafana.
+This will spawn 3 additional containers for Promtail, Loki and Grafana.
 
-Once running, log onto the grafana UI from [here](http://localhost:3101).
-Add the loki datasource in grafana with the following loki data-source url: `http://host.docker.internal:3100`.
+Once running, log onto the Grafana UI from [here](http://localhost:3101). Use the username `admin` and password `admin`.
 
-The logs should now be available in the explore tab to query.
-For debugging requests - you may query a specific traceId like so:
+Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Note: this url should match the value of `SSP_LOKI_HOST` in your `.env` file.
+
+The logs should now be available in the **Explore** tab to query - you may need to trigger some API requests in the UI to generate some logs. You can then debug requests by specifying the app name along with a traceId, for example:
 
 ```
 {app="ssportal-dev"} |= `ae44989e-7654-4e7f-ae7c-8987a829a622`
 ```
+
+Note: the name of the app should match the `SSP_APP_NAME` in your `.env` file.
 
 ## Email Templates
 
