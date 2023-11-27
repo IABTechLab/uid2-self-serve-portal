@@ -73,7 +73,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
 
   app.use(getLoggingMiddleware());
 
-  const [logger, errorLogger] = getLoggers();
+  const { logger, errorLogger } = getLoggers();
   if (useMetrics) {
     app.use(
       makeMetricsApiMiddleware(
@@ -167,7 +167,8 @@ export function configureAndStartApi(useMetrics: boolean = true) {
 
   app.use(getErrorLoggingMiddleware());
   const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
-    logger.error(`Fallback error handler invoked: ${err.message}`);
+    const traceId = req?.headers?.traceId?.toString() ?? '';
+    errorLogger.error(`Fallback error handler invoked: ${err.message}`, traceId);
     if (err.statusCode === 401) {
       res.status(401).json({
         message: 'Unauthorized. You do not have the necessary permissions.',

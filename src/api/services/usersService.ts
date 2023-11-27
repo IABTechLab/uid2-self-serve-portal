@@ -26,7 +26,11 @@ export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTer
   return User.query().insert(user);
 };
 
-export const isUserBelongsToParticipant = async (email: string, participantId: number) => {
+export const isUserBelongsToParticipant = async (
+  email: string,
+  participantId: number,
+  traceId: string
+) => {
   const user = await User.query()
     .where('email', email)
     .andWhere('deleted', 0)
@@ -34,8 +38,8 @@ export const isUserBelongsToParticipant = async (email: string, participantId: n
     .first();
 
   if (!user) {
-    const [, errorLogger] = getLoggers();
-    errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`, traceId);
   }
   return !!user;
 };
@@ -68,12 +72,17 @@ export const enrichWithUserFromParams = async (
   next: NextFunction
 ) => {
   const { userId } = userIdParser.parse(req.params);
+  const traceId = req?.headers?.traceId?.toString() ?? '';
   const user = await User.query().findById(userId);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
   if (
-    !(await isUserBelongsToParticipant(req.auth?.payload?.email as string, user.participantId!))
+    !(await isUserBelongsToParticipant(
+      req.auth?.payload?.email as string,
+      user.participantId!,
+      traceId
+    ))
   ) {
     return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }

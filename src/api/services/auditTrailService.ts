@@ -29,7 +29,8 @@ export const insertSharingAuditTrails = async (
   userId: number,
   userEmail: string,
   action: AuditAction,
-  siteIds: number[]
+  siteIds: number[],
+  traceId: string
 ) => {
   try {
     const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
@@ -47,8 +48,8 @@ export const insertSharingAuditTrails = async (
 
     return await AuditTrail.query().insert(sharingAuditTrail);
   } catch (error) {
-    const [logger] = getLoggers();
-    logger.error(`Audit trails inserted failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Audit trails inserted failed: ${error}`, traceId);
     throw error;
   }
 };
@@ -57,7 +58,8 @@ export const insertSharingTypesAuditTrail = async (
   participant: Participant,
   userId: number,
   userEmail: string,
-  types: ClientType[]
+  types: ClientType[],
+  traceId: string
 ) => {
   try {
     const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
@@ -74,8 +76,8 @@ export const insertSharingTypesAuditTrail = async (
 
     return await AuditTrail.query().insert(sharingAuditTrail);
   } catch (error) {
-    const [logger] = getLoggers();
-    logger.error(`Audit trails inserted failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Audit trails inserted failed: ${error}`, traceId);
     throw error;
   }
 };
@@ -86,7 +88,8 @@ export const insertKeyPairAuditTrails = async (
   userEmail: string,
   action: AuditAction,
   name: string,
-  disabled: boolean
+  disabled: boolean,
+  traceId: string
 ) => {
   try {
     const keyPairAuditTrail: Omit<AuditTrailDTO, 'id'> = {
@@ -105,8 +108,8 @@ export const insertKeyPairAuditTrails = async (
 
     return await AuditTrail.query().insert(keyPairAuditTrail);
   } catch (error) {
-    const [logger] = getLoggers();
-    logger.error(`Audit trails inserted failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Audit trails inserted failed: ${error}`, traceId);
     throw error;
   }
 };

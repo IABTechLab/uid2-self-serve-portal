@@ -6,7 +6,7 @@ import * as SendGridService from './sendGridService';
 export function createEmailService() {
   const isProduction = process.env.NODE_ENV === 'production';
 
-  async function sendEmail(args: EmailArgs): Promise<void> {
+  async function sendEmail(args: EmailArgs, traceId: string): Promise<void> {
     const emailArgs = {
       ...args,
       templateData: {
@@ -15,7 +15,7 @@ export function createEmailService() {
       },
     };
     if (isProduction) {
-      await SendGridService.sendEmail(emailArgs);
+      await SendGridService.sendEmail(emailArgs, traceId);
     } else {
       await NodemailerService.sendEmail(emailArgs);
     }

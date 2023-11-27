@@ -50,8 +50,21 @@ const errorLogger = winston.createLogger({
   ),
 });
 
+const infoLoggerWrapper = {
+  info: (message: string, traceId: string) => logger.info(`${message}, [traceId=${traceId}]`),
+};
+
+const errorLoggerWrapper = {
+  error: (message: string, traceId: string) =>
+    errorLogger.error(`${message}, [traceId=${traceId}]`),
+};
+
 export const getLoggers = () => {
-  return [logger, errorLogger];
+  return {
+    logger,
+    infoLogger: infoLoggerWrapper,
+    errorLogger: errorLoggerWrapper,
+  };
 };
 
 const headersToRedact = ['authorization'];
