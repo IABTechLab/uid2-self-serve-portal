@@ -6,7 +6,7 @@ import {
   SharingSiteDTO,
 } from '../helpers/siteConvertingHelpers';
 import { isApproverCheck } from '../middleware/approversMiddleware';
-import { getSiteList } from '../services/adminServiceClient';
+import { getSiteList, getVisibleSiteList } from '../services/adminServiceClient';
 import { SiteDTO } from '../services/adminServiceHelpers';
 import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/participantsService';
 
@@ -21,8 +21,8 @@ export function createSitesRouter() {
   });
 
   sitesRouter.get('/available', async (_req, res) => {
-    const sites = await getSiteList();
-    const availableSites = sites.filter(canBeSharedWith);
+    const visibleSites = await getVisibleSiteList();
+    const availableSites = visibleSites.filter(canBeSharedWith);
     const matchedParticipants = await getParticipantsBySiteIds(availableSites.map((s) => s.id));
     const availableSharingSites: SharingSiteDTO[] = availableSites.map((site: SiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)
@@ -31,9 +31,9 @@ export function createSitesRouter() {
   });
 
   sitesRouter.get('/', async (_req, res) => {
-    const sites = await getSiteList();
-    const matchedParticipants = await getParticipantsBySiteIds(sites.map((s) => s.id));
-    const sharingSites: SharingSiteDTO[] = sites.map((site: SiteDTO) =>
+    const visibleSites = await getVisibleSiteList();
+    const matchedParticipants = await getParticipantsBySiteIds(visibleSites.map((s) => s.id));
+    const sharingSites: SharingSiteDTO[] = visibleSites.map((site: SiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)
     );
     return res.status(200).json(sharingSites);

@@ -71,6 +71,11 @@ export const getSiteList = async (): Promise<SiteDTO[]> => {
   return response.data;
 };
 
+export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {
+  const siteList = await getSiteList();
+  return siteList.filter((x) => x.visible !== false);
+};
+
 export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
   const response = await adminServiceClient.get<KeyPairDTO[]>(
     `/api/v2/sites/${siteId}/client-side-keypairs`
