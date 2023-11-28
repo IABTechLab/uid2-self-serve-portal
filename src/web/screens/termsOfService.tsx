@@ -1,4 +1,5 @@
 import { TermsAndConditions } from '../components/Core/TermsAndConditions';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './accountPending.scss';
@@ -10,6 +11,7 @@ function TermsOfService() {
 export const TermsOfServiceRoute: PortalRoute = {
   path: '/termsOfService',
   element: <TermsOfService />,
+  errorElement: <RouteErrorBoundary />,
   description: 'Terms of Service',
   location: 'footer',
 };
