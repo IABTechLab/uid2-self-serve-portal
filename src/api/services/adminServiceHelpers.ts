@@ -24,6 +24,7 @@ export type SiteDTO = {
   roles: ClientRole[];
   clientTypes?: ClientType[];
   client_count: number;
+  visible: boolean;
 };
 
 export type SharingListResponse = {

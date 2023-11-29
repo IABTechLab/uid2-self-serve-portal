@@ -20,6 +20,7 @@ const response: SiteDTO[] = [
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
+    visible: true,
   },
   {
     id: 4,
@@ -29,6 +30,7 @@ const response: SiteDTO[] = [
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
+    visible: false,
   },
 ];
 

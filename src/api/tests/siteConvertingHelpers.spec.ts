@@ -110,6 +110,7 @@ describe('Sharing Permission Helper Tests', () => {
         clientTypes: ['DSP'],
         // eslint-disable-next-line camelcase
         client_count: 1,
+        visible: true,
       } as SiteDTO;
       expect(canBeSharedWith(site)).toBeTruthy();
     });
