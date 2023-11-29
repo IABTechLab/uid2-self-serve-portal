@@ -75,7 +75,13 @@ function ParticipantApprovalForm({
   const fuse = useMemo(
     () =>
       sites
-        ? new Fuse(sites!, { keys: ['name'], includeMatches: true, findAllMatches: true })
+        ? new Fuse(sites!, {
+            keys: ['name'],
+            includeMatches: true,
+            findAllMatches: true,
+            useExtendedSearch: true,
+            minMatchCharLength: 2,
+          })
         : null,
     [sites]
   );

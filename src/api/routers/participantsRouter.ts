@@ -14,7 +14,12 @@ import {
 import { UserDTO, UserRole } from '../entities/User';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
-import { addKeyPair, getKeyPairsList, getSharingList } from '../services/adminServiceClient';
+import {
+  addKeyPair,
+  getKeyPairsList,
+  getSharingList,
+  setSiteClientTypes,
+} from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -129,6 +134,7 @@ export function createParticipantsRouter() {
       );
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
+      await setSiteClientTypes(data);
       await Promise.all(
         users.map((user) =>
           assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
