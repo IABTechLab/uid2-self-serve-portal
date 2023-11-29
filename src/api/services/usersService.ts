@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 
 export type UserWithIsApprover = User & { isApprover: boolean };
@@ -72,7 +72,7 @@ export const enrichWithUserFromParams = async (
   next: NextFunction
 ) => {
   const { userId } = userIdParser.parse(req.params);
-  const traceId = req?.headers?.traceId?.toString() ?? '';
+  const traceId = getTraceId(req);
   const user = await User.query().findById(userId);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);

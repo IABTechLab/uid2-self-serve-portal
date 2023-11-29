@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import expressWinston from 'express-winston';
 import winston from 'winston';
 import LokiTransport from 'winston-loki';
@@ -80,3 +81,7 @@ export const getErrorLoggingMiddleware = () =>
     winstonInstance: errorLogger,
     headerBlacklist: headersToRedact,
   });
+
+export const getTraceId = (request: Request): string => {
+  return request?.headers?.traceId?.toString() ?? '';
+};

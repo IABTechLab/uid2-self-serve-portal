@@ -12,6 +12,7 @@ import {
   ParticipantStatus,
 } from '../entities/Participant';
 import { UserDTO, UserRole } from '../entities/User';
+import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { addKeyPair, getKeyPairsList, getSharingList } from '../services/adminServiceClient';
@@ -90,7 +91,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.post('/', async (req, res) => {
     try {
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       const data = {
         ...ParticipantCreationPartial.parse(req.body),
         status: ParticipantStatus.AwaitingApproval,
@@ -119,7 +120,7 @@ export function createParticipantsRouter() {
     isApproverCheck,
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       const data = {
         ...ParticipantApprovalPartial.parse(req.body),
         status: ParticipantStatus.Approved,
@@ -202,7 +203,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -226,7 +227,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/add',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -261,7 +262,7 @@ export function createParticipantsRouter() {
     '/:participantId/keyPair/add',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -305,7 +306,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/delete',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -339,7 +340,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/shareWithTypes',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = req?.headers?.traceId?.toString() ?? '';
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }

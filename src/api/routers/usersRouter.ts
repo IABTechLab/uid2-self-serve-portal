@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Participant, ParticipantStatus } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserRole } from '../entities/User';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { getSiteList } from '../services/adminServiceClient';
@@ -76,7 +76,7 @@ export function createUsersRouter() {
 
   usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {
     const { infoLogger, errorLogger } = getLoggers();
-    const traceId = req?.headers?.traceId?.toString() ?? '';
+    const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
 
