@@ -12,6 +12,7 @@ import {
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
+import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
@@ -25,7 +26,8 @@ export interface ParticipantRequest extends Request {
 
 export const sendNewParticipantEmail = async (
   newParticipant: z.infer<typeof ParticipantCreationPartial>,
-  typeIds: number[]
+  typeIds: number[],
+  traceId: string
 ) => {
   const participantTypes = await ParticipantType.query().findByIds(typeIds);
   const emailService = createEmailService();
@@ -45,7 +47,7 @@ export const sendNewParticipantEmail = async (
     template: 'newParticipantReadyForReview',
     to: approvers.map((a) => ({ name: a.displayName, email: a.email })),
   };
-  emailService.sendEmail(emailArgs);
+  emailService.sendEmail(emailArgs, traceId);
 };
 
 export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {
@@ -77,24 +79,27 @@ export const getParticipantsBySiteIds = async (siteIds: number[]) => {
 
 export const addSharingParticipants = async (
   participantSiteId: number,
-  siteIds: number[]
+  siteIds: number[],
+  traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
+  const sharingListResponse = await getSharingList(participantSiteId, traceId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
   const response = await updateSharingList(
     participantSiteId,
     sharingListResponse.hash,
     [...newSharingSet],
-    sharingListResponse.allowed_types
+    sharingListResponse.allowed_types,
+    traceId
   );
   return response;
 };
 
 export const deleteSharingParticipants = async (
   participantSiteId: number,
-  siteIds: number[]
+  siteIds: number[],
+  traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
+  const sharingListResponse = await getSharingList(participantSiteId, traceId);
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
@@ -102,7 +107,8 @@ export const deleteSharingParticipants = async (
     participantSiteId,
     sharingListResponse.hash,
     newSharingList,
-    sharingListResponse.allowed_types
+    sharingListResponse.allowed_types,
+    traceId
   );
 };
 
@@ -133,18 +139,20 @@ export const updateParticipantAndTypes = async (
 
 export const UpdateSharingTypes = async (
   participantSiteId: number,
-  types: ClientType[]
+  types: ClientType[],
+  traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
+  const sharingListResponse = await getSharingList(participantSiteId, traceId);
   return updateSharingList(
     participantSiteId,
     sharingListResponse.hash,
     sharingListResponse.allowed_sites,
-    types
+    types,
+    traceId
   );
 };
 
-export const sendParticipantApprovedEmail = async (users: User[]) => {
+export const sendParticipantApprovedEmail = async (users: User[], traceId: string) => {
   const emailService = createEmailService();
   const emailArgs: EmailArgs = {
     subject: 'Your account has been confirmed',
@@ -152,7 +160,7 @@ export const sendParticipantApprovedEmail = async (users: User[]) => {
     template: 'accountHasBeenConfirmed',
     to: users.map((user) => ({ name: user.fullName(), email: user.email })),
   };
-  emailService.sendEmail(emailArgs);
+  emailService.sendEmail(emailArgs, traceId);
 };
 
 const idParser = z.object({
@@ -161,13 +169,14 @@ const idParser = z.object({
 
 const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);
+  const traceId = getTraceId(req);
   const participant = await Participant.query().findById(participantId).withGraphFetched('types');
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }
 
   const currentUserEmail = req.auth?.payload?.email as string;
-  if (!(await isUserBelongsToParticipant(currentUserEmail, participantId))) {
+  if (!(await isUserBelongsToParticipant(currentUserEmail, participantId, traceId))) {
     return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
   }
 

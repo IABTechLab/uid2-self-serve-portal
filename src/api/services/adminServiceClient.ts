@@ -45,7 +45,10 @@ const mapClientTypesToAdminEnums = (
   });
 };
 
-export const getSharingList = async (siteId: number): Promise<SharingListResponse> => {
+export const getSharingList = async (
+  siteId: number,
+  traceId: string
+): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.get<SharingListResponse>(
       `/api/sharing/list/${siteId}`,
@@ -57,8 +60,8 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
       ? response.data
       : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
   } catch (error: unknown) {
-    const [logger] = getLoggers();
-    logger.error(`Get ACLs failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Get ACLs failed: ${error}`, traceId);
     throw error;
   }
 };
@@ -67,7 +70,8 @@ export const updateSharingList = async (
   siteId: number,
   hash: number,
   siteList: number[],
-  typeList: ClientType[]
+  typeList: ClientType[],
+  traceId: string
 ): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.post<SharingListResponse>(
@@ -85,8 +89,8 @@ export const updateSharingList = async (
       ? response.data
       : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
   } catch (error: unknown) {
-    const [logger] = getLoggers();
-    logger.error(`Update ACLs failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Update ACLs failed: ${error}`, traceId);
     throw error;
   }
 };
@@ -94,6 +98,11 @@ export const updateSharingList = async (
 export const getSiteList = async (): Promise<SiteDTO[]> => {
   const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
   return response.data;
+};
+
+export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {
+  const siteList = await getSiteList();
+  return siteList.filter((x) => x.visible !== false);
 };
 
 export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
@@ -106,6 +115,7 @@ export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => 
 export const addKeyPair = async (
   siteId: number,
   name: string,
+  traceId: string,
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
   try {
@@ -116,18 +126,19 @@ export const addKeyPair = async (
     });
     return response.data;
   } catch (error: unknown) {
-    const [logger] = getLoggers();
+    const { errorLogger } = getLoggers();
     let errorMessage = error;
     if (error instanceof AxiosError) {
       errorMessage = error.response?.data.message as string;
     }
-    logger.error(`Adding keypair failed: ${errorMessage}`);
+    errorLogger.error(`Get ACLs failed: ${errorMessage}`, traceId);
     throw error;
   }
 };
 
 export const setSiteClientTypes = async (
-  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
+  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
+  traceId: string
 ): Promise<void> => {
   const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial).join(',');
   try {
@@ -139,12 +150,12 @@ export const setSiteClientTypes = async (
     });
     return response.data;
   } catch (error: unknown) {
-    const [logger] = getLoggers();
+    const { errorLogger } = getLoggers();
     let errorMessage = error;
     if (error instanceof AxiosError) {
       errorMessage = error.response?.data.message as string;
     }
-    logger.error(`Update site client types failed: ${errorMessage}`);
+    errorLogger.error(`Update site client types failed: ${errorMessage}`, traceId);
     throw error;
   }
 };

@@ -2,6 +2,7 @@ import { useContext, useMemo } from 'react';
 
 import { Tooltip } from '../components/Core/Tooltip';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './accountInformation.scss';
@@ -39,5 +40,6 @@ function AccountInformation() {
 export const AccountInformationRoute: PortalRoute = {
   description: 'Participant Information',
   element: <AccountInformation />,
+  errorElement: <RouteErrorBoundary />,
   path: '/dashboard/info',
 };

@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { Participant, ParticipantStatus } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserRole } from '../entities/User';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { getSiteList } from '../services/adminServiceClient';
@@ -57,15 +57,19 @@ export function createUsersRouter() {
   });
 
   usersRouter.get('/current/participant', async (req: UserRequest, res) => {
-    const currentParticipant = await Participant.query().findOne({ id: req.user!.participantId });
-    const sites = await getSiteList();
-    const currentSite = sites.find((x) => x.id === currentParticipant?.siteId);
-    const allParticipantTypes = await ParticipantType.query();
-    const result = {
-      ...currentParticipant,
-      types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
-    };
-    return res.status(200).json(result);
+    try {
+      const currentParticipant = await Participant.query().findOne({ id: req.user!.participantId });
+      const sites = await getSiteList();
+      const currentSite = sites.find((x) => x.id === currentParticipant?.siteId);
+      const allParticipantTypes = await ParticipantType.query();
+      const result = {
+        ...currentParticipant,
+        types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
+      };
+      return res.status(200).json(result);
+    } catch (error: unknown) {
+      console.log(error);
+    }
   });
 
   usersRouter.use('/:userId', enrichWithUserFromParams);
@@ -75,8 +79,8 @@ export function createUsersRouter() {
   });
 
   usersRouter.post('/:userId/resendInvitation', async (req: UserRequest, res) => {
-    const [logger, errorLogger] = getLoggers();
-
+    const { infoLogger, errorLogger } = getLoggers();
+    const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
 
@@ -85,11 +89,17 @@ export function createUsersRouter() {
       return res.sendStatus(404);
     }
     if (resultLength > 1) {
-      errorLogger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
+      errorLogger.error(
+        `Multiple results received when loading user entry for ${req.user?.email}`,
+        traceId
+      );
       return res.sendStatus(500);
     }
 
-    logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
+    infoLogger.info(
+      `Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`,
+      traceId
+    );
     await sendInviteEmail(kcAdminClient, user[0]);
     return res.sendStatus(200);
   });

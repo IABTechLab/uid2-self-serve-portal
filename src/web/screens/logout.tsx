@@ -1,5 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
 
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
@@ -13,5 +14,6 @@ export const LogoutRoute: PortalRoute = {
   path: '/logout',
   description: 'Logout',
   element: <Logout />,
+  errorElement: <RouteErrorBoundary />,
   isHidden: true,
 };

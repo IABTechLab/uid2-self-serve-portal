@@ -6,6 +6,7 @@ import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
 import { ApiError } from '../utils/apiError';
+import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 function KeyPairsScreen() {
@@ -77,5 +78,6 @@ function KeyPairsScreen() {
 export const KeyPairRoute: PortalRoute = {
   description: 'Client Side Integration',
   element: <KeyPairsScreen />,
+  errorElement: <RouteErrorBoundary />,
   path: '/dashboard/keyPairs',
 };
