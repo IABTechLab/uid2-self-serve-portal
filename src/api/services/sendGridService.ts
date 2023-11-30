@@ -25,7 +25,10 @@ const findTemplate = (template: string): string => {
   throw Error('template not exist');
 };
 
-export const sendEmail = async ({ to, subject, templateData, template }: EmailArgs) => {
+export const sendEmail = async (
+  { to, subject, templateData, template }: EmailArgs,
+  traceId: string
+) => {
   const message = {
     from: UID2Sender,
     templateId: findTemplate(template),
@@ -43,8 +46,8 @@ export const sendEmail = async ({ to, subject, templateData, template }: EmailAr
   try {
     sgMail.send(message);
   } catch (err: unknown) {
-    const [logger] = getLoggers();
+    const { errorLogger } = getLoggers();
 
-    logger.error(`Send email failed: ${err}`);
+    errorLogger.error(`Send email failed: ${err}`, traceId);
   }
 };

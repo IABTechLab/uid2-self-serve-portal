@@ -20,7 +20,10 @@ const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'all
   allowed_sites: [],
 };
 
-export const getSharingList = async (siteId: number): Promise<SharingListResponse> => {
+export const getSharingList = async (
+  siteId: number,
+  traceId: string
+): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.get<SharingListResponse>(
       `/api/sharing/list/${siteId}`,
@@ -32,8 +35,8 @@ export const getSharingList = async (siteId: number): Promise<SharingListRespons
       ? response.data
       : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
   } catch (error: unknown) {
-    const [logger] = getLoggers();
-    logger.error(`Get ACLs failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Get ACLs failed: ${error}`, traceId);
     throw error;
   }
 };
@@ -42,7 +45,8 @@ export const updateSharingList = async (
   siteId: number,
   hash: number,
   siteList: number[],
-  typeList: ClientType[]
+  typeList: ClientType[],
+  traceId: string
 ): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.post<SharingListResponse>(
@@ -60,8 +64,8 @@ export const updateSharingList = async (
       ? response.data
       : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
   } catch (error: unknown) {
-    const [logger] = getLoggers();
-    logger.error(`Update ACLs failed: ${error}`);
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Update ACLs failed: ${error}`, traceId);
     throw error;
   }
 };

@@ -12,6 +12,7 @@ import {
   ParticipantStatus,
 } from '../entities/Participant';
 import { UserDTO, UserRole } from '../entities/User';
+import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { addKeyPair, getKeyPairsList, getSharingList } from '../services/adminServiceClient';
@@ -90,6 +91,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.post('/', async (req, res) => {
     try {
+      const traceId = getTraceId(req);
       const data = {
         ...ParticipantCreationPartial.parse(req.body),
         status: ParticipantStatus.AwaitingApproval,
@@ -101,7 +103,8 @@ export function createParticipantsRouter() {
 
       sendNewParticipantEmail(
         data,
-        data.types.map((t) => t.id)
+        data.types.map((t) => t.id),
+        traceId
       );
       return res.status(201).json(newParticipant);
     } catch (err) {
@@ -117,6 +120,7 @@ export function createParticipantsRouter() {
     isApproverCheck,
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      const traceId = getTraceId(req);
       const data = {
         ...ParticipantApprovalPartial.parse(req.body),
         status: ParticipantStatus.Approved,
@@ -135,7 +139,7 @@ export function createParticipantsRouter() {
         )
       );
       await updateParticipantAndTypes(participant!, data);
-      await sendParticipantApprovedEmail(users);
+      await sendParticipantApprovedEmail(users, traceId);
       await updateAuditTrailToProceed(auditTrail.id);
       return res.sendStatus(200);
     }
@@ -199,11 +203,12 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
       try {
-        const sharingList = await getSharingList(participant.siteId);
+        const sharingList = await getSharingList(participant.siteId, traceId);
         return res.status(200).json(sharingList);
       } catch (err) {
         if (err instanceof AxiosError && err.response?.status === 404) {
@@ -222,6 +227,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/add',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -232,12 +238,14 @@ export function createParticipantsRouter() {
         currentUser!.id,
         currentUser!.email,
         AuditAction.Add,
-        newParticipantSites
+        newParticipantSites,
+        traceId
       );
 
       const sharingParticipants = await addSharingParticipants(
         participant.siteId,
-        newParticipantSites
+        newParticipantSites,
+        traceId
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
@@ -254,6 +262,7 @@ export function createParticipantsRouter() {
     '/:participantId/keyPair/add',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -265,7 +274,8 @@ export function createParticipantsRouter() {
         currentUser!.email,
         AuditAction.Add,
         name,
-        disabled
+        disabled,
+        traceId
       );
 
       const keyPairs = await addKeyPair(participant.siteId, name, disabled);
@@ -296,6 +306,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/delete',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -306,12 +317,14 @@ export function createParticipantsRouter() {
         currentUser!.id,
         currentUser!.email,
         AuditAction.Delete,
-        sharingSitesToRemove
+        sharingSitesToRemove,
+        traceId
       );
 
       const sharingParticipants = await deleteSharingParticipants(
         participant.siteId,
-        sharingSitesToRemove
+        sharingSitesToRemove,
+        traceId
       );
 
       await updateAuditTrailToProceed(auditTrail.id);
@@ -327,6 +340,7 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission/shareWithTypes',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -336,10 +350,11 @@ export function createParticipantsRouter() {
         participant,
         currentUser!.id,
         currentUser!.email,
-        types
+        types,
+        traceId
       );
 
-      const sharingParticipants = await UpdateSharingTypes(participant.siteId, types);
+      const sharingParticipants = await UpdateSharingTypes(participant.siteId, types, traceId);
 
       await updateAuditTrailToProceed(auditTrail.id);
 

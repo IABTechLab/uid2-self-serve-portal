@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import expressWinston from 'express-winston';
 import winston from 'winston';
 import LokiTransport from 'winston-loki';
@@ -50,8 +51,21 @@ const errorLogger = winston.createLogger({
   ),
 });
 
+const infoLoggerWrapper = {
+  info: (message: string, traceId: string) => logger.info(`${message}, [traceId=${traceId}]`),
+};
+
+const errorLoggerWrapper = {
+  error: (message: string, traceId: string) =>
+    errorLogger.error(`${message}, [traceId=${traceId}]`),
+};
+
 export const getLoggers = () => {
-  return [logger, errorLogger];
+  return {
+    logger,
+    infoLogger: infoLoggerWrapper,
+    errorLogger: errorLoggerWrapper,
+  };
 };
 
 const headersToRedact = ['authorization'];
@@ -67,3 +81,7 @@ export const getErrorLoggingMiddleware = () =>
     winstonInstance: errorLogger,
     headerBlacklist: headersToRedact,
   });
+
+export const getTraceId = (request: Request): string => {
+  return request?.headers?.traceId?.toString() ?? '';
+};
