@@ -5,7 +5,13 @@ import { z } from 'zod';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-import { ClientType, KeyPairDTO, SharingListResponse, SiteDTO } from './adminServiceHelpers';
+import {
+  ClientType,
+  KeyPairDTO,
+  mapClientTypesToAdminEnums,
+  SharingListResponse,
+  SiteDTO,
+} from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -20,29 +26,6 @@ const adminServiceClient = axios.create({
 const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'allowed_types'> = {
   allowed_types: ['DSP'],
   allowed_sites: [],
-};
-
-const mapClientTypesToAdminEnums = (
-  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
-): string[] => {
-  return participantApprovalPartial.types.map((type) => {
-    let adminEnum = 'UNKNOWN';
-    switch (type.id) {
-      case 1:
-        adminEnum = 'DSP';
-        break;
-      case 2:
-        adminEnum = 'ADVERTISER';
-        break;
-      case 3:
-        adminEnum = 'DATA_PROVIDER';
-        break;
-      case 4:
-        adminEnum = 'PUBLISHER';
-        break;
-    }
-    return adminEnum;
-  });
 };
 
 export const getSharingList = async (
@@ -131,7 +114,7 @@ export const addKeyPair = async (
     if (error instanceof AxiosError) {
       errorMessage = error.response?.data.message as string;
     }
-    errorLogger.error(`Get ACLs failed: ${errorMessage}`, traceId);
+    errorLogger.error(`Add keypair failed: ${errorMessage}`, traceId);
     throw error;
   }
 };

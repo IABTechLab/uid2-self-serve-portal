@@ -57,19 +57,15 @@ export function createUsersRouter() {
   });
 
   usersRouter.get('/current/participant', async (req: UserRequest, res) => {
-    try {
-      const currentParticipant = await Participant.query().findOne({ id: req.user!.participantId });
-      const sites = await getSiteList();
-      const currentSite = sites.find((x) => x.id === currentParticipant?.siteId);
-      const allParticipantTypes = await ParticipantType.query();
-      const result = {
-        ...currentParticipant,
-        types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
-      };
-      return res.status(200).json(result);
-    } catch (error: unknown) {
-      console.log(error);
-    }
+    const currentParticipant = await Participant.query().findOne({ id: req.user!.participantId });
+    const sites = await getSiteList();
+    const currentSite = sites.find((x) => x.id === currentParticipant?.siteId);
+    const allParticipantTypes = await ParticipantType.query();
+    const result = {
+      ...currentParticipant,
+      types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
+    };
+    return res.status(200).json(result);
   });
 
   usersRouter.use('/:userId', enrichWithUserFromParams);
