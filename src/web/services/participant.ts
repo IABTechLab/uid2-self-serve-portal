@@ -254,6 +254,6 @@ export async function ApproveParticipantRequest(
       types: formData.types.map((typeId) => ({ id: typeId })),
     });
   } catch (e: unknown) {
-    throw backendError(e, 'Could not update email contact');
+    throw backendError(e, 'Could not approve participant');
   }
 }

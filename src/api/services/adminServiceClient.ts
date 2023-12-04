@@ -1,9 +1,17 @@
 /* eslint-disable camelcase */
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+import { z } from 'zod';
 
+import { ParticipantApprovalPartial } from '../entities/Participant';
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
-import { ClientType, KeyPairDTO, SharingListResponse, SiteDTO } from './adminServiceHelpers';
+import {
+  ClientType,
+  KeyPairDTO,
+  mapClientTypesToAdminEnums,
+  SharingListResponse,
+  SiteDTO,
+} from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -90,12 +98,47 @@ export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => 
 export const addKeyPair = async (
   siteId: number,
   name: string,
+  traceId: string,
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
-  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
-    site_id: siteId,
-    disabled,
-    name,
-  });
-  return response.data;
+  try {
+    const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
+      site_id: siteId,
+      disabled,
+      name,
+    });
+    return response.data;
+  } catch (error: unknown) {
+    const { errorLogger } = getLoggers();
+    let errorMessage = error;
+    if (error instanceof AxiosError) {
+      errorMessage = error.response?.data.message as string;
+    }
+    errorLogger.error(`Add keypair failed: ${errorMessage}`, traceId);
+    throw error;
+  }
+};
+
+export const setSiteClientTypes = async (
+  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
+  traceId: string
+): Promise<void> => {
+  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial).join(',');
+  try {
+    const response = await adminServiceClient.post('/api/site/set-types', null, {
+      params: {
+        id: participantApprovalPartial.siteId,
+        types: adminTypes,
+      },
+    });
+    return response.data;
+  } catch (error: unknown) {
+    const { errorLogger } = getLoggers();
+    let errorMessage = error;
+    if (error instanceof AxiosError) {
+      errorMessage = error.response?.data.message as string;
+    }
+    errorLogger.error(`Update site client types failed: ${errorMessage}`, traceId);
+    throw error;
+  }
 };

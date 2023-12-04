@@ -12,7 +12,11 @@ Don't delete old sections - just leave them towards the bottom of the file, and 
 
 ## Next (pending changes for the next coming release)
 
-1. Keycloak needs to update realm display name to UID2 Portal
+1. Admin must be deployed before the portal to include the Role changes needed for setting client types (sas-UID2-1782-approved-types-to-admin)
+
+## 0.7.5
+
+2. Keycloak needs to update realm display name to UID2 Portal
 
 ## 0.6.0
 

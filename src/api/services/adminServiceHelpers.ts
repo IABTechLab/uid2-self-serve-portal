@@ -1,3 +1,6 @@
+import { z } from 'zod';
+
+import { ParticipantApprovalPartial } from '../entities/Participant';
 import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
@@ -54,3 +57,26 @@ export function GetRecommendedRoles(roles: ParticipantTypeDTO[]) {
   const recommendedRolesWithDuplicates = roles.flatMap((r) => AllowedSiteRoles[r.typeName]);
   return [...new Set(recommendedRolesWithDuplicates)];
 }
+
+export const mapClientTypesToAdminEnums = (
+  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
+): string[] => {
+  return participantApprovalPartial.types.map((type) => {
+    let adminEnum = 'UNKNOWN';
+    switch (type.id) {
+      case 1:
+        adminEnum = 'DSP';
+        break;
+      case 2:
+        adminEnum = 'ADVERTISER';
+        break;
+      case 3:
+        adminEnum = 'DATA_PROVIDER';
+        break;
+      case 4:
+        adminEnum = 'PUBLISHER';
+        break;
+    }
+    return adminEnum;
+  });
+};

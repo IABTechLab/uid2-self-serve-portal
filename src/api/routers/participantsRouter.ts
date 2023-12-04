@@ -15,7 +15,12 @@ import { UserDTO, UserRole } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
-import { addKeyPair, getKeyPairsList, getSharingList } from '../services/adminServiceClient';
+import {
+  addKeyPair,
+  getKeyPairsList,
+  getSharingList,
+  setSiteClientTypes,
+} from '../services/adminServiceClient';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -133,6 +138,7 @@ export function createParticipantsRouter() {
       );
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
+      await setSiteClientTypes(data, traceId);
       await Promise.all(
         users.map((user) =>
           assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
@@ -278,7 +284,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      const keyPairs = await addKeyPair(participant.siteId, name, disabled);
+      const keyPairs = await addKeyPair(participant.siteId, name, traceId, disabled);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(201).json(keyPairs);
