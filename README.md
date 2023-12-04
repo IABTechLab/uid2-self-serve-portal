@@ -221,7 +221,7 @@ The following steps describe the minimal steps required to successfully log in t
 8. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
 9. Open the email and Click `Verify Email`
 10. Fill in the form however you want and submit the form
-11. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml)
+11. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
 12. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
 13. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
 
