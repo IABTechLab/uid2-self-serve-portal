@@ -8,7 +8,7 @@ import { UserRole } from '../entities/User';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { getSiteList } from '../services/adminServiceClient';
+import { getSite, getSiteList } from '../services/adminServiceClient';
 import {
   assignClientRoleToUser,
   deleteUserByEmail,
@@ -58,8 +58,12 @@ export function createUsersRouter() {
 
   usersRouter.get('/current/participant', async (req: UserRequest, res) => {
     const currentParticipant = await Participant.query().findOne({ id: req.user!.participantId });
-    const sites = await getSiteList();
-    const currentSite = sites.find((x) => x.id === currentParticipant?.siteId);
+
+    const currentSite =
+      currentParticipant?.siteId === undefined
+        ? undefined
+        : await getSite(currentParticipant?.siteId);
+
     const allParticipantTypes = await ParticipantType.query();
     const result = {
       ...currentParticipant,
