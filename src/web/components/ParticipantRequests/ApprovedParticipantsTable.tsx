@@ -28,9 +28,6 @@ export function ApprovedParticipantsTable({ participants }: ApprovedParticipants
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
-            {/* <th>Allowed API Roles</th>
-            <th>Name of Approver</th>
-            <th>Date of Approval</th> */}
             <th className='action'>Actions</th>
           </tr>
         </thead>
