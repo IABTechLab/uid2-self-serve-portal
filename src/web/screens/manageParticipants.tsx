@@ -1,13 +1,16 @@
 import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
+import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
 import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
+import { ApprovedParticipantsTable } from '../components/ParticipantRequests/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
 import {
   ApproveParticipantRequest,
+  GetApprovedParticipants,
   GetParticipantsAwaitingApproval,
   ParticipantApprovalFormDetails,
 } from '../services/participant';
@@ -18,7 +21,7 @@ import { PortalRoute } from './routeUtils';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
-    results: [ParticipantRequestDTO[], ParticipantTypeDTO[], SiteDTO[]];
+    results: [ParticipantRequestDTO[], ParticipantDTO[], ParticipantTypeDTO[], SiteDTO[]];
   };
 
   const reloader = useRevalidator();
@@ -42,15 +45,19 @@ function ManageParticipants() {
       </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.results}>
-          {([participantRequests, participantTypes]: [
+          {([participantRequests, participantApproved, participantTypes]: [
             ParticipantRequestDTO[],
+            ParticipantDTO[],
             ParticipantTypeDTO[]
           ]) => (
-            <ParticipantRequestsTable
-              participantRequests={participantRequests}
-              participantTypes={participantTypes}
-              onApprove={handleApproveParticipantRequest}
-            />
+            <div>
+              <ParticipantRequestsTable
+                participantRequests={participantRequests}
+                participantTypes={participantTypes}
+                onApprove={handleApproveParticipantRequest}
+              />
+              <ApprovedParticipantsTable participants={participantApproved} />
+            </div>
           )}
         </Await>
       </Suspense>
@@ -65,9 +72,15 @@ export const ManageParticipantsRoute: PortalRoute = {
   errorElement: <RouteErrorBoundary />,
   loader: async () => {
     const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
+    const participantsApproved = GetApprovedParticipants();
     const participantTypes = GetAllParticipantTypes();
     const sitesList = preloadSiteList();
-    const promises = Promise.all([participantsAwaitingApproval, participantTypes, sitesList]);
+    const promises = Promise.all([
+      participantsAwaitingApproval,
+      participantsApproved,
+      participantTypes,
+      sitesList,
+    ]);
     return defer({
       results: promises,
     });
