@@ -36,7 +36,7 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
-  getApprovedParticipant as getParticipantsApproved,
+  getParticipantsApproved,
   getParticipantsAwaitingApproval,
   ParticipantRequest,
   sendNewParticipantEmail,

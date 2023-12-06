@@ -73,7 +73,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
   return sites.map((s) => s.siteId);
 };
 
-export const getApprovedParticipant = async (): Promise<Participant[]> => {
+export const getParticipantsApproved = async (): Promise<Participant[]> => {
   return Participant.query().where('status', ParticipantStatus.Approved);
 };
 
