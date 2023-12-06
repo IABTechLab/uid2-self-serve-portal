@@ -12,6 +12,8 @@ Don't delete old sections - just leave them towards the bottom of the file, and 
 
 ## Next (pending changes for the next coming release)
 
+## 0.8.0
+
 1. Admin must be deployed before the portal to include the Role changes needed for setting client types (sas-UID2-1782-approved-types-to-admin)
 2. Admin must be deployed before the portal to include the Get Site By Id endpoint utilized (jss-UID2-2065-get-site-by-id)
 
