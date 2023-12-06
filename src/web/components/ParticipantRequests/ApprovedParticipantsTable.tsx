@@ -1,11 +1,11 @@
-import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
 import './ParticipantRequestsTable.scss';
 
 type ApprovedParticipantsTableProps = {
-  participants: ParticipantRequestDTO[];
+  participants: ParticipantDTO[];
 };
 
 function NoParticipants() {
@@ -22,14 +22,15 @@ function NoParticipants() {
 export function ApprovedParticipantsTable({ participants }: ApprovedParticipantsTableProps) {
   return (
     <div className='approved-participant-container'>
+      <h2>All Participants</h2>
       <table className='approved-participants-table'>
         <thead>
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
-            <th>Allowed API Roles</th>
+            {/* <th>Allowed API Roles</th>
             <th>Name of Approver</th>
-            <th>Date of Approval</th>
+            <th>Date of Approval</th> */}
             <th className='action'>Actions</th>
           </tr>
         </thead>

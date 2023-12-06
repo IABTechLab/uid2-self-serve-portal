@@ -1,9 +1,9 @@
-import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
+import { ParticipantDTO } from '../../../api/entities/Participant';
 
 import './ParticipantRequestItem.scss';
 
 type ApprovedParticipantProps = {
-  participant: ParticipantRequestDTO;
+  participant: ParticipantDTO;
 };
 
 export function ApprovedParticipantItem({ participant }: ApprovedParticipantProps) {
@@ -26,7 +26,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
       <td>
         <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
       </td>
-      <td>
+      {/* <td>
         <div className='participant-api-roles' />
       </td>
       <td>
@@ -35,6 +35,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
       <td>
         <div className='participant-approved-date' />
       </td>
+      */}
       <td className='action'>
         <div className='action-cell' />
       </td>
