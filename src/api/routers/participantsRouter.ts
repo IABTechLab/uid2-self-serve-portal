@@ -11,14 +11,17 @@ import {
   ParticipantSchema,
   ParticipantStatus,
 } from '../entities/Participant';
+import { ParticipantType } from '../entities/ParticipantType';
 import { UserDTO, UserRole } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
+import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
   getKeyPairsList,
   getSharingList,
+  getSiteList,
   setSiteClientTypes,
 } from '../services/adminServiceClient';
 import {
@@ -33,7 +36,7 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
-  getApprovedParticipant,
+  getApprovedParticipant as getParticipantsApproved,
   getParticipantsAwaitingApproval,
   ParticipantRequest,
   sendNewParticipantEmail,
@@ -95,9 +98,17 @@ export function createParticipantsRouter() {
     }
   );
 
-  participantsRouter.get('/list', isApproverCheck, async (req: ParticipantRequest, res) => {
-    const participants = await getApprovedParticipant();
-    const result = participants.map(p => )
+  participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
+    const participants = await getParticipantsApproved();
+    const sites = await getSiteList();
+    const allParticipantTypes = await ParticipantType.query();
+    const result = participants.map((p) => {
+      const currentSite = sites.find((x) => x.id === p?.siteId);
+      return {
+        ...p,
+        types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
+      };
+    });
     return res.status(200).json(result);
   });
 
