@@ -33,6 +33,7 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
+  getApprovedParticipant,
   getParticipantsAwaitingApproval,
   ParticipantRequest,
   sendNewParticipantEmail,
@@ -93,6 +94,12 @@ export function createParticipantsRouter() {
       return res.status(200).json(result);
     }
   );
+
+  participantsRouter.get('/list', isApproverCheck, async (req: ParticipantRequest, res) => {
+    const participants = await getApprovedParticipant();
+    const result = participants.map(p => )
+    return res.status(200).json(result);
+  });
 
   participantsRouter.post('/', async (req, res) => {
     try {

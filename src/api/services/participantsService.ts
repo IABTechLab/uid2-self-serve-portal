@@ -73,6 +73,10 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
   return sites.map((s) => s.siteId);
 };
 
+export const getApprovedParticipant = async (): Promise<Participant[]> => {
+  return Participant.query().where('status', ParticipantStatus.Approved);
+};
+
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
   return Participant.query().whereIn('siteId', siteIds).withGraphFetched('types');
 };
