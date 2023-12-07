@@ -24,6 +24,7 @@ import {
   getSiteList,
   setSiteClientTypes,
 } from '../services/adminServiceClient';
+import { SiteDTO } from '../services/adminServiceHelpers';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -100,10 +101,14 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
     const participants = await getParticipantsApproved();
-    const sites = await getSiteList();
+
+    const sitesList = await getSiteList();
+    const siteMap = new Map<number, SiteDTO>();
+    sitesList.forEach((s) => siteMap.set(s.id, s));
+
     const allParticipantTypes = await ParticipantType.query();
     const result = participants.map((p) => {
-      const currentSite = sites.find((x) => x.id === p?.siteId);
+      const currentSite = p?.siteId === undefined ? undefined : siteMap.get(p.siteId);
       return {
         ...p,
         types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
