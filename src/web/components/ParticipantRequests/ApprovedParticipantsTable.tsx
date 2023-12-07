@@ -28,7 +28,6 @@ export function ApprovedParticipantsTable({ participants }: ApprovedParticipants
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
-            <th className='action'>Actions</th>
           </tr>
         </thead>
 

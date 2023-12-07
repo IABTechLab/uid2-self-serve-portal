@@ -26,9 +26,6 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
       <td>
         <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
       </td>
-      <td className='action'>
-        <div className='action-cell' />
-      </td>
     </tr>
   );
 }
