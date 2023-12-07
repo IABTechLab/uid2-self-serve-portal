@@ -122,7 +122,7 @@ This will spawn 3 additional containers for Promtail, Loki and Grafana.
 
 Once running, log onto the Grafana UI from [here](http://localhost:3101). Use the username `admin` and password `admin`.
 
-Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Note: this url should match the value of `SSP_LOKI_HOST` in your `.env` file.
+Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Notes: When adding Loki, if the test query fails, try a query in the **Explore** tab it may have been added anyway. This url should match the value of `SSP_LOKI_HOST` in your `.env` file.
 
 The logs should now be available in the **Explore** tab to query - you may need to trigger some API requests in the UI to generate some logs. You can then debug requests by specifying the app name along with a traceId, for example:
 
@@ -198,6 +198,7 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 ## Setting up UI Dev Environment
 
 The following steps describe the minimal steps required to successfully log in to the portal UI. If you require a fully-functional portal, please perform the following steps as well as the steps described below in [Connecting to local admin service](README.md#connecting-to-local-admin-service).
+
 1. Set up Docker, as described above: [Docker](README.md#docker)
 2. Ensure your `SSP_KK_SECRET` matches the value in the Keycloak admin console. If it does not, please try [Reset your keycloak realm](./KeycloakAdvancedSetup.md#reset-realm). If all else fails, manually generate your own secret by following: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
 3. Run the following to install dependencies:
@@ -241,10 +242,11 @@ The following steps describe the minimal steps required to successfully log in t
 15. Return to the UI and you should be good to go!
 
 ### Connecting to local admin service
+
 Functionality relating to Sharing Permissions will require the admin service to be running locally. Perform the following steps to standup the admin service to develop and test admin-related functionality on the portal.
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
-1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally. 
-1. Ensure that you have a key in `admins.json` in `uid2-admin` with the `SHARING_PORTAL` role, and that key is in your `.env` as `SSP_ADMIN_SERVICE_CLIENT_KEY`. 
-    - You should be able to use an existing key in `admins.json`, rather than having to create a new one. 
-    - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file. 
+1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
+1. Ensure that you have a key in `admins.json` in `uid2-admin` with the `SHARING_PORTAL` role, and that key is in your `.env` as `SSP_ADMIN_SERVICE_CLIENT_KEY`.
+   - You should be able to use an existing key in `admins.json`, rather than having to create a new one.
+   - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file.

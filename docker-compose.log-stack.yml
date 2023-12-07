@@ -8,7 +8,7 @@ services:
   loki:
     image: grafana/loki:2.4.1
     ports:
-      - "3100:3100"
+      - '3100:3100'
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./config/loki-config.yaml:/etc/loki/local-config.yml
@@ -26,12 +26,10 @@ services:
       - loki
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:10.2.2
     ports:
-      - "3101:3101"
+      - '3101:3101'
     environment:
       - GF_SERVER_HTTP_PORT=3101
     networks:
       - loki
-
-
