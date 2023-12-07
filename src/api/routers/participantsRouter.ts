@@ -106,13 +106,18 @@ export function createParticipantsRouter() {
     const siteMap = new Map<number, SiteDTO>(sitesList.map((s) => [s.id, s]));
 
     const allParticipantTypes = await ParticipantType.query();
-    const result = participants.map((p) => {
-      const currentSite = p?.siteId === undefined ? undefined : siteMap.get(p.siteId);
-      return {
-        ...p,
-        types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
-      };
-    });
+    const result = participants
+      .map((p) => {
+        const currentSite = p?.siteId === undefined ? undefined : siteMap.get(p.siteId);
+        return {
+          ...p,
+          types: mapClientTypeToParticipantType(
+            currentSite?.clientTypes || [],
+            allParticipantTypes
+          ),
+        };
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
     return res.status(200).json(result);
   });
 
