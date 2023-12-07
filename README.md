@@ -122,7 +122,7 @@ This will spawn 3 additional containers for Promtail, Loki and Grafana.
 
 Once running, log onto the Grafana UI from [here](http://localhost:3101). Use the username `admin` and password `admin`.
 
-Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Notes: When adding Loki, if the test query fails, try a query in the **Explore** tab it may have been added anyway. This url should match the value of `SSP_LOKI_HOST` in your `.env` file.
+Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Notes: When adding Loki, if the test query fails, try a query in the **Explore** tab as it may have been added and working anyway. This url should match the value of `SSP_LOKI_HOST` in your `.env` file.
 
 The logs should now be available in the **Explore** tab to query - you may need to trigger some API requests in the UI to generate some logs. You can then debug requests by specifying the app name along with a traceId, for example:
 
