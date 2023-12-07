@@ -50,14 +50,14 @@ function ManageParticipants() {
             ParticipantDTO[],
             ParticipantTypeDTO[]
           ]) => (
-            <div>
+            <>
               <ParticipantRequestsTable
                 participantRequests={participantRequests}
                 participantTypes={participantTypes}
                 onApprove={handleApproveParticipantRequest}
               />
               <ApprovedParticipantsTable participants={participantApproved} />
-            </div>
+            </>
           )}
         </Await>
       </Suspense>

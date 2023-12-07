@@ -30,7 +30,10 @@ export function ParticipantRequestsTable({
 }: ParticipantRequestsTableProps) {
   return (
     <div className='participant-requests-container'>
-      <h2>{participantRequests.length} Participants Pending Approval</h2>
+      <h2>
+        {participantRequests.length}{' '}
+        {participantRequests.length === 1 ? 'Participant' : 'Participants'} Pending Approval
+      </h2>
       <table className='participant-requests-table'>
         <thead>
           <tr>
