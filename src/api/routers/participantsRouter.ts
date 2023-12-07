@@ -103,8 +103,7 @@ export function createParticipantsRouter() {
     const participants = await getParticipantsApproved();
 
     const sitesList = await getSiteList();
-    const siteMap = new Map<number, SiteDTO>();
-    sitesList.forEach((s) => siteMap.set(s.id, s));
+    const siteMap = new Map<number, SiteDTO>(sitesList.map((s) => [s.id, s]));
 
     const allParticipantTypes = await ParticipantType.query();
     const result = participants.map((p) => {
