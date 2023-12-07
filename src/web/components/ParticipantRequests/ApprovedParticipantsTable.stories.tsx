@@ -16,28 +16,10 @@ export const AllParticipants: Story = {
   args: {
     participants: [
       {
-        id: 1,
-        name: 'Participant 1',
-        types: [],
-        status: ParticipantStatus.Approved,
-        allowSharing: true,
-        completedRecommendations: false,
-        users: [
-          {
-            id: 1,
-            email: 'test1@example.com',
-            firstName: 'First Test User 1',
-            lastName: 'Last Test User 1',
-            role: UserRole.Marketing,
-            acceptedTerms: false,
-          },
-        ],
-      },
-      {
         id: 2,
         name: 'Participant 2',
         types: [{ id: 1, typeName: 'Type 1' }],
-        status: ParticipantStatus.AwaitingApproval,
+        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         users: [
@@ -58,7 +40,7 @@ export const AllParticipants: Story = {
           { id: 1, typeName: 'Type 1' },
           { id: 2, typeName: 'Type 2' },
         ],
-        status: ParticipantStatus.AwaitingApproval,
+        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         users: [
@@ -80,7 +62,7 @@ export const AllParticipants: Story = {
           { id: 2, typeName: 'Type 2' },
           { id: 3, typeName: 'Type 3' },
         ],
-        status: ParticipantStatus.AwaitingApproval,
+        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         users: [
@@ -103,7 +85,7 @@ export const AllParticipants: Story = {
           { id: 3, typeName: 'Type 3' },
           { id: 4, typeName: 'Type 4' },
         ],
-        status: ParticipantStatus.AwaitingApproval,
+        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         users: [
