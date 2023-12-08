@@ -88,6 +88,17 @@ export async function GetParticipantsAwaitingApproval() {
   }
 }
 
+export async function GetApprovedParticipants() {
+  try {
+    const result = await axios.get<ParticipantDTO[]>(`/participants/approved`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load approved participants');
+  }
+}
+
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
   return axios.post(`/participants/${participantId}/invitexx`, formData);
 }

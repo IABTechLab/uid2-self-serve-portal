@@ -74,6 +74,11 @@ export const getSiteList = async (): Promise<SiteDTO[]> => {
   return response.data;
 };
 
+export const getSite = async (siteId: number): Promise<SiteDTO> => {
+  const response = await adminServiceClient.get<SiteDTO>(`/api/site/${siteId}`);
+  return response.data;
+};
+
 export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {
   const siteList = await getSiteList();
   return siteList.filter((x) => x.visible !== false);
