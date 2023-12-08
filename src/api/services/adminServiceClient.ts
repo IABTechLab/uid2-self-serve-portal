@@ -28,25 +28,16 @@ const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'all
   allowed_sites: [],
 };
 
-export const getSharingList = async (
-  siteId: number,
-  traceId: string
-): Promise<SharingListResponse> => {
-  try {
-    const response = await adminServiceClient.get<SharingListResponse>(
-      `/api/sharing/list/${siteId}`,
-      {
-        validateStatus: (status) => status >= 200 && status < 300,
-      }
-    );
-    return response.data.allowed_sites
-      ? response.data
-      : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
-  } catch (error: unknown) {
-    const { errorLogger } = getLoggers();
-    errorLogger.error(`Get ACLs failed: ${error}`, traceId);
-    throw error;
-  }
+export const getSharingList = async (siteId: number): Promise<SharingListResponse> => {
+  const response = await adminServiceClient.get<SharingListResponse>(
+    `/api/sharing/list/${siteId}`,
+    {
+      validateStatus: (status) => status >= 200 && status < 300,
+    }
+  );
+  return response.data.allowed_sites
+    ? response.data
+    : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
 };
 
 export const updateSharingList = async (
@@ -98,47 +89,25 @@ export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => 
 export const addKeyPair = async (
   siteId: number,
   name: string,
-  traceId: string,
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
-  try {
-    const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
-      site_id: siteId,
-      disabled,
-      name,
-    });
-    return response.data;
-  } catch (error: unknown) {
-    const { errorLogger } = getLoggers();
-    let errorMessage = error;
-    if (error instanceof AxiosError) {
-      errorMessage = error.response?.data.message as string;
-    }
-    errorLogger.error(`Add keypair failed: ${errorMessage}`, traceId);
-    throw error;
-  }
+  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
+    site_id: siteId,
+    disabled,
+    name,
+  });
+  return response.data;
 };
 
 export const setSiteClientTypes = async (
-  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
-  traceId: string
+  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
 ): Promise<void> => {
   const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial).join(',');
-  try {
-    const response = await adminServiceClient.post('/api/site/set-types', null, {
-      params: {
-        id: participantApprovalPartial.siteId,
-        types: adminTypes,
-      },
-    });
-    return response.data;
-  } catch (error: unknown) {
-    const { errorLogger } = getLoggers();
-    let errorMessage = error;
-    if (error instanceof AxiosError) {
-      errorMessage = error.response?.data.message as string;
-    }
-    errorLogger.error(`Update site client types failed: ${errorMessage}`, traceId);
-    throw error;
-  }
+  const response = await adminServiceClient.post('/api/site/set-types', null, {
+    params: {
+      id: participantApprovalPartial.siteId,
+      types: adminTypes,
+    },
+  });
+  return response.data;
 };

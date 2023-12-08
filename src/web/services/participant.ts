@@ -89,11 +89,11 @@ export async function GetParticipantsAwaitingApproval() {
 }
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
-  try {
-    return await axios.post(`/participants/${participantId}/invite`, formData);
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not invite participants');
-  }
+  // try {
+  return axios.post(`/participants/${participantId}/invitexxx`, formData);
+  // } catch (e: unknown) {
+  //  throw backendError(e, 'Could not invite participants');
+  // }
 }
 
 export type UpdateParticipantForm = {
