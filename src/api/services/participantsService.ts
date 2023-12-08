@@ -78,7 +78,7 @@ export const getApprovedParticipant = async (): Promise<Participant[]> => {
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
-  return Participant.query().whereIn('siteId', siteIds).withGraphFetched('typesxxx');
+  return Participant.query().whereIn('siteId', siteIds).withGraphFetched('types');
 };
 
 export const addSharingParticipants = async (
