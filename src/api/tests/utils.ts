@@ -31,9 +31,9 @@ function useTestServer() {
   });
   beforeAll(async () => {
     const serverDetails = configureAndStartApi(false);
-    api = serverDetails.server;
+    // api = serverDetails.server;
     routers = serverDetails.routers;
-    terminator = createHttpTerminator({ server: api });
+    // terminator = createHttpTerminator({ server: api });
 
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
       username: 'test_user@example.com',
