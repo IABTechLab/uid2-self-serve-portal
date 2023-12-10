@@ -4,7 +4,7 @@ This document provides detailed instructions on more advanced Keycloak setup top
 
 ## Generating SSP_KK_SECRET
 
-It is preferred that you use the `SSP_KK_SECRET` that is stored in `.env`, and you set the secret in keycloak by [resetting your realm](./KeycloakAdvancedSetup.md#reset-realm). 
+It is preferred that you use the `SSP_KK_SECRET` that is stored in `.env`, and you set the secret in keycloak by [resetting your realm](./KeycloakAdvancedSetup.md#reset-realm).
 
 However, if you must generate a new client secret, please do the following:
 
@@ -41,7 +41,7 @@ The following instructions detail how to assign a specific role to a user in Key
 1. From the Keycloak admin console, select `Users` from the left side menu.
 2. Locate the user from the user list. You can use the search bar if necessary.
 3. Click on the desired username to open the user's detail page. Then, select the `Role Mapping` tab.
-4. Click `Assign role`. If the role you want to assign isn't immediately visible, select `Filter by realm roles` to open the dropdown menu, and then switch to `Filter by clients`.
+4. Click `Assign role`. If the role you want to assign isn't immediately visible, click `Filter by realm roles` to open the dropdown menu, and then select `Filter by clients`.
 5. Locate the role in the client roles list. Tick the checkbox next to the role, and then click `Assign`.
 
 Note that you will need the `api-participant-member` role for much of the portal functionality
