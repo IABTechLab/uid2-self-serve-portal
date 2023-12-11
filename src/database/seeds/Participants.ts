@@ -8,7 +8,7 @@ import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
   ParticipantsType & { type: string },
-  'id' | 'location' | 'siteId' | 'types' | 'users'
+  'id' | 'location' | 'siteId' | 'types' | 'users' | 'roles'
 >[] = [
   {
     name: 'Publisher example',
@@ -65,7 +65,7 @@ export async function CreateParticipant(
   knex: Knex,
   details: Optional<
     ParticipantsType,
-    'id' | 'allowSharing' | 'location' | 'siteId' | 'types' | 'users'
+    'id' | 'allowSharing' | 'location' | 'siteId' | 'types' | 'users' | 'roles'
   >,
   type: string
 ) {
@@ -76,6 +76,7 @@ export async function CreateParticipant(
       siteId: details.siteId,
     })
     .returning('id');
+
   const participantType = await knex('participantTypes').where('typeName', type);
   await knex('participantsToTypes').insert<{
     participantId: number;
@@ -84,6 +85,18 @@ export async function CreateParticipant(
     participantId: participant[0].id as number,
     participantTypeId: participantType[0].id as number,
   });
+
+  await details.roles?.forEach(async (role) => {
+    const apiRole = await knex('apiRoles').where('roleName', role);
+    await knex('participantsToRoles').insert<{
+      participantId: number;
+      apiRoleId: number;
+    }>({
+      participantId: participant[0].id as number,
+      apiRoleId: apiRole[0].id as number,
+    });
+  });
+
   return parseInt(participant[0].id as string, 10);
 }
 
