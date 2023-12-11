@@ -29,6 +29,18 @@ export class Participant extends BaseModel {
         to: 'participantTypes.id',
       },
     },
+    roles: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'ApiRole',
+      join: {
+        from: 'participants.id',
+        through: {
+          from: 'participantsToRoles.apiRoleId',
+          to: 'participantsToRoles.participantId',
+        },
+        to: 'apiRoles.id',
+      },
+    },
     users: {
       relation: Model.HasManyRelation,
       modelClass: 'User',
