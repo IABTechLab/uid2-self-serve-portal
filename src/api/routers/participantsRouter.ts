@@ -165,7 +165,7 @@ export function createParticipantsRouter() {
       );
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
-      await setSiteClientTypes(data, traceId);
+      await setSiteClientTypes(data);
       await Promise.all(
         users.map((user) =>
           assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
@@ -236,12 +236,11 @@ export function createParticipantsRouter() {
     '/:participantId/sharingPermission',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
       try {
-        const sharingList = await getSharingList(participant.siteId, traceId);
+        const sharingList = await getSharingList(participant.siteId);
         return res.status(200).json(sharingList);
       } catch (err) {
         if (err instanceof AxiosError && err.response?.status === 404) {
@@ -311,7 +310,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      const keyPairs = await addKeyPair(participant.siteId, name, traceId, disabled);
+      const keyPairs = await addKeyPair(participant.siteId, name, disabled);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(201).json(keyPairs);

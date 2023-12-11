@@ -1,5 +1,6 @@
 import 'express-async-errors';
 
+import { AxiosError } from 'axios';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
@@ -170,7 +171,26 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     const traceId = getTraceId(req);
     errorLogger.error(`Fallback error handler invoked: ${err.message}`, traceId);
-    if (err.statusCode === 401) {
+    let code = 500;
+    if (err instanceof AxiosError) {
+      errorLogger.error(`API Error: ${err.response?.data?.message}`, traceId);
+      errorLogger.error(err.stack!, traceId);
+      code = err.response?.status!;
+    } else if (err.stack) {
+      errorLogger.error(err.stack as string, traceId);
+      if (err.statusCode) {
+        code = err.statusCode as number;
+      }
+    } else {
+      errorLogger.error(err as string, traceId);
+    }
+
+    if (code === 400) {
+      res.status(400).json({
+        message: 'Invalid request.',
+        errorHash: req.headers.traceId,
+      });
+    } else if (code === 401) {
       res.status(401).json({
         message: 'Unauthorized. You do not have the necessary permissions.',
         errorHash: req.headers.traceId,

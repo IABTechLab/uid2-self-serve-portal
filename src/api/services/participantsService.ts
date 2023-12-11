@@ -86,7 +86,7 @@ export const addSharingParticipants = async (
   siteIds: number[],
   traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId, traceId);
+  const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
   const response = await updateSharingList(
     participantSiteId,
@@ -103,7 +103,7 @@ export const deleteSharingParticipants = async (
   siteIds: number[],
   traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId, traceId);
+  const sharingListResponse = await getSharingList(participantSiteId);
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
@@ -146,7 +146,7 @@ export const UpdateSharingTypes = async (
   types: ClientType[],
   traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId, traceId);
+  const sharingListResponse = await getSharingList(participantSiteId);
   return updateSharingList(
     participantSiteId,
     sharingListResponse.hash,
