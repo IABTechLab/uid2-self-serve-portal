@@ -149,6 +149,7 @@ module.exports = {
         'react/require-default-props': 'off',
         'react/destructuring-assignment': 'off',
         'no-unused-vars': 'off',
+        'class-methods-use-this': 'off',
         '@typescript-eslint/no-unused-vars': [
           'warn',
           {
