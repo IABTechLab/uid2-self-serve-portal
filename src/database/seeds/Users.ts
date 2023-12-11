@@ -13,6 +13,7 @@ const sampleParticipant = {
   status: ParticipantStatus.AwaitingApproval,
   allowSharing: true,
   location: 'Sydney',
+  roles: [],
   completedRecommendations: false,
 };
 const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
