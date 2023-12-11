@@ -100,7 +100,7 @@ export async function GetApprovedParticipants() {
 }
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
-  return axios.post(`/participants/${participantId}/invitexx`, formData);
+  return axios.post(`/participants/${participantId}/invite`, formData);
 }
 
 export type UpdateParticipantForm = {

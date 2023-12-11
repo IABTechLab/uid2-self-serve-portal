@@ -54,11 +54,15 @@ function TeamMembers() {
   };
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
-    const response = await InviteTeamMember(formData, participant!.id);
-    if (response.status === 201) {
-      handleSuccessPopup('Team member added.');
+    try {
+      const response = await InviteTeamMember(formData, participant!.id);
+      if (response.status === 201) {
+        handleSuccessPopup('Team member added.');
+      }
+      onTeamMembersUpdated();
+    } catch (e: unknown) {
+      handleErrorPopup(e as Error);
     }
-    onTeamMembersUpdated();
   };
 
   const handleRemoveTeamMember = async (userId: number) => {
