@@ -8,6 +8,7 @@ import { CreateParticipant } from './Participants';
 
 type UserType = ModelObject<User>;
 
+// TODO ADD PROPER ROLES
 const sampleParticipant = {
   name: 'Awaiting Approval',
   status: ParticipantStatus.AwaitingApproval,

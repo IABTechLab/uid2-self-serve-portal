@@ -4,6 +4,7 @@ import { Optional } from 'utility-types';
 
 import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
+// TODO ADD PROPER ROLES
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
   ParticipantsType & { type: string },
