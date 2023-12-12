@@ -16,7 +16,7 @@ export async function up(knex: Knex): Promise<void> {
 
   await knex.schema.createTable('participantsToApiRoles', (table) => {
     table.integer('participantId').references('participants.id').onDelete('CASCADE');
-    table.integer('apiRoleId').references('id').inTable('apiRoles').onDelete('CASCADE');
+    table.integer('apiRoleId').references('id').inTable('apiRoles');
     table.primary(['participantId', 'apiRoleId']);
   });
 }
