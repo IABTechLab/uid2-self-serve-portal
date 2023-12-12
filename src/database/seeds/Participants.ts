@@ -6,7 +6,7 @@ import { Participant, ParticipantStatus } from '../../api/entities/Participant';
 
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
-  ParticipantsType & { type: string; apiRolesString: string[] },
+  ParticipantsType & { type: string; apiRoleNames: string[] },
   'id' | 'location' | 'siteId' | 'types' | 'users' | 'apiRoles'
 >[] = [
   {
@@ -16,7 +16,7 @@ const sampleData: Optional<
     type: 'Publisher',
     location: 'Sydney',
     siteId: 124,
-    apiRolesString: ['GENERATOR', 'SHARER'],
+    apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
   },
   {
@@ -26,7 +26,7 @@ const sampleData: Optional<
     allowSharing: true,
     location: 'Sydney',
     siteId: 123,
-    apiRolesString: ['ID_READER', 'SHARER'],
+    apiRoleNames: ['ID_READER', 'SHARER'],
     completedRecommendations: false,
   },
   {
@@ -36,7 +36,7 @@ const sampleData: Optional<
     type: 'Data Provider',
     location: 'Sydney',
     siteId: 125,
-    apiRolesString: ['MAPPER', 'SHARER'],
+    apiRoleNames: ['MAPPER', 'SHARER'],
     completedRecommendations: false,
   },
   {
@@ -46,7 +46,7 @@ const sampleData: Optional<
     type: 'Advertiser',
     location: 'Sydney',
     siteId: 126,
-    apiRolesString: ['MAPPER', 'SHARER'],
+    apiRoleNames: ['MAPPER', 'SHARER'],
     completedRecommendations: false,
   },
   {
@@ -55,7 +55,7 @@ const sampleData: Optional<
     status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
     location: 'Sydney',
-    apiRolesString: ['GENERATOR', 'SHARER'],
+    apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
   },
 ];
@@ -67,7 +67,7 @@ export async function CreateParticipant(
     'id' | 'allowSharing' | 'location' | 'siteId' | 'types' | 'users' | 'apiRoles'
   >,
   type: string,
-  apiRolesString: string[]
+  apiRoleNames: string[]
 ) {
   const participant = await knex('participants')
     .insert({
@@ -86,7 +86,7 @@ export async function CreateParticipant(
     participantTypeId: participantType[0].id as number,
   });
 
-  await apiRolesString.forEach(async (role) => {
+  await apiRoleNames.forEach(async (role) => {
     const apiRole = await knex('apiRoles').where('roleName', role);
     await knex('participantsToApiRoles').insert<{
       participantId: number;
@@ -105,7 +105,7 @@ export async function seed(knex: Knex): Promise<void> {
   await knex('participants').whereILike('name', '%example').del();
   // Inserts seed entries
   const promises = sampleData.map((sample) =>
-    CreateParticipant(knex, sample, sample.type, sample.apiRolesString)
+    CreateParticipant(knex, sample, sample.type, sample.apiRoleNames)
   );
   await Promise.all(promises);
 }
