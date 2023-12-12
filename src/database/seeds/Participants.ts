@@ -3,6 +3,7 @@ import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
 import { Participant, ParticipantStatus } from '../../api/entities/Participant';
+import { AllowedSiteRoles } from '../../api/services/adminServiceHelpers';
 
 // TODO ADD PROPER ROLES
 type ParticipantsType = ModelObject<Participant>;
@@ -16,7 +17,6 @@ const sampleData: Optional<
     status: ParticipantStatus.Approved,
     type: 'Publisher',
     location: 'Sydney',
-    roles: [],
     siteId: 124,
     completedRecommendations: false,
   },
@@ -26,7 +26,6 @@ const sampleData: Optional<
     type: 'DSP',
     allowSharing: true,
     location: 'Sydney',
-    roles: [],
     siteId: 123,
     completedRecommendations: false,
   },
@@ -36,7 +35,6 @@ const sampleData: Optional<
     allowSharing: true,
     type: 'Data Provider',
     location: 'Sydney',
-    roles: [],
     siteId: 125,
     completedRecommendations: false,
   },
@@ -46,7 +44,6 @@ const sampleData: Optional<
     status: ParticipantStatus.Approved,
     type: 'Advertiser',
     location: 'Sydney',
-    roles: [],
     siteId: 126,
     completedRecommendations: false,
   },
@@ -55,7 +52,6 @@ const sampleData: Optional<
     allowSharing: true,
     status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
-    roles: [],
     location: 'Sydney',
     completedRecommendations: false,
   },
@@ -86,7 +82,7 @@ export async function CreateParticipant(
     participantTypeId: participantType[0].id as number,
   });
 
-  await details.roles?.forEach(async (role) => {
+  await AllowedSiteRoles[type].forEach(async (role) => {
     const apiRole = await knex('apiRoles').where('roleName', role);
     await knex('participantsToRoles').insert<{
       participantId: number;

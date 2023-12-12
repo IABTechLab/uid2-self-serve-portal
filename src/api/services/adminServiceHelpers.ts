@@ -46,7 +46,7 @@ export type KeyPairDTO = {
   name?: string;
 };
 
-const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
+export const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
   [ParticipantTypeData.Advertiser.typeName]: ['MAPPER', 'SHARER'],
   [ParticipantTypeData.DataProvider.typeName]: ['MAPPER', 'SHARER'],
   [ParticipantTypeData.DSP.typeName]: ['ID_READER', 'SHARER'],
