@@ -8,7 +8,7 @@ import { AllowedSiteRoles } from '../../api/services/adminServiceHelpers';
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
   ParticipantsType & { type: string },
-  'id' | 'location' | 'siteId' | 'types' | 'users' | 'roles'
+  'id' | 'location' | 'siteId' | 'types' | 'users' | 'apiRoles'
 >[] = [
   {
     name: 'Publisher example',
@@ -60,7 +60,7 @@ export async function CreateParticipant(
   knex: Knex,
   details: Optional<
     ParticipantsType,
-    'id' | 'allowSharing' | 'location' | 'siteId' | 'types' | 'users' | 'roles'
+    'id' | 'allowSharing' | 'location' | 'siteId' | 'types' | 'users' | 'apiRoles'
   >,
   type: string
 ) {
