@@ -1,10 +1,5 @@
 import { Knex } from 'knex';
 
-import { ApiRole } from '../../api/entities/ApiRole';
-import { Participant } from '../../api/entities/Participant';
-import { getSiteList } from '../../api/services/adminServiceClient';
-import { SiteDTO } from '../../api/services/adminServiceHelpers';
-
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('apiRoles', (table) => {
     table.increments('id').primary();
