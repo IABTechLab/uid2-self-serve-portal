@@ -28,7 +28,7 @@ export class ApiRole extends BaseModel {
 
 export type ApiRoleDTO = ModelObjectOpt<ApiRole>;
 
-export const ApiRoleTypeSchema = z.object({
+export const ApiRoleSchema = z.object({
   id: z.number(),
   roleName: z.string().optional(),
 });
