@@ -30,14 +30,14 @@ export class Participant extends BaseModel {
         to: 'participantTypes.id',
       },
     },
-    roles: {
+    apiRoles: {
       relation: Model.ManyToManyRelation,
       modelClass: 'ApiRole',
       join: {
         from: 'participants.id',
         through: {
-          from: 'participantsToRoles.apiRoleId',
-          to: 'participantsToRoles.participantId',
+          from: 'participantsToApiRoles.apiRoleId',
+          to: 'participantsToApiRoles.participantId',
         },
         to: 'apiRoles.id',
       },
@@ -67,7 +67,7 @@ export class Participant extends BaseModel {
   declare siteId?: number;
   declare location?: string;
   declare types?: ParticipantType[];
-  declare roles?: ApiRole[];
+  declare apiRoles?: ApiRole[];
   declare users?: User[];
 }
 
@@ -82,7 +82,7 @@ export const ParticipantSchema = z.object({
   name: z.string(),
   status: z.nativeEnum(ParticipantStatus),
   types: z.array(ParticipantTypeSchema).optional(),
-  roles: z.array(ApiRoleTypeSchema).optional(),
+  apiRoles: z.array(ApiRoleTypeSchema).optional(),
   users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
   location: z.string().optional(),

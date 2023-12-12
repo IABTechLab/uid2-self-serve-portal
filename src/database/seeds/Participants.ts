@@ -83,7 +83,7 @@ export async function CreateParticipant(
 
   await AllowedSiteRoles[type].forEach(async (role) => {
     const apiRole = await knex('apiRoles').where('roleName', role);
-    await knex('participantsToRoles').insert<{
+    await knex('participantsToApiRoles').insert<{
       participantId: number;
       apiRoleId: number;
     }>({

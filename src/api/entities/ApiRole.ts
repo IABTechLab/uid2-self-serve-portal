@@ -15,8 +15,8 @@ export class ApiRole extends BaseModel {
       join: {
         from: 'apiRoles.id',
         through: {
-          from: 'participantsToRoles.apiRoleId',
-          to: 'participantsToRoles.participantId',
+          from: 'participantsToApiRoles.apiRoleId',
+          to: 'participantsToApiRoles.participantId',
         },
         to: 'participants.id',
       },

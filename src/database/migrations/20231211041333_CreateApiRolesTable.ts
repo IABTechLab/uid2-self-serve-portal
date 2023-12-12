@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
     })
   );
 
-  await knex.schema.createTable('participantsToRoles', (table) => {
+  await knex.schema.createTable('participantsToApiRoles', (table) => {
     table.integer('participantId').references('participants.id').onDelete('CASCADE');
     table.integer('apiRoleId').references('id').inTable('apiRoles').onDelete('CASCADE');
     table.primary(['participantId', 'apiRoleId']);
@@ -22,6 +22,6 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex.schema.dropTableIfExists('participantsToRoles');
+  await knex.schema.dropTableIfExists('participantsToApiRoles');
   await knex.schema.dropTableIfExists('apiRoles');
 }
