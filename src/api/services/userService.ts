@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { injectable } from 'inversify';
 import { z } from 'zod';
 
