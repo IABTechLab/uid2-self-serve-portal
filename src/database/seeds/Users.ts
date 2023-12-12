@@ -40,6 +40,9 @@ export async function seed(knex: Knex): Promise<void> {
     .del();
 
   // Inserts seed entries
-  const participantId = await CreateParticipant(knex, sampleParticipant, 'Advertiser');
+  const participantId = await CreateParticipant(knex, sampleParticipant, 'Advertiser', [
+    'MAPPER',
+    'SHARER',
+  ]);
   await knex('users').insert(sampleData.map((user) => ({ ...user, participantId })));
 }

@@ -1,6 +1,7 @@
 import { Model } from 'objection';
 import { z } from 'zod';
 
+import { ApiRole, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
@@ -29,6 +30,18 @@ export class Participant extends BaseModel {
         to: 'participantTypes.id',
       },
     },
+    apiRoles: {
+      relation: Model.ManyToManyRelation,
+      modelClass: 'ApiRole',
+      join: {
+        from: 'participants.id',
+        through: {
+          from: 'participantsToApiRoles.apiRoleId',
+          to: 'participantsToApiRoles.participantId',
+        },
+        to: 'apiRoles.id',
+      },
+    },
     users: {
       relation: Model.HasManyRelation,
       modelClass: 'User',
@@ -54,6 +67,7 @@ export class Participant extends BaseModel {
   declare siteId?: number;
   declare location?: string;
   declare types?: ParticipantType[];
+  declare apiRoles?: ApiRole[];
   declare users?: User[];
 }
 
@@ -68,6 +82,7 @@ export const ParticipantSchema = z.object({
   name: z.string(),
   status: z.nativeEnum(ParticipantStatus),
   types: z.array(ParticipantTypeSchema).optional(),
+  apiRoles: z.array(ApiRoleSchema).optional(),
   users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
   location: z.string().optional(),
