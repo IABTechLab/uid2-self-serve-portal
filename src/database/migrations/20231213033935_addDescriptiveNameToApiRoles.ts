@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex('apiRoles').where({ roleName: 'MAPPER' }).update({ externalName: 'UID2 Creator' });
   await knex('apiRoles').where({ roleName: 'ID_READER' }).update({ externalName: 'Decryptor' });
   await knex('apiRoles').where({ roleName: 'SHARER' }).update({ externalName: 'Securer' });
-  await knex('apiRoles').where({ roleName: 'OPTOUT' }).update({ externalName: 'OPTOUT' });
+  await knex('apiRoles').where({ roleName: 'OPTOUT' }).update({ externalName: 'Opt-Out' });
 
   await knex('apiRoles')
     .whereNull('externalName')
