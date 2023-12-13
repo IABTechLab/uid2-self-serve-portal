@@ -21,8 +21,8 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
   function getApiRoles(currApiRoles?: ApprovedParticipantProps['participant']['apiRoles']) {
     if (!currApiRoles) return null;
     return currApiRoles.map((role) => (
-      <div className='participant-request-api-role-label' key={role.roleName}>
-        {role.roleName}
+      <div className='participant-request-api-role-label' key={role.externalName}>
+        {role.externalName}
       </div>
     ));
   }
