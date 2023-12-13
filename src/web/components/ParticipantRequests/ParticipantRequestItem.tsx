@@ -48,7 +48,7 @@ export function ParticipantRequestItem({
         <div className='participant-name'>{participant.name}</div>
       </td>
       <td>
-        <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+        <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
         <div className='participant-request-name'>{participant.requestingUser.fullName}</div>

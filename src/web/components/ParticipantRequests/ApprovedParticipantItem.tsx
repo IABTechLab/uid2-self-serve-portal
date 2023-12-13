@@ -35,10 +35,10 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
         <div className='participant-name'>{participant.name}</div>
       </td>
       <td>
-        <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+        <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
-        <div className='api-roles'>{getApiRoles(participant.apiRoles)}</div>
+        <div className='participant-request-api-roles'>{getApiRoles(participant.apiRoles)}</div>
       </td>
     </tr>
   );
