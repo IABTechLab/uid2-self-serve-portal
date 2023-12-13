@@ -103,11 +103,6 @@ export function createParticipantsRouter() {
   participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
     const participants = await getParticipantsApproved();
 
-    console.log('HERE!!!!!!!!!!!!!!!');
-    participants.forEach((participant) => {
-      console.log(participant.apiRoles);
-    });
-
     const sitesList = await getSiteList();
     const siteMap = new Map<number, SiteDTO>(sitesList.map((s) => [s.id, s]));
 
