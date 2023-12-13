@@ -27,8 +27,6 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
     ));
   }
 
-  console.log(participant);
-
   return (
     <tr className='participant-request-item'>
       <td>
