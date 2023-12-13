@@ -28,6 +28,7 @@ export function ApprovedParticipantsTable({ participants }: ApprovedParticipants
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
+            <th>API Roles</th>
           </tr>
         </thead>
 

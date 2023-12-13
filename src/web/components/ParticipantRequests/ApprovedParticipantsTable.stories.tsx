@@ -19,6 +19,7 @@ export const AllParticipants: Story = {
         id: 2,
         name: 'Participant 2',
         types: [{ id: 1, typeName: 'Type 1' }],
+        apiRoles: [{ id: 1, roleName: 'Role 1' }],
         status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,

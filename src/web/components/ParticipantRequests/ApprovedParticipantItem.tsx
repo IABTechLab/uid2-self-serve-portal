@@ -18,6 +18,17 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
     ));
   }
 
+  function getApiRoles(currApiRoles?: ApprovedParticipantProps['participant']['apiRoles']) {
+    if (!currApiRoles) return null;
+    return currApiRoles.map((role) => (
+      <div className='participant-request-api-role-label' key={role.roleName}>
+        {role.roleName}
+      </div>
+    ));
+  }
+
+  console.log(participant);
+
   return (
     <tr className='participant-request-item'>
       <td>
@@ -25,6 +36,9 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
       </td>
       <td>
         <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+      </td>
+      <td>
+        <div className='api-roles'>{getApiRoles(participant.apiRoles)}</div>
       </td>
     </tr>
   );
