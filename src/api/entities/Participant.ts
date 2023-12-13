@@ -1,7 +1,7 @@
 import { Model } from 'objection';
 import { z } from 'zod';
 
-import { ApiRole, ApiRoleSchema } from './ApiRole';
+import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
@@ -36,8 +36,8 @@ export class Participant extends BaseModel {
       join: {
         from: 'participants.id',
         through: {
-          from: 'participantsToApiRoles.apiRoleId',
-          to: 'participantsToApiRoles.participantId',
+          from: 'participantsToApiRoles.participantId',
+          to: 'participantsToApiRoles.apiRoleId',
         },
         to: 'apiRoles.id',
       },
@@ -72,8 +72,9 @@ export class Participant extends BaseModel {
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
-export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'> & {
+export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users' | 'apiRoles'> & {
   types?: ParticipantTypeDTO[];
+  apiRoles?: ApiRoleDTO[];
   users?: ModelObjectOpt<User>[];
 };
 

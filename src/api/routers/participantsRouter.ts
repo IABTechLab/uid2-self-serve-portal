@@ -56,7 +56,7 @@ export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'si
 
 export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
-  'id' | 'name' | 'siteId' | 'types' | 'status'
+  'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
 > & {
   requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
 };
@@ -74,6 +74,7 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
     name: participant.name,
     siteId: participant.siteId,
     types: participant.types,
+    apiRoles: participant.apiRoles,
     status: participant.status,
     requestingUser: {
       email: firstUser.email,
@@ -101,6 +102,11 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
     const participants = await getParticipantsApproved();
+
+    console.log('HERE!!!!!!!!!!!!!!!');
+    participants.forEach((participant) => {
+      console.log(participant.apiRoles);
+    });
 
     const sitesList = await getSiteList();
     const siteMap = new Map<number, SiteDTO>(sitesList.map((s) => [s.id, s]));
