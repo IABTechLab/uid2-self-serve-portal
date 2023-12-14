@@ -13,7 +13,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
   ) {
     if (!currentParticipantTypes) return null;
     return currentParticipantTypes.map((pt) => (
-      <div className='participant-request-type-label' key={pt.typeName}>
+      <div className='participant-item-type-label' key={pt.typeName}>
         {pt.typeName}
       </div>
     ));
@@ -22,7 +22,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
   function getApiRoles(currApiRoles?: ApprovedParticipantProps['participant']['apiRoles']) {
     if (!currApiRoles) return null;
     return currApiRoles.map((role) => (
-      <div className='participant-request-api-role-label' key={role.externalName}>
+      <div className='participant-item-api-role-label' key={role.externalName}>
         <Tooltip trigger={role.externalName}>{role.roleName}</Tooltip>
       </div>
     ));
@@ -34,10 +34,10 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
         <div className='participant-name'>{participant.name}</div>
       </td>
       <td>
-        <div className='participant-request-types'>{getParticipantTypes(participant.types)}</div>
+        <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
-        <div className='participant-request-api-roles'>{getApiRoles(participant.apiRoles)}</div>
+        <div className='participant-item-api-roles'>{getApiRoles(participant.apiRoles)}</div>
       </td>
     </tr>
   );

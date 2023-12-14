@@ -1,45 +1,40 @@
 .participant-management-item {
   line-height: 2;
 
-  .participant-request-type-label {
+  .participant-item-type-label {
     background: var(--theme-label-background);
     border-radius: 3px;
     padding: 4px 8px;
     margin-right: 8px;
   }
 
-  .participant-request-api-role-label {
+  .participant-item-api-role-label {
     background: var(--theme-label);
     border-radius: 3px;
     padding: 4px 8px;
     margin-right: 8px;
   }
 
-  .participant-request-logo {
+  .participant-item-logo {
     width: 50px;
     margin-right: 16px;
   }
 
-  .participant-request-types {
+  .participant-item-types {
     display: flex;
     align-items: center;
     font-size: 0.75rem;
     line-height: 0.75rem;
   }
 
-  .participant-request-api-roles {
+  .participant-item-api-roles {
     display: flex;
     align-items: center;
     font-size: 0.75rem;
     line-height: 0.75rem;
   }
 
-  .participant-request-name-cell {
-    display: flex;
-    align-items: center;
-  }
-
-  .participant-request-status {
+  .participant-item-name-cell {
     display: flex;
     align-items: center;
   }
