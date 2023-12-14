@@ -7,7 +7,7 @@ import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
-import './ParticipantRequestItem.scss';
+import './ParticipantManagementItem.scss';
 
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
@@ -43,7 +43,7 @@ export function ParticipantRequestItem({
   };
 
   return (
-    <tr className='participant-request-item'>
+    <tr className='participant-management-item'>
       <td>
         <div className='participant-name'>{participant.name}</div>
       </td>

@@ -6,8 +6,8 @@ import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
 import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
-import { ApprovedParticipantsTable } from '../components/ParticipantRequests/ApprovedParticipantsTable';
-import { ParticipantRequestsTable } from '../components/ParticipantRequests/ParticipantRequestsTable';
+import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
+import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
 import {
   ApproveParticipantRequest,
   GetApprovedParticipants,

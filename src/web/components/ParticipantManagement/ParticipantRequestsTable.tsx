@@ -4,7 +4,7 @@ import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ParticipantRequestItem } from './ParticipantRequestItem';
 
-import './ParticipantRequestsTable.scss';
+import './ParticipantManagementTable.scss';
 
 type ParticipantRequestsTableProps = {
   participantRequests: ParticipantRequestDTO[];

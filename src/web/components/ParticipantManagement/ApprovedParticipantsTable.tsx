@@ -2,7 +2,7 @@ import { ParticipantDTO } from '../../../api/entities/Participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
-import './ParticipantRequestsTable.scss';
+import './ParticipantManagementTable.scss';
 
 type ApprovedParticipantsTableProps = {
   participants: ParticipantDTO[];

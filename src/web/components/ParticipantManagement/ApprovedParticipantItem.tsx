@@ -1,7 +1,7 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { Tooltip } from '../Core/Tooltip';
 
-import './ParticipantRequestItem.scss';
+import './ParticipantManagementItem.scss';
 
 type ApprovedParticipantProps = {
   participant: ParticipantDTO;
@@ -29,7 +29,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
   }
 
   return (
-    <tr className='participant-request-item'>
+    <tr className='participant-management-item'>
       <td>
         <div className='participant-name'>{participant.name}</div>
       </td>
