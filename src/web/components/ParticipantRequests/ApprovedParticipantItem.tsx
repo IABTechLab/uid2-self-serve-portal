@@ -1,4 +1,5 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { Tooltip } from '../Core/Tooltip';
 
 import './ParticipantRequestItem.scss';
 
@@ -22,7 +23,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
     if (!currApiRoles) return null;
     return currApiRoles.map((role) => (
       <div className='participant-request-api-role-label' key={role.externalName}>
-        {role.externalName}
+        <Tooltip trigger={role.externalName}>{role.roleName}</Tooltip>
       </div>
     ));
   }
