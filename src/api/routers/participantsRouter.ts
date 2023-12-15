@@ -56,7 +56,7 @@ export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'si
 
 export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
-  'id' | 'name' | 'siteId' | 'types' | 'status'
+  'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
 > & {
   requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
 };
@@ -74,6 +74,7 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
     name: participant.name,
     siteId: participant.siteId,
     types: participant.types,
+    apiRoles: participant.apiRoles,
     status: participant.status,
     requestingUser: {
       email: firstUser.email,

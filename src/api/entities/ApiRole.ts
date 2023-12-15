@@ -24,11 +24,13 @@ export class ApiRole extends BaseModel {
   };
   declare id: number;
   declare roleName: string;
+  declare externalName: string;
 }
 
 export type ApiRoleDTO = ModelObjectOpt<ApiRole>;
 
 export const ApiRoleSchema = z.object({
   id: z.number(),
-  roleName: z.string().optional(),
+  roleName: z.string(),
+  externalName: z.string(),
 });

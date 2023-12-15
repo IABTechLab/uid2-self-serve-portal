@@ -4,9 +4,11 @@
   align-self: center;
 
   button.tooltip-trigger {
+    cursor: help;
     border: none;
     padding: 0;
     width: inherit;
+    font-weight: 400;
 
     .default-trigger {
       color: var(--theme-info-icon);

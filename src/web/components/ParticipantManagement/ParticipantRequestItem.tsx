@@ -7,7 +7,7 @@ import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
-import './ParticipantRequestItem.scss';
+import './ParticipantManagementItem.scss';
 
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
@@ -28,7 +28,7 @@ export function ParticipantRequestItem({
   ) {
     if (!currentParticipantTypes) return null;
     return currentParticipantTypes.map((pt) => (
-      <div className='participant-request-type-label' key={pt.typeName}>
+      <div className='participant-item-type-label' key={pt.typeName}>
         {pt.typeName}
       </div>
     ));
@@ -43,21 +43,21 @@ export function ParticipantRequestItem({
   };
 
   return (
-    <tr className='participant-request-item'>
+    <tr className='participant-management-item'>
       <td>
         <div className='participant-name'>{participant.name}</div>
       </td>
       <td>
-        <div className='participant-types'>{getParticipantTypes(participant.types)}</div>
+        <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
-        <div className='participant-request-name'>{participant.requestingUser.fullName}</div>
+        <div className='participant-item-name'>{participant.requestingUser.fullName}</div>
       </td>
       <td>
-        <div className='participant-request-email'>{participant.requestingUser.email}</div>
+        <div className='participant-item-email'>{participant.requestingUser.email}</div>
       </td>
       <td>
-        <div className='participant-request-job-function'>{participant.requestingUser.role}</div>
+        <div className='participant-item-job-function'>{participant.requestingUser.role}</div>
       </td>
       <td className='action'>
         <div className='action-cell'>
