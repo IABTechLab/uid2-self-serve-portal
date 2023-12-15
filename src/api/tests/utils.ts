@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import 'reflect-metadata';
+
 import { Server } from 'http';
 import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 import tokenRequester from 'keycloak-request-token';
@@ -31,9 +33,9 @@ function useTestServer() {
   });
   beforeAll(async () => {
     const serverDetails = configureAndStartApi(false);
-    // api = serverDetails.server;
+    api = serverDetails.server;
     routers = serverDetails.routers;
-    // terminator = createHttpTerminator({ server: api });
+    terminator = createHttpTerminator({ server: api });
 
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
       username: 'test_user@example.com',
