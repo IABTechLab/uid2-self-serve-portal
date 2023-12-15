@@ -191,7 +191,6 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   };
   app.use(errorHandler);
   const port = 6540;
-
   const inversifyExpressServer = new InversifyExpressServer(container, router, null, app);
   const server = inversifyExpressServer.build().listen(port, () => {
     logger.info(`Listening on port ${port}.`);
