@@ -1,6 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import 'reflect-metadata';
+
 import { Server } from 'http';
 import { createHttpTerminator, HttpTerminator } from 'http-terminator';
 import tokenRequester from 'keycloak-request-token';

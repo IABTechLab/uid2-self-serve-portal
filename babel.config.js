@@ -10,6 +10,9 @@ module.exports = {
     ],
   ],
   plugins: [
+    ['@babel/plugin-proposal-decorators', { legacy: true }],
+    'babel-plugin-transform-typescript-metadata',
+    'babel-plugin-parameter-decorator',
     [
       '@babel/plugin-transform-typescript',
       {

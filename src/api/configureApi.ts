@@ -6,9 +6,12 @@ import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimCheck, JWTPayload } from 'express-oauth2-jwt-bearer';
+import { Container } from 'inversify';
+import { InversifyExpressServer } from 'inversify-express-utils';
 import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
+import { TYPES } from './constant/types';
 import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_KK_AUDIENCE,
@@ -30,6 +33,7 @@ import makeMetricsApiMiddleware from './middleware/metrics';
 import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
+import { UserService } from './services/userService';
 
 const BASE_REQUEST_PATH = '/api';
 
@@ -58,6 +62,8 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath
 }
 
 export function configureAndStartApi(useMetrics: boolean = true) {
+  const container = new Container();
+  container.bind<UserService>(TYPES.UserService).to(UserService);
   const app = express();
   const routers = {
     rootRouter: express.Router(),
@@ -205,7 +211,8 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   };
   app.use(errorHandler);
   const port = 6540;
-  const server = app.listen(port, () => {
+  const inversifyExpressServer = new InversifyExpressServer(container, router, null, app);
+  const server = inversifyExpressServer.build().listen(port, () => {
     logger.info(`Listening on port ${port}.`);
   });
   return { server, routers };
