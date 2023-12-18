@@ -30,9 +30,13 @@ export default meta;
 
 type Story = StoryObj<typeof ApiRolesCell>;
 
-export const NoRole: Story = {
+export const ManyRole: Story = {
   args: {
-    apiRoles: [],
+    apiRoles: [
+      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+    ],
   },
 };
 
@@ -42,12 +46,8 @@ export const OneRole: Story = {
   },
 };
 
-export const ManyRole: Story = {
+export const NoRole: Story = {
   args: {
-    apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
-    ],
+    apiRoles: [],
   },
 };

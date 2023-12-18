@@ -10,12 +10,6 @@ export default meta;
 
 type Story = StoryObj<typeof KeyTable>;
 
-export const NoKeys: Story = {
-  args: {
-    apiKeys: [],
-  },
-};
-
 export const ManyKeys: Story = {
   args: {
     apiKeys: [
@@ -77,5 +71,11 @@ export const ManyKeys: Story = {
         serviceId: 0,
       },
     ],
+  },
+};
+
+export const NoKeys: Story = {
+  args: {
+    apiKeys: [],
   },
 };
