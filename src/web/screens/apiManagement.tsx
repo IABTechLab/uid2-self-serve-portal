@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { Await, defer, useLoaderData } from 'react-router-dom';
 
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
@@ -16,7 +16,7 @@ function ManageParticipants() {
   return (
     <div>
       <h1>Manage API Keys</h1>
-      <p className='heading-details'>View and manage your API keys.</p>
+      <p className='heading-details'>View and manage you API keys.</p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {(apiKeys: ApiKeyDTO[]) => <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />}
