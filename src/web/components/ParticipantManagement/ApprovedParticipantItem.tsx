@@ -1,6 +1,5 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
-import { Tooltip } from '../Core/Tooltip';
 
 import './ParticipantManagementItem.scss';
 
