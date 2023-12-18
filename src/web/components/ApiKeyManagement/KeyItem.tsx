@@ -1,4 +1,4 @@
-import { ApiKeyDTO } from '../../../api/entities/ApiKey';
+import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import ApiRolesCell from './ApiRolesCell';
 
 import './KeyItem.scss';
@@ -24,7 +24,7 @@ function KeyItem({ apiKey }: KeyItemProps) {
   return (
     <tr className='ApiKeyItem'>
       <td>{apiKey.name}</td>
-      <td>{apiKey.keyId}</td>
+      <td>{apiKey.key_id}</td>
       <td>
         <ApiRolesCell apiRoles={apiKey.roles} />
       </td>

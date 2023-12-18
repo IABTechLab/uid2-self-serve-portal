@@ -1,4 +1,4 @@
-import { ApiKeyDTO } from '../../../api/entities/ApiKey';
+import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import KeyItem from './KeyItem';
 
@@ -32,7 +32,7 @@ function KeyTable({ apiKeys }: KeyTableProps) {
         </thead>
         <tbody>
           {apiKeys.map((key) => (
-            <KeyItem key={key.keyId} apiKey={key} />
+            <KeyItem key={key.key_id} apiKey={key} />
           ))}
         </tbody>
       </table>

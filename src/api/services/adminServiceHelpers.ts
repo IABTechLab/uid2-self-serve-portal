@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 
@@ -80,3 +81,15 @@ export const mapClientTypesToAdminEnums = (
     return adminEnum;
   });
 };
+
+export type ApiKeyDTO = {
+  key_id: string;
+  name: string;
+  contact: string;
+  roles: ApiRoleDTO[];
+  created: number;
+  disabled: boolean;
+  service_id: number;
+};
+
+export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
