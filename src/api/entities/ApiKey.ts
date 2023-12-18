@@ -1,9 +1,11 @@
-export interface ApiKey {
-  key_id: string;
+import { ApiRoleDTO } from './ApiRole';
+
+export interface ApiKeyDTO {
+  keyId: string;
   name: string;
   contact: string;
-  roles: string;
+  roles: ApiRoleDTO[];
   created: number;
   disabled: boolean;
-  service_id: number;
+  serviceId: number;
 }
