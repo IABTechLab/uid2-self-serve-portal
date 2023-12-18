@@ -104,6 +104,9 @@ export async function GetParticipantApiKeys(participantId?: number) {
     const result = await axios.get<ApiKeyDTO[]>(
       `/participants/${participantId ?? 'current'}/apiKeys`
     );
+
+    console.log(result.data);
+
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not get the apiKeys');

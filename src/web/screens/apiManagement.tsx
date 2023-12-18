@@ -19,7 +19,7 @@ function ManageParticipants() {
       <p className='heading-details'>View and manage your API keys.</p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
-          {(apiKeys: ApiKeyDTO[]) => <KeyTable apiKeys={apiKeys} />}
+          {(apiKeys: ApiKeyDTO[]) => <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />}
         </Await>
       </Suspense>
     </div>

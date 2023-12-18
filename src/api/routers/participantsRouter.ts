@@ -267,7 +267,9 @@ export function createParticipantsRouter() {
 
       const adminApiKeys = await getApiKeys(participant.siteId);
 
-      const apiKeys = mapApiKeyDTO(adminApiKeys);
+      const apiKeys = await mapApiKeyDTO(adminApiKeys);
+
+      console.log(apiKeys);
 
       return res.status(200).json(apiKeys);
     }
