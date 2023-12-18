@@ -1,11 +1,12 @@
 /* eslint-disable camelcase */
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { z } from 'zod';
 
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
+  ApiKeyAdmin,
   ClientType,
   KeyPairDTO,
   mapClientTypesToAdminEnums,
@@ -76,6 +77,11 @@ export const getSiteList = async (): Promise<SiteDTO[]> => {
 
 export const getSite = async (siteId: number): Promise<SiteDTO> => {
   const response = await adminServiceClient.get<SiteDTO>(`/api/site/${siteId}`);
+  return response.data;
+};
+
+export const getApiKeys = async (siteId: number): Promise<ApiKeyAdmin[]> => {
+  const response = await adminServiceClient.get<ApiKeyAdmin[]>(`/api/client/listBySite/${siteId}`);
   return response.data;
 };
 

@@ -1,6 +1,7 @@
+/* eslint-disable camelcase */
 import { z } from 'zod';
 
-import { ApiRoleDTO } from '../entities/ApiRole';
+import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 
@@ -93,3 +94,45 @@ export type ApiKeyDTO = {
 };
 
 export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
+
+export async function mapAdminRoleToApiRole(role: string): Promise<ApiRoleDTO> {
+  let apiRoleDb = await ApiRole.query().findOne({ roleName: role });
+
+  if (apiRoleDb === undefined) {
+    apiRoleDb = ApiRole.fromJson({ roleName: role, externalName: role });
+  }
+
+  return apiRoleDb as ApiRoleDTO;
+}
+
+export async function mapApiKeyDTO(adminApiKeys: ApiKeyAdmin[]): Promise<ApiKeyDTO[]> {
+  const apiRoleList = await ApiRole.query();
+  const apiRoleMap = new Map<String, ApiRoleDTO>(
+    apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])
+  );
+
+  return adminApiKeys.map((adminKey) => {
+    const roles = adminKey.roles.split(',').map((role) => {
+      const roleTrim = role.trim();
+
+      let apiRole = apiRoleMap.get(roleTrim);
+
+      if (apiRole === undefined) {
+        apiRole = ApiRole.fromJson({ roleName: role, externalName: role }) as ApiRoleDTO;
+        apiRoleMap.set(roleTrim, apiRole);
+      }
+
+      return apiRole;
+    });
+
+    return {
+      key_id: adminKey.key_id,
+      name: adminKey.name,
+      contact: adminKey.contact,
+      created: adminKey.created,
+      disabled: adminKey.disabled,
+      roles,
+      service_id: adminKey.service_id,
+    };
+  });
+}

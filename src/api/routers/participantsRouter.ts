@@ -19,12 +19,13 @@ import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
+  getApiKeys,
   getKeyPairsList,
   getSharingList,
   getSiteList,
   setSiteClientTypes,
 } from '../services/adminServiceClient';
-import { SiteDTO } from '../services/adminServiceHelpers';
+import { mapApiKeyDTO, SiteDTO } from '../services/adminServiceHelpers';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -255,6 +256,22 @@ export function createParticipantsRouter() {
   const sharingRelationParser = z.object({
     newParticipantSites: z.array(z.number()),
   });
+
+  participantsRouter.get(
+    '/:participantId/apiKeys',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const adminApiKeys = await getApiKeys(participant.siteId);
+
+      const apiKeys = mapApiKeyDTO(adminApiKeys);
+
+      return res.status(200).json(apiKeys);
+    }
+  );
 
   participantsRouter.post(
     '/:participantId/sharingPermission/add',

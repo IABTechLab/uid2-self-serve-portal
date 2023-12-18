@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
+import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -96,6 +96,17 @@ export async function GetApprovedParticipants() {
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load approved participants');
+  }
+}
+
+export async function GetParticipantApiKeys(participantId?: number) {
+  try {
+    const result = await axios.get<ApiKeyDTO[]>(
+      `/participants/${participantId ?? 'current'}/apiKeys`
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get the apiKeys');
   }
 }
 
