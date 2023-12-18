@@ -1,4 +1,5 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
 import { Tooltip } from '../Core/Tooltip';
 
 import './ParticipantManagementItem.scss';
@@ -19,15 +20,6 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
     ));
   }
 
-  function getApiRoles(currApiRoles?: ApprovedParticipantProps['participant']['apiRoles']) {
-    if (!currApiRoles) return null;
-    return currApiRoles.map((role) => (
-      <div className='participant-item-api-role-label' key={role.externalName}>
-        <Tooltip trigger={role.externalName}>{role.roleName}</Tooltip>
-      </div>
-    ));
-  }
-
   return (
     <tr className='participant-management-item'>
       <td>
@@ -37,7 +29,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
         <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
-        <div className='participant-item-api-roles'>{getApiRoles(participant.apiRoles)}</div>
+        <ApiRolesCell apiRoles={participant.apiRoles == null ? [] : participant.apiRoles} />
       </td>
     </tr>
   );
