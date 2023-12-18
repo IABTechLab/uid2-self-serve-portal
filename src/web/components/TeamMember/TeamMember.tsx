@@ -4,7 +4,7 @@ import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
-import { ApiError } from '../../utils/apiError';
+import { handleErrorPopup } from '../../utils/apiError';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { StatusNotificationType, StatusPopup } from '../Core/StatusPopup';
@@ -101,14 +101,7 @@ function TeamMember({
     } catch (e) {
       setErrorInfo(e as Error);
       setInviteState(InviteState.error);
-      const err = e as Error;
-      const hasHash = Object.hasOwn(err, 'errorHash') && (e as ApiError).errorHash;
-      const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
-      setStatusPopup({
-        type: 'Error',
-        message: `${err.message}${hash}`,
-      });
-      setShowStatusPopup(true);
+      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
     }
   }, [person.id, reinviteState, resendInvite]);
 

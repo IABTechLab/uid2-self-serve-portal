@@ -14,7 +14,7 @@ import {
   GetSharingList,
   UpdateSharingTypes,
 } from '../services/participant';
-import { ApiError } from '../utils/apiError';
+import { ApiError, handleErrorPopup } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -50,18 +50,14 @@ function SharingPermissions() {
             : `${selectedTypes.length} Participant types`
         } saved to Your Sharing Permissions`,
       });
+      setShowStatusPopup(true);
       setSharedTypes(response.allowed_types ?? []);
       if (!participant?.completedRecommendations) {
         const updatedParticipant = await CompleteRecommendations(participant!.id);
         setParticipant(updatedParticipant);
       }
     } catch (e) {
-      setStatusPopup({
-        type: 'Error',
-        message: `Save Sharing Permissions Failed`,
-      });
-    } finally {
-      setShowStatusPopup(true);
+      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -74,14 +70,10 @@ function SharingPermissions() {
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
         } added to Your Sharing Permissions`,
       });
+      setShowStatusPopup(true);
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
-      setStatusPopup({
-        type: 'Error',
-        message: `Add Sharing Permissions Failed`,
-      });
-    } finally {
-      setShowStatusPopup(true);
+      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -94,14 +86,10 @@ function SharingPermissions() {
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
         } deleted`,
       });
+      setShowStatusPopup(true);
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
-      setStatusPopup({
-        type: 'Error',
-        message: `Delete Sharing Permissions Failed`,
-      });
-    } finally {
-      setShowStatusPopup(true);
+      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
     }
   };
 
