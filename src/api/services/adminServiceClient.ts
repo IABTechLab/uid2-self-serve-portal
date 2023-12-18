@@ -81,7 +81,7 @@ export const getSite = async (siteId: number): Promise<SiteDTO> => {
 };
 
 export const getApiKeys = async (siteId: number): Promise<ApiKeyAdmin[]> => {
-  const response = await adminServiceClient.get<ApiKeyAdmin[]>(`/api/client/listBySite/${siteId}`);
+  const response = await adminServiceClient.get<ApiKeyAdmin[]>(`/api/client/list/${siteId}`);
   return response.data;
 };
 
