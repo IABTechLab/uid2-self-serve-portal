@@ -46,7 +46,7 @@ export function BusinessContacts() {
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -58,7 +58,7 @@ export function BusinessContacts() {
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -70,7 +70,7 @@ export function BusinessContacts() {
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 

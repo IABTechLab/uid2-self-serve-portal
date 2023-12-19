@@ -50,7 +50,7 @@ function TeamMembers() {
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -62,7 +62,7 @@ function TeamMembers() {
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -75,7 +75,7 @@ function TeamMembers() {
       onTeamMembersUpdated();
       if (LoggedInUser?.user?.id === userId) await loadUser();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 

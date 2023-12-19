@@ -57,7 +57,7 @@ function SharingPermissions() {
         setParticipant(updatedParticipant);
       }
     } catch (e) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -73,7 +73,7 @@ function SharingPermissions() {
       setShowStatusPopup(true);
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -89,7 +89,7 @@ function SharingPermissions() {
       setShowStatusPopup(true);
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 

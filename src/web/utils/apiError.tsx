@@ -28,17 +28,32 @@ export function backendError(e: unknown, overrideMessage: string) {
   return Error(overrideMessage);
 }
 
-export function handleErrorPopup(
-  e: Error,
+const isError = (obj: unknown): obj is Error => obj instanceof Error;
+
+const getHash = (e: Error) => {
+  let result = '';
+  if (e instanceof ApiError) {
+    result = e.errorHash ?? '';
+  }
+  if (e instanceof AxiosError) {
+    result = (e.response?.data?.errorHash as string) ?? '';
+  }
+  return result;
+};
+
+export const handleErrorPopup = (
+  e: unknown,
   setStatusPopup: React.Dispatch<React.SetStateAction<StatusNotificationType | undefined>>,
   setShowStatusPopup: React.Dispatch<React.SetStateAction<boolean>>
-) {
-  const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
-  const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
-  setStatusPopup({
-    type: 'Error',
-    message: `${e.message}${hash}`,
-  });
-  setShowStatusPopup(true);
-  throw new Error(e.message);
-}
+) => {
+  if (isError(e)) {
+    const hash = getHash(e);
+    const hashMessage = hash.length > 0 ? `: (${hash})` : '';
+    setStatusPopup({
+      type: 'Error',
+      message: `${e.message}${hashMessage}`,
+    });
+    setShowStatusPopup(true);
+  }
+  throw e;
+};

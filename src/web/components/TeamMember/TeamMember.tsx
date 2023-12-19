@@ -101,7 +101,7 @@ function TeamMember({
     } catch (e) {
       setErrorInfo(e as Error);
       setInviteState(InviteState.error);
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   }, [person.id, reinviteState, resendInvite]);
 

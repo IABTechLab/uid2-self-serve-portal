@@ -41,7 +41,7 @@ function KeyPairsScreen() {
         loadKeyPairs();
       }
     } catch (e: unknown) {
-      handleErrorPopup(e as Error, setStatusPopup, setShowStatusPopup);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
