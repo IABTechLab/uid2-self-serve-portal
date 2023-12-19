@@ -95,16 +95,6 @@ export type ApiKeyDTO = {
 
 export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
 
-export async function mapAdminRoleToApiRole(role: string): Promise<ApiRoleDTO> {
-  let apiRoleDb = await ApiRole.query().findOne({ roleName: role });
-
-  if (apiRoleDb === undefined) {
-    apiRoleDb = ApiRole.fromJson({ roleName: role, externalName: role });
-  }
-
-  return apiRoleDb as ApiRoleDTO;
-}
-
 export async function mapApiKeyDTO(adminApiKeys: ApiKeyAdmin[]): Promise<ApiKeyDTO[]> {
   const apiRoleList = await ApiRole.query();
   const apiRoleMap = new Map<String, ApiRoleDTO>(
