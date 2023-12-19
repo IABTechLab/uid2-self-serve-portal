@@ -33,10 +33,15 @@ export class UserService {
     const currentParticipant = await Participant.query().findOne({
       id: req.user!.participantId,
     });
+
+    console.log('HEREEEEEE1');
+    console.log(currentParticipant);
     const currentSite =
-      currentParticipant?.siteId === undefined
+      currentParticipant?.siteId === undefined || currentParticipant.siteId === null
         ? undefined
         : await getSite(currentParticipant?.siteId);
+
+    console.log('HEREEEEEE2');
     const allParticipantTypes = await ParticipantType.query();
     const result = {
       ...currentParticipant,
