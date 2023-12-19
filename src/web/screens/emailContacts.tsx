@@ -11,7 +11,7 @@ import {
   RemoveEmailContact,
   UpdateEmailContact,
 } from '../services/participant';
-import { ApiError } from '../utils/apiError';
+import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -30,17 +30,6 @@ export function BusinessContacts() {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
-  const handleErrorPopup = (e: Error) => {
-    const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
-    const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
-    setStatusPopup({
-      type: 'Error',
-      message: `${e.message}${hash}`,
-    });
-    setShowStatusPopup(true);
-    throw new Error(e.message);
-  };
-
   const handleSuccessPopup = (message: string) => {
     setStatusPopup({
       type: 'Success',
@@ -57,7 +46,7 @@ export function BusinessContacts() {
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -69,7 +58,7 @@ export function BusinessContacts() {
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -81,7 +70,7 @@ export function BusinessContacts() {
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 

@@ -5,7 +5,7 @@ import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPo
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
-import { ApiError } from '../utils/apiError';
+import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -24,17 +24,6 @@ function KeyPairsScreen() {
     loadKeyPairs();
   }, [loadKeyPairs]);
 
-  const handleErrorPopup = (e: Error) => {
-    const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
-    const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
-    setStatusPopup({
-      type: 'Error',
-      message: `${e.message}${hash}`,
-    });
-    setShowStatusPopup(true);
-    throw new Error(e.message);
-  };
-
   const handleSuccessPopup = (message: string) => {
     setStatusPopup({
       type: 'Success',
@@ -52,7 +41,7 @@ function KeyPairsScreen() {
         loadKeyPairs();
       }
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 

@@ -15,7 +15,7 @@ import {
   UpdateUser,
   UserResponse,
 } from '../services/userAccount';
-import { ApiError } from '../utils/apiError';
+import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -34,17 +34,6 @@ function TeamMembers() {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
-  const handleErrorPopup = (e: Error) => {
-    const hasHash = Object.hasOwn(e, 'errorHash') && (e as ApiError).errorHash;
-    const hash = hasHash ? `: (${(e as ApiError).errorHash})` : '';
-    setStatusPopup({
-      type: 'Error',
-      message: `${e.message}${hash}`,
-    });
-    setShowStatusPopup(true);
-    throw new Error(e.message);
-  };
-
   const handleSuccessPopup = (message: string) => {
     setStatusPopup({
       type: 'Success',
@@ -61,7 +50,7 @@ function TeamMembers() {
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -73,7 +62,7 @@ function TeamMembers() {
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 
@@ -86,7 +75,7 @@ function TeamMembers() {
       onTeamMembersUpdated();
       if (LoggedInUser?.user?.id === userId) await loadUser();
     } catch (e: unknown) {
-      handleErrorPopup(e as Error);
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
   };
 

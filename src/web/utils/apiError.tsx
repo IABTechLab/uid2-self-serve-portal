@@ -1,4 +1,6 @@
 import { AxiosError } from 'axios';
+
+import { StatusNotificationType } from '../components/Core/StatusPopup';
 /*
  * Backend errors may return an `errorHash` that can help correlate the logs
  * with the user reported issues.
@@ -25,3 +27,33 @@ export function backendError(e: unknown, overrideMessage: string) {
   }
   return Error(overrideMessage);
 }
+
+const isError = (obj: unknown): obj is Error => obj instanceof Error;
+
+const getHash = (e: Error) => {
+  let result = '';
+  if (e instanceof ApiError) {
+    result = e.errorHash ?? '';
+  }
+  if (e instanceof AxiosError) {
+    result = (e.response?.data?.errorHash as string) ?? '';
+  }
+  return result;
+};
+
+export const handleErrorPopup = (
+  e: unknown,
+  setStatusPopup: React.Dispatch<React.SetStateAction<StatusNotificationType | undefined>>,
+  setShowStatusPopup: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  if (isError(e)) {
+    const hash = getHash(e);
+    const hashMessage = hash.length > 0 ? `: (${hash})` : '';
+    setStatusPopup({
+      type: 'Error',
+      message: `${e.message}${hashMessage}`,
+    });
+    setShowStatusPopup(true);
+  }
+  throw e;
+};
