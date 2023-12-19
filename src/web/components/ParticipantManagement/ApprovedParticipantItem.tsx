@@ -28,7 +28,10 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
         <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
-        <ApiRolesCell apiRoles={participant.apiRoles == null ? [] : participant.apiRoles} />
+        <ApiRolesCell
+          apiRoles={participant.apiRoles == null ? [] : participant.apiRoles}
+          showRole
+        />
       </td>
     </tr>
   );
