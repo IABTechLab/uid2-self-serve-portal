@@ -1,5 +1,6 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
+import { Tooltip } from '../Core/Tooltip';
 import KeyItem from './KeyItem';
 
 import './KeyTable.scss';
@@ -25,7 +26,13 @@ function KeyTable({ apiKeys }: KeyTableProps) {
         <thead>
           <tr>
             <th>Name</th>
-            <th>keyId</th>
+            <th className='KeyIdHeader'>
+              <div>Key ID</div>
+              <Tooltip>
+                Shows the first few characters of your plain text key. If support related to a key
+                is required, please provide this ID.
+              </Tooltip>
+            </th>
             <th>Roles</th>
             <th>Created</th>
           </tr>
