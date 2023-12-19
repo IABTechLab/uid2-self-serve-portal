@@ -5,16 +5,7 @@ import './KeyItem.scss';
 
 function formatDate(timeValue: number) {
   const date = new Date(timeValue * 1000);
-
-  const twoDigit = (num: number) => {
-    return num < 10 ? `0${num}` : `${num}`;
-  };
-
-  const year = date.getFullYear();
-  const month = twoDigit(date.getMonth() + 1);
-  const day = twoDigit(date.getDate());
-
-  return `${day}/${month}/${year}`;
+  return date.toLocaleDateString();
 }
 
 type KeyItemProps = {
