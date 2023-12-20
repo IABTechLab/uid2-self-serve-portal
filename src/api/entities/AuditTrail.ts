@@ -40,6 +40,7 @@ export type ApproveAccountEventData = {
   newName?: string;
   oldTypeIds?: number[];
   newTypeIds?: number[];
+  apiRoles?: number[];
 };
 
 export type ManageKeyPairEventData = {

@@ -42,7 +42,7 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
-  updateParticipantAndTypes,
+  updateParticipantAndTypesAndRoles,
   UpdateSharingTypes,
 } from '../services/participantsService';
 import {
@@ -172,7 +172,7 @@ export function createParticipantsRouter() {
           assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
         )
       );
-      await updateParticipantAndTypes(participant!, data);
+      await updateParticipantAndTypesAndRoles(participant!, data);
       await sendParticipantApprovedEmail(users, traceId);
       await updateAuditTrailToProceed(auditTrail.id);
       return res.sendStatus(200);

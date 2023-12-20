@@ -78,6 +78,11 @@ export const ParticipantRequests: Story = {
       { id: 2, typeName: 'Type 2' },
       { id: 3, typeName: 'Type 3' },
     ],
+    apiRoles: [
+      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+    ],
     onApprove: async (_id, form) => {
       // eslint-disable-next-line no-console
       console.log(JSON.stringify(form));

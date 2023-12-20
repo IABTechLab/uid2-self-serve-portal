@@ -127,7 +127,16 @@ const updateParticipantAssociatedRequestTypes = async (
   await participant.$relatedQuery('types', trx).relate(participantApprovalPartial.types);
 };
 
-export const updateParticipantAndTypes = async (
+const updateParticipantAssociatedRequestApiRoles = async (
+  participant: Participant,
+  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
+  trx: TransactionOrKnex
+) => {
+  await participant.$relatedQuery('apiRoles', trx).unrelate();
+  await participant.$relatedQuery('apiRoles', trx).relate(participantApprovalPartial.apiRoles);
+};
+
+export const updateParticipantAndTypesAndRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
     status: ParticipantStatus;
@@ -140,6 +149,7 @@ export const updateParticipantAndTypes = async (
       status: participantApprovalPartial.status,
     });
     await updateParticipantAssociatedRequestTypes(participant, participantApprovalPartial, trx);
+    await updateParticipantAssociatedRequestApiRoles(participant, participantApprovalPartial, trx);
   });
 };
 

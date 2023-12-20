@@ -122,6 +122,7 @@ export const insertApproveAccountAuditTrail = async (
   const user = await findUserByEmail(userEmail);
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
+    apiRoles: data.apiRoles.map((role) => role.id),
   };
 
   if (data.name !== participant.name) {

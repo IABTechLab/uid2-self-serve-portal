@@ -12,6 +12,7 @@ import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
 import { TYPES } from './constant/types';
+import { ApiRole, ApiRoleDTO } from './entities/ApiRole';
 import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_KK_AUDIENCE,
@@ -153,6 +154,11 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   router.get('/participantTypes', async (_req, res) => {
     const participantTypes = await ParticipantType.query();
     return res.status(200).json(participantTypes);
+  });
+
+  router.get('/apiRoles', async (_req, res) => {
+    const apiRoles = await ApiRole.query();
+    return res.status(200).json(apiRoles);
   });
 
   router.get('/keycloak-config', async (_req, res) => {

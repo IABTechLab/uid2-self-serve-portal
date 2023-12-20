@@ -247,6 +247,7 @@ export async function UpdateEmailContact(
 export type ParticipantApprovalFormDetails = {
   name: string;
   types: number[];
+  apiRoles: number[];
   siteId: number;
 };
 
@@ -259,6 +260,7 @@ export async function ApproveParticipantRequest(
       name: formData.name,
       siteId: formData.siteId,
       types: formData.types.map((typeId) => ({ id: typeId })),
+      apiRoles: formData.apiRoles.map((roleId) => ({ id: roleId })),
     });
   } catch (e: unknown) {
     throw backendError(e, 'Could not approve participant');

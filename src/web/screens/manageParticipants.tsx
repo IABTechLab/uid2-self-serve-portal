@@ -1,6 +1,7 @@
 import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
+import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
@@ -8,6 +9,7 @@ import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
+import { GetAllApiRoles } from '../services/apiRoles';
 import {
   ApproveParticipantRequest,
   GetApprovedParticipants,
@@ -21,7 +23,13 @@ import { PortalRoute } from './routeUtils';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
-    results: [ParticipantRequestDTO[], ParticipantDTO[], ParticipantTypeDTO[], SiteDTO[]];
+    results: [
+      ParticipantRequestDTO[],
+      ParticipantDTO[],
+      ParticipantTypeDTO[],
+      ApiRoleDTO[],
+      SiteDTO[]
+    ];
   };
 
   const reloader = useRevalidator();
@@ -45,15 +53,17 @@ function ManageParticipants() {
       </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.results}>
-          {([participantRequests, participantApproved, participantTypes]: [
+          {([participantRequests, participantApproved, participantTypes, apiRoles]: [
             ParticipantRequestDTO[],
             ParticipantDTO[],
-            ParticipantTypeDTO[]
+            ParticipantTypeDTO[],
+            ApiRoleDTO[]
           ]) => (
             <>
               <ParticipantRequestsTable
                 participantRequests={participantRequests}
                 participantTypes={participantTypes}
+                apiRoles={apiRoles}
                 onApprove={handleApproveParticipantRequest}
               />
               <ApprovedParticipantsTable participants={participantApproved} />
@@ -74,11 +84,13 @@ export const ManageParticipantsRoute: PortalRoute = {
     const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
     const participantsApproved = GetApprovedParticipants();
     const participantTypes = GetAllParticipantTypes();
+    const apiRoles = GetAllApiRoles();
     const sitesList = preloadSiteList();
     const promises = Promise.all([
       participantsAwaitingApproval,
       participantsApproved,
       participantTypes,
+      apiRoles,
       sitesList,
     ]);
     return defer({
