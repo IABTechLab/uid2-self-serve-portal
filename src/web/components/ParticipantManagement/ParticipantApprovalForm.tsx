@@ -3,6 +3,7 @@ import Fuse from 'fuse.js';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
@@ -65,11 +66,13 @@ type ParticipantApprovalFormProps = {
   onApprove: (formData: ParticipantApprovalFormDetails) => Promise<void>;
   participant: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
+  apiRoles: ApiRoleDTO[];
 };
 function ParticipantApprovalForm({
   onApprove,
   participant,
   participantTypes,
+  apiRoles,
 }: ParticipantApprovalFormProps) {
   const { sites } = useSiteList();
   const fuse = useMemo(
@@ -153,6 +156,15 @@ function ParticipantApprovalForm({
               rules={{ required: 'Please specify Participant type.' }}
               options={participantTypes.map((p) => ({
                 optionLabel: p.typeName,
+                value: p.id,
+              }))}
+            />
+            <CheckboxInput
+              inputName='apiRoles'
+              label='Api Roles'
+              rules={{ required: 'Please specify the API Roles' }}
+              options={apiRoles.map((p) => ({
+                optionLabel: `${p.externalName} (${p.roleName})`,
                 value: p.id,
               }))}
             />
