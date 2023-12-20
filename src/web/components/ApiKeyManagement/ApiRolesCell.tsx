@@ -9,7 +9,7 @@ type ApiRolesProps = {
 };
 function ApiRolesCell({ apiRoles, showRole = false }: ApiRolesProps) {
   return (
-    <td className='api-roles-cell'>
+    <div className='api-roles-cell'>
       {apiRoles.map((role) => (
         <div key={role.externalName}>
           {showRole ? (
@@ -19,7 +19,7 @@ function ApiRolesCell({ apiRoles, showRole = false }: ApiRolesProps) {
           )}
         </div>
       ))}
-    </td>
+    </div>
   );
 }
 
