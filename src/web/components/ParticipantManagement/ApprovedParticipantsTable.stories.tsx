@@ -91,10 +91,9 @@ export const AllParticipants: Story = {
           { id: 4, typeName: 'Type 4' },
         ],
         apiRoles: [
-          { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-          { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-          { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-          { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+          { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+          { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+          { id: 3, roleName: 'Role3', externalName: 'Role 3' },
         ],
         status: ParticipantStatus.Approved,
         allowSharing: true,

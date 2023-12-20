@@ -79,9 +79,10 @@ export const ParticipantRequests: Story = {
       { id: 3, typeName: 'Type 3' },
     ],
     apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
     ],
     onApprove: async (_id, form) => {
       // eslint-disable-next-line no-console
@@ -104,6 +105,12 @@ export const NoParticipantRequests: Story = {
       { id: 1, typeName: 'Type 1' },
       { id: 2, typeName: 'Type 2' },
       { id: 3, typeName: 'Type 3' },
+    ],
+    apiRoles: [
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
     ],
     onApprove: async (_id, form) => {
       // eslint-disable-next-line no-console
