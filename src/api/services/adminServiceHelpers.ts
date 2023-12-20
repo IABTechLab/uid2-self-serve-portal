@@ -95,27 +95,36 @@ export type ApiKeyDTO = {
 
 export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
 
+function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String, ApiRoleDTO>) {
+  return adminRoles.map((adminRole) => {
+    const adminRoleTrimmed = adminRole.trim();
+
+    let apiRole = apiRoleMap.get(adminRoleTrimmed);
+
+    if (apiRole === undefined) {
+      // Add new role to map if not found. Stocks duplicate new objects
+      apiRole = ApiRole.fromJson({
+        roleName: adminRoleTrimmed,
+        externalName: adminRoleTrimmed,
+      });
+      apiRoleMap.set(adminRoleTrimmed, apiRole);
+    }
+
+    return apiRole;
+  });
+}
+
 export async function mapAdminApiKeysToApiKeyDTOs(
   adminApiKeys: ApiKeyAdmin[]
 ): Promise<ApiKeyDTO[]> {
+  // Loads apiRole list into map for faster/easier searching
   const apiRoleList = await ApiRole.query();
   const apiRoleMap = new Map<String, ApiRoleDTO>(
     apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])
   );
 
   return adminApiKeys.map((adminKey) => {
-    const roles = adminKey.roles.split(',').map((role) => {
-      const roleTrim = role.trim();
-
-      let apiRole = apiRoleMap.get(roleTrim);
-
-      if (apiRole === undefined) {
-        apiRole = ApiRole.fromJson({ roleName: role, externalName: role }) as ApiRoleDTO;
-        apiRoleMap.set(roleTrim, apiRole);
-      }
-
-      return apiRole;
-    });
+    const roles = mapAdminRolesToApiRoleDTOs(adminKey.roles.split(','), apiRoleMap);
 
     return {
       key_id: adminKey.key_id,
