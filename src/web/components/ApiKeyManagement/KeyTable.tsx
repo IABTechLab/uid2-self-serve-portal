@@ -38,7 +38,7 @@ function KeyTable({ apiKeys }: KeyTableProps) {
           </tr>
         </thead>
         <tbody>
-          {apiKeys.map((key) => (
+          {apiKeys.map((key: ApiKeyDTO) => (
             <KeyItem key={key.key_id} apiKey={key} />
           ))}
         </tbody>
