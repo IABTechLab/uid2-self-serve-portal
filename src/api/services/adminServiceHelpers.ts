@@ -95,7 +95,9 @@ export type ApiKeyDTO = {
 
 export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
 
-export async function mapApiKeyDTO(adminApiKeys: ApiKeyAdmin[]): Promise<ApiKeyDTO[]> {
+export async function mapAdminApiKeysToApiKeyDTOs(
+  adminApiKeys: ApiKeyAdmin[]
+): Promise<ApiKeyDTO[]> {
   const apiRoleList = await ApiRole.query();
   const apiRoleMap = new Map<String, ApiRoleDTO>(
     apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])

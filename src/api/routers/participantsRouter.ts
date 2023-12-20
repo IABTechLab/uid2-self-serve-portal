@@ -25,7 +25,7 @@ import {
   getSiteList,
   setSiteClientTypes,
 } from '../services/adminServiceClient';
-import { mapApiKeyDTO, SiteDTO } from '../services/adminServiceHelpers';
+import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -266,7 +266,7 @@ export function createParticipantsRouter() {
       }
 
       const adminApiKeys = await getApiKeys(participant.siteId);
-      const apiKeys = await mapApiKeyDTO(adminApiKeys);
+      const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
 
       return res.status(200).json(apiKeys);
     }
