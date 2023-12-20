@@ -164,7 +164,8 @@ function ParticipantApprovalForm({
               label='Api Roles'
               rules={{ required: 'Please specify the API Roles' }}
               options={apiRoles.map((p) => ({
-                optionLabel: `${p.externalName} (${p.roleName})`,
+                optionLabel: p.externalName,
+                optionToolTip: p.roleName,
                 value: p.id,
               }))}
             />

@@ -9,6 +9,7 @@ import './SelectInput.scss';
 
 export type Option<T> = {
   optionLabel: string;
+  optionToolTip?: String;
   value: T;
 };
 export type SelectInputProps<TFieldValues extends FieldValues> = {
