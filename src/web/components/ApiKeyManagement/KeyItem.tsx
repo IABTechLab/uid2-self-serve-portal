@@ -1,8 +1,6 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import ApiRolesCell from './ApiRolesCell';
 
-import './KeyItem.scss';
-
 function formatDate(timeValue: number) {
   const date = new Date(timeValue * 1000);
   return date.toLocaleDateString();
@@ -13,7 +11,7 @@ type KeyItemProps = {
 };
 function KeyItem({ apiKey }: KeyItemProps) {
   return (
-    <tr className='api-key-item'>
+    <tr>
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>
