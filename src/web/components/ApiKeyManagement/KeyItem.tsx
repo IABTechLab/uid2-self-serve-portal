@@ -13,7 +13,7 @@ type KeyItemProps = {
 };
 function KeyItem({ apiKey }: KeyItemProps) {
   return (
-    <tr className='ApiKeyItem'>
+    <tr className='api-key-item'>
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>

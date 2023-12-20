@@ -22,11 +22,11 @@ type KeyTableProps = {
 function KeyTable({ apiKeys }: KeyTableProps) {
   return (
     <div>
-      <table className='ApiKeyTable'>
+      <table className='api-key-table'>
         <thead>
           <tr>
             <th>Name</th>
-            <th className='KeyIdHeader'>
+            <th className='key-id-header'>
               <div>Key ID</div>
               <Tooltip>
                 Shows the first few characters of your plain text key. If support related to a key
