@@ -69,13 +69,13 @@ export function CheckboxInput<
               </Checkbox.Indicator>
             </Checkbox.Root>
 
-            {!optionToolTip ? (
-              <label className='option-label' htmlFor={optionLabel}>
-                {optionLabel}
-              </label>
-            ) : (
-              <Tooltip trigger={optionLabel}>{optionToolTip}</Tooltip>
-            )}
+            <label className='option-label' htmlFor={optionLabel}>
+              {!optionToolTip ? (
+                optionLabel
+              ) : (
+                <Tooltip trigger={optionLabel}>{optionToolTip}</Tooltip>
+              )}
+            </label>
           </div>
         ))}
       </div>

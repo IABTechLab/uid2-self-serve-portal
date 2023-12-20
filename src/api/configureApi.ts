@@ -12,7 +12,7 @@ import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
 import { TYPES } from './constant/types';
-import { ApiRole, ApiRoleDTO } from './entities/ApiRole';
+import { ApiRole } from './entities/ApiRole';
 import { ParticipantType } from './entities/ParticipantType';
 import {
   SSP_KK_AUDIENCE,
