@@ -25,4 +25,10 @@ export async function down(knex: Knex): Promise<void> {
     .update({
       participantId: knex.raw("JSON_VALUE(eventData, '$.participantId')"),
     });
+
+  await knex('auditTrails')
+    .where(knex.raw("JSON_VALUE(eventData, '$.participantId') IS NOT NULL"))
+    .update({
+      eventData: knex.raw("JSON_MODIFY(eventData, '$.participantId', null)"),
+    });
 }
