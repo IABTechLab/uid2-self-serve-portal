@@ -8,7 +8,7 @@ import { GetParticipantApiKeys } from '../services/participant';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-function ManageParticipants() {
+function ApiKeyManagement() {
   const data = useLoaderData() as {
     result: ApiKeyDTO[];
   };
@@ -16,7 +16,7 @@ function ManageParticipants() {
   return (
     <div>
       <h1>Manage API Keys</h1>
-      <p className='heading-details'>View and manage you API keys.</p>
+      <p className='heading-details'>View and manage your API keys.</p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {(apiKeys: ApiKeyDTO[]) => <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />}
@@ -26,10 +26,10 @@ function ManageParticipants() {
   );
 }
 
-export const ApiManagementRoute: PortalRoute = {
-  path: '/dashboard/api',
+export const ApiKeyManagementRoute: PortalRoute = {
+  path: '/dashboard/apiKeyManagement',
   description: 'API Key Management',
-  element: <ManageParticipants />,
+  element: <ApiKeyManagement />,
   errorElement: <RouteErrorBoundary />,
   loader: async () => {
     const apiKeysPromise = GetParticipantApiKeys();

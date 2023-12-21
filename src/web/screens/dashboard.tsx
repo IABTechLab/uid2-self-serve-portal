@@ -11,7 +11,7 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { SetTermsAccepted } from '../services/userAccount';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { AccountInformationRoute } from './accountInformation';
-import { ApiManagementRoute } from './apiManagement';
+import { ApiKeyManagementRoute } from './apiKeyManagement';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
 import { KeyPairRoute } from './keyPairsScreen';
@@ -29,7 +29,7 @@ export const StandardRoutes: PortalRoute[] = [
   LogoutRoute,
   SharingPermissionsRoute,
   AccountInformationRoute,
-  ApiManagementRoute,
+  ApiKeyManagementRoute,
   TeamMembersRoute,
   EmailContactsRoute,
   TermsOfServiceRoute,
