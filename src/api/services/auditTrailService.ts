@@ -34,11 +34,11 @@ export const insertSharingAuditTrails = async (
 ) => {
   try {
     const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
-      participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.UpdateSharingPermissions,
       eventData: {
+        participantId: participant.id,
         siteId: participant.siteId!,
         action,
         sharingPermissions: siteIds,
@@ -63,11 +63,11 @@ export const insertSharingTypesAuditTrail = async (
 ) => {
   try {
     const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
-      participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.UpdateSharingTypes,
       eventData: {
+        participantId: participant.id,
         siteId: participant.siteId!,
         allowedTypes: types,
       },
@@ -93,11 +93,11 @@ export const insertKeyPairAuditTrails = async (
 ) => {
   try {
     const keyPairAuditTrail: Omit<AuditTrailDTO, 'id'> = {
-      participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.ManageKeyPair,
       eventData: {
+        participantId: participant.id,
         siteId: participant.siteId!,
         action,
         name,
@@ -122,6 +122,7 @@ export const insertApproveAccountAuditTrail = async (
   const user = await findUserByEmail(userEmail);
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
+    participantId: participant.id,
   };
 
   if (data.name !== participant.name) {
@@ -138,7 +139,6 @@ export const insertApproveAccountAuditTrail = async (
   }
 
   return AuditTrail.query().insert({
-    participantId: participant?.id!,
     userId: user?.id!,
     userEmail,
     event: AuditTrailEvents.ApproveAccount,
