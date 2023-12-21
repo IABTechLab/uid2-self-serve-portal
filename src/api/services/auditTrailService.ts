@@ -38,10 +38,10 @@ export const insertSharingAuditTrails = async (
       userEmail,
       event: AuditTrailEvents.UpdateSharingPermissions,
       eventData: {
-        participantId: participant.id,
         siteId: participant.siteId!,
         action,
         sharingPermissions: siteIds,
+        participantId: participant.id,
       },
       succeeded: false,
     };
@@ -67,9 +67,9 @@ export const insertSharingTypesAuditTrail = async (
       userEmail,
       event: AuditTrailEvents.UpdateSharingTypes,
       eventData: {
-        participantId: participant.id,
         siteId: participant.siteId!,
         allowedTypes: types,
+        participantId: participant.id,
       },
       succeeded: false,
     };
@@ -97,11 +97,11 @@ export const insertKeyPairAuditTrails = async (
       userEmail,
       event: AuditTrailEvents.ManageKeyPair,
       eventData: {
-        participantId: participant.id,
         siteId: participant.siteId!,
         action,
         name,
         disabled,
+        participantId: participant.id,
       },
       succeeded: false,
     };
