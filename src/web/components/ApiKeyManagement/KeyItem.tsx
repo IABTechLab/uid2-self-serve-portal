@@ -1,12 +1,6 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
+import { formatUnixDate } from '../../utils/textHelpers';
 import ApiRolesCell from './ApiRolesCell';
-
-const SecondToMillisecond = 1000;
-
-function formatDate(timeValue: number) {
-  const date = new Date(timeValue * SecondToMillisecond);
-  return date.toLocaleDateString();
-}
 
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
@@ -19,7 +13,7 @@ function KeyItem({ apiKey }: KeyItemProps) {
       <td>
         <ApiRolesCell apiRoles={apiKey.roles} />
       </td>
-      <td>{formatDate(apiKey.created)}</td>
+      <td>{formatUnixDate(apiKey.created)}</td>
     </tr>
   );
 }

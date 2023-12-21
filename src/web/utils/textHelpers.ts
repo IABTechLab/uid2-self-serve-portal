@@ -16,3 +16,10 @@ export const formatStringsWithSeparator = (strings: string[]): string => {
   }
   return strings.length ? strings[0] : '';
 };
+
+const secondToMilliseconds = (timeValue: number) => timeValue * 1000;
+
+export function formatUnixDate(timeValue: number) {
+  const date = new Date(secondToMilliseconds(timeValue));
+  return date.toLocaleDateString();
+}
