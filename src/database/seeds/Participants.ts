@@ -103,20 +103,14 @@ export async function CreateParticipant(
 export async function seed(knex: Knex): Promise<void> {
   // Deletes existing entries for sampleData
 
+  const sampleParticipantNames = sampleData.map((d) => d.name);
+
   await knex('users')
     .join('participants', 'users.participantId', '=', 'participants.id')
-    .whereIn(
-      'participants.name',
-      sampleData.map((d) => d.name)
-    )
+    .whereIn('participants.name', sampleParticipantNames)
     .del();
 
-  await knex('participants')
-    .whereIn(
-      'name',
-      sampleData.map((d) => d.name)
-    )
-    .del();
+  await knex('participants').whereIn('name', sampleParticipantNames).del();
   // Inserts seed entries
   const promises = sampleData.map((sample) =>
     CreateParticipant(knex, sample, sample.type, sample.apiRoleNames)
