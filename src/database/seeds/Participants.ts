@@ -101,8 +101,13 @@ export async function CreateParticipant(
 }
 
 export async function seed(knex: Knex): Promise<void> {
-  // Deletes ALL existing entries
-  await knex('participants').whereILike('name', '%example').del();
+  // Deletes existing entries for sampleData
+  await knex('participants')
+    .whereIn(
+      'name',
+      sampleData.map((d) => d.name)
+    )
+    .del();
   // Inserts seed entries
   const promises = sampleData.map((sample) =>
     CreateParticipant(knex, sample, sample.type, sample.apiRoleNames)
