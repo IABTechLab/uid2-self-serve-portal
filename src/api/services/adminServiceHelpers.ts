@@ -102,7 +102,6 @@ function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String
     let apiRole = apiRoleMap.get(adminRoleTrimmed);
 
     if (apiRole === undefined) {
-      // Add new role to map if not found. Stocks duplicate new objects
       apiRole = ApiRole.fromJson({
         roleName: adminRoleTrimmed,
         externalName: adminRoleTrimmed,
@@ -117,7 +116,6 @@ function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String
 export async function mapAdminApiKeysToApiKeyDTOs(
   adminApiKeys: ApiKeyAdmin[]
 ): Promise<ApiKeyDTO[]> {
-  // Loads apiRole list into map for faster/easier searching
   const apiRoleList = await ApiRole.query();
   const apiRoleMap = new Map<String, ApiRoleDTO>(
     apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])

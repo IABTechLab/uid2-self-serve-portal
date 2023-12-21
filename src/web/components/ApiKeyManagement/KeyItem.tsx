@@ -1,8 +1,10 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import ApiRolesCell from './ApiRolesCell';
 
+const SecondToMillisecond = 1000;
+
 function formatDate(timeValue: number) {
-  const date = new Date(timeValue * 1000);
+  const date = new Date(timeValue * SecondToMillisecond);
   return date.toLocaleDateString();
 }
 

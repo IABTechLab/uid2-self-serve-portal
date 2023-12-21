@@ -107,7 +107,7 @@ export async function GetParticipantApiKeys(participantId?: number) {
 
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not get participants API Keys');
+    throw backendError(e, 'Could not get participant API Keys');
   }
 }
 
