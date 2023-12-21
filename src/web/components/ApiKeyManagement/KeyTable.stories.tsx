@@ -5,7 +5,7 @@ import KeyTable from './KeyTable';
 
 const meta: Meta<typeof KeyTable> = {
   component: KeyTable,
-  title: 'ApiManagement/API key table',
+  title: 'Api Management/API key table',
 };
 export default meta;
 
@@ -36,7 +36,7 @@ export const ManyKeys: Story = {
         contact: 'ApiKey3',
         name: 'ApiKey3',
         created: 1702830516,
-        key_id: 'FDSL,089',
+        key_id: 'F4lfa.fdas',
         disabled: false,
         roles: [
           { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
