@@ -30,7 +30,7 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
       <td>
         <ApiRolesCell
           apiRoles={participant.apiRoles == null ? [] : participant.apiRoles}
-          showRole
+          showRoleTooltip
         />
       </td>
     </tr>

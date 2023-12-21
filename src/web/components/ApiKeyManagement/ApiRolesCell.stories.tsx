@@ -38,7 +38,7 @@ export const ManyRoleShowingRoleName: Story = {
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
       { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
     ],
-    showRole: true,
+    showRoleTooltip: true,
   },
 };
 

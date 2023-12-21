@@ -5,9 +5,9 @@ import './ApiRolesCell.scss';
 
 type ApiRolesProps = {
   apiRoles: ApiRoleDTO[];
-  showRole?: Boolean;
+  showRoleTooltip?: boolean;
 };
-function ApiRolesCell({ apiRoles, showRole = false }: ApiRolesProps) {
+function ApiRolesCell({ apiRoles, showRoleTooltip: showRole = false }: ApiRolesProps) {
   return (
     <div className='api-roles-cell'>
       {apiRoles.map((role) => (
