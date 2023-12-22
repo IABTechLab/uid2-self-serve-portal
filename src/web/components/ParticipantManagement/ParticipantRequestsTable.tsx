@@ -1,3 +1,4 @@
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
@@ -9,6 +10,7 @@ import './ParticipantManagementTable.scss';
 type ParticipantRequestsTableProps = {
   participantRequests: ParticipantRequestDTO[];
   participantTypes: ParticipantTypeDTO[];
+  apiRoles: ApiRoleDTO[];
   onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
 };
 
@@ -26,6 +28,7 @@ function NoParticipantRequests() {
 export function ParticipantRequestsTable({
   participantRequests,
   participantTypes,
+  apiRoles,
   onApprove,
 }: ParticipantRequestsTableProps) {
   return (
@@ -52,6 +55,7 @@ export function ParticipantRequestsTable({
               key={participantRequest.id}
               participantRequest={participantRequest}
               participantTypes={participantTypes}
+              apiRoles={apiRoles}
               onApprove={onApprove}
             />
           ))}

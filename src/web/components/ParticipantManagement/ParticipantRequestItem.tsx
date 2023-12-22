@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
@@ -12,12 +13,14 @@ import './ParticipantManagementItem.scss';
 type ParticipantRequestProps = {
   participantRequest: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
+  apiRoles: ApiRoleDTO[];
   onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
 };
 
 export function ParticipantRequestItem({
   participantRequest: participant,
   participantTypes,
+  apiRoles,
   onApprove,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
@@ -76,6 +79,7 @@ export function ParticipantRequestItem({
               onApprove={handleApprove}
               participant={participant}
               participantTypes={participantTypes}
+              apiRoles={apiRoles}
             />
           </Dialog>
         </div>

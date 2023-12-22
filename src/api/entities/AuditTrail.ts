@@ -42,6 +42,7 @@ export type ApproveAccountEventData = {
   newName?: string;
   oldTypeIds?: number[];
   newTypeIds?: number[];
+  apiRoles?: number[];
   participantId: number;
 };
 

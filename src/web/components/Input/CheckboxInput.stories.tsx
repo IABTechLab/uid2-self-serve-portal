@@ -30,6 +30,17 @@ WithLabel.args = {
   options,
 };
 
+export const WithToolTip = Template.bind({});
+WithToolTip.args = {
+  inputName: 'default',
+  label: 'Select options',
+  options: [
+    { optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' },
+    { optionLabel: 'Option 2', optionToolTip: 'Option2', value: 'option2' },
+    { optionLabel: 'Option 3', optionToolTip: 'Option3', value: 'option3' },
+  ],
+};
+
 export const WithValidation = Template.bind({});
 WithValidation.args = {
   inputName: 'checkbox with rule',

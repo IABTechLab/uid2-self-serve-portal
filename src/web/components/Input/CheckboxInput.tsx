@@ -3,6 +3,7 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import { useCallback } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
+import { Tooltip } from '../Core/Tooltip';
 import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
@@ -53,7 +54,7 @@ export function CheckboxInput<
   return (
     <Input error={error} label={label} inputName={inputName}>
       <div className='inline-options'>
-        {options.map(({ optionLabel, value }) => (
+        {options.map(({ optionLabel, optionToolTip, value }) => (
           <div className='checkbox-option' key={optionLabel}>
             <Checkbox.Root
               className='checkbox-root'
@@ -67,8 +68,13 @@ export function CheckboxInput<
                 <FontAwesomeIcon icon='check' />
               </Checkbox.Indicator>
             </Checkbox.Root>
+
             <label className='option-label' htmlFor={optionLabel}>
-              {optionLabel}
+              {!optionToolTip ? (
+                optionLabel
+              ) : (
+                <Tooltip trigger={optionLabel}>{optionToolTip}</Tooltip>
+              )}
             </label>
           </div>
         ))}

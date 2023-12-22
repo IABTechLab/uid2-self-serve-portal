@@ -42,8 +42,40 @@ const Template: ComponentStory<typeof ParticipantApprovalForm> = (args) => {
   );
 };
 
-export const ParticipantApproval = Template.bind({});
-ParticipantApproval.args = {
+export const ParticipantApprovalMatchingSite = Template.bind({});
+ParticipantApprovalMatchingSite.args = {
+  participant: {
+    id: 1,
+    name: 'Test Participant',
+    types: [
+      { id: 1, typeName: 'Type 1' },
+      { id: 2, typeName: 'Type 2' },
+    ],
+    status: ParticipantStatus.AwaitingApproval,
+    requestingUser: {
+      email: 'test@example.com',
+      fullName: 'Test User',
+      role: UserRole.MediaBuyer,
+    },
+  },
+  participantTypes: [
+    { id: 1, typeName: 'Type 1' },
+    { id: 2, typeName: 'Type 2' },
+    { id: 3, typeName: 'Type 3' },
+  ],
+  apiRoles: [
+    { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+    { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+    { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+  ],
+  onApprove: async (form) => {
+    console.log(JSON.stringify(form));
+  },
+};
+
+export const ParticipantApprovalSiteSearch = Template.bind({});
+ParticipantApprovalSiteSearch.args = {
   participant: {
     id: 1,
     name: 'Participant 1',
@@ -62,6 +94,12 @@ ParticipantApproval.args = {
     { id: 1, typeName: 'Type 1' },
     { id: 2, typeName: 'Type 2' },
     { id: 3, typeName: 'Type 3' },
+  ],
+  apiRoles: [
+    { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+    { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+    { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
   ],
   onApprove: async (form) => {
     console.log(JSON.stringify(form));

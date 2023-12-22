@@ -102,6 +102,8 @@ export const ParticipantApprovalPartial = ParticipantSchema.pick({
   siteId: true,
   name: true,
   types: true,
+  apiRoles: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
+  apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
 });
