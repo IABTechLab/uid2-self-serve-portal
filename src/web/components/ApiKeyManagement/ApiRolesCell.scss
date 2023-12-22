@@ -1,0 +1,12 @@
+.api-roles-cell {
+  display: flex;
+  font-size: 0.75rem;
+  line-height: 1.15;
+
+  > div {
+    background: var(--theme-label);
+    border-radius: 3px;
+    padding: 4px 8px;
+    margin-right: 8px;
+  }
+}
