@@ -50,7 +50,7 @@ export async function ResendInvite(id: number): Promise<void> {
   try {
     return await axios.post(`/users/${id}/resendInvitation`);
   } catch (e: unknown) {
-    const error = backendError(e, 'Unable to resend invite.');
+    const error = backendError(e, 'Unable to resend invite');
     log.error(error);
     throw error;
   }

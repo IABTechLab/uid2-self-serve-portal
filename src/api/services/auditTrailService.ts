@@ -34,7 +34,6 @@ export const insertSharingAuditTrails = async (
 ) => {
   try {
     const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
-      participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.UpdateSharingPermissions,
@@ -42,6 +41,7 @@ export const insertSharingAuditTrails = async (
         siteId: participant.siteId!,
         action,
         sharingPermissions: siteIds,
+        participantId: participant.id,
       },
       succeeded: false,
     };
@@ -63,13 +63,13 @@ export const insertSharingTypesAuditTrail = async (
 ) => {
   try {
     const sharingAuditTrail: Omit<AuditTrailDTO, 'id'> = {
-      participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.UpdateSharingTypes,
       eventData: {
         siteId: participant.siteId!,
         allowedTypes: types,
+        participantId: participant.id,
       },
       succeeded: false,
     };
@@ -93,7 +93,6 @@ export const insertKeyPairAuditTrails = async (
 ) => {
   try {
     const keyPairAuditTrail: Omit<AuditTrailDTO, 'id'> = {
-      participantId: participant.id,
       userId,
       userEmail,
       event: AuditTrailEvents.ManageKeyPair,
@@ -102,6 +101,7 @@ export const insertKeyPairAuditTrails = async (
         action,
         name,
         disabled,
+        participantId: participant.id,
       },
       succeeded: false,
     };
@@ -123,6 +123,7 @@ export const insertApproveAccountAuditTrail = async (
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
     apiRoles: data.apiRoles.map((role) => role.id),
+    participantId: participant.id,
   };
 
   if (data.name !== participant.name) {
@@ -139,7 +140,6 @@ export const insertApproveAccountAuditTrail = async (
   }
 
   return AuditTrail.query().insert({
-    participantId: participant?.id!,
     userId: user?.id!,
     userEmail,
     event: AuditTrailEvents.ApproveAccount,

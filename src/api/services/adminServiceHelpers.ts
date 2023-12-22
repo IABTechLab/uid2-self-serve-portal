@@ -1,5 +1,7 @@
+/* eslint-disable camelcase */
 import { z } from 'zod';
 
+import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 
@@ -80,3 +82,56 @@ export const mapClientTypesToAdminEnums = (
     return adminEnum;
   });
 };
+
+export type ApiKeyDTO = {
+  key_id: string;
+  name: string;
+  contact: string;
+  roles: ApiRoleDTO[];
+  created: number;
+  disabled: boolean;
+  service_id: number;
+};
+
+export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
+
+function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String, ApiRoleDTO>) {
+  return adminRoles.map((adminRole) => {
+    const adminRoleTrimmed = adminRole.trim();
+
+    let apiRole = apiRoleMap.get(adminRoleTrimmed);
+
+    if (apiRole === undefined) {
+      apiRole = ApiRole.fromJson({
+        roleName: adminRoleTrimmed,
+        externalName: adminRoleTrimmed,
+      });
+      apiRoleMap.set(adminRoleTrimmed, apiRole);
+    }
+
+    return apiRole;
+  });
+}
+
+export async function mapAdminApiKeysToApiKeyDTOs(
+  adminApiKeys: ApiKeyAdmin[]
+): Promise<ApiKeyDTO[]> {
+  const apiRoleList = await ApiRole.query();
+  const apiRoleMap = new Map<String, ApiRoleDTO>(
+    apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])
+  );
+
+  return adminApiKeys.map((adminKey) => {
+    const roles = mapAdminRolesToApiRoleDTOs(adminKey.roles.split(','), apiRoleMap);
+
+    return {
+      key_id: adminKey.key_id,
+      name: adminKey.name,
+      contact: adminKey.contact,
+      created: adminKey.created,
+      disabled: adminKey.disabled,
+      roles,
+      service_id: adminKey.service_id,
+    };
+  });
+}

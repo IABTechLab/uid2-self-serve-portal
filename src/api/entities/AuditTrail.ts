@@ -27,11 +27,13 @@ export type UpdateSharingPermissionEventData = {
   siteId: number;
   action: AuditAction;
   sharingPermissions: number[];
+  participantId: number;
 };
 
 export type UpdateSharingTypesEventData = {
   siteId: number;
   allowedTypes: ClientType[];
+  participantId: number;
 };
 
 export type ApproveAccountEventData = {
@@ -41,6 +43,7 @@ export type ApproveAccountEventData = {
   oldTypeIds?: number[];
   newTypeIds?: number[];
   apiRoles?: number[];
+  participantId: number;
 };
 
 export type ManageKeyPairEventData = {
@@ -48,6 +51,7 @@ export type ManageKeyPairEventData = {
   name: string;
   disabled: boolean;
   action: AuditAction;
+  participantId: number;
 };
 
 export class AuditTrail extends BaseModel {
@@ -55,14 +59,6 @@ export class AuditTrail extends BaseModel {
     return 'auditTrails';
   }
   static relationMappings = {
-    participant: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'auditTrails.participantId',
-        to: 'participants.id',
-      },
-    },
     user: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'User',
@@ -79,7 +75,6 @@ export class AuditTrail extends BaseModel {
 
   declare id: number;
   declare userId: number;
-  declare participantId: number;
   declare userEmail: string;
   declare succeeded: boolean;
   declare event: AuditTrailEvents;
