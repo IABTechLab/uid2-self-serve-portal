@@ -7,12 +7,12 @@ type ApiRolesProps = {
   apiRoles: ApiRoleDTO[];
   showRoleTooltip?: boolean;
 };
-function ApiRolesCell({ apiRoles, showRoleTooltip: showRole = false }: ApiRolesProps) {
+function ApiRolesCell({ apiRoles, showRoleTooltip = false }: ApiRolesProps) {
   return (
     <div className='api-roles-cell'>
       {apiRoles.map((role) => (
         <div key={role.externalName}>
-          {showRole ? (
+          {showRoleTooltip ? (
             <Tooltip trigger={role.externalName}>{role.roleName}</Tooltip>
           ) : (
             <div>{role.externalName}</div>
