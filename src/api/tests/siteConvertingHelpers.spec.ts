@@ -100,19 +100,19 @@ describe('Sharing Permission Helper Tests', () => {
     });
   });
 
-  describe('#hasSharerRole', () => {
-    it('should return true if site is DSP', () => {
+  describe('#canBeSharedWith', () => {
+    it('should return true if site is DSP and has ID_READER', () => {
       const site = {
         id: 2,
         name: 'Test Site',
         enabled: true,
-        roles: [],
+        roles: ['ID_READER'],
         clientTypes: ['DSP'],
         // eslint-disable-next-line camelcase
         client_count: 1,
         visible: true,
       } as SiteDTO;
-      expect(canBeSharedWith(site)).toBeTruthy();
+      expect(canBeSharedWith(site)).toBe(true);
     });
 
     it('should return true if site has SHARER role', () => {
@@ -125,7 +125,33 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
       } as SiteDTO;
-      expect(canBeSharedWith(site)).toBeTruthy();
+      expect(canBeSharedWith(site)).toBe(true);
+    });
+
+    it('should return false if site has ID_READER but is not a DSP', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: ['ID_READER'],
+        clientTypes: ['PUBLISHER'],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      expect(canBeSharedWith(site)).toBe(false);
+    });
+
+    it('should return false if site has OPTOUT role', () => {
+      const site = {
+        id: 2,
+        name: 'Test Site',
+        enabled: true,
+        roles: ['OPTOUT'],
+        clientTypes: ['DSP'],
+        // eslint-disable-next-line camelcase
+        client_count: 1,
+      } as SiteDTO;
+      expect(canBeSharedWith(site)).toBe(false);
     });
   });
 });
