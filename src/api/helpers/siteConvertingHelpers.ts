@@ -26,8 +26,7 @@ export const mapClientTypeToParticipantType = (
 export const canBeSharedWith = (site: SiteDTO): boolean => {
   if (
     (site.roles.includes('SHARER') ||
-      site.roles.includes('ID_READER') ||
-      site.clientTypes?.includes('DSP')) &&
+      (site.roles.includes('ID_READER') && site.clientTypes?.includes('DSP'))) &&
     !site.roles.includes('OPTOUT')
   )
     return true;
