@@ -158,6 +158,9 @@ This action should be triggered after adding or updating any templates and befor
 
 > **Note:** If you only need to update an existing template, you can simply modify the corresponding `.hbs` file and trigger the **Sync Handlebars Template with SendGrid** action. There is no need to redeploy or rebuild Docker images in this case.
 
+## Environment Variables
+We do not have a committed `.env` file as it goes against best practice, per https://www.npmjs.com/package/dotenv. However, we do provide a sample `.env.sample` file that can be copied into a `.env` file to get development up and running. 
+
 ## Available Scripts
 
 In the project directory, you can run:
@@ -200,31 +203,32 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 The following steps describe the minimal steps required to successfully log in to the portal UI. If you require a fully-functional portal, please perform the following steps as well as the steps described below in [Connecting to local admin service](README.md#connecting-to-local-admin-service).
 
 1. Set up Docker, as described above: [Docker](README.md#docker)
-2. Ensure your `SSP_KK_SECRET` matches the value in the Keycloak admin console. If it does not, please try [Reset your keycloak realm](./KeycloakAdvancedSetup.md#reset-realm). If all else fails, manually generate your own secret by following: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
-3. Run the following to install dependencies:
+2. Set up your `.env` file per (README.md#environment-variables)
+3. Ensure your `SSP_KK_SECRET` matches the value in the Keycloak admin console. If it does not, please try [Reset your keycloak realm](./KeycloakAdvancedSetup.md#reset-realm). If all else fails, manually generate your own secret by following: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
+4. Run the following to install dependencies:
    ```
    npm install
    ```
-4. Run the following to start the API and React front-end:
+5. Run the following to start the API and React front-end:
    ```
    npm run dev
    ```
    Successfully running this will result in the self-serve-portal opening in the browser.
-5. Run the following to build the database schema:
+6. Run the following to build the database schema:
    ```
    npm run knex:migrate:latest
    ```
-6. Run the following to populate test data:
+7. Run the following to populate test data:
    ```
    npm run knex:seed:run
    ```
-7. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
-8. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
-9. Open the email and Click `Verify Email`
-10. Fill in the form however you want and submit the form
-11. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
-12. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-13. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
+8. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
+9. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
+10. Open the email and Click `Verify Email`
+11. Fill in the form however you want and submit the form
+12. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
+13. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
+14. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
 
     ```
     declare @email as nvarchar(256) = '<Enter your email here>'
@@ -237,9 +241,8 @@ The following steps describe the minimal steps required to successfully log in t
     where u.email = @email
     ```
 
-14. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
-
-15. Return to the UI and you should be good to go!
+15. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
+16. Return to the UI and you should be good to go!
 
 ### Connecting to local admin service
 
