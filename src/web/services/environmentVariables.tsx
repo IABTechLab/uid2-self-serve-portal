@@ -14,6 +14,6 @@ export async function GetEnvironmentVariables() {
     });
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not get base url');
+    throw backendError(e, 'Could not get environment variables');
   }
 }

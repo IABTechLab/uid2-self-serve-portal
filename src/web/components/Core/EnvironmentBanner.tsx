@@ -27,7 +27,7 @@ function EnvironmentBanner() {
   const { baseUrl, isDevelopment } = environment;
   const showBanner = isDevelopment && !baseUrl.includes('localhost');
 
-  return showBanner ? <Banner type='Error' message={`Your base URL is ${baseUrl}.`} /> : null;
+  return showBanner ? <Banner type='Error' message={`Your base URL is ${baseUrl}`} /> : null;
 }
 
 export { EnvironmentBanner };
