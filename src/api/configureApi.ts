@@ -15,6 +15,7 @@ import { TYPES } from './constant/types';
 import { ApiRole } from './entities/ApiRole';
 import { ParticipantType } from './entities/ParticipantType';
 import {
+  SSP_IS_DEVELOPMENT,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
   SSP_KK_ISSUER_BASE_URL,
@@ -23,6 +24,7 @@ import {
   SSP_KK_SSL_PUBLIC_CLIENT,
   SSP_KK_SSL_REQUIRED,
   SSP_KK_SSL_RESOURCE,
+  SSP_WEB_BASE_URL,
 } from './envars';
 import {
   getErrorLoggingMiddleware,
@@ -159,6 +161,12 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   router.get('/apiRoles', async (_req, res) => {
     const apiRoles = await ApiRole.query();
     return res.status(200).json(apiRoles);
+  });
+
+  router.get('/envars', async (_req, res) => {
+    const baseUrl = SSP_WEB_BASE_URL;
+    const isDevelopment = SSP_IS_DEVELOPMENT;
+    return res.json({ baseUrl, isDevelopment });
   });
 
   router.get('/keycloak-config', async (_req, res) => {
