@@ -10,7 +10,7 @@ const checkEnvFile = (): void => {
     console.log('.env file found!');
   } catch (err) {
     console.error(
-      'Error: .env file not found. See `.env.sample` or 1Password under "ssportal-env"'
+      'Error: .env file not found. See 1Password under "ssportal-env" or see https://github.com/IABTechLab/uid2-self-serve-portal?tab=readme-ov-file#environment-variables'
     );
 
     process.exit(1); // Exit with a non-zero status code to indicate failure
