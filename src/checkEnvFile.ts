@@ -1,0 +1,20 @@
+import * as fs from 'fs';
+import * as path from 'path';
+
+const checkEnvFile = (): void => {
+  const envFilePath = path.join(process.cwd(), '.env');
+
+  try {
+    // Check if the .env file exists
+    fs.accessSync(envFilePath, fs.constants.R_OK);
+    console.log('.env file found!');
+  } catch (err) {
+    console.error(
+      'Error: .env file not found. See `.env.sample` or 1Password under "ssportal-env"'
+    );
+
+    process.exit(1); // Exit with a non-zero status code to indicate failure
+  }
+};
+
+checkEnvFile();
