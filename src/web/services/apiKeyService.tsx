@@ -13,3 +13,8 @@ export async function GetAllApiRoles() {
     throw backendError(e, 'Could not get API Roles');
   }
 }
+
+export type KeyCreationFormProps = {
+  name: string;
+  roles?: number[];
+};
