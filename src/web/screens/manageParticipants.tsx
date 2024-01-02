@@ -9,7 +9,7 @@ import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
-import { GetAllApiRoles } from '../services/apiRoles';
+import { GetAllApiRoles } from '../services/apiKeyService';
 import {
   ApproveParticipantRequest,
   GetApprovedParticipants,

@@ -2,6 +2,7 @@ import axios, { AxiosError, isAxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import { z } from 'zod';
 
+import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
@@ -108,6 +109,18 @@ export async function GetParticipantApiKeys(participantId?: number) {
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not get participant API Keys');
+  }
+}
+
+export async function GetParticipantApiRoles(participantId?: number) {
+  try {
+    const result = await axios.get<ApiRoleDTO[]>(
+      `/participants/${participantId ?? 'current'}/apiRoles`
+    );
+
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get participant API Roles');
   }
 }
 

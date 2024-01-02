@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { ApiRoleDTO } from '../entities/ApiRole';
 import { AuditAction } from '../entities/AuditTrail';
 import {
   Participant,
@@ -38,6 +39,7 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
+  getApiRoles,
   getParticipantsApproved,
   getParticipantsAwaitingApproval,
   ParticipantRequest,
@@ -269,6 +271,20 @@ export function createParticipantsRouter() {
       const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
 
       return res.status(200).json(apiKeys);
+    }
+  );
+
+  participantsRouter.get(
+    '/:participantId/apiRoles',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const apiRoles: ApiRoleDTO[] = await getApiRoles(participant);
+
+      return res.status(200).json(apiRoles);
     }
   );
 

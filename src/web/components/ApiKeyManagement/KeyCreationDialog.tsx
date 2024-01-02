@@ -26,6 +26,8 @@ function KeyCreationDialog({
     setOpen(false);
   };
 
+  console.log(availableRoles);
+
   return (
     <Dialog
       triggerButton={triggerButton}
