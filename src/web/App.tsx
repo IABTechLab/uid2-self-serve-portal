@@ -2,6 +2,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { EnvironmentBanner } from './components/Core/EnvironmentBanner';
 import { Loading } from './components/Core/Loading';
 import { PortalHeader } from './components/Core/PortalHeader';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
@@ -41,6 +42,7 @@ export function App() {
               setDarkMode={setDarkMode}
               logout={logout}
             />
+            <EnvironmentBanner />
             <Outlet />
           </div>
         </ParticipantProvider>
