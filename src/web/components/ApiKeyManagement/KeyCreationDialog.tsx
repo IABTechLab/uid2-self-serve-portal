@@ -26,8 +26,6 @@ function KeyCreationDialog({
     setOpen(false);
   };
 
-  console.log(availableRoles);
-
   return (
     <Dialog
       triggerButton={triggerButton}
@@ -39,6 +37,7 @@ function KeyCreationDialog({
       <Form<KeyCreationFormProps> onSubmit={onSubmit} submitButtonText='Create API Key'>
         <TextInput inputName='name' label='Name' required />
         <CheckboxInput
+          label='API Roles'
           inputName='Roles'
           options={availableRoles.map((role) => ({
             optionLabel: role.externalName,
