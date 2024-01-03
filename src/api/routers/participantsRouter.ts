@@ -20,6 +20,7 @@ import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
+  createApiKey,
   getApiKeys,
   getKeyPairsList,
   getSharingList,
@@ -27,6 +28,11 @@ import {
   setSiteClientTypes,
 } from '../services/adminServiceClient';
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
+import {
+  allowedApiRoles,
+  apiKeyCreationToApiKeySecret,
+  getApiRoles,
+} from '../services/apiKeyService';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -39,7 +45,6 @@ import {
   addSharingParticipants,
   checkParticipantId,
   deleteSharingParticipants,
-  getApiRoles,
   getParticipantsApproved,
   getParticipantsAwaitingApproval,
   ParticipantRequest,
@@ -285,6 +290,30 @@ export function createParticipantsRouter() {
       const apiRoles: ApiRoleDTO[] = await getApiRoles(participant);
 
       return res.status(200).json(apiRoles);
+    }
+  );
+
+  const apiKeyCreateParser = z.object({ name: z.string(), roles: z.array(z.string()) });
+
+  participantsRouter.post(
+    '/:participantId/apiKeys/create',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      console.log(req.body);
+
+      const { name, roles } = apiKeyCreateParser.parse(req.body);
+
+      if (!allowedApiRoles(roles, participant)) {
+        return res.status(400).send('Invalid api Roles');
+      }
+
+      const key = await createApiKey(name, roles, participant.siteId);
+
+      return res.status(200).json(apiKeyCreationToApiKeySecret(key));
     }
   );
 

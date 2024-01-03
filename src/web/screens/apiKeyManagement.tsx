@@ -1,11 +1,12 @@
 import { Suspense } from 'react';
-import { Await, defer, useLoaderData } from 'react-router-dom';
+import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
+import { ApiKeyCreationFormDTO, CreateApiKey } from '../services/apiKeyService';
 import { GetParticipantApiKeys, GetParticipantApiRoles } from '../services/participant';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -13,6 +14,14 @@ import { PortalRoute } from './routeUtils';
 function ApiKeyManagement() {
   const data = useLoaderData() as {
     result: ApiKeyDTO[];
+  };
+
+  const reloader = useRevalidator();
+
+  const onKeyCreation = async (form: ApiKeyCreationFormDTO, participantId?: number) => {
+    const keySecret = await CreateApiKey(form, participantId);
+    reloader.revalidate();
+    return keySecret;
   };
 
   return (
@@ -26,7 +35,7 @@ function ApiKeyManagement() {
               <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />
               <KeyCreationDialog
                 availableRoles={apiRoles}
-                onKeyCreation={async (roles) => {}}
+                onKeyCreation={onKeyCreation}
                 triggerButton={
                   <button className='small-button' type='button'>
                     Add API Key

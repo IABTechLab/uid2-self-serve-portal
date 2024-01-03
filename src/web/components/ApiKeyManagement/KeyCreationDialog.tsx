@@ -2,17 +2,20 @@ import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
-import { KeyCreationFormProps } from '../../services/apiKeyService';
+import { ApiKeySecretDTO } from '../../../api/services/apiKeyService';
+import { ApiKeyCreationFormDTO } from '../../services/apiKeyService';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
 type KeyCreationDialogProps = {
-  onKeyCreation: (form: KeyCreationFormProps) => Promise<void>;
+  onKeyCreation: (form: ApiKeyCreationFormDTO) => Promise<ApiKeySecretDTO>;
   triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
 };
+
+type KeySecretProp = ApiKeySecretDTO | undefined;
 
 function KeyCreationDialog({
   onKeyCreation,
@@ -20,10 +23,10 @@ function KeyCreationDialog({
   availableRoles,
 }: KeyCreationDialogProps) {
   const [open, setOpen] = useState(false);
+  const [secret, setSecret] = useState<KeySecretProp>(undefined);
 
-  const onSubmit: SubmitHandler<KeyCreationFormProps> = async (formData) => {
-    await onKeyCreation(formData);
-    setOpen(false);
+  const onFormSubmit: SubmitHandler<ApiKeyCreationFormDTO> = async (formData) => {
+    setSecret(await onKeyCreation(formData));
   };
 
   return (
@@ -34,17 +37,24 @@ function KeyCreationDialog({
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<KeyCreationFormProps> onSubmit={onSubmit} submitButtonText='Create API Key'>
-        <TextInput inputName='name' label='Name' required />
-        <CheckboxInput
-          label='API Roles'
-          inputName='Roles'
-          options={availableRoles.map((role) => ({
-            optionLabel: role.externalName,
-            value: role.id,
-          }))}
-        />
-      </Form>
+      {!secret ? (
+        <Form<ApiKeyCreationFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
+          <TextInput inputName='name' label='Name' required />
+          <CheckboxInput
+            label='API Roles'
+            inputName='roles'
+            options={availableRoles.map((role) => ({
+              optionLabel: role.externalName,
+              value: role.roleName,
+            }))}
+          />
+        </Form>
+      ) : (
+        <div>
+          Secret: {secret.secret}
+          Plaintext key: {secret.plaintextKey}
+        </div>
+      )}
     </Dialog>
   );
 }

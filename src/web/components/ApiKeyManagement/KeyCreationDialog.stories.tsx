@@ -13,9 +13,14 @@ type Story = StoryObj<typeof KeyCreationDialog>;
 export const MultipleRoles: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
-    onKeyCreation: (form) =>
+    onKeyCreation: (form) => {
       // eslint-disable-next-line no-console
-      Promise.resolve(console.log(`Add new key pair ${JSON.stringify(form)}`)),
+      console.log(`Add a new Key ${JSON.stringify(form)}`);
+      return Promise.resolve({
+        plaintextKey: 'Test_Plaintext',
+        secret: 'Test_Secret',
+      });
+    },
     availableRoles: [
       { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
       { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
@@ -27,9 +32,14 @@ export const MultipleRoles: Story = {
 export const NoRoles: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
-    onKeyCreation: (form) =>
+    onKeyCreation: (form) => {
       // eslint-disable-next-line no-console
-      Promise.resolve(console.log(`Add a new Key ${JSON.stringify(form)}`)),
+      console.log(`Add a new Key ${JSON.stringify(form)}`);
+      return Promise.resolve({
+        plaintextKey: 'Test_Plaintext',
+        secret: 'Test_Secret',
+      });
+    },
     availableRoles: [],
   },
 };

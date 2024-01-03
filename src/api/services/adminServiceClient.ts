@@ -7,6 +7,7 @@ import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../env
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
   ApiKeyAdmin,
+  ApiKeyCreationDTO,
   ClientType,
   KeyPairDTO,
   mapClientTypesToAdminEnums,
@@ -120,5 +121,22 @@ export const setSiteClientTypes = async (
       types: adminTypes,
     },
   });
+  return response.data;
+};
+
+export const createApiKey = async (
+  name: string,
+  roles: string[],
+  siteId: number
+): Promise<ApiKeyCreationDTO> => {
+  const rolesString = roles.join(', ');
+  const response = await adminServiceClient.post<ApiKeyCreationDTO>('/api/client/add', null, {
+    params: {
+      name,
+      roles: rolesString,
+      site_id: siteId,
+    },
+  });
+
   return response.data;
 };

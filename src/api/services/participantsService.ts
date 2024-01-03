@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
-import { ApiRole } from '../entities/ApiRole';
 import {
   Participant,
   ParticipantApprovalPartial,
@@ -228,15 +227,4 @@ export const checkParticipantId = async (
     return enrichCurrentParticipant(req, res, next);
   }
   return hasParticipantAccess(req, res, next);
-};
-
-export const getApiRoles = async (participant: Participant) => {
-  const participantCurr = await Participant.query()
-    .findById(participant.id)
-    .withGraphFetched('apiRoles');
-
-  if (!participantCurr?.apiRoles) {
-    return [];
-  }
-  return participantCurr.apiRoles;
 };
