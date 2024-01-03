@@ -7,7 +7,6 @@ import '../../utils/errorHandler.scss';
 const meta: Meta<typeof ErrorView> = {
   component: ErrorView,
   title: 'Shared Components/Error View',
-  decorators: [(Story) => <Story />],
 };
 export default meta;
 
