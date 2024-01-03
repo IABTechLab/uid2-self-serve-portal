@@ -305,8 +305,6 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
-      console.log(req.body);
-
       const { name, roles } = apiKeyCreateParser.parse(req.body);
 
       if (!allowedApiRoles(roles, participant)) {
