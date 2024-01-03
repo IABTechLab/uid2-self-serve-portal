@@ -9,13 +9,13 @@ import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
+type KeySecretProp = ApiKeySecretDTO | undefined;
+
 type KeyCreationDialogProps = {
-  onKeyCreation: (form: ApiKeyCreationFormDTO) => Promise<ApiKeySecretDTO>;
+  onKeyCreation: (form: ApiKeyCreationFormDTO) => Promise<KeySecretProp>;
   triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
 };
-
-type KeySecretProp = ApiKeySecretDTO | undefined;
 
 function KeyCreationDialog({
   onKeyCreation,
@@ -47,6 +47,7 @@ function KeyCreationDialog({
               optionLabel: role.externalName,
               value: role.roleName,
             }))}
+            rules={{ required: 'Your new API Key must have at least one role.' }}
           />
         </Form>
       ) : (

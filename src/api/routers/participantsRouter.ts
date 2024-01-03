@@ -298,6 +298,8 @@ export function createParticipantsRouter() {
   participantsRouter.post(
     '/:participantId/apiKeys/create',
     async (req: ParticipantRequest, res: Response) => {
+      // TODO Add Audit here
+
       const { participant } = req;
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
