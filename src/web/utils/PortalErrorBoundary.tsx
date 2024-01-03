@@ -1,5 +1,5 @@
+import ErrorView from '../components/Core/ErrorView';
 import { errorHandler, RenderedErrorProps } from './errorHandler';
-import { ErrorView } from './ErrorView';
 
 function PortalErrorComponent(props: RenderedErrorProps) {
   const { errorId, errorHash } = props;
