@@ -56,6 +56,7 @@ function KeyCreationDialog({
           Plaintext key: {secret.plaintextKey}
         </div>
       )}
+      {/* TODO Make submit blank until picked */}
     </Dialog>
   );
 }
