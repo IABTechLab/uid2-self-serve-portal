@@ -2,6 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import ErrorView from './ErrorView';
 
+import '../../utils/errorHandler.scss';
+
 const meta: Meta<typeof ErrorView> = {
   component: ErrorView,
   title: 'Shared Components/Error View',
@@ -10,6 +12,8 @@ const meta: Meta<typeof ErrorView> = {
 export default meta;
 
 type Story = StoryObj<typeof ErrorView>;
+
+export const Default: Story = {};
 
 export const WithErrorId: Story = {
   args: {
