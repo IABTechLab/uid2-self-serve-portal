@@ -159,7 +159,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
   });
 
   router.get('/apiRoles', async (_req, res) => {
-    const apiRoles = await ApiRole.query();
+    const apiRoles = await ApiRole.query().where({ disabled: false });
     return res.status(200).json(apiRoles);
   });
 
