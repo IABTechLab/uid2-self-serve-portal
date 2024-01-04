@@ -19,8 +19,23 @@ function ViewKeyButton({ value, title }: { value: string; title: string }) {
   );
 }
 
-function KeySecretReveal({ value, title }: { value: string; title: string }) {
+function KeySecretReveal({
+  value,
+  title,
+  setCopiedSecrets,
+}: {
+  value: string;
+  title: string;
+  setCopiedSecrets?: React.Dispatch<React.SetStateAction<Map<String, boolean>>>;
+}) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
+
+  if (setCopiedSecrets) {
+    setCopiedSecrets((prevMap) => {
+      if (!prevMap.has(value)) prevMap.set(value, false);
+      return prevMap;
+    });
+  }
 
   const display: string =
     value.length > 20
@@ -30,6 +45,13 @@ function KeySecretReveal({ value, title }: { value: string; title: string }) {
   const copyKey = (): void => {
     setShowStatusPopup(true);
     navigator.clipboard.writeText(value);
+
+    if (setCopiedSecrets) {
+      setCopiedSecrets((prevMap) => {
+        prevMap.set(value, true);
+        return prevMap;
+      });
+    }
   };
 
   return (
