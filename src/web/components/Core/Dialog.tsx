@@ -46,13 +46,15 @@ export function Dialog({
               </RadixDialog.Close>
             </div>
           )}
-          <div className='dialog-close-container'>
-            <RadixDialog.Close asChild>
-              <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
-                <FontAwesomeIcon icon='xmark' />
-              </button>
-            </RadixDialog.Close>
-          </div>
+          {onOpenChange && (
+            <div className='dialog-close-container'>
+              <RadixDialog.Close asChild>
+                <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
+                  <FontAwesomeIcon icon='xmark' />
+                </button>
+              </RadixDialog.Close>
+            </div>
+          )}
         </div>
       </RadixDialog.Content>
     </RadixDialog.Root>

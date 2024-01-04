@@ -19,6 +19,7 @@ export const MultipleRoles: Story = {
       return Promise.resolve({
         plaintextKey: 'Test_Plaintext',
         secret: 'Test_Secret',
+        name: 'Test_Key',
       });
     },
     availableRoles: [
@@ -38,6 +39,7 @@ export const NoRoles: Story = {
       return Promise.resolve({
         plaintextKey: 'Test_Plaintext',
         secret: 'Test_Secret',
+        name: 'Test_Key',
       });
     },
     availableRoles: [],

@@ -4,11 +4,16 @@ import { ApiKeyCreationDTO } from './adminServiceHelpers';
 export type ApiKeySecretDTO = {
   plaintextKey: string;
   secret: string;
+  name: string;
 };
 
 export const apiKeyCreationToApiKeySecret = (apiKey: ApiKeyCreationDTO): ApiKeySecretDTO => {
   // eslint-disable-next-line camelcase
-  return { plaintextKey: apiKey.plaintext_key, secret: apiKey.authorizable.secret };
+  return {
+    plaintextKey: apiKey.plaintext_key,
+    secret: apiKey.authorizable.secret,
+    name: apiKey.authorizable.name,
+  };
 };
 
 export const getApiRoles = async (participant: Participant) => {
