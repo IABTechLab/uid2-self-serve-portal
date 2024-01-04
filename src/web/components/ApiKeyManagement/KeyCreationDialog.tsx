@@ -29,18 +29,24 @@ function KeyCreationDialog({
   const [open, setOpen] = useState(false);
   const [secrets, setSecrets] = useState<KeySecretProp>(undefined);
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
+  const [statusPopupMessage, setStatusPopupMessage] = useState<string>('');
   const [copiedSecrets, setCopiedSecrets] = useState<Map<String, boolean>>(
     new Map<String, boolean>()
   );
 
   const onFormSubmit: SubmitHandler<ApiKeyCreationFormDTO> = async (formData) => {
     setSecrets(await onKeyCreation(formData));
+    setStatusPopupMessage(
+      'Your key has been created. Please copy the credentials before closing the window.'
+    );
+    setShowStatusPopup(true);
   };
 
   function confirmClose(): void {
     const values = [...copiedSecrets.values()];
 
     if (values.filter((value) => value === false).length > 0) {
+      setStatusPopupMessage('Please copy all secrets shown before closing the page');
       setShowStatusPopup(true);
       return;
     }
@@ -104,12 +110,13 @@ function KeyCreationDialog({
               <button type='button' onClick={confirmClose}>
                 Close
               </button>
+
               {showStatusPopup && (
                 <StatusPopup
-                  status='Warning'
+                  status='Success'
                   show={showStatusPopup}
                   setShow={setShowStatusPopup}
-                  message='Please copy all secrets shown before closing the page'
+                  message={statusPopupMessage}
                 />
               )}
             </div>

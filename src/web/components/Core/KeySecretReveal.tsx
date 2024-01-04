@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Popover from './Popover';
 import { StatusPopup } from './StatusPopup';
@@ -57,12 +57,14 @@ function KeySecretReveal({
 }) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
 
-  if (setCopiedSecrets) {
-    setCopiedSecrets((prevMap) => {
-      if (!prevMap.has(value)) prevMap.set(value, false);
-      return prevMap;
-    });
-  }
+  useEffect(() => {
+    if (setCopiedSecrets) {
+      setCopiedSecrets((prevMap) => {
+        if (!prevMap.has(value)) prevMap.set(value, false);
+        return prevMap;
+      });
+    }
+  }, [setCopiedSecrets, value]);
 
   const confirmCopiedSecret = () => {
     if (setCopiedSecrets) {
