@@ -5,7 +5,15 @@ import { StatusPopup } from './StatusPopup';
 
 import './KeySecretReveal.scss';
 
-function ViewKeyButton({ value, title }: { value: string; title: string }) {
+function ViewKeyButton({
+  value,
+  title,
+  confirmCopiedSecret,
+}: {
+  value: string;
+  title: string;
+  confirmCopiedSecret: () => void;
+}) {
   const display =
     value.length > 20
       ? `${value.substring(0, 10)}......${value.substring(value.length - 10, value.length)}`
@@ -23,6 +31,7 @@ function ViewKeyButton({ value, title }: { value: string; title: string }) {
                 aria-label={title}
                 type='button'
                 title={title}
+                onClick={confirmCopiedSecret}
               >
                 View
               </button>
@@ -55,10 +64,7 @@ function KeySecretReveal({
     });
   }
 
-  const copyKey = (): void => {
-    setShowStatusPopup(true);
-    navigator.clipboard.writeText(value);
-
+  const confirmCopiedSecret = () => {
     if (setCopiedSecrets) {
       setCopiedSecrets((prevMap) => {
         prevMap.set(value, true);
@@ -67,10 +73,16 @@ function KeySecretReveal({
     }
   };
 
+  const copyKey = (): void => {
+    setShowStatusPopup(true);
+    navigator.clipboard.writeText(value);
+    confirmCopiedSecret();
+  };
+
   return (
     <div className='key-secret-reveal'>
       <h2>{title}</h2>
-      <ViewKeyButton value={value} title={title} />
+      <ViewKeyButton value={value} title={title} confirmCopiedSecret={confirmCopiedSecret} />
       <button
         className='icon-button copy-button'
         aria-label='copy'
