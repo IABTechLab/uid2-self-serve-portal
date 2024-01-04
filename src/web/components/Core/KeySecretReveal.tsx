@@ -6,16 +6,34 @@ import { StatusPopup } from './StatusPopup';
 import './KeySecretReveal.scss';
 
 function ViewKeyButton({ value, title }: { value: string; title: string }) {
+  const display =
+    value.length > 20
+      ? `${value.substring(0, 10)}......${value.substring(value.length - 10, value.length)}`
+      : value;
+
   return (
-    <Popover
-      triggerButton={
-        <button className='icon-button show-button' aria-label={title} type='button' title={title}>
-          View
-        </button>
-      }
-    >
-      <p>{value}</p>
-    </Popover>
+    <>
+      {display}
+      {value.length > 20 && (
+        <>
+          <Popover
+            triggerButton={
+              <button
+                className='icon-button show-button'
+                aria-label={title}
+                type='button'
+                title={title}
+              >
+                View
+              </button>
+            }
+          >
+            <p>{value}</p>
+          </Popover>
+          |
+        </>
+      )}
+    </>
   );
 }
 
@@ -37,11 +55,6 @@ function KeySecretReveal({
     });
   }
 
-  const display: string =
-    value.length > 20
-      ? `${value.substring(0, 10)}......${value.substring(value.length - 10, value.length)}`
-      : value;
-
   const copyKey = (): void => {
     setShowStatusPopup(true);
     navigator.clipboard.writeText(value);
@@ -57,8 +70,7 @@ function KeySecretReveal({
   return (
     <div className='key-secret-reveal'>
       <h2>{title}</h2>
-      {display}
-      <ViewKeyButton value={value} title={title} />|
+      <ViewKeyButton value={value} title={title} />
       <button
         className='icon-button copy-button'
         aria-label='copy'
