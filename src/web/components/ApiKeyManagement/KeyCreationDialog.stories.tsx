@@ -29,19 +29,3 @@ export const MultipleRoles: Story = {
     ],
   },
 };
-
-export const NoRoles: Story = {
-  args: {
-    triggerButton: <button type='button'>Open</button>,
-    onKeyCreation: (form) => {
-      // eslint-disable-next-line no-console
-      console.log(`Add a new Key ${JSON.stringify(form)}`);
-      return Promise.resolve({
-        plaintextKey: 'Test_Plaintext',
-        secret: 'Test_Secret',
-        name: 'Test_Key',
-      });
-    },
-    availableRoles: [],
-  },
-};

@@ -44,15 +44,17 @@ function ApiKeyManagement() {
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
             <>
               <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />
-              <KeyCreationDialog
-                availableRoles={apiRoles}
-                onKeyCreation={onKeyCreation}
-                triggerButton={
-                  <button className='small-button create-key-button' type='button'>
-                    Create Key
-                  </button>
-                }
-              />
+              {apiRoles.length > 0 && (
+                <KeyCreationDialog
+                  availableRoles={apiRoles}
+                  onKeyCreation={onKeyCreation}
+                  triggerButton={
+                    <button className='small-button create-key-button' type='button'>
+                      Create Key
+                    </button>
+                  }
+                />
+              )}
             </>
           )}
         </Await>
