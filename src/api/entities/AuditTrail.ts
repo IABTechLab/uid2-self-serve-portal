@@ -15,13 +15,15 @@ export enum AuditTrailEvents {
   UpdateSharingTypes = 'UpdateSharingTypes',
   ApproveAccount = 'ApproveAccount',
   ManageKeyPair = 'ManageKeyPair',
+  ManageApiKey = 'ManageApiKey',
 }
 
 export type AuditTrailEventData =
   | UpdateSharingPermissionEventData
   | ApproveAccountEventData
   | UpdateSharingTypesEventData
-  | ManageKeyPairEventData;
+  | ManageKeyPairEventData
+  | ManageApiKeyEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
@@ -51,6 +53,14 @@ export type ManageKeyPairEventData = {
   name: string;
   disabled: boolean;
   action: AuditAction;
+  participantId: number;
+};
+
+export type ManageApiKeyEventData = {
+  siteId: number;
+  action: AuditAction;
+  keyName: String;
+  apiRoles: String[];
   participantId: number;
 };
 

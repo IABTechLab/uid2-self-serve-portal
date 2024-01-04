@@ -36,6 +36,7 @@ import {
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
+  insertManageApiKeyAuditTrail,
   insertSharingAuditTrails,
   insertSharingTypesAuditTrail,
   updateAuditTrailToProceed,
@@ -298,21 +299,32 @@ export function createParticipantsRouter() {
   participantsRouter.post(
     '/:participantId/apiKeys/create',
     async (req: ParticipantRequest, res: Response) => {
-      // TODO Add Audit here
-
       const { participant } = req;
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
 
-      const { name, roles } = apiKeyCreateInputParser.parse(req.body);
+      const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
 
-      if (!checkApiRoles(roles, participant)) {
+      const traceId = getTraceId(req);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertManageApiKeyAuditTrail(
+        participant,
+        currentUser!.id,
+        currentUser!.email,
+        AuditAction.Add,
+        keyName,
+        apiRoles,
+        traceId
+      );
+
+      if (!checkApiRoles(apiRoles, participant)) {
         return res.status(400).send('Invalid api Roles');
       }
 
-      const key = await createApiKey(name, roles, participant.siteId);
+      const key = await createApiKey(keyName, apiRoles, participant.siteId);
 
+      await updateAuditTrailToProceed(auditTrail.id);
       return res.status(200).json(createdApiKeyToApiKeySecrets(key));
     }
   );
