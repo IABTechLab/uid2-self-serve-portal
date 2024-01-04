@@ -293,7 +293,7 @@ export function createParticipantsRouter() {
     }
   );
 
-  const apiKeyCreateParser = z.object({ name: z.string(), roles: z.array(z.string()) });
+  const apiKeyCreateInputParser = z.object({ name: z.string(), roles: z.array(z.string()) });
 
   participantsRouter.post(
     '/:participantId/apiKeys/create',
@@ -305,7 +305,7 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
-      const { name, roles } = apiKeyCreateParser.parse(req.body);
+      const { name, roles } = apiKeyCreateInputParser.parse(req.body);
 
       if (!allowedApiRoles(roles, participant)) {
         return res.status(400).send('Invalid api Roles');
