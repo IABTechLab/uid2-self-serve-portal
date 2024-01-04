@@ -3,7 +3,7 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
-import { ApiKeyCreationFormDTO } from '../../services/apiKeyService';
+import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import KeySecretReveal from '../Core/KeySecretReveal';
@@ -16,7 +16,7 @@ import './KeyCreationDialog.scss';
 type KeySecretProp = ApiKeySecretsDTO | undefined;
 
 type KeyCreationDialogProps = {
-  onKeyCreation: (form: ApiKeyCreationFormDTO) => Promise<KeySecretProp>;
+  onKeyCreation: (form: CreateApiKeyFormDTO) => Promise<KeySecretProp>;
   triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
 };
@@ -34,7 +34,7 @@ function KeyCreationDialog({
     new Map<String, boolean>()
   );
 
-  const onFormSubmit: SubmitHandler<ApiKeyCreationFormDTO> = async (formData) => {
+  const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
     setSecrets(await onKeyCreation(formData));
     setStatusPopupMessage(
       'Your key has been created. Please copy the credentials before closing the window.'
@@ -61,7 +61,7 @@ function KeyCreationDialog({
         {!secrets ? (
           <>
             <h1>Create API Key</h1>
-            <Form<ApiKeyCreationFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
+            <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
               <TextInput inputName='name' label='Name' required />
               <CheckboxInput
                 label='API Roles'

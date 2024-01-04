@@ -7,7 +7,7 @@ import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog'
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
-import { ApiKeyCreationFormDTO, CreateApiKey } from '../services/apiKeyService';
+import { CreateApiKey, CreateApiKeyFormDTO } from '../services/apiKeyService';
 import { GetParticipantApiKeys, GetParticipantApiRoles } from '../services/participant';
 import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -25,7 +25,7 @@ function ApiKeyManagement() {
 
   const reloader = useRevalidator();
 
-  const onKeyCreation = async (form: ApiKeyCreationFormDTO, participantId?: number) => {
+  const onKeyCreation = async (form: CreateApiKeyFormDTO, participantId?: number) => {
     try {
       const keySecret = await CreateApiKey(form, participantId);
       reloader.revalidate();

@@ -15,13 +15,13 @@ export async function GetAllApiRoles() {
   }
 }
 
-export type ApiKeyCreationFormDTO = {
+export type CreateApiKeyFormDTO = {
   name: string;
   roles: string[];
 };
 
 export async function CreateApiKey(
-  form: ApiKeyCreationFormDTO,
+  form: CreateApiKeyFormDTO,
   participantId?: number
 ): Promise<ApiKeySecretsDTO> {
   try {
