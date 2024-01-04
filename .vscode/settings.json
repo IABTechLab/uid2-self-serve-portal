@@ -2,7 +2,7 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "editor.tabSize": 2,
   "files.eol": "\n",
@@ -24,6 +24,7 @@
   },
   "cSpell.words": [
     "Approvable",
+    "authorizable",
     "camelcase",
     "clsx",
     "collapsibles",
@@ -34,6 +35,7 @@
     "linebreaks",
     "loglevel",
     "OPTOUT",
+    "Revalidator",
     "testid"
   ]
 }
