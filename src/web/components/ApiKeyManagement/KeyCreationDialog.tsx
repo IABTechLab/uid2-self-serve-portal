@@ -1,4 +1,3 @@
-import { faL } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
@@ -65,7 +64,9 @@ function KeyCreationDialog({
                   optionLabel: role.externalName,
                   value: role.roleName,
                 }))}
-                rules={{ required: 'Your new API Key must have at least one role.' }}
+                rules={{
+                  required: 'Your new API Key must have at least one role.',
+                }}
               />
             </Form>
             <div className='cancel-container'>
