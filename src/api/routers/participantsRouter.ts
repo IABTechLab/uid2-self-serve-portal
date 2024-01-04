@@ -30,7 +30,7 @@ import {
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
   allowedApiRoles,
-  apiKeyCreationToApiKeySecret,
+  createdApiKeyToApiKeySecret,
   getApiRoles,
 } from '../services/apiKeyService';
 import {
@@ -313,7 +313,7 @@ export function createParticipantsRouter() {
 
       const key = await createApiKey(name, roles, participant.siteId);
 
-      return res.status(200).json(apiKeyCreationToApiKeySecret(key));
+      return res.status(200).json(createdApiKeyToApiKeySecret(key));
     }
   );
 

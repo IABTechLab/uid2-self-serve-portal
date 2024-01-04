@@ -7,7 +7,7 @@ import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../env
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
   ApiKeyAdmin,
-  ApiKeyCreationDTO,
+  CreatedApiKeyDTO,
   ClientType,
   KeyPairDTO,
   mapClientTypesToAdminEnums,
@@ -128,9 +128,9 @@ export const createApiKey = async (
   name: string,
   roles: string[],
   siteId: number
-): Promise<ApiKeyCreationDTO> => {
+): Promise<CreatedApiKeyDTO> => {
   const rolesString = roles.join(', ');
-  const response = await adminServiceClient.post<ApiKeyCreationDTO>('/api/client/add', null, {
+  const response = await adminServiceClient.post<CreatedApiKeyDTO>('/api/client/add', null, {
     params: {
       name,
       roles: rolesString,

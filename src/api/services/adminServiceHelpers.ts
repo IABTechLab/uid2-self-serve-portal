@@ -93,7 +93,7 @@ export type ApiKeyDTO = {
   service_id: number;
 };
 
-export type ApiKeyCreationDTO = {
+export type CreatedApiKeyDTO = {
   authorizable: ApiKeyDTO & { key_hash: string; key_salt: string; secret: string };
   plaintext_key: string;
 };
