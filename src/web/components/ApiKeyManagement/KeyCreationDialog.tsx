@@ -46,6 +46,7 @@ function KeyCreationDialog({
       return;
     }
 
+    setSecrets(undefined);
     setOpen(false);
   }
 
