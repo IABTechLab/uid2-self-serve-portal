@@ -29,8 +29,8 @@ import {
 } from '../services/adminServiceClient';
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
-  allowedApiRoles,
-  createdApiKeyToApiKeySecret,
+  checkApiRoles,
+  createdApiKeyToApiKeySecrets,
   getApiRoles,
 } from '../services/apiKeyService';
 import {
@@ -307,13 +307,13 @@ export function createParticipantsRouter() {
 
       const { name, roles } = apiKeyCreateInputParser.parse(req.body);
 
-      if (!allowedApiRoles(roles, participant)) {
+      if (!checkApiRoles(roles, participant)) {
         return res.status(400).send('Invalid api Roles');
       }
 
       const key = await createApiKey(name, roles, participant.siteId);
 
-      return res.status(200).json(createdApiKeyToApiKeySecret(key));
+      return res.status(200).json(createdApiKeyToApiKeySecrets(key));
     }
   );
 

@@ -7,7 +7,7 @@ export type ApiKeySecretsDTO = {
   name: string;
 };
 
-export const createdApiKeyToApiKeySecret = (apiKey: CreatedApiKeyDTO): ApiKeySecretsDTO => {
+export const createdApiKeyToApiKeySecrets = (apiKey: CreatedApiKeyDTO): ApiKeySecretsDTO => {
   // eslint-disable-next-line camelcase
   return {
     plaintextKey: apiKey.plaintext_key,
@@ -27,7 +27,7 @@ export const getApiRoles = async (participant: Participant) => {
   return participantCurr.apiRoles;
 };
 
-export const allowedApiRoles = async (
+export const checkApiRoles = async (
   keyRoles: string[],
   participant: Participant
 ): Promise<boolean> => {
