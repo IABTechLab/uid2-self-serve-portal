@@ -5,6 +5,8 @@ import { StatusPopup } from './StatusPopup';
 
 import './KeySecretReveal.scss';
 
+const MAX_SHOWN_VALUE_LENGTH = 20;
+
 function ViewKeyButton({
   value,
   title,
@@ -15,14 +17,17 @@ function ViewKeyButton({
   confirmCopiedSecret: () => void;
 }) {
   const display =
-    value.length > 20
-      ? `${value.substring(0, 10)}......${value.substring(value.length - 10, value.length)}`
+    value.length > MAX_SHOWN_VALUE_LENGTH
+      ? `${value.substring(0, MAX_SHOWN_VALUE_LENGTH / 2)}......${value.substring(
+          value.length - MAX_SHOWN_VALUE_LENGTH / 2,
+          value.length
+        )}`
       : value;
 
   return (
     <>
       {display}
-      {value.length > 20 && (
+      {value.length > MAX_SHOWN_VALUE_LENGTH && (
         <>
           <Popover
             triggerButton={
