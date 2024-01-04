@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
-import { ApiKeySecretDTO } from '../../../api/services/apiKeyService';
+import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { ApiKeyCreationFormDTO } from '../../services/apiKeyService';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
@@ -13,7 +13,7 @@ import { TextInput } from '../Input/TextInput';
 
 import './KeyCreationDialog.scss';
 
-type KeySecretProp = ApiKeySecretDTO | undefined;
+type KeySecretProp = ApiKeySecretsDTO | undefined;
 
 type KeyCreationDialogProps = {
   onKeyCreation: (form: ApiKeyCreationFormDTO) => Promise<KeySecretProp>;

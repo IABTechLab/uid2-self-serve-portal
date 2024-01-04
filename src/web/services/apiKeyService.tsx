@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
-import { ApiKeySecretDTO } from '../../api/services/apiKeyService';
+import { ApiKeySecretsDTO } from '../../api/services/apiKeyService';
 import { backendError } from '../utils/apiError';
 
 export async function GetAllApiRoles() {
@@ -23,9 +23,9 @@ export type ApiKeyCreationFormDTO = {
 export async function CreateApiKey(
   form: ApiKeyCreationFormDTO,
   participantId?: number
-): Promise<ApiKeySecretDTO> {
+): Promise<ApiKeySecretsDTO> {
   try {
-    const result = await axios.post<ApiKeySecretDTO>(
+    const result = await axios.post<ApiKeySecretsDTO>(
       `/participants/${participantId ?? 'current'}/apiKeys/create`,
       form
     );

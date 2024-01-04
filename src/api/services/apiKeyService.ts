@@ -1,13 +1,13 @@
 import { Participant } from '../entities/Participant';
 import { CreatedApiKeyDTO } from './adminServiceHelpers';
 
-export type ApiKeySecretDTO = {
+export type ApiKeySecretsDTO = {
   plaintextKey: string;
   secret: string;
   name: string;
 };
 
-export const createdApiKeyToApiKeySecret = (apiKey: CreatedApiKeyDTO): ApiKeySecretDTO => {
+export const createdApiKeyToApiKeySecret = (apiKey: CreatedApiKeyDTO): ApiKeySecretsDTO => {
   // eslint-disable-next-line camelcase
   return {
     plaintextKey: apiKey.plaintext_key,
