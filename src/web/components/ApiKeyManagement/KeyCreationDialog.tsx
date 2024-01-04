@@ -88,11 +88,13 @@ function KeyCreationDialog({
               Keep these secrets in a secure location and do not share them with anyone. If the
               secrets are lost a new key will have be generated.
             </p>
+            <h2>Secret</h2>
             <KeySecretReveal
               title='Secret'
               value={secrets.secret}
               setCopiedSecrets={setCopiedSecrets}
             />
+            <h2>Key</h2>
             <KeySecretReveal
               title='Key'
               value={secrets.plaintextKey}

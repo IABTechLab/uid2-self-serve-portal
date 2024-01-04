@@ -81,7 +81,6 @@ function KeySecretReveal({
 
   return (
     <div className='key-secret-reveal'>
-      <h2>{title}</h2>
       <ViewKeyButton value={value} title={title} confirmCopiedSecret={confirmCopiedSecret} />
       <button
         className='icon-button copy-button'
