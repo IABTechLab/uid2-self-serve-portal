@@ -1,5 +1,3 @@
-import { ReactNode, useState } from 'react';
-
 import KeySecretReveal from '../Core/KeySecretReveal';
 import { KeyPairModel } from './KeyPairModel';
 
