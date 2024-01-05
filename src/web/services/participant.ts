@@ -278,3 +278,7 @@ export async function ApproveParticipantRequest(
     throw backendError(e, 'Could not approve participant');
   }
 }
+
+export type ParticipantEditForm = {
+  apiRoles: number[];
+};
