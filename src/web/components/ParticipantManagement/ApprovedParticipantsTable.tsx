@@ -1,4 +1,6 @@
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { ParticipantEditForm } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
@@ -6,6 +8,8 @@ import './ParticipantManagementTable.scss';
 
 type ApprovedParticipantsTableProps = {
   participants: ParticipantDTO[];
+  apiRoles: ApiRoleDTO[];
+  onEditParticipant: (form: ParticipantEditForm, participant: ParticipantDTO) => Promise<void>;
 };
 
 function NoParticipants() {
@@ -19,7 +23,11 @@ function NoParticipants() {
   );
 }
 
-export function ApprovedParticipantsTable({ participants }: ApprovedParticipantsTableProps) {
+export function ApprovedParticipantsTable({
+  participants,
+  apiRoles,
+  onEditParticipant,
+}: ApprovedParticipantsTableProps) {
   return (
     <div className='approved-participant-container'>
       <h2>All Participants</h2>
@@ -29,12 +37,18 @@ export function ApprovedParticipantsTable({ participants }: ApprovedParticipants
             <th>Participant Name</th>
             <th>Participant Type</th>
             <th>API Roles</th>
+            <th>Action</th>
           </tr>
         </thead>
 
         <tbody>
           {participants.map((participant) => (
-            <ApprovedParticipantItem key={participant.id} participant={participant} />
+            <ApprovedParticipantItem
+              key={participant.id}
+              participant={participant}
+              apiRoles={apiRoles}
+              onEditParticipant={onEditParticipant}
+            />
           ))}
         </tbody>
       </table>

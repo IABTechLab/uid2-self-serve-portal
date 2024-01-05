@@ -9,9 +9,9 @@ import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 
 type EditApprovedParticipantDialogProps = {
-  onEditParticipant: (form: ParticipantEditForm) => void;
   triggerButton: JSX.Element;
   participant: ParticipantDTO;
+  onEditParticipant: (form: ParticipantEditForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
 };
 
@@ -19,7 +19,7 @@ function EditApprovedParticipantDialog(props: EditApprovedParticipantDialogProps
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<ParticipantEditForm> = async (formData) => {
-    await props.onEditParticipant(formData);
+    await props.onEditParticipant(formData, props.participant);
     setOpen(false);
   };
 

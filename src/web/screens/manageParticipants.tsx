@@ -15,6 +15,7 @@ import {
   GetApprovedParticipants,
   GetParticipantsAwaitingApproval,
   ParticipantApprovalFormDetails,
+  ParticipantEditForm,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadSiteList } from '../services/site';
@@ -45,6 +46,8 @@ function ManageParticipants() {
     onParticipantRequestsUpdate();
   };
 
+  const onEditParticipant = async (form: ParticipantEditForm, participant: ParticipantDTO) => {};
+
   return (
     <div>
       <h1>Manage Participants</h1>
@@ -66,7 +69,11 @@ function ManageParticipants() {
                 apiRoles={apiRoles}
                 onApprove={handleApproveParticipantRequest}
               />
-              <ApprovedParticipantsTable participants={participantApproved} />
+              <ApprovedParticipantsTable
+                participants={participantApproved}
+                apiRoles={apiRoles}
+                onEditParticipant={onEditParticipant}
+              />
             </>
           )}
         </Await>

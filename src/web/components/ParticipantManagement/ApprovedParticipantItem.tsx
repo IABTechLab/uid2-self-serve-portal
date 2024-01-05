@@ -1,13 +1,22 @@
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { ParticipantEditForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
+import EditApprovedParticipantDialog from './EditApprovedParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
 type ApprovedParticipantProps = {
   participant: ParticipantDTO;
+  apiRoles: ApiRoleDTO[];
+  onEditParticipant: (form: ParticipantEditForm, participant: ParticipantDTO) => Promise<void>;
 };
 
-export function ApprovedParticipantItem({ participant }: ApprovedParticipantProps) {
+export function ApprovedParticipantItem({
+  participant,
+  apiRoles,
+  onEditParticipant,
+}: ApprovedParticipantProps) {
   function getParticipantTypes(
     currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
   ) {
@@ -31,6 +40,18 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
         <ApiRolesCell
           apiRoles={participant.apiRoles == null ? [] : participant.apiRoles}
           showRoleTooltip
+        />
+      </td>
+      <td>
+        <EditApprovedParticipantDialog
+          apiRoles={apiRoles}
+          onEditParticipant={onEditParticipant}
+          participant={participant}
+          triggerButton={
+            <button type='button' className='transparent-button'>
+              Edit
+            </button>
+          }
         />
       </td>
     </tr>

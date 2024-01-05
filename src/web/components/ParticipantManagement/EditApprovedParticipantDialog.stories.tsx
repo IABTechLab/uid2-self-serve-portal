@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
@@ -51,6 +52,7 @@ export const ParticipantWithExistingRoles: Story = {
     onEditParticipant: (form) => {
       // eslint-disable-next-line no-console
       console.log(form);
+      return Promise.resolve();
     },
     triggerButton: <button type='button'>Open</button>,
   },
@@ -73,6 +75,11 @@ export const ParticipantWithNoRoles: Story = {
         { id: 3, typeName: 'Type 3' },
         { id: 4, typeName: 'Type 4' },
       ],
+      apiRoles: [
+        { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+        { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+        { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+      ],
       status: ParticipantStatus.Approved,
       allowSharing: true,
       completedRecommendations: false,
@@ -87,9 +94,10 @@ export const ParticipantWithNoRoles: Story = {
         },
       ],
     },
-    onEditParticipant: (form) => {
-      // eslint-disable-next-line no-console
+    onEditParticipant: (form, participant) => {
       console.log(form);
+      console.log(participant);
+      return Promise.resolve();
     },
     triggerButton: <button type='button'>Open</button>,
   },
