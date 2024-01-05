@@ -32,13 +32,11 @@ function EditApprovedParticipantDialog(props: EditApprovedParticipantDialogProps
   return (
     <Dialog
       triggerButton={props.triggerButton}
-      title='Edit Participant'
+      title={`Edit ${props.participant.name}`}
       closeButton='Cancel'
       open={open}
       onOpenChange={setOpen}
     >
-      <h1>Edit {props.participant.name}</h1>
-
       <Form<ParticipantEditForm>
         onSubmit={onSubmit}
         submitButtonText='Update Participant'
