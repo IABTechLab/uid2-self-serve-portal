@@ -41,7 +41,7 @@ function EditApprovedParticipantDialog(props: EditApprovedParticipantDialogProps
 
       <Form<ParticipantEditForm>
         onSubmit={onSubmit}
-        submitButtonText='Create Key Pair'
+        submitButtonText='Update Participant'
         defaultValues={currentFormValue}
       >
         <CheckboxInput
