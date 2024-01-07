@@ -50,7 +50,6 @@ export const ParticipantWithExistingRoles: Story = {
       ],
     },
     onUpdateParticipant: (form) => {
-      // eslint-disable-next-line no-console
       console.log(form);
       return Promise.resolve();
     },
