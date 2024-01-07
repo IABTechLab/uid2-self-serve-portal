@@ -3,7 +3,7 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ParticipantUpdateForm } from '../../services/participant';
+import { UpdateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -11,19 +11,19 @@ import { CheckboxInput } from '../Input/CheckboxInput';
 type UpdateParticipantDialogProps = {
   triggerButton: JSX.Element;
   participant: ParticipantDTO;
-  onUpdateParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
+  onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
 };
 
 function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const onSubmit: SubmitHandler<ParticipantUpdateForm> = async (formData) => {
+  const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
     await props.onUpdateParticipant(formData, props.participant);
     setOpen(false);
   };
 
-  const originalFormValues: ParticipantUpdateForm = {
+  const originalFormValues: UpdateParticipantForm = {
     apiRoles: props.participant.apiRoles
       ? props.participant.apiRoles.map((apiRole) => apiRole.id)
       : [],
@@ -37,7 +37,7 @@ function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<ParticipantUpdateForm>
+      <Form<UpdateParticipantForm>
         onSubmit={onSubmit}
         submitButtonText='Update Participant'
         defaultValues={originalFormValues}

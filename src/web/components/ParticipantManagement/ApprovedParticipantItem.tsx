@@ -1,6 +1,6 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ParticipantUpdateForm } from '../../services/participant';
+import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
 import UpdateParticipantDialog from './UpdateParticipantDialog';
 
@@ -9,7 +9,7 @@ import './ParticipantManagementItem.scss';
 type ApprovedParticipantProps = {
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
-  onUpdateParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
+  onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
 };
 
 export function ApprovedParticipantItem({

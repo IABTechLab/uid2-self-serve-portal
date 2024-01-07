@@ -15,8 +15,8 @@ import {
   GetApprovedParticipants,
   GetParticipantsAwaitingApproval,
   ParticipantApprovalFormDetails,
-  ParticipantUpdateForm,
   UpdateParticipant,
+  UpdateParticipantForm,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadSiteList } from '../services/site';
@@ -47,7 +47,7 @@ function ManageParticipants() {
     onParticipantChange();
   };
 
-  const onUpdateParticipant = async (form: ParticipantUpdateForm, participant: ParticipantDTO) => {
+  const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
     onParticipantChange();
   };
