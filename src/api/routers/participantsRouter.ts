@@ -215,22 +215,14 @@ export function createParticipantsRouter() {
     }
   );
 
-  const participantParser = ParticipantSchema.pick({
-    location: true,
-  });
+  const participantParser = z.object({ apiRoles: z.array(z.string()) });
 
   participantsRouter.put('/:participantId', async (req: ParticipantRequest, res: Response) => {
-    try {
-      const { location } = participantParser.parse(req.body);
+    const { participant } = req;
+    const { apiRoles } = participantParser.parse(req.body);
 
-      const { participant } = req;
-      await participant!.$query().patch({ location });
-      return res.status(200).json(participant);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).send(err.issues);
-      }
-      throw err;
+    if (!participant) {
+      return res.status(400).send('Unable to find participant');
     }
   });
 
