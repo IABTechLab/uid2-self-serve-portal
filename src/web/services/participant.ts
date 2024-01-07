@@ -115,14 +115,16 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
   return axios.post(`/participants/${participantId}/invite`, formData);
 }
 
-export type UpdateParticipantForm = {
-  location?: string;
-  logo?: string;
+export type ParticipantEditForm = {
+  apiRoles: number[];
 };
 
-export async function UpdateParticipant(formData: UpdateParticipantForm, participantId: number) {
+export async function UpdateParticipant(formData: ParticipantEditForm, participantId?: number) {
   try {
-    const result = await axios.put<ParticipantDTO>(`/participants/${participantId}`, formData);
+    const result = await axios.put<ParticipantDTO>(
+      `/participants/${participantId ?? 'current'}`,
+      formData
+    );
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
@@ -278,7 +280,3 @@ export async function ApproveParticipantRequest(
     throw backendError(e, 'Could not approve participant');
   }
 }
-
-export type ParticipantEditForm = {
-  apiRoles: number[];
-};

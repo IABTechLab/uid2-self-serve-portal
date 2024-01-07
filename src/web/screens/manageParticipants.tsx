@@ -16,6 +16,7 @@ import {
   GetParticipantsAwaitingApproval,
   ParticipantApprovalFormDetails,
   ParticipantEditForm,
+  UpdateParticipant,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { preloadSiteList } from '../services/site';
@@ -34,7 +35,7 @@ function ManageParticipants() {
   };
 
   const reloader = useRevalidator();
-  const onParticipantRequestsUpdate = useCallback(() => {
+  const onParticipantUpdate = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
 
@@ -43,10 +44,12 @@ function ManageParticipants() {
     formData: ParticipantApprovalFormDetails
   ) => {
     await ApproveParticipantRequest(participantId, formData);
-    onParticipantRequestsUpdate();
+    onParticipantUpdate();
   };
 
-  const onEditParticipant = async (form: ParticipantEditForm, participant: ParticipantDTO) => {};
+  const onEditParticipant = async (form: ParticipantEditForm, participant: ParticipantDTO) => {
+    await UpdateParticipant(form, participant.id);
+  };
 
   return (
     <div>
