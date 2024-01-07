@@ -9,7 +9,7 @@ import './ParticipantManagementTable.scss';
 type ApprovedParticipantsTableProps = {
   participants: ParticipantDTO[];
   apiRoles: ApiRoleDTO[];
-  onEditParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
+  onUpdateParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
 };
 
 function NoParticipants() {
@@ -26,7 +26,7 @@ function NoParticipants() {
 export function ApprovedParticipantsTable({
   participants,
   apiRoles,
-  onEditParticipant,
+  onUpdateParticipant,
 }: ApprovedParticipantsTableProps) {
   return (
     <div className='approved-participant-container'>
@@ -47,7 +47,7 @@ export function ApprovedParticipantsTable({
               key={participant.id}
               participant={participant}
               apiRoles={apiRoles}
-              onEditParticipant={onEditParticipant}
+              onUpdateParticipant={onUpdateParticipant}
             />
           ))}
         </tbody>

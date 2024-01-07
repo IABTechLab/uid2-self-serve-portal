@@ -9,13 +9,13 @@ import './ParticipantManagementItem.scss';
 type ApprovedParticipantProps = {
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
-  onEditParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
+  onUpdateParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
 };
 
 export function ApprovedParticipantItem({
   participant,
   apiRoles,
-  onEditParticipant,
+  onUpdateParticipant,
 }: ApprovedParticipantProps) {
   function getParticipantTypes(
     currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
@@ -45,7 +45,7 @@ export function ApprovedParticipantItem({
       <td>
         <UpdateParticipantDialog
           apiRoles={apiRoles}
-          onUpdateParticipant={onEditParticipant}
+          onUpdateParticipant={onUpdateParticipant}
           participant={participant}
           triggerButton={
             <button type='button' className='transparent-button'>

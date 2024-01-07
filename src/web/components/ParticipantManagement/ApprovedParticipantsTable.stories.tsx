@@ -116,7 +116,7 @@ export const AllParticipants: Story = {
 export const NoParticipants: Story = {
   args: {
     participants: [],
-    onEditParticipant: (form, participant) => {
+    onUpdateParticipant: (form, participant) => {
       console.log(form);
       console.log(participant);
       return Promise.resolve();

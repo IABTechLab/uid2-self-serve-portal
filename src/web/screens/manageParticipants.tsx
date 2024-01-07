@@ -47,7 +47,7 @@ function ManageParticipants() {
     onParticipantUpdate();
   };
 
-  const onEditParticipant = async (form: ParticipantUpdateForm, participant: ParticipantDTO) => {
+  const onUpdateParticipant = async (form: ParticipantUpdateForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
     onParticipantUpdate();
   };
@@ -76,7 +76,7 @@ function ManageParticipants() {
               <ApprovedParticipantsTable
                 participants={participantApproved}
                 apiRoles={apiRoles}
-                onEditParticipant={onEditParticipant}
+                onUpdateParticipant={onUpdateParticipant}
               />
             </>
           )}
