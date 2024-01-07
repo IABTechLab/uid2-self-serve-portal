@@ -16,14 +16,14 @@ export const createdApiKeyToApiKeySecrets = (apiKey: CreatedApiKeyDTO): ApiKeySe
 };
 
 export const getApiRoles = async (participant: Participant) => {
-  const participantCurr = await Participant.query()
+  const participantWithApiRoles = await Participant.query()
     .findById(participant.id)
     .withGraphFetched('apiRoles');
 
-  if (!participantCurr?.apiRoles) {
+  if (!participantWithApiRoles?.apiRoles) {
     return [];
   }
-  return participantCurr.apiRoles;
+  return participantWithApiRoles.apiRoles;
 };
 
 export const validateApiRoles = async (
