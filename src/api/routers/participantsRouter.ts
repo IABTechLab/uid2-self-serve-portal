@@ -319,7 +319,7 @@ export function createParticipantsRouter() {
       );
 
       if (!validateApiRoles(apiRoles, participant)) {
-        return res.status(400).send('Invalid api Roles');
+        return res.status(400).send('Invalid API Roles');
       }
 
       const key = await createApiKey(keyName, apiRoles, participant.siteId);
