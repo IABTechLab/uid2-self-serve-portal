@@ -23,7 +23,7 @@ function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
     setOpen(false);
   };
 
-  const currentFormValue: ParticipantUpdateForm = {
+  const currentFormValues: ParticipantUpdateForm = {
     apiRoles: props.participant.apiRoles
       ? props.participant.apiRoles.map((apiRole) => apiRole.id)
       : [],
@@ -40,7 +40,7 @@ function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
       <Form<ParticipantUpdateForm>
         onSubmit={onSubmit}
         submitButtonText='Update Participant'
-        defaultValues={currentFormValue}
+        defaultValues={currentFormValues}
       >
         <CheckboxInput
           inputName='apiRoles'
