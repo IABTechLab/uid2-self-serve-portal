@@ -115,11 +115,11 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
   return axios.post(`/participants/${participantId}/invite`, formData);
 }
 
-export type ParticipantEditForm = {
+export type ParticipantUpdateForm = {
   apiRoles: number[];
 };
 
-export async function UpdateParticipant(formData: ParticipantEditForm, participantId?: number) {
+export async function UpdateParticipant(formData: ParticipantUpdateForm, participantId?: number) {
   try {
     await axios.put(`/participants/${participantId ?? 'current'}`, formData);
   } catch (e: unknown) {

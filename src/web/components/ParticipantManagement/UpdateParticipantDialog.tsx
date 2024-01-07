@@ -3,27 +3,27 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ParticipantEditForm } from '../../services/participant';
+import { ParticipantUpdateForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 
-type EditApprovedParticipantDialogProps = {
+type UpdateParticipantDialogProps = {
   triggerButton: JSX.Element;
   participant: ParticipantDTO;
-  onEditParticipant: (form: ParticipantEditForm, participant: ParticipantDTO) => Promise<void>;
+  onUpdateParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
 };
 
-function EditApprovedParticipantDialog(props: EditApprovedParticipantDialogProps) {
+function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const onSubmit: SubmitHandler<ParticipantEditForm> = async (formData) => {
-    await props.onEditParticipant(formData, props.participant);
+  const onSubmit: SubmitHandler<ParticipantUpdateForm> = async (formData) => {
+    await props.onUpdateParticipant(formData, props.participant);
     setOpen(false);
   };
 
-  const currentFormValue: ParticipantEditForm = {
+  const currentFormValue: ParticipantUpdateForm = {
     apiRoles: props.participant.apiRoles
       ? props.participant.apiRoles.map((apiRole) => apiRole.id)
       : [],
@@ -37,7 +37,7 @@ function EditApprovedParticipantDialog(props: EditApprovedParticipantDialogProps
       open={open}
       onOpenChange={setOpen}
     >
-      <Form<ParticipantEditForm>
+      <Form<ParticipantUpdateForm>
         onSubmit={onSubmit}
         submitButtonText='Update Participant'
         defaultValues={currentFormValue}
@@ -57,4 +57,4 @@ function EditApprovedParticipantDialog(props: EditApprovedParticipantDialogProps
   );
 }
 
-export default EditApprovedParticipantDialog;
+export default UpdateParticipantDialog;

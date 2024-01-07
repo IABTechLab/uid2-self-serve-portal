@@ -1,15 +1,15 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ParticipantEditForm } from '../../services/participant';
+import { ParticipantUpdateForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
-import EditApprovedParticipantDialog from './EditApprovedParticipantDialog';
+import UpdateParticipantDialog from './UpdateParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
 type ApprovedParticipantProps = {
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
-  onEditParticipant: (form: ParticipantEditForm, participant: ParticipantDTO) => Promise<void>;
+  onEditParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
 };
 
 export function ApprovedParticipantItem({
@@ -43,9 +43,9 @@ export function ApprovedParticipantItem({
         />
       </td>
       <td>
-        <EditApprovedParticipantDialog
+        <UpdateParticipantDialog
           apiRoles={apiRoles}
-          onEditParticipant={onEditParticipant}
+          onUpdateParticipant={onEditParticipant}
           participant={participant}
           triggerButton={
             <button type='button' className='transparent-button'>

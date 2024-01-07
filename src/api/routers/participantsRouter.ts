@@ -180,7 +180,7 @@ export function createParticipantsRouter() {
     }
   );
 
-  const participantParser = z.object({ apiRoles: z.array(z.number()) });
+  const updateParticipantParser = z.object({ apiRoles: z.array(z.number()) });
 
   participantsRouter.put(
     '/:participantId',
@@ -192,7 +192,7 @@ export function createParticipantsRouter() {
         return res.status(400).send('Unable to find participant');
       }
 
-      const { apiRoles } = participantParser.parse(req.body);
+      const { apiRoles } = updateParticipantParser.parse(req.body);
 
       await Participant.transaction(async (trx) => {
         await updateParticipantAssociatedRequestApiRoles(
@@ -203,8 +203,6 @@ export function createParticipantsRouter() {
           trx
         );
       });
-
-      console.log('RETURNING');
 
       return res.sendStatus(200);
     }

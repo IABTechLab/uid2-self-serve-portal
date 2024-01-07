@@ -1,6 +1,6 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ParticipantEditForm } from '../../services/participant';
+import { ParticipantUpdateForm } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
@@ -9,7 +9,7 @@ import './ParticipantManagementTable.scss';
 type ApprovedParticipantsTableProps = {
   participants: ParticipantDTO[];
   apiRoles: ApiRoleDTO[];
-  onEditParticipant: (form: ParticipantEditForm, participant: ParticipantDTO) => Promise<void>;
+  onEditParticipant: (form: ParticipantUpdateForm, participant: ParticipantDTO) => Promise<void>;
 };
 
 function NoParticipants() {
