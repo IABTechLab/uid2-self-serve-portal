@@ -29,9 +29,9 @@ import {
 } from '../services/adminServiceClient';
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
-  checkApiRoles,
   createdApiKeyToApiKeySecrets,
   getApiRoles,
+  validateApiRoles,
 } from '../services/apiKeyService';
 import {
   insertApproveAccountAuditTrail,
@@ -318,7 +318,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      if (!checkApiRoles(apiRoles, participant)) {
+      if (!validateApiRoles(apiRoles, participant)) {
         return res.status(400).send('Invalid api Roles');
       }
 

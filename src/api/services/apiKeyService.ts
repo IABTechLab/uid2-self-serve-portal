@@ -27,7 +27,7 @@ export const getApiRoles = async (participant: Participant) => {
   return participantCurr.apiRoles;
 };
 
-export const checkApiRoles = async (
+export const validateApiRoles = async (
   keyRoles: string[],
   participant: Participant
 ): Promise<boolean> => {
