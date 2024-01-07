@@ -121,11 +121,7 @@ export type ParticipantEditForm = {
 
 export async function UpdateParticipant(formData: ParticipantEditForm, participantId?: number) {
   try {
-    const result = await axios.put<ParticipantDTO>(
-      `/participants/${participantId ?? 'current'}`,
-      formData
-    );
-    return result.data;
+    await axios.put(`/participants/${participantId ?? 'current'}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
   }
