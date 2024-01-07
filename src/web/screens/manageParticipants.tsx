@@ -49,6 +49,7 @@ function ManageParticipants() {
 
   const onEditParticipant = async (form: ParticipantEditForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
+    onParticipantUpdate();
   };
 
   return (

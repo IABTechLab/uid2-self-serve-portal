@@ -218,27 +218,31 @@ export function createParticipantsRouter() {
 
   const participantParser = z.object({ apiRoles: z.array(z.number()) });
 
-  participantsRouter.put('/:participantId', async (req: ParticipantRequest, res: Response) => {
-    const { participant } = req;
+  participantsRouter.put(
+    '/:participantId',
+    isApproverCheck,
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
 
-    if (!participant) {
-      return res.status(400).send('Unable to find participant');
+      if (!participant) {
+        return res.status(400).send('Unable to find participant');
+      }
+
+      const { apiRoles } = participantParser.parse(req.body);
+
+      await Participant.transaction(async (trx) => {
+        await updateParticipantAssociatedRequestApiRoles(
+          participant,
+          apiRoles.map((role) => ({
+            id: role,
+          })),
+          trx
+        );
+      });
+
+      return res.status(200);
     }
-
-    const { apiRoles } = participantParser.parse(req.body);
-
-    await Participant.transaction(async (trx) => {
-      await updateParticipantAssociatedRequestApiRoles(
-        participant,
-        apiRoles.map((role) => ({
-          id: role,
-        })),
-        trx
-      );
-    });
-
-    return res.status(200);
-  });
+  );
 
   participantsRouter.get(
     '/:participantId/sharingPermission',
