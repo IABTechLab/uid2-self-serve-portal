@@ -7,8 +7,8 @@ import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../env
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
   ApiKeyAdmin,
-  CreatedApiKeyDTO,
   ClientType,
+  CreatedApiKeyDTO,
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
