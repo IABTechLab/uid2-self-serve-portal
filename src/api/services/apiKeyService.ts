@@ -8,7 +8,6 @@ export type ApiKeySecretsDTO = {
 };
 
 export const createdApiKeyToApiKeySecrets = (apiKey: CreatedApiKeyDTO): ApiKeySecretsDTO => {
-  // eslint-disable-next-line camelcase
   return {
     plaintextKey: apiKey.plaintext_key,
     secret: apiKey.authorizable.secret,
@@ -31,10 +30,10 @@ export const validateApiRoles = async (
   keyRoles: string[],
   participant: Participant
 ): Promise<boolean> => {
-  const userRoles = (await getApiRoles(participant)).map((role) => role.roleName);
+  const participantRoles = (await getApiRoles(participant)).map((role) => role.roleName);
 
   for (const role of keyRoles) {
-    if (!userRoles.includes(role)) return false;
+    if (!participantRoles.includes(role)) return false;
   }
 
   return true;
