@@ -20,10 +20,7 @@ export const getApiRoles = async (participant: Participant) => {
     .findById(participant.id)
     .withGraphFetched('apiRoles');
 
-  if (!participantWithApiRoles?.apiRoles) {
-    return [];
-  }
-  return participantWithApiRoles.apiRoles;
+  return participantWithApiRoles?.apiRoles ?? [];
 };
 
 export const validateApiRoles = async (
