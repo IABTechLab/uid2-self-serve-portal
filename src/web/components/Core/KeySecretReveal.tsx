@@ -35,7 +35,7 @@ function ViewKeyButton({
                 className='icon-button show-button'
                 aria-label={title}
                 type='button'
-                title={title}
+                title={`View ${title}`}
                 onClick={confirmCopiedSecret}
               >
                 View
