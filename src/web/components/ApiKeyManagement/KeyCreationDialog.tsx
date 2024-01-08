@@ -92,7 +92,7 @@ function KeyCreationDialog({
             <p>
               Please copy the key and secret as they will not be saved after this window is closed.
               Keep these secrets in a secure location and do not share them with anyone. If the
-              secrets are lost a new key will have be generated.
+              secrets are lost a new key will have to be generated.
             </p>
             <h2>Secret</h2>
             <KeySecretReveal
