@@ -21,6 +21,84 @@ type KeyCreationDialogProps = {
   availableRoles: ApiRoleDTO[];
 };
 
+function CreateApiKeyForm(
+  onFormSubmit: SubmitHandler<CreateApiKeyFormDTO>,
+  availableRoles: ApiRoleDTO[],
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+) {
+  return (
+    <>
+      <h1>Create API Key</h1>
+      <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
+        <TextInput inputName='name' label='Name' required />
+        <CheckboxInput
+          label='API Roles'
+          inputName='roles'
+          options={availableRoles.map((role) => ({
+            optionLabel: role.externalName,
+            value: role.roleName,
+          }))}
+          rules={{
+            required: 'Please select at least one API Role.',
+          }}
+        />
+      </Form>
+      <div className='cancel-container'>
+        <button
+          type='button'
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+          Cancel
+        </button>
+      </div>
+    </>
+  );
+}
+
+function ShowApiKeySecrets(
+  secrets: ApiKeySecretsDTO,
+  setCopiedSecrets: React.Dispatch<React.SetStateAction<Map<String, boolean>>>,
+  confirmClose: () => void,
+  showStatusPopup: boolean,
+  setShowStatusPopup: React.Dispatch<React.SetStateAction<boolean>>,
+  statusPopupMessage: string
+) {
+  return (
+    <div>
+      <h1>{secrets.name} Secrets</h1>
+      <p>
+        Please copy the key and secret as they will not be saved after this window is closed. Keep
+        these secrets in a secure location and do not share them with anyone. If the secrets are
+        lost a new key will have to be generated.
+      </p>
+      <h2>Secret</h2>
+      <KeySecretReveal title='Secret' value={secrets.secret} setCopiedSecrets={setCopiedSecrets} />
+      <h2>Key</h2>
+      <KeySecretReveal
+        title='Key'
+        value={secrets.plaintextKey}
+        setCopiedSecrets={setCopiedSecrets}
+      />
+      <div className='cancel-container'>
+        <button type='button' onClick={confirmClose}>
+          Close
+        </button>
+
+        {showStatusPopup && (
+          <StatusPopup
+            status='Success'
+            show={showStatusPopup}
+            setShow={setShowStatusPopup}
+            message={statusPopupMessage}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function KeyCreationDialog({
   onKeyCreation,
   triggerButton,
@@ -58,70 +136,16 @@ function KeyCreationDialog({
   return (
     <div className='key-creation-dialog'>
       <Dialog triggerButton={triggerButton} open={open} onOpenChange={setOpen} hideClose>
-        {!secrets ? (
-          <>
-            <h1>Create API Key</h1>
-            <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
-              <TextInput inputName='name' label='Name' required />
-              <CheckboxInput
-                label='API Roles'
-                inputName='roles'
-                options={availableRoles.map((role) => ({
-                  optionLabel: role.externalName,
-                  value: role.roleName,
-                }))}
-                rules={{
-                  required: 'Please select at least one API Role.',
-                }}
-              />
-            </Form>
-            <div className='cancel-container'>
-              <button
-                type='button'
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </>
-        ) : (
-          <div>
-            <h1>New Key: {secrets.name}</h1>
-            <p>
-              Please copy the key and secret as they will not be saved after this window is closed.
-              Keep these secrets in a secure location and do not share them with anyone. If the
-              secrets are lost a new key will have to be generated.
-            </p>
-            <h2>Secret</h2>
-            <KeySecretReveal
-              title='Secret'
-              value={secrets.secret}
-              setCopiedSecrets={setCopiedSecrets}
-            />
-            <h2>Key</h2>
-            <KeySecretReveal
-              title='Key'
-              value={secrets.plaintextKey}
-              setCopiedSecrets={setCopiedSecrets}
-            />
-            <div className='cancel-container'>
-              <button type='button' onClick={confirmClose}>
-                Close
-              </button>
-
-              {showStatusPopup && (
-                <StatusPopup
-                  status='Success'
-                  show={showStatusPopup}
-                  setShow={setShowStatusPopup}
-                  message={statusPopupMessage}
-                />
-              )}
-            </div>
-          </div>
-        )}
+        {!secrets
+          ? CreateApiKeyForm(onFormSubmit, availableRoles, setOpen)
+          : ShowApiKeySecrets(
+              secrets,
+              setCopiedSecrets,
+              confirmClose,
+              showStatusPopup,
+              setShowStatusPopup,
+              statusPopupMessage
+            )}
       </Dialog>
     </div>
   );
