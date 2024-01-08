@@ -13,14 +13,14 @@ type Story = StoryObj<typeof KeySecretReveal>;
 
 export const LongValue: Story = {
   args: {
-    title: 'Example_Secret',
+    valueName: 'Example_Secret',
     value: '6XlnVlrKcjkSJZW8vz8ZhpN543NKilYVwtmkJrF9Mk0=',
   },
 };
 
 export const ShortValue: Story = {
   args: {
-    title: 'Example_Secret',
+    valueName: 'Example_Secret',
     value: 'ABCD1234',
   },
 };

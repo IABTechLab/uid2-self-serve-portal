@@ -11,7 +11,7 @@ function KeyPair({ keyPair }: KeyPairProps) {
       <td className='name'>{keyPair.name}</td>
       <td className='subscription-id'>{keyPair.subscriptionId}</td>
       <td>
-        <KeySecretReveal title='public-key' value={keyPair.publicKey} />
+        <KeySecretReveal valueName='public-key' value={keyPair.publicKey} />
       </td>
       <td className='created'>{keyPair.createdString}</td>
       <td className='disabled'>{keyPair.disabled.toString()}</td>

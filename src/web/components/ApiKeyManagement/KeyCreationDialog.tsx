@@ -74,10 +74,14 @@ function ShowApiKeySecrets(
         lost a new key will have to be generated.
       </p>
       <h2>Secret</h2>
-      <KeySecretReveal title='Secret' value={secrets.secret} setCopiedSecrets={setCopiedSecrets} />
+      <KeySecretReveal
+        valueName='Secret'
+        value={secrets.secret}
+        setCopiedSecrets={setCopiedSecrets}
+      />
       <h2>Key</h2>
       <KeySecretReveal
-        title='Key'
+        valueName='Key'
         value={secrets.plaintextKey}
         setCopiedSecrets={setCopiedSecrets}
       />

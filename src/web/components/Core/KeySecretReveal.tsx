@@ -53,11 +53,11 @@ function ViewKeyButton({
 
 function KeySecretReveal({
   value,
-  title,
+  valueName,
   setCopiedSecrets,
 }: {
   value: string;
-  title: string;
+  valueName: string;
   setCopiedSecrets?: React.Dispatch<React.SetStateAction<Map<String, boolean>>>;
 }) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
@@ -88,13 +88,13 @@ function KeySecretReveal({
 
   return (
     <div className='key-secret-reveal'>
-      <ViewKeyButton value={value} title={title} confirmCopiedSecret={confirmCopiedSecret} />
+      <ViewKeyButton value={value} title={valueName} confirmCopiedSecret={confirmCopiedSecret} />
       <button
         className='icon-button copy-button'
         aria-label='copy'
         type='button'
         onClick={() => copyKey()}
-        title={`Copy ${title} to clipboard`}
+        title={`Copy ${valueName} to clipboard`}
       >
         Copy
       </button>
@@ -103,7 +103,7 @@ function KeySecretReveal({
           status='Success'
           show={showStatusPopup}
           setShow={setShowStatusPopup}
-          message={`${title} copied to clipboard.`}
+          message={`${valueName} copied to clipboard.`}
         />
       )}
     </div>
