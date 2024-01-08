@@ -71,7 +71,7 @@ function KeyCreationDialog({
                   value: role.roleName,
                 }))}
                 rules={{
-                  required: 'Your new API Key must have at least one role.',
+                  required: 'Please select at least one API Role.',
                 }}
               />
             </Form>
