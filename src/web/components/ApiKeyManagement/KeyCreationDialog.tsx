@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
 import { Dialog } from '../Core/Dialog';
+import DisplaySecret, { Secret } from '../Core/DisplaySecret';
 import { Form } from '../Core/Form';
-import KeySecretReveal from '../Core/KeySecretReveal';
 import { StatusPopup } from '../Core/StatusPopup';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
@@ -24,11 +24,11 @@ type KeyCreationDialogProps = {
 function CreateApiKeyForm({
   onFormSubmit,
   availableRoles,
-  setOpen,
+  closeDialog,
 }: {
   onFormSubmit: SubmitHandler<CreateApiKeyFormDTO>;
   availableRoles: ApiRoleDTO[];
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  closeDialog: () => void;
 }) {
   return (
     <>
@@ -52,7 +52,7 @@ function CreateApiKeyForm({
           type='button'
           className='transparent-button'
           onClick={() => {
-            setOpen(false);
+            closeDialog();
           }}
         >
           Cancel
@@ -63,36 +63,60 @@ function CreateApiKeyForm({
 }
 
 function ShowApiKeySecrets({
-  secrets,
-  setCopiedSecrets,
-  confirmClose,
+  keySecrets,
+  closeDialog,
+  showPopupMessage,
 }: {
-  secrets: ApiKeySecretsDTO;
-  setCopiedSecrets: React.Dispatch<React.SetStateAction<Map<String, boolean>>>;
-  confirmClose: () => void;
+  keySecrets: ApiKeySecretsDTO;
+  closeDialog: () => void;
+  showPopupMessage: (message: string) => void;
 }) {
+  const secrets: Secret[] = [
+    { value: keySecrets.secret, valueName: 'Secret' },
+    { value: keySecrets.plaintextKey, valueName: 'Key' },
+  ];
+
+  const [uncopiedValues, setUncopiedValueNames] = useState(
+    secrets.map((secret) => secret.valueName)
+  );
+
+  const onCopyGenerator = (copiedValueName: String) => {
+    return () => {
+      setUncopiedValueNames((oldUncopiedValueNames: string[]) => {
+        return oldUncopiedValueNames.filter((valueName) => valueName !== copiedValueName);
+      });
+    };
+  };
+
+  const onCheckClose = () => {
+    if (uncopiedValues.length > 0) {
+      showPopupMessage('Please copy all secrets shown before closing the page');
+      return;
+    }
+
+    closeDialog();
+  };
+
   return (
     <div>
-      <h1>{secrets.name} Secrets</h1>
+      <h1>{keySecrets.name} Secrets</h1>
       <p>
         Please copy the key and secret as they will not be saved after this window is closed. Keep
         these secrets in a secure location and do not share them with anyone. If the secrets are
         lost a new key will have to be generated.
       </p>
-      <h2>Secret</h2>
-      <KeySecretReveal
-        valueName='Secret'
-        value={secrets.secret}
-        setCopiedSecrets={setCopiedSecrets}
-      />
-      <h2>Key</h2>
-      <KeySecretReveal
-        valueName='Key'
-        value={secrets.plaintextKey}
-        setCopiedSecrets={setCopiedSecrets}
-      />
+      {secrets.map((secret) => (
+        <>
+          <h2>{secret.valueName}</h2>
+          <DisplaySecret
+            secret={secret}
+            onCopy={onCopyGenerator(secret.valueName)}
+            key={secret.valueName}
+          />
+        </>
+      ))}
       <div className='cancel-container'>
-        <button type='button' className='transparent-button' onClick={confirmClose}>
+        <button type='button' className='transparent-button' onClick={onCheckClose}>
           Close
         </button>
       </div>
@@ -106,48 +130,41 @@ function KeyCreationDialog({
   availableRoles,
 }: KeyCreationDialogProps) {
   const [open, setOpen] = useState(false);
-  const [secrets, setSecrets] = useState<KeySecretProp>(undefined);
+  const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
   const [statusPopupMessage, setStatusPopupMessage] = useState<string>('');
-  const [copiedSecrets, setCopiedSecrets] = useState<Map<String, boolean>>(
-    new Map<String, boolean>()
-  );
 
-  const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
-    setSecrets(await onKeyCreation(formData));
-    setStatusPopupMessage(
-      'Your key has been created. Please copy the credentials before closing the window.'
-    );
+  const showPopupMessage = (message: string) => {
+    setStatusPopupMessage(message);
     setShowStatusPopup(true);
   };
 
-  const confirmClose = () => {
-    const values = [...copiedSecrets.values()];
+  const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
+    setKeySecrets(await onKeyCreation(formData));
+    showPopupMessage(
+      'Your key has been created. Please copy the credentials before closing the window.'
+    );
+  };
 
-    if (values.filter((value) => value === false).length > 0) {
-      setStatusPopupMessage('Please copy all secrets shown before closing the page');
-      setShowStatusPopup(true);
-      return;
-    }
-
-    setSecrets(undefined);
+  const closeDialog = () => {
+    setKeySecrets(undefined);
     setOpen(false);
   };
-  // CreateApiKeyForm(onFormSubmit, availableRoles, setOpen)
+
   return (
     <div className='key-creation-dialog'>
       <Dialog triggerButton={triggerButton} open={open} onOpenChange={setOpen} hideClose>
-        {!secrets ? (
+        {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}
             availableRoles={availableRoles}
-            setOpen={setOpen}
+            closeDialog={closeDialog}
           />
         ) : (
           <ShowApiKeySecrets
-            confirmClose={confirmClose}
-            secrets={secrets}
-            setCopiedSecrets={setCopiedSecrets}
+            closeDialog={closeDialog}
+            keySecrets={keySecrets}
+            showPopupMessage={showPopupMessage}
           />
         )}
 
