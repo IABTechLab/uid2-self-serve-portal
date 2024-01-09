@@ -21,11 +21,15 @@ type KeyCreationDialogProps = {
   availableRoles: ApiRoleDTO[];
 };
 
-function CreateApiKeyForm(
-  onFormSubmit: SubmitHandler<CreateApiKeyFormDTO>,
-  availableRoles: ApiRoleDTO[],
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-) {
+function CreateApiKeyForm({
+  onFormSubmit,
+  availableRoles,
+  setOpen,
+}: {
+  onFormSubmit: SubmitHandler<CreateApiKeyFormDTO>;
+  availableRoles: ApiRoleDTO[];
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <>
       <h1>Create API Key</h1>
@@ -58,14 +62,15 @@ function CreateApiKeyForm(
   );
 }
 
-function ShowApiKeySecrets(
-  secrets: ApiKeySecretsDTO,
-  setCopiedSecrets: React.Dispatch<React.SetStateAction<Map<String, boolean>>>,
-  confirmClose: () => void,
-  showStatusPopup: boolean,
-  setShowStatusPopup: React.Dispatch<React.SetStateAction<boolean>>,
-  statusPopupMessage: string
-) {
+function ShowApiKeySecrets({
+  secrets,
+  setCopiedSecrets,
+  confirmClose,
+}: {
+  secrets: ApiKeySecretsDTO;
+  setCopiedSecrets: React.Dispatch<React.SetStateAction<Map<String, boolean>>>;
+  confirmClose: () => void;
+}) {
   return (
     <div>
       <h1>{secrets.name} Secrets</h1>
@@ -90,15 +95,6 @@ function ShowApiKeySecrets(
         <button type='button' className='transparent-button' onClick={confirmClose}>
           Close
         </button>
-
-        {showStatusPopup && (
-          <StatusPopup
-            status='Success'
-            show={showStatusPopup}
-            setShow={setShowStatusPopup}
-            message={statusPopupMessage}
-          />
-        )}
       </div>
     </div>
   );
@@ -125,7 +121,7 @@ function KeyCreationDialog({
     setShowStatusPopup(true);
   };
 
-  function confirmClose(): void {
+  const confirmClose = () => {
     const values = [...copiedSecrets.values()];
 
     if (values.filter((value) => value === false).length > 0) {
@@ -136,21 +132,33 @@ function KeyCreationDialog({
 
     setSecrets(undefined);
     setOpen(false);
-  }
-
+  };
+  // CreateApiKeyForm(onFormSubmit, availableRoles, setOpen)
   return (
     <div className='key-creation-dialog'>
       <Dialog triggerButton={triggerButton} open={open} onOpenChange={setOpen} hideClose>
-        {!secrets
-          ? CreateApiKeyForm(onFormSubmit, availableRoles, setOpen)
-          : ShowApiKeySecrets(
-              secrets,
-              setCopiedSecrets,
-              confirmClose,
-              showStatusPopup,
-              setShowStatusPopup,
-              statusPopupMessage
-            )}
+        {!secrets ? (
+          <CreateApiKeyForm
+            onFormSubmit={onFormSubmit}
+            availableRoles={availableRoles}
+            setOpen={setOpen}
+          />
+        ) : (
+          <ShowApiKeySecrets
+            confirmClose={confirmClose}
+            secrets={secrets}
+            setCopiedSecrets={setCopiedSecrets}
+          />
+        )}
+
+        {showStatusPopup && (
+          <StatusPopup
+            status='Success'
+            show={showStatusPopup}
+            setShow={setShowStatusPopup}
+            message={statusPopupMessage}
+          />
+        )}
       </Dialog>
     </div>
   );
