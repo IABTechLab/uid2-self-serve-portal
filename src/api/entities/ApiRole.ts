@@ -34,5 +34,4 @@ export const ApiRoleSchema = z.object({
   id: z.number(),
   roleName: z.string(),
   externalName: z.string(),
-  disabled: z.boolean(),
 });
