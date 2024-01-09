@@ -5,9 +5,9 @@ export async function up(knex: Knex): Promise<void> {
     table.boolean('disabled').defaultTo(true).notNullable();
   });
 
-  const allowedRoles = ['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER'];
+  const enabledRoles = ['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER'];
 
-  await knex('apiRoles').whereIn('roleName', allowedRoles).update({ disabled: false });
+  await knex('apiRoles').whereIn('roleName', enabledRoles).update({ disabled: false });
 }
 
 export async function down(knex: Knex): Promise<void> {
