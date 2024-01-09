@@ -195,6 +195,10 @@ export function createParticipantsRouter() {
       try {
         const { participant } = req;
         const { firstName, lastName, email, role } = invitationParser.parse(req.body);
+        const existingUser = await findUserByEmail(email);
+        if (existingUser) {
+          return res.status(400).send('Error inviting user');
+        }
         const kcAdminClient = await getKcAdminClient();
         const user = await createNewUser(kcAdminClient, firstName, lastName, email);
         await createUserInPortal({
