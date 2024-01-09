@@ -7,7 +7,7 @@ import UpdateParticipantDialog from './UpdateParticipantDialog';
 
 const meta: Meta<typeof UpdateParticipantDialog> = {
   component: UpdateParticipantDialog,
-  title: 'Manage Participants/Update Participants Dialog',
+  title: 'Manage Participants/Update Participant Dialog',
 };
 export default meta;
 
@@ -93,9 +93,8 @@ export const ParticipantWithNoRoles: Story = {
         },
       ],
     },
-    onUpdateParticipant: (form, participant) => {
+    onUpdateParticipant: (form) => {
       console.log(form);
-      console.log(participant);
       return Promise.resolve();
     },
     triggerButton: <button type='button'>Open</button>,
