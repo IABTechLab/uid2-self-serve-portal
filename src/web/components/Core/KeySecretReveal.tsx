@@ -28,24 +28,21 @@ function ViewSecretButton({
     <>
       {display}
       {value.length > MAX_SHOWN_VALUE_LENGTH && (
-        <>
-          <Popover
-            triggerButton={
-              <button
-                className='icon-button show-button'
-                aria-label={title}
-                type='button'
-                title={`View ${title}`}
-                onClick={confirmCopiedSecret}
-              >
-                View
-              </button>
-            }
-          >
-            <p>{value}</p>
-          </Popover>
-          |
-        </>
+        <Popover
+          triggerButton={
+            <button
+              className='icon-button show-button'
+              aria-label={title}
+              type='button'
+              title={`View ${title}`}
+              onClick={confirmCopiedSecret}
+            >
+              View
+            </button>
+          }
+        >
+          <p>{value}</p>
+        </Popover>
       )}
     </>
   );
@@ -89,6 +86,7 @@ function KeySecretReveal({
   return (
     <div className='key-secret-reveal'>
       <ViewSecretButton value={value} title={valueName} confirmCopiedSecret={confirmCopiedSecret} />
+      |
       <button
         className='icon-button copy-button'
         aria-label='copy'
