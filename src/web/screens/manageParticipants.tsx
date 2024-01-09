@@ -35,7 +35,7 @@ function ManageParticipants() {
   };
 
   const reloader = useRevalidator();
-  const onParticipantChange = useCallback(() => {
+  const onParticipantUpdate = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
 
@@ -44,12 +44,12 @@ function ManageParticipants() {
     formData: ParticipantApprovalFormDetails
   ) => {
     await ApproveParticipantRequest(participantId, formData);
-    onParticipantChange();
+    onParticipantUpdate();
   };
 
   const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
-    onParticipantChange();
+    onParticipantUpdate();
   };
 
   return (
