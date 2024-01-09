@@ -153,7 +153,7 @@ function KeyCreationDialog({
 
         {showStatusPopup && (
           <StatusPopup
-            status='Success'
+            status='Info'
             show={showStatusPopup}
             setShow={setShowStatusPopup}
             message={statusPopupMessage}
