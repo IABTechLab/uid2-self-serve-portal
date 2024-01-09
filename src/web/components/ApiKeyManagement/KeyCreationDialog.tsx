@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
