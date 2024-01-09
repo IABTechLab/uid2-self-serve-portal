@@ -28,7 +28,7 @@ function ViewSecretButton({ secret, onCopy }: { secret: Secret; onCopy: () => vo
         <Popover
           triggerButton={
             <button
-              className='icon-button show-button'
+              className='icon-button view-button'
               aria-label={secret.valueName}
               type='button'
               title={`View ${secret.valueName}`}
@@ -78,7 +78,7 @@ function DisplaySecret({ secret, onCopy = () => {} }: { secret: Secret; onCopy?:
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
 
   return (
-    <div className='key-secret-reveal'>
+    <div className='display-secret'>
       <ViewSecretButton secret={secret} onCopy={onCopy} />|
       <CopyKeyButton onCopy={onCopy} secret={secret} setShowStatusPopup={setShowStatusPopup} />
       {showStatusPopup && (

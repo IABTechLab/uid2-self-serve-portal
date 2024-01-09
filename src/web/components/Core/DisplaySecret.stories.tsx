@@ -5,7 +5,7 @@ import DisplaySecret from './DisplaySecret';
 
 const meta: Meta<typeof DisplaySecret> = {
   component: DisplaySecret,
-  title: 'Shared Components/Key Secret Reveal',
+  title: 'Shared Components/Display Secret',
 };
 export default meta;
 
