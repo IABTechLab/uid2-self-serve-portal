@@ -300,16 +300,13 @@ export function createParticipantsRouter() {
     '/:participantId/apiKeys/create',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
-      }
 
       const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
 
       const traceId = getTraceId(req);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertManageApiKeyAuditTrail(
-        participant,
+        participant!,
         currentUser!.id,
         currentUser!.email,
         AuditAction.Add,
@@ -318,11 +315,11 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      if (!validateApiRoles(apiRoles, participant)) {
+      if (!validateApiRoles(apiRoles, participant!)) {
         return res.status(400).send('Invalid API Roles');
       }
 
-      const key = await createApiKey(keyName, apiRoles, participant.siteId);
+      const key = await createApiKey(keyName, apiRoles, participant!.siteId);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(200).json(createdApiKeyToApiKeySecrets(key));
