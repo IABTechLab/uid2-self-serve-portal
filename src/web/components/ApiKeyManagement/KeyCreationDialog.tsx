@@ -46,6 +46,7 @@ function CreateApiKeyForm(
       <div className='cancel-container'>
         <button
           type='button'
+          className='transparent-button'
           onClick={() => {
             setOpen(false);
           }}
@@ -86,7 +87,7 @@ function ShowApiKeySecrets(
         setCopiedSecrets={setCopiedSecrets}
       />
       <div className='cancel-container'>
-        <button type='button' onClick={confirmClose}>
+        <button type='button' className='transparent-button' onClick={confirmClose}>
           Close
         </button>
 
