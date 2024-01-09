@@ -7,7 +7,7 @@ import './KeySecretReveal.scss';
 
 const MAX_SHOWN_VALUE_LENGTH = 20;
 
-function ViewKeyButton({
+function ViewSecretButton({
   value,
   title,
   confirmCopiedSecret,
@@ -88,7 +88,7 @@ function KeySecretReveal({
 
   return (
     <div className='key-secret-reveal'>
-      <ViewKeyButton value={value} title={valueName} confirmCopiedSecret={confirmCopiedSecret} />
+      <ViewSecretButton value={value} title={valueName} confirmCopiedSecret={confirmCopiedSecret} />
       <button
         className='icon-button copy-button'
         aria-label='copy'
