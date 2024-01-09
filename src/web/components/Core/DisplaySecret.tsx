@@ -13,39 +13,25 @@ export type Secret = {
 };
 
 function ViewSecretButton({ secret, onCopy }: { secret: Secret; onCopy: () => void }) {
-  const display =
-    secret.value.length > MAX_SHOWN_VALUE_LENGTH
-      ? `${secret.value.substring(0, MAX_SHOWN_VALUE_LENGTH / 2)}......${secret.value.substring(
-          secret.value.length - MAX_SHOWN_VALUE_LENGTH / 2,
-          secret.value.length
-        )}`
-      : secret.value;
-
   return (
-    <>
-      {display}
-      {secret.value.length > MAX_SHOWN_VALUE_LENGTH && (
-        <Popover
-          triggerButton={
-            <button
-              className='icon-button view-button'
-              aria-label={secret.valueName}
-              type='button'
-              title={`View ${secret.valueName}`}
-              onClick={onCopy}
-            >
-              View
-            </button>
-          }
+    <Popover
+      triggerButton={
+        <button
+          className='icon-button view-button'
+          aria-label={secret.valueName}
+          type='button'
+          title={`View ${secret.valueName}`}
+          onClick={onCopy}
         >
-          <p>{secret.value}</p>
-        </Popover>
-      )}
-    </>
+          View
+        </button>
+      }
+    >
+      <p>{secret.value}</p>
+    </Popover>
   );
 }
 
-export default DisplaySecret;
 function CopyKeyButton({
   secret,
   onCopy,
@@ -77,9 +63,22 @@ function CopyKeyButton({
 function DisplaySecret({ secret, onCopy = () => {} }: { secret: Secret; onCopy?: () => void }) {
   const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
 
+  const secretText =
+    secret.value.length > MAX_SHOWN_VALUE_LENGTH
+      ? `${secret.value.substring(0, MAX_SHOWN_VALUE_LENGTH / 2)}......${secret.value.substring(
+          secret.value.length - MAX_SHOWN_VALUE_LENGTH / 2,
+          secret.value.length
+        )}`
+      : secret.value;
+
   return (
     <div className='display-secret'>
-      <ViewSecretButton secret={secret} onCopy={onCopy} />|
+      {secretText}
+      {secret.value.length > MAX_SHOWN_VALUE_LENGTH && (
+        <>
+          <ViewSecretButton secret={secret} onCopy={onCopy} />|
+        </>
+      )}
       <CopyKeyButton onCopy={onCopy} secret={secret} setShowStatusPopup={setShowStatusPopup} />
       {showStatusPopup && (
         <StatusPopup
@@ -92,3 +91,4 @@ function DisplaySecret({ secret, onCopy = () => {} }: { secret: Secret; onCopy?:
     </div>
   );
 }
+export default DisplaySecret;
