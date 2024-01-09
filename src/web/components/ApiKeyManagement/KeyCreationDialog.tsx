@@ -76,7 +76,7 @@ function ShowApiKeySecrets({
     { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
-  const [uncopiedValues, setUncopiedValueNames] = useState(
+  const [uncopiedValueNames, setUncopiedValueNames] = useState(
     secrets.map((secret) => secret.valueName)
   );
 
@@ -88,8 +88,8 @@ function ShowApiKeySecrets({
     };
   };
 
-  const onCheckClose = () => {
-    if (uncopiedValues.length > 0) {
+  const onClose = () => {
+    if (uncopiedValueNames.length > 0) {
       showPopupMessage('Please copy all secrets shown before closing the page');
       return;
     }
@@ -112,7 +112,7 @@ function ShowApiKeySecrets({
         </div>
       ))}
       <div className='cancel-container'>
-        <button type='button' className='transparent-button' onClick={onCheckClose}>
+        <button type='button' className='transparent-button' onClick={onClose}>
           Close
         </button>
       </div>
@@ -144,6 +144,7 @@ function KeyCreationDialog({
 
   const closeDialog = () => {
     setKeySecrets(undefined);
+    setShowStatusPopup(false);
     setOpen(false);
   };
 
