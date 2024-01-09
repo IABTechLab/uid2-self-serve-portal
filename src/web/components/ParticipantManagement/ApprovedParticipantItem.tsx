@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UpdateParticipantForm } from '../../services/participant';
@@ -49,7 +51,7 @@ export function ApprovedParticipantItem({
           participant={participant}
           triggerButton={
             <button type='button' className='transparent-button'>
-              Edit
+              <FontAwesomeIcon icon='pencil' />
             </button>
           }
         />
