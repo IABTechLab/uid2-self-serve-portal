@@ -14,7 +14,7 @@ export type DialogProps = {
   onOpenChange?: (open: boolean) => void;
   fullScreen?: boolean;
   className?: string;
-  hideClose?: boolean;
+  hideCloseContainerButton?: boolean;
 };
 export function Dialog({
   triggerButton,
@@ -25,7 +25,7 @@ export function Dialog({
   onOpenChange,
   fullScreen,
   className,
-  hideClose = false,
+  hideCloseContainerButton = false,
 }: DialogProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -48,7 +48,7 @@ export function Dialog({
               </RadixDialog.Close>
             </div>
           )}
-          {!hideClose && (
+          {!hideCloseContainerButton && (
             <div className='dialog-close-container'>
               <RadixDialog.Close asChild>
                 <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
