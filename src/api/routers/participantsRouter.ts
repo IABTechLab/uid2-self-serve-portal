@@ -300,6 +300,9 @@ export function createParticipantsRouter() {
     '/:participantId/apiKeys/create',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
 
       const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
 
