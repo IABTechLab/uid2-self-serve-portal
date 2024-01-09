@@ -45,15 +45,17 @@ function ApiKeyManagement() {
             <>
               <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />
               {apiRoles.length > 0 && (
-                <KeyCreationDialog
-                  availableRoles={apiRoles}
-                  onKeyCreation={onKeyCreation}
-                  triggerButton={
-                    <button className='small-button create-key-button' type='button'>
-                      Create Key
-                    </button>
-                  }
-                />
+                <div className='create-new-key'>
+                  <KeyCreationDialog
+                    availableRoles={apiRoles}
+                    onKeyCreation={onKeyCreation}
+                    triggerButton={
+                      <button className='small-button' type='button'>
+                        Create Key
+                      </button>
+                    }
+                  />
+                </div>
               )}
             </>
           )}
