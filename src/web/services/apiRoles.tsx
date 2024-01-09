@@ -3,7 +3,7 @@ import axios from 'axios';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { backendError } from '../utils/apiError';
 
-export async function GetAllApiRoles() {
+export async function GetEnabledApiRoles() {
   try {
     const result = await axios.get<ApiRoleDTO[]>(`/apiRoles`, {
       validateStatus: (status) => status === 200,
