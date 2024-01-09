@@ -284,11 +284,8 @@ export function createParticipantsRouter() {
     '/:participantId/apiRoles',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
-      if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
-      }
 
-      const apiRoles: ApiRoleDTO[] = await getApiRoles(participant);
+      const apiRoles: ApiRoleDTO[] = await getApiRoles(participant!);
 
       return res.status(200).json(apiRoles);
     }
