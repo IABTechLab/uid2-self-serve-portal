@@ -15,24 +15,27 @@ type UpdateParticipantDialogProps = {
   apiRoles: ApiRoleDTO[];
 };
 
-function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
+function UpdateParticipantDialog({
+  apiRoles,
+  onUpdateParticipant,
+  participant,
+  triggerButton,
+}: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
-    await props.onUpdateParticipant(formData, props.participant);
+    await onUpdateParticipant(formData, participant);
     setOpen(false);
   };
 
   const originalFormValues: UpdateParticipantForm = {
-    apiRoles: props.participant.apiRoles
-      ? props.participant.apiRoles.map((apiRole) => apiRole.id)
-      : [],
+    apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
   };
 
   return (
     <Dialog
-      triggerButton={props.triggerButton}
-      title={`Edit ${props.participant.name}`}
+      triggerButton={triggerButton}
+      title={`Edit ${participant.name}`}
       closeButton='Cancel'
       open={open}
       onOpenChange={setOpen}
@@ -46,7 +49,7 @@ function UpdateParticipantDialog(props: UpdateParticipantDialogProps) {
           inputName='apiRoles'
           label='API Roles'
           rules={{ required: 'Please specify the API Roles' }}
-          options={props.apiRoles.map((p) => ({
+          options={apiRoles.map((p) => ({
             optionLabel: p.externalName,
             optionToolTip: p.roleName,
             value: p.id,
