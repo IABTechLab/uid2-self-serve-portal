@@ -4,7 +4,7 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../api/services/apiKeyService';
 import { backendError } from '../utils/apiError';
 
-export async function GetAllApiRoles() {
+export async function GetAllEnabledApiRoles() {
   try {
     const result = await axios.get<ApiRoleDTO[]>(`/apiRoles`, {
       validateStatus: (status) => status === 200,
