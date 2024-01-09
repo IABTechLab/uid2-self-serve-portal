@@ -171,6 +171,7 @@ function KeyCreationDialog({
             show={showStatusPopup}
             setShow={setShowStatusPopup}
             message={statusPopupMessage}
+            displayDuration={10000}
           />
         )}
       </Dialog>
