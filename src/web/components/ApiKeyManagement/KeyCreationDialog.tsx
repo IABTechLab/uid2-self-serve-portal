@@ -106,14 +106,10 @@ function ShowApiKeySecrets({
         lost a new key will have to be generated.
       </p>
       {secrets.map((secret) => (
-        <>
+        <div key={secret.valueName}>
           <h2>{secret.valueName}</h2>
-          <DisplaySecret
-            secret={secret}
-            onCopy={onCopyGenerator(secret.valueName)}
-            key={secret.valueName}
-          />
-        </>
+          <DisplaySecret secret={secret} onCopy={onCopyGenerator(secret.valueName)} />
+        </div>
       ))}
       <div className='cancel-container'>
         <button type='button' className='transparent-button' onClick={onCheckClose}>
