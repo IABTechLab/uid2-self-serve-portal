@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { ApiRoleDTO } from '../entities/ApiRole';
 import { AuditAction } from '../entities/AuditTrail';
 import {
   Participant,
@@ -19,6 +20,7 @@ import { getKcAdminClient } from '../keycloakAdminClient';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
+  createApiKey,
   getApiKeys,
   getKeyPairsList,
   getSharingList,
@@ -27,8 +29,14 @@ import {
 } from '../services/adminServiceClient';
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
+  createdApiKeyToApiKeySecrets,
+  getApiRoles,
+  validateApiRoles,
+} from '../services/apiKeyService';
+import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
+  insertManageApiKeyAuditTrail,
   insertSharingAuditTrails,
   insertSharingTypesAuditTrail,
   updateAuditTrailToProceed,
@@ -273,6 +281,52 @@ export function createParticipantsRouter() {
       const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
 
       return res.status(200).json(apiKeys);
+    }
+  );
+
+  participantsRouter.get(
+    '/:participantId/apiRoles',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+
+      const apiRoles: ApiRoleDTO[] = await getApiRoles(participant!);
+
+      return res.status(200).json(apiRoles);
+    }
+  );
+
+  const apiKeyCreateInputParser = z.object({ name: z.string(), roles: z.array(z.string()) });
+
+  participantsRouter.post(
+    '/:participantId/apiKeys/create',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
+
+      const traceId = getTraceId(req);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertManageApiKeyAuditTrail(
+        participant!,
+        currentUser!.id,
+        currentUser!.email,
+        AuditAction.Add,
+        keyName,
+        apiRoles,
+        traceId
+      );
+
+      if (!validateApiRoles(apiRoles, participant!)) {
+        return res.status(400).send('Invalid API Roles');
+      }
+
+      const key = await createApiKey(keyName, apiRoles, participant!.siteId);
+
+      await updateAuditTrailToProceed(auditTrail.id);
+      return res.status(200).json(createdApiKeyToApiKeySecrets(key));
     }
   );
 

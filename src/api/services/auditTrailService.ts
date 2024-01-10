@@ -54,6 +54,38 @@ export const insertSharingAuditTrails = async (
   }
 };
 
+export const insertManageApiKeyAuditTrail = async (
+  participant: Participant,
+  userId: number,
+  userEmail: string,
+  action: AuditAction,
+  keyName: String,
+  apiRoles: String[],
+  traceId: string
+) => {
+  try {
+    const manageApiKeyTrail: Omit<AuditTrailDTO, 'id'> = {
+      userId,
+      userEmail,
+      event: AuditTrailEvents.ManageApiKey,
+      eventData: {
+        siteId: participant.siteId!,
+        action,
+        apiRoles,
+        keyName,
+        participantId: participant.id,
+      },
+      succeeded: false,
+    };
+
+    return await AuditTrail.query().insert(manageApiKeyTrail);
+  } catch (error) {
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Audit trails inserted failed: ${error}`, traceId);
+    throw error;
+  }
+};
+
 export const insertSharingTypesAuditTrail = async (
   participant: Participant,
   userId: number,

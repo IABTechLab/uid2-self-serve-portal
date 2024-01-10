@@ -45,7 +45,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     <Dialog
       triggerButton={props.triggerButton}
       title={`${props.person ? 'Edit' : 'Add'} Team Member`}
-      closeButton='Cancel'
+      closeButtonText='Cancel'
       open={open}
       onOpenChange={setOpen}
     >

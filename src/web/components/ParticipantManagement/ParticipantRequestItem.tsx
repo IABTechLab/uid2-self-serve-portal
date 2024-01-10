@@ -70,7 +70,7 @@ export function ParticipantRequestItem({
           </button>
           <Dialog
             title='Approve Participant Request'
-            closeButton='Cancel'
+            closeButtonText='Cancel'
             open={open}
             onOpenChange={setOpen}
             className='participants-request-dialog'

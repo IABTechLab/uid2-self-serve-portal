@@ -29,7 +29,7 @@ function KeyPairDialog(props: KeyPairDialogProps) {
     <Dialog
       triggerButton={props.triggerButton}
       title='Create Key Pair'
-      closeButton='Cancel'
+      closeButtonText='Cancel'
       open={open}
       onOpenChange={setOpen}
     >

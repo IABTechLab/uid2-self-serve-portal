@@ -31,17 +31,6 @@
       padding: 15px 5px 15px 0;
     }
 
-    .public-key {
-      overflow-wrap: anywhere;
-
-      .expand-button,
-      .copy-button {
-        color: var(--theme-action);
-        padding: 0 8px;
-        font-size: 1rem;
-      }
-    }
-
     .action {
       padding-right: 80px;
     }

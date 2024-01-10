@@ -93,6 +93,11 @@ export type ApiKeyDTO = {
   service_id: number;
 };
 
+export type CreatedApiKeyDTO = {
+  authorizable: ApiKeyDTO & { key_hash: string; key_salt: string; secret: string };
+  plaintext_key: string;
+};
+
 export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
 
 function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String, ApiRoleDTO>) {
