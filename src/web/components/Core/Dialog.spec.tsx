@@ -18,13 +18,20 @@ describe('Dialog', () => {
 
   it('does not render text close button if closeButton is undefined', () => {
     render(<WithoutCloseText />);
+    const openButton = screen.getByText('Open Dialog');
+    fireEvent.click(openButton);
+
     expect(screen.queryByText('Close')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Close')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Close')).toBeInTheDocument();
   });
 
   it('does not render close buttons if hideCloseButtons', () => {
     render(<WithoutCloseButtons />);
+    const openButton = screen.getByText('Open Dialog');
+    fireEvent.click(openButton);
+
     expect(screen.queryByText('Close')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Close')).not.toBeInTheDocument();
   });
 
   it('open dialog with external button', () => {
