@@ -22,7 +22,7 @@ describe('Dialog', () => {
     fireEvent.click(openButton);
 
     expect(screen.queryByText('Close')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('Close')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
   });
 
   it('does not render close buttons if hideCloseButtons', () => {
@@ -31,7 +31,7 @@ describe('Dialog', () => {
     fireEvent.click(openButton);
 
     expect(screen.queryByText('Close')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('Close')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
   });
 
   it('open dialog with external button', () => {
