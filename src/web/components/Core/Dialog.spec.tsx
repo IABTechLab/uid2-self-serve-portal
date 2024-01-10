@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import * as stories from './Dialog.stories';
 
-const { Default, WithoutCloseButton } = composeStories(stories);
+const { Default, WithoutCloseText, WithoutCloseButtons } = composeStories(stories);
 
 describe('Dialog', () => {
   it('renders correctly with default props', () => {
@@ -16,8 +16,14 @@ describe('Dialog', () => {
     expect(screen.getByText('Close')).toBeInTheDocument();
   });
 
-  it('does not render close button if closeButton is undefined', () => {
-    render(<WithoutCloseButton />);
+  it('does not render text close button if closeButton is undefined', () => {
+    render(<WithoutCloseText />);
+    expect(screen.queryByText('Close')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Close')).not.toBeInTheDocument();
+  });
+
+  it('does not render close buttons if hideCloseButtons', () => {
+    render(<WithoutCloseButtons />);
     expect(screen.queryByText('Close')).not.toBeInTheDocument();
   });
 
