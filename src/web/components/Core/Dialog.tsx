@@ -44,7 +44,7 @@ export function Dialog({
               {closeButtonText && (
                 <div className='dialog-close-button'>
                   <RadixDialog.Close asChild>
-                    <button className='transparent-button' type='button'>
+                    <button className='transparent-button' type='button' aria-label='Close Button'>
                       {closeButtonText}
                     </button>
                   </RadixDialog.Close>
@@ -55,7 +55,7 @@ export function Dialog({
                 <RadixDialog.Close asChild>
                   <button
                     className='dialog-close-icon icon-button'
-                    aria-label='Close'
+                    aria-label='Close Icon'
                     type='button'
                   >
                     <FontAwesomeIcon icon='xmark' />

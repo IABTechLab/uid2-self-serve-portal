@@ -13,7 +13,8 @@ describe('Dialog', () => {
 
     expect(screen.getByText('Dialog Title')).toBeInTheDocument();
     expect(screen.getByText('Dialog content goes here')).toBeInTheDocument();
-    expect(screen.getByText('Close')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close Button' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close Icon' })).toBeInTheDocument();
   });
 
   it('does not render text close button if closeButton is undefined', () => {
@@ -21,8 +22,8 @@ describe('Dialog', () => {
     const openButton = screen.getByText('Open Dialog');
     fireEvent.click(openButton);
 
-    expect(screen.queryByText('Close')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close Button' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close Icon' })).toBeInTheDocument();
   });
 
   it('does not render close buttons if hideCloseButtons', () => {
@@ -30,8 +31,8 @@ describe('Dialog', () => {
     const openButton = screen.getByText('Open Dialog');
     fireEvent.click(openButton);
 
-    expect(screen.queryByText('Close')).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close Button' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Close Icon' })).not.toBeInTheDocument();
   });
 
   it('open dialog with external button', () => {
