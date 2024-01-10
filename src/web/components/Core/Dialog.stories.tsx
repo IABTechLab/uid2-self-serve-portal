@@ -18,7 +18,7 @@ Default.args = {
     </button>
   ),
   title: 'Dialog Title',
-  closeButton: 'Close',
+  closeButtonText: 'Close',
   children: 'Dialog content goes here',
 };
 
@@ -28,10 +28,17 @@ WithoutTitle.args = {
   title: undefined,
 };
 
-export const WithoutCloseButton = Template.bind({});
-WithoutCloseButton.args = {
+export const WithoutCloseText = Template.bind({});
+WithoutCloseText.args = {
   ...Default.args,
-  closeButton: undefined,
+  closeButtonText: undefined,
+};
+
+export const WithoutCloseButtons = Template.bind({});
+WithoutCloseButtons.args = {
+  ...Default.args,
+  closeButtonText: undefined,
+  hideCloseButtons: true,
 };
 
 export const WithOpenAndOnOpenChange = () => {

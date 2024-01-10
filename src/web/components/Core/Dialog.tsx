@@ -9,23 +9,23 @@ export type DialogProps = {
   triggerButton?: JSX.Element;
   children: ReactNode;
   title?: string;
-  closeButton?: string;
+  closeButtonText?: string;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   fullScreen?: boolean;
   className?: string;
-  hideCloseContainerButton?: boolean;
+  hideCloseButtons?: boolean;
 };
 export function Dialog({
   triggerButton,
   children,
   title,
-  closeButton,
+  closeButtonText,
   open,
   onOpenChange,
   fullScreen,
   className,
-  hideCloseContainerButton = false,
+  hideCloseButtons = false,
 }: DialogProps) {
   return (
     <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -39,23 +39,30 @@ export function Dialog({
         <div className={clsx({ fullScreen }, 'dialog-content', className)}>
           {title && <RadixDialog.Title className='dialog-title'>{title}</RadixDialog.Title>}
           {children}
-          {closeButton && (
-            <div className='dialog-close-button'>
-              <RadixDialog.Close asChild>
-                <button className='transparent-button' type='button'>
-                  {closeButton}
-                </button>
-              </RadixDialog.Close>
-            </div>
-          )}
-          {!hideCloseContainerButton && (
-            <div className='dialog-close-container'>
-              <RadixDialog.Close asChild>
-                <button className='dialog-close-icon icon-button' aria-label='Close' type='button'>
-                  <FontAwesomeIcon icon='xmark' />
-                </button>
-              </RadixDialog.Close>
-            </div>
+          {!hideCloseButtons && (
+            <>
+              {closeButtonText && (
+                <div className='dialog-close-button'>
+                  <RadixDialog.Close asChild>
+                    <button className='transparent-button' type='button'>
+                      {closeButtonText}
+                    </button>
+                  </RadixDialog.Close>
+                </div>
+              )}
+
+              <div className='dialog-close-container'>
+                <RadixDialog.Close asChild>
+                  <button
+                    className='dialog-close-icon icon-button'
+                    aria-label='Close'
+                    type='button'
+                  >
+                    <FontAwesomeIcon icon='xmark' />
+                  </button>
+                </RadixDialog.Close>
+              </div>
+            </>
           )}
         </div>
       </RadixDialog.Content>
