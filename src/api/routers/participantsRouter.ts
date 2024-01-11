@@ -43,7 +43,8 @@ import {
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndRoles,
-  updateParticipantAssociatedRequestApiRoles,
+  updateParticipantApiRoles,
+  updateParticipantApiRolesUsingTransaction,
   UpdateSharingTypes,
 } from '../services/participantsService';
 import {
@@ -189,20 +190,12 @@ export function createParticipantsRouter() {
       const { participant } = req;
 
       if (!participant) {
-        return res.status(400).send('Unable to find participant');
+        return res.status(404).send('Unable to find participant');
       }
 
       const { apiRoles } = updateParticipantParser.parse(req.body);
 
-      await Participant.transaction(async (trx) => {
-        await updateParticipantAssociatedRequestApiRoles(
-          participant,
-          apiRoles.map((role) => ({
-            id: role,
-          })),
-          trx
-        );
-      });
+      await updateParticipantApiRoles(participant, apiRoles);
 
       return res.sendStatus(200);
     }

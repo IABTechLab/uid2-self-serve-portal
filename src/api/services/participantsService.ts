@@ -118,7 +118,7 @@ export const deleteSharingParticipants = async (
   );
 };
 
-const updateParticipantAssociatedRequestTypes = async (
+const updateParticipantRequestTypesUsingTransaction = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>,
   trx: TransactionOrKnex
@@ -127,7 +127,7 @@ const updateParticipantAssociatedRequestTypes = async (
   await participant.$relatedQuery('types', trx).relate(participantApprovalPartial.types);
 };
 
-export const updateParticipantAssociatedRequestApiRoles = async (
+export const updateParticipantApiRolesUsingTransaction = async (
   participant: Participant,
   apiRoles: {
     id: number;
@@ -150,10 +150,26 @@ export const updateParticipantAndTypesAndRoles = async (
       siteId: participantApprovalPartial.siteId,
       status: participantApprovalPartial.status,
     });
-    await updateParticipantAssociatedRequestTypes(participant, participantApprovalPartial, trx);
-    await updateParticipantAssociatedRequestApiRoles(
+    await updateParticipantRequestTypesUsingTransaction(
+      participant,
+      participantApprovalPartial,
+      trx
+    );
+    await updateParticipantApiRolesUsingTransaction(
       participant,
       participantApprovalPartial.apiRoles,
+      trx
+    );
+  });
+};
+
+export const updateParticipantApiRoles = async (participant: Participant, apiRoles: number[]) => {
+  await Participant.transaction(async (trx) => {
+    await updateParticipantApiRolesUsingTransaction(
+      participant,
+      apiRoles.map((role) => ({
+        id: role,
+      })),
       trx
     );
   });
