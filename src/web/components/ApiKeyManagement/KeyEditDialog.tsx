@@ -24,6 +24,10 @@ function KeyEditDialog({ availableRoles, onEdit, triggerButton, apiKey }: KeyEdi
     setOpen(false);
   };
 
+  const possibleRolesMap = new Map<number, ApiRoleDTO>();
+  availableRoles.map((role) => possibleRolesMap.set(role.id, role));
+  apiKey.roles.map((role) => possibleRolesMap.set(role.id, role));
+
   const defaultFormData: EditApiKeyFormDTO = {
     name: apiKey.name,
     roles: apiKey.roles.map((role) => role.roleName),
@@ -45,7 +49,7 @@ function KeyEditDialog({ availableRoles, onEdit, triggerButton, apiKey }: KeyEdi
         <CheckboxInput
           label='API Roles'
           inputName='roles'
-          options={availableRoles.map((role) => ({
+          options={Array.from(possibleRolesMap.values()).map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}

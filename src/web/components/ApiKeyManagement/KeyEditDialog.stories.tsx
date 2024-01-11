@@ -12,6 +12,32 @@ export default meta;
 
 type Story = StoryObj<typeof KeyEditDialog>;
 
+export const KeyWithNotAllowedRoles: Story = {
+  args: {
+    apiKey: {
+      contact: 'ApiKey',
+      name: 'ApiKey',
+      created: 1702830516,
+      key_id: 'F4lfa.fdas',
+      disabled: false,
+      roles: [
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      ],
+      service_id: 0,
+    },
+    availableRoles: [
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    ],
+    onEdit: (form) => {
+      console.log(form);
+      return Promise.resolve();
+    },
+    triggerButton: <button type='button'>Open</button>,
+  },
+};
+
 export const MultipleRoles: Story = {
   args: {
     apiKey: {
