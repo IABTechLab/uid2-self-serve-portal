@@ -44,7 +44,6 @@ import {
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndRoles,
   updateParticipantApiRoles,
-  updateParticipantApiRolesUsingTransaction,
   UpdateSharingTypes,
 } from '../services/participantsService';
 import {
