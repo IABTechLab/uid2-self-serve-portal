@@ -9,7 +9,6 @@ import {
   ParticipantApprovalPartial,
   ParticipantCreationPartial,
   ParticipantDTO,
-  ParticipantSchema,
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
@@ -54,6 +53,7 @@ import {
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndRoles,
+  updateParticipantApiRoles,
   UpdateSharingTypes,
 } from '../services/participantsService';
 import {
@@ -190,6 +190,26 @@ export function createParticipantsRouter() {
     }
   );
 
+  const updateParticipantParser = z.object({ apiRoles: z.array(z.number()) });
+
+  participantsRouter.put(
+    '/:participantId',
+    isApproverCheck,
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+
+      if (!participant) {
+        return res.status(404).send('Unable to find participant');
+      }
+
+      const { apiRoles } = updateParticipantParser.parse(req.body);
+
+      await updateParticipantApiRoles(participant, apiRoles);
+
+      return res.sendStatus(200);
+    }
+  );
+
   participantsRouter.use('/:participantId', checkParticipantId);
 
   const invitationParser = z.object({
@@ -228,25 +248,6 @@ export function createParticipantsRouter() {
       }
     }
   );
-
-  const participantParser = ParticipantSchema.pick({
-    location: true,
-  });
-
-  participantsRouter.put('/:participantId', async (req: ParticipantRequest, res: Response) => {
-    try {
-      const { location } = participantParser.parse(req.body);
-
-      const { participant } = req;
-      await participant!.$query().patch({ location });
-      return res.status(200).json(participant);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).send(err.issues);
-      }
-      throw err;
-    }
-  });
 
   participantsRouter.get(
     '/:participantId/sharingPermission',

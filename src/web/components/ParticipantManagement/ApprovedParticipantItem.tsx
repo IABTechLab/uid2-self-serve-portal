@@ -1,13 +1,24 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
+import UpdateParticipantDialog from './UpdateParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
 type ApprovedParticipantProps = {
   participant: ParticipantDTO;
+  apiRoles: ApiRoleDTO[];
+  onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
 };
 
-export function ApprovedParticipantItem({ participant }: ApprovedParticipantProps) {
+export function ApprovedParticipantItem({
+  participant,
+  apiRoles,
+  onUpdateParticipant,
+}: ApprovedParticipantProps) {
   function getParticipantTypes(
     currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
   ) {
@@ -31,6 +42,18 @@ export function ApprovedParticipantItem({ participant }: ApprovedParticipantProp
         <ApiRolesCell
           apiRoles={participant.apiRoles == null ? [] : participant.apiRoles}
           showRoleTooltip
+        />
+      </td>
+      <td>
+        <UpdateParticipantDialog
+          apiRoles={apiRoles}
+          onUpdateParticipant={onUpdateParticipant}
+          participant={participant}
+          triggerButton={
+            <button type='button' className='transparent-button'>
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+          }
         />
       </td>
     </tr>
