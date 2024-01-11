@@ -1,3 +1,4 @@
+import { ApiRoleDTO } from '../entities/ApiRole';
 import { Participant } from '../entities/Participant';
 import { CreatedApiKeyDTO } from './adminServiceHelpers';
 
@@ -25,9 +26,9 @@ export const getApiRoles = async (participant: Participant) => {
 
 export const validateApiRoles = async (
   keyRoles: string[],
-  participant: Participant
+  allowedRoles: ApiRoleDTO[]
 ): Promise<boolean> => {
-  const participantRoles = (await getApiRoles(participant)).map((role) => role.roleName);
+  const participantRoles = allowedRoles.map((role) => role.roleName);
 
   for (const role of keyRoles) {
     if (!participantRoles.includes(role)) return false;

@@ -21,8 +21,9 @@ export type CreateApiKeyFormDTO = {
 };
 
 export type EditApiKeyFormDTO = {
-  name: string;
-  roles: string[];
+  keyId: string;
+  newName: string;
+  newApiRoles: string[];
 };
 
 export async function CreateApiKey(

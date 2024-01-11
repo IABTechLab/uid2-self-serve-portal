@@ -25,7 +25,9 @@ import {
   getKeyPairsList,
   getSharingList,
   getSiteList,
+  renameApiKey,
   setSiteClientTypes,
+  updateApiKeyRoles,
 } from '../services/adminServiceClient';
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
@@ -284,6 +286,47 @@ export function createParticipantsRouter() {
     }
   );
 
+  const apiKeyEditInputParser = z.object({
+    keyId: z.string(),
+    newName: z.string(),
+    newApiRoles: z.array(z.string()),
+  });
+
+  participantsRouter.put(
+    '/:participantId/apiKeys',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
+
+      // Get key in current form and check that is valid
+      const siteApiKeys = await getApiKeys(participant!.siteId);
+      const editedKeyAdmin = siteApiKeys.find((key) => key.key_id === keyId);
+      if (!editedKeyAdmin) {
+        return res.status(404).send('KeyId was invalid');
+      }
+      const editedKey = (await mapAdminApiKeysToApiKeyDTOs([editedKeyAdmin]))[0];
+
+      const participantRoles = await getApiRoles(participant);
+      const validRoles = editedKey.roles.concat(participantRoles);
+      if (!validateApiRoles(newApiRoles, validRoles)) {
+        return res.status(401).send('API Roles are invalid');
+      }
+
+      if (!newName) {
+        return res.status(400).send('Name is invalid');
+      }
+
+      await renameApiKey(editedKey.contact, newName);
+      await updateApiKeyRoles(editedKey.contact, newApiRoles);
+
+      return res.sendStatus(200);
+    }
+  );
+
   participantsRouter.get(
     '/:participantId/apiRoles',
     async (req: ParticipantRequest, res: Response) => {
@@ -319,7 +362,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      if (!validateApiRoles(apiRoles, participant!)) {
+      if (!validateApiRoles(apiRoles, await getApiRoles(participant!))) {
         return res.status(400).send('Invalid API Roles');
       }
 
