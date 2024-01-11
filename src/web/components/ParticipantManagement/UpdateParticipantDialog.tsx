@@ -42,7 +42,7 @@ function UpdateParticipantDialog({
     >
       <Form<UpdateParticipantForm>
         onSubmit={onSubmit}
-        submitButtonText='Update Participant'
+        submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
         <CheckboxInput
