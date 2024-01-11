@@ -129,14 +129,12 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
 }
 
 export type UpdateParticipantForm = {
-  location?: string;
-  logo?: string;
+  apiRoles: number[];
 };
 
-export async function UpdateParticipant(formData: UpdateParticipantForm, participantId: number) {
+export async function UpdateParticipant(formData: UpdateParticipantForm, participantId?: number) {
   try {
-    const result = await axios.put<ParticipantDTO>(`/participants/${participantId}`, formData);
-    return result.data;
+    await axios.put(`/participants/${participantId ?? 'current'}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
   }

@@ -116,5 +116,16 @@ export const AllParticipants: Story = {
 export const NoParticipants: Story = {
   args: {
     participants: [],
+    onUpdateParticipant: (form, participant) => {
+      console.log(form);
+      console.log(participant);
+      return Promise.resolve();
+    },
+    apiRoles: [
+      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+      { id: 4, roleName: 'Role4', externalName: 'Role 4' },
+    ],
   },
 };
