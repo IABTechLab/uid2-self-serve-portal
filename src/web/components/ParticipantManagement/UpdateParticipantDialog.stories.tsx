@@ -16,10 +16,10 @@ type Story = StoryObj<typeof UpdateParticipantDialog>;
 export const ParticipantWithExistingRoles: Story = {
   args: {
     apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
-      { id: 4, roleName: 'Role4', externalName: 'Role 4' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
     ],
     participant: {
       id: 5,
@@ -31,9 +31,9 @@ export const ParticipantWithExistingRoles: Story = {
         { id: 4, typeName: 'Type 4' },
       ],
       apiRoles: [
-        { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-        { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-        { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+        { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
       ],
       status: ParticipantStatus.Approved,
       allowSharing: true,
@@ -60,10 +60,10 @@ export const ParticipantWithExistingRoles: Story = {
 export const ParticipantWithNoRoles: Story = {
   args: {
     apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
-      { id: 4, roleName: 'Role4', externalName: 'Role 4' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
     ],
     participant: {
       id: 5,
@@ -74,11 +74,7 @@ export const ParticipantWithNoRoles: Story = {
         { id: 3, typeName: 'Type 3' },
         { id: 4, typeName: 'Type 4' },
       ],
-      apiRoles: [
-        { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-        { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-        { id: 3, roleName: 'Role3', externalName: 'Role 3' },
-      ],
+      apiRoles: [],
       status: ParticipantStatus.Approved,
       allowSharing: true,
       completedRecommendations: false,
