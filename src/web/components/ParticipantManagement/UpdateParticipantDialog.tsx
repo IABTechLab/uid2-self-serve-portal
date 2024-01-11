@@ -16,10 +16,10 @@ type UpdateParticipantDialogProps = {
 };
 
 function UpdateParticipantDialog({
-  apiRoles,
-  onUpdateParticipant,
-  participant,
   triggerButton,
+  participant,
+  onUpdateParticipant,
+  apiRoles,
 }: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
 
