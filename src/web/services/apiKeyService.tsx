@@ -20,6 +20,11 @@ export type CreateApiKeyFormDTO = {
   roles: string[];
 };
 
+export type EditApiKeyFormDTO = {
+  name: string;
+  roles: string[];
+};
+
 export async function CreateApiKey(
   form: CreateApiKeyFormDTO,
   participantId?: number
