@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { EditApiKeyFormDTO } from '../../services/apiKeyService';
 import { formatUnixDate } from '../../utils/textHelpers';
@@ -7,8 +10,9 @@ import KeyEditDialog from './KeyEditDialog';
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
   onEdit: (form: EditApiKeyFormDTO) => Promise<void>;
+  availableRoles: ApiRoleDTO[];
 };
-function KeyItem({ apiKey, onEdit }: KeyItemProps) {
+function KeyItem({ apiKey, onEdit, availableRoles }: KeyItemProps) {
   return (
     <tr>
       <td>{apiKey.name}</td>
@@ -21,7 +25,12 @@ function KeyItem({ apiKey, onEdit }: KeyItemProps) {
         <KeyEditDialog
           apiKey={apiKey}
           onEdit={onEdit}
-          triggerButton={<FontAwesomeIcon icon='pencil' />}
+          triggerButton={
+            <button type='button' className='transparent-button'>
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+          }
+          availableRoles={availableRoles}
         />
       </td>
     </tr>

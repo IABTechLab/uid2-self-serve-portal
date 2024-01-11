@@ -87,11 +87,18 @@ export const getApiKeys = async (siteId: number): Promise<ApiKeyAdmin[]> => {
 };
 
 export const renameApiKey = async (contact: string, newName: string) => {
-  await adminServiceClient.post('/api/client/rename', { contact, newName });
+  const response = await adminServiceClient.post('/api/client/rename', null, {
+    params: { contact, newName },
+  });
 };
 
 export const updateApiKeyRoles = async (contact: string, apiRoles: string[]) => {
-  await adminServiceClient.post('/api/client/roles', { contact, roles: apiRoles.join(', ') });
+  const response = await adminServiceClient.post('/api/client/roles', null, {
+    params: {
+      contact,
+      roles: apiRoles.join(', '),
+    },
+  });
 };
 
 export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {

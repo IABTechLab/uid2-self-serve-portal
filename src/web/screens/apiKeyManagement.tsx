@@ -1,4 +1,3 @@
-import { number } from 'prop-types';
 import { Suspense, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
@@ -58,7 +57,11 @@ function ApiKeyManagement() {
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
             <>
-              <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />
+              <KeyTable
+                apiKeys={apiKeys.filter((key) => !key.disabled)}
+                onKeyEdit={onKeyEdit}
+                availableRoles={apiRoles}
+              />
               {apiRoles.length > 0 && (
                 <div className='create-new-key'>
                   <KeyCreationDialog

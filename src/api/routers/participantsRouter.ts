@@ -300,6 +300,8 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
+      // TODO Add audit log
+
       const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
 
       // Get key in current form and check that is valid
