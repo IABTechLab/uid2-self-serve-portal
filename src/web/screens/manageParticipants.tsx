@@ -9,7 +9,7 @@ import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
-import { GetEnabledApiRoles } from '../services/apiRoles';
+import { GetAllEnabledApiRoles } from '../services/apiKeyService';
 import {
   ApproveParticipantRequest,
   GetApprovedParticipants,
@@ -95,7 +95,7 @@ export const ManageParticipantsRoute: PortalRoute = {
     const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
     const participantsApproved = GetApprovedParticipants();
     const participantTypes = GetAllParticipantTypes();
-    const apiRoles = GetEnabledApiRoles();
+    const apiRoles = GetAllEnabledApiRoles();
     const sitesList = preloadSiteList();
     const promises = Promise.all([
       participantsAwaitingApproval,

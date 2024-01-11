@@ -8,6 +8,7 @@ import { getLoggers } from '../helpers/loggingHelpers';
 import {
   ApiKeyAdmin,
   ClientType,
+  CreatedApiKeyDTO,
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
@@ -120,5 +121,22 @@ export const setSiteClientTypes = async (
       types: adminTypes,
     },
   });
+  return response.data;
+};
+
+export const createApiKey = async (
+  name: string,
+  roles: string[],
+  siteId: number
+): Promise<CreatedApiKeyDTO> => {
+  const rolesString = roles.join(', ');
+  const response = await adminServiceClient.post<CreatedApiKeyDTO>('/api/client/add', null, {
+    params: {
+      name,
+      roles: rolesString,
+      site_id: siteId,
+    },
+  });
+
   return response.data;
 };

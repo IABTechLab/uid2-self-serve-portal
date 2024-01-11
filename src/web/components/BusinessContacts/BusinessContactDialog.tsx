@@ -30,7 +30,7 @@ function BusinessContactDialog({
     <Dialog
       triggerButton={triggerButton}
       title={`${contact ? 'Edit' : 'Add'} Email Contact`}
-      closeButton='Cancel'
+      closeButtonText='Cancel'
       open={open}
       onOpenChange={setOpen}
     >
