@@ -1,3 +1,4 @@
+import { number } from 'prop-types';
 import { Suspense, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
@@ -7,7 +8,12 @@ import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog'
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
-import { CreateApiKey, CreateApiKeyFormDTO } from '../services/apiKeyService';
+import {
+  CreateApiKey,
+  CreateApiKeyFormDTO,
+  EditApiKey,
+  EditApiKeyFormDTO,
+} from '../services/apiKeyService';
 import { GetParticipantApiKeys, GetParticipantApiRoles } from '../services/participant';
 import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -30,6 +36,15 @@ function ApiKeyManagement() {
       const keySecret = await CreateApiKey(form, participantId);
       reloader.revalidate();
       return keySecret;
+    } catch (e) {
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+    }
+  };
+
+  const onKeyEdit = async (form: EditApiKeyFormDTO, participantId?: number) => {
+    try {
+      await EditApiKey(form, participantId);
+      reloader.revalidate();
     } catch (e) {
       handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }

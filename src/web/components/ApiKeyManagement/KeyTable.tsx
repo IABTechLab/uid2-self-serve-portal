@@ -1,4 +1,5 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
+import { EditApiKeyFormDTO } from '../../services/apiKeyService';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { Tooltip } from '../Core/Tooltip';
 import KeyItem from './KeyItem';
@@ -18,8 +19,9 @@ function NoKeys() {
 
 type KeyTableProps = {
   apiKeys: ApiKeyDTO[];
+  onEdit: (form: EditApiKeyFormDTO) => Promise<void>;
 };
-function KeyTable({ apiKeys }: KeyTableProps) {
+function KeyTable({ apiKeys, onEdit }: KeyTableProps) {
   return (
     <div>
       <table className='api-key-table'>
@@ -35,11 +37,12 @@ function KeyTable({ apiKeys }: KeyTableProps) {
             </th>
             <th>Roles</th>
             <th>Created</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {apiKeys.map((key: ApiKeyDTO) => (
-            <KeyItem key={key.key_id} apiKey={key} />
+            <KeyItem key={key.key_id} apiKey={key} onEdit={onEdit} />
           ))}
         </tbody>
       </table>
