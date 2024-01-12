@@ -86,13 +86,13 @@ export const getApiKeys = async (siteId: number): Promise<ApiKeyAdmin[]> => {
   return response.data;
 };
 
-export const renameApiKey = async (contact: string, newName: string) => {
+export const renameApiKey = async (contact: string, newName: string): Promise<void> => {
   const response = await adminServiceClient.post('/api/client/rename', null, {
     params: { contact, newName },
   });
 };
 
-export const updateApiKeyRoles = async (contact: string, apiRoles: string[]) => {
+export const updateApiKeyRoles = async (contact: string, apiRoles: string[]): Promise<void> => {
   const response = await adminServiceClient.post('/api/client/roles', null, {
     params: {
       contact,
