@@ -301,17 +301,29 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
-      // TODO Add audit log
-
       const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
 
-      // Get key in current form and check that is valid
       const siteApiKeys = await getApiKeys(participant!.siteId);
       const editedKeyAdmin = siteApiKeys.find((key) => key.key_id === keyId);
       if (!editedKeyAdmin) {
         return res.status(404).send('KeyId was invalid');
       }
+
       const editedKey = (await mapAdminApiKeysToApiKeyDTOs([editedKeyAdmin]))[0];
+
+      const traceId = getTraceId(req);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertManageApiKeyAuditTrail(
+        participant!,
+        currentUser!.id,
+        currentUser!.email,
+        AuditAction.Update,
+        editedKey.name,
+        editedKey.roles.map((role) => role.roleName),
+        traceId,
+        newName,
+        newApiRoles
+      );
 
       const participantRoles = await getApiRoles(participant);
       const validRoles = editedKey.roles.concat(participantRoles);
@@ -325,6 +337,8 @@ export function createParticipantsRouter() {
 
       await renameApiKey(editedKey.contact, newName);
       await updateApiKeyRoles(editedKey.contact, newApiRoles);
+
+      await updateAuditTrailToProceed(auditTrail.id);
 
       return res.sendStatus(200);
     }

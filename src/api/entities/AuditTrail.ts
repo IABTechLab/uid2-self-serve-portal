@@ -62,6 +62,8 @@ export type ManageApiKeyEventData = {
   keyName: String;
   apiRoles: String[];
   participantId: number;
+  newKeyName?: String;
+  newApiRoles?: String[];
 };
 
 export class AuditTrail extends BaseModel {
