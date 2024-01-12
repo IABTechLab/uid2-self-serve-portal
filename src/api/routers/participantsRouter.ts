@@ -31,6 +31,7 @@ import {
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
+  getApiKey,
   getApiRoles,
   validateApiRoles,
 } from '../services/apiKeyService';
@@ -303,13 +304,11 @@ export function createParticipantsRouter() {
 
       const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
 
-      const siteApiKeys = await getApiKeys(participant!.siteId);
-      const editedKeyAdmin = siteApiKeys.find((key) => key.key_id === keyId);
-      if (!editedKeyAdmin) {
+      const editedKey = await getApiKey(participant!.siteId, keyId);
+
+      if (!editedKey) {
         return res.status(404).send('KeyId was invalid');
       }
-
-      const editedKey = (await mapAdminApiKeysToApiKeyDTOs([editedKeyAdmin]))[0];
 
       const traceId = getTraceId(req);
       const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
