@@ -1,7 +1,7 @@
 import { ApiRoleDTO } from '../entities/ApiRole';
 import { Participant } from '../entities/Participant';
 import { getApiKeys } from './adminServiceClient';
-import { CreatedApiKeyDTO, mapAdminApiKeysToApiKeyDTOs } from './adminServiceHelpers';
+import { ApiKeyDTO, CreatedApiKeyDTO, mapAdminApiKeysToApiKeyDTOs } from './adminServiceHelpers';
 
 export type ApiKeySecretsDTO = {
   plaintextKey: string;
@@ -38,7 +38,7 @@ export const validateApiRoles = async (
   return true;
 };
 
-export const getApiKey = async (siteId: number, keyId: String) => {
+export const getApiKey = async (siteId: number, keyId: String): Promise<ApiKeyDTO | undefined> => {
   const siteApiKeys = await getApiKeys(siteId);
   const editedKeyAdmin = siteApiKeys.find((key) => key.key_id === keyId);
 
