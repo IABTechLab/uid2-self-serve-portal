@@ -62,6 +62,7 @@ export type ManageApiKeyEventData = {
   keyName: String;
   apiRoles: String[];
   participantId: number;
+  keyContact?: String;
   newKeyName?: String;
   newApiRoles?: String[];
 };
