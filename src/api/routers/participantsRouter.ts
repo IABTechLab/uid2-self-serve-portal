@@ -335,8 +335,15 @@ export function createParticipantsRouter() {
         return res.status(400).send('Name is invalid');
       }
 
-      await renameApiKey(editedKey.contact, newName);
-      await updateApiKeyRoles(editedKey.contact, newApiRoles);
+      if (newName === editedKey.name) await renameApiKey(editedKey.contact, newName);
+
+      if (
+        editedKey.roles
+          .map((role) => role.roleName)
+          .sort()
+          .join(',') === newApiRoles.sort().join(',')
+      )
+        await updateApiKeyRoles(editedKey.contact, newApiRoles);
 
       await updateAuditTrailToProceed(auditTrail.id);
 
