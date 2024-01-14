@@ -319,7 +319,7 @@ export function createParticipantsRouter() {
         editedKey.name,
         editedKey.roles.map((role) => role.roleName),
         traceId,
-        editedKey.contact,
+        editedKey.key_id,
         newName,
         newApiRoles
       );

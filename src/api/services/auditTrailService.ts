@@ -62,7 +62,7 @@ export const insertManageApiKeyAuditTrail = async (
   keyName: String,
   apiRoles: String[],
   traceId: string,
-  keyContact?: String,
+  keyId?: String,
   newKeyName?: String,
   newApiRoles?: String[]
 ) => {
@@ -77,7 +77,7 @@ export const insertManageApiKeyAuditTrail = async (
         apiRoles,
         keyName,
         participantId: participant.id,
-        keyContact,
+        keyId,
         newKeyName,
         newApiRoles,
       },
