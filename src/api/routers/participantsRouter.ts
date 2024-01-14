@@ -304,7 +304,7 @@ export function createParticipantsRouter() {
 
       const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
 
-      const editedKey = await getApiKey(participant!.siteId, keyId);
+      const editedKey = await getApiKey(participant.siteId, keyId);
       if (!editedKey) {
         return res.status(404).send('KeyId was invalid');
       }
