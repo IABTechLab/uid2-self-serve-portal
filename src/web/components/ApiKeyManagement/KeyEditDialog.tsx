@@ -53,6 +53,7 @@ function KeyEditDialog({
       open={open}
       onOpenChange={setOpen}
       triggerButton={triggerButton}
+      title={`Edit ${apiKey.name}`}
     >
       <Form<EditApiKeyFormDTO>
         onSubmit={onSubmit}
