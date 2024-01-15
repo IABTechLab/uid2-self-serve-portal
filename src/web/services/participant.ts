@@ -103,7 +103,7 @@ export async function GetApprovedParticipants() {
 export async function GetParticipantApiKeys(participantId?: number) {
   try {
     const result = await axios.get<ApiKeyDTO[]>(
-      `/participants/${participantId ?? 'current'}/apiKeys`
+      `/participants/${participantId ?? 'current'}/apiKeys/list`
     );
 
     return result.data;
@@ -115,7 +115,7 @@ export async function GetParticipantApiKeys(participantId?: number) {
 export async function GetParticipantApiKey(keyId: string, participantId?: number) {
   try {
     const result = await axios.get<ApiKeyDTO>(
-      `/participants/${participantId ?? 'current'}/apiKeys/keyId`,
+      `/participants/${participantId ?? 'current'}/apiKeys`,
       { params: { keyId } }
     );
     return result.data;

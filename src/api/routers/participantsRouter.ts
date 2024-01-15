@@ -270,7 +270,7 @@ export function createParticipantsRouter() {
   );
 
   participantsRouter.get(
-    '/:participantId/apiKeys',
+    '/:participantId/apiKeys/list',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
@@ -288,7 +288,7 @@ export function createParticipantsRouter() {
     keyId: z.string(),
   });
   participantsRouter.get(
-    '/:participantId/apiKeys/keyId',
+    '/:participantId/apiKeys',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
