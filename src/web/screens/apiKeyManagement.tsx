@@ -43,8 +43,7 @@ function ApiKeyManagement() {
   const onKeyEdit: OnApiKeyEdit = async (form, setApiKey, participantId?) => {
     try {
       await EditApiKey(form, participantId);
-      const apiKey = await GetParticipantApiKey(form.keyId, participantId);
-      setApiKey(apiKey);
+      setApiKey(await GetParticipantApiKey(form.keyId, participantId));
     } catch (e) {
       handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }
