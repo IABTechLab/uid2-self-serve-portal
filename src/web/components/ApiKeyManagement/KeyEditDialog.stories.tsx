@@ -19,6 +19,7 @@ export const MultipleRoles: Story = {
       name: 'ApiKey',
       created: 1702830516,
       key_id: 'F4lfa.fdas',
+      site_id: 1,
       disabled: false,
       roles: [
         { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
@@ -45,6 +46,7 @@ export const KeyWithNotAllowedRoles: Story = {
     apiKey: {
       contact: 'ApiKey',
       name: 'ApiKey',
+      site_id: 1,
       created: 1702830516,
       key_id: 'F4lfa.fdas',
       disabled: false,

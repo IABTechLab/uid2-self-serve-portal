@@ -81,19 +81,26 @@ export const getSite = async (siteId: number): Promise<SiteDTO> => {
   return response.data;
 };
 
-export const getApiKeys = async (siteId: number): Promise<ApiKeyAdmin[]> => {
+export const getApiKeysFromAdmin = async (siteId: number): Promise<ApiKeyAdmin[]> => {
   const response = await adminServiceClient.get<ApiKeyAdmin[]>(`/api/client/list/${siteId}`);
   return response.data;
 };
 
+export const getApiKeyFromAdmin = async (keyId: String): Promise<ApiKeyAdmin> => {
+  const response = await adminServiceClient.get<ApiKeyAdmin>(`/api/client/keyId`, {
+    params: { keyId },
+  });
+  return response.data;
+};
+
 export const renameApiKey = async (contact: string, newName: string): Promise<void> => {
-  const response = await adminServiceClient.post('/api/client/rename', null, {
+  await adminServiceClient.post('/api/client/rename', null, {
     params: { contact, newName },
   });
 };
 
 export const updateApiKeyRoles = async (contact: string, apiRoles: string[]): Promise<void> => {
-  const response = await adminServiceClient.post('/api/client/roles', null, {
+  await adminServiceClient.post('/api/client/roles', null, {
     params: {
       contact,
       roles: apiRoles.join(', '),

@@ -91,6 +91,7 @@ export type ApiKeyDTO = {
   created: number;
   disabled: boolean;
   service_id: number;
+  site_id: number;
 };
 
 export type CreatedApiKeyDTO = {
@@ -135,6 +136,7 @@ export async function mapAdminApiKeysToApiKeyDTOs(
       contact: adminKey.contact,
       created: adminKey.created,
       disabled: adminKey.disabled,
+      site_id: adminKey.site_id,
       roles,
       service_id: adminKey.service_id,
     };

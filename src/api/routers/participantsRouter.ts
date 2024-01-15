@@ -20,7 +20,7 @@ import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
   createApiKey,
-  getApiKeys,
+  getApiKeysFromAdmin,
   getKeyPairsList,
   getSharingList,
   getSiteList,
@@ -281,10 +281,35 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
-      const adminApiKeys = await getApiKeys(participant.siteId);
+      const adminApiKeys = await getApiKeysFromAdmin(participant.siteId);
       const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
 
       return res.status(200).json(apiKeys);
+    }
+  );
+
+  interface ApiKeyRequest extends ParticipantRequest {
+    keyId?: String;
+  }
+  participantsRouter.get(
+    '/:participantId/apiKeys/:keyId',
+    async (req: ApiKeyRequest, res: Response) => {
+      const { participant, keyId } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      if (!keyId) {
+        return res.status(400).send('Key id is not set');
+      }
+
+      const apiKey = await getApiKey(participant.siteId, keyId);
+
+      if (!apiKey) {
+        return res.status(404).send('Could not find participants key with keyId');
+      }
+
+      return res.status(200).json(apiKey);
     }
   );
 
