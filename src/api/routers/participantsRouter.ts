@@ -287,7 +287,6 @@ export function createParticipantsRouter() {
   const apiKeyIdParser = z.object({
     keyId: z.string(),
   });
-
   participantsRouter.get(
     '/:participantId/apiKeys/keyId',
     async (req: ParticipantRequest, res: Response) => {
@@ -315,7 +314,6 @@ export function createParticipantsRouter() {
     newName: z.string(),
     newApiRoles: z.array(z.string()),
   });
-
   participantsRouter.put(
     '/:participantId/apiKeys',
     async (req: ParticipantRequest, res: Response) => {
