@@ -45,6 +45,6 @@ export async function EditApiKey(form: EditApiKeyFormDTO, participantId?: number
   try {
     await axios.put(`/participants/${participantId ?? 'current'}/apiKeys`, form);
   } catch (e: unknown) {
-    throw backendError(e, 'Could not create API Key');
+    throw backendError(e, 'Could not edit API Key');
   }
 }

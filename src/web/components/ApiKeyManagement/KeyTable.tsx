@@ -1,8 +1,8 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
-import { EditApiKeyFormDTO } from '../../services/apiKeyService';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { Tooltip } from '../Core/Tooltip';
+import { OnApiKeyEdit } from './KeyEditDialog';
 import KeyItem from './KeyItem';
 
 import './KeyTable.scss';
@@ -20,7 +20,7 @@ function NoKeys() {
 
 type KeyTableProps = {
   apiKeys: ApiKeyDTO[];
-  onKeyEdit: (form: EditApiKeyFormDTO) => Promise<void>;
+  onKeyEdit: OnApiKeyEdit;
   availableRoles: ApiRoleDTO[];
 };
 function KeyTable({ apiKeys, onKeyEdit, availableRoles }: KeyTableProps) {

@@ -4,16 +4,16 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
+import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
+import { CreateApiKey, CreateApiKeyFormDTO, EditApiKey } from '../services/apiKeyService';
 import {
-  CreateApiKey,
-  CreateApiKeyFormDTO,
-  EditApiKey,
-  EditApiKeyFormDTO,
-} from '../services/apiKeyService';
-import { GetParticipantApiKeys, GetParticipantApiRoles } from '../services/participant';
+  GetParticipantApiKey,
+  GetParticipantApiKeys,
+  GetParticipantApiRoles,
+} from '../services/participant';
 import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -40,10 +40,11 @@ function ApiKeyManagement() {
     }
   };
 
-  const onKeyEdit = async (form: EditApiKeyFormDTO, participantId?: number) => {
+  const onKeyEdit: OnApiKeyEdit = async (form, setApiKey, participantId?) => {
     try {
       await EditApiKey(form, participantId);
-      reloader.revalidate();
+      const apiKey = await GetParticipantApiKey(form.keyId, participantId);
+      setApiKey(apiKey);
     } catch (e) {
       handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
     }

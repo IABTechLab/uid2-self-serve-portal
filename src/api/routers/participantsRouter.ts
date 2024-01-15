@@ -269,10 +269,6 @@ export function createParticipantsRouter() {
     }
   );
 
-  const sharingRelationParser = z.object({
-    newParticipantSites: z.array(z.number()),
-  });
-
   participantsRouter.get(
     '/:participantId/apiKeys',
     async (req: ParticipantRequest, res: Response) => {
@@ -288,23 +284,24 @@ export function createParticipantsRouter() {
     }
   );
 
-  interface ApiKeyRequest extends ParticipantRequest {
-    keyId?: String;
-  }
+  const apiKeyIdParser = z.object({
+    keyId: z.string(),
+  });
+
   participantsRouter.get(
-    '/:participantId/apiKeys/:keyId',
-    async (req: ApiKeyRequest, res: Response) => {
-      const { participant, keyId } = req;
+    '/:participantId/apiKeys/keyId',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
 
+      const { keyId } = apiKeyIdParser.parse(req.query);
       if (!keyId) {
         return res.status(400).send('Key id is not set');
       }
 
       const apiKey = await getApiKey(participant.siteId, keyId);
-
       if (!apiKey) {
         return res.status(404).send('Could not find participants key with keyId');
       }
@@ -421,6 +418,9 @@ export function createParticipantsRouter() {
     }
   );
 
+  const sharingRelationParser = z.object({
+    newParticipantSites: z.array(z.number()),
+  });
   participantsRouter.post(
     '/:participantId/sharingPermission/add',
     async (req: ParticipantRequest, res: Response) => {

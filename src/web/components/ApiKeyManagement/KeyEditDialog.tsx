@@ -9,18 +9,31 @@ import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
+export type OnApiKeyEdit = (
+  form: EditApiKeyFormDTO,
+  setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>,
+  participantId?: number
+) => void;
+
 type KeyEditDialogProps = {
-  onEdit: (form: EditApiKeyFormDTO) => Promise<void>;
+  onEdit: OnApiKeyEdit;
   triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
   apiKey: ApiKeyDTO;
+  setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
 };
 
-function KeyEditDialog({ availableRoles, onEdit, triggerButton, apiKey }: KeyEditDialogProps) {
+function KeyEditDialog({
+  availableRoles,
+  onEdit,
+  triggerButton,
+  apiKey,
+  setApiKey,
+}: KeyEditDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit: SubmitHandler<EditApiKeyFormDTO> = async (formData) => {
-    await onEdit(formData);
+    await onEdit(formData, setApiKey);
     setOpen(false);
   };
 

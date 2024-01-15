@@ -1,18 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
-import { EditApiKeyFormDTO } from '../../services/apiKeyService';
 import { formatUnixDate } from '../../utils/textHelpers';
 import ApiRolesCell from './ApiRolesCell';
-import KeyEditDialog from './KeyEditDialog';
+import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
-  onEdit: (form: EditApiKeyFormDTO) => Promise<void>;
+  onEdit: OnApiKeyEdit;
   availableRoles: ApiRoleDTO[];
 };
-function KeyItem({ apiKey, onEdit, availableRoles }: KeyItemProps) {
+function KeyItem({ apiKey: apiKeyInitial, onEdit, availableRoles }: KeyItemProps) {
+  const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
+
   return (
     <tr>
       <td>{apiKey.name}</td>
@@ -31,6 +33,7 @@ function KeyItem({ apiKey, onEdit, availableRoles }: KeyItemProps) {
             </button>
           }
           availableRoles={availableRoles}
+          setApiKey={setApiKey}
         />
       </td>
     </tr>

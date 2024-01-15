@@ -86,10 +86,15 @@ export const getApiKeysFromAdmin = async (siteId: number): Promise<ApiKeyAdmin[]
   return response.data;
 };
 
-export const getApiKeyFromAdmin = async (keyId: String): Promise<ApiKeyAdmin> => {
+export const getApiKeyFromAdmin = async (keyId: String): Promise<ApiKeyAdmin | undefined> => {
   const response = await adminServiceClient.get<ApiKeyAdmin>(`/api/client/keyId`, {
     params: { keyId },
   });
+
+  if (response.status === 404) {
+    return undefined;
+  }
+
   return response.data;
 };
 

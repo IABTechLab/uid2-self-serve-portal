@@ -112,6 +112,18 @@ export async function GetParticipantApiKeys(participantId?: number) {
   }
 }
 
+export async function GetParticipantApiKey(keyId: string, participantId?: number) {
+  try {
+    const result = await axios.get<ApiKeyDTO>(
+      `/participants/${participantId ?? 'current'}/apiKeys/keyId`,
+      { params: { keyId } }
+    );
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get API Key');
+  }
+}
+
 export async function GetParticipantApiRoles(participantId?: number) {
   try {
     const result = await axios.get<ApiRoleDTO[]>(
