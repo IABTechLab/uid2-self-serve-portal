@@ -32,7 +32,7 @@ export async function CreateApiKey(
 ): Promise<ApiKeySecretsDTO> {
   try {
     const result = await axios.post<ApiKeySecretsDTO>(
-      `/participants/${participantId ?? 'current'}/apiKeys/create`,
+      `/participants/${participantId ?? 'current'}/apiKeys`,
       form
     );
     return result.data;

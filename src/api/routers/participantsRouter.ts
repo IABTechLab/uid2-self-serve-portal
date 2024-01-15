@@ -384,7 +384,7 @@ export function createParticipantsRouter() {
   const apiKeyCreateInputParser = z.object({ name: z.string(), roles: z.array(z.string()) });
 
   participantsRouter.post(
-    '/:participantId/apiKeys/create',
+    '/:participantId/apiKeys',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
