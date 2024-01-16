@@ -41,7 +41,7 @@ export const MultipleRoles: Story = {
   },
 };
 
-export const KeyWithNotAllowedRoles: Story = {
+export const KeyWithRolesParticipantIsntAllowed: Story = {
   args: {
     apiKey: {
       contact: 'ApiKey',
