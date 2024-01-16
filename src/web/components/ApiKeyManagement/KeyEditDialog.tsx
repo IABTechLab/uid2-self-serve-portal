@@ -23,6 +23,15 @@ type KeyEditDialogProps = {
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
 };
 
+function getAllowedRoles(apiRoleAllowedLists: ApiRoleDTO[][]): ApiRoleDTO[] {
+  const possibleRolesMap = new Map<number, ApiRoleDTO>();
+  apiRoleAllowedLists.map((apiRoles) =>
+    apiRoles.map((apiRole) => possibleRolesMap.set(apiRole.id, apiRole))
+  );
+
+  return Array.from(possibleRolesMap.values());
+}
+
 function KeyEditDialog({
   availableRoles,
   onEdit,
@@ -36,10 +45,6 @@ function KeyEditDialog({
     await onEdit(formData, setApiKey);
     setOpen(false);
   };
-
-  const possibleRolesMap = new Map<number, ApiRoleDTO>();
-  availableRoles.map((role) => possibleRolesMap.set(role.id, role));
-  apiKey.roles.map((role) => possibleRolesMap.set(role.id, role));
 
   const defaultFormData: EditApiKeyFormDTO = {
     keyId: apiKey.key_id,
@@ -64,7 +69,7 @@ function KeyEditDialog({
         <CheckboxInput
           label='API Roles'
           inputName='newApiRoles'
-          options={Array.from(possibleRolesMap.values()).map((role) => ({
+          options={getAllowedRoles([availableRoles, apiKey.roles]).map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}
