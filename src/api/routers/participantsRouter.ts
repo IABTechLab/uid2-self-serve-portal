@@ -270,7 +270,7 @@ export function createParticipantsRouter() {
   );
 
   participantsRouter.get(
-    '/:participantId/apiKeys/list',
+    '/:participantId/apiKeys',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
@@ -288,7 +288,7 @@ export function createParticipantsRouter() {
     keyId: z.string(),
   });
   participantsRouter.get(
-    '/:participantId/apiKeys',
+    '/:participantId/apiKey',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
@@ -315,7 +315,7 @@ export function createParticipantsRouter() {
     newApiRoles: z.array(z.string()),
   });
   participantsRouter.put(
-    '/:participantId/apiKeys',
+    '/:participantId/apiKey',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
@@ -384,7 +384,7 @@ export function createParticipantsRouter() {
   const apiKeyCreateInputParser = z.object({ name: z.string(), roles: z.array(z.string()) });
 
   participantsRouter.post(
-    '/:participantId/apiKeys',
+    '/:participantId/apiKey',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
