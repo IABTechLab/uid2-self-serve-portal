@@ -52,6 +52,8 @@ function KeyEditDialog({
     newApiRoles: apiKey.roles.map((role) => role.roleName),
   };
 
+  const allowedApiRoles = getAllowedRoles([availableRoles, apiKey.roles]);
+
   return (
     <Dialog
       closeButtonText='Cancel'
@@ -69,7 +71,7 @@ function KeyEditDialog({
         <CheckboxInput
           label='API Roles'
           inputName='newApiRoles'
-          options={getAllowedRoles([availableRoles, apiKey.roles]).map((role) => ({
+          options={allowedApiRoles.map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}
