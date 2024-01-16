@@ -13,5 +13,8 @@
     "jest.preset.js",
     "tests/jest-resolver.js",
     "craco.config.cjs"
-  ]
+  ],
+  "ts-node": {
+    "esm": true
+  }
 }

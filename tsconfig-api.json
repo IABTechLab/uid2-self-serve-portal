@@ -17,5 +17,8 @@
     "src/database/seeds/**/*",
     "src/index.tsx",
     "src/setupTests.ts"
-  ]
+  ],
+  "ts-node": {
+    "esm": true
+  }
 }
