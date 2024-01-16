@@ -19,5 +19,8 @@
     "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types", "./src/typings"]
   },
+  "ts-node": {
+    "esm": true
+  },
   "include": ["src"]
 }

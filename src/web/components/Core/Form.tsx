@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { ReactNode, useCallback } from 'react';
 import {
-  DeepPartial,
+  DefaultValues,
   FieldValues,
   FormProvider,
   SubmitHandler,
@@ -16,7 +16,7 @@ type FormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
   children: ReactNode;
   onError?: (error: unknown) => void;
-  defaultValues?: DeepPartial<T>;
+  defaultValues?: DefaultValues<T>;
   submitButtonText?: string;
   customizeSubmit?: boolean;
   id?: string;

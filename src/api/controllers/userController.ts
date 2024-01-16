@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import type { Response } from 'express';
 import { inject } from 'inversify';
 import {
   controller,
@@ -24,7 +24,7 @@ import {
   updateUserProfile,
 } from '../services/kcUsersService';
 import { DeletedUser, UpdateUserParser, UserService } from '../services/userService';
-import { UserRequest } from '../services/usersService';
+import type { UserRequest } from '../services/usersService';
 
 @controller('/users')
 export class UserController {

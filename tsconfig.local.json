@@ -7,11 +7,11 @@
   "extends": "./tsconfig.json",
   "include": [
     "tools/**/*.ts",
-    ".eslintrc.js",
+    ".eslintrc.cjs",
     "jest.config.base.js",
     "jest.config.js",
     "jest.preset.js",
     "tests/jest-resolver.js",
-    "craco.config.js"
+    "craco.config.cjs"
   ]
 }
