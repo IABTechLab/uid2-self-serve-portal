@@ -44,7 +44,7 @@ function ApiKeyManagement() {
     try {
       await EditApiKey(form, participantId);
       setApiKey(await GetParticipantApiKey(form.keyId, participantId));
-      setStatusPopup({ message: 'Key successfully edited', type: 'Success' });
+      setStatusPopup({ message: 'Your key has been updated', type: 'Success' });
       setShowStatusPopup(true);
     } catch (e) {
       handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
