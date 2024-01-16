@@ -58,7 +58,7 @@ function KeyEditDialog({
       <Form<EditApiKeyFormDTO>
         onSubmit={onSubmit}
         defaultValues={defaultFormData}
-        submitButtonText='Edit'
+        submitButtonText='Save Key'
       >
         <TextInput inputName='newName' label='Name' required />
         <CheckboxInput
