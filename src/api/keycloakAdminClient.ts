@@ -1,6 +1,9 @@
-import KcAdminClient from '@keycloak/keycloak-admin-client';
+// import KcAdminClient from '@keycloak/keycloak-admin-client';
 
 import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_REALM, SSP_KK_SECRET } from './envars';
+
+const KcAdminClientModule = await import('@keycloak/keycloak-admin-client');
+const KcAdminClient = KcAdminClientModule.default;
 
 const kcAdminClient = new KcAdminClient({
   baseUrl: SSP_KK_AUTH_SERVER_URL,
