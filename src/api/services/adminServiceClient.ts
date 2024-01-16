@@ -81,12 +81,12 @@ export const getSite = async (siteId: number): Promise<SiteDTO> => {
   return response.data;
 };
 
-export const getApiKeysFromAdmin = async (siteId: number): Promise<ApiKeyAdmin[]> => {
+export const getApiKeysBySite = async (siteId: number): Promise<ApiKeyAdmin[]> => {
   const response = await adminServiceClient.get<ApiKeyAdmin[]>(`/api/client/list/${siteId}`);
   return response.data;
 };
 
-export const getApiKeyFromAdmin = async (keyId: String): Promise<ApiKeyAdmin | undefined> => {
+export const getApiKeyById = async (keyId: String): Promise<ApiKeyAdmin | undefined> => {
   const response = await adminServiceClient.get<ApiKeyAdmin>(`/api/client/keyId`, {
     params: { keyId },
   });

@@ -20,7 +20,7 @@ import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
   createApiKey,
-  getApiKeysFromAdmin,
+  getApiKeysBySite,
   getKeyPairsList,
   getSharingList,
   getSiteList,
@@ -277,7 +277,7 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
-      const adminApiKeys = await getApiKeysFromAdmin(participant.siteId);
+      const adminApiKeys = await getApiKeysBySite(participant.siteId);
       const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
 
       return res.status(200).json(apiKeys);
