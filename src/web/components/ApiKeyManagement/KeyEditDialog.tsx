@@ -23,7 +23,7 @@ type KeyEditDialogProps = {
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
 };
 
-function getAllowedRoles(apiRoleAllowedLists: ApiRoleDTO[][]): ApiRoleDTO[] {
+export function getAllowedRoles(apiRoleAllowedLists: ApiRoleDTO[][]): ApiRoleDTO[] {
   const possibleRolesMap = new Map<number, ApiRoleDTO>();
   apiRoleAllowedLists.map((apiRoles) =>
     apiRoles.map((apiRole) => possibleRolesMap.set(apiRole.id, apiRole))
