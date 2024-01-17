@@ -1,6 +1,6 @@
-import { getAllowedRoles } from './KeyEditDialog';
+import { getAllowedRoles } from './KeyEditDialogHelper';
 
-describe('test GetAllowedRoles function', () => {
+describe('#getAllowedRoles', () => {
   test('When theres only 1 array', () => {
     const roles = [
       { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },

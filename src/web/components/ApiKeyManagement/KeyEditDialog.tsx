@@ -8,6 +8,7 @@ import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
+import { getAllowedRoles } from './KeyEditDialogHelper';
 
 export type OnApiKeyEdit = (
   form: EditApiKeyFormDTO,
@@ -22,15 +23,6 @@ type KeyEditDialogProps = {
   apiKey: ApiKeyDTO;
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
 };
-
-export function getAllowedRoles(apiRoleAllowedLists: ApiRoleDTO[][]): ApiRoleDTO[] {
-  const possibleRolesMap = new Map<number, ApiRoleDTO>();
-  apiRoleAllowedLists.map((apiRoles) =>
-    apiRoles.map((apiRole) => possibleRolesMap.set(apiRole.id, apiRole))
-  );
-
-  return Array.from(possibleRolesMap.values());
-}
 
 function KeyEditDialog({
   availableRoles,
