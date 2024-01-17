@@ -110,6 +110,7 @@
     "stylelint": "stylelint \"**/*.scss\"",
     "knex:migrate:latest": "knex --knexfile ./knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback",
+    "knex:migrate:down": "knex --knexfile ./knexfile.ts migrate:down",
     "knex:migrate:make": "knex --knexfile ./knexfile.ts migrate:make",
     "knex:seed:make": "knex --knexfile ./knexfile.ts seed:make",
     "knex:seed:run": "knex --knexfile ./knexfile.ts seed:run"

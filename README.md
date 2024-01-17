@@ -47,8 +47,10 @@ We use knex for migrations and seed data. Once your Docker environment is runnin
 
 - `npm run knex:migrate:latest`
   - Update your schema to the latest.
+- `npm run knex:migrate:down`
+  - Undo the last migration that was run.
 - `npm run knex:migrate:rollback`
-  - Rollback the most recent update to your schema.
+  - Rollback the most recent batch of migrations to your schema. This command can be dangerous as it may rollback multiple migrations, in most cases `down` should be used instead.
 - `npm run knex:seed:run`
   - Generate some helpful seed data for a dev or test environment (n.b. this is only for seeding dev/test data).
 
@@ -159,7 +161,8 @@ This action should be triggered after adding or updating any templates and befor
 > **Note:** If you only need to update an existing template, you can simply modify the corresponding `.hbs` file and trigger the **Sync Handlebars Template with SendGrid** action. There is no need to redeploy or rebuild Docker images in this case.
 
 ## Environment Variables
-We do not have a committed `.env` file as it goes against best practice, per https://www.npmjs.com/package/dotenv. However, we do provide a sample `.env.sample` file that can be copied into a `.env` file to get development up and running. 
+
+We do not have a committed `.env` file as it goes against best practice, per https://www.npmjs.com/package/dotenv. However, we do provide a sample `.env.sample` file that can be copied into a `.env` file to get development up and running.
 
 ## Available Scripts
 
