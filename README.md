@@ -48,7 +48,7 @@ We use knex for migrations and seed data. Once your Docker environment is runnin
 - `npm run knex:migrate:latest`
   - Update your schema to the latest.
 - `npm run knex:migrate:down`
-  - Rollback the most single recent migration to your schema.
+  - Undo the last migration that was run.
 - `npm run knex:migrate:rollback`
   - Rollback the most recent batch of migrations to your schema. This command can be dangerous as it may rollback multiple migrations, in most cases `down` should be used instead.
 - `npm run knex:seed:run`
