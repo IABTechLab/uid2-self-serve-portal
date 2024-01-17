@@ -354,15 +354,19 @@ export function createParticipantsRouter() {
         return res.status(400).send('Name is invalid');
       }
 
-      if (newName !== editedKey.name) await renameApiKey(editedKey.contact, newName);
+      if (newName !== editedKey.name) {
+        await renameApiKey(editedKey.contact, newName);
+      }
 
-      if (
+      const apiKeyRolesChanged =
         editedKey.roles
           .map((role) => role.roleName)
           .sort()
-          .join(',') !== newApiRoles.sort().join(',')
-      )
+          .join(',') !== newApiRoles.sort().join(',');
+
+      if (apiKeyRolesChanged) {
         await updateApiKeyRoles(editedKey.contact, newApiRoles);
+      }
 
       await updateAuditTrailToProceed(auditTrail.id);
 
