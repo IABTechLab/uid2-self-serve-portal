@@ -40,10 +40,10 @@ function ApiKeyManagement() {
     }
   };
 
-  const onKeyEdit: OnApiKeyEdit = async (form, setApiKey, participantId?) => {
+  const onKeyEdit: OnApiKeyEdit = async (form, setApiKey) => {
     try {
-      await EditApiKey(form, participantId);
-      setApiKey(await GetParticipantApiKey(form.keyId, participantId));
+      await EditApiKey(form);
+      setApiKey(await GetParticipantApiKey(form.keyId));
       setStatusPopup({ message: 'Your key has been updated', type: 'Success' });
       setShowStatusPopup(true);
     } catch (e) {

@@ -12,8 +12,7 @@ import { getAllowedRoles } from './KeyEditDialogHelper';
 
 export type OnApiKeyEdit = (
   form: EditApiKeyFormDTO,
-  setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>,
-  participantId?: number
+  setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>
 ) => void;
 
 type KeyEditDialogProps = {
