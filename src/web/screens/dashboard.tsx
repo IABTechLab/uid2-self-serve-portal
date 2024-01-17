@@ -29,14 +29,17 @@ export const StandardRoutes: PortalRoute[] = [
   LogoutRoute,
   SharingPermissionsRoute,
   AccountInformationRoute,
-  ApiKeyManagementRoute,
   TeamMembersRoute,
   EmailContactsRoute,
   TermsOfServiceRoute,
 ];
 
 // adding KeyPairRoute to AdminRoutes here while it's in development.  It should go under sharing permissions when ready
-export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute, KeyPairRoute];
+export const AdminRoutes: PortalRoute[] = [
+  ManageParticipantsRoute,
+  KeyPairRoute,
+  ApiKeyManagementRoute,
+];
 
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 
