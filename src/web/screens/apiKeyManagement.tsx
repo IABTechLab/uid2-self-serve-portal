@@ -4,11 +4,16 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
+import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
-import { CreateApiKey, CreateApiKeyFormDTO } from '../services/apiKeyService';
-import { GetParticipantApiKeys, GetParticipantApiRoles } from '../services/participant';
+import { CreateApiKey, CreateApiKeyFormDTO, EditApiKey } from '../services/apiKeyService';
+import {
+  GetParticipantApiKey,
+  GetParticipantApiKeys,
+  GetParticipantApiRoles,
+} from '../services/participant';
 import { handleErrorPopup } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -35,6 +40,17 @@ function ApiKeyManagement() {
     }
   };
 
+  const onKeyEdit: OnApiKeyEdit = async (form, setApiKey) => {
+    try {
+      await EditApiKey(form);
+      setApiKey(await GetParticipantApiKey(form.keyId));
+      setStatusPopup({ message: 'Your key has been updated', type: 'Success' });
+      setShowStatusPopup(true);
+    } catch (e) {
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+    }
+  };
+
   return (
     <div className='api-key-management-page'>
       <h1>Manage API Keys</h1>
@@ -43,7 +59,11 @@ function ApiKeyManagement() {
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
             <>
-              <KeyTable apiKeys={apiKeys.filter((key) => !key.disabled)} />
+              <KeyTable
+                apiKeys={apiKeys.filter((key) => !key.disabled)}
+                onKeyEdit={onKeyEdit}
+                availableRoles={apiRoles}
+              />
               {apiRoles.length > 0 && (
                 <div className='create-new-key'>
                   <KeyCreationDialog

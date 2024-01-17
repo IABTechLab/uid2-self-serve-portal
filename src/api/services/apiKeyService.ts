@@ -1,5 +1,7 @@
+import { ApiRoleDTO } from '../entities/ApiRole';
 import { Participant } from '../entities/Participant';
-import { CreatedApiKeyDTO } from './adminServiceHelpers';
+import { getApiKeyById } from './adminServiceClient';
+import { ApiKeyDTO, CreatedApiKeyDTO, mapAdminApiKeysToApiKeyDTOs } from './adminServiceHelpers';
 
 export type ApiKeySecretsDTO = {
   plaintextKey: string;
@@ -25,13 +27,22 @@ export const getApiRoles = async (participant: Participant) => {
 
 export const validateApiRoles = async (
   keyRoles: string[],
-  participant: Participant
+  allowedRoles: ApiRoleDTO[]
 ): Promise<boolean> => {
-  const participantRoles = (await getApiRoles(participant)).map((role) => role.roleName);
+  const participantRoles = allowedRoles.map((role) => role.roleName);
 
   for (const role of keyRoles) {
     if (!participantRoles.includes(role)) return false;
   }
 
   return true;
+};
+
+export const getApiKey = async (siteId: number, keyId: String): Promise<ApiKeyDTO | undefined> => {
+  const apiKeyAdmin = await getApiKeyById(keyId);
+
+  const isApiKeyAssociatedWithSite = apiKeyAdmin?.site_id === siteId;
+  if (!isApiKeyAssociatedWithSite) return undefined;
+
+  return (await mapAdminApiKeysToApiKeyDTOs([apiKeyAdmin]))[0];
 };

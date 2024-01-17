@@ -61,7 +61,10 @@ export const insertManageApiKeyAuditTrail = async (
   action: AuditAction,
   keyName: String,
   apiRoles: String[],
-  traceId: string
+  traceId: string,
+  keyId?: String,
+  newKeyName?: String,
+  newApiRoles?: String[]
 ) => {
   try {
     const manageApiKeyTrail: Omit<AuditTrailDTO, 'id'> = {
@@ -74,6 +77,9 @@ export const insertManageApiKeyAuditTrail = async (
         apiRoles,
         keyName,
         participantId: participant.id,
+        keyId,
+        newKeyName,
+        newApiRoles,
       },
       succeeded: false,
     };

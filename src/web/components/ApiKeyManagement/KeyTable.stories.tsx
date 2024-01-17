@@ -22,6 +22,7 @@ export const ManyKeys: Story = {
         disabled: false,
         roles: [],
         service_id: 0,
+        site_id: 1,
       },
       {
         contact: 'ApiKey2',
@@ -31,6 +32,7 @@ export const ManyKeys: Story = {
         disabled: false,
         roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
         service_id: 0,
+        site_id: 1,
       },
       {
         contact: 'ApiKey3',
@@ -43,6 +45,7 @@ export const ManyKeys: Story = {
           { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
         ],
         service_id: 0,
+        site_id: 1,
       },
       {
         contact: 'ApiKey4',
@@ -56,6 +59,7 @@ export const ManyKeys: Story = {
           { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
         ],
         service_id: 0,
+        site_id: 1,
       },
       {
         contact: 'ApiKey5',
@@ -70,6 +74,7 @@ export const ManyKeys: Story = {
           { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
         ],
         service_id: 0,
+        site_id: 1,
       },
     ],
   },

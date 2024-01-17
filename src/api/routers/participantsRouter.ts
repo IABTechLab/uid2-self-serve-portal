@@ -20,15 +20,18 @@ import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
   createApiKey,
-  getApiKeys,
+  getApiKeysBySite,
   getKeyPairsList,
   getSharingList,
   getSiteList,
+  renameApiKey,
   setSiteClientTypes,
+  updateApiKeyRoles,
 } from '../services/adminServiceClient';
 import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
+  getApiKey,
   getApiRoles,
   validateApiRoles,
 } from '../services/apiKeyService';
@@ -266,10 +269,6 @@ export function createParticipantsRouter() {
     }
   );
 
-  const sharingRelationParser = z.object({
-    newParticipantSites: z.array(z.number()),
-  });
-
   participantsRouter.get(
     '/:participantId/apiKeys',
     async (req: ParticipantRequest, res: Response) => {
@@ -278,10 +277,100 @@ export function createParticipantsRouter() {
         return res.status(400).send('Site id is not set');
       }
 
-      const adminApiKeys = await getApiKeys(participant.siteId);
+      const adminApiKeys = await getApiKeysBySite(participant.siteId);
       const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
 
       return res.status(200).json(apiKeys);
+    }
+  );
+
+  const apiKeyIdParser = z.object({
+    keyId: z.string(),
+  });
+  participantsRouter.get(
+    '/:participantId/apiKey',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { keyId } = apiKeyIdParser.parse(req.query);
+      if (!keyId) {
+        return res.status(400).send('Key id is not set');
+      }
+
+      const apiKey = await getApiKey(participant.siteId, keyId);
+      if (!apiKey) {
+        return res.status(404).send('Could not find participants key with keyId');
+      }
+
+      return res.status(200).json(apiKey);
+    }
+  );
+
+  const apiKeyEditInputParser = z.object({
+    keyId: z.string(),
+    newName: z.string(),
+    newApiRoles: z.array(z.string()),
+  });
+  participantsRouter.put(
+    '/:participantId/apiKey',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
+
+      const editedKey = await getApiKey(participant.siteId, keyId);
+      if (!editedKey) {
+        return res.status(404).send('KeyId was invalid');
+      }
+
+      const traceId = getTraceId(req);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertManageApiKeyAuditTrail(
+        participant!,
+        currentUser!.id,
+        currentUser!.email,
+        AuditAction.Update,
+        editedKey.name,
+        editedKey.roles.map((role) => role.roleName),
+        traceId,
+        editedKey.key_id,
+        newName,
+        newApiRoles
+      );
+
+      const participantRoles = await getApiRoles(participant);
+      const validRoles = editedKey.roles.concat(participantRoles);
+      if (!validateApiRoles(newApiRoles, validRoles)) {
+        return res.status(401).send('API Roles are invalid');
+      }
+
+      if (!newName) {
+        return res.status(400).send('Name is invalid');
+      }
+
+      const apiKeyNameChanged = newName !== editedKey.name;
+      if (apiKeyNameChanged) {
+        await renameApiKey(editedKey.contact, newName);
+      }
+
+      const apiKeyRolesChanged =
+        editedKey.roles
+          .map((role) => role.roleName)
+          .sort()
+          .join(',') !== newApiRoles.sort().join(',');
+      if (apiKeyRolesChanged) {
+        await updateApiKeyRoles(editedKey.contact, newApiRoles);
+      }
+
+      await updateAuditTrailToProceed(auditTrail.id);
+
+      return res.sendStatus(200);
     }
   );
 
@@ -299,7 +388,7 @@ export function createParticipantsRouter() {
   const apiKeyCreateInputParser = z.object({ name: z.string(), roles: z.array(z.string()) });
 
   participantsRouter.post(
-    '/:participantId/apiKeys/create',
+    '/:participantId/apiKey',
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
@@ -320,7 +409,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      if (!validateApiRoles(apiRoles, participant!)) {
+      if (!validateApiRoles(apiRoles, await getApiRoles(participant!))) {
         return res.status(400).send('Invalid API Roles');
       }
 
@@ -331,6 +420,9 @@ export function createParticipantsRouter() {
     }
   );
 
+  const sharingRelationParser = z.object({
+    newParticipantSites: z.array(z.number()),
+  });
   participantsRouter.post(
     '/:participantId/sharingPermission/add',
     async (req: ParticipantRequest, res: Response) => {
