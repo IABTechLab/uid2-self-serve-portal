@@ -354,7 +354,8 @@ export function createParticipantsRouter() {
         return res.status(400).send('Name is invalid');
       }
 
-      if (newName !== editedKey.name) {
+      const apiKeyNameChanged = newName !== editedKey.name;
+      if (apiKeyNameChanged) {
         await renameApiKey(editedKey.contact, newName);
       }
 
@@ -363,7 +364,6 @@ export function createParticipantsRouter() {
           .map((role) => role.roleName)
           .sort()
           .join(',') !== newApiRoles.sort().join(',');
-
       if (apiKeyRolesChanged) {
         await updateApiKeyRoles(editedKey.contact, newApiRoles);
       }
