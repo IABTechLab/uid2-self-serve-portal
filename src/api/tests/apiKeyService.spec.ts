@@ -1,8 +1,8 @@
 import { ApiRoleDTO } from '../entities/ApiRole';
 import { validateApiRoles } from '../services/apiKeyService';
 
-describe('#validateApiRoles', () => {
-  test('1 Valid Roles', () => {
+describe('Returns true if role(s) are valid', () => {
+  test('Returns true if 1 valid role', () => {
     const keyRoles: string[] = ['MAPPER'];
     const allowedRoles: ApiRoleDTO[] = [
       { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
@@ -15,7 +15,7 @@ describe('#validateApiRoles', () => {
     expect(result).toBe(true);
   });
 
-  test('Multiple Valid Roles', () => {
+  test('Returns true if multiple valid roles', () => {
     const keyRoles: string[] = ['MAPPER', 'GENERATOR', 'SHARER'];
     const allowedRoles: ApiRoleDTO[] = [
       { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
@@ -29,7 +29,7 @@ describe('#validateApiRoles', () => {
     expect(result).toBe(true);
   });
 
-  test('No Allowed Roles', () => {
+  test('Returns false if no allowed roles', () => {
     const keyRoles: string[] = ['MAPPER', 'GENERATOR', 'SHARER'];
     const allowedRoles: ApiRoleDTO[] = [];
 
@@ -38,7 +38,7 @@ describe('#validateApiRoles', () => {
     expect(result).toBe(false);
   });
 
-  test('Some Allowed Roles', () => {
+  test('Returns false if only some valid roles', () => {
     const keyRoles: string[] = ['MAPPER', 'SHARER'];
     const allowedRoles: ApiRoleDTO[] = [
       { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
