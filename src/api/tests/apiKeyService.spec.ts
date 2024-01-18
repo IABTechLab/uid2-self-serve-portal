@@ -1,7 +1,7 @@
 import { ApiRoleDTO } from '../entities/ApiRole';
 import { validateApiRoles } from '../services/apiKeyService';
 
-describe('Returns true if role(s) are valid', () => {
+describe('#validateApiRoles', () => {
   test('Returns true if 1 valid role', () => {
     const keyRoles: string[] = ['MAPPER'];
     const allowedRoles: ApiRoleDTO[] = [
