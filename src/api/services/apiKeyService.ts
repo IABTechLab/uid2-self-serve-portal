@@ -25,10 +25,7 @@ export const getApiRoles = async (participant: Participant) => {
   return participantWithApiRoles?.apiRoles ?? [];
 };
 
-export const validateApiRoles = async (
-  keyRoles: string[],
-  allowedRoles: ApiRoleDTO[]
-): Promise<boolean> => {
+export const validateApiRoles = (keyRoles: string[], allowedRoles: ApiRoleDTO[]): boolean => {
   const participantRoles = allowedRoles.map((role) => role.roleName);
 
   for (const role of keyRoles) {

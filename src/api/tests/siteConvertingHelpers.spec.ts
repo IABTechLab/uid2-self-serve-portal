@@ -92,9 +92,9 @@ describe('Sharing Permission Helper Tests', () => {
       } as Participant;
       const convertedType = convertSiteToSharingSiteDTO(site, [participant]);
       expect(convertedType).toEqual({
-        name: 'Participant Name',
+        clientTypes: ['PUBLISHER'],
         id: 2,
-        types: ['PUBLISHER'],
+        name: 'Participant Name',
         canBeSharedWith: true,
       });
     });
