@@ -97,10 +97,7 @@ describe('Key edit dialog', () => {
     const openButton = screen.getByText('Open');
     fireEvent.click(openButton);
 
-    for (const role of ['ID_READER']) {
-      const roleInput = screen.getByDisplayValue(role);
-      fireEvent.click(roleInput);
-    }
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Bidder' }));
 
     const saveButton = screen.getByRole('button', { name: 'Save Key' });
     expect(saveButton).toBeInTheDocument();
@@ -109,18 +106,63 @@ describe('Key edit dialog', () => {
       expect(screen.queryByRole('button', { name: 'Save Key' })).not.toBeInTheDocument();
     });
 
-    expect(onEditMock).toHaveBeenCalledWith([
+    expect(onEditMock).toHaveBeenCalledWith(
       {
         keyId: 'F4lfa.fdas',
-        newName: 'ApiKey2',
+        newName: 'ApiKey',
         newApiRoles: ['MAPPER', 'ID_READER'],
       },
-      setApiKeyMock,
-    ]);
+      setApiKeyMock
+    );
   });
 
-  // [
-  //       { keyId: 'F4lfa.fdas', newName: 'ApiKey2', newApiRoles: ['MAPPER', 'ID_READER'] },
-  //       setApiKeyMock,
-  //     ],
+  it('should return the correct values with one role', async () => {
+    const apiKey = {
+      contact: 'ApiKey',
+      name: 'ApiKey',
+      created: 1702830516,
+      key_id: 'F4lfa.fdas',
+      site_id: 1,
+      disabled: false,
+      roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+      service_id: 0,
+    };
+
+    const availableRoles = [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }];
+
+    const setApiKeyMock = () => {};
+
+    const onEditMock = jest.fn(() => {});
+
+    const triggerButton = <button type='button'>Open</button>;
+
+    render(
+      <KeyEditDialog
+        apiKey={apiKey}
+        availableRoles={availableRoles}
+        onEdit={onEditMock}
+        triggerButton={triggerButton}
+        setApiKey={setApiKeyMock}
+      />
+    );
+
+    const openButton = screen.getByText('Open');
+    fireEvent.click(openButton);
+
+    const saveButton = screen.getByRole('button', { name: 'Save Key' });
+    expect(saveButton).toBeInTheDocument();
+    fireEvent.click(saveButton);
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: 'Save Key' })).not.toBeInTheDocument();
+    });
+
+    expect(onEditMock).toHaveBeenCalledWith(
+      {
+        keyId: 'F4lfa.fdas',
+        newName: 'ApiKey',
+        newApiRoles: ['MAPPER'],
+      },
+      setApiKeyMock
+    );
+  });
 });
