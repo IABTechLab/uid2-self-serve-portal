@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
@@ -59,7 +59,7 @@ describe('Key edit dialog', () => {
     }
   });
 
-  it('should return the correct values with multiple roles', () => {
+  it('should return the correct values with multiple roles', async () => {
     const apiKey = {
       contact: 'ApiKey',
       name: 'ApiKey',
@@ -105,13 +105,18 @@ describe('Key edit dialog', () => {
     const saveButton = screen.getByRole('button', { name: 'Save Key' });
     expect(saveButton).toBeInTheDocument();
     fireEvent.click(saveButton);
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: 'Save Key' })).not.toBeInTheDocument();
+    });
 
-    const openButtonSecond = screen.getByText('Open');
-    expect(openButtonSecond).toBeInTheDocument();
-
-    screen.debug(undefined, Infinity);
-
-    expect(onEditMock).toHaveBeenCalled();
+    expect(onEditMock).toHaveBeenCalledWith([
+      {
+        keyId: 'F4lfa.fdas',
+        newName: 'ApiKey2',
+        newApiRoles: ['MAPPER', 'ID_READER'],
+      },
+      setApiKeyMock,
+    ]);
   });
 
   // [
