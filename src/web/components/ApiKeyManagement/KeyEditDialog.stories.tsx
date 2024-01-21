@@ -68,7 +68,7 @@ export const KeyWithRolesParticipantIsntAllowed: Story = {
   },
 };
 
-export const KeyWithOnly1Role: Story = {
+export const KeyWithOnlyOneRole: Story = {
   args: {
     apiKey: {
       contact: 'ApiKey',
