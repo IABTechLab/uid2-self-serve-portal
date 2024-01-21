@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
 import { Tooltip } from '../Core/Tooltip';
@@ -28,6 +28,12 @@ export function CheckboxInput<
     rules,
   });
 
+  useEffect(() => {
+    if (field.value === undefined) {
+      field.onChange([]);
+    }
+  }, [field]);
+
   const isDefaultChecked = useCallback(
     (value: TPath) => {
       return ((field.value as Array<TPath>) ?? []).includes(value);
@@ -42,6 +48,7 @@ export function CheckboxInput<
     } else {
       valueCopy.delete(value);
     }
+
     field.onChange(Array.from(valueCopy));
   };
 
