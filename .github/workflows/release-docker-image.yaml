@@ -1,5 +1,5 @@
-name: Release Self Serve Portal Image for API/UI
-run-name: ${{ inputs.release_type == 'Snapshot' && 'Publish Pre-release' || format('Release {0}', inputs.release_type)}} API/UI Docker Image by @${{ github.actor }}  
+name: Release Self Serve Portal Image
+run-name: ${{ inputs.release_type == 'Snapshot' && 'Publish Pre-release' || format('Release {0}', inputs.release_type)}} Docker Image by @${{ github.actor }}  
 on:
   workflow_dispatch:
     inputs:
