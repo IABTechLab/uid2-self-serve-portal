@@ -1,12 +1,9 @@
-import { composeStories } from '@storybook/testing-react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { close } from 'fs';
+import userEvent from '@testing-library/user-event';
 
+import { ApiRole, ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import KeyCreationDialog from './KeyCreationDialog';
-import * as stories from './KeyCreationDialog.stories';
-
-const { MultipleRoles, OneRole } = composeStories(stories);
 
 const writeText = jest.fn();
 
@@ -16,227 +13,184 @@ Object.assign(navigator, {
   },
 });
 
-describe('Key creation dialog', () => {
-  it('Should show one apiRole', () => {
-    render(<OneRole />);
-
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
-
-    expect(screen.getByDisplayValue('MAPPER')).not.toBeChecked();
-  });
-
-  it('Should show multiple ApiRoles', () => {
-    render(<MultipleRoles />);
-
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
-
-    for (const role of ['MAPPER', 'GENERATOR', 'ID_READER']) {
-      expect(screen.getByDisplayValue(role)).not.toBeChecked();
-    }
-  });
-
-  it('should show an error when no roles selected creating key', async () => {
-    render(<MultipleRoles />);
-
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
-
-    const nameInput = screen.getByRole('textbox', { name: 'name' });
-    fireEvent.change(nameInput, { target: { value: `ApiKey` } });
-
-    const createButton = screen.getByRole('button', { name: 'Create API Key' });
-    fireEvent.click(createButton);
-    await waitFor(() => {
-      expect(screen.getByText('Please select at least one API Role.')).toBeInTheDocument();
+async function loadComponent(
+  availableRoles: { id: number; roleName: string; externalName: string }[],
+  openDialog: boolean = true
+) {
+  const onKeyCreation = jest.fn(() => {
+    return Promise.resolve({
+      name: 'test_key',
+      plaintextKey: 'ABCD',
+      secret: '1234',
     });
   });
+  const triggerButton = <button type='button'>Open</button>;
 
-  it('should work with one allowed api role', async () => {
-    const availableRoles = [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }];
-    const onKeyCreation = jest.fn(() => {
-      const returnValue: ApiKeySecretsDTO = {
-        name: 'test_key',
-        plaintextKey: 'ABCD',
-        secret: '1234',
-      };
-      return Promise.resolve(returnValue);
-    });
-    const triggerButton = <button type='button'>Open</button>;
+  render(
+    <KeyCreationDialog
+      availableRoles={availableRoles}
+      onKeyCreation={onKeyCreation}
+      triggerButton={triggerButton}
+    />
+  );
 
-    render(
-      <KeyCreationDialog
-        availableRoles={availableRoles}
-        onKeyCreation={onKeyCreation}
-        triggerButton={triggerButton}
-      />
-    );
+  if (openDialog) {
+    const openButton = screen.getByRole('button', { name: 'Open' });
+    await userEvent.click(openButton);
+  }
 
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
+  return onKeyCreation;
+}
 
-    const nameInput = screen.getByRole('textbox', { name: 'name' });
-    fireEvent.change(nameInput, { target: { value: `test_key` } });
+async function enterApiName(name: string) {
+  const nameInput = screen.getByRole('textbox', { name: 'name' });
+  await userEvent.type(nameInput, name);
+}
 
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Mapper' }));
+async function clickApiRole(apiRole: ApiRoleDTO) {
+  await userEvent.click(screen.getByRole('checkbox', { name: apiRole.externalName }));
+}
 
-    const createButton = screen.getByRole('button', { name: 'Create API Key' });
-    fireEvent.click(createButton);
+async function submitForm() {
+  const createButton = screen.getByRole('button', { name: 'Create API Key' });
+  await userEvent.click(createButton);
+}
 
-    await waitFor(() => {
-      expect(onKeyCreation).toHaveBeenCalledWith({ name: 'test_key', roles: ['MAPPER'] });
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText('ABCD')).toBeInTheDocument();
-    });
-
-    expect(screen.getByText('1234')).toBeInTheDocument();
-  });
-
-  it('should work with multiple allowed api role', async () => {
-    const availableRoles = [
+const apiRoleTests = [
+  [[{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }]],
+  [
+    [
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    ],
+  ],
+  [
+    [
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    ],
+  ],
+  [
+    [
       { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
       { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
       { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
-    ];
-    const onKeyCreation = jest.fn(() => {
-      const returnValue: ApiKeySecretsDTO = {
-        name: 'test_key',
-        plaintextKey: 'ABCD',
-        secret: '1234',
-      };
-      return Promise.resolve(returnValue);
-    });
-    const triggerButton = <button type='button'>Open</button>;
+    ],
+  ],
+];
 
-    render(
-      <KeyCreationDialog
-        availableRoles={availableRoles}
-        onKeyCreation={onKeyCreation}
-        triggerButton={triggerButton}
-      />
-    );
+describe('Key creation dialog', () => {
+  test.each(apiRoleTests)('Should should show apiRole external names', async (apiRoles) => {
+    await loadComponent(apiRoles);
 
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
+    for (const role of apiRoles) {
+      expect(screen.getByRole('checkbox', { name: role.externalName })).toBeInTheDocument();
+    }
+  });
 
-    const nameInput = screen.getByRole('textbox', { name: 'name' });
-    fireEvent.change(nameInput, { target: { value: `test_key` } });
+  test.each(apiRoleTests)(
+    'Should show error when submitting with no roles selected',
+    async (apiRoles) => {
+      await loadComponent(apiRoles);
 
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Mapper' }));
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Generator' }));
+      await enterApiName('apiKey');
 
-    const createButton = screen.getByRole('button', { name: 'Create API Key' });
-    fireEvent.click(createButton);
+      await submitForm();
+
+      await waitFor(() => {
+        expect(screen.getByText('Please select at least one API Role.')).toBeInTheDocument();
+      });
+    }
+  );
+
+  test.each(apiRoleTests)('should submit form when you choose one role', async (apiRoles) => {
+    const onSubmitMock = await loadComponent(apiRoles);
+
+    await enterApiName('key_name');
+    await clickApiRole(apiRoles[0]);
+    await submitForm();
 
     await waitFor(() => {
-      expect(onKeyCreation).toHaveBeenCalledWith({
-        name: 'test_key',
-        roles: ['MAPPER', 'GENERATOR'],
+      expect(onSubmitMock).toHaveBeenCalledWith({
+        name: 'key_name',
+        roles: [apiRoles[0].roleName],
       });
     });
+  });
 
-    await waitFor(() => {
-      expect(screen.getByText('ABCD')).toBeInTheDocument();
+  test.each(apiRoleTests)('should submit form when you choose all roles', async (apiRoles) => {
+    const onSubmitMock = await loadComponent(apiRoles);
+
+    await enterApiName('key_name');
+
+    await apiRoles.map(async (apiRole) => {
+      await clickApiRole(apiRole);
     });
 
+    await submitForm();
+
+    const expectedValue = {
+      name: 'key_name',
+      roles: apiRoles.map((apiRole) => apiRole.roleName),
+    };
+
+    await waitFor(() => {
+      expect(onSubmitMock).toHaveBeenCalledWith(expectedValue);
+    });
+  });
+
+  test.each(apiRoleTests)('Should display key after form submitted', async (apiRoles) => {
+    const onSubmitMock = await loadComponent(apiRoles);
+
+    await enterApiName('key_name');
+    await clickApiRole(apiRoles[0]);
+    await submitForm();
+
+    expect(screen.getByText('ABCD')).toBeInTheDocument();
     expect(screen.getByText('1234')).toBeInTheDocument();
   });
 
-  it('should make you copy copy before closing the dialog', async () => {
-    const availableRoles = [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }];
-    const onKeyCreation = jest.fn(() => {
-      const returnValue: ApiKeySecretsDTO = {
-        name: 'test_key',
-        plaintextKey: 'ABCD',
-        secret: '1234',
-      };
-      return Promise.resolve(returnValue);
-    });
-    const triggerButton = <button type='button'>Open</button>;
+  it('Should make you copy secrets before closing the dialog', async () => {
+    const apiRoles = [
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    ];
 
-    render(
-      <KeyCreationDialog
-        availableRoles={availableRoles}
-        onKeyCreation={onKeyCreation}
-        triggerButton={triggerButton}
-      />
-    );
+    await loadComponent(apiRoles);
 
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
-
-    const nameInput = screen.getByRole('textbox', { name: 'name' });
-    fireEvent.change(nameInput, { target: { value: `test_key` } });
-
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Mapper' }));
-
-    const createButton = screen.getByRole('button', { name: 'Create API Key' });
-    fireEvent.click(createButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Close')).toBeInTheDocument();
-    });
+    await enterApiName('key_name');
+    await clickApiRole(apiRoles[0]);
+    await submitForm();
 
     const closeDialogButton = screen.getByText('Close');
-    fireEvent.click(closeDialogButton);
+    await userEvent.click(closeDialogButton);
 
-    await waitFor(() => {
-      expect(
-        screen.getByText('Please copy all secrets shown before closing the page')
-      ).toBeInTheDocument();
-    });
+    expect(
+      screen.getByText('Please copy all secrets shown before closing the page')
+    ).toBeInTheDocument();
   });
 
   it('should let you copy each secret', async () => {
-    const availableRoles = [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }];
-    const onKeyCreation = jest.fn(() => {
-      const returnValue: ApiKeySecretsDTO = {
-        name: 'test_key',
-        plaintextKey: 'ABCD',
-        secret: '1234',
-      };
-      return Promise.resolve(returnValue);
-    });
-    const triggerButton = <button type='button'>Open</button>;
+    const apiRoles = [
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+    ];
 
-    render(
-      <KeyCreationDialog
-        availableRoles={availableRoles}
-        onKeyCreation={onKeyCreation}
-        triggerButton={triggerButton}
-      />
-    );
+    await loadComponent(apiRoles);
 
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
-
-    const nameInput = screen.getByRole('textbox', { name: 'name' });
-    fireEvent.change(nameInput, { target: { value: `test_key` } });
-
-    fireEvent.click(screen.getByRole('checkbox', { name: 'Mapper' }));
-
-    const createButton = screen.getByRole('button', { name: 'Create API Key' });
-    fireEvent.click(createButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Close')).toBeInTheDocument();
-    });
+    await enterApiName('key_name');
+    await clickApiRole(apiRoles[0]);
+    await submitForm();
 
     const copyButton1 = screen.getAllByText('Copy')[0];
     const copyButton2 = screen.getAllByText('Copy')[1];
 
-    fireEvent.click(copyButton1);
-    await waitFor(() => {
-      expect(writeText).lastCalledWith('1234');
-    });
+    await userEvent.click(copyButton1);
+    expect(writeText).lastCalledWith('1234');
 
-    fireEvent.click(copyButton2);
-    await waitFor(() => {
-      expect(writeText).lastCalledWith('ABCD');
-    });
+    await userEvent.click(copyButton2);
+    expect(writeText).lastCalledWith('ABCD');
   });
 });
