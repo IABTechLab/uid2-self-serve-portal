@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { SiteAdmin, SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -102,6 +102,12 @@ function ParticipantApprovalForm({
   const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
     setSelectedSite(site);
+
+    const siteApiRoleIds = site.apiRoles.map((apiRole) => apiRole.id);
+    setValue(
+      'apiRoles',
+      apiRoles.filter((apiRole) => siteApiRoleIds.includes(apiRole.id)).map((apiRole) => apiRole.id)
+    );
   };
 
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
