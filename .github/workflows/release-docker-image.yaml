@@ -1,0 +1,57 @@
+name: Release Self Serve Portal Image for API/UI
+run-name: ${{ inputs.release_type == 'Snapshot' && 'Publish Pre-release' || format('Release {0}', inputs.release_type)}} API/UI Docker Image by @${{ github.actor }}  
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        type: choice
+        description: 'The type of release'
+        options:
+        - Major
+        - Minor
+        - Patch
+        - Snapshot
+  pull_request:
+
+jobs:
+  incrementVersionNumber:
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@v2
+    with:
+      release_type: ${{ inputs.release_type }}
+    secrets: inherit
+
+  publishForApiUi:
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    needs: incrementVersionNumber
+    with: 
+      new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
+      image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
+      release_type: ${{ inputs.release_type }}
+      docker_file: Dockerfile_ssportal
+      docker_image_name: iabtechlab/uid2-ssportal
+      docker_registry: ghcr.io
+    secrets: inherit
+
+  publishForDBMigration:
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    needs: incrementVersionNumber
+    with: 
+      new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
+      image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
+      release_type: ${{ inputs.release_type }}
+      docker_file: Dockerfile_ssportal_migration
+      docker_image_name: iabtechlab/uid2-ssportal-migration
+      docker_registry: ghcr.io
+    secrets: inherit
+
+  publishForKeycloak:
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    needs: incrementVersionNumber
+    with: 
+      new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
+      image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
+      release_type: ${{ inputs.release_type }}
+      docker_file: Dockerfile_keycloak
+      docker_image_name: iabtechlab/uid2-ssportal-keycloak
+      docker_registry: ghcr.io
+    secrets: inherit
