@@ -6,7 +6,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
-import { SiteAdmin } from '../../../api/services/adminServiceHelpers';
+import { SiteAdmin, SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -45,7 +45,7 @@ const getSpans = (matches: [number, number][], totalLength: number) => {
 };
 
 type HighlightedResultProps = {
-  result: Fuse.FuseResult<SiteAdmin>;
+  result: Fuse.FuseResult<SiteDTO>;
 };
 export function HighlightedResult({ result }: HighlightedResultProps) {
   const text = `${result.item.name} (Site ID ${result.item.id})`;
@@ -82,9 +82,9 @@ function ParticipantApprovalForm({
         : null,
     [sites]
   );
-  const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteAdmin>[]>();
+  const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteDTO>[]>();
   const [searchText, setSearchText] = useState(participant.name);
-  const [selectedSite, setSelectedSite] = useState<SiteAdmin>();
+  const [selectedSite, setSelectedSite] = useState<SiteDTO>();
 
   useEffect(() => {
     setSiteSearchResults(fuse?.search(searchText ?? participant.name));
@@ -99,7 +99,7 @@ function ParticipantApprovalForm({
     await onApprove(data);
   };
 
-  const onSiteClick = (site: SiteAdmin) => {
+  const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
     setSelectedSite(site);
   };

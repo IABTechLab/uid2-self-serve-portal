@@ -17,7 +17,9 @@ export function createSitesRouter() {
     const allSitesPromise = getSiteList();
     const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
-    const siteDTOs = mapAdminSitesToSiteDTOs(allSites.filter((s) => !attachedSites.includes(s.id)));
+    const siteDTOs = await mapAdminSitesToSiteDTOs(
+      allSites.filter((s) => !attachedSites.includes(s.id))
+    );
     return res.status(200).json(siteDTOs);
   });
 

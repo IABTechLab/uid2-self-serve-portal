@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { SharingSiteDTO } from '../../api/helpers/siteConvertingHelpers';
-import { SiteAdmin, SiteDTO } from '../../api/services/adminServiceHelpers';
+import { SiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
 const unattachedEndpoint = `/sites/unattached/`;

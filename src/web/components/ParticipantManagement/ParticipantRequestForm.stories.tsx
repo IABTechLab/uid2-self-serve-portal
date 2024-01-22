@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
-import { SiteAdmin } from '../../../api/services/adminServiceHelpers';
+import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
@@ -11,12 +11,15 @@ export default {
   component: ParticipantApprovalForm,
 } as ComponentMeta<typeof ParticipantApprovalForm>;
 
-const response: SiteAdmin[] = [
+const response: SiteDTO[] = [
   {
     id: 2,
     name: 'Test Site',
     enabled: true,
-    roles: ['SHARER'],
+    apiRoles: [
+      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+    ],
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
@@ -26,7 +29,7 @@ const response: SiteAdmin[] = [
     id: 4,
     name: 'Test Four',
     enabled: true,
-    roles: ['SHARER'],
+    apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1' }],
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,

@@ -1,16 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import Fuse from 'fuse.js';
 
-import { SiteAdmin } from '../../../api/services/adminServiceHelpers';
+import { SiteAdmin, SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 const createResult = (text: string, indices: [number, number][]) => {
-  const result: Fuse.FuseResult<SiteAdmin> = {
+  const result: Fuse.FuseResult<SiteDTO> = {
     item: {
       name: text,
       id: 1,
       enabled: true,
-      roles: [],
+      apiRoles: [],
       clientTypes: [],
       // eslint-disable-next-line camelcase
       client_count: 1,
