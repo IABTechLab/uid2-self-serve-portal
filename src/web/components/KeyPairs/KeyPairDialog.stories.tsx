@@ -28,7 +28,8 @@ export const WithKeyPair: Story = {
       publicKey: 'public key 1',
       created: new Date(),
       createdString: new Date().toLocaleDateString(),
-      disabled: false,
+      name: 'TESTING',
+      disabled: true,
     },
   },
 };

@@ -28,27 +28,21 @@ export function CheckboxInput<
     rules,
   });
 
-  const isBooleanCheckbox = options?.length === 1;
   const isDefaultChecked = useCallback(
     (value: TPath) => {
-      if (isBooleanCheckbox) return field.value;
       return ((field.value as Array<TPath>) ?? []).includes(value);
     },
-    [field.value, isBooleanCheckbox]
+    [field.value]
   );
 
   const onCheckedChange = (checked: boolean, value: TPath) => {
-    if (!isBooleanCheckbox) {
-      const valueCopy = new Set(field.value);
-      if (checked) {
-        valueCopy.add(value);
-      } else {
-        valueCopy.delete(value);
-      }
-      field.onChange(Array.from(valueCopy));
+    const valueCopy = new Set(field.value);
+    if (checked) {
+      valueCopy.add(value);
     } else {
-      field.onChange(checked);
+      valueCopy.delete(value);
     }
+    field.onChange(Array.from(valueCopy));
   };
 
   return (

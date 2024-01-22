@@ -4,9 +4,11 @@ import { SubmitHandler } from 'react-hook-form';
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
-import { CheckboxInput } from '../Input/CheckboxInput';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
+
+import './KeyPairDialog.scss';
 
 type AddKeyPairDialogProps = {
   onAddKeyPair: (form: AddKeyPairFormProps) => Promise<void>;
@@ -26,22 +28,27 @@ function KeyPairDialog(props: KeyPairDialogProps) {
   };
 
   return (
-    <Dialog
-      triggerButton={props.triggerButton}
-      title='Create Key Pair'
-      closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <Form<AddKeyPairFormProps>
-        onSubmit={onSubmit}
-        submitButtonText='Create Key Pair'
-        defaultValues={keyPair}
+    <div className='key-pair-dialog'>
+      <Dialog
+        triggerButton={props.triggerButton}
+        title='Create Key Pair'
+        closeButtonText='Cancel'
+        open={open}
+        onOpenChange={setOpen}
       >
-        <TextInput inputName='name' label='Name' />
-        <CheckboxInput inputName='disabled' options={[{ optionLabel: 'Disabled', value: false }]} />
-      </Form>
-    </Dialog>
+        <Form<AddKeyPairFormProps>
+          onSubmit={onSubmit}
+          submitButtonText='Create Key Pair'
+          defaultValues={keyPair}
+        >
+          <TextInput inputName='name' label='Name' />
+          <div className='disabled-checkbox'>
+            <FormStyledCheckbox name='disabled' />
+            <span className='checkbox-label'>Disabled</span>
+          </div>
+        </Form>
+      </Dialog>
+    </div>
   );
 }
 
