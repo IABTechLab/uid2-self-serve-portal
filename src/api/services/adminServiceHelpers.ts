@@ -22,6 +22,7 @@ export const ClientRolesWithDescriptions: Record<AvailableClientRole, string> = 
   MAPPER: 'Mapper',
   ID_READER: 'ID Reader',
 };
+
 export type SiteAdmin = {
   id: number;
   name: string;
@@ -31,6 +32,8 @@ export type SiteAdmin = {
   client_count: number;
   visible: boolean;
 };
+
+export type SiteDTO = Omit<SiteAdmin, 'roles'> & { apiRoles: ApiRoleDTO[] };
 
 export type SharingListResponse = {
   allowed_sites: number[];
