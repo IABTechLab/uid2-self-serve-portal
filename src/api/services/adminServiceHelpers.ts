@@ -122,13 +122,19 @@ function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String
   });
 }
 
-export async function mapAdminApiKeysToApiKeyDTOs(
-  adminApiKeys: ApiKeyAdmin[]
-): Promise<ApiKeyDTO[]> {
+async function loadLoadRoleMaps(): Promise<Map<String, ApiRoleDTO>> {
   const apiRoleList = await ApiRole.query();
   const apiRoleMap = new Map<String, ApiRoleDTO>(
     apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])
   );
+
+  return apiRoleMap;
+}
+
+export async function mapAdminApiKeysToApiKeyDTOs(
+  adminApiKeys: ApiKeyAdmin[]
+): Promise<ApiKeyDTO[]> {
+  const apiRoleMap = await loadLoadRoleMaps();
 
   return adminApiKeys.map((adminKey) => {
     const roles = mapAdminRolesToApiRoleDTOs(adminKey.roles.split(','), apiRoleMap);
@@ -142,6 +148,24 @@ export async function mapAdminApiKeysToApiKeyDTOs(
       site_id: adminKey.site_id,
       roles,
       service_id: adminKey.service_id,
+    };
+  });
+}
+
+export async function mapAdminSitesToSiteDTOs(adminSites: SiteAdmin[]): Promise<SiteDTO[]> {
+  const apiRoleMap = await loadLoadRoleMaps();
+
+  return adminSites.map((adminSite) => {
+    const apiRoles = mapAdminRolesToApiRoleDTOs(adminSite.roles, apiRoleMap);
+
+    return {
+      id: adminSite.id,
+      client_count: adminSite.client_count,
+      enabled: adminSite.enabled,
+      name: adminSite.name,
+      visible: adminSite.visible,
+      clientTypes: adminSite.clientTypes,
+      apiRoles,
     };
   });
 }
