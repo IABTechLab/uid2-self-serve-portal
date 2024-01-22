@@ -12,7 +12,7 @@ import {
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
-  SiteDTO,
+  SiteAdmin,
 } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
@@ -71,13 +71,13 @@ export const updateSharingList = async (
   }
 };
 
-export const getSiteList = async (): Promise<SiteDTO[]> => {
-  const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
+export const getSiteList = async (): Promise<SiteAdmin[]> => {
+  const response = await adminServiceClient.get<SiteAdmin[]>('/api/site/list');
   return response.data;
 };
 
-export const getSite = async (siteId: number): Promise<SiteDTO> => {
-  const response = await adminServiceClient.get<SiteDTO>(`/api/site/${siteId}`);
+export const getSite = async (siteId: number): Promise<SiteAdmin> => {
+  const response = await adminServiceClient.get<SiteAdmin>(`/api/site/${siteId}`);
   return response.data;
 };
 
@@ -113,7 +113,7 @@ export const updateApiKeyRoles = async (contact: string, apiRoles: string[]): Pr
   });
 };
 
-export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {
+export const getVisibleSiteList = async (): Promise<SiteAdmin[]> => {
   const siteList = await getSiteList();
   return siteList.filter((x) => x.visible !== false);
 };

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import Fuse from 'fuse.js';
 
-import { SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { SiteAdmin } from '../../../api/services/adminServiceHelpers';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 const createResult = (text: string, indices: [number, number][]) => {
-  const result: Fuse.FuseResult<SiteDTO> = {
+  const result: Fuse.FuseResult<SiteAdmin> = {
     item: {
       name: text,
       id: 1,

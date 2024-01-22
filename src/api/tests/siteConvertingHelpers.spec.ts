@@ -4,7 +4,7 @@ import {
   convertSiteToSharingSiteDTO,
   mapClientTypeToParticipantType,
 } from '../helpers/siteConvertingHelpers';
-import { ClientType, SiteDTO } from '../services/adminServiceHelpers';
+import { ClientType, SiteAdmin } from '../services/adminServiceHelpers';
 
 describe('Sharing Permission Helper Tests', () => {
   const participantTypes = [
@@ -59,7 +59,7 @@ describe('Sharing Permission Helper Tests', () => {
         clientTypes: ['PUBLISHER'],
         // eslint-disable-next-line camelcase
         client_count: 1,
-      } as SiteDTO;
+      } as SiteAdmin;
       const convertedType = convertSiteToSharingSiteDTO(site, []);
       expect(convertedType).toEqual({
         name: 'Test Site',
@@ -78,7 +78,7 @@ describe('Sharing Permission Helper Tests', () => {
         clientTypes: ['PUBLISHER'],
         // eslint-disable-next-line camelcase
         client_count: 1,
-      } as SiteDTO;
+      } as SiteAdmin;
       const participant = {
         id: 100,
         name: 'Participant Name',
@@ -111,7 +111,7 @@ describe('Sharing Permission Helper Tests', () => {
         // eslint-disable-next-line camelcase
         client_count: 1,
         visible: true,
-      } as SiteDTO;
+      } as SiteAdmin;
       expect(canBeSharedWith(site)).toBe(true);
     });
 
@@ -124,7 +124,7 @@ describe('Sharing Permission Helper Tests', () => {
         clientTypes: ['PUBLISHER'],
         // eslint-disable-next-line camelcase
         client_count: 1,
-      } as SiteDTO;
+      } as SiteAdmin;
       expect(canBeSharedWith(site)).toBe(true);
     });
 
@@ -137,7 +137,7 @@ describe('Sharing Permission Helper Tests', () => {
         clientTypes: ['PUBLISHER'],
         // eslint-disable-next-line camelcase
         client_count: 1,
-      } as SiteDTO;
+      } as SiteAdmin;
       expect(canBeSharedWith(site)).toBe(false);
     });
 
@@ -150,7 +150,7 @@ describe('Sharing Permission Helper Tests', () => {
         clientTypes: ['DSP'],
         // eslint-disable-next-line camelcase
         client_count: 1,
-      } as SiteDTO;
+      } as SiteAdmin;
       expect(canBeSharedWith(site)).toBe(false);
     });
   });
