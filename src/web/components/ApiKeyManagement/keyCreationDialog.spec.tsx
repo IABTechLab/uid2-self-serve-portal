@@ -1,8 +1,7 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ApiRole, ApiRoleDTO } from '../../../api/entities/ApiRole';
-import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import KeyCreationDialog from './KeyCreationDialog';
 
 const writeText = jest.fn();
@@ -142,7 +141,7 @@ describe('Key creation dialog', () => {
   });
 
   test.each(apiRoleTests)('Should display key after form submitted', async (apiRoles) => {
-    const onSubmitMock = await loadComponent(apiRoles);
+    await loadComponent(apiRoles);
 
     await enterApiName('key_name');
     await clickApiRole(apiRoles[0]);
