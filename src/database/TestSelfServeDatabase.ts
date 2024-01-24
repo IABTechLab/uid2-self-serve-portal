@@ -13,9 +13,11 @@ const config: Knex.Knex.Config = {
   useNullAsDefault: true,
 };
 
-export async function TestConfigure(): Promise<void> {
+export async function TestConfigure(): Promise<Knex.Knex> {
   const knex = Knex.knex(config);
   Model.knex(knex);
 
   await knex.migrate.latest();
+
+  return knex;
 }

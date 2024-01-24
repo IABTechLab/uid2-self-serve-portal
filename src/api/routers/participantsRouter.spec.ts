@@ -1,14 +1,14 @@
-import axios from 'axios';
-import { NextFunction, Request, Response, response } from 'express';
+import { Response } from 'express';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { TestConfigure } from '../../database/TestSelfServeDatabase';
 import { Participant, ParticipantStatus } from '../entities/Participant';
-import { User, UserRole } from '../entities/User';
+import { User } from '../entities/User';
 import { SSP_ADMIN_SERVICE_BASE_URL } from '../envars';
 import { KeyPairDTO } from '../services/adminServiceHelpers';
 import { ParticipantRequest } from '../services/participantsService';
+import { createParticipant, createResponseObject, createUser } from './helperFunctions';
 import { getParticipantKeyPairs, getParticipantUsers } from './participantsRouter';
 
 const oneKeyPair: KeyPairDTO[] = [
@@ -86,10 +86,7 @@ describe('#getParticipantKeyPairs', () => {
       participant: participantObject,
     } as ParticipantRequest;
 
-    const res = {} as unknown as Response;
-    res.json = jest.fn();
-    res.send = jest.fn();
-    res.status = jest.fn(() => res);
+    const { res } = createResponseObject();
 
     await getParticipantKeyPairs(participantRequest, res);
 
@@ -130,29 +127,15 @@ describe('#getParticipantKeyPairs', () => {
 
 describe('#getParticipantUsers', () => {
   test('return empty list when no users', async () => {
-    await TestConfigure();
+    const knex = await TestConfigure();
 
-    // Insert Participant
-    const participantObject = Participant.fromJson({
-      name: 'test',
-      allowSharing: true,
-      completedRecommendations: true,
-      status: ParticipantStatus.Approved,
-      apiRoles: [],
-      siteId: 5,
-    });
+    const participantObject = await createParticipant(knex, {});
 
-    await Participant.query().insert(participantObject);
-
-    // Setup query
     const participantRequest = {
       participant: participantObject,
     } as ParticipantRequest;
 
-    const res = {} as unknown as Response;
-    res.json = jest.fn();
-    res.send = jest.fn();
-    res.status = jest.fn(() => res);
+    const { res } = createResponseObject();
 
     await getParticipantUsers(participantRequest, res);
 
@@ -160,68 +143,54 @@ describe('#getParticipantUsers', () => {
     expect(res.json).lastCalledWith([]);
   });
 
-  test('return list with one user', async () => {
-    await TestConfigure();
+  test('return list with correct user', async () => {
+    const knex = await TestConfigure();
+    const { res, json } = createResponseObject();
 
-    const participantDb = await Participant.query().insert({
-      id: 10,
-      name: 'test',
-      allowSharing: true,
-      completedRecommendations: true,
-      status: ParticipantStatus.Approved,
-      apiRoles: [],
-      siteId: 10,
-    });
+    const relatedParticipant = await createParticipant(knex, {});
+    const relatedUser = await createUser({ participantId: relatedParticipant.id });
 
-    const relatedUser = await User.query().insert({
-      id: 5,
-      email: 'test@example.com',
-      firstName: 'Test',
-      lastName: 'User',
-      location: 'Sydney, AU',
-      phone: '+61298765432',
-      role: UserRole.DA,
-      acceptedTerms: false,
-      participantId: 10,
-    });
+    const unrelatedParticipant = await createParticipant(knex, {});
+    const unrelatedUser = await createUser({ participantId: unrelatedParticipant.id });
 
-    const unrelatedParticipant = await Participant.query().insert({
-      id: 11,
-      name: 'test',
-      allowSharing: true,
-      completedRecommendations: true,
-      status: ParticipantStatus.Approved,
-      apiRoles: [],
-      siteId: 11,
-    });
-
-    const unrelatedUser = await User.query().insert({
-      id: 6,
-      email: 'test2@example.com',
-      firstName: 'Test2',
-      lastName: 'User2',
-      location: 'Sydney, AU',
-      phone: '+61298765432',
-      role: UserRole.DA,
-      acceptedTerms: false,
-      participantId: 11,
-    });
-
-    // Setup query
     const participantRequest = {
-      participant: participantDb,
+      participant: relatedParticipant,
     } as ParticipantRequest;
-
-    const res = {} as unknown as Response;
-    const json = jest.fn();
-    res.json = json;
-    res.send = jest.fn();
-    res.status = jest.fn(() => res);
-
     await getParticipantUsers(participantRequest, res);
-    const receivedUsers = json.mock.calls.pop()[0] as User[];
+
+    expect(json).toBeCalled();
+
+    const receivedUsers = json.mock.calls[0][0] as User[];
 
     expect(res.status).lastCalledWith(200);
     expect(receivedUsers.map((user) => user.id).sort()).toEqual([relatedUser.id].sort());
+  });
+
+  test('return list with multiple correct user', async () => {
+    const knex = await TestConfigure();
+    const { res, json } = createResponseObject();
+
+    const relatedParticipant = await createParticipant(knex, {});
+    const relatedUsers = [
+      await createUser({ participantId: relatedParticipant.id }),
+      await createUser({ participantId: relatedParticipant.id }),
+    ];
+
+    const unrelatedParticipant = await createParticipant(knex, {});
+    await createUser({ participantId: unrelatedParticipant.id });
+
+    const participantRequest = {
+      participant: relatedParticipant,
+    } as ParticipantRequest;
+    await getParticipantUsers(participantRequest, res);
+
+    expect(json).toBeCalled();
+
+    const receivedUsers = json.mock.calls[0][0] as User[];
+
+    expect(res.status).lastCalledWith(200);
+    expect(receivedUsers.map((user) => user.id).sort()).toEqual(
+      relatedUsers.map((user) => user.id).sort()
+    );
   });
 });
