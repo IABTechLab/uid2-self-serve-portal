@@ -8,7 +8,7 @@
   },
   "private": true,
   "engines": {
-    "node": ">=16.14"
+    "node": ">=18.0"
   },
   "dependencies": {
     "@fontsource/roboto-mono": "^4.5.10",
