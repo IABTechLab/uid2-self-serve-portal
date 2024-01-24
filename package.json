@@ -8,7 +8,7 @@
   },
   "private": true,
   "engines": {
-    "node": ">=16.14"
+    "node": ">=18.18"
   },
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
