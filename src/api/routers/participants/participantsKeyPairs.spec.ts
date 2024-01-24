@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { Response } from 'express';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -11,33 +12,30 @@ import { getParticipantKeyPairs } from './participantsKeyPairs';
 
 const oneKeyPair: KeyPairDTO[] = [
   {
-    name: 'test',
-    siteId: 999,
-    subscriptionId: 'MovTPCPo4T',
-    publicKey:
-      'UID2-X-L-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEBSfiggI3wcXR8atoC11Dr5YoysLP0az1g1ZsWf/TfDtmgEaI7OLlqwkS38r1q3c5n3LyBg8+niOi87lYYNoCcQ==',
-    created: 43214213,
+    name: faker.company.buzzNoun(),
+    siteId: faker.number.int(10000),
+    subscriptionId: faker.string.alphanumeric(8),
+    publicKey: faker.string.alphanumeric(140),
+    created: faker.number.int(50000000),
     disabled: false,
   },
 ];
 
 const multipleKeyPairs: KeyPairDTO[] = [
   {
-    name: 'test',
-    siteId: 999,
-    subscriptionId: 'MovTPCPo4T',
-    publicKey:
-      'UID2-X-L-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEBSfiggI3wcXR8atoC11Dr5YoysLP0az1g1ZsWf/TfDtmgEaI7OLlqwkS38r1q3c5n3LyBg8+niOi87lYYNoCcQ==',
-    created: 314234312,
+    name: faker.company.buzzNoun(),
+    siteId: faker.number.int(10000),
+    subscriptionId: faker.string.alphanumeric(8),
+    publicKey: faker.string.alphanumeric(140),
+    created: faker.number.int(50000000),
     disabled: false,
   },
   {
-    name: 'test',
-    siteId: 999,
-    subscriptionId: 'V5sVHDKRxT',
-    publicKey:
-      'UID2-X-L-MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE24CNfSAb/UMUZHxfI+6jxpF8fwRIBcF6Ko0TlsqqxdTc96qHh6/YGoMQTXQBWPE7R3E+KpvD3/voSOw47qq7xQ==',
-    created: 4314321432,
+    name: faker.company.buzzNoun(),
+    siteId: faker.number.int(10000),
+    subscriptionId: faker.string.alphanumeric(8),
+    publicKey: faker.string.alphanumeric(140),
+    created: faker.number.int(50000000),
     disabled: true,
   },
 ];
