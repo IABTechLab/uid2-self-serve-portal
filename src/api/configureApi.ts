@@ -33,7 +33,7 @@ import {
   getTraceId,
 } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
-import { createParticipantsRouter } from './routers/participantsRouter';
+import { createParticipantsRouter } from './routers/participants/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
 import { UserService } from './services/userService';

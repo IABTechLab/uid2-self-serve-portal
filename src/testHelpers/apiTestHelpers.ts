@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker';
 import { Response } from 'express';
 import { Knex } from 'knex';
 
-import { CreateParticipant } from '../../database/seeds/Participants';
-import { Participant, ParticipantStatus } from '../entities/Participant';
-import { User, UserRole } from '../entities/User';
+import { Participant, ParticipantStatus } from '../api/entities/Participant';
+import { User, UserRole } from '../api/entities/User';
+import { CreateParticipant } from '../database/seeds/Participants';
 
 export function createResponseObject() {
   const res = {} as unknown as Response;

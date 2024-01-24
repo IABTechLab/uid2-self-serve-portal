@@ -2,21 +2,21 @@ import { AxiosError } from 'axios';
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { ApiRoleDTO } from '../entities/ApiRole';
-import { AuditAction } from '../entities/AuditTrail';
+import { ApiRoleDTO } from '../../entities/ApiRole';
+import { AuditAction } from '../../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
   ParticipantCreationPartial,
   ParticipantDTO,
   ParticipantStatus,
-} from '../entities/Participant';
-import { ParticipantType } from '../entities/ParticipantType';
-import { UserDTO, UserRole } from '../entities/User';
-import { getTraceId } from '../helpers/loggingHelpers';
-import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
-import { getKcAdminClient } from '../keycloakAdminClient';
-import { isApproverCheck } from '../middleware/approversMiddleware';
+} from '../../entities/Participant';
+import { ParticipantType } from '../../entities/ParticipantType';
+import { UserDTO, UserRole } from '../../entities/User';
+import { getTraceId } from '../../helpers/loggingHelpers';
+import { mapClientTypeToParticipantType } from '../../helpers/siteConvertingHelpers';
+import { getKcAdminClient } from '../../keycloakAdminClient';
+import { isApproverCheck } from '../../middleware/approversMiddleware';
 import {
   addKeyPair,
   createApiKey,
@@ -27,14 +27,14 @@ import {
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
-} from '../services/adminServiceClient';
-import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
+} from '../../services/adminServiceClient';
+import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
   getApiKey,
   getApiRoles,
   validateApiRoles,
-} from '../services/apiKeyService';
+} from '../../services/apiKeyService';
 import {
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
@@ -42,8 +42,12 @@ import {
   insertSharingAuditTrails,
   insertSharingTypesAuditTrail,
   updateAuditTrailToProceed,
-} from '../services/auditTrailService';
-import { assignClientRoleToUser, createNewUser, sendInviteEmail } from '../services/kcUsersService';
+} from '../../services/auditTrailService';
+import {
+  assignClientRoleToUser,
+  createNewUser,
+  sendInviteEmail,
+} from '../../services/kcUsersService';
 import {
   addSharingParticipants,
   checkParticipantId,
@@ -56,13 +60,15 @@ import {
   updateParticipantAndTypesAndRoles,
   updateParticipantApiRoles,
   UpdateSharingTypes,
-} from '../services/participantsService';
+} from '../../services/participantsService';
 import {
   createUserInPortal,
   findUserByEmail,
   getAllUserFromParticipant,
-} from '../services/usersService';
-import { createBusinessContactsRouter } from './businessContactsRouter';
+} from '../../services/usersService';
+import { createBusinessContactsRouter } from '../businessContactsRouter';
+import { getParticipantKeyPairs } from './participantsKeyPairs';
+import { getParticipantUsers } from './participantsUsers';
 
 export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'siteId' | 'types'>>;
 
@@ -94,22 +100,6 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
       fullName: firstUser.fullName(),
     },
   };
-}
-
-export async function getParticipantKeyPairs(req: ParticipantRequest, res: Response) {
-  const { participant } = req;
-  if (!participant?.siteId) {
-    return res.status(400).send('Site id is not set');
-  }
-  const siteId = participant?.siteId;
-  const allKeyPairs = await getKeyPairsList(siteId!);
-  return res.status(200).json(allKeyPairs);
-}
-
-export async function getParticipantUsers(req: ParticipantRequest, res: Response) {
-  const { participant } = req;
-  const users = await getAllUserFromParticipant(participant!);
-  return res.status(200).json(users);
 }
 
 export function createParticipantsRouter() {
