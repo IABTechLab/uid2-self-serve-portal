@@ -6,7 +6,7 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 
 ## Requirements
 
-- A recent version of Node. Recommended: 18.12 or later. See [package.json](./package.json) for the required version.
+- A recent version of Node. Recommended: 18.18 or later. See [package.json](./package.json) for the required version.
 - Docker Desktop.
 - VS Code (or equivalent). Note that if you don't use VS Code, you will need to find equivalent extensions for things like linting.
 
