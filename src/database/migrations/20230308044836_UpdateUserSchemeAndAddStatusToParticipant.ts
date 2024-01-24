@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
     table.string('firstName').notNullable();
     table.string('lastName').notNullable();
-    table.enu('role', ['admin', 'user']).notNullable().defaultTo('user');
+    table.string('role', 100).notNullable().defaultTo('user');
   });
 
   await knex.schema.alterTable('participants', (table) => {
