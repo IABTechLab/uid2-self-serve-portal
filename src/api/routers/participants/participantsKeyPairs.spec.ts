@@ -13,7 +13,7 @@ import { getParticipantKeyPairs } from './participantsKeyPairs';
 const oneKeyPair: KeyPairDTO[] = [
   {
     name: faker.company.buzzNoun(),
-    siteId: faker.number.int(10000),
+    siteId: 11,
     subscriptionId: faker.string.alphanumeric(8),
     publicKey: faker.string.alphanumeric(140),
     created: faker.number.int(50000000),
@@ -24,7 +24,7 @@ const oneKeyPair: KeyPairDTO[] = [
 const multipleKeyPairs: KeyPairDTO[] = [
   {
     name: faker.company.buzzNoun(),
-    siteId: faker.number.int(10000),
+    siteId: 12,
     subscriptionId: faker.string.alphanumeric(8),
     publicKey: faker.string.alphanumeric(140),
     created: faker.number.int(50000000),
@@ -32,7 +32,7 @@ const multipleKeyPairs: KeyPairDTO[] = [
   },
   {
     name: faker.company.buzzNoun(),
-    siteId: faker.number.int(10000),
+    siteId: 12,
     subscriptionId: faker.string.alphanumeric(8),
     publicKey: faker.string.alphanumeric(140),
     created: faker.number.int(50000000),
