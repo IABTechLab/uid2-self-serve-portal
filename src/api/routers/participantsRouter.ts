@@ -106,6 +106,12 @@ export async function getParticipantKeyPairs(req: ParticipantRequest, res: Respo
   return res.status(200).json(allKeyPairs);
 }
 
+export async function getParticipantUsers(req: ParticipantRequest, res: Response) {
+  const { participant } = req;
+  const users = await getAllUserFromParticipant(participant!);
+  return res.status(200).json(users);
+}
+
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
@@ -574,14 +580,7 @@ export function createParticipantsRouter() {
     }
   );
 
-  participantsRouter.get(
-    '/:participantId/users',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
-      const users = await getAllUserFromParticipant(participant!);
-      return res.status(200).json(users);
-    }
-  );
+  participantsRouter.get('/:participantId/users', getParticipantUsers);
 
   const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
