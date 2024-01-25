@@ -1,5 +1,10 @@
-// jest.polyfills.js
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 /**
+ * See this page for info: mswjs.io/docs/migrations/1.x-to-2.x/#frequent-issues
+ *
+ *
+ *
  * @note The block below contains polyfills for Node.js globals
  * required for Jest to function when running JSDOM tests.
  * These HAVE to be require's and HAVE to be in this exact
@@ -9,22 +14,22 @@
  * you don't want to deal with this.
  */
 
-import { Blob } from 'node:buffer';
-import { TextDecoder, TextEncoder } from 'node:util';
-import { fetch, FormData, Headers, Request, Response } from 'undici';
+const { TextDecoder, TextEncoder } = require('node:util');
 
 Object.defineProperties(globalThis, {
   TextDecoder: { value: TextDecoder },
   TextEncoder: { value: TextEncoder },
 });
 
+const { Blob, File } = require('node:buffer');
+const { fetch, Headers, FormData, Request, Response } = require('undici');
+
 Object.defineProperties(globalThis, {
   fetch: { value: fetch, writable: true },
   Blob: { value: Blob },
+  File: { value: File },
   Headers: { value: Headers },
   FormData: { value: FormData },
   Request: { value: Request },
   Response: { value: Response },
 });
-
-export {};
