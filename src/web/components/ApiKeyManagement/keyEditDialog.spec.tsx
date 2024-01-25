@@ -72,17 +72,17 @@ describe('Key edit dialog', () => {
   describe.each(testingValues)(
     'Should show the correct initial values',
     (apiKeyRoles, participantApiRoles) => {
-      beforeEach(async () => {
-        const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
-
-        await openDialog();
-      });
-
       it('should prefill name input', async () => {
+        loadComponent(apiKeyRoles, participantApiRoles);
+        await openDialog();
+
         expect(screen.getByRole('textbox', { name: 'newName' })).toHaveValue('ApiKey');
       });
 
-      it('should select the apiKey roles', () => {
+      it('should select the apiKey roles', async () => {
+        loadComponent(apiKeyRoles, participantApiRoles);
+        await openDialog();
+
         for (const role of apiKeyRoles) {
           expect(screen.getByDisplayValue(role.roleName)).toBeChecked();
         }
@@ -96,6 +96,8 @@ describe('Key edit dialog', () => {
       });
 
       it('should return the correct value when submitted', async () => {
+        const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
+        await openDialog();
         await submitForm();
 
         expect(onEditMock).toHaveBeenCalledWith(
