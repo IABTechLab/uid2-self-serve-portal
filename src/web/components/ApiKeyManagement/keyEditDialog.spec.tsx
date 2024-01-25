@@ -50,6 +50,16 @@ async function submitForm() {
   await userEvent.click(saveButton);
 }
 
+async function renameKey(newName: string) {
+  const nameInput = screen.getByRole('textbox', { name: 'newName' });
+  await userEvent.clear(nameInput);
+  await userEvent.type(nameInput, newName);
+}
+
+async function clickRole(role: ApiRoleDTO) {
+  await userEvent.click(screen.getByRole('checkbox', { name: role.externalName }));
+}
+
 const Mapper = { id: 1, roleName: 'MAPPER', externalName: 'Mapper' };
 const Bidder = { id: 3, roleName: 'ID_READER', externalName: 'Bidder' };
 const Generator = { id: 2, roleName: 'GENERATOR', externalName: 'Generator' };
@@ -70,7 +80,7 @@ const testingValues = [
 
 describe('Key edit dialog', () => {
   describe.each(testingValues)(
-    'Should show the correct initial values',
+    'Should show the correct initial values with test array %#',
     (apiKeyRoles, participantApiRoles) => {
       it('should prefill name input', async () => {
         loadComponent(apiKeyRoles, participantApiRoles);
@@ -112,155 +122,95 @@ describe('Key edit dialog', () => {
     }
   );
 
-  it('should return the correct values with one role', async () => {
-    const apiKey = {
-      contact: 'ApiKey',
-      name: 'ApiKey',
-      created: 1702830516,
-      key_id: 'F4lfa.fdas',
-      site_id: 1,
-      disabled: false,
-      roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
-      service_id: 0,
-    };
+  describe('should return the correct values key after being edited', () => {
+    it('should allow the key to be renamed', async () => {
+      const { onEditMock, setApiKeyMock } = loadComponent([Mapper], [Mapper]);
+      await openDialog();
 
-    const availableRoles = [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }];
+      await renameKey('ApiKey Rename');
 
-    const setApiKeyMock = () => {};
+      await submitForm();
 
-    const onEditMock = jest.fn(() => {});
+      expect(onEditMock).lastCalledWith(
+        {
+          keyId: 'F4lfa.fdas',
+          newName: 'ApiKey Rename',
+          newApiRoles: ['MAPPER'],
+        },
+        setApiKeyMock
+      );
+    });
+    it('should show an error on submission if no roles selected', async () => {
+      const { onEditMock, setApiKeyMock } = loadComponent([Mapper], [Mapper]);
+      await openDialog();
 
-    const triggerButton = <button type='button'>Open</button>;
+      await renameKey('ApiKey Rename');
+      clickRole(Mapper);
 
-    render(
-      <KeyEditDialog
-        apiKey={apiKey}
-        availableRoles={availableRoles}
-        onEdit={onEditMock}
-        triggerButton={triggerButton}
-        setApiKey={setApiKeyMock}
-      />
-    );
+      await submitForm();
 
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
-
-    const saveButton = screen.getByRole('button', { name: 'Save Key' });
-    expect(saveButton).toBeInTheDocument();
-    fireEvent.click(saveButton);
-    await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Save Key' })).not.toBeInTheDocument();
+      expect(screen.getByText('Please select at least one API Role.')).toBeInTheDocument();
     });
 
-    expect(onEditMock).toHaveBeenCalledWith(
-      {
-        keyId: 'F4lfa.fdas',
-        newName: 'ApiKey',
-        newApiRoles: ['MAPPER'],
-      },
-      setApiKeyMock
-    );
-  });
+    it.each([
+      [[Mapper], [Bidder]],
+      [[Mapper], [Bidder, Mapper]],
+      [[Mapper, Sharer], [Bidder]],
+      [
+        [Mapper, Sharer],
+        [Mapper, Bidder],
+      ],
+    ])(
+      'should allow a role to be added with test array %#',
+      async (apiKeyRoles, participantApiRoles) => {
+        const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
+        await openDialog();
 
-  it('should return the key be renamed', async () => {
-    const apiKey = {
-      contact: 'ApiKey',
-      name: 'ApiKey',
-      created: 1702830516,
-      key_id: 'F4lfa.fdas',
-      site_id: 1,
-      disabled: false,
-      roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
-      service_id: 0,
-    };
+        await clickRole(Bidder);
 
-    const availableRoles = [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }];
+        await submitForm();
 
-    const setApiKeyMock = () => {};
-
-    const onEditMock = jest.fn(() => {});
-
-    const triggerButton = <button type='button'>Open</button>;
-
-    render(
-      <KeyEditDialog
-        apiKey={apiKey}
-        availableRoles={availableRoles}
-        onEdit={onEditMock}
-        triggerButton={triggerButton}
-        setApiKey={setApiKeyMock}
-      />
+        expect(onEditMock).toHaveBeenCalledWith(
+          {
+            keyId: 'F4lfa.fdas',
+            newName: 'ApiKey',
+            newApiRoles: [...apiKeyRoles, Bidder].map((role) => role.roleName),
+          },
+          setApiKeyMock
+        );
+      }
     );
 
-    const openButton = screen.getByText('Open');
-    fireEvent.click(openButton);
+    it.each([
+      [[Mapper, Sharer], [Mapper]],
+      [
+        [Mapper, Sharer],
+        [Mapper, Sharer],
+      ],
+      [[Mapper, Sharer, Generator], [Mapper]],
+      [
+        [Mapper, Sharer, Generator],
+        [Mapper, Sharer, Generator],
+      ],
+    ])(
+      'should allow a role to be removed with test array %#',
+      async (apiKeyRoles, participantApiRoles) => {
+        const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
+        await openDialog();
 
-    const nameInput = screen.getByRole('textbox', { name: 'newName' });
-    fireEvent.change(nameInput, { target: { value: `ApiKey Rename` } });
+        await clickRole(Mapper);
 
-    const saveButton = screen.getByRole('button', { name: 'Save Key' });
-    expect(saveButton).toBeInTheDocument();
-    fireEvent.click(saveButton);
-    await waitFor(() => {
-      expect(screen.queryByRole('button', { name: 'Save Key' })).not.toBeInTheDocument();
-    });
+        await submitForm();
 
-    expect(onEditMock).toHaveBeenCalledWith(
-      {
-        keyId: 'F4lfa.fdas',
-        newName: 'ApiKey Rename',
-        newApiRoles: ['MAPPER'],
-      },
-      setApiKeyMock
+        expect(onEditMock).toHaveBeenCalledWith(
+          {
+            keyId: 'F4lfa.fdas',
+            newName: 'ApiKey',
+            newApiRoles: apiKeyRoles.filter((role) => role !== Mapper).map((role) => role.roleName),
+          },
+          setApiKeyMock
+        );
+      }
     );
-  });
-});
-
-it('should show an error if no roles given', async () => {
-  const apiKey = {
-    contact: 'ApiKey',
-    name: 'ApiKey',
-    created: 1702830516,
-    key_id: 'F4lfa.fdas',
-    site_id: 1,
-    disabled: false,
-    roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
-    service_id: 0,
-  };
-
-  const availableRoles = [
-    { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-    { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-    { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
-  ];
-
-  const setApiKeyMock = () => {};
-
-  const onEditMock = jest.fn(() => {});
-
-  const triggerButton = <button type='button'>Open</button>;
-
-  render(
-    <KeyEditDialog
-      apiKey={apiKey}
-      availableRoles={availableRoles}
-      onEdit={onEditMock}
-      triggerButton={triggerButton}
-      setApiKey={setApiKeyMock}
-    />
-  );
-
-  const openButton = screen.getByText('Open');
-  fireEvent.click(openButton);
-
-  fireEvent.click(screen.getByRole('checkbox', { name: 'Mapper' }));
-
-  const saveButton = screen.getByRole('button', { name: 'Save Key' });
-  expect(saveButton).toBeInTheDocument();
-  fireEvent.click(saveButton);
-
-  await waitFor(() => {
-    expect(screen.getByText('Please select at least one API Role.')).toBeInTheDocument();
   });
 });
