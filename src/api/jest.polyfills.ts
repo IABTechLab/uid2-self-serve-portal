@@ -14,6 +14,8 @@
  * you don't want to deal with this.
  */
 
+export {};
+
 const { TextDecoder, TextEncoder } = require('node:util');
 
 Object.defineProperties(globalThis, {
