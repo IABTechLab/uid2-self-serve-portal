@@ -55,29 +55,16 @@ async function submitForm() {
   await userEvent.click(createButton);
 }
 
+const Mapper = { id: 1, roleName: 'MAPPER', externalName: 'Mapper' };
+const Generator = { id: 2, roleName: 'GENERATOR', externalName: 'Generator' };
+const Bidder = { id: 3, roleName: 'ID_READER', externalName: 'Bidder' };
+const Sharer = { id: 4, roleName: 'SHARER', externalName: 'Sharer' };
+
 const apiRoleTests = [
-  [[{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }]],
-  [
-    [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    ],
-  ],
-  [
-    [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    ],
-  ],
-  [
-    [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
-    ],
-  ],
+  [[Mapper]],
+  [[Mapper, Bidder]],
+  [[Mapper, Generator, Bidder]],
+  [[Mapper, Generator, Bidder, Sharer]],
 ];
 
 describe('Key creation dialog', () => {
@@ -152,10 +139,7 @@ describe('Key creation dialog', () => {
   });
 
   it('Should make you copy secrets before closing the dialog', async () => {
-    const apiRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    ];
+    const apiRoles = [Mapper, Bidder];
 
     await loadComponent(apiRoles);
 
@@ -172,10 +156,7 @@ describe('Key creation dialog', () => {
   });
 
   it('should let you copy each secret', async () => {
-    const apiRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    ];
+    const apiRoles = [Mapper, Bidder];
 
     await loadComponent(apiRoles);
 
