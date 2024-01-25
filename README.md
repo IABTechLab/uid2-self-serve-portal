@@ -87,6 +87,8 @@ All components below the page level should be props-driven - data fetching shoul
 
 When developing new components, you should create new stories in Storybook for the key states to allow easy review of both visuals and functionality.
 
+When using our Dialog Component, click on individual stories to avoid an issue where the dialog expands outside the bounds of the box.
+
 ## Testing
 
 Please add tests to your changes where possible! We don't have a minimum coverage level because we feel responsible developers should be able to decide what's important to test, and what's not worth testing. Continuing down this path requires us all to be responsible developers and write tests!
