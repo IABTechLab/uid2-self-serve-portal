@@ -113,6 +113,14 @@ export const updateApiKeyRoles = async (contact: string, apiRoles: string[]): Pr
   });
 };
 
+export const disableApiKey = async (contact: string): Promise<void> => {
+  await adminServiceClient.post('/api/client/disable', null, {
+    params: {
+      contact,
+    },
+  });
+};
+
 export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {
   const siteList = await getSiteList();
   return siteList.filter((x) => x.visible !== false);
