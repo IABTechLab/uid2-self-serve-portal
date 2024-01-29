@@ -39,7 +39,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
         />
         <KeyDisableDialog
           apiKey={apiKey}
-          onKeyDisable={onDisable}
+          onDisable={onDisable}
           triggerButton={
             <button type='button' className='transparent-button'>
               <FontAwesomeIcon icon='trash-can' />
