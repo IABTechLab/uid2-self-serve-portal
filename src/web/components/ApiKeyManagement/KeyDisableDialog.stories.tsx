@@ -1,0 +1,38 @@
+/* eslint-disable no-console */
+/* eslint-disable camelcase */
+
+import type { Meta, StoryObj } from '@storybook/react';
+
+import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
+import KeyDisableDialog from './KeyDisableDialog';
+
+const meta: Meta<typeof KeyDisableDialog> = {
+  component: KeyDisableDialog,
+  title: 'Api Management/Key Disable Dialog',
+};
+export default meta;
+
+type Story = StoryObj<typeof KeyDisableDialog>;
+
+export const DisableApiKey: Story = {
+  args: {
+    triggerButton: <button type='button'>Open</button>,
+    onKeyDisable: (key: ApiKeyDTO) => {
+      // eslint-disable-next-line no-console
+      console.log(`Disabling Key ${key.name}`);
+    },
+    apiKey: {
+      contact: 'ApiKey',
+      name: 'Test ApiKey 1',
+      created: 1702830516,
+      key_id: 'F4lfa.fdas',
+      site_id: 1,
+      disabled: false,
+      roles: [
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+      ],
+      service_id: 0,
+    },
+  },
+};
