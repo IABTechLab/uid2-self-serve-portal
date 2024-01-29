@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
+import { OnApiKeyEdit } from './KeyEditDialog';
 import KeyTable from './KeyTable';
 
 const meta: Meta<typeof KeyTable> = {
@@ -10,6 +12,32 @@ const meta: Meta<typeof KeyTable> = {
 export default meta;
 
 type Story = StoryObj<typeof KeyTable>;
+
+const apiRoles = [
+  { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+  { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+  { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+  { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+  { id: 5, roleName: 'OPTOUT', externalName: 'Opt-Out' },
+];
+
+const apiRolesMap = new Map<string, ApiRoleDTO>(
+  apiRoles.map((apiRole) => [apiRole.roleName, apiRole])
+);
+
+const apiRoleNameToApiRoleDTO = (roleNames: string[]) => {
+  return roleNames.map((roleName) => apiRolesMap.get(roleName)!);
+};
+
+const onKeyEdit: OnApiKeyEdit = (form, setApiKey) => {
+  setApiKey((oldApiKey) => {
+    const newApiKey = { ...oldApiKey };
+    newApiKey.name = form.newName;
+    newApiKey.roles = apiRoleNameToApiRoleDTO(form.newApiRoles);
+
+    return newApiKey;
+  });
+};
 
 export const ManyKeys: Story = {
   args: {
@@ -30,7 +58,7 @@ export const ManyKeys: Story = {
         created: 1701210253,
         key_id: 'FDSL,089',
         disabled: false,
-        roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+        roles: apiRoleNameToApiRoleDTO(['MAPPER']),
         service_id: 0,
         site_id: 1,
       },
@@ -40,10 +68,7 @@ export const ManyKeys: Story = {
         created: 1702830516,
         key_id: 'F4lfa.fdas',
         disabled: false,
-        roles: [
-          { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-          { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-        ],
+        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR']),
         service_id: 0,
         site_id: 1,
       },
@@ -53,11 +78,7 @@ export const ManyKeys: Story = {
         created: 17028300516,
         key_id: 'REIO_38',
         disabled: false,
-        roles: [
-          { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-          { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-          { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-        ],
+        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER']),
         service_id: 0,
         site_id: 1,
       },
@@ -67,21 +88,30 @@ export const ManyKeys: Story = {
         created: 1702840516,
         key_id: 'BNJMB_934',
         disabled: false,
-        roles: [
-          { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-          { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-          { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-          { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
-        ],
+        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER']),
+        service_id: 0,
+        site_id: 1,
+      },
+      {
+        contact: 'ApiKey6',
+        name: 'ApiKey6',
+        created: 1702840516,
+        key_id: 'FDSFDFS_934',
+        disabled: false,
+        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER', 'OPTOUT']),
         service_id: 0,
         site_id: 1,
       },
     ],
+    availableRoles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER']),
+    onKeyEdit,
   },
 };
 
 export const NoKeys: Story = {
   args: {
     apiKeys: [],
+    availableRoles: [],
+    onKeyEdit,
   },
 };
