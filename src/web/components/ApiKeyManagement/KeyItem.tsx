@@ -17,6 +17,10 @@ type KeyItemProps = {
 function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: KeyItemProps) {
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
 
+  if (apiKey.disabled) {
+    return <div />;
+  }
+
   return (
     <tr>
       <td>{apiKey.name}</td>
@@ -24,7 +28,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       <td>
         <ApiRolesCell apiRoles={apiKey.roles} />
       </td>
-      <td>{apiKey.disabled ? 'DISABLE' : formatUnixDate(apiKey.created)}</td>
+      <td>{formatUnixDate(apiKey.created)}</td>
       <td>
         <KeyEditDialog
           apiKey={apiKey}
