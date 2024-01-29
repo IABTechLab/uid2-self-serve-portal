@@ -57,14 +57,10 @@ function ApiKeyManagement() {
     }
   };
 
-  const onKeyDisable: OnApiKeyDisable = async (apiKey, setApiKey) => {
+  const onKeyDisable: OnApiKeyDisable = async (apiKey) => {
     try {
       await DisableApiKey(apiKey);
-      setApiKey((oldApiKey) => {
-        const newApiKey = { ...oldApiKey };
-        newApiKey.disabled = true;
-        return newApiKey;
-      });
+      reloader.revalidate();
       setStatusPopup({ message: 'Your key has been disabled', type: 'Success' });
       setShowStatusPopup(true);
     } catch (e) {

@@ -49,7 +49,6 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
               <FontAwesomeIcon icon='trash-can' />
             </button>
           }
-          setApiKey={setApiKey}
         />
       </td>
     </tr>
