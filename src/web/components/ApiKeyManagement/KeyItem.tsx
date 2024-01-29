@@ -5,14 +5,16 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
 import ApiRolesCell from './ApiRolesCell';
+import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
   onEdit: OnApiKeyEdit;
+  onDisable: OnApiKeyDisable;
   availableRoles: ApiRoleDTO[];
 };
-function KeyItem({ apiKey: apiKeyInitial, onEdit, availableRoles }: KeyItemProps) {
+function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: KeyItemProps) {
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
 
   return (
@@ -22,7 +24,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, availableRoles }: KeyItemProps
       <td>
         <ApiRolesCell apiRoles={apiKey.roles} />
       </td>
-      <td>{formatUnixDate(apiKey.created)}</td>
+      <td>{apiKey.disabled ? 'DISABLE' : formatUnixDate(apiKey.created)}</td>
       <td>
         <KeyEditDialog
           apiKey={apiKey}
@@ -33,6 +35,16 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, availableRoles }: KeyItemProps
             </button>
           }
           availableRoles={availableRoles}
+          setApiKey={setApiKey}
+        />
+        <KeyDisableDialog
+          apiKey={apiKey}
+          onKeyDisable={onDisable}
+          triggerButton={
+            <button type='button' className='transparent-button'>
+              <FontAwesomeIcon icon='trash-can' />
+            </button>
+          }
           setApiKey={setApiKey}
         />
       </td>

@@ -2,6 +2,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
+import { OnApiKeyDisable } from './KeyDisableDialog';
 import { OnApiKeyEdit } from './KeyEditDialog';
 import KeyTable from './KeyTable';
 
@@ -30,10 +31,23 @@ const apiRoleNameToApiRoleDTO = (roleNames: string[]) => {
 };
 
 const onKeyEdit: OnApiKeyEdit = (form, setApiKey) => {
+  console.log(`editing ${form.keyId}`);
+
   setApiKey((oldApiKey) => {
     const newApiKey = { ...oldApiKey };
     newApiKey.name = form.newName;
     newApiKey.roles = apiRoleNameToApiRoleDTO(form.newApiRoles);
+
+    return newApiKey;
+  });
+};
+
+const onKeyDisable: OnApiKeyDisable = (apiKey, setApiKey) => {
+  console.log(`DELETING ${apiKey.name}`);
+
+  setApiKey((oldApiKey) => {
+    const newApiKey = { ...oldApiKey };
+    newApiKey.disabled = true;
 
     return newApiKey;
   });
@@ -105,6 +119,7 @@ export const ManyKeys: Story = {
     ],
     availableRoles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER']),
     onKeyEdit,
+    onKeyDisable,
   },
 };
 
@@ -113,5 +128,6 @@ export const NoKeys: Story = {
     apiKeys: [],
     availableRoles: [],
     onKeyEdit,
+    onKeyDisable,
   },
 };
