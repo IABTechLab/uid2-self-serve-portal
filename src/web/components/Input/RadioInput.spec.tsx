@@ -14,11 +14,10 @@ describe('RadioInput', () => {
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent('This field is required');
 
-    userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
-    await waitFor(() => {
-      const option2Radio = screen.getByLabelText('Option 2');
-      expect(option2Radio).toBeChecked();
-    });
-    expect(screen.queryByRole('alert')).toBeNull();
+    await userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
+    const option2Radio = screen.getByLabelText('Option 2');
+    expect(option2Radio).toBeChecked();
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
