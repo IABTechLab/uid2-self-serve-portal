@@ -20,6 +20,7 @@ import { isApproverCheck } from '../middleware/approversMiddleware';
 import {
   addKeyPair,
   createApiKey,
+  disableApiKey,
   getApiKeysBySite,
   getKeyPairsList,
   getSharingList,
@@ -367,6 +368,45 @@ export function createParticipantsRouter() {
       if (apiKeyRolesChanged) {
         await updateApiKeyRoles(editedKey.contact, newApiRoles);
       }
+
+      await updateAuditTrailToProceed(auditTrail.id);
+
+      return res.sendStatus(200);
+    }
+  );
+
+  const apiKeyDeleteInputParser = z.object({
+    keyId: z.string(),
+  });
+  participantsRouter.delete(
+    '/:participantId/apiKey',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { keyId } = apiKeyDeleteInputParser.parse(req.body);
+
+      const apiKey = await getApiKey(participant.siteId, keyId);
+      if (!apiKey) {
+        return res.status(404).send('KeyId was invalid');
+      }
+
+      const traceId = getTraceId(req);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertManageApiKeyAuditTrail(
+        participant!,
+        currentUser!.id,
+        currentUser!.email,
+        AuditAction.Delete,
+        apiKey.name,
+        apiKey.roles.map((role) => role.roleName),
+        traceId,
+        apiKey.key_id
+      );
+
+      await disableApiKey(apiKey.contact);
 
       await updateAuditTrailToProceed(auditTrail.id);
 
