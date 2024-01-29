@@ -39,7 +39,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey, setApiKey }: KeyDi
         <br />
         Type the Key ID to confirm: <b>{apiKey.key_id}</b>
       </p>
-      <Form onSubmit={onSubmit} submitButtonText='Disable Key'>
+      <Form onSubmit={onSubmit} submitButtonText='Disable Key' disableSubmitWhenInvalid>
         <TextInput
           inputName='Key Id'
           placeholder={apiKey.key_id}
