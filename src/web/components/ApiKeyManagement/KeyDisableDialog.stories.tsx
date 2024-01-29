@@ -17,7 +17,7 @@ type Story = StoryObj<typeof KeyDisableDialog>;
 export const DisableApiKey: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
-    onKeyDisable: (key: ApiKeyDTO) => {
+    onDisable: (key: ApiKeyDTO) => {
       // eslint-disable-next-line no-console
       console.log(`Disabling Key ${key.name}`);
     },

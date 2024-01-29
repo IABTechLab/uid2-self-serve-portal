@@ -11,22 +11,18 @@ export type OnApiKeyDisable = (
 ) => void;
 
 type KeyDisableDialogProps = {
-  onKeyDisable: OnApiKeyDisable;
+  onDisable: OnApiKeyDisable;
   triggerButton: JSX.Element;
   apiKey: ApiKeyDTO;
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
 };
 
-function KeyDisableDialog({
-  onKeyDisable,
-  triggerButton,
-  apiKey,
-  setApiKey,
-}: KeyDisableDialogProps) {
+function KeyDisableDialog({ onDisable, triggerButton, apiKey, setApiKey }: KeyDisableDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit = () => {
-    onKeyDisable(apiKey, setApiKey);
+    onDisable(apiKey, setApiKey);
+    setOpen(false);
   };
 
   return (
