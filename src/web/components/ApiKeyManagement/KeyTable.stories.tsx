@@ -42,15 +42,8 @@ const onKeyEdit: OnApiKeyEdit = (form, setApiKey) => {
   });
 };
 
-const onKeyDisable: OnApiKeyDisable = (apiKey, setApiKey) => {
+const onKeyDisable: OnApiKeyDisable = (apiKey) => {
   console.log(`DELETING ${apiKey.name}`);
-
-  setApiKey((oldApiKey) => {
-    const newApiKey = { ...oldApiKey };
-    newApiKey.disabled = true;
-
-    return newApiKey;
-  });
 };
 
 export const ManyKeys: Story = {
