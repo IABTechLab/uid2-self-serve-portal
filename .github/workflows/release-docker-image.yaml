@@ -22,7 +22,7 @@ jobs:
     secrets: inherit
 
   publishForApiUi:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@kcc-UID2-2674-implement-shared-publish-to-docker-versioned
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -34,7 +34,7 @@ jobs:
     secrets: inherit
 
   publishForDBMigration:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@kcc-UID2-2674-implement-shared-publish-to-docker-versioned
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -46,7 +46,7 @@ jobs:
     secrets: inherit
 
   publishForKeycloak:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@kcc-UID2-2674-implement-shared-publish-to-docker-versioned
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
