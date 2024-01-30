@@ -6,13 +6,13 @@ import { ParticipantApprovalPartial } from '../entities/Participant';
 import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
+  AdminSiteDTO,
   ApiKeyAdmin,
   ClientType,
   CreatedApiKeyDTO,
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
-  SiteDTO,
 } from './adminServiceHelpers';
 
 const adminServiceClient = axios.create({
@@ -71,13 +71,13 @@ export const updateSharingList = async (
   }
 };
 
-export const getSiteList = async (): Promise<SiteDTO[]> => {
-  const response = await adminServiceClient.get<SiteDTO[]>('/api/site/list');
+export const getSiteList = async (): Promise<AdminSiteDTO[]> => {
+  const response = await adminServiceClient.get<AdminSiteDTO[]>('/api/site/list');
   return response.data;
 };
 
-export const getSite = async (siteId: number): Promise<SiteDTO> => {
-  const response = await adminServiceClient.get<SiteDTO>(`/api/site/${siteId}`);
+export const getSite = async (siteId: number): Promise<AdminSiteDTO> => {
+  const response = await adminServiceClient.get<AdminSiteDTO>(`/api/site/${siteId}`);
   return response.data;
 };
 
@@ -121,7 +121,7 @@ export const disableApiKey = async (contact: string): Promise<void> => {
   });
 };
 
-export const getVisibleSiteList = async (): Promise<SiteDTO[]> => {
+export const getVisibleSiteList = async (): Promise<AdminSiteDTO[]> => {
   const siteList = await getSiteList();
   return siteList.filter((x) => x.visible !== false);
 };

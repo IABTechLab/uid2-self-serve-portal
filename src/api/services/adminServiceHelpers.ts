@@ -22,7 +22,7 @@ export const ClientRolesWithDescriptions: Record<AvailableClientRole, string> = 
   MAPPER: 'Mapper',
   ID_READER: 'ID Reader',
 };
-export type SiteDTO = {
+export type AdminSiteDTO = {
   id: number;
   name: string;
   enabled: boolean;
