@@ -107,22 +107,16 @@ describe('CheckboxInput', () => {
       </Form>
     );
 
-    await waitFor(() => {
-      const option1 = screen.getByRole('checkbox', { name: 'Option 1' });
-      expect(option1).toBeChecked();
-    });
+    const option1 = screen.getByRole('checkbox', { name: 'Option 1' });
+    expect(option1).toBeChecked();
 
-    await waitFor(() => {
-      const option2 = screen.getByRole('checkbox', { name: 'Option 2' });
-      expect(option2).toBeChecked();
-    });
+    const option2 = screen.getByRole('checkbox', { name: 'Option 2' });
+    expect(option2).toBeChecked();
 
     const submitButton = screen.getByRole('button', { name: 'Submit' });
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(onSubmitMock.mock.calls).toEqual([[{ default: ['option1', 'option2'] }]]);
-    });
+    expect(onSubmitMock).toHaveBeenLastCalledWith({ default: ['option1', 'option2'] });
   });
 
   it('Verifies field based on rule', async () => {
