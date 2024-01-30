@@ -76,24 +76,7 @@ function ShowApiKeySecrets({
     { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
-  const [uncopiedValueNames, setUncopiedValueNames] = useState(
-    secrets.map((secret) => secret.valueName)
-  );
-
-  const onCopyGenerator = (copiedValueName: String) => {
-    return () => {
-      setUncopiedValueNames((oldUncopiedValueNames: string[]) => {
-        return oldUncopiedValueNames.filter((valueName) => valueName !== copiedValueName);
-      });
-    };
-  };
-
   const onClose = () => {
-    if (uncopiedValueNames.length > 0) {
-      showPopupMessage('Please copy all secrets shown before closing the page');
-      return;
-    }
-
     closeDialog();
   };
 
@@ -108,7 +91,7 @@ function ShowApiKeySecrets({
       {secrets.map((secret) => (
         <div key={secret.valueName}>
           <h2>{secret.valueName}</h2>
-          <DisplaySecret secret={secret} onCopy={onCopyGenerator(secret.valueName)} />
+          <DisplaySecret secret={secret} />
         </div>
       ))}
       <div className='cancel-container'>
