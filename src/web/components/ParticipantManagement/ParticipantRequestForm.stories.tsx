@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
-import { SiteAdmin } from '../../../api/services/adminServiceHelpers';
+import { AdminSiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
@@ -11,7 +11,7 @@ export default {
   component: ParticipantApprovalForm,
 } as ComponentMeta<typeof ParticipantApprovalForm>;
 
-const response: SiteAdmin[] = [
+const response: AdminSiteDTO[] = [
   {
     id: 2,
     name: 'Test Site',

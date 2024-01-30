@@ -1,19 +1,19 @@
 import axios from 'axios';
 
 import { SharingSiteDTO } from '../../api/helpers/siteConvertingHelpers';
-import { SiteAdmin } from '../../api/services/adminServiceHelpers';
+import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { createSwrHook } from './SwrHelpers';
 
 const unattachedEndpoint = `/sites/unattached/`;
 const fetcher = async () => {
   try {
-    const result = await axios.get<SiteAdmin[]>(unattachedEndpoint);
+    const result = await axios.get<AdminSiteDTO[]>(unattachedEndpoint);
     return result.data;
   } catch {
     return [];
   }
 };
-const swrHook = createSwrHook<SiteAdmin[]>(unattachedEndpoint, fetcher);
+const swrHook = createSwrHook<AdminSiteDTO[]>(unattachedEndpoint, fetcher);
 export const useSiteList = swrHook.hookFunction;
 export const preloadSiteList = swrHook.preloadFunction;
 export const TestSiteListProvider = swrHook.TestDataProvider;
