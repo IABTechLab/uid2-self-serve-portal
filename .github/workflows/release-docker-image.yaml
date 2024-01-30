@@ -12,7 +12,6 @@ on:
         - Patch
         - Snapshot
         required: true
-  pull_request:
 
 jobs:
   incrementVersionNumber:
