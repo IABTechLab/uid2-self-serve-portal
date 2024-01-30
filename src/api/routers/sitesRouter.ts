@@ -7,7 +7,7 @@ import {
 } from '../helpers/siteConvertingHelpers';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { getSiteList, getVisibleSiteList } from '../services/adminServiceClient';
-import { AdminSiteDTO } from '../services/adminServiceHelpers';
+import { AdminSiteDTO, mapAdminSitesToSiteDTOs } from '../services/adminServiceHelpers';
 import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/participantsService';
 
 export function createSitesRouter() {
@@ -17,7 +17,10 @@ export function createSitesRouter() {
     const allSitesPromise = getSiteList();
     const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
-    return res.status(200).json(allSites.filter((s) => !attachedSites.includes(s.id)));
+    const siteDTOs = await mapAdminSitesToSiteDTOs(
+      allSites.filter((s) => !attachedSites.includes(s.id))
+    );
+    return res.status(200).json(siteDTOs);
   });
 
   sitesRouter.get('/available', async (_req, res) => {
