@@ -4,8 +4,9 @@ import { SubmitHandler } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
+import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
-import DisplaySecret, { Secret } from '../Core/DisplaySecret';
+import DisplaySecret from '../Core/DisplaySecret';
 import { Form } from '../Core/Form';
 import { StatusPopup } from '../Core/StatusPopup';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -47,7 +48,7 @@ function CreateApiKeyForm({
           }}
         />
       </Form>
-      <div className='cancel-container'>
+      <div className='button-container'>
         <button
           type='button'
           className='transparent-button'
@@ -65,20 +66,27 @@ function CreateApiKeyForm({
 function ShowApiKeySecrets({
   keySecrets,
   closeDialog,
-  showPopupMessage,
 }: {
   keySecrets: ApiKeySecretsDTO;
   closeDialog: () => void;
-  showPopupMessage: (message: string) => void;
 }) {
   const secrets: Secret[] = [
     { value: keySecrets.secret, valueName: 'Secret' },
     { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
-  const onClose = () => {
+  const [open, setOpen] = useState(false);
+
+  const onCloseConfirmation = () => {
     closeDialog();
+    setOpen(false);
   };
+
+  const triggerButton: JSX.Element = (
+    <button className='primary-button' type='button'>
+      Close
+    </button>
+  );
 
   return (
     <div>
@@ -94,10 +102,24 @@ function ShowApiKeySecrets({
           <DisplaySecret secret={secret} />
         </div>
       ))}
-      <div className='cancel-container'>
-        <button type='button' className='transparent-button' onClick={onClose}>
-          Close
-        </button>
+
+      <div className='button-container'>
+        <Dialog
+          triggerButton={triggerButton}
+          open={open}
+          onOpenChange={setOpen}
+          closeButtonText='Cancel'
+        >
+          <p>
+            Make sure you have copied your API Secret and Key. These will not be accessible after
+            this page is closed.
+          </p>
+          <div className='button-container'>
+            <button onClick={onCloseConfirmation} className='primary-button' type='button'>
+              Close
+            </button>
+          </div>
+        </Dialog>
       </div>
     </div>
   );
@@ -141,11 +163,7 @@ function KeyCreationDialog({
             closeDialog={closeDialog}
           />
         ) : (
-          <ShowApiKeySecrets
-            closeDialog={closeDialog}
-            keySecrets={keySecrets}
-            showPopupMessage={showPopupMessage}
-          />
+          <ShowApiKeySecrets closeDialog={closeDialog} keySecrets={keySecrets} />
         )}
 
         {showStatusPopup && (
