@@ -1,4 +1,4 @@
-name: Release Self Serve Portal Image (Do not use - not working)
+name: Release Self Serve Portal Image
 run-name: ${{ inputs.release_type == 'Snapshot' && 'Publish Pre-release' || format('Release {0}', inputs.release_type)}} Self Serve Portal Image by @${{ github.actor }}
 on:
   workflow_dispatch:
