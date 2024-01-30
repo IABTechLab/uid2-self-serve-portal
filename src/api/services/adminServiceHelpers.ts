@@ -22,8 +22,7 @@ export const ClientRolesWithDescriptions: Record<AvailableClientRole, string> = 
   MAPPER: 'Mapper',
   ID_READER: 'ID Reader',
 };
-
-export type SiteAdmin = {
+export type AdminSiteDTO = {
   id: number;
   name: string;
   enabled: boolean;
@@ -33,7 +32,7 @@ export type SiteAdmin = {
   visible: boolean;
 };
 
-export type SiteDTO = Omit<SiteAdmin, 'roles'> & { apiRoles: ApiRoleDTO[] };
+export type SiteDTO = Omit<AdminSiteDTO, 'roles'> & { apiRoles: ApiRoleDTO[] };
 
 export type SharingListResponse = {
   allowed_sites: number[];
@@ -152,7 +151,7 @@ export async function mapAdminApiKeysToApiKeyDTOs(
   });
 }
 
-export async function mapAdminSitesToSiteDTOs(adminSites: SiteAdmin[]): Promise<SiteDTO[]> {
+export async function mapAdminSitesToSiteDTOs(adminSites: AdminSiteDTO[]): Promise<SiteDTO[]> {
   const apiRoleMap = await loadLoadRoleMaps();
 
   return adminSites.map((adminSite) => {

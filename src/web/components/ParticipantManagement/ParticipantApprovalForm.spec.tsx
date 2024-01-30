@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import Fuse from 'fuse.js';
 
-import {  SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 const createResult = (text: string, indices: [number, number][]) => {

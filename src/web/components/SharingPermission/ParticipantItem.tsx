@@ -1,5 +1,5 @@
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
-import { ClientTypeDescriptions, SiteAdmin } from '../../../api/services/adminServiceHelpers';
+import { AdminSiteDTO, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import {
@@ -10,7 +10,7 @@ import {
 
 import './ParticipantItem.scss';
 
-function getParticipantTypes(siteTypes?: SiteAdmin['clientTypes']) {
+function getParticipantTypes(siteTypes?: AdminSiteDTO['clientTypes']) {
   if (!siteTypes) return null;
   return siteTypes.map((pt) => (
     <div className='participant-type-label' key={pt}>

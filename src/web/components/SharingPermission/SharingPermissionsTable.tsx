@@ -230,6 +230,7 @@ export function SharingPermissionsTable({
   const { sites, isLoading } = useAllSitesList();
   const getSharingParticipants: () => SharingSiteWithSource[] = () => {
     return sites!
+      .filter((p) => p.canBeSharedWith || sharedSiteIds.includes(p.id))
       .map((p) => {
         const maybeManualArray: (typeof MANUALLY_ADDED)[] = sharedSiteIds.includes(p.id)
           ? [MANUALLY_ADDED]
