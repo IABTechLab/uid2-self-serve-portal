@@ -156,4 +156,22 @@ describe('Key creation dialog', () => {
     await userEvent.click(copyButton2);
     expect(writeText).lastCalledWith('ABCD');
   });
+
+  it('should confirm copying before letting user close', async () => {
+    const apiRoles = [Mapper, Bidder];
+
+    await loadComponent(apiRoles);
+
+    await enterApiName('key_name');
+    await clickApiRole(apiRoles[0]);
+    await submitForm();
+
+    await userEvent.click(screen.queryAllByRole('button', { name: 'Close' })[0]);
+
+    expect(
+      screen.getByText(
+        'Make sure you have copied your API Secret and Key. These will not be accessible after this page is closed.'
+      )
+    ).toBeInTheDocument();
+  });
 });
