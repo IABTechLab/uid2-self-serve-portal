@@ -5,7 +5,7 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { SiteDTO } from '../../api/services/adminServiceHelpers';
+import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
@@ -30,7 +30,7 @@ function ManageParticipants() {
       ParticipantDTO[],
       ParticipantTypeDTO[],
       ApiRoleDTO[],
-      SiteDTO[]
+      AdminSiteDTO[]
     ];
   };
 

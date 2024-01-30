@@ -29,7 +29,7 @@ import {
   setSiteClientTypes,
   updateApiKeyRoles,
 } from '../services/adminServiceClient';
-import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../services/adminServiceHelpers';
+import { AdminSiteDTO, mapAdminApiKeysToApiKeyDTOs } from '../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
   getApiKey,
@@ -117,7 +117,7 @@ export function createParticipantsRouter() {
     const participants = await getParticipantsApproved();
 
     const sitesList = await getSiteList();
-    const siteMap = new Map<number, SiteDTO>(sitesList.map((s) => [s.id, s]));
+    const siteMap = new Map<number, AdminSiteDTO>(sitesList.map((s) => [s.id, s]));
 
     const allParticipantTypes = await ParticipantType.query();
     const result = participants

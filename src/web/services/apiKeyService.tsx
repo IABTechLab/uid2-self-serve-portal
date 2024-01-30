@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
+import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import { ApiKeySecretsDTO } from '../../api/services/apiKeyService';
 import { backendError } from '../utils/apiError';
 
@@ -46,5 +47,15 @@ export async function EditApiKey(form: EditApiKeyFormDTO, participantId?: number
     await axios.put(`/participants/${participantId ?? 'current'}/apiKey`, form);
   } catch (e: unknown) {
     throw backendError(e, 'Could not edit API Key');
+  }
+}
+
+export async function DisableApiKey(apiKey: ApiKeyDTO, participantId?: number) {
+  try {
+    await axios.delete(`/participants/${participantId ?? 'current'}/apiKey`, {
+      data: { keyId: apiKey.key_id },
+    });
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not disable API Key');
   }
 }

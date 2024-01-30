@@ -16,7 +16,10 @@ const response: SiteDTO[] = [
     id: 2,
     name: 'Test Site',
     enabled: true,
-    roles: ['SHARER'],
+    apiRoles: [
+      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+    ],
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
@@ -26,7 +29,7 @@ const response: SiteDTO[] = [
     id: 4,
     name: 'Test Four',
     enabled: true,
-    roles: ['SHARER'],
+    apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1' }],
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,

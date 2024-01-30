@@ -5,23 +5,19 @@ import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { TextInput } from '../Input/TextInput';
 
-export type OnApiKeyDisable = (
-  apiKey: ApiKeyDTO,
-  setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>
-) => void;
+export type OnApiKeyDisable = (apiKey: ApiKeyDTO) => void;
 
 type KeyDisableDialogProps = {
   onDisable: OnApiKeyDisable;
   triggerButton: JSX.Element;
   apiKey: ApiKeyDTO;
-  setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
 };
 
-function KeyDisableDialog({ onDisable, triggerButton, apiKey, setApiKey }: KeyDisableDialogProps) {
+function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialogProps) {
   const [open, setOpen] = useState(false);
 
   const onSubmit = () => {
-    onDisable(apiKey, setApiKey);
+    onDisable(apiKey);
     setOpen(false);
   };
 
@@ -39,7 +35,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey, setApiKey }: KeyDi
         <br />
         Type the Key ID to confirm: <b>{apiKey.key_id}</b>
       </p>
-      <Form onSubmit={onSubmit} submitButtonText='Disable Key'>
+      <Form onSubmit={onSubmit} submitButtonText='Disable Key' disableSubmitWhenInvalid>
         <TextInput
           inputName='Key Id'
           placeholder={apiKey.key_id}

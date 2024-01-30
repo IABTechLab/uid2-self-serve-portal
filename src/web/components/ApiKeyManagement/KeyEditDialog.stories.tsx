@@ -67,3 +67,24 @@ export const KeyWithRolesParticipantIsntAllowed: Story = {
     triggerButton: <button type='button'>Open</button>,
   },
 };
+
+export const KeyWithOnlyOneRole: Story = {
+  args: {
+    apiKey: {
+      contact: 'ApiKey',
+      name: 'ApiKey',
+      site_id: 1,
+      created: 1702830516,
+      key_id: 'F4lfa.fdas',
+      disabled: false,
+      roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+      service_id: 0,
+    },
+    availableRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+    onEdit: (form) => {
+      console.log(form);
+      return Promise.resolve();
+    },
+    triggerButton: <button type='button'>Open</button>,
+  },
+};
