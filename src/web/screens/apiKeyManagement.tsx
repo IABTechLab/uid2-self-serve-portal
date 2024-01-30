@@ -4,11 +4,17 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
+import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog';
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
 import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
-import { CreateApiKey, CreateApiKeyFormDTO, EditApiKey } from '../services/apiKeyService';
+import {
+  CreateApiKey,
+  CreateApiKeyFormDTO,
+  DisableApiKey,
+  EditApiKey,
+} from '../services/apiKeyService';
 import {
   GetParticipantApiKey,
   GetParticipantApiKeys,
@@ -51,6 +57,17 @@ function ApiKeyManagement() {
     }
   };
 
+  const onKeyDisable: OnApiKeyDisable = async (apiKey) => {
+    try {
+      await DisableApiKey(apiKey);
+      reloader.revalidate();
+      setStatusPopup({ message: 'Your key has been disabled', type: 'Success' });
+      setShowStatusPopup(true);
+    } catch (e) {
+      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+    }
+  };
+
   return (
     <div className='api-key-management-page'>
       <h1>Manage API Keys</h1>
@@ -62,6 +79,7 @@ function ApiKeyManagement() {
               <KeyTable
                 apiKeys={apiKeys.filter((key) => !key.disabled)}
                 onKeyEdit={onKeyEdit}
+                onKeyDisable={onKeyDisable}
                 availableRoles={apiRoles}
               />
               {apiRoles.length > 0 && (

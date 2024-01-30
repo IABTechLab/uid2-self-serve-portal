@@ -2,6 +2,7 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { Tooltip } from '../Core/Tooltip';
+import { OnApiKeyDisable } from './KeyDisableDialog';
 import { OnApiKeyEdit } from './KeyEditDialog';
 import KeyItem from './KeyItem';
 
@@ -21,9 +22,10 @@ function NoKeys() {
 type KeyTableProps = {
   apiKeys: ApiKeyDTO[];
   onKeyEdit: OnApiKeyEdit;
+  onKeyDisable: OnApiKeyDisable;
   availableRoles: ApiRoleDTO[];
 };
-function KeyTable({ apiKeys, onKeyEdit, availableRoles }: KeyTableProps) {
+function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTableProps) {
   return (
     <div>
       <table className='api-key-table'>
@@ -48,6 +50,7 @@ function KeyTable({ apiKeys, onKeyEdit, availableRoles }: KeyTableProps) {
               key={key.key_id}
               apiKey={key}
               onEdit={onKeyEdit}
+              onDisable={onKeyDisable}
               availableRoles={availableRoles}
             />
           ))}
