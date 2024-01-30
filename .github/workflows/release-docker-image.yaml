@@ -1,9 +1,18 @@
 name: Release Self Serve Portal Image (Do not use - not working)
 run-name: ${{ inputs.release_type == 'Snapshot' && 'Publish Pre-release' || format('Release {0}', inputs.release_type)}} Self Serve Portal Image by @${{ github.actor }}
 on:
-  push:
-    branches:
-      - no-branch-this-is-disabled-temporarily
+  workflow_dispatch:
+    inputs:
+      release_type:
+        type: choice
+        description: The type of release
+        options:
+        - Major
+        - Minor
+        - Patch
+        - Snapshot
+        required: true
+  pull_request:
 
 jobs:
   incrementVersionNumber:
