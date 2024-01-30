@@ -29,4 +29,15 @@ describe('SharingPermissionsTable', () => {
 
     expect(screen.getByText(/Delete Permissions/i)).toBeInTheDocument();
   });
+
+  it('shows participants included by site ID even if they are not a valid sharing target', async () => {
+    render(<SharedWithParticipants />);
+    expect(await screen.findByText('No SHARER and explicitly included')).toBeInTheDocument();
+  });
+
+  it('does not show participants that are included by group if they are not a valid sharing target', async () => {
+    render(<SharedWithParticipants />);
+    await screen.findByText('Site 1');
+    expect(screen.queryByText('No SHARER and not explicitly included')).not.toBeInTheDocument();
+  });
 });

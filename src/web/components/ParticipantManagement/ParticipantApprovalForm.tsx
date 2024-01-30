@@ -102,6 +102,12 @@ function ParticipantApprovalForm({
   const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
     setSelectedSite(site);
+
+    const siteApiRoleIds = site.apiRoles.map((apiRole) => apiRole.id);
+    setValue(
+      'apiRoles',
+      apiRoles.filter((apiRole) => siteApiRoleIds.includes(apiRole.id)).map((apiRole) => apiRole.id)
+    );
   };
 
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {

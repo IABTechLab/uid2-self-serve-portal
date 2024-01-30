@@ -7,7 +7,7 @@ import {
 } from '../helpers/siteConvertingHelpers';
 import { isApproverCheck } from '../middleware/approversMiddleware';
 import { getSiteList, getVisibleSiteList } from '../services/adminServiceClient';
-import { SiteDTO } from '../services/adminServiceHelpers';
+import { AdminSiteDTO, mapAdminSitesToSiteDTOs } from '../services/adminServiceHelpers';
 import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/participantsService';
 
 export function createSitesRouter() {
@@ -17,14 +17,17 @@ export function createSitesRouter() {
     const allSitesPromise = getSiteList();
     const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
-    return res.status(200).json(allSites.filter((s) => !attachedSites.includes(s.id)));
+    const siteDTOs = await mapAdminSitesToSiteDTOs(
+      allSites.filter((s) => !attachedSites.includes(s.id))
+    );
+    return res.status(200).json(siteDTOs);
   });
 
   sitesRouter.get('/available', async (_req, res) => {
     const visibleSites = await getVisibleSiteList();
     const availableSites = visibleSites.filter(canBeSharedWith);
     const matchedParticipants = await getParticipantsBySiteIds(availableSites.map((s) => s.id));
-    const availableSharingSites: SharingSiteDTO[] = availableSites.map((site: SiteDTO) =>
+    const availableSharingSites: SharingSiteDTO[] = availableSites.map((site: AdminSiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)
     );
     return res.status(200).json(availableSharingSites);
@@ -33,7 +36,7 @@ export function createSitesRouter() {
   sitesRouter.get('/', async (_req, res) => {
     const visibleSites = await getVisibleSiteList();
     const matchedParticipants = await getParticipantsBySiteIds(visibleSites.map((s) => s.id));
-    const sharingSites: SharingSiteDTO[] = visibleSites.map((site: SiteDTO) =>
+    const sharingSites: SharingSiteDTO[] = visibleSites.map((site: AdminSiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)
     );
     return res.status(200).json(sharingSites);
