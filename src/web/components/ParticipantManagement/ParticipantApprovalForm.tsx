@@ -168,7 +168,6 @@ function ParticipantApprovalForm({
             <CheckboxInput
               inputName='apiRoles'
               label='API Roles'
-              rules={{ required: 'Please specify the API Roles' }}
               options={apiRoles.map((p) => ({
                 optionLabel: p.externalName,
                 optionToolTip: p.roleName,
