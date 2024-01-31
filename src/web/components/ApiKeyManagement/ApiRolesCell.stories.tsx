@@ -49,6 +49,10 @@ export const ManyRole: Story = {
       { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
     ],
+    availableRoles: [
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+    ],
   },
 };
 
