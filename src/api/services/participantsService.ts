@@ -142,7 +142,7 @@ export const updateParticipantApiRolesWithTransaction = async (
       'id',
       apiRoleIds.map((role) => role.id)
     )
-    .where('disabled', true);
+    .where('disabled', false);
 
   if (apiRoles.length > 0) {
     await participant.$relatedQuery('apiRoles', trx).relate(apiRoles);
