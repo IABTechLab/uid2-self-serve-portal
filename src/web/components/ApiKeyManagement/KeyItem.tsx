@@ -26,7 +26,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>
-        <ApiRolesCell apiRoles={apiKey.roles} />
+        <ApiRolesCell apiRoles={apiKey.roles} availableRoles={availableRoles} />
       </td>
       <td>{formatUnixDate(apiKey.created)}</td>
       <td>
