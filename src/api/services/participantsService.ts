@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
+import { ApiRole } from '../entities/ApiRole';
 import {
   Participant,
   ParticipantApprovalPartial,
@@ -129,13 +130,23 @@ const updateParticipantRequestTypesWithTransaction = async (
 
 export const updateParticipantApiRolesWithTransaction = async (
   participant: Participant,
-  apiRoles: {
+  apiRoleIds: {
     id: number;
   }[],
   trx: TransactionOrKnex
 ) => {
   await participant.$relatedQuery('apiRoles', trx).unrelate();
-  await participant.$relatedQuery('apiRoles', trx).relate(apiRoles);
+
+  const apiRoles = await ApiRole.query()
+    .whereIn(
+      'id',
+      apiRoleIds.map((role) => role.id)
+    )
+    .where('disabled', true);
+
+  if (apiRoles.length > 0) {
+    await participant.$relatedQuery('apiRoles', trx).relate(apiRoles);
+  }
 };
 
 export const updateParticipantAndTypesAndRoles = async (
