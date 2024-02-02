@@ -4,6 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { EditApiKeyFormDTO } from '../../services/apiKeyService';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -65,7 +66,7 @@ function KeyEditDialog({
           <CheckboxInput
             label='API Roles'
             inputName='newApiRoles'
-            options={availableRoles.concat(unapprovedRoles).map((role) => ({
+            options={sortApiRoles(availableRoles.concat(unapprovedRoles)).map((role) => ({
               optionLabel: role.externalName,
               value: role.roleName,
             }))}

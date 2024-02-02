@@ -1,4 +1,5 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { Tooltip } from '../Core/Tooltip';
 
 import './ApiRolesCell.scss';
@@ -34,7 +35,7 @@ function ApiRolesCell({ apiRoles, availableRoles, showRoleTooltip = false }: Api
   return (
     <div className='api-roles-cell'>
       <div className='api-role-boxes'>
-        {apiRoles.map((role) => (
+        {sortApiRoles(apiRoles).map((role) => (
           <div key={role.externalName}>
             {showRoleTooltip ? (
               <Tooltip
