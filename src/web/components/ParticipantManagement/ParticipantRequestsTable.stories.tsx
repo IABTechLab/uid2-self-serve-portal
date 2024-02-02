@@ -79,10 +79,10 @@ export const ParticipantRequests: Story = {
       { id: 3, typeName: 'Type 3' },
     ],
     apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     onApprove: async (_id, form) => {
       // eslint-disable-next-line no-console
@@ -107,10 +107,10 @@ export const NoParticipantRequests: Story = {
       { id: 3, typeName: 'Type 3' },
     ],
     apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     onApprove: async (_id, form) => {
       // eslint-disable-next-line no-console

@@ -29,8 +29,8 @@ export const DisableApiKey: Story = {
       site_id: 1,
       disabled: false,
       roles: [
-        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
       ],
       service_id: 0,
     },

@@ -16,10 +16,10 @@ type Story = StoryObj<typeof UpdateParticipantDialog>;
 export const ParticipantWithExistingRoles: Story = {
   args: {
     apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     participant: {
       id: 5,
@@ -31,9 +31,9 @@ export const ParticipantWithExistingRoles: Story = {
         { id: 4, typeName: 'Type 4' },
       ],
       apiRoles: [
-        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-        { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+        { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
       ],
       status: ParticipantStatus.Approved,
       allowSharing: true,
@@ -60,10 +60,10 @@ export const ParticipantWithExistingRoles: Story = {
 export const ParticipantWithNoRoles: Story = {
   args: {
     apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     participant: {
       id: 5,

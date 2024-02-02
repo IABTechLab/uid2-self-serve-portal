@@ -12,10 +12,7 @@ Object.assign(navigator, {
   },
 });
 
-async function loadComponent(
-  availableRoles: { id: number; roleName: string; externalName: string }[],
-  openDialog: boolean = true
-) {
+async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean = true) {
   const onKeyCreation = jest.fn(() => {
     return Promise.resolve({
       name: 'test_key',
@@ -55,10 +52,10 @@ async function submitForm() {
   await userEvent.click(createButton);
 }
 
-const Mapper = { id: 1, roleName: 'MAPPER', externalName: 'Mapper' };
-const Generator = { id: 2, roleName: 'GENERATOR', externalName: 'Generator' };
-const Bidder = { id: 3, roleName: 'ID_READER', externalName: 'Bidder' };
-const Sharer = { id: 4, roleName: 'SHARER', externalName: 'Sharer' };
+const Mapper: ApiRoleDTO = { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 };
+const Generator: ApiRoleDTO = { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 };
+const Bidder: ApiRoleDTO = { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 };
+const Sharer: ApiRoleDTO = { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 };
 
 const apiRoleTests = [
   [[Mapper]],

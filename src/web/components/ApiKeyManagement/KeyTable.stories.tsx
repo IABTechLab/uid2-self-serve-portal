@@ -14,12 +14,12 @@ export default meta;
 
 type Story = StoryObj<typeof KeyTable>;
 
-const apiRoles = [
-  { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-  { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-  { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-  { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
-  { id: 5, roleName: 'OPTOUT', externalName: 'Opt-Out' },
+const apiRoles: ApiRoleDTO[] = [
+  { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+  { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+  { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+  { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
+  { id: 5, roleName: 'OPTOUT', externalName: 'Opt-Out', order: 100 },
 ];
 
 const apiRolesMap = new Map<string, ApiRoleDTO>(
