@@ -11,7 +11,7 @@ import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
 
 configureFontAwesomeLibrary();
