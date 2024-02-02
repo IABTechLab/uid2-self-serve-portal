@@ -83,7 +83,7 @@ describe('Key creation dialog', () => {
       await submitForm();
 
       await waitFor(() => {
-        expect(screen.getByText('Please select at least one API Role.')).toBeInTheDocument();
+        expect(screen.getByText('Select at least one API role.')).toBeInTheDocument();
       });
     }
   );
