@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { getByRole, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
@@ -138,23 +138,6 @@ describe('Key creation dialog', () => {
     expect(screen.getByText('1234')).toBeInTheDocument();
   });
 
-  it('Should make you copy secrets before closing the dialog', async () => {
-    const apiRoles = [Mapper, Bidder];
-
-    await loadComponent(apiRoles);
-
-    await enterApiName('key_name');
-    await clickApiRole(apiRoles[0]);
-    await submitForm();
-
-    const closeDialogButton = screen.getByText('Close');
-    await userEvent.click(closeDialogButton);
-
-    expect(
-      screen.getByText('Please copy all secrets shown before closing the page')
-    ).toBeInTheDocument();
-  });
-
   it('should let you copy each secret', async () => {
     const apiRoles = [Mapper, Bidder];
 
@@ -164,13 +147,31 @@ describe('Key creation dialog', () => {
     await clickApiRole(apiRoles[0]);
     await submitForm();
 
-    const copyButton1 = screen.getAllByText('Copy')[0];
-    const copyButton2 = screen.getAllByText('Copy')[1];
+    const copyButton1 = screen.getByTitle('Copy Secret to clipboard');
+    const copyButton2 = screen.getByTitle('Copy Key to clipboard');
 
     await userEvent.click(copyButton1);
     expect(writeText).lastCalledWith('1234');
 
     await userEvent.click(copyButton2);
     expect(writeText).lastCalledWith('ABCD');
+  });
+
+  it('should confirm copying before letting user close', async () => {
+    const apiRoles = [Mapper, Bidder];
+
+    await loadComponent(apiRoles);
+
+    await enterApiName('key_name');
+    await clickApiRole(apiRoles[0]);
+    await submitForm();
+
+    await userEvent.click(screen.queryAllByRole('button', { name: 'Close' })[0]);
+
+    expect(
+      screen.getByText(
+        'Make sure you have copied your API Secret and Key. These will not be accessible after this page is closed.'
+      )
+    ).toBeInTheDocument();
   });
 });
