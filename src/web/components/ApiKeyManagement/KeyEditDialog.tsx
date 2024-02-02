@@ -45,7 +45,7 @@ function KeyEditDialog({
     newApiRoles: apiKey.roles.map((role) => role.roleName),
   };
 
-  const unapprovedRoles = getUnapprovedRoles(apiKey.roles, availableRoles);
+  const unapprovedRoles: ApiRoleDTO[] = getUnapprovedRoles(apiKey.roles, availableRoles);
 
   return (
     <div className='key-edit-dialog'>

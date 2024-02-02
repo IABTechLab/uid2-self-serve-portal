@@ -8,6 +8,8 @@ import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
+import './KeyItem.scss';
+
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
   onEdit: OnApiKeyEdit;
@@ -22,7 +24,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   }
 
   return (
-    <tr>
+    <tr className='key-item'>
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>
@@ -30,7 +32,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       </td>
       <td>{formatUnixDate(apiKey.created)}</td>
       {availableRoles.length > 0 && (
-        <td>
+        <td className='key-actions'>
           <KeyEditDialog
             apiKey={apiKey}
             onEdit={onEdit}
