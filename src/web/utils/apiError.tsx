@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 
 import { StatusNotificationType } from '../components/Core/StatusPopup';
 /*
@@ -39,6 +40,15 @@ const getHash = (e: Error) => {
     result = (e.response?.data?.errorHash as string) ?? '';
   }
   return result;
+};
+
+export const handleErrorToast = (e: unknown) => {
+  if (isError(e)) {
+    const hash = getHash(e);
+    const hashMessage = hash.length > 0 ? `: (${hash})` : '';
+    toast.error(`${e.message}${hashMessage}`);
+  }
+  throw e;
 };
 
 export const handleErrorPopup = (

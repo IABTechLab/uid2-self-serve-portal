@@ -1,6 +1,7 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import { EnvironmentBanner } from './components/Core/EnvironmentBanner';
 import { Loading } from './components/Core/Loading';
@@ -10,6 +11,7 @@ import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
+import 'react-toastify/dist/ReactToastify.css';
 import './App.scss';
 
 configureFontAwesomeLibrary();
@@ -44,6 +46,7 @@ export function App() {
             />
             <EnvironmentBanner />
             <Outlet />
+            <ToastContainer hideProgressBar />
           </div>
         </ParticipantProvider>
       </PortalErrorBoundary>
