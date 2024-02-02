@@ -29,28 +29,30 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
         <ApiRolesCell apiRoles={apiKey.roles} availableRoles={availableRoles} />
       </td>
       <td>{formatUnixDate(apiKey.created)}</td>
-      <td>
-        <KeyEditDialog
-          apiKey={apiKey}
-          onEdit={onEdit}
-          triggerButton={
-            <button type='button' className='transparent-button'>
-              <FontAwesomeIcon icon='pencil' />
-            </button>
-          }
-          availableRoles={availableRoles}
-          setApiKey={setApiKey}
-        />
-        <KeyDisableDialog
-          apiKey={apiKey}
-          onDisable={onDisable}
-          triggerButton={
-            <button type='button' className='transparent-button'>
-              <FontAwesomeIcon icon='trash-can' />
-            </button>
-          }
-        />
-      </td>
+      {availableRoles.length > 0 && (
+        <td>
+          <KeyEditDialog
+            apiKey={apiKey}
+            onEdit={onEdit}
+            triggerButton={
+              <button type='button' className='transparent-button'>
+                <FontAwesomeIcon icon='pencil' />
+              </button>
+            }
+            availableRoles={availableRoles}
+            setApiKey={setApiKey}
+          />
+          <KeyDisableDialog
+            apiKey={apiKey}
+            onDisable={onDisable}
+            triggerButton={
+              <button type='button' className='transparent-button'>
+                <FontAwesomeIcon icon='trash-can' />
+              </button>
+            }
+          />
+        </td>
+      )}
     </tr>
   );
 }
