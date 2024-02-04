@@ -12,10 +12,14 @@ export async function up(knex: Knex): Promise<void> {
     { role: 'ID_READER', order: 4 },
   ];
 
+  const promises = [];
   for (const roleOrder of roleOrders) {
-    // eslint-disable-next-line no-await-in-loop
-    await knex('apiRoles').where('roleName', roleOrder.role).update({ order: roleOrder.order });
+    promises.push(
+      knex('apiRoles').where('roleName', roleOrder.role).update({ order: roleOrder.order })
+    );
   }
+
+  await Promise.all(promises);
 }
 
 export async function down(knex: Knex): Promise<void> {
