@@ -40,7 +40,7 @@ export const AllParticipants: Story = {
           { id: 1, typeName: 'Type 1' },
           { id: 2, typeName: 'Type 2' },
         ],
-        apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1' }],
+        apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 }],
         status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
@@ -64,8 +64,8 @@ export const AllParticipants: Story = {
           { id: 3, typeName: 'Type 3' },
         ],
         apiRoles: [
-          { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-          { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+          { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
+          { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
         ],
         status: ParticipantStatus.Approved,
         allowSharing: true,
@@ -91,9 +91,9 @@ export const AllParticipants: Story = {
           { id: 4, typeName: 'Type 4' },
         ],
         apiRoles: [
-          { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-          { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-          { id: 3, roleName: 'Role3', externalName: 'Role 3' },
+          { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
+          { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
+          { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
         ],
         status: ParticipantStatus.Approved,
         allowSharing: true,
@@ -122,10 +122,10 @@ export const NoParticipants: Story = {
       return Promise.resolve();
     },
     apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3' },
-      { id: 4, roleName: 'Role4', externalName: 'Role 4' },
+      { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
+      { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
+      { id: 4, roleName: 'Role4', externalName: 'Role 4', order: 4 },
     ],
   },
 };

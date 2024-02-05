@@ -23,9 +23,9 @@ export const MultipleRoles: Story = {
       });
     },
     availableRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 3 },
     ],
   },
 };
@@ -42,6 +42,6 @@ export const OneRole: Story = {
         name: 'Test_Key',
       });
     },
-    availableRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+    availableRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
   },
 };

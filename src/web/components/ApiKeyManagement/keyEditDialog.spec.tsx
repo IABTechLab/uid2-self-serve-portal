@@ -1,14 +1,10 @@
 /* eslint-disable camelcase */
-import { composeStories } from '@storybook/testing-react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import KeyEditDialog from './KeyEditDialog';
-import * as stories from './KeyEditDialog.stories';
-
-const { KeyWithRolesParticipantIsntAllowed, MultipleRoles } = composeStories(stories);
 
 function loadComponent(apiKeyRoles: ApiRoleDTO[], participantApiRoles: ApiRoleDTO[]) {
   const apiKey: ApiKeyDTO = {
@@ -60,10 +56,10 @@ async function clickRole(role: ApiRoleDTO) {
   await userEvent.click(screen.getByRole('checkbox', { name: role.externalName }));
 }
 
-const Mapper = { id: 1, roleName: 'MAPPER', externalName: 'Mapper' };
-const Bidder = { id: 3, roleName: 'ID_READER', externalName: 'Bidder' };
-const Generator = { id: 2, roleName: 'GENERATOR', externalName: 'Generator' };
-const Sharer = { id: 4, roleName: 'SHARER', externalName: 'Sharer' };
+const Mapper: ApiRoleDTO = { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 };
+const Generator: ApiRoleDTO = { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 };
+const Bidder: ApiRoleDTO = { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 };
+const Sharer: ApiRoleDTO = { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 };
 
 const testingValues = [
   [[Bidder], [Bidder]],

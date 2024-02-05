@@ -22,16 +22,16 @@ export const MultipleRoles: Story = {
       site_id: 1,
       disabled: false,
       roles: [
-        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
       ],
       service_id: 0,
     },
     availableRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     onEdit: (form) => {
       console.log(form);
@@ -51,14 +51,14 @@ export const KeyWithRolesParticipantIsntAllowed: Story = {
       key_id: 'F4lfa.fdas',
       disabled: false,
       roles: [
-        { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-        { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
+        { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+        { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
       ],
       service_id: 0,
     },
     availableRoles: [
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
     ],
     onEdit: (form) => {
       console.log(form);
@@ -77,10 +77,10 @@ export const KeyWithOnlyOneRole: Story = {
       created: 1702830516,
       key_id: 'F4lfa.fdas',
       disabled: false,
-      roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+      roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
       service_id: 0,
     },
-    availableRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+    availableRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
     onEdit: (form) => {
       console.log(form);
       return Promise.resolve();

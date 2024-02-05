@@ -4,6 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
 import DisplaySecret from '../Core/DisplaySecret';
@@ -39,12 +40,12 @@ function CreateApiKeyForm({
         <CheckboxInput
           label='API Roles'
           inputName='roles'
-          options={availableRoles.map((role) => ({
+          options={sortApiRoles(availableRoles).map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}
           rules={{
-            required: 'Please select at least one API Role.',
+            required: 'Select at least one API role.',
           }}
         />
       </Form>
@@ -90,11 +91,11 @@ function ShowApiKeySecrets({
 
   return (
     <div>
-      <h1>{keySecrets.name} Secrets</h1>
+      <h1>API Key {keySecrets.name} Credentials</h1>
       <p>
-        Please copy the key and secret as they will not be saved after this window is closed. Keep
-        these secrets in a secure location and do not share them with anyone. If the secrets are
-        lost a new key will have to be generated.
+        Copy the key and secret, store them in a secure location, and do not share them. When you
+        close the window, these values are not saved and are no longer available to you. If they are
+        lost, you`ll need to create a new key.
       </p>
       {secrets.map((secret) => (
         <div key={secret.valueName}>
@@ -142,9 +143,7 @@ function KeyCreationDialog({
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
     setKeySecrets(await onKeyCreation(formData));
-    showPopupMessage(
-      'Your key has been created. Please copy the credentials before closing the window.'
-    );
+    showPopupMessage('Copy the credentials to a secure location before closing the page.');
   };
 
   const closeDialog = () => {

@@ -9,6 +9,7 @@ import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { Input } from '../Input/Input';
 import { TextInput } from '../Input/TextInput';
@@ -168,7 +169,7 @@ function ParticipantApprovalForm({
             <CheckboxInput
               inputName='apiRoles'
               label='API Roles'
-              options={apiRoles.map((p) => ({
+              options={sortApiRoles(apiRoles).map((p) => ({
                 optionLabel: p.externalName,
                 optionToolTip: p.roleName,
                 value: p.id,
