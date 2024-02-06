@@ -6,7 +6,7 @@ import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
 
 export const mockParticipant = (participant: Partial<Participant> | null = {}) => {
-  jest.spyOn(Participant, 'query').mockReturnValueOnce(
+  jest.spyOn(Participant, 'query').mockReturnValue(
     QueryBuilder.forClass(Participant).resolve(
       participant === null
         ? undefined
