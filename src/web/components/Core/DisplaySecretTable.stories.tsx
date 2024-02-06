@@ -1,22 +1,15 @@
 /* eslint-disable no-console */
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DisplaySecret from './DisplaySecret';
+import DisplaySecretTable from './DisplaySecretTable';
 
-const meta: Meta<typeof DisplaySecret> = {
-  component: DisplaySecret,
-  title: 'Shared Components/Display Secret',
-  decorators: [
-    (Story) => (
-      <div style={{ width: '250px' }}>
-        <Story />
-      </div>
-    ),
-  ],
+const meta: Meta<typeof DisplaySecretTable> = {
+  component: DisplaySecretTable,
+  title: 'Shared Components/Display Secret Table',
 };
 export default meta;
 
-type Story = StoryObj<typeof DisplaySecret>;
+type Story = StoryObj<typeof DisplaySecretTable>;
 
 export const LongValue: Story = {
   args: {

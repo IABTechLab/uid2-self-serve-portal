@@ -4,11 +4,14 @@ import { SubmitHandler } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { EditApiKeyFormDTO } from '../../services/apiKeyService';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
-import { getAllowedRoles } from './KeyEditDialogHelper';
+import { getUnapprovedRoles } from './KeyEditDialogHelper';
+
+import './KeyEditDialog.scss';
 
 export type OnApiKeyEdit = (
   form: EditApiKeyFormDTO,
@@ -43,35 +46,48 @@ function KeyEditDialog({
     newApiRoles: apiKey.roles.map((role) => role.roleName),
   };
 
-  const allowedApiRoles = getAllowedRoles([availableRoles, apiKey.roles]);
+  const unapprovedRoles: ApiRoleDTO[] = getUnapprovedRoles(apiKey.roles, availableRoles);
 
   return (
-    <Dialog
-      closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
-      triggerButton={triggerButton}
-      title={`Edit ${apiKey.name}`}
-    >
-      <Form<EditApiKeyFormDTO>
-        onSubmit={onSubmit}
-        defaultValues={defaultFormData}
-        submitButtonText='Save Key'
+    <div className='key-edit-dialog'>
+      <Dialog
+        closeButtonText='Cancel'
+        open={open}
+        onOpenChange={setOpen}
+        triggerButton={triggerButton}
+        title={`Edit ${apiKey.name}`}
       >
-        <TextInput inputName='newName' label='Name' required />
-        <CheckboxInput
-          label='API Roles'
-          inputName='newApiRoles'
-          options={allowedApiRoles.map((role) => ({
-            optionLabel: role.externalName,
-            value: role.roleName,
-          }))}
-          rules={{
-            required: 'Please select at least one API Role.',
-          }}
-        />
-      </Form>
-    </Dialog>
+        <Form<EditApiKeyFormDTO>
+          onSubmit={onSubmit}
+          defaultValues={defaultFormData}
+          submitButtonText='Save Key'
+        >
+          <TextInput inputName='newName' label='Name' required />
+          <CheckboxInput
+            label='API Roles'
+            inputName='newApiRoles'
+            options={sortApiRoles(availableRoles.concat(unapprovedRoles)).map((role) => ({
+              optionLabel: role.externalName,
+              value: role.roleName,
+            }))}
+            rules={{
+              required: 'Please select at least one API Role.',
+            }}
+          />
+          {unapprovedRoles.length > 0 && (
+            <div className='unapproved-roles-message'>
+              You do not have permission for:
+              <ul>
+                {unapprovedRoles.map((role) => (
+                  <li>{role.externalName}</li>
+                ))}
+              </ul>
+              If you remove any of these roles from the key, you will not be able to undo this.
+            </div>
+          )}
+        </Form>
+      </Dialog>
+    </div>
   );
 }
 export default KeyEditDialog;

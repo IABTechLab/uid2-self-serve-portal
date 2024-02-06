@@ -8,6 +8,8 @@ import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
+import './KeyItem.scss';
+
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
   onEdit: OnApiKeyEdit;
@@ -22,35 +24,37 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   }
 
   return (
-    <tr>
+    <tr className='key-item'>
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>
-        <ApiRolesCell apiRoles={apiKey.roles} />
+        <ApiRolesCell apiRoles={apiKey.roles} availableRoles={availableRoles} />
       </td>
       <td>{formatUnixDate(apiKey.created)}</td>
-      <td>
-        <KeyEditDialog
-          apiKey={apiKey}
-          onEdit={onEdit}
-          triggerButton={
-            <button type='button' className='transparent-button'>
-              <FontAwesomeIcon icon='pencil' />
-            </button>
-          }
-          availableRoles={availableRoles}
-          setApiKey={setApiKey}
-        />
-        <KeyDisableDialog
-          apiKey={apiKey}
-          onDisable={onDisable}
-          triggerButton={
-            <button type='button' className='transparent-button'>
-              <FontAwesomeIcon icon='trash-can' />
-            </button>
-          }
-        />
-      </td>
+      {availableRoles.length > 0 && (
+        <td className='key-actions'>
+          <KeyEditDialog
+            apiKey={apiKey}
+            onEdit={onEdit}
+            triggerButton={
+              <button type='button' className='transparent-button'>
+                <FontAwesomeIcon icon='pencil' />
+              </button>
+            }
+            availableRoles={availableRoles}
+            setApiKey={setApiKey}
+          />
+          <KeyDisableDialog
+            apiKey={apiKey}
+            onDisable={onDisable}
+            triggerButton={
+              <button type='button' className='transparent-button'>
+                <FontAwesomeIcon icon='trash-can' />
+              </button>
+            }
+          />
+        </td>
+      )}
     </tr>
   );
 }

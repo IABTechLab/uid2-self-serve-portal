@@ -17,8 +17,8 @@ const response: SiteDTO[] = [
     name: 'Test Site',
     enabled: true,
     apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1' },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2' },
+      { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
     ],
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
@@ -29,7 +29,7 @@ const response: SiteDTO[] = [
     id: 4,
     name: 'Test Four',
     enabled: true,
-    apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1' }],
+    apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 }],
     clientTypes: ['PUBLISHER'],
     // eslint-disable-next-line camelcase
     client_count: 1,
@@ -67,10 +67,10 @@ ParticipantApprovalMatchingSite.args = {
     { id: 3, typeName: 'Type 3' },
   ],
   apiRoles: [
-    { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-    { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-    { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+    { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+    { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+    { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+    { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
   ],
   onApprove: async (form) => {
     console.log(JSON.stringify(form));
@@ -99,10 +99,10 @@ ParticipantApprovalSiteSearch.args = {
     { id: 3, typeName: 'Type 3' },
   ],
   apiRoles: [
-    { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-    { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-    { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-    { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+    { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+    { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+    { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+    { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
   ],
   onApprove: async (form) => {
     console.log(JSON.stringify(form));

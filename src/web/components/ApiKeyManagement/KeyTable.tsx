@@ -41,7 +41,7 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
             </th>
             <th>Roles</th>
             <th>Created</th>
-            <th>Action</th>
+            {availableRoles.length > 0 && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
