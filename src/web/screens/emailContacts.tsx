@@ -44,7 +44,7 @@ export function BusinessContacts() {
     try {
       const response = await UpdateEmailContact(contactId, formData);
       if (response.status === 200) {
-        toast.success('Email contact updated');
+        toast.success('Email contact updated.');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {

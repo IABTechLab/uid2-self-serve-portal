@@ -49,12 +49,3 @@ export const handleErrorToast = (e: unknown) => {
   }
   throw e;
 };
-
-export const handleErrorPopup = (e: unknown) => {
-  if (isError(e)) {
-    const hash = getHash(e);
-    const hashMessage = hash.length > 0 ? `: (${hash})` : '';
-    toast.error(`${e.message}${hashMessage}`);
-  }
-  throw e;
-};

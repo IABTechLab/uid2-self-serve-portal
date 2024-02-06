@@ -45,7 +45,7 @@ function SharingPermissions() {
           selectedTypes.length === 1
             ? '1 Participant type'
             : `${selectedTypes.length} Participant types`
-        } saved to Your Sharing Permissions`
+        } saved to your Sharing Permissions`
       );
       setSharedTypes(response.allowed_types ?? []);
       if (!participant?.completedRecommendations) {
@@ -63,7 +63,7 @@ function SharingPermissions() {
       toast.success(
         `${
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
-        } added to Your Sharing Permissions`
+        } added to your Sharing Permissions`
       );
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
