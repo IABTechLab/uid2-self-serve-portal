@@ -1,18 +1,16 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { Loading } from '../components/Core/Loading';
-import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
-import { handleErrorPopup } from '../utils/apiError';
+import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 function KeyPairsScreen() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs();
@@ -24,24 +22,16 @@ function KeyPairsScreen() {
     loadKeyPairs();
   }, [loadKeyPairs]);
 
-  const handleSuccessPopup = (message: string) => {
-    setStatusPopup({
-      type: 'Success',
-      message,
-    });
-    setShowStatusPopup(true);
-  };
-
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name, disabled = false } = formData;
     try {
       const response = await AddKeyPair({ name, disabled });
       if (response.status === 201) {
-        handleSuccessPopup('Key Pair added.');
+        toast.success('Key Pair added.');
         loadKeyPairs();
       }
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -52,14 +42,6 @@ function KeyPairsScreen() {
       <Suspense fallback={<Loading />}>
         <KeyPairsTable keyPairs={keyPairData} onAddKeyPair={handleAddKeyPair} />
       </Suspense>
-      {statusPopup && (
-        <StatusPopup
-          status={statusPopup!.type}
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={statusPopup!.message}
-        />
-      )}
     </>
   );
 }

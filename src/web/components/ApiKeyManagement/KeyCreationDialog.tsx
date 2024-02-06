@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
@@ -9,7 +10,6 @@ import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
 import DisplaySecret from '../Core/DisplaySecret';
 import { Form } from '../Core/Form';
-import { StatusPopup } from '../Core/StatusPopup';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
@@ -133,22 +133,14 @@ function KeyCreationDialog({
 }: KeyCreationDialogProps) {
   const [open, setOpen] = useState(false);
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopupMessage, setStatusPopupMessage] = useState<string>('');
-
-  const showPopupMessage = (message: string) => {
-    setStatusPopupMessage(message);
-    setShowStatusPopup(true);
-  };
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
     setKeySecrets(await onKeyCreation(formData));
-    showPopupMessage('Copy the credentials to a secure location before closing the page.');
+    toast.info('Copy the credentials to a secure location before closing the page.');
   };
 
   const closeDialog = () => {
     setKeySecrets(undefined);
-    setShowStatusPopup(false);
     setOpen(false);
   };
 
@@ -163,16 +155,6 @@ function KeyCreationDialog({
           />
         ) : (
           <ShowApiKeySecrets closeDialog={closeDialog} keySecrets={keySecrets} />
-        )}
-
-        {showStatusPopup && (
-          <StatusPopup
-            status='Info'
-            show={showStatusPopup}
-            setShow={setShowStatusPopup}
-            message={statusPopupMessage}
-            displayDuration={10000}
-          />
         )}
       </Dialog>
     </div>

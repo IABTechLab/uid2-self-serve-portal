@@ -1,8 +1,8 @@
-import { Suspense, useCallback, useState } from 'react';
+import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
-import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import {
   AddEmailContact,
   BusinessContactForm,
@@ -11,7 +11,7 @@ import {
   RemoveEmailContact,
   UpdateEmailContact,
 } from '../services/participant';
-import { handleErrorPopup } from '../utils/apiError';
+import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -27,26 +27,16 @@ export function BusinessContacts() {
   const handleBusinessContactUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-
-  const handleSuccessPopup = (message: string) => {
-    setStatusPopup({
-      type: 'Success',
-      message,
-    });
-    setShowStatusPopup(true);
-  };
 
   const handleRemoveEmailContact = async (contactId: number) => {
     try {
       const response = await RemoveEmailContact(contactId);
       if (response.status === 200) {
-        handleSuccessPopup('Email contact removed.');
+        toast.success('Email contact removed.');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -54,11 +44,11 @@ export function BusinessContacts() {
     try {
       const response = await UpdateEmailContact(contactId, formData);
       if (response.status === 200) {
-        handleSuccessPopup('Email contact updated.');
+        toast.success('Email contact updated');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -66,11 +56,11 @@ export function BusinessContacts() {
     try {
       const response = await AddEmailContact(formData);
       if (response.status === 201) {
-        handleSuccessPopup('Email contact added.');
+        toast.success('Email contact added.');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -93,14 +83,6 @@ export function BusinessContacts() {
           )}
         </Await>
       </Suspense>
-      {statusPopup && (
-        <StatusPopup
-          status={statusPopup!.type}
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={statusPopup!.message}
-        />
-      )}
     </div>
   );
 }

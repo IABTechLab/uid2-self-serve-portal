@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
-import { handleErrorPopup } from '../../utils/apiError';
+import { handleErrorToast } from '../../utils/apiError';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
-import { StatusNotificationType, StatusPopup } from '../Core/StatusPopup';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type DeleteConfirmationDialogProps = {
@@ -76,8 +76,6 @@ function TeamMember({
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
@@ -92,16 +90,12 @@ function TeamMember({
     setInviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id);
-      setStatusPopup({
-        type: 'Success',
-        message: `Invitation sent`,
-      });
-      setShowStatusPopup(true);
+      toast.success('Invitation sent');
       setInviteState(InviteState.sent);
     } catch (e) {
       setErrorInfo(e as Error);
       setInviteState(InviteState.error);
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   }, [person.id, reinviteState, resendInvite]);
 
@@ -161,14 +155,6 @@ function TeamMember({
             />
             <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
           </div>
-          {statusPopup && (
-            <StatusPopup
-              status={statusPopup!.type}
-              show={showStatusPopup}
-              setShow={setShowStatusPopup}
-              message={statusPopup!.message}
-            />
-          )}
         </div>
       </td>
     </tr>

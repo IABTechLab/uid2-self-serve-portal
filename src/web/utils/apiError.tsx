@@ -1,7 +1,6 @@
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
-import { StatusNotificationType } from '../components/Core/StatusPopup';
 /*
  * Backend errors may return an `errorHash` that can help correlate the logs
  * with the user reported issues.
@@ -51,19 +50,11 @@ export const handleErrorToast = (e: unknown) => {
   throw e;
 };
 
-export const handleErrorPopup = (
-  e: unknown,
-  setStatusPopup: React.Dispatch<React.SetStateAction<StatusNotificationType | undefined>>,
-  setShowStatusPopup: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+export const handleErrorPopup = (e: unknown) => {
   if (isError(e)) {
     const hash = getHash(e);
     const hashMessage = hash.length > 0 ? `: (${hash})` : '';
-    setStatusPopup({
-      type: 'Error',
-      message: `${e.message}${hashMessage}`,
-    });
-    setShowStatusPopup(true);
+    toast.error(`${e.message}${hashMessage}`);
   }
   throw e;
 };

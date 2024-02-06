@@ -1,9 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 
 import CopyKeyButton, { Secret } from './CopySecretButton';
 import Popover from './Popover';
-import { StatusPopup } from './StatusPopup';
 
 import './DisplaySecretTable.scss';
 
@@ -29,8 +27,6 @@ function ViewSecretButton({ secret }: { secret: Secret }) {
 }
 
 function DisplaySecretTable({ secret }: { secret: Secret }) {
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-
   const secretText =
     secret.value.length > MAX_SHOWN_VALUE_LENGTH
       ? `${secret.value.substring(0, MAX_SHOWN_VALUE_LENGTH / 2)}......${secret.value.substring(
@@ -47,15 +43,7 @@ function DisplaySecretTable({ secret }: { secret: Secret }) {
           <ViewSecretButton secret={secret} />|
         </>
       )}
-      <CopyKeyButton secret={secret} setShowStatusPopup={setShowStatusPopup} />
-      {showStatusPopup && (
-        <StatusPopup
-          status='Success'
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={`${secret.valueName} copied to clipboard.`}
-        />
-      )}
+      <CopyKeyButton secret={secret} />
     </div>
   );
 }

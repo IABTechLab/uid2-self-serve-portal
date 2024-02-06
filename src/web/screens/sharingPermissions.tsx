@@ -1,8 +1,8 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
-import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
@@ -14,7 +14,7 @@ import {
   GetSharingList,
   UpdateSharingTypes,
 } from '../services/participant';
-import { ApiError, handleErrorPopup } from '../utils/apiError';
+import { ApiError, handleErrorToast } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -32,64 +32,56 @@ function SharingPermissionPageContainer({ children }: { children: ReactNode }) {
 
 function SharingPermissions() {
   const [showNoKeySetError, setNoKeySetError] = useState(false);
-  const [showStatusPopup, setShowStatusPopup] = useState(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
   const throwError = useAsyncError();
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
       const response = await UpdateSharingTypes(participant!.id, selectedTypes);
-      setStatusPopup({
-        type: 'Success',
-        message: `${
+      toast.success(
+        `${
           selectedTypes.length === 1
             ? '1 Participant type'
             : `${selectedTypes.length} Participant types`
-        } saved to Your Sharing Permissions`,
-      });
-      setShowStatusPopup(true);
+        } saved to Your Sharing Permissions`
+      );
       setSharedTypes(response.allowed_types ?? []);
       if (!participant?.completedRecommendations) {
         const updatedParticipant = await CompleteRecommendations(participant!.id);
         setParticipant(updatedParticipant);
       }
     } catch (e) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
       const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
-      setStatusPopup({
-        type: 'Success',
-        message: `${
+      toast.success(
+        `${
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
-        } added to Your Sharing Permissions`,
-      });
-      setShowStatusPopup(true);
+        } added to Your Sharing Permissions`
+      );
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
   const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
       const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
-      setStatusPopup({
-        type: 'Success',
-        message: `${siteIdsToDelete.length} sharing ${
+      toast.success(
+        `${siteIdsToDelete.length} sharing ${
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
-        } deleted`,
-      });
-      setShowStatusPopup(true);
+        } deleted`
+      );
       setSharedSiteIds(response.allowed_sites);
     } catch (e) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -161,15 +153,6 @@ function SharingPermissions() {
           />
         )}
       </div>
-
-      {statusPopup && (
-        <StatusPopup
-          status={statusPopup!.type}
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={statusPopup!.message}
-        />
-      )}
     </SharingPermissionPageContainer>
   );
 }
