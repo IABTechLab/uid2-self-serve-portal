@@ -95,6 +95,8 @@ Please add tests to your changes where possible! We don't have a minimum coverag
 
 Focus on testing functionality, not implementation. For example, if you have a button which waits 1 second and then displays a dialog, _do not_ simulate a click and then assert that `setTimeout(...)` was called. Instead, simulate a click, advance the timer, and make sure the dialog was displayed! Refer to the [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles) and the section of the docs on [Query Priority](https://testing-library.com/docs/queries/about#priority).
 
+To run api tests `npm run test-api` please make sure the docker container is running and the api is not being run.
+
 ## Keycloak setup
 
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
