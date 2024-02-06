@@ -63,7 +63,7 @@ describe('Approvers Service Tests', () => {
     it('should allow access when user is the approver of the current participant type', async () => {
       mockUser();
       mockApprover([{}, {}]);
-      mockParticipant();
+      mockParticipant([{}, {}]);
 
       const req: Request = request(api).get('/api/participants/1/testApprover');
       const res = await withToken(req);

@@ -5,24 +5,33 @@ import { BusinessContact, ContactType } from '../entities/BusinessContact';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
 
-export const mockParticipant = (participant: Partial<Participant> | null = {}) => {
-  jest.spyOn(Participant, 'query').mockReturnValue(
-    QueryBuilder.forClass(Participant).resolve(
-      participant === null
-        ? undefined
-        : {
-            id: 1,
-            name: 'Test Participant',
-            location: 'Test Location',
-            allowSharing: true,
-            types: [
-              {
-                id: 1,
-                typeName: 'DSP',
-              },
-            ],
-            ...participant,
-          }
+type PartialParticipantOrNull = Partial<Participant> | null;
+export const mockParticipant = (
+  participant: PartialParticipantOrNull | PartialParticipantOrNull[] = {}
+) => {
+  const participants = Array.isArray(participant) ? participant : [participant];
+
+  const spy = jest.spyOn(Participant, 'query');
+
+  participants.forEach((p) =>
+    spy.mockReturnValueOnce(
+      QueryBuilder.forClass(Participant).resolve(
+        p === null
+          ? undefined
+          : {
+              id: 1,
+              name: 'Test Participant',
+              location: 'Test Location',
+              allowSharing: true,
+              types: [
+                {
+                  id: 1,
+                  typeName: 'DSP',
+                },
+              ],
+              ...p,
+            }
+      )
     )
   );
 };
