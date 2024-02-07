@@ -32,14 +32,31 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
         <thead>
           <tr>
             <th>Name</th>
-            <th className='key-id-header'>
-              <div>Key ID</div>
-              <Tooltip>
-                Shows the first few characters of your plain text key. If support related to a key
-                is required, please provide this ID.
-              </Tooltip>
+            <th>
+              <div className='tooltip-header'>
+                <div>Key ID</div>
+                <Tooltip>
+                  Shows the first few characters of your plain text key. If support related to a key
+                  is required, please provide this ID.
+                </Tooltip>
+              </div>
             </th>
-            <th>Roles</th>
+            <th>
+              <div className='tooltip-header'>
+                <div>Roles</div>
+                <Tooltip>
+                  For more information on API Roles, please visit our{' '}
+                  <a
+                    target='_blank'
+                    href='https://unifiedid.com/docs/getting-started/gs-permissions'
+                    rel='noreferrer'
+                  >
+                    docs
+                  </a>
+                  .
+                </Tooltip>
+              </div>
+            </th>
             <th>Created</th>
             {availableRoles.length > 0 && <th>Action</th>}
           </tr>

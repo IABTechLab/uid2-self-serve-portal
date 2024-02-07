@@ -27,7 +27,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
       open={open}
       onOpenChange={setOpen}
       triggerButton={triggerButton}
-      title={`Disable ${apiKey.name}`}
+      title={`Delete ${apiKey.name}`}
     >
       <p>
         Are you sure you want to delete your Api key?{' '}
@@ -36,7 +36,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
         <br />
         Type the Key ID to confirm: <b>{apiKey.key_id}</b>
       </p>
-      <Form onSubmit={onSubmit} submitButtonText='Disable Key' disableSubmitWhenInvalid>
+      <Form onSubmit={onSubmit} submitButtonText='Delete Key' disableSubmitWhenInvalid>
         <TextInput
           inputName='Key Id'
           placeholder={apiKey.key_id}

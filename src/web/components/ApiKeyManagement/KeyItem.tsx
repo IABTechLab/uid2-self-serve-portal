@@ -28,7 +28,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>
-        <ApiRolesCell apiRoles={apiKey.roles} availableRoles={availableRoles} />
+        <ApiRolesCell apiRoles={apiKey.roles} />
       </td>
       <td>{formatUnixDate(apiKey.created)}</td>
       {availableRoles.length > 0 && (
@@ -37,7 +37,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
             apiKey={apiKey}
             onEdit={onEdit}
             triggerButton={
-              <button type='button' className='transparent-button'>
+              <button type='button' className='transparent-button' title='Edit'>
                 <FontAwesomeIcon icon='pencil' />
               </button>
             }
@@ -48,7 +48,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
             apiKey={apiKey}
             onDisable={onDisable}
             triggerButton={
-              <button type='button' className='transparent-button'>
+              <button type='button' className='transparent-button' title='Delete'>
                 <FontAwesomeIcon icon='trash-can' />
               </button>
             }
