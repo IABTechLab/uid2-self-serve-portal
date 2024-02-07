@@ -10,8 +10,7 @@ function ApiRoleBox({ apiRole, valid }: { apiRole: ApiRoleDTO; valid: boolean })
       {apiRole.externalName}
       {!valid && (
         <Tooltip>
-          You do not have permission for this role. You will not be able to create new Keys with
-          this Role. This does not affect this Key.
+          You do not have permission for this role, so you cannot create new keys with this role.
         </Tooltip>
       )}
     </div>

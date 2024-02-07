@@ -11,8 +11,6 @@ import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { getUnapprovedRoles } from './KeyEditDialogHelper';
 
-import './KeyEditDialog.scss';
-
 export type OnApiKeyEdit = (
   form: EditApiKeyFormDTO,
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>
@@ -49,45 +47,43 @@ function KeyEditDialog({
   const unapprovedRoles: ApiRoleDTO[] = getUnapprovedRoles(apiKey.roles, availableRoles);
 
   return (
-    <div className='key-edit-dialog'>
-      <Dialog
-        closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-        triggerButton={triggerButton}
-        title={`Edit ${apiKey.name}`}
+    <Dialog
+      closeButtonText='Cancel'
+      open={open}
+      onOpenChange={setOpen}
+      triggerButton={triggerButton}
+      title={`Edit ${apiKey.name}`}
+    >
+      <Form<EditApiKeyFormDTO>
+        onSubmit={onSubmit}
+        defaultValues={defaultFormData}
+        submitButtonText='Save Key'
       >
-        <Form<EditApiKeyFormDTO>
-          onSubmit={onSubmit}
-          defaultValues={defaultFormData}
-          submitButtonText='Save Key'
-        >
-          <TextInput inputName='newName' label='Name' required />
-          <CheckboxInput
-            label='API Roles'
-            inputName='newApiRoles'
-            options={sortApiRoles(availableRoles.concat(unapprovedRoles)).map((role) => ({
-              optionLabel: role.externalName,
-              value: role.roleName,
-            }))}
-            rules={{
-              required: 'Please select at least one API Role.',
-            }}
-          />
-          {unapprovedRoles.length > 0 && (
-            <div className='unapproved-roles-message'>
-              You do not have permission for:
-              <ul>
-                {unapprovedRoles.map((role) => (
-                  <li>{role.externalName}</li>
-                ))}
-              </ul>
-              If you remove any of these roles from the key, you will not be able to undo this.
-            </div>
-          )}
-        </Form>
-      </Dialog>
-    </div>
+        <TextInput inputName='newName' label='Name' required />
+        <CheckboxInput
+          label='API Roles'
+          inputName='newApiRoles'
+          options={sortApiRoles(availableRoles.concat(unapprovedRoles)).map((role) => ({
+            optionLabel: role.externalName,
+            value: role.roleName,
+          }))}
+          rules={{
+            required: 'Please select at least one API role.',
+          }}
+        />
+        {unapprovedRoles.length > 0 && (
+          <div>
+            You do not have permission for:
+            <ul>
+              {unapprovedRoles.map((role) => (
+                <li>{role.externalName}</li>
+              ))}
+            </ul>
+            If you remove any of these roles from the key, you will not be able to undo this action.
+          </div>
+        )}
+      </Form>
+    </Dialog>
   );
 }
 export default KeyEditDialog;

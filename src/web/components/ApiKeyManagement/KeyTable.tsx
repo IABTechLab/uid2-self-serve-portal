@@ -14,7 +14,7 @@ function NoKeys() {
       icon={<img src='/group-icon.svg' alt='group-icon' />}
       title='No API Keys'
     >
-      <span>There are no API keys. Go create one!</span>
+      <span>There are no API keys.</span>
     </TableNoDataPlaceholder>
   );
 }

@@ -30,7 +30,8 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
       title={`Disable ${apiKey.name}`}
     >
       <p>
-        Are you sure you want to delete your Api Key. <b>This action can not be undone.</b>
+        Are you sure you want to delete your Api key?{' '}
+        <b>You will not be able to undo this action.</b>
         <br />
         <br />
         Type the Key ID to confirm: <b>{apiKey.key_id}</b>
