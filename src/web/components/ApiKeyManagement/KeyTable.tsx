@@ -41,22 +41,7 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
                 </Tooltip>
               </div>
             </th>
-            <th>
-              <div className='tooltip-header'>
-                <div>Roles</div>
-                <Tooltip>
-                  For more information on API Roles, please visit our{' '}
-                  <a
-                    target='_blank'
-                    href='https://unifiedid.com/docs/getting-started/gs-permissions'
-                    rel='noreferrer'
-                  >
-                    docs
-                  </a>
-                  .
-                </Tooltip>
-              </div>
-            </th>
+            <th>Roles</th>
             <th>Created</th>
             {availableRoles.length > 0 && <th>Action</th>}
           </tr>
