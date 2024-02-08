@@ -79,7 +79,7 @@ function KeyEditDialog({
               You do not have permission for:
               <ul>
                 {unapprovedRoles.map((role) => (
-                  <li>{role.externalName}</li>
+                  <li key={`Role-${role.id}`}>{role.externalName}</li>
                 ))}
               </ul>
               If you remove any of these roles from the key, you will not be able to undo this
