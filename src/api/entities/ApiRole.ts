@@ -26,6 +26,7 @@ export class ApiRole extends BaseModel {
   declare roleName: string;
   declare externalName: string;
   declare disabled: boolean;
+  declare order: number;
 }
 
 export type ApiRoleDTO = Omit<ModelObjectOpt<ApiRole>, 'disabled'>;
@@ -34,4 +35,5 @@ export const ApiRoleSchema = z.object({
   id: z.number(),
   roleName: z.string(),
   externalName: z.string(),
+  order: z.number(),
 });
