@@ -33,7 +33,7 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
           <tr>
             <th>Name</th>
             <th>
-              <div className='tooltip-header'>
+              <div className='key-id-header'>
                 <div>Key ID</div>
                 <Tooltip>
                   Shows the first few characters of your plain text key. If support related to a key
@@ -43,7 +43,7 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
             </th>
             <th>Roles</th>
             <th>Created</th>
-            {availableRoles.length > 0 && <th>Action</th>}
+            {availableRoles.length > 0 && <th className='action'>Actions</th>}
           </tr>
         </thead>
         <tbody>
