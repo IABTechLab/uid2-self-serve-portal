@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { ErrorToast, InfoToast, SuccessToast, ToastContainerWrapper, WarningToast } from './Toast';
 
-function TestToaster() {
+function TestToast() {
   return (
     <>
       <ToastContainerWrapper />
@@ -47,9 +47,9 @@ function TestToaster() {
 }
 
 export default {
-  component: TestToaster,
-} as Meta<typeof TestToaster>;
+  component: TestToast,
+} as Meta<typeof TestToast>;
 
-type Story = StoryObj<typeof TestToaster>;
+type Story = StoryObj<typeof TestToast>;
 
 export const Default: Story = {};

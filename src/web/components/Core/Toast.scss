@@ -1,7 +1,7 @@
-.toaster-content {
+.toast-content {
   margin: 10px 0px;
 
-  .toaster-title-container {
+  .toast-title-container {
     margin-bottom: 4px;
     display: flex;
     justify-content: space-between;
@@ -11,14 +11,14 @@
       font-size: 1rem;
     }
 
-    .toaster-title {
+    .toast-title {
       font-weight: 700;
       font-size: 1rem;
       line-height: 1;
       margin-left: 8px;
     }
 
-    .toaster-close-button {
+    .toast-close-button {
       background: none;
       border: none;
       padding: 0;
@@ -29,14 +29,14 @@
       }
     }
   }
-  .toaster-message {
+  .toast-message {
     font-weight: 400;
     font-size: 1rem;
     line-height: 1.3;
     margin-left: 24px;
   }
 
-  .toaster-close {
+  .toast-close {
     svg {
       color: var(--theme-primary);
       background: transparent;
