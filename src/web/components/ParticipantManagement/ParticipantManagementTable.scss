@@ -9,26 +9,6 @@
       font-size: 0.875rem;
       line-height: 1.5;
     }
-
-    th.action {
-      text-align: end;
-      padding-left: 140px;
-    }
-
-    .action {
-      padding-right: 80px;
-    }
-
-    .action-cell {
-      font-size: 0.8125rem;
-      display: flex;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-
-      & > button {
-        padding: 5px 0 5px 10px;
-      }
-    }
   }
 
   .no-participant-requests-container {

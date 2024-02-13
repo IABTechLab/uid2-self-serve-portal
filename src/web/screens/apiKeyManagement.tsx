@@ -66,8 +66,17 @@ function ApiKeyManagement() {
   return (
     <div className='api-key-management-page'>
       <h1>Manage API Keys</h1>
-      <p className='heading-details'>View and manage your API keys.</p>
-
+      <p className='heading-details'>
+        View and manage your API keys. For more information, see{' '}
+        <a
+          target='_blank'
+          href='https://unifiedid.com/docs/getting-started/gs-permissions'
+          rel='noreferrer'
+        >
+          API permissions
+        </a>
+        .
+      </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (

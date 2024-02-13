@@ -83,7 +83,7 @@ describe('Key creation dialog', () => {
       await submitForm();
 
       await waitFor(() => {
-        expect(screen.getByText('Select at least one API role.')).toBeInTheDocument();
+        expect(screen.getByText('Please select at least one API role.')).toBeInTheDocument();
       });
     }
   );
@@ -167,7 +167,7 @@ describe('Key creation dialog', () => {
 
     expect(
       screen.getByText(
-        'Make sure you have copied your API Secret and Key. These will not be accessible after this page is closed.'
+        `Make sure you've copied your API secret and key to a secure location. After you close this page, they are no longer accessible.`
       )
     ).toBeInTheDocument();
   });

@@ -71,7 +71,7 @@ function KeyEditDialog({
               value: role.roleName,
             }))}
             rules={{
-              required: 'Please select at least one API Role.',
+              required: 'Please select at least one API role.',
             }}
           />
           {unapprovedRoles.length > 0 && (
@@ -79,10 +79,11 @@ function KeyEditDialog({
               You do not have permission for:
               <ul>
                 {unapprovedRoles.map((role) => (
-                  <li>{role.externalName}</li>
+                  <li key={`Role-${role.id}`}>{role.externalName}</li>
                 ))}
               </ul>
-              If you remove any of these roles from the key, you will not be able to undo this.
+              If you remove any of these roles from the key, you will not be able to undo this
+              action.
             </div>
           )}
         </Form>

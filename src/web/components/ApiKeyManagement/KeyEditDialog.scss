@@ -1,5 +1,8 @@
 .key-edit-dialog {
   .unapproved-roles-message {
-    color: var(--theme-error);
+    margin-top: 10px;
+    ul {
+      margin: 0px;
+    }
   }
 }

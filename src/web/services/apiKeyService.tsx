@@ -38,7 +38,7 @@ export async function CreateApiKey(
     );
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not create API Key');
+    throw backendError(e, 'Could not create API key');
   }
 }
 
