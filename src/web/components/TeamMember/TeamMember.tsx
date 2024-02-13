@@ -33,6 +33,7 @@ function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirma
       }
       open={openConfirmation}
       onOpenChange={setOpenConfirmation}
+      closeButtonText='Cancel'
     >
       <ul className='dot-list'>
         <li>
@@ -42,13 +43,6 @@ function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirma
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
           Delete Team Member
-        </button>
-        <button
-          type='button'
-          className='transparent-button'
-          onClick={() => setOpenConfirmation(false)}
-        >
-          Cancel
         </button>
       </div>
     </Dialog>
