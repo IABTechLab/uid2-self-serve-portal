@@ -45,7 +45,7 @@ function CreateApiKeyForm({
             value: role.roleName,
           }))}
           rules={{
-            required: 'Select at least one API role.',
+            required: 'Please select at least one API role.',
           }}
         />
       </Form>
@@ -95,7 +95,7 @@ function ShowApiKeySecrets({
       <p>
         Copy the key and secret, store them in a secure location, and do not share them. When you
         close the window, these values are not saved and are no longer available to you. If they are
-        lost, you`ll need to create a new key.
+        lost, you&apos;ll need to create a new key.
       </p>
       {secrets.map((secret) => (
         <div key={secret.valueName}>
@@ -112,8 +112,8 @@ function ShowApiKeySecrets({
           closeButtonText='Cancel'
         >
           <p>
-            Make sure you have copied your API Secret and Key. These will not be accessible after
-            this page is closed.
+            Make sure you&apos;ve copied your API secret and key to a secure location. After you
+            close this page, they are no longer accessible.
           </p>
           <div className='button-container'>
             <button onClick={onCloseConfirmation} className='primary-button' type='button'>

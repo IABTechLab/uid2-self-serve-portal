@@ -36,6 +36,27 @@ table {
       background-color: var(--theme-background-row);
     }
   }
+
+  th.action {
+    text-align: end;
+    padding-left: 140px;
+  }
+
+  .action {
+    padding-right: 80px;
+  }
+
+  .action-cell {
+    font-size: 0.8125rem;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    svg {
+      font-size: 1rem;
+    }
+  }
 }
 
 .table-actions {

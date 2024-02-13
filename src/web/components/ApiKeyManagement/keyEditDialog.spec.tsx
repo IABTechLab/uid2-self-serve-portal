@@ -145,7 +145,7 @@ describe('Key edit dialog', () => {
 
       await submitForm();
 
-      expect(screen.getByText('Please select at least one API Role.')).toBeInTheDocument();
+      expect(screen.getByText('Please select at least one API role.')).toBeInTheDocument();
     });
 
     it.each([
