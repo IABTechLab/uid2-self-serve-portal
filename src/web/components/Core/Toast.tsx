@@ -68,5 +68,5 @@ export function ErrorToast(message: string) {
 }
 
 export function ToastContainerWrapper() {
-  return <ToastContainer hideProgressBar autoClose={false} icon={false} closeButton={false} />;
+  return <ToastContainer hideProgressBar icon={false} closeButton={false} />;
 }

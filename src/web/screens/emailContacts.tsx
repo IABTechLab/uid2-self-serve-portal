@@ -99,7 +99,6 @@ export function BusinessContacts() {
           show={showStatusPopup}
           setShow={setShowStatusPopup}
           message={statusPopup!.message}
-          displayDuration={1000000}
         />
       )}
     </div>
