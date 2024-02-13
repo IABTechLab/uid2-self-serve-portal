@@ -49,10 +49,6 @@ export const ManyRole: Story = {
       { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
     ],
-    availableRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-    ],
   },
 };
 
