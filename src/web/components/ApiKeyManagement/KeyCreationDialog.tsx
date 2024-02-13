@@ -38,14 +38,14 @@ function CreateApiKeyForm({
       <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
         <TextInput inputName='name' label='Name' required />
         <CheckboxInput
-          label='API Roles'
+          label='API Permissions'
           inputName='roles'
           options={sortApiRoles(availableRoles).map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}
           rules={{
-            required: 'Please select at least one API role.',
+            required: 'Please select at least one API permission.',
           }}
         />
       </Form>

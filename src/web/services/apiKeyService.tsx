@@ -12,7 +12,7 @@ export async function GetAllEnabledApiRoles() {
     });
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not get API Roles');
+    throw backendError(e, 'Could not get API Permissions');
   }
 }
 

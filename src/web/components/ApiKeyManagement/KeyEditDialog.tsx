@@ -64,14 +64,14 @@ function KeyEditDialog({
         >
           <TextInput inputName='newName' label='Name' required />
           <CheckboxInput
-            label='API Roles'
+            label='API Permissions'
             inputName='newApiRoles'
             options={sortApiRoles(availableRoles.concat(unapprovedRoles)).map((role) => ({
               optionLabel: role.externalName,
               value: role.roleName,
             }))}
             rules={{
-              required: 'Please select at least one API role.',
+              required: 'Please select at least one API permission.',
             }}
           />
           {unapprovedRoles.length > 0 && (
@@ -82,8 +82,8 @@ function KeyEditDialog({
                   <li key={`Role-${role.id}`}>{role.externalName}</li>
                 ))}
               </ul>
-              If you remove any of these roles from the key, you will not be able to undo this
-              action.
+              If you remove any of these permission(s) from the key, you will not be able to undo
+              this action.
             </div>
           )}
         </Form>

@@ -168,7 +168,7 @@ function ParticipantApprovalForm({
             />
             <CheckboxInput
               inputName='apiRoles'
-              label='API Roles'
+              label='API Permissions'
               options={sortApiRoles(apiRoles).map((p) => ({
                 optionLabel: p.externalName,
                 optionToolTip: p.roleName,
