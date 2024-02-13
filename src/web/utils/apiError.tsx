@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
-import { toast } from 'react-toastify';
 
+import { ErrorToast } from '../components/Core/Toast';
 /*
  * Backend errors may return an `errorHash` that can help correlate the logs
  * with the user reported issues.
@@ -45,7 +45,7 @@ export const handleErrorToast = (e: unknown) => {
   if (isError(e)) {
     const hash = getHash(e);
     const hashMessage = hash.length > 0 ? `: (${hash})` : '';
-    toast.error(`${e.message}${hashMessage}`);
+    ErrorToast(`${e.message}${hashMessage}`);
   }
   throw e;
 };

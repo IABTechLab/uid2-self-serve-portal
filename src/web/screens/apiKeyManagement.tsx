@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
@@ -9,6 +8,7 @@ import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
+import { SuccessToast } from '../components/Core/Toast';
 import {
   CreateApiKey,
   CreateApiKeyFormDTO,
@@ -47,7 +47,7 @@ function ApiKeyManagement() {
     try {
       await EditApiKey(form);
       setApiKey(await GetParticipantApiKey(form.keyId));
-      toast.success('Your key has been updated');
+      SuccessToast('Your key has been updated');
     } catch (e) {
       handleErrorToast(e);
     }
@@ -57,7 +57,7 @@ function ApiKeyManagement() {
     try {
       await DisableApiKey(apiKey);
       reloader.revalidate();
-      toast.success('Your key has been disabled');
+      SuccessToast('Your key has been disabled');
     } catch (e) {
       handleErrorToast(e);
     }
@@ -67,6 +67,7 @@ function ApiKeyManagement() {
     <div className='api-key-management-page'>
       <h1>Manage API Keys</h1>
       <p className='heading-details'>View and manage your API keys.</p>
+
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
