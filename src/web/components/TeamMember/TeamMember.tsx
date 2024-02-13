@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useState } from 'react';
-import { toast } from 'react-toastify';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
+import { SuccessToast } from '../Core/Toast';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type DeleteConfirmationDialogProps = {
@@ -90,7 +90,7 @@ function TeamMember({
     setInviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id);
-      toast.success('Invitation sent');
+      SuccessToast('Invitation sent');
       setInviteState(InviteState.sent);
     } catch (e) {
       setErrorInfo(e as Error);

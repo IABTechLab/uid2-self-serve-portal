@@ -1,8 +1,8 @@
 import { ReactNode, useContext, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
+import { SuccessToast } from '../components/Core/Toast';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
@@ -40,7 +40,7 @@ function SharingPermissions() {
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
       const response = await UpdateSharingTypes(participant!.id, selectedTypes);
-      toast.success(
+      SuccessToast(
         `${
           selectedTypes.length === 1
             ? '1 Participant type'
@@ -60,7 +60,7 @@ function SharingPermissions() {
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
       const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
-      toast.success(
+      SuccessToast(
         `${
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
         } added to your Sharing Permissions`
@@ -74,7 +74,7 @@ function SharingPermissions() {
   const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
       const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
-      toast.success(
+      SuccessToast(
         `${siteIdsToDelete.length} sharing ${
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
         } deleted`

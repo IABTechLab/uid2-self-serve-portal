@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useContext } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
+import { SuccessToast } from '../components/Core/Toast';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -36,7 +36,7 @@ function TeamMembers() {
     try {
       const response = await InviteTeamMember(formData, participant!.id);
       if (response.status === 201) {
-        toast.success('Team member added.');
+        SuccessToast('Team member added.');
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
@@ -48,7 +48,7 @@ function TeamMembers() {
     try {
       const response = await RemoveUser(userId);
       if (response.status === 200) {
-        toast.success('Team member removed.');
+        SuccessToast('Team member removed.');
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
@@ -60,7 +60,7 @@ function TeamMembers() {
     try {
       const response = await UpdateUser(userId, formData);
       if (response.status === 200) {
-        toast.success('Team member updated.');
+        SuccessToast('Team member updated.');
       }
       onTeamMembersUpdated();
       if (LoggedInUser?.user?.id === userId) await loadUser();

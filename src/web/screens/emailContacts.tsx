@@ -1,8 +1,8 @@
 import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
+import { SuccessToast } from '../components/Core/Toast';
 import {
   AddEmailContact,
   BusinessContactForm,
@@ -32,7 +32,7 @@ export function BusinessContacts() {
     try {
       const response = await RemoveEmailContact(contactId);
       if (response.status === 200) {
-        toast.success('Email contact removed.');
+        SuccessToast('Email contact removed.');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
@@ -44,7 +44,7 @@ export function BusinessContacts() {
     try {
       const response = await UpdateEmailContact(contactId, formData);
       if (response.status === 200) {
-        toast.success('Email contact updated.');
+        SuccessToast('Email contact updated.');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {
@@ -56,7 +56,7 @@ export function BusinessContacts() {
     try {
       const response = await AddEmailContact(formData);
       if (response.status === 201) {
-        toast.success('Email contact added.');
+        SuccessToast('Email contact added.');
       }
       handleBusinessContactUpdated();
     } catch (e: unknown) {

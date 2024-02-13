@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
 
 import { Loading } from '../components/Core/Loading';
+import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
@@ -27,7 +27,7 @@ function KeyPairsScreen() {
     try {
       const response = await AddKeyPair({ name, disabled });
       if (response.status === 201) {
-        toast.success('Key Pair added.');
+        SuccessToast('Key Pair added.');
         loadKeyPairs();
       }
     } catch (e: unknown) {

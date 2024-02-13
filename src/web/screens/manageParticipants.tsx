@@ -1,6 +1,5 @@
 import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
@@ -8,6 +7,7 @@ import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
 import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
+import { SuccessToast } from '../components/Core/Toast';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
@@ -50,7 +50,7 @@ function ManageParticipants() {
 
   const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
-    toast.success('Participant updated');
+    SuccessToast('Participant updated');
     handleParticipantUpdated();
   };
 
