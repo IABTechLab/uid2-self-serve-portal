@@ -5,11 +5,13 @@ import { Outlet } from 'react-router-dom';
 import { EnvironmentBanner } from './components/Core/EnvironmentBanner';
 import { Loading } from './components/Core/Loading';
 import { PortalHeader } from './components/Core/PortalHeader';
+import { ToastContainerWrapper } from './components/Core/Toast';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
+import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
 
 configureFontAwesomeLibrary();
@@ -44,6 +46,7 @@ export function App() {
             />
             <EnvironmentBanner />
             <Outlet />
+            <ToastContainerWrapper />
           </div>
         </ParticipantProvider>
       </PortalErrorBoundary>

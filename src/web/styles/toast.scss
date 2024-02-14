@@ -1,0 +1,49 @@
+.app {
+  --toastify-color-light: #fff;
+  --toastify-color-dark: #121212;
+  --toastify-color-success: var(--theme-success);
+  --toastify-color-info: var(--theme-info);
+  --toastify-color-warning: var(--theme-warning);
+  --toastify-color-error: var(--theme-error);
+  --toastify-color-transparent: rgba(255, 255, 255, 0.7);
+
+  --toastify-icon-color-success: var(--toastify-color-success);
+  --toastify-icon-color-info: var(--toastify-color-info);
+  --toastify-icon-color-warning: var(--toastify-color-warning);
+  --toastify-icon-color-error: var(--toastify-color-error);
+
+  --toastify-text-color-light: var(--theme-button-text);
+
+  .Toastify__toast--success {
+    background: var(--theme-success-background);
+    svg {
+      color: var(--theme-success-icon);
+      background: transparent;
+    }
+  }
+
+  .Toastify__toast--info {
+    background: var(--theme-info-background);
+
+    svg {
+      color: var(--theme-info);
+      background: transparent;
+    }
+  }
+
+  .Toastify__toast--warning {
+    background: var(--theme-warning-background);
+    svg {
+      color: var(--theme-warning);
+      background: transparent;
+    }
+  }
+
+  .Toastify__toast--error {
+    background: var(--theme-error-background);
+    svg {
+      color: var(--theme-error);
+      background: transparent;
+    }
+  }
+}

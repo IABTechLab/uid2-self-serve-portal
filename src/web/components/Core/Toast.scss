@@ -1,0 +1,45 @@
+.toast-content {
+  margin: 10px 0px;
+
+  .toast-title-container {
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    svg {
+      font-size: 1rem;
+    }
+
+    .toast-title {
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1;
+      margin-left: 8px;
+    }
+
+    .toast-close-button {
+      background: none;
+      border: none;
+      padding: 0;
+
+      svg {
+        color: var(--theme-primary);
+        background: transparent;
+      }
+    }
+  }
+  .toast-message {
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-left: 24px;
+  }
+
+  .toast-close {
+    svg {
+      color: var(--theme-primary);
+      background: transparent;
+    }
+  }
+}

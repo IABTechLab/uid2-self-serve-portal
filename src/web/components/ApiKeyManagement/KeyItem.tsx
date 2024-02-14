@@ -8,8 +8,6 @@ import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
-import './KeyItem.scss';
-
 type KeyItemProps = {
   apiKey: ApiKeyDTO;
   onEdit: OnApiKeyEdit;
@@ -24,35 +22,37 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   }
 
   return (
-    <tr className='key-item'>
+    <tr>
       <td>{apiKey.name}</td>
       <td>{apiKey.key_id}</td>
       <td>
-        <ApiRolesCell apiRoles={apiKey.roles} availableRoles={availableRoles} />
+        <ApiRolesCell apiRoles={apiKey.roles} />
       </td>
       <td>{formatUnixDate(apiKey.created)}</td>
       {availableRoles.length > 0 && (
-        <td className='key-actions'>
-          <KeyEditDialog
-            apiKey={apiKey}
-            onEdit={onEdit}
-            triggerButton={
-              <button type='button' className='transparent-button'>
-                <FontAwesomeIcon icon='pencil' />
-              </button>
-            }
-            availableRoles={availableRoles}
-            setApiKey={setApiKey}
-          />
-          <KeyDisableDialog
-            apiKey={apiKey}
-            onDisable={onDisable}
-            triggerButton={
-              <button type='button' className='transparent-button'>
-                <FontAwesomeIcon icon='trash-can' />
-              </button>
-            }
-          />
+        <td className='action'>
+          <div className='action-cell'>
+            <KeyEditDialog
+              apiKey={apiKey}
+              onEdit={onEdit}
+              triggerButton={
+                <button type='button' className='icon-button' title='Edit'>
+                  <FontAwesomeIcon icon='pencil' />
+                </button>
+              }
+              availableRoles={availableRoles}
+              setApiKey={setApiKey}
+            />
+            <KeyDisableDialog
+              apiKey={apiKey}
+              onDisable={onDisable}
+              triggerButton={
+                <button type='button' className='icon-button' title='Delete'>
+                  <FontAwesomeIcon icon='trash-can' />
+                </button>
+              }
+            />
+          </div>
         </td>
       )}
     </tr>

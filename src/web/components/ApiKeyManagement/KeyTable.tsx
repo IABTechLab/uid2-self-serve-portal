@@ -14,7 +14,7 @@ function NoKeys() {
       icon={<img src='/group-icon.svg' alt='group-icon' />}
       title='No API Keys'
     >
-      <span>There are no API keys. Go create one!</span>
+      <span>There are no API keys.</span>
     </TableNoDataPlaceholder>
   );
 }
@@ -32,16 +32,18 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
         <thead>
           <tr>
             <th>Name</th>
-            <th className='key-id-header'>
-              <div>Key ID</div>
-              <Tooltip>
-                Shows the first few characters of your plain text key. If support related to a key
-                is required, please provide this ID.
-              </Tooltip>
+            <th>
+              <div className='key-id-header'>
+                <div>Key ID</div>
+                <Tooltip>
+                  Shows the first few characters of your plain text key. If support related to a key
+                  is required, please provide this ID.
+                </Tooltip>
+              </div>
             </th>
             <th>Roles</th>
             <th>Created</th>
-            {availableRoles.length > 0 && <th>Action</th>}
+            {availableRoles.length > 0 && <th className='action'>Actions</th>}
           </tr>
         </thead>
         <tbody>

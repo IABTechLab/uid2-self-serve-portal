@@ -37,18 +37,24 @@ table {
     }
   }
 
-  tr {
-    .tristate-checkbox {
-      margin-right: 16px;
-    }
+  th.action {
+    text-align: end;
+    padding-left: 140px;
+  }
 
-    button[role='checkbox'] {
-      width: 21px;
-      height: 21px;
-    }
+  .action {
+    padding-right: 80px;
+  }
 
-    .input-container {
-      height: 26px;
+  .action-cell {
+    font-size: 0.8125rem;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    svg {
+      font-size: 1rem;
     }
   }
 }

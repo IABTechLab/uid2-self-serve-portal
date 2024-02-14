@@ -44,17 +44,19 @@ export function ApprovedParticipantItem({
           showRoleTooltip
         />
       </td>
-      <td>
-        <UpdateParticipantDialog
-          apiRoles={apiRoles}
-          onUpdateParticipant={onUpdateParticipant}
-          participant={participant}
-          triggerButton={
-            <button type='button' className='transparent-button'>
-              <FontAwesomeIcon icon='pencil' />
-            </button>
-          }
-        />
+      <td className='action'>
+        <div className='action-cell'>
+          <UpdateParticipantDialog
+            apiRoles={apiRoles}
+            onUpdateParticipant={onUpdateParticipant}
+            participant={participant}
+            triggerButton={
+              <button type='button' className='transparent-button'>
+                <FontAwesomeIcon icon='pencil' />
+              </button>
+            }
+          />
+        </div>
       </td>
     </tr>
   );

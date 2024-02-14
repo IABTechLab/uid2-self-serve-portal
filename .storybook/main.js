@@ -5,20 +5,21 @@ module.exports = {
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     {
-      name: '@storybook/preset-create-react-app',
+      name: '@storybook/addon-styling-webpack',
       options: {
-        babelOptions: {
-          presets: [['@babel/preset-typescript', { allowDeclareFields: true }]],
-          plugins: [
-            [
-              '@babel/plugin-transform-typescript',
+        rules: [
+          {
+            test: /\.s[ac]ss$/i,
+            use: [
+              'style-loader',
+              'css-loader',
               {
-                allowDeclareFields: true,
+                loader: 'sass-loader',
+                options: { implementation: require.resolve('sass') },
               },
             ],
-            ['@babel/proposal-class-properties', { loose: true }],
-          ],
-        },
+          },
+        ],
       },
     },
   ],
