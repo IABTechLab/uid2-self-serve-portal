@@ -8,7 +8,6 @@ module.exports = {
       name: '@storybook/addon-styling-webpack',
       options: {
         rules: [
-          // Replaces any existing Sass rules with given rules
           {
             test: /\.s[ac]ss$/i,
             use: [
