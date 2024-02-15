@@ -41,7 +41,7 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
                 </Tooltip>
               </div>
             </th>
-            <th>Roles</th>
+            <th>Permissions</th>
             <th>Created</th>
             {availableRoles.length > 0 && <th className='action'>Actions</th>}
           </tr>
