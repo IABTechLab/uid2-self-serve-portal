@@ -82,8 +82,8 @@ function KeyEditDialog({
                   <li key={`Role-${role.id}`}>{role.externalName}</li>
                 ))}
               </ul>
-              If you remove any of these permission(s) from the key, you will not be able to undo
-              this action.
+              If you remove any of these permissions from the key, you will not be able to undo this
+              action.
             </div>
           )}
         </Form>
