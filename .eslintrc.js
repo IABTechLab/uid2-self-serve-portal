@@ -57,6 +57,7 @@ module.exports = {
     'unicode-bom': 'error',
     'react/react-in-jsx-scope': 'off',
     'padded-blocks': ['warn', 'never'],
+    'jsx-a11y/control-has-associated-label': 'off',
     'no-unused-vars': [
       'warn',
       {

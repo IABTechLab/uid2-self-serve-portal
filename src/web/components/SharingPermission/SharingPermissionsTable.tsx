@@ -83,6 +83,7 @@ function DeletePermissionDialog({
       }
       open={openConfirmation}
       onOpenChange={setOpenConfirmation}
+      closeButtonText='Cancel'
     >
       <div className='dialog-body-section'>
         <ul className='dot-list'>
@@ -97,13 +98,6 @@ function DeletePermissionDialog({
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleDeletePermissions}>
           Delete Permissions
-        </button>
-        <button
-          type='button'
-          className='transparent-button'
-          onClick={() => setOpenConfirmation(false)}
-        >
-          Cancel
         </button>
       </div>
     </Dialog>
@@ -230,6 +224,7 @@ export function SharingPermissionsTable({
   const { sites, isLoading } = useAllSitesList();
   const getSharingParticipants: () => SharingSiteWithSource[] = () => {
     return sites!
+      .filter((p) => p.canBeSharedWith || sharedSiteIds.includes(p.id))
       .map((p) => {
         const maybeManualArray: (typeof MANUALLY_ADDED)[] = sharedSiteIds.includes(p.id)
           ? [MANUALLY_ADDED]

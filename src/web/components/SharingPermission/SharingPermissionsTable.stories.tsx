@@ -46,6 +46,18 @@ const response: SharingSiteDTO[] = [
     id: 15,
     canBeSharedWith: true,
   },
+  {
+    name: 'No SHARER and not explicitly included',
+    clientTypes: ['DATA_PROVIDER'],
+    id: 16,
+    canBeSharedWith: false,
+  },
+  {
+    name: 'No SHARER and explicitly included',
+    clientTypes: ['DATA_PROVIDER'],
+    id: 17,
+    canBeSharedWith: false,
+  },
 ];
 const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
   <TestAllSitesListProvider response={response}>
@@ -55,7 +67,7 @@ const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
 
 export const SharedWithParticipants = Template.bind({});
 SharedWithParticipants.args = {
-  sharedSiteIds: [10, 11, 12, 14, 15],
+  sharedSiteIds: [10, 11, 12, 14, 15, 17],
   sharedTypes: ['DSP', 'DATA_PROVIDER'],
   onDeleteSharingPermission: () => Promise.resolve(),
 };

@@ -5,8 +5,9 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
-import { SiteDTO } from '../../api/services/adminServiceHelpers';
+import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
+import { SuccessToast } from '../components/Core/Toast';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
@@ -30,7 +31,7 @@ function ManageParticipants() {
       ParticipantDTO[],
       ParticipantTypeDTO[],
       ApiRoleDTO[],
-      SiteDTO[]
+      AdminSiteDTO[]
     ];
   };
 
@@ -49,6 +50,7 @@ function ManageParticipants() {
 
   const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
+    SuccessToast('Participant updated');
     handleParticipantUpdated();
   };
 

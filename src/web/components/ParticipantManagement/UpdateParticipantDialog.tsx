@@ -4,6 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UpdateParticipantForm } from '../../services/participant';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { CheckboxInput } from '../Input/CheckboxInput';
@@ -47,9 +48,8 @@ function UpdateParticipantDialog({
       >
         <CheckboxInput
           inputName='apiRoles'
-          label='API Roles'
-          rules={{ required: 'Please specify the API Roles' }}
-          options={apiRoles.map((p) => ({
+          label='API Permissions'
+          options={sortApiRoles(apiRoles).map((p) => ({
             optionLabel: p.externalName,
             optionToolTip: p.roleName,
             value: p.id,

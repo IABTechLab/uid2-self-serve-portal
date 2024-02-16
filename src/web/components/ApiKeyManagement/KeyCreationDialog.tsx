@@ -4,10 +4,12 @@ import { SubmitHandler } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
+import { sortApiRoles } from '../../utils/apiRoles';
+import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
-import DisplaySecret, { Secret } from '../Core/DisplaySecret';
+import DisplaySecret from '../Core/DisplaySecret';
 import { Form } from '../Core/Form';
-import { StatusPopup } from '../Core/StatusPopup';
+import { InfoToast } from '../Core/Toast';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
@@ -36,18 +38,18 @@ function CreateApiKeyForm({
       <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
         <TextInput inputName='name' label='Name' required />
         <CheckboxInput
-          label='API Roles'
+          label='API Permissions'
           inputName='roles'
-          options={availableRoles.map((role) => ({
+          options={sortApiRoles(availableRoles).map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}
           rules={{
-            required: 'Please select at least one API Role.',
+            required: 'Please select at least one API permission.',
           }}
         />
       </Form>
-      <div className='cancel-container'>
+      <div className='button-container'>
         <button
           type='button'
           className='transparent-button'
@@ -65,56 +67,60 @@ function CreateApiKeyForm({
 function ShowApiKeySecrets({
   keySecrets,
   closeDialog,
-  showPopupMessage,
 }: {
   keySecrets: ApiKeySecretsDTO;
   closeDialog: () => void;
-  showPopupMessage: (message: string) => void;
 }) {
   const secrets: Secret[] = [
     { value: keySecrets.secret, valueName: 'Secret' },
     { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
-  const [uncopiedValueNames, setUncopiedValueNames] = useState(
-    secrets.map((secret) => secret.valueName)
-  );
+  const [open, setOpen] = useState(false);
 
-  const onCopyGenerator = (copiedValueName: String) => {
-    return () => {
-      setUncopiedValueNames((oldUncopiedValueNames: string[]) => {
-        return oldUncopiedValueNames.filter((valueName) => valueName !== copiedValueName);
-      });
-    };
-  };
-
-  const onClose = () => {
-    if (uncopiedValueNames.length > 0) {
-      showPopupMessage('Please copy all secrets shown before closing the page');
-      return;
-    }
-
+  const onCloseConfirmation = () => {
     closeDialog();
+    setOpen(false);
   };
+
+  const triggerButton: JSX.Element = (
+    <button className='primary-button' type='button'>
+      Close
+    </button>
+  );
 
   return (
     <div>
-      <h1>{keySecrets.name} Secrets</h1>
+      <h1>API Key {keySecrets.name} Credentials</h1>
       <p>
-        Please copy the key and secret as they will not be saved after this window is closed. Keep
-        these secrets in a secure location and do not share them with anyone. If the secrets are
-        lost a new key will have to be generated.
+        Copy the key and secret, store them in a secure location, and do not share them. When you
+        close the window, these values are not saved and are no longer available to you. If they are
+        lost, you&apos;ll need to create a new key.
       </p>
       {secrets.map((secret) => (
         <div key={secret.valueName}>
           <h2>{secret.valueName}</h2>
-          <DisplaySecret secret={secret} onCopy={onCopyGenerator(secret.valueName)} />
+          <DisplaySecret secret={secret} />
         </div>
       ))}
-      <div className='cancel-container'>
-        <button type='button' className='transparent-button' onClick={onClose}>
-          Close
-        </button>
+
+      <div className='button-container'>
+        <Dialog
+          triggerButton={triggerButton}
+          open={open}
+          onOpenChange={setOpen}
+          closeButtonText='Cancel'
+        >
+          <p>
+            Make sure you&apos;ve copied your API secret and key to a secure location. After you
+            close this page, they are no longer accessible.
+          </p>
+          <div className='button-container'>
+            <button onClick={onCloseConfirmation} className='primary-button' type='button'>
+              Close
+            </button>
+          </div>
+        </Dialog>
       </div>
     </div>
   );
@@ -127,24 +133,14 @@ function KeyCreationDialog({
 }: KeyCreationDialogProps) {
   const [open, setOpen] = useState(false);
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopupMessage, setStatusPopupMessage] = useState<string>('');
-
-  const showPopupMessage = (message: string) => {
-    setStatusPopupMessage(message);
-    setShowStatusPopup(true);
-  };
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
     setKeySecrets(await onKeyCreation(formData));
-    showPopupMessage(
-      'Your key has been created. Please copy the credentials before closing the window.'
-    );
+    InfoToast('Copy the credentials to a secure location before closing the page.');
   };
 
   const closeDialog = () => {
     setKeySecrets(undefined);
-    setShowStatusPopup(false);
     setOpen(false);
   };
 
@@ -158,21 +154,7 @@ function KeyCreationDialog({
             closeDialog={closeDialog}
           />
         ) : (
-          <ShowApiKeySecrets
-            closeDialog={closeDialog}
-            keySecrets={keySecrets}
-            showPopupMessage={showPopupMessage}
-          />
-        )}
-
-        {showStatusPopup && (
-          <StatusPopup
-            status='Info'
-            show={showStatusPopup}
-            setShow={setShowStatusPopup}
-            message={statusPopupMessage}
-            displayDuration={10000}
-          />
+          <ShowApiKeySecrets closeDialog={closeDialog} keySecrets={keySecrets} />
         )}
       </Dialog>
     </div>

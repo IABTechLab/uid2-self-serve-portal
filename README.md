@@ -6,7 +6,7 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 
 ## Requirements
 
-- A recent version of Node. Recommended: 18.18 or later. See [package.json](./package.json) for the required version.
+- A recent version of Node. Recommended: 20.11 or later. See [package.json](./package.json) for the required version.
 - Docker Desktop.
 - VS Code (or equivalent). Note that if you don't use VS Code, you will need to find equivalent extensions for things like linting.
 
@@ -87,11 +87,15 @@ All components below the page level should be props-driven - data fetching shoul
 
 When developing new components, you should create new stories in Storybook for the key states to allow easy review of both visuals and functionality.
 
+When using our Dialog Component, click on individual stories to avoid an issue where the dialog expands outside the bounds of the box.
+
 ## Testing
 
 Please add tests to your changes where possible! We don't have a minimum coverage level because we feel responsible developers should be able to decide what's important to test, and what's not worth testing. Continuing down this path requires us all to be responsible developers and write tests!
 
 Focus on testing functionality, not implementation. For example, if you have a button which waits 1 second and then displays a dialog, _do not_ simulate a click and then assert that `setTimeout(...)` was called. Instead, simulate a click, advance the timer, and make sure the dialog was displayed! Refer to the [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles) and the section of the docs on [Query Priority](https://testing-library.com/docs/queries/about#priority).
+
+To run api tests `npm run test-api` please make sure the docker container is running and the api is not being run.
 
 ## Keycloak setup
 

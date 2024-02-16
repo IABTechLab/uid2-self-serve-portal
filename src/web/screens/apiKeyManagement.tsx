@@ -1,20 +1,26 @@
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
+import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog';
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
-import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
-import { CreateApiKey, CreateApiKeyFormDTO, EditApiKey } from '../services/apiKeyService';
+import { SuccessToast } from '../components/Core/Toast';
+import {
+  CreateApiKey,
+  CreateApiKeyFormDTO,
+  DisableApiKey,
+  EditApiKey,
+} from '../services/apiKeyService';
 import {
   GetParticipantApiKey,
   GetParticipantApiKeys,
   GetParticipantApiRoles,
 } from '../services/participant';
-import { handleErrorPopup } from '../utils/apiError';
+import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -25,9 +31,6 @@ function ApiKeyManagement() {
     result: ApiKeyDTO[];
   };
 
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-  const [showStatusPopup, setShowStatusPopup] = useState(false);
-
   const reloader = useRevalidator();
 
   const onKeyCreation = async (form: CreateApiKeyFormDTO, participantId?: number) => {
@@ -36,7 +39,7 @@ function ApiKeyManagement() {
       reloader.revalidate();
       return keySecret;
     } catch (e) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -44,17 +47,36 @@ function ApiKeyManagement() {
     try {
       await EditApiKey(form);
       setApiKey(await GetParticipantApiKey(form.keyId));
-      setStatusPopup({ message: 'Your key has been updated', type: 'Success' });
-      setShowStatusPopup(true);
+      SuccessToast('Your key has been updated');
     } catch (e) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
+    }
+  };
+
+  const onKeyDisable: OnApiKeyDisable = async (apiKey) => {
+    try {
+      await DisableApiKey(apiKey);
+      reloader.revalidate();
+      SuccessToast('Your key has been disabled');
+    } catch (e) {
+      handleErrorToast(e);
     }
   };
 
   return (
     <div className='api-key-management-page'>
       <h1>Manage API Keys</h1>
-      <p className='heading-details'>View and manage your API keys.</p>
+      <p className='heading-details'>
+        View and manage your API keys. For more information, see{' '}
+        <a
+          target='_blank'
+          href='https://unifiedid.com/docs/getting-started/gs-permissions'
+          rel='noreferrer'
+        >
+          API permissions
+        </a>
+        .
+      </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
@@ -62,6 +84,7 @@ function ApiKeyManagement() {
               <KeyTable
                 apiKeys={apiKeys.filter((key) => !key.disabled)}
                 onKeyEdit={onKeyEdit}
+                onKeyDisable={onKeyDisable}
                 availableRoles={apiRoles}
               />
               {apiRoles.length > 0 && (
@@ -81,14 +104,6 @@ function ApiKeyManagement() {
           )}
         </Await>
       </Suspense>
-      {statusPopup && (
-        <StatusPopup
-          status={statusPopup!.type}
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={statusPopup!.message}
-        />
-      )}
     </div>
   );
 }

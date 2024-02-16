@@ -32,6 +32,7 @@ function DeleteBusinessContactDialog({
       }
       open={openDialog}
       onOpenChange={setOpenDialog}
+      closeButtonText='Cancel'
     >
       <ul className='dot-list'>
         <li>{contact.name}</li>
@@ -39,9 +40,6 @@ function DeleteBusinessContactDialog({
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
           Delete Email Contact
-        </button>
-        <button type='button' className='transparent-button' onClick={() => setOpenDialog(false)}>
-          Cancel
         </button>
       </div>
     </Dialog>

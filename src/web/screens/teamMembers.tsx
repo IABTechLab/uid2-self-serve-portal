@@ -1,7 +1,7 @@
-import { Suspense, useCallback, useContext, useState } from 'react';
+import { Suspense, useCallback, useContext } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
-import { StatusNotificationType, StatusPopup } from '../components/Core/StatusPopup';
+import { SuccessToast } from '../components/Core/Toast';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -15,7 +15,7 @@ import {
   UpdateUser,
   UserResponse,
 } from '../services/userAccount';
-import { handleErrorPopup } from '../utils/apiError';
+import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -31,26 +31,16 @@ function TeamMembers() {
   const onTeamMembersUpdated = useCallback(() => {
     reloader.revalidate();
   }, [reloader]);
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
-
-  const handleSuccessPopup = (message: string) => {
-    setStatusPopup({
-      type: 'Success',
-      message,
-    });
-    setShowStatusPopup(true);
-  };
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
     try {
       const response = await InviteTeamMember(formData, participant!.id);
       if (response.status === 201) {
-        handleSuccessPopup('Team member added.');
+        SuccessToast('Team member added.');
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -58,11 +48,11 @@ function TeamMembers() {
     try {
       const response = await RemoveUser(userId);
       if (response.status === 200) {
-        handleSuccessPopup('Team member removed.');
+        SuccessToast('Team member removed.');
       }
       onTeamMembersUpdated();
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -70,12 +60,12 @@ function TeamMembers() {
     try {
       const response = await UpdateUser(userId, formData);
       if (response.status === 200) {
-        handleSuccessPopup('Team member updated.');
+        SuccessToast('Team member updated.');
       }
       onTeamMembersUpdated();
       if (LoggedInUser?.user?.id === userId) await loadUser();
     } catch (e: unknown) {
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   };
 
@@ -98,14 +88,6 @@ function TeamMembers() {
           )}
         </Await>
       </Suspense>
-      {statusPopup && (
-        <StatusPopup
-          status={statusPopup!.type}
-          show={showStatusPopup}
-          setShow={setShowStatusPopup}
-          message={statusPopup!.message}
-        />
-      )}
     </>
   );
 }

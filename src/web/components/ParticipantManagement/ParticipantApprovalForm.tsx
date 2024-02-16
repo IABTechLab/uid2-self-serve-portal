@@ -9,6 +9,7 @@ import { ParticipantRequestDTO } from '../../../api/routers/participants/partici
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
+import { sortApiRoles } from '../../utils/apiRoles';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { Input } from '../Input/Input';
 import { TextInput } from '../Input/TextInput';
@@ -102,6 +103,12 @@ function ParticipantApprovalForm({
   const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
     setSelectedSite(site);
+
+    const siteApiRoleIds = site.apiRoles.map((apiRole) => apiRole.id);
+    setValue(
+      'apiRoles',
+      apiRoles.filter((apiRole) => siteApiRoleIds.includes(apiRole.id)).map((apiRole) => apiRole.id)
+    );
   };
 
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -161,9 +168,8 @@ function ParticipantApprovalForm({
             />
             <CheckboxInput
               inputName='apiRoles'
-              label='API Roles'
-              rules={{ required: 'Please specify the API Roles' }}
-              options={apiRoles.map((p) => ({
+              label='API Permissions'
+              options={sortApiRoles(apiRoles).map((p) => ({
                 optionLabel: p.externalName,
                 optionToolTip: p.roleName,
                 value: p.id,

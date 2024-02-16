@@ -20,15 +20,15 @@ import { isApproverCheck } from '../../middleware/approversMiddleware';
 import {
   addKeyPair,
   createApiKey,
+  disableApiKey,
   getApiKeysBySite,
-  getKeyPairsList,
   getSharingList,
   getSiteList,
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
 } from '../../services/adminServiceClient';
-import { mapAdminApiKeysToApiKeyDTOs, SiteDTO } from '../../services/adminServiceHelpers';
+import { AdminSiteDTO, mapAdminApiKeysToApiKeyDTOs } from '../../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
   getApiKey,
@@ -122,7 +122,7 @@ export function createParticipantsRouter() {
     const participants = await getParticipantsApproved();
 
     const sitesList = await getSiteList();
-    const siteMap = new Map<number, SiteDTO>(sitesList.map((s) => [s.id, s]));
+    const siteMap = new Map<number, AdminSiteDTO>(sitesList.map((s) => [s.id, s]));
 
     const allParticipantTypes = await ParticipantType.query();
     const result = participants
@@ -353,7 +353,7 @@ export function createParticipantsRouter() {
       const participantRoles = await getApiRoles(participant);
       const validRoles = editedKey.roles.concat(participantRoles);
       if (!validateApiRoles(newApiRoles, validRoles)) {
-        return res.status(401).send('API Roles are invalid');
+        return res.status(401).send('API Permissions are invalid');
       }
 
       if (!newName) {
@@ -373,6 +373,45 @@ export function createParticipantsRouter() {
       if (apiKeyRolesChanged) {
         await updateApiKeyRoles(editedKey.contact, newApiRoles);
       }
+
+      await updateAuditTrailToProceed(auditTrail.id);
+
+      return res.sendStatus(200);
+    }
+  );
+
+  const apiKeyDeleteInputParser = z.object({
+    keyId: z.string(),
+  });
+  participantsRouter.delete(
+    '/:participantId/apiKey',
+    async (req: ParticipantRequest, res: Response) => {
+      const { participant } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { keyId } = apiKeyDeleteInputParser.parse(req.body);
+
+      const apiKey = await getApiKey(participant.siteId, keyId);
+      if (!apiKey) {
+        return res.status(404).send('KeyId was invalid');
+      }
+
+      const traceId = getTraceId(req);
+      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+      const auditTrail = await insertManageApiKeyAuditTrail(
+        participant!,
+        currentUser!.id,
+        currentUser!.email,
+        AuditAction.Delete,
+        apiKey.name,
+        apiKey.roles.map((role) => role.roleName),
+        traceId,
+        apiKey.key_id
+      );
+
+      await disableApiKey(apiKey.contact);
 
       await updateAuditTrailToProceed(auditTrail.id);
 
@@ -416,7 +455,7 @@ export function createParticipantsRouter() {
       );
 
       if (!validateApiRoles(apiRoles, await getApiRoles(participant!))) {
-        return res.status(400).send('Invalid API Roles');
+        return res.status(400).send('Invalid API Permissions');
       }
 
       const key = await createApiKey(keyName, apiRoles, participant!.siteId);

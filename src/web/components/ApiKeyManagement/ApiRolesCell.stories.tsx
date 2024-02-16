@@ -33,10 +33,10 @@ type Story = StoryObj<typeof ApiRolesCell>;
 export const ManyRoleShowingRoleName: Story = {
   args: {
     apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     showRoleTooltip: true,
   },
@@ -45,16 +45,16 @@ export const ManyRoleShowingRoleName: Story = {
 export const ManyRole: Story = {
   args: {
     apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper' },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator' },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder' },
+      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
     ],
   },
 };
 
 export const OneRole: Story = {
   args: {
-    apiRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper' }],
+    apiRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
   },
 };
 

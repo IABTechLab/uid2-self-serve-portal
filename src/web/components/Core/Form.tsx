@@ -2,7 +2,7 @@
 import axios from 'axios';
 import { ReactNode, useCallback } from 'react';
 import {
-  DeepPartial,
+  DefaultValues,
   FieldValues,
   FormProvider,
   SubmitHandler,
@@ -16,7 +16,8 @@ type FormProps<T extends FieldValues> = {
   onSubmit: SubmitHandler<T>;
   children: ReactNode;
   onError?: (error: unknown) => void;
-  defaultValues?: DeepPartial<T>;
+  defaultValues?: DefaultValues<T>;
+  disableSubmitWhenInvalid?: boolean;
   submitButtonText?: string;
   customizeSubmit?: boolean;
   id?: string;
@@ -33,6 +34,7 @@ export function Form<T extends FieldValues>({
   onError,
   defaultValues,
   children,
+  disableSubmitWhenInvalid,
   submitButtonText,
   customizeSubmit,
 }: FormProps<T>) {
@@ -42,7 +44,7 @@ export function Form<T extends FieldValues>({
   const {
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty, isValid },
   } = methods;
   const submit = useCallback(
     async (formData: T) => {
@@ -75,7 +77,11 @@ export function Form<T extends FieldValues>({
         {children}
         {!customizeSubmit && (
           <div className='form-footer'>
-            <button type='submit' disabled={isSubmitting} className='primary-button'>
+            <button
+              type='submit'
+              disabled={isSubmitting || (disableSubmitWhenInvalid && (!isDirty || !isValid))}
+              className='primary-button'
+            >
               {submitButtonText ?? 'Submit'}
             </button>
           </div>

@@ -36,8 +36,8 @@ export function ApprovedParticipantsTable({
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
-            <th>API Roles</th>
-            <th>Action</th>
+            <th>API Permissions</th>
+            <th className='action'>Action</th>
           </tr>
         </thead>
 

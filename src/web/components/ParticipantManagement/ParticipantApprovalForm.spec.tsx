@@ -10,7 +10,7 @@ const createResult = (text: string, indices: [number, number][]) => {
       name: text,
       id: 1,
       enabled: true,
-      roles: [],
+      apiRoles: [],
       clientTypes: [],
       // eslint-disable-next-line camelcase
       client_count: 1,
