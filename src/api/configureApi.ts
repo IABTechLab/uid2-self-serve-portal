@@ -210,7 +210,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
 
     if (code === 400) {
       res.status(400).json({
-        message: currentMessage,
+        message: 'Invalid request.',
         errorHash: req.headers.traceId,
       });
     } else if (code === 401) {
