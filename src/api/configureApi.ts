@@ -193,10 +193,12 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     const traceId = getTraceId(req);
     errorLogger.error(`Fallback error handler invoked: ${err.message}`, traceId);
     let code = 500;
+    let currentMessage = `${err.message}`;
     if (err instanceof AxiosError) {
       errorLogger.error(`API Error: ${err.response?.data?.message}`, traceId);
       errorLogger.error(err.stack!, traceId);
       code = err.response?.status!;
+      currentMessage = `${err.response?.data?.message}`!;
     } else if (err.stack) {
       errorLogger.error(err.stack as string, traceId);
       if (err.statusCode) {
@@ -208,12 +210,17 @@ export function configureAndStartApi(useMetrics: boolean = true) {
 
     if (code === 400) {
       res.status(400).json({
-        message: 'Invalid request.',
+        message: currentMessage,
         errorHash: req.headers.traceId,
       });
     } else if (code === 401) {
       res.status(401).json({
         message: 'Unauthorized. You do not have the necessary permissions.',
+        errorHash: req.headers.traceId,
+      });
+    } else if (code === 404) {
+      res.status(404).json({
+        message: currentMessage,
         errorHash: req.headers.traceId,
       });
     } else {
