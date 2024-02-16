@@ -12,7 +12,7 @@ import {
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
-import { User, UserDTO, UserRole } from '../entities/User';
+import { UserDTO, UserRole } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
