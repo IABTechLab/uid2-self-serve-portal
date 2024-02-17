@@ -198,7 +198,9 @@ export function configureAndStartApi(useMetrics: boolean = true) {
       errorLogger.error(`API Error: ${err.response?.data?.message}`, traceId);
       errorLogger.error(err.stack!, traceId);
       code = err.response?.status!;
-      currentMessage = `${err.response?.data?.message}`!;
+      if (err.response?.data?.message) {
+        currentMessage = `${err.response?.data?.message}`!;
+      }
     } else if (err.stack) {
       errorLogger.error(err.stack as string, traceId);
       if (err.statusCode) {

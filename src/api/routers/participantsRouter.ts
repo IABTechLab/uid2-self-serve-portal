@@ -389,7 +389,7 @@ export function createParticipantsRouter() {
 
       const apiKey = await getApiKey(participant.siteId, keyId);
       if (!apiKey) {
-        return res.status(404).send('KeyId was invalid');
+        return res.status(404).send('Key Id or Site Id was invalid');
       }
 
       const traceId = getTraceId(req);
