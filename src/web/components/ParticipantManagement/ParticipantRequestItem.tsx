@@ -65,7 +65,11 @@ export function ParticipantRequestItem({
       <td className='action'>
         <div className='action-cell'>
           {hasError && <InlineMessage message='An error has occurred' type='Error' />}
-          <button type='button' className='transparent-button' onClick={() => setOpen(true)}>
+          <button
+            type='button'
+            className='transparent-button approve-button'
+            onClick={() => setOpen(true)}
+          >
             Approve
           </button>
           <Dialog
