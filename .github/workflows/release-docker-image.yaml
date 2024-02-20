@@ -12,10 +12,11 @@ on:
         - Patch
         - Snapshot
         required: true
+  pull_request:
 
 jobs:
   incrementVersionNumber:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@kcc-UID2-2674-implement-shared-publish-to-docker-versioned
     with:
       release_type: ${{ inputs.release_type }}
     secrets: inherit
