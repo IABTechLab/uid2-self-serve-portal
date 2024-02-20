@@ -23,12 +23,16 @@ import {
   sendInviteEmail,
   updateUserProfile,
 } from '../services/kcUsersService';
+import { LoggerService } from '../services/loggerService';
 import { DeletedUser, UpdateUserParser, UserService } from '../services/userService';
 import { UserRequest } from '../services/usersService';
 
 @controller('/users')
 export class UserController {
-  constructor(@inject(TYPES.UserService) private userService: UserService) {}
+  constructor(
+    @inject(TYPES.UserService) private userService: UserService,
+    @inject(TYPES.LoggerService) private loggerService: LoggerService
+  ) {}
 
   @httpGet('/current')
   public async getCurrentUser(
@@ -83,7 +87,10 @@ export class UserController {
     @request() req: UserRequest,
     @response() res: Response
   ): Promise<void> {
-    const { infoLogger, errorLogger } = getLoggers();
+    // const { infoLogger, errorLogger } = getLoggers();
+    // const { infoLogger, errorLogger } = this.loggerService.getLoggers();
+    const errorLogger = this.loggerService.getErrorLogger();
+    const infoLogger = this.loggerService.getLogger();
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');

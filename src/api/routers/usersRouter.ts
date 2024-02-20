@@ -1,12 +1,13 @@
 import express from 'express';
 
 import { UserController } from '../controllers/userController';
-import {  UserService } from '../services/userService';
+import { LoggerService } from '../services/loggerService';
+import { UserService } from '../services/userService';
 import { enrichCurrentUser, enrichWithUserFromParams } from '../services/usersService';
 
 const createUsersRouter = () => {
   const usersRouter = express.Router();
-  const userController = new UserController(new UserService());
+  const userController = new UserController(new UserService(), new LoggerService());
 
   usersRouter.use('/current', enrichCurrentUser);
   usersRouter.get('/current', userController.getCurrentUser.bind(userController));
