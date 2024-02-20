@@ -88,9 +88,9 @@ export class UserController {
     @response() res: Response
   ): Promise<void> {
     // const { infoLogger, errorLogger } = getLoggers();
-    // const { infoLogger, errorLogger } = this.loggerService.getLoggers();
-    const errorLogger = this.loggerService.getErrorLogger();
-    const infoLogger = this.loggerService.getLogger();
+    const { infoLogger, errorLogger } = this.loggerService.getLoggers();
+    // const errorLogger = this.loggerService.getErrorLogger();
+    // const infoLogger = this.loggerService.getLogger();
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');

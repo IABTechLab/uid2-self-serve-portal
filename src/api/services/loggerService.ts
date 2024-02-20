@@ -68,10 +68,23 @@ export class LoggerService {
     ];
   }
 
-  public getLoggers(): { logger: winston.Logger; errorLogger: winston.Logger } {
+  private info(message: string, traceId: string) {
+    this.logger.info(`${message}, [traceId=${traceId}]`);
+  }
+
+  private error(message: string, traceId: string) {
+    this.logger.error(`${message}, [traceId=${traceId}]`);
+  }
+
+  public getLoggers() {
     return {
       logger: this.logger,
-      errorLogger: this.errorLogger,
+      infoLogger: {
+        info: this.info.bind(this),
+      },
+      errorLogger: {
+        error: this.error.bind(this),
+      },
     };
   }
 
