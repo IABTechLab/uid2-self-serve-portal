@@ -57,9 +57,11 @@ import {
   updateParticipantAndTypesAndRoles,
   updateParticipantApiRoles,
   UpdateSharingTypes,
+  UserParticipantRequest,
 } from '../services/participantsService';
 import {
   createUserInPortal,
+  enrichCurrentUser,
   findUserByEmail,
   getAllUserFromParticipant,
 } from '../services/usersService';
@@ -160,10 +162,12 @@ export function createParticipantsRouter() {
     }
   });
 
+  participantsRouter.use('/:participantId', checkParticipantId, enrichCurrentUser);
+
   participantsRouter.put(
     '/:participantId/approve',
     isApproverCheck,
-    async (req: ParticipantRequest, res: Response) => {
+    async (req: UserParticipantRequest, res: Response) => {
       const { participant } = req;
       const traceId = getTraceId(req);
       const data = {
@@ -210,8 +214,6 @@ export function createParticipantsRouter() {
       return res.sendStatus(200);
     }
   );
-
-  participantsRouter.use('/:participantId', checkParticipantId);
 
   const invitationParser = z.object({
     firstName: z.string(),

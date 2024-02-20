@@ -25,6 +25,10 @@ export interface ParticipantRequest extends Request {
   participant?: Participant;
 }
 
+export interface UserParticipantRequest extends ParticipantRequest {
+  user?: User;
+}
+
 export const sendNewParticipantEmail = async (
   newParticipant: z.infer<typeof ParticipantCreationPartial>,
   typeIds: number[],
