@@ -73,14 +73,17 @@ export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
   'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
 > & {
-  requestingUser: Pick<UserDTO, 'email'> & Partial<Pick<UserDTO, 'role'>> & { fullName: string };
+  requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
 };
 
 export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
 
 function mapParticipantToApprovalRequest(participant: Participant): ParticipantRequestDTO {
+  if (!participant.users || participant.users.length === 0)
+    throw Error('Found a participant with no requesting user.');
+
   // There should usually only be one user at this point - but if there are multiple, the first one is preferred.
-  const firstUser = participant.users?.sort((a, b) => a.id - b.id)[0];
+  const firstUser = participant.users.sort((a, b) => a.id - b.id)[0];
   return {
     id: participant.id,
     name: participant.name,
@@ -89,11 +92,9 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
     apiRoles: participant.apiRoles,
     status: participant.status,
     requestingUser: {
-      email: firstUser ? firstUser.email : '',
-      role: firstUser?.role,
-      fullName: firstUser
-        ? firstUser?.fullName()
-        : 'There is no user attached to this participant.',
+      email: firstUser.email,
+      role: firstUser.role,
+      fullName: firstUser.fullName(),
     },
   };
 }
@@ -162,12 +163,10 @@ export function createParticipantsRouter() {
     }
   });
 
-  participantsRouter.use('/:participantId', checkParticipantId, enrichCurrentUser);
-
   participantsRouter.put(
     '/:participantId/approve',
     isApproverCheck,
-    async (req: UserParticipantRequest, res: Response) => {
+    async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       const traceId = getTraceId(req);
       const data = {
@@ -214,6 +213,8 @@ export function createParticipantsRouter() {
       return res.sendStatus(200);
     }
   );
+
+  participantsRouter.use('/:participantId', checkParticipantId);
 
   const invitationParser = z.object({
     firstName: z.string(),
@@ -391,7 +392,7 @@ export function createParticipantsRouter() {
 
       const apiKey = await getApiKey(participant.siteId, keyId);
       if (!apiKey) {
-        return res.status(404).send('Key Id or Site Id was invalid');
+        return res.status(404).send('KeyId was invalid');
       }
 
       const traceId = getTraceId(req);
