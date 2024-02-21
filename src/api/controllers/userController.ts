@@ -88,7 +88,7 @@ export class UserController {
     @response() res: Response
   ): Promise<void> {
     // const { infoLogger, errorLogger } = getLoggers();
-    const { infoLogger, errorLogger } = this.loggerService.getLoggers();
+    const { infoLogger, errorLogger } = this.loggerService.getLoggers(req);
     // const errorLogger = this.loggerService.getErrorLogger();
     // const infoLogger = this.loggerService.getLogger();
     const traceId = getTraceId(req);
@@ -98,8 +98,7 @@ export class UserController {
     const resultLength = user?.length ?? 0;
     if (resultLength < 1) {
       errorLogger.error(
-        `No results received when loading user entry for ${req.user?.email}`,
-        traceId
+        `No results received when loading user entry for ${req.user?.email}`
       );
       res.status(404).json({
         errorHash: traceId,
@@ -108,8 +107,7 @@ export class UserController {
     }
     if (resultLength > 1) {
       errorLogger.error(
-        `Multiple results received when loading user entry for ${req.user?.email}`,
-        traceId
+        `Multiple results received when loading user entry for ${req.user?.email}`
       );
       res.status(500).json({
         errorHash: traceId,
@@ -118,8 +116,7 @@ export class UserController {
     }
 
     infoLogger.info(
-      `Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`,
-      traceId
+      `Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`
     );
     await sendInviteEmail(kcAdminClient, user[0]);
     res.sendStatus(200);

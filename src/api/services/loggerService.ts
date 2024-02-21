@@ -1,8 +1,11 @@
+import { Request } from 'express';
 import { injectable } from 'inversify';
 import winston from 'winston';
 import LokiTransport from 'winston-loki';
 
 import { SSP_APP_NAME, SSP_IS_DEVELOPMENT, SSP_LOKI_HOST } from '../envars';
+import { getTraceId } from '../helpers/loggingHelpers';
+import { UserRequest } from './usersService';
 
 const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
   const basicString = `${timestamp} [${label}] ${level}: ${message}`;
@@ -76,14 +79,15 @@ export class LoggerService {
     this.logger.error(`${message}, [traceId=${traceId}]`);
   }
 
-  public getLoggers() {
+  public getLoggers(req: Request) {
+    const traceId = getTraceId(req);
     return {
       logger: this.logger,
       infoLogger: {
-        info: this.info.bind(this),
+        info: (message: string) => this.info.bind(message, traceId),
       },
       errorLogger: {
-        error: this.error.bind(this),
+        error: (message: string) => this.error(message, traceId),
       },
     };
   }
