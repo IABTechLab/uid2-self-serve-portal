@@ -8,9 +8,9 @@ import {
   AuditTrailEvents,
 } from '../entities/AuditTrail';
 import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
+import { User } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
 import { ClientType } from './adminServiceHelpers';
-import { findUserByEmail } from './usersService';
 
 const arraysHaveSameElements = (a: unknown[], b: unknown[]): boolean => {
   const aSet = new Set(a);
@@ -154,10 +154,11 @@ export const insertKeyPairAuditTrails = async (
 
 export const insertApproveAccountAuditTrail = async (
   participant: Participant,
+  currentUser: User,
   userEmail: string,
   data: z.infer<typeof ParticipantApprovalPartial>
 ) => {
-  const user = await findUserByEmail(userEmail);
+  const user = currentUser;
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
     apiRoles: data.apiRoles.map((role) => role.id),

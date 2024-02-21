@@ -238,7 +238,7 @@ const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next
 };
 
 const enrichCurrentParticipant = async (
-  req: ParticipantRequest,
+  req: UserParticipantRequest,
   res: Response,
   next: NextFunction
 ) => {

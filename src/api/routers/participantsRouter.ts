@@ -62,7 +62,6 @@ import {
 import {
   createUserInPortal,
   enrichCurrentUser,
-  findUserByEmail,
   getAllUserFromParticipant,
 } from '../services/usersService';
 import { createBusinessContactsRouter } from './businessContactsRouter';
@@ -163,11 +162,13 @@ export function createParticipantsRouter() {
     }
   });
 
+  participantsRouter.use('/:participantId', enrichCurrentUser);
+
   participantsRouter.put(
     '/:participantId/approve',
     isApproverCheck,
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       const traceId = getTraceId(req);
       const data = {
         ...ParticipantApprovalPartial.parse(req.body),
@@ -176,6 +177,7 @@ export function createParticipantsRouter() {
 
       const auditTrail = await insertApproveAccountAuditTrail(
         participant!,
+        user!,
         req.auth?.payload?.email as string,
         data
       );
@@ -183,8 +185,8 @@ export function createParticipantsRouter() {
       const users = await getAllUserFromParticipant(participant!);
       await setSiteClientTypes(data);
       await Promise.all(
-        users.map((user) =>
-          assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member')
+        users.map((currentUser) =>
+          assignClientRoleToUser(kcAdminClient, currentUser.email, 'api-participant-member')
         )
       );
       await updateParticipantAndTypesAndRoles(participant!, data);
@@ -214,8 +216,6 @@ export function createParticipantsRouter() {
     }
   );
 
-  participantsRouter.use('/:participantId', checkParticipantId);
-
   const invitationParser = z.object({
     firstName: z.string(),
     lastName: z.string(),
@@ -225,16 +225,16 @@ export function createParticipantsRouter() {
 
   participantsRouter.post(
     '/:participantId/invite',
-    async (req: ParticipantRequest, res: Response) => {
+    async (req: UserParticipantRequest, res: Response) => {
       try {
-        const { participant } = req;
+        const { participant, user } = req;
         const { firstName, lastName, email, role } = invitationParser.parse(req.body);
-        const existingUser = await findUserByEmail(email);
+        const existingUser = user;
         if (existingUser) {
           return res.status(400).send('Error inviting user');
         }
         const kcAdminClient = await getKcAdminClient();
-        const user = await createNewUser(kcAdminClient, firstName, lastName, email);
+        const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
         await createUserInPortal({
           email,
           role,
@@ -242,7 +242,7 @@ export function createParticipantsRouter() {
           firstName,
           lastName,
         });
-        await sendInviteEmail(kcAdminClient, user);
+        await sendInviteEmail(kcAdminClient, newUser);
         return res.sendStatus(201);
       } catch (err) {
         if (err instanceof z.ZodError) {
@@ -319,8 +319,8 @@ export function createParticipantsRouter() {
   });
   participantsRouter.put(
     '/:participantId/apiKey',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -333,11 +333,10 @@ export function createParticipantsRouter() {
       }
 
       const traceId = getTraceId(req);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertManageApiKeyAuditTrail(
         participant!,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         AuditAction.Update,
         editedKey.name,
         editedKey.roles.map((role) => role.roleName),
@@ -382,8 +381,8 @@ export function createParticipantsRouter() {
   });
   participantsRouter.delete(
     '/:participantId/apiKey',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -396,11 +395,10 @@ export function createParticipantsRouter() {
       }
 
       const traceId = getTraceId(req);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertManageApiKeyAuditTrail(
         participant!,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         AuditAction.Delete,
         apiKey.name,
         apiKey.roles.map((role) => role.roleName),
@@ -431,8 +429,8 @@ export function createParticipantsRouter() {
 
   participantsRouter.post(
     '/:participantId/apiKey',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
@@ -440,11 +438,10 @@ export function createParticipantsRouter() {
       const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
 
       const traceId = getTraceId(req);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertManageApiKeyAuditTrail(
         participant!,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         AuditAction.Add,
         keyName,
         apiRoles,
@@ -467,18 +464,17 @@ export function createParticipantsRouter() {
   });
   participantsRouter.post(
     '/:participantId/sharingPermission/add',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
       const { newParticipantSites } = sharingRelationParser.parse(req.body);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         AuditAction.Add,
         newParticipantSites,
         traceId
@@ -502,18 +498,17 @@ export function createParticipantsRouter() {
 
   participantsRouter.post(
     '/:participantId/keyPair/add',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
       const { name, disabled } = keyPairParser.parse(req.body);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertKeyPairAuditTrails(
         participant,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         AuditAction.Add,
         name,
         disabled,
@@ -546,18 +541,17 @@ export function createParticipantsRouter() {
 
   participantsRouter.post(
     '/:participantId/sharingPermission/delete',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
       const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingAuditTrails(
         participant,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         AuditAction.Delete,
         sharingSitesToRemove,
         traceId
@@ -580,18 +574,17 @@ export function createParticipantsRouter() {
   });
   participantsRouter.post(
     '/:participantId/sharingPermission/shareWithTypes',
-    async (req: ParticipantRequest, res: Response) => {
-      const { participant } = req;
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
       const { types } = sharingTypesParser.parse(req.body);
-      const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
       const auditTrail = await insertSharingTypesAuditTrail(
         participant,
-        currentUser!.id,
-        currentUser!.email,
+        user!.id,
+        user!.email,
         types,
         traceId
       );
