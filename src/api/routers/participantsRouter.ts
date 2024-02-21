@@ -175,12 +175,7 @@ export function createParticipantsRouter() {
         status: ParticipantStatus.Approved,
       };
 
-      const auditTrail = await insertApproveAccountAuditTrail(
-        participant!,
-        user!,
-        req.auth?.payload?.email as string,
-        data
-      );
+      const auditTrail = await insertApproveAccountAuditTrail(participant!, user!, data);
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
       await setSiteClientTypes(data);

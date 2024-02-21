@@ -155,10 +155,8 @@ export const insertKeyPairAuditTrails = async (
 export const insertApproveAccountAuditTrail = async (
   participant: Participant,
   currentUser: User,
-  userEmail: string,
   data: z.infer<typeof ParticipantApprovalPartial>
 ) => {
-  const user = currentUser;
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
     apiRoles: data.apiRoles.map((role) => role.id),
@@ -179,8 +177,8 @@ export const insertApproveAccountAuditTrail = async (
   }
 
   return AuditTrail.query().insert({
-    userId: user?.id!,
-    userEmail,
+    userId: currentUser?.id!,
+    userEmail: currentUser.email,
     event: AuditTrailEvents.ApproveAccount,
     eventData,
     succeeded: false,
