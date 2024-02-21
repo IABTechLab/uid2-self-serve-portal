@@ -14,7 +14,7 @@ import { v4 as uuid } from 'uuid';
 
 import { TYPES } from '../constant/types';
 import { Participant, ParticipantStatus } from '../entities/Participant';
-import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
+import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignClientRoleToUser,
@@ -87,33 +87,28 @@ export class UserController {
     @request() req: UserRequest,
     @response() res: Response
   ): Promise<void> {
-    // const { infoLogger, errorLogger } = getLoggers();
-    const { infoLogger, errorLogger } = this.loggerService.getLoggers(req);
-    // const errorLogger = this.loggerService.getErrorLogger();
-    // const infoLogger = this.loggerService.getLogger();
+    const logger = this.loggerService.getLogger(req);
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
 
     const resultLength = user?.length ?? 0;
     if (resultLength < 1) {
-      errorLogger.error(
-        `No results received when loading user entry for ${req.user?.email}`
-      );
+      logger.error(`No results received when loading user entry for ${req.user?.email}`);
       res.status(404).json({
         errorHash: traceId,
       });
       return;
     }
     if (resultLength > 1) {
-      errorLogger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
+      logger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
       res.status(500).json({
         errorHash: traceId,
       });
       return;
     }
 
-    infoLogger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
+    logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmail(kcAdminClient, user[0]);
     res.sendStatus(200);
   }

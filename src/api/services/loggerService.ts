@@ -3,26 +3,15 @@ import { injectable } from 'inversify';
 import winston from 'winston';
 import LokiTransport from 'winston-loki';
 
-import { SSP_APP_NAME, SSP_IS_DEVELOPMENT, SSP_LOKI_HOST } from '../envars';
-import { getTraceId } from '../helpers/loggingHelpers';
-import { UserRequest } from './usersService';
-
-const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
-  const basicString = `${timestamp} [${label}] ${level}: ${message}`;
-  const requestDetails = meta
-    ? ` [traceId=${meta.req.headers.traceId ?? ''}] metadata=${JSON.stringify(meta)}`
-    : '';
-  return basicString + requestDetails;
-});
+import { SSP_APP_NAME, SSP_LOKI_HOST } from '../envars';
+import { getTraceId, traceFormat } from '../helpers/loggingHelpers';
 
 @injectable()
 export class LoggerService {
   private logger: winston.Logger;
-  private errorLogger: winston.Logger;
 
   constructor() {
     this.logger = this.createLogger();
-    this.errorLogger = this.createErrorLogger();
   }
 
   private createLogger(): winston.Logger {
@@ -32,25 +21,8 @@ export class LoggerService {
     });
   }
 
-  private createErrorLogger(): winston.Logger {
-    return winston.createLogger({
-      transports: this.getTransports(),
-      format: this.errorLoggerFormat(),
-    });
-  }
-
   private loggerFormat(): winston.Logform.Format {
     return winston.format.combine(
-      winston.format.label({ label: SSP_APP_NAME }),
-      winston.format.timestamp(),
-      winston.format.json(),
-      traceFormat
-    );
-  }
-
-  private errorLoggerFormat(): winston.Logform.Format {
-    return winston.format.combine(
-      winston.format.errors({ stack: SSP_IS_DEVELOPMENT }), // only show stack in development
       winston.format.label({ label: SSP_APP_NAME }),
       winston.format.timestamp(),
       winston.format.json(),
@@ -79,24 +51,11 @@ export class LoggerService {
     this.logger.error(`${message}, [traceId=${traceId}]`);
   }
 
-  public getLoggers(req: Request) {
+  public getLogger(req: Request) {
     const traceId = getTraceId(req);
     return {
-      logger: this.logger,
-      infoLogger: {
-        info: (message: string) => this.info.bind(message, traceId),
-      },
-      errorLogger: {
-        error: (message: string) => this.error(message, traceId),
-      },
+      info: (message: string) => this.info(message, traceId),
+      error: (message: string) => this.error(message, traceId),
     };
-  }
-
-  public getLogger(): winston.Logger {
-    return this.logger;
-  }
-
-  public getErrorLogger(): winston.Logger {
-    return this.errorLogger;
   }
 }
