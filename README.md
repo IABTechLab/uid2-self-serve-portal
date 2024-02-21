@@ -207,7 +207,7 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 
 ## Setting up UI Dev Environment
 
-The following steps describe the minimal steps required to successfully log in to the portal UI. If you require a fully-functional portal, please perform the following steps as well as the steps described below in [Connecting to local admin service](README.md#connecting-to-local-admin-service).
+The following steps describe the minimal steps required to successfully log in to the portal UI.
 
 1. Set up Docker, as described above: [Docker](README.md#docker)
 2. Set up your `.env` file per [Environment Variables](README.md#environment-variables)
@@ -229,13 +229,14 @@ The following steps describe the minimal steps required to successfully log in t
    ```
    npm run knex:seed:run
    ```
-8. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
-9. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
-10. Open the email and Click `Verify Email`
-11. Fill in the form however you want and submit the form
-12. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
-13. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-14. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
+8. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
+9. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
+10. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
+11. Open the email and Click `Verify Email`
+12. Fill in the form however you want and submit the form
+13. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
+14. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
+15. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
 
     ```
     declare @email as nvarchar(256) = '<Enter your email here>'
@@ -248,12 +249,10 @@ The following steps describe the minimal steps required to successfully log in t
     where u.email = @email
     ```
 
-15. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
-16. Return to the UI and you should be good to go!
+16. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
+17. Return to the UI and you should be good to go!
 
-### Connecting to local admin service
-
-Functionality relating to Sharing Permissions will require the admin service to be running locally. Perform the following steps to standup the admin service to develop and test admin-related functionality on the portal.
+### Connecting to local Admin service
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
 1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
