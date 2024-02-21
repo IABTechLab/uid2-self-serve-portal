@@ -106,18 +106,14 @@ export class UserController {
       return;
     }
     if (resultLength > 1) {
-      errorLogger.error(
-        `Multiple results received when loading user entry for ${req.user?.email}`
-      );
+      errorLogger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
       res.status(500).json({
         errorHash: traceId,
       });
       return;
     }
 
-    infoLogger.info(
-      `Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`
-    );
+    infoLogger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmail(kcAdminClient, user[0]);
     res.sendStatus(200);
   }
