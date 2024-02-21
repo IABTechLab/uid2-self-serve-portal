@@ -72,17 +72,14 @@ export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
   'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
 > & {
-  requestingUser: Pick<UserDTO, 'email' | 'role'> & { fullName: string };
+  requestingUser: Pick<UserDTO, 'email'> & Partial<Pick<UserDTO, 'role'>> & { fullName: string };
 };
 
 export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
 
 function mapParticipantToApprovalRequest(participant: Participant): ParticipantRequestDTO {
-  if (!participant.users || participant.users.length === 0)
-    throw Error('Found a participant with no requesting user.');
-
   // There should usually only be one user at this point - but if there are multiple, the first one is preferred.
-  const firstUser = participant.users.sort((a, b) => a.id - b.id)[0];
+  const firstUser = participant.users?.sort((a, b) => a.id - b.id)[0];
   return {
     id: participant.id,
     name: participant.name,
@@ -91,9 +88,11 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
     apiRoles: participant.apiRoles,
     status: participant.status,
     requestingUser: {
-      email: firstUser.email,
-      role: firstUser.role,
-      fullName: firstUser.fullName(),
+      email: firstUser ? firstUser.email : '',
+      role: firstUser?.role,
+      fullName: firstUser
+        ? firstUser?.fullName()
+        : 'There is no user attached to this participant.',
     },
   };
 }
@@ -217,6 +216,8 @@ export function createParticipantsRouter() {
     email: z.string(),
     role: z.nativeEnum(UserRole),
   });
+
+  participantsRouter.use('/:participantId', checkParticipantId);
 
   participantsRouter.post(
     '/:participantId/invite',
@@ -386,7 +387,7 @@ export function createParticipantsRouter() {
 
       const apiKey = await getApiKey(participant.siteId, keyId);
       if (!apiKey) {
-        return res.status(404).send('KeyId was invalid');
+        return res.status(404).send('KeyId or SiteId was invalid');
       }
 
       const traceId = getTraceId(req);
