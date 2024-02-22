@@ -223,14 +223,14 @@ export function createParticipantsRouter() {
     }
   );
 
+  participantsRouter.use('/:participantId', checkParticipantId);
+
   const invitationParser = z.object({
     firstName: z.string(),
     lastName: z.string(),
     email: z.string(),
     role: z.nativeEnum(UserRole),
   });
-
-  participantsRouter.use('/:participantId', checkParticipantId);
 
   participantsRouter.post(
     '/:participantId/invite',
