@@ -6,7 +6,12 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
-import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
+import {
+  ApiKeyDTO,
+  ClientType,
+  ParticipantApprovalResponse,
+  SharingListResponse,
+} from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
@@ -289,14 +294,15 @@ export type ParticipantApprovalFormDetails = {
 export async function ApproveParticipantRequest(
   participantId: number,
   formData: ParticipantApprovalFormDetails
-) {
+): Promise<ParticipantApprovalResponse> {
   try {
-    await axios.put(`/participants/${participantId}/approve`, {
+    const result = await axios.put(`/participants/${participantId}/approve`, {
       name: formData.name,
       siteId: formData.siteId,
       types: formData.types.map((typeId) => ({ id: typeId })),
       apiRoles: formData.apiRoles.map((roleId) => ({ id: roleId })),
     });
+    return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not approve participant');
   }

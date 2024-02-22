@@ -29,7 +29,11 @@ import {
   setSiteClientTypes,
   updateApiKeyRoles,
 } from '../services/adminServiceClient';
-import { AdminSiteDTO, mapAdminApiKeysToApiKeyDTOs } from '../services/adminServiceHelpers';
+import {
+  AdminSiteDTO,
+  mapAdminApiKeysToApiKeyDTOs,
+  ParticipantApprovalResponse,
+} from '../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
   getApiKey,
@@ -177,16 +181,24 @@ export function createParticipantsRouter() {
       const auditTrail = await insertApproveAccountAuditTrail(participant!, user!, data);
       const kcAdminClient = await getKcAdminClient();
       const users = await getAllUserFromParticipant(participant!);
+      // if there are no users, send email to the approver
+      const emailRecipient = users.length > 0 ? users : [user!];
       await setSiteClientTypes(data);
       await Promise.all(
         users.map((currentUser) =>
           assignClientRoleToUser(kcAdminClient, currentUser.email, 'api-participant-member')
         )
       );
+
       await updateParticipantAndTypesAndRoles(participant!, data);
-      await sendParticipantApprovedEmail(users, traceId);
+      await sendParticipantApprovedEmail(emailRecipient, traceId);
       await updateAuditTrailToProceed(auditTrail.id);
-      return res.sendStatus(200);
+
+      const approvalResponse: ParticipantApprovalResponse = {
+        users,
+      };
+
+      return res.status(200).json(approvalResponse);
     }
   );
 
