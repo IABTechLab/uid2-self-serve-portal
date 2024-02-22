@@ -66,6 +66,7 @@ import {
 import {
   createUserInPortal,
   enrichCurrentUser,
+  findUserByEmail,
   getAllUserFromParticipant,
 } from '../services/usersService';
 import { createBusinessContactsRouter } from './businessContactsRouter';
@@ -233,16 +234,16 @@ export function createParticipantsRouter() {
 
   participantsRouter.post(
     '/:participantId/invite',
-    async (req: UserParticipantRequest, res: Response) => {
+    async (req: ParticipantRequest, res: Response) => {
       try {
-        const { participant, user } = req;
+        const { participant } = req;
         const { firstName, lastName, email, role } = invitationParser.parse(req.body);
-        const existingUser = user;
+        const existingUser = await findUserByEmail(email);
         if (existingUser) {
           return res.status(400).send('Error inviting user');
         }
         const kcAdminClient = await getKcAdminClient();
-        const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
+        const user = await createNewUser(kcAdminClient, firstName, lastName, email);
         await createUserInPortal({
           email,
           role,
@@ -250,7 +251,7 @@ export function createParticipantsRouter() {
           firstName,
           lastName,
         });
-        await sendInviteEmail(kcAdminClient, newUser);
+        await sendInviteEmail(kcAdminClient, user);
         return res.sendStatus(201);
       } catch (err) {
         if (err instanceof z.ZodError) {
@@ -268,8 +269,9 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
+      const traceId = getTraceId(req);
       try {
-        const sharingList = await getSharingList(participant.siteId);
+        const sharingList = await getSharingList(participant.siteId, traceId);
         return res.status(200).json(sharingList);
       } catch (err) {
         if (err instanceof AxiosError && err.response?.status === 404) {
@@ -337,7 +339,7 @@ export function createParticipantsRouter() {
 
       const editedKey = await getApiKey(participant.siteId, keyId);
       if (!editedKey) {
-        return res.status(404).send('KeyId was invalid');
+        return res.status(404).send('SiteId was invalid');
       }
 
       const traceId = getTraceId(req);
@@ -399,7 +401,7 @@ export function createParticipantsRouter() {
 
       const apiKey = await getApiKey(participant.siteId, keyId);
       if (!apiKey) {
-        return res.status(404).send('KeyId or SiteId was invalid');
+        return res.status(404).send('SiteId was invalid');
       }
 
       const traceId = getTraceId(req);
