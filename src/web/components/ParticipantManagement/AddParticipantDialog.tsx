@@ -45,9 +45,6 @@ function AddParticipantDialog({
   const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteDTO>[]>();
   const [searchText, setSearchText] = useState('');
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
-  // const [selectedTypes, setSelectedTypes] = useState<number[] | undefined>([]);
-  // const [recommendedRoles, setRecommendedRoles] = useState<number[]>([]);
-  // const [participantName, setParticipantName] = useState('');
 
   const formMethods = useForm<AddParticipantForm>();
   const { register, setValue, watch, handleSubmit, reset } = formMethods;
@@ -56,44 +53,16 @@ function AddParticipantDialog({
     setSiteSearchResults(fuse?.search(searchText));
   }, [fuse, searchText]);
 
-  // const aRoles = watch('apiRoles');
-  // console.log(aRoles);
-
-  // useEffect(() => {
-  //   watch((value, { name, type }) => console.log(value, name, type));
-  // }, [watch]);
-
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      console.log(value);
       if (name === 'participantTypes') {
         const types = value.participantTypes;
-        // setSelectedTypes(types as number[]);
         const roles = GetRecommendedRolesById(types as number[]);
-        // setRecommendedRoles(roles);
-        console.log(open);
-        console.log(roles);
         setValue('apiRoles', roles);
-        // reset({ apiRoles: roles });
-        // reset({ apiRoles: [1, 2] });
       }
     });
     return () => subscription.unsubscribe();
   }, [watch, setValue, reset, open]);
-
-  // useEffect(() => {
-  //   if (selectedTypes) {
-  //     const roles = GetRecommendedRolesById(selectedTypes);
-  //     setRecommendedRoles(roles);
-  //     // reset({ apiRoles: roles });
-  //     // console.log(roles);
-  //     // console.log(selectedTypes);
-  //   }
-  // }, [selectedTypes, reset]);
-
-  // useEffect(() => {
-  //   reset({ apiRoles: recommendedRoles });
-  // }, [recommendedRoles, reset]);
 
   useEffect(() => {
     if (!open) {
@@ -101,14 +70,7 @@ function AddParticipantDialog({
     }
   }, [open, reset]);
 
-  // useEffect(() => {
-  //   if (searchText.length > 0) {
-  //     reset({ apiRoles: [1, 2] });
-  //   }
-  // }, [searchText, reset]);
-
   const onSubmit = async (formData: AddParticipantForm) => {
-    console.log(formData);
     await onAddParticipant(formData);
     setOpen(false);
   };
@@ -116,27 +78,11 @@ function AddParticipantDialog({
   const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
     setSelectedSite(site);
-
-    // const siteApiRoleIds = site.apiRoles.map((apiRole) => apiRole.id);
-    // setValue(
-    //   'apiRoles',
-    //   apiRoles.filter((apiRole) => siteApiRoleIds.includes(apiRole.id)).map((apiRole) => apiRole.id)
-    // );
   };
 
   const onSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
   };
-
-  // const onSubmit: SubmitHandler<AddParticipantForm> = async (formData) => {
-  //   await onAddParticipant(formData);
-  //   console.log(formData);
-  //   // setOpen(false);
-  // };
-
-  // const onSubmit = async (data: AddParticipantForm) => {
-  //   await onApprove(data);
-  // };
 
   return (
     <Dialog
