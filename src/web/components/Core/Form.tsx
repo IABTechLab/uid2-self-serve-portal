@@ -52,10 +52,14 @@ export function Form<T extends FieldValues>({
         await onSubmit(formData);
       } catch (err) {
         if (onError) onError(err);
-        const message =
-          axios.isAxiosError(err) && (err.response?.data ?? [])[0]?.message
-            ? ((err.response?.data ?? [])[0]?.message as string)
-            : 'Something went wrong, please try again';
+        let message = 'Something went wrong, please try again';
+        if (axios.isAxiosError(err)) {
+          if (err.response?.data?.message) {
+            message = err.response?.data?.message as string;
+          } else if (err.response?.data) {
+            message = err.response?.data as string;
+          }
+        }
 
         setError('root.serverError', {
           type: '400',

@@ -34,9 +34,15 @@ export function RadioInput<
         aria-invalid={error ? 'true' : 'false'}
         onValueChange={field.onChange}
       >
-        {options.map(({ optionLabel, value }) => (
+        {options.map(({ optionLabel, value, disabled, checked }) => (
           <div className='radio-option' key={optionLabel}>
-            <RadioGroup.Item className='radio-group-item' value={value} id={optionLabel}>
+            <RadioGroup.Item
+              className='radio-group-item'
+              value={value}
+              id={optionLabel}
+              disabled={disabled}
+              checked={checked}
+            >
               <RadioGroup.Indicator className='radio-group-indicator' />
             </RadioGroup.Item>
             <label className='option-label' htmlFor={optionLabel}>

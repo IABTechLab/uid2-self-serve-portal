@@ -1,0 +1,9 @@
+.manage-participants-header {
+  display: flex;
+  justify-content: space-between;
+
+  &-right {
+    display: flex;
+    align-items: center;
+  }
+}

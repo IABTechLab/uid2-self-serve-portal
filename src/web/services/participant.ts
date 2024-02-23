@@ -144,6 +144,21 @@ export type UpdateParticipantForm = {
   apiRoles: number[];
 };
 
+export type AddParticipantForm = {
+  contactFirstName: string;
+  contactLastName: string;
+  contactEmail: string;
+  participantName: string;
+  apiRoles: number[];
+  participantTypes: number[];
+  siteId?: number;
+  role: string;
+};
+
+export async function AddParticipant(formData: AddParticipantForm) {
+  await axios.put(`/participants/`, formData);
+}
+
 export async function UpdateParticipant(formData: UpdateParticipantForm, participantId?: number) {
   try {
     await axios.put(`/participants/${participantId ?? 'current'}`, formData);

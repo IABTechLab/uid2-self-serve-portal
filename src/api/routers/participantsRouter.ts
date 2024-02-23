@@ -2,17 +2,19 @@ import { AxiosError } from 'axios';
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { ApiRoleDTO } from '../entities/ApiRole';
+import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { AuditAction } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
+  participantCreationAndApprovalPartial,
   ParticipantCreationPartial,
+  ParticipantCreationPartial2,
   ParticipantDTO,
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
-import { UserDTO, UserRole } from '../entities/User';
+import { User, UserCreationPartial, UserDTO, UserRole } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
@@ -37,6 +39,7 @@ import {
   validateApiRoles,
 } from '../services/apiKeyService';
 import {
+  insertAddParticipantAuditTrail,
   insertApproveAccountAuditTrail,
   insertKeyPairAuditTrails,
   insertManageApiKeyAuditTrail,
@@ -211,6 +214,68 @@ export function createParticipantsRouter() {
       return res.sendStatus(200);
     }
   );
+
+  participantsRouter.put('/', isApproverCheck, async (req, res) => {
+    const participantRequest = ParticipantCreationPartial2.parse(req.body);
+    const duplicateParticipant = await Participant.query().findOne(
+      'name',
+      participantRequest.participantName
+    );
+    if (duplicateParticipant) {
+      return res.status(400).send('Duplicate participant name');
+    }
+    const existingUser = await findUserByEmail(participantRequest.email);
+    if (existingUser) {
+      return res.status(400).send('Duplicate requesting user');
+    }
+    const kcAdminClient = await getKcAdminClient();
+    const existingKcUser = await kcAdminClient.users.find({ email: participantRequest.email });
+    if (existingKcUser.length > 0) {
+      return res.status(400).send('Requesting user already exists in keycloak');
+    }
+
+    const traceId = getTraceId(req);
+    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    const user = UserCreationPartial.parse({ ...req.body, acceptedTerms: true });
+
+    const types = await ParticipantType.query().findByIds(participantRequest.participantTypes);
+    const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
+
+    const participantData = participantCreationAndApprovalPartial.parse({
+      name: participantRequest.participantName,
+      types,
+      apiRoles,
+      status: ParticipantStatus.Approved,
+      siteId: participantRequest.siteId,
+      users: [user],
+    });
+
+    const auditTrail = await insertAddParticipantAuditTrail(currentUser!.email, participantData);
+
+    // create site (UID2-2631)
+
+    // create participant, user, and role/type mappings
+    await Participant.query().insertGraphAndFetch([participantData], {
+      relate: true,
+    });
+
+    // Get newly created user
+    const newUser = await User.query().findOne('email', participantRequest.email);
+
+    // create keyCloak user
+    const kcUser = await createNewUser(
+      kcAdminClient,
+      participantRequest.firstName,
+      participantRequest.lastName,
+      participantRequest.email
+    );
+
+    await sendInviteEmail(kcAdminClient, kcUser);
+    await sendParticipantApprovedEmail([newUser!], traceId);
+    await updateAuditTrailToProceed(auditTrail.id);
+
+    return res.sendStatus(200);
+  });
 
   participantsRouter.use('/:participantId', checkParticipantId);
 

@@ -10,6 +10,7 @@
   padding: 0 !important;
   border-radius: 100% !important;
   border: 1px solid var(--theme-input-border) !important;
+  margin-right: 1rem;
 }
 .radio-group-item:has(> .radio-group-indicator) {
   background-color: var(--theme-radio-background);

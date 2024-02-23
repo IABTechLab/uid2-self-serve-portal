@@ -11,6 +11,8 @@ export type Option<T> = {
   optionLabel: string;
   optionToolTip?: String;
   value: T;
+  disabled?: boolean;
+  checked?: boolean;
 };
 export type SelectInputProps<TFieldValues extends FieldValues> = {
   options: Option<FieldValue<TFieldValues>>[];

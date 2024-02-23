@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
-import { User, UserDTO } from '../entities/User';
+import { User, UserDTO, UserRole } from '../entities/User';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 

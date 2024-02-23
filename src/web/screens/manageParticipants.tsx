@@ -7,10 +7,13 @@ import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
 import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
+import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
 import {
+  AddParticipant,
+  AddParticipantForm,
   ApproveParticipantRequest,
   GetApprovedParticipants,
   GetParticipantsAwaitingApproval,
@@ -19,9 +22,10 @@ import {
   UpdateParticipantForm,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
-import { preloadSiteList } from '../services/site';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
+
+import '../components/ParticipantManagement/ParticipantManagement.scss';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
@@ -30,7 +34,8 @@ function ManageParticipants() {
       ParticipantDTO[],
       ParticipantTypeDTO[],
       ApiRoleDTO[],
-      AdminSiteDTO[]
+      AdminSiteDTO[],
+      string[]
     ];
   };
 
@@ -52,21 +57,39 @@ function ManageParticipants() {
     handleParticipantUpdated();
   };
 
+  const onAddParticipant = async (form: AddParticipantForm) => {
+    await AddParticipant(form);
+    handleParticipantUpdated();
+  };
+
   return (
     <div>
-      <h1>Manage Participants</h1>
-      <p className='heading-details'>
-        View and manage UID2 Portal participant requests and information.
-      </p>
       <Suspense fallback={<Loading />}>
         <Await resolve={data.results}>
           {([participantRequests, participantApproved, participantTypes, apiRoles]: [
             ParticipantRequestDTO[],
             ParticipantDTO[],
             ParticipantTypeDTO[],
-            ApiRoleDTO[]
+            ApiRoleDTO[],
+            string[]
           ]) => (
             <>
+              <div className='manage-participants-header'>
+                <div className='manage-participants-header-left'>
+                  <h1>Manage Participants</h1>
+                  <p className='heading-details'>
+                    View and manage UID2 Portal participant requests and information.
+                  </p>
+                </div>
+                <div className='manage-participants-header-right'>
+                  <AddParticipantDialog
+                    apiRoles={apiRoles}
+                    participantTypes={participantTypes}
+                    onAddParticipant={onAddParticipant}
+                    triggerButton={<button type='button'>Add Participant</button>}
+                  />
+                </div>
+              </div>
               <ParticipantRequestsTable
                 participantRequests={participantRequests}
                 participantTypes={participantTypes}
@@ -96,13 +119,11 @@ export const ManageParticipantsRoute: PortalRoute = {
     const participantsApproved = GetApprovedParticipants();
     const participantTypes = GetAllParticipantTypes();
     const apiRoles = GetAllEnabledApiRoles();
-    const sitesList = preloadSiteList();
     const promises = Promise.all([
       participantsAwaitingApproval,
       participantsApproved,
       participantTypes,
       apiRoles,
-      sitesList,
     ]);
     return defer({
       results: promises,
