@@ -23,6 +23,8 @@ export const UpdateUserParser = z.object({
 @injectable()
 export class UserService {
   public async getCurrentUser(req: UserRequest) {
+    console.log(`------------- hit userService`);
+
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
     const userWithIsApprover = await enrichUserWithIsApprover(user!);

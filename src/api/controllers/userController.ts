@@ -1,3 +1,4 @@
+import { trace } from 'console';
 import { Response } from 'express';
 import { inject } from 'inversify';
 import {
@@ -7,6 +8,7 @@ import {
   httpPatch,
   httpPost,
   httpPut,
+  interfaces,
   request,
   response,
 } from 'inversify-express-utils';
@@ -26,15 +28,16 @@ import {
 import { DeletedUser, UpdateUserParser, UserService } from '../services/userService';
 import { UserRequest } from '../services/usersService';
 
-@controller('/users')
-export class UserController {
+@controller('/api/users')
+export class UserController implements interfaces.Controller {
   constructor(@inject(TYPES.UserService) private userService: UserService) {}
 
-  @httpGet('/current')
+  @httpGet('/current/')
   public async getCurrentUser(
     @request() req: UserRequest,
     @response() res: Response
   ): Promise<void> {
+    console.log(`------------- hit userController`);
     const result = await this.userService.getCurrentUser(req);
     res.json(result);
   }
