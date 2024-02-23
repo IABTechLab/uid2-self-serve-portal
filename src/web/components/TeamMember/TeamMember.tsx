@@ -4,10 +4,10 @@ import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
-import { handleErrorPopup } from '../../utils/apiError';
+import { handleErrorToast } from '../../utils/apiError';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
-import { StatusNotificationType, StatusPopup } from '../Core/StatusPopup';
+import { SuccessToast } from '../Core/Toast';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type DeleteConfirmationDialogProps = {
@@ -33,6 +33,7 @@ function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirma
       }
       open={openConfirmation}
       onOpenChange={setOpenConfirmation}
+      closeButtonText='Cancel'
     >
       <ul className='dot-list'>
         <li>
@@ -42,13 +43,6 @@ function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirma
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
           Delete Team Member
-        </button>
-        <button
-          type='button'
-          className='transparent-button'
-          onClick={() => setOpenConfirmation(false)}
-        >
-          Cancel
         </button>
       </div>
     </Dialog>
@@ -76,8 +70,6 @@ function TeamMember({
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopup, setStatusPopup] = useState<StatusNotificationType>();
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
@@ -92,16 +84,12 @@ function TeamMember({
     setInviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id);
-      setStatusPopup({
-        type: 'Success',
-        message: `Invitation sent`,
-      });
-      setShowStatusPopup(true);
+      SuccessToast('Invitation sent');
       setInviteState(InviteState.sent);
     } catch (e) {
       setErrorInfo(e as Error);
       setInviteState(InviteState.error);
-      handleErrorPopup(e, setStatusPopup, setShowStatusPopup);
+      handleErrorToast(e);
     }
   }, [person.id, reinviteState, resendInvite]);
 
@@ -161,14 +149,6 @@ function TeamMember({
             />
             <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
           </div>
-          {statusPopup && (
-            <StatusPopup
-              status={statusPopup!.type}
-              show={showStatusPopup}
-              setShow={setShowStatusPopup}
-              message={statusPopup!.message}
-            />
-          )}
         </div>
       </td>
     </tr>

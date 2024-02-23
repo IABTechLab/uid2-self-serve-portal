@@ -413,7 +413,7 @@ export function createParticipantsRouter() {
       const participantRoles = await getApiRoles(participant);
       const validRoles = editedKey.roles.concat(participantRoles);
       if (!validateApiRoles(newApiRoles, validRoles)) {
-        return res.status(401).send('API Roles are invalid');
+        return res.status(401).send('API Permissions are invalid');
       }
 
       if (!newName) {
@@ -515,7 +515,7 @@ export function createParticipantsRouter() {
       );
 
       if (!validateApiRoles(apiRoles, await getApiRoles(participant!))) {
-        return res.status(400).send('Invalid API Roles');
+        return res.status(400).send('Invalid API Permissions');
       }
 
       const key = await createApiKey(keyName, apiRoles, participant!.siteId);

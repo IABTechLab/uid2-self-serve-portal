@@ -132,7 +132,7 @@ export async function GetParticipantApiRoles(participantId?: number) {
 
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not get participant API Roles');
+    throw backendError(e, 'Could not get participant API Permissions');
   }
 }
 

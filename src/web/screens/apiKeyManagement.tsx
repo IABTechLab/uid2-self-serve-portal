@@ -57,7 +57,7 @@ function ApiKeyManagement() {
     try {
       await DisableApiKey(apiKey);
       reloader.revalidate();
-      SuccessToast('Your key has been disabled');
+      SuccessToast('Your key has been deleted');
     } catch (e) {
       handleErrorToast(e);
     }
@@ -70,6 +70,7 @@ function ApiKeyManagement() {
         View and manage your API keys. For more information, see{' '}
         <a
           target='_blank'
+          className='outside-link'
           href='https://unifiedid.com/docs/getting-started/gs-permissions'
           rel='noreferrer'
         >

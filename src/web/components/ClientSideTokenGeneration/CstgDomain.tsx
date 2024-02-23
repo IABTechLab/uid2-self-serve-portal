@@ -26,6 +26,7 @@ function DeleteConfirmationDialog({ domain, onRemoveDomain }: DeleteConfirmation
       }
       open={openConfirmation}
       onOpenChange={setOpenConfirmation}
+      closeButtonText='Cancel'
     >
       <ul className='dot-list'>
         <li>{domain}</li>
@@ -33,13 +34,6 @@ function DeleteConfirmationDialog({ domain, onRemoveDomain }: DeleteConfirmation
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
           Delete Domain
-        </button>
-        <button
-          type='button'
-          className='transparent-button'
-          onClick={() => setOpenConfirmation(false)}
-        >
-          Cancel
         </button>
       </div>
     </Dialog>

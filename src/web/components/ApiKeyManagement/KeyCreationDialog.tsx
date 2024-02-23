@@ -9,7 +9,7 @@ import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
 import DisplaySecret from '../Core/DisplaySecret';
 import { Form } from '../Core/Form';
-import { StatusPopup } from '../Core/StatusPopup';
+import { InfoToast } from '../Core/Toast';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
@@ -38,14 +38,14 @@ function CreateApiKeyForm({
       <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
         <TextInput inputName='name' label='Name' required />
         <CheckboxInput
-          label='API Roles'
+          label='API Permissions'
           inputName='roles'
           options={sortApiRoles(availableRoles).map((role) => ({
             optionLabel: role.externalName,
             value: role.roleName,
           }))}
           rules={{
-            required: 'Please select at least one API role.',
+            required: 'Please select at least one API permission.',
           }}
         />
       </Form>
@@ -133,22 +133,14 @@ function KeyCreationDialog({
 }: KeyCreationDialogProps) {
   const [open, setOpen] = useState(false);
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
-  const [showStatusPopup, setShowStatusPopup] = useState<boolean>(false);
-  const [statusPopupMessage, setStatusPopupMessage] = useState<string>('');
-
-  const showPopupMessage = (message: string) => {
-    setStatusPopupMessage(message);
-    setShowStatusPopup(true);
-  };
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
     setKeySecrets(await onKeyCreation(formData));
-    showPopupMessage('Copy the credentials to a secure location before closing the page.');
+    InfoToast('Copy the credentials to a secure location before closing the page.');
   };
 
   const closeDialog = () => {
     setKeySecrets(undefined);
-    setShowStatusPopup(false);
     setOpen(false);
   };
 
@@ -163,16 +155,6 @@ function KeyCreationDialog({
           />
         ) : (
           <ShowApiKeySecrets closeDialog={closeDialog} keySecrets={keySecrets} />
-        )}
-
-        {showStatusPopup && (
-          <StatusPopup
-            status='Info'
-            show={showStatusPopup}
-            setShow={setShowStatusPopup}
-            message={statusPopupMessage}
-            displayDuration={10000}
-          />
         )}
       </Dialog>
     </div>

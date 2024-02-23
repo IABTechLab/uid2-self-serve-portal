@@ -79,6 +79,7 @@ export function SearchAndAddParticipants({
           }
           open={openConfirmation}
           onOpenChange={setOpenConfirmation}
+          closeButtonText='Cancel'
         >
           Adding permissions for the following participants:
           <ul className='dot-list'>
@@ -89,13 +90,6 @@ export function SearchAndAddParticipants({
           <div className='dialog-footer-section'>
             <button type='button' className='primary-button' onClick={onHandleAddSites}>
               Save
-            </button>
-            <button
-              type='button'
-              className='transparent-button'
-              onClick={() => setOpenConfirmation(false)}
-            >
-              Cancel
             </button>
           </div>
         </Dialog>

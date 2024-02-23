@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { SuccessToast } from './Toast';
+
 import './CopySecretButton.scss';
 
 export type Secret = {
@@ -7,15 +9,9 @@ export type Secret = {
   valueName: string;
 };
 
-function CopyKeyButton({
-  secret,
-  setShowStatusPopup,
-}: {
-  secret: Secret;
-  setShowStatusPopup: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+function CopyKeyButton({ secret }: { secret: Secret }) {
   const copyKey = (): void => {
-    setShowStatusPopup(true);
+    SuccessToast(`${secret.valueName} copied to clipboard.`);
     navigator.clipboard.writeText(secret.value);
   };
 

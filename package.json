@@ -1,6 +1,6 @@
 {
   "name": "uid2-ssportal",
-  "version": "0.14.0-29fc217f54",
+  "version": "0.15.4-7cb3abc3e5",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -32,6 +32,7 @@
     "@react-keycloak/core": "^3.2.0",
     "@react-keycloak/web": "^3.4.0",
     "@sendgrid/mail": "^7.7.0",
+    "@storybook/addon-styling-webpack": "^0.0.6",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.2.1",
     "@testing-library/user-event": "^14.5.2",
@@ -74,8 +75,8 @@
     "react-hook-form": "^7.50.0",
     "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
-    "reflect-metadata": "^0.1.14",
     "react-toastify": "^10.0.4",
+    "reflect-metadata": "^0.1.14",
     "sass": "^1.70.0",
     "stream-browserify": "^3.0.0",
     "swr": "^2.2.4",
