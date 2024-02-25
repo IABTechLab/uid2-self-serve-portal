@@ -3,9 +3,15 @@ import axios from 'axios';
 import { z } from 'zod';
 
 import { ParticipantApprovalPartial } from '../entities/Participant';
-import { SSP_ADMIN_SERVICE_BASE_URL, SSP_ADMIN_SERVICE_CLIENT_KEY } from '../envars';
+import {
+  SSP_ADMIN_SERVICE_BASE_URL,
+  SSP_OKTA_AUTH_SERVER_URL,
+  SSP_OKTA_CLIENT_ID,
+  SSP_OKTA_CLIENT_SECRET,
+} from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
+  AccessToken,
   AdminSiteDTO,
   ApiKeyAdmin,
   ClientType,
@@ -15,14 +21,51 @@ import {
   SharingListResponse,
 } from './adminServiceHelpers';
 
+let accessToken: string = '';
+let accessTokenExpiry: number = 0;
+
+const oktaClient = axios.create({
+  baseURL: SSP_OKTA_AUTH_SERVER_URL,
+  headers: {
+    common: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${Buffer.from(
+        `${SSP_OKTA_CLIENT_ID}:${SSP_OKTA_CLIENT_SECRET}`,
+        'binary'
+      ).toString('base64')}`,
+    },
+  },
+});
+
+async function getAccessToken() {
+  if (
+    !accessToken ||
+    !accessTokenExpiry ||
+    Math.floor(Date.now() / 1000) + 600 > accessTokenExpiry
+  ) {
+    const response = await oktaClient.post<AccessToken>(
+      '/v1/token?grant_type=client_credentials&scope=uid2.admin.ss-portal'
+    );
+    accessToken = response.data.access_token;
+    accessTokenExpiry = Math.floor(Date.now() / 1000) + response.data.expires_in;
+  }
+  return accessToken;
+}
+
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
   headers: {
     common: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${SSP_ADMIN_SERVICE_CLIENT_KEY}`,
+      Authorization: `Bearer `,
     },
   },
+});
+
+adminServiceClient.interceptors.request.use(async (config) => {
+  const updated = config;
+  updated.headers.Authorization = `Bearer ${await getAccessToken()}`;
+  return config;
 });
 
 const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'allowed_types'> = {

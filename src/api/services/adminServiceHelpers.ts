@@ -5,6 +5,13 @@ import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 
+export type AccessToken = {
+  token_type: string;
+  expires_in: number;
+  access_token: string;
+  scope: string;
+};
+
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
 export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
 export const ClientTypeDescriptions: Record<ClientType, string> = {
