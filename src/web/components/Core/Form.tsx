@@ -56,6 +56,8 @@ export function Form<T extends FieldValues>({
         if (axios.isAxiosError(err)) {
           if (err.response?.data?.message) {
             message = err.response?.data?.message as string;
+          } else if ((err.response?.data ?? [])[0]?.message) {
+            message = err.response?.data[0]?.message as string;
           } else if (err.response?.data) {
             message = err.response?.data as string;
           }
