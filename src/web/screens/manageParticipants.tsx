@@ -5,7 +5,6 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
-import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { SuccessToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
