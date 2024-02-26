@@ -1,6 +1,6 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
+import { ParticipantRequestDTO } from '../../../api/routers/participants/participantsRouter';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ParticipantRequestItem } from './ParticipantRequestItem';
