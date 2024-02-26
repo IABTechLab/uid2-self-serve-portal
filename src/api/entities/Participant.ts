@@ -98,7 +98,7 @@ export const ParticipantCreationPartial = ParticipantSchema.pick({
   users: z.array(UserCreationPartial).optional(),
 });
 
-export const ParticipantCreationPartial2 = z.object({
+export const AdminParticipantCreationPartial = z.object({
   participantName: z.string(),
   participantTypes: z.array(z.number()),
   apiRoles: z.array(z.number()),
@@ -106,6 +106,7 @@ export const ParticipantCreationPartial2 = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
+  role: z.string(),
 });
 
 export const ParticipantApprovalPartial = ParticipantSchema.pick({

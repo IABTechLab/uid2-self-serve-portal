@@ -30,14 +30,7 @@ import '../components/ParticipantManagement/ParticipantManagement.scss';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
-    results: [
-      ParticipantRequestDTO[],
-      ParticipantDTO[],
-      ParticipantTypeDTO[],
-      ApiRoleDTO[],
-      AdminSiteDTO[],
-      string[]
-    ];
+    results: [ParticipantRequestDTO[], ParticipantDTO[], ParticipantTypeDTO[], ApiRoleDTO[]];
   };
 
   const reloader = useRevalidator();

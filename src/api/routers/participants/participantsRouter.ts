@@ -5,11 +5,11 @@ import { z } from 'zod';
 import { ApiRole, ApiRoleDTO } from '../../entities/ApiRole';
 import { AuditAction } from '../../entities/AuditTrail';
 import {
+  AdminParticipantCreationPartial,
   Participant,
   ParticipantApprovalPartial,
   participantCreationAndApprovalPartial,
   ParticipantCreationPartial,
-  ParticipantCreationPartial2,
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
@@ -221,12 +221,12 @@ export function createParticipantsRouter() {
   );
 
   participantsRouter.put('/', isApproverCheck, async (req, res) => {
-    const participantRequest = ParticipantCreationPartial2.parse(req.body);
-    const duplicateParticipant = await Participant.query().findOne(
+    const participantRequest = AdminParticipantCreationPartial.parse(req.body);
+    const existingParticipant = await Participant.query().findOne(
       'name',
       participantRequest.participantName
     );
-    if (duplicateParticipant) {
+    if (existingParticipant) {
       return res.status(400).send('Duplicate participant name');
     }
     const existingUser = await findUserByEmail(participantRequest.email);
@@ -236,11 +236,11 @@ export function createParticipantsRouter() {
     const kcAdminClient = await getKcAdminClient();
     const existingKcUser = await kcAdminClient.users.find({ email: participantRequest.email });
     if (existingKcUser.length > 0) {
-      return res.status(400).send('Requesting user already exists in keycloak');
+      return res.status(400).send('Requesting user already exists in Keycloak');
     }
 
     const traceId = getTraceId(req);
-    const currentUser = await findUserByEmail(req.auth?.payload?.email as string);
+    const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
     const user = UserCreationPartial.parse({
       ...req.body,
       acceptedTerms: true,
@@ -258,7 +258,7 @@ export function createParticipantsRouter() {
       users: [user],
     });
 
-    const auditTrail = await insertAddParticipantAuditTrail(currentUser!.email, participantData);
+    const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);
 
     // create site (UID2-2631)
 
@@ -271,14 +271,14 @@ export function createParticipantsRouter() {
     const newUser = (await User.query().findOne('email', participantRequest.email)) as User;
 
     // create keyCloak user
-    const kcUser = await createNewUser(
+    const newKcUser = await createNewUser(
       kcAdminClient,
       participantRequest.firstName,
       participantRequest.lastName,
       participantRequest.email
     );
 
-    await sendInviteEmail(kcAdminClient, kcUser);
+    await sendInviteEmail(kcAdminClient, newKcUser);
     await sendParticipantApprovedEmail([newUser!], traceId);
     await updateAuditTrailToProceed(auditTrail.id);
 

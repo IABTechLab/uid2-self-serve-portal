@@ -62,7 +62,7 @@ function AddParticipantDialog({
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setValue, reset, open]);
+  }, [watch, setValue, open]);
 
   useEffect(() => {
     if (!open) {
