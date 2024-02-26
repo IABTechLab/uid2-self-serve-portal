@@ -32,7 +32,7 @@ function useTestServer() {
     terminator = null;
   });
   beforeAll(async () => {
-    const serverDetails = configureAndStartApi(false);
+    const serverDetails = configureAndStartApi(false, 6541);
     api = serverDetails.server;
     routers = serverDetails.routers;
     terminator = createHttpTerminator({ server: api });
