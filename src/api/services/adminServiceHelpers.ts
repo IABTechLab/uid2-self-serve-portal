@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
+import { User } from '../entities/User';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
 export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
@@ -38,6 +39,10 @@ export type SharingListResponse = {
   allowed_sites: number[];
   allowed_types: ClientType[];
   hash: number;
+};
+
+export type ParticipantApprovalResponse = {
+  users: User[];
 };
 
 export type KeyPairDTO = {

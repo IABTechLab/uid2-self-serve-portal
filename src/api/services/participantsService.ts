@@ -25,6 +25,10 @@ export interface ParticipantRequest extends Request {
   participant?: Participant;
 }
 
+export interface UserParticipantRequest extends ParticipantRequest {
+  user?: User;
+}
+
 export const sendNewParticipantEmail = async (
   newParticipant: z.infer<typeof ParticipantCreationPartial>,
   typeIds: number[],
@@ -89,7 +93,7 @@ export const addSharingParticipants = async (
   siteIds: number[],
   traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
+  const sharingListResponse = await getSharingList(participantSiteId, traceId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
   const response = await updateSharingList(
     participantSiteId,
@@ -106,7 +110,7 @@ export const deleteSharingParticipants = async (
   siteIds: number[],
   traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
+  const sharingListResponse = await getSharingList(participantSiteId, traceId);
   const newSharingList = sharingListResponse.allowed_sites.filter(
     (siteId) => !siteIds.includes(siteId)
   );
@@ -191,7 +195,7 @@ export const UpdateSharingTypes = async (
   types: ClientType[],
   traceId: string
 ): Promise<SharingListResponse> => {
-  const sharingListResponse = await getSharingList(participantSiteId);
+  const sharingListResponse = await getSharingList(participantSiteId, traceId);
   return updateSharingList(
     participantSiteId,
     sharingListResponse.hash,
