@@ -95,8 +95,6 @@ Please add tests to your changes where possible! We don't have a minimum coverag
 
 Focus on testing functionality, not implementation. For example, if you have a button which waits 1 second and then displays a dialog, _do not_ simulate a click and then assert that `setTimeout(...)` was called. Instead, simulate a click, advance the timer, and make sure the dialog was displayed! Refer to the [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles) and the section of the docs on [Query Priority](https://testing-library.com/docs/queries/about#priority).
 
-To run api tests `npm run test-api` please make sure the docker container is running and the api is not being run.
-
 ## Keycloak setup
 
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
@@ -192,10 +190,18 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+### `npm run api`
+
+Run the API on port 6540 by default. The API server will restart if you make edits, and you will see logs in the console. Useful if you need to debug the API.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run test-api`
+
+Runs the API tests. Please ensure the docker container is running.
 
 ### `npm run build`
 
