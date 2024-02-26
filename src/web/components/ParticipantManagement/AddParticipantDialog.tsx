@@ -224,9 +224,12 @@ function AddParticipantDialog({
               </div>
             </div>
           </div>
-          <button type='submit' className='primary-button'>
-            Approve Participant
-          </button>
+          <br />
+          <div className='request-button'>
+            <button type='submit' className='primary-button'>
+              Request Account
+            </button>
+          </div>
         </form>
       </FormProvider>
     </Dialog>
