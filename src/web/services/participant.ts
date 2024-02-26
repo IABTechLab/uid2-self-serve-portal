@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
-import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
+import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import {
   ApiKeyDTO,
   ClientType,

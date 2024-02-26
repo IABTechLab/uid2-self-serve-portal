@@ -95,8 +95,6 @@ Please add tests to your changes where possible! We don't have a minimum coverag
 
 Focus on testing functionality, not implementation. For example, if you have a button which waits 1 second and then displays a dialog, _do not_ simulate a click and then assert that `setTimeout(...)` was called. Instead, simulate a click, advance the timer, and make sure the dialog was displayed! Refer to the [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles) and the section of the docs on [Query Priority](https://testing-library.com/docs/queries/about#priority).
 
-To run api tests `npm run test-api` please make sure the docker container is running and the api is not being run.
-
 ## Keycloak setup
 
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
@@ -126,7 +124,7 @@ docker compose -f docker-compose.yml -f docker-compose.log-stack.yml up
 
 This will spawn 3 additional containers for Promtail, Loki and Grafana.
 
-Once running, log onto the Grafana UI from [here](http://localhost:3101). Use the username `admin` and password `admin`.
+Once running, log onto the Grafana UI from [http://localhost:3101](http://localhost:3101). Use the username `admin` and password `admin`.
 
 Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Notes: When adding Loki, if the test query fails, try a query in the **Explore** tab as it may have been added and working anyway. This url should match the value of `SSP_LOKI_HOST` in your `.env` file.
 
@@ -192,10 +190,18 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
+### `npm run api`
+
+Run the API on port 6540 by default. The API server will restart if you make edits, and you will see logs in the console. Useful if you need to debug the API.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+
+### `npm run test-api`
+
+Runs the API tests. Please ensure the docker container is running.
 
 ### `npm run build`
 
@@ -207,7 +213,7 @@ Your app is ready to be deployed! Note that builds for deployment are not made o
 
 ## Setting up UI Dev Environment
 
-The following steps describe the minimal steps required to successfully log in to the portal UI. If you require a fully-functional portal, please perform the following steps as well as the steps described below in [Connecting to local admin service](README.md#connecting-to-local-admin-service).
+The following steps describe the minimal steps required to successfully log in to the portal UI.
 
 1. Set up Docker, as described above: [Docker](README.md#docker)
 2. Set up your `.env` file per [Environment Variables](README.md#environment-variables)
@@ -229,13 +235,14 @@ The following steps describe the minimal steps required to successfully log in t
    ```
    npm run knex:seed:run
    ```
-8. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
-9. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
-10. Open the email and Click `Verify Email`
-11. Fill in the form however you want and submit the form
-12. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
-13. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-14. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
+8. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
+9. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
+10. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
+11. Open the email and Click `Verify Email`
+12. Fill in the form however you want and submit the form
+13. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
+14. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
+15. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
 
     ```
     declare @email as nvarchar(256) = '<Enter your email here>'
@@ -248,12 +255,10 @@ The following steps describe the minimal steps required to successfully log in t
     where u.email = @email
     ```
 
-15. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
-16. Return to the UI and you should be good to go!
+16. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
+17. Return to the UI and you should be good to go!
 
-### Connecting to local admin service
-
-Functionality relating to Sharing Permissions will require the admin service to be running locally. Perform the following steps to standup the admin service to develop and test admin-related functionality on the portal.
+### Connecting to local Admin service
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
 1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.

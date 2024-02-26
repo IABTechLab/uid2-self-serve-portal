@@ -4,7 +4,7 @@ import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../api/routers/participantsRouter';
+import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import { AdminSiteDTO } from '../../api/services/adminServiceHelpers';
 import { Loading } from '../components/Core/Loading';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
