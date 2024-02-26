@@ -65,7 +65,7 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath
   } as express.Handler;
 }
 
-export function configureAndStartApi(useMetrics: boolean = true) {
+export function configureAndStartApi(useMetrics: boolean = true, portNumber: number = 6540) {
   const container = new Container();
   container.bind<UserService>(TYPES.UserService).to(UserService);
   container.bind<LoggerService>(TYPES.LoggerService).to(LoggerService);
@@ -227,7 +227,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     }
   };
   app.use(errorHandler);
-  const port = 6540;
+  const port = portNumber;
   const inversifyExpressServer = new InversifyExpressServer(container, router, null, app);
   const server = inversifyExpressServer.build().listen(port, () => {
     logger.info(`Listening on port ${port}.`);
