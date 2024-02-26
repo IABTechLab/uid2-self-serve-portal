@@ -126,7 +126,7 @@ docker compose -f docker-compose.yml -f docker-compose.log-stack.yml up
 
 This will spawn 3 additional containers for Promtail, Loki and Grafana.
 
-Once running, log onto the Grafana UI from [here](http://localhost:3101). Use the username `admin` and password `admin`.
+Once running, log onto the Grafana UI from [http://localhost:3101](http://localhost:3101). Use the username `admin` and password `admin`.
 
 Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Notes: When adding Loki, if the test query fails, try a query in the **Explore** tab as it may have been added and working anyway. This url should match the value of `SSP_LOKI_HOST` in your `.env` file.
 

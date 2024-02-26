@@ -5,7 +5,7 @@ import LokiTransport from 'winston-loki';
 
 import { SSP_APP_NAME, SSP_IS_DEVELOPMENT, SSP_LOKI_HOST } from '../envars';
 
-const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
+export const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
   const basicString = `${timestamp} [${label}] ${level}: ${message}`;
   const requestDetails = meta
     ? ` [traceId=${meta.req.headers.traceId ?? ''}] metadata=${JSON.stringify(meta)}`
