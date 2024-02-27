@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { ParticipantApprovalPartial } from '../entities/Participant';
@@ -30,16 +30,28 @@ const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'all
   allowed_sites: [],
 };
 
-export const getSharingList = async (siteId: number): Promise<SharingListResponse> => {
-  const response = await adminServiceClient.get<SharingListResponse>(
-    `/api/sharing/list/${siteId}`,
-    {
-      validateStatus: (status) => status >= 200 && status < 300,
+export const getSharingList = async (
+  siteId: number,
+  traceId: string
+): Promise<SharingListResponse> => {
+  try {
+    const response = await adminServiceClient.get<SharingListResponse>(
+      `/api/sharing/list/${siteId}`,
+      {
+        validateStatus: (status) => status >= 200 && status < 300,
+      }
+    );
+    return response.data.allowed_sites
+      ? response.data
+      : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
+  } catch (error: unknown) {
+    const { errorLogger } = getLoggers();
+    if (error instanceof AxiosError) {
+      error.message = `Site Id invalid`;
     }
-  );
-  return response.data.allowed_sites
-    ? response.data
-    : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
+    errorLogger.error(`${error}`, traceId);
+    throw error;
+  }
 };
 
 export const updateSharingList = async (
@@ -86,15 +98,10 @@ export const getApiKeysBySite = async (siteId: number): Promise<ApiKeyAdmin[]> =
   return response.data;
 };
 
-export const getApiKeyById = async (keyId: String): Promise<ApiKeyAdmin | undefined> => {
+export const getApiKeyById = async (keyId: String): Promise<ApiKeyAdmin> => {
   const response = await adminServiceClient.get<ApiKeyAdmin>(`/api/client/keyId`, {
     params: { keyId },
   });
-
-  if (response.status === 404) {
-    return undefined;
-  }
-
   return response.data;
 };
 

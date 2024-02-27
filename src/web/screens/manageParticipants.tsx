@@ -6,7 +6,7 @@ import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import { Loading } from '../components/Core/Loading';
-import { SuccessToast } from '../components/Core/Toast';
+import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
@@ -41,7 +41,12 @@ function ManageParticipants() {
     participantId: number,
     formData: ParticipantApprovalFormDetails
   ) => {
-    await ApproveParticipantRequest(participantId, formData);
+    const approvalResponse = await ApproveParticipantRequest(participantId, formData);
+    if (approvalResponse?.users?.length === 0) {
+      WarningToast(
+        'Participant approved. Since no users are attached to participant, email confirmation sent to approver.'
+      );
+    }
     handleParticipantUpdated();
   };
 
