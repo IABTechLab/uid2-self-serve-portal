@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import axios from 'axios';
 import { ReactNode, useCallback } from 'react';
 import {
   DefaultValues,

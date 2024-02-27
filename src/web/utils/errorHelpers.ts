@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 export const analyticsIdentifier = (errorId?: string, errorHash?: string) => {
   if (!errorHash && !errorId) return 'No error identifier';

@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
-import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
