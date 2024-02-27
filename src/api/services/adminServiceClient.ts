@@ -13,7 +13,10 @@ import {
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
+  SiteCreationDTO,
+  SiteDTO,
 } from './adminServiceHelpers';
+import { SiteRequest } from './usersService';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -144,6 +147,19 @@ export const addKeyPair = async (
     name,
   });
   return response.data;
+};
+
+export const addSite = async (): // siteId: number,
+// name: string,
+// disabled: boolean = false
+Promise<SiteCreationDTO> => {
+  // const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
+  //   site_id: siteId,
+  //   disabled,
+  //   name,
+  // });
+  // return response.data;
+  return null;
 };
 
 export const setSiteClientTypes = async (

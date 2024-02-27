@@ -34,6 +34,14 @@ export type AdminSiteDTO = {
 
 export type SiteDTO = Omit<AdminSiteDTO, 'roles'> & { apiRoles: ApiRoleDTO[] };
 
+export type SiteCreationDTO = {
+  name: string;
+  enabled: boolean;
+  description?: string;
+  types: number[];
+  domainNames?: string[];
+};
+
 export type SharingListResponse = {
   allowed_sites: number[];
   allowed_types: ClientType[];
