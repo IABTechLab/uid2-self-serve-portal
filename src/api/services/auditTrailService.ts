@@ -8,12 +8,9 @@ import {
   AuditTrailDTO,
   AuditTrailEvents,
 } from '../entities/AuditTrail';
-import {
-  Participant,
-  ParticipantApprovalPartial,
-  participantCreationAndApprovalPartial,
-} from '../entities/Participant';
+import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
 import { getLoggers } from '../helpers/loggingHelpers';
+import { ParticipantCreationAndApprovalPartial } from '../routers/participants/participantClasses';
 import { ClientType } from './adminServiceHelpers';
 import { findUserByEmail } from './usersService';
 
@@ -193,7 +190,7 @@ export const insertApproveAccountAuditTrail = async (
 
 export const insertAddParticipantAuditTrail = async (
   userEmail: string,
-  data: z.infer<typeof participantCreationAndApprovalPartial>
+  data: z.infer<typeof ParticipantCreationAndApprovalPartial>
 ) => {
   const user = await findUserByEmail(userEmail);
   const eventData: AddParticipantEventData = {

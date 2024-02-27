@@ -7,6 +7,7 @@
 .radio-group-item {
   width: 25px;
   height: 25px;
+  margin-right: 11px;
   padding: 0 !important;
   border-radius: 100% !important;
   border: 1px solid var(--theme-input-border) !important;
@@ -35,4 +36,9 @@
 .radio-option {
   display: flex;
   align-items: center;
+
+  .disabled {
+    background-color: #ebebe4 !important;
+    cursor: default !important;
+  }
 }

@@ -1,4 +1,5 @@
 import * as RadioGroup from '@radix-ui/react-radio-group';
+import clsx from 'clsx';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
 import { BaseInputProps, Input } from './Input';
@@ -37,7 +38,7 @@ export function RadioInput<
         {options.map(({ optionLabel, value, disabled }) => (
           <div className='radio-option' key={optionLabel}>
             <RadioGroup.Item
-              className='radio-group-item'
+              className={clsx('radio-group-item', disabled ? 'disabled' : '')}
               value={value}
               id={optionLabel}
               disabled={disabled}

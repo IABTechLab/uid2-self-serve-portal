@@ -25,7 +25,7 @@ import { GetAllParticipantTypes } from '../services/participantType';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-import '../components/ParticipantManagement/ParticipantManagement.scss';
+import './manageParticipants.scss';
 
 function ManageParticipants() {
   const data = useLoaderData() as {
@@ -64,8 +64,7 @@ function ManageParticipants() {
             ParticipantRequestDTO[],
             ParticipantDTO[],
             ParticipantTypeDTO[],
-            ApiRoleDTO[],
-            string[]
+            ApiRoleDTO[]
           ]) => (
             <>
               <div className='manage-participants-header'>

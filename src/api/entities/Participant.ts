@@ -98,17 +98,6 @@ export const ParticipantCreationPartial = ParticipantSchema.pick({
   users: z.array(UserCreationPartial).optional(),
 });
 
-export const AdminParticipantCreationPartial = z.object({
-  participantName: z.string(),
-  participantTypes: z.array(z.number()),
-  apiRoles: z.array(z.number()),
-  siteId: z.number().optional(),
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  role: z.string(),
-});
-
 export const ParticipantApprovalPartial = ParticipantSchema.pick({
   siteId: true,
   name: true,
@@ -117,17 +106,4 @@ export const ParticipantApprovalPartial = ParticipantSchema.pick({
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
-});
-
-export const participantCreationAndApprovalPartial = ParticipantSchema.pick({
-  siteId: true,
-  name: true,
-  types: true,
-  apiRoles: true,
-  status: true,
-}).extend({
-  siteId: z.number().optional(),
-  types: z.array(ParticipantTypeSchema.pick({ id: true })),
-  apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
-  users: z.array(UserCreationPartial),
 });

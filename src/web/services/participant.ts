@@ -152,6 +152,7 @@ export type AddParticipantForm = {
   apiRoles: number[];
   participantTypes: number[];
   siteId?: number;
+  siteIdType: number;
   role: string;
 };
 

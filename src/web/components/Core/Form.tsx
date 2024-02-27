@@ -10,6 +10,8 @@ import {
   UseFormRegisterReturn,
 } from 'react-hook-form';
 
+import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
+
 import './Form.scss';
 
 type FormProps<T extends FieldValues> = {
@@ -52,16 +54,8 @@ export function Form<T extends FieldValues>({
         await onSubmit(formData);
       } catch (err) {
         if (onError) onError(err);
-        let message = 'Something went wrong, please try again';
-        if (axios.isAxiosError(err)) {
-          if (err.response?.data?.message) {
-            message = err.response?.data?.message as string;
-          } else if ((err.response?.data ?? [])[0]?.message) {
-            message = err.response?.data[0]?.message as string;
-          } else if (err.response?.data) {
-            message = err.response?.data as string;
-          }
-        }
+        const message =
+          extractMessageFromAxiosError(err as Error) ?? 'Something went wrong, please try again';
 
         setError('root.serverError', {
           type: '400',

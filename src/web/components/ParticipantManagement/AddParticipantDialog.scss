@@ -1,6 +1,6 @@
 .add-participant-dialog {
   max-width: 1100px;
-  height: 880px;
+  height: 900px;
   overflow-y: auto;
 
   .add-participant-dialog-flex {
@@ -24,7 +24,7 @@
   .search-bar {
     display: flex;
     flex-direction: column;
-    width: 500px;
+    width: 400px;
 
     .site-search-results {
       flex-grow: 1;
