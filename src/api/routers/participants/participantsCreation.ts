@@ -6,6 +6,8 @@ import { ParticipantType } from '../../entities/ParticipantType';
 import { User, UserCreationPartial } from '../../entities/User';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
+import { getSiteList } from '../../services/adminServiceClient';
+import { SiteCreationRequest } from '../../services/adminServiceHelpers';
 import {
   insertAddParticipantAuditTrail,
   updateAuditTrailToProceed,
@@ -40,6 +42,16 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     return res.status(400).send('Requesting user already exists in Keycloak');
   }
 
+  if (!participantRequest.siteId) {
+    // check for duplicate site in admin
+    const { siteName } = participantRequest;
+    // this is dumb but we'd need a new endpoint in admin to search by name
+    const sites = await getSiteList();
+    if (sites.filter((site) => site.name === siteName).length > 0) {
+      return res.status(400).send('Requested site name already exists');
+    }
+  }
+
   const traceId = getTraceId(req);
   const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
   const user = UserCreationPartial.parse({
@@ -50,38 +62,47 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
   const types = await ParticipantType.query().findByIds(participantRequest.participantTypes);
   const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
 
-  const participantData = ParticipantCreationAndApprovalPartial.parse({
-    name: participantRequest.participantName,
-    types,
-    apiRoles,
-    status: ParticipantStatus.Approved,
-    siteId: participantRequest.siteId,
-    users: [user],
-  });
+  // const participantData = ParticipantCreationAndApprovalPartial.parse({
+  //   name: participantRequest.participantName,
+  //   types,
+  //   apiRoles,
+  //   status: ParticipantStatus.Approved,
+  //   siteId: participantRequest.siteId,
+  //   users: [user],
+  // });
 
-  const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);
+  // const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);
 
-  // create site (UID2-2631)
+  if (!participantRequest.siteId) {
+    // create site (UID2-2631)
+    const adminApiRoles = apiRoles.map((role) => role.roleName);
+    const newSite = SiteCreationRequest.parse({
+      name: participantRequest.siteName,
+      description: '',
+      roles: adminApiRoles,
+    });
+    console.log(newSite);
+  }
 
   // create participant, user, and role/type mappings
-  await Participant.query().insertGraphAndFetch([participantData], {
-    relate: true,
-  });
+  // await Participant.query().insertGraphAndFetch([participantData], {
+  //   relate: true,
+  // });
 
   // Get newly created user
-  const newUser = (await User.query().findOne('email', participantRequest.email)) as User;
+  // const newUser = (await User.query().findOne('email', participantRequest.email)) as User;
 
   // create keyCloak user
-  const newKcUser = await createNewUser(
-    kcAdminClient,
-    participantRequest.firstName,
-    participantRequest.lastName,
-    participantRequest.email
-  );
+  // const newKcUser = await createNewUser(
+  //   kcAdminClient,
+  //   participantRequest.firstName,
+  //   participantRequest.lastName,
+  //   participantRequest.email
+  // );
 
-  await sendInviteEmail(kcAdminClient, newKcUser);
-  await sendParticipantApprovedEmail([newUser!], traceId);
-  await updateAuditTrailToProceed(auditTrail.id);
+  // await sendInviteEmail(kcAdminClient, newKcUser);
+  // await sendParticipantApprovedEmail([newUser!], traceId);
+  // await updateAuditTrailToProceed(auditTrail.id);
 
   return res.sendStatus(200);
 }

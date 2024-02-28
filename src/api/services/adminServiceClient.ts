@@ -156,14 +156,16 @@ export const addKeyPair = async (
   return response.data;
 };
 
-export const addSite = async (): // siteId: number,
-// name: string,
-// disabled: boolean = false
-Promise<SiteCreationDTO> => {
-  // const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
-  //   site_id: siteId,
-  //   disabled,
+export const addSite = async (
+  name: string,
+  description: string,
+  roles: string[]
+): Promise<SiteCreationDTO | null> => {
+  console.log('adding site');
+  // const response = await adminServiceClient.post<SiteCreationDTO>('/api/site/add', {
   //   name,
+  //   description,
+  //   roles,
   // });
   // return response.data;
   return null;

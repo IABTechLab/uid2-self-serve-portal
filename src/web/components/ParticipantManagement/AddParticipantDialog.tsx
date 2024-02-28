@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { boolean } from 'zod';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
@@ -46,6 +47,7 @@ function AddParticipantDialog({
   const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteDTO>[]>();
   const [searchText, setSearchText] = useState('');
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
+  const [newSite, setNewSite] = useState(false);
 
   const formMethods = useForm<AddParticipantForm>({ defaultValues: { siteIdType: 0 } });
   const {
@@ -69,6 +71,10 @@ function AddParticipantDialog({
         const roles = GetRecommendedRolesById(types as number[]);
         setValue('apiRoles', roles);
       }
+      if (name === 'siteIdType') {
+        const type = value.siteIdType;
+        setNewSite(type === 1);
+      }
     });
     return () => subscription.unsubscribe();
   }, [watch, setValue, open]);
@@ -81,6 +87,7 @@ function AddParticipantDialog({
 
   const onSubmit = useCallback(
     async (formData: AddParticipantForm) => {
+      // const siteId = formData.siteId === '' ? null : formData.siteId;
       await onAddParticipant(formData);
       setOpen(false);
     },
@@ -159,44 +166,58 @@ function AddParticipantDialog({
                   label='Site ID'
                   options={[
                     { optionLabel: 'Existing Site ID', value: 0 },
-                    { optionLabel: 'New Site ID', value: 1, disabled: true },
+                    { optionLabel: 'New Site ID', value: 1 },
                   ]}
                 />
               </div>
               <div className='right-column'>
-                <SearchBarContainer>
-                  <Input
-                    inputName='participantSearch'
-                    label='Search Participant Name to find Site ID'
-                  >
-                    <SearchBarInput
-                      inputClassName='search-input'
-                      fullBorder
-                      value={
-                        !selectedSite
-                          ? searchText
-                          : `${selectedSite.name} (Site ID ${selectedSite.id})`
-                      }
-                      onChange={onSearchInputChange}
-                      onFocus={() => setSelectedSite(undefined)}
-                    />
-                  </Input>
-                  {!selectedSite && searchText && (
-                    <SearchBarResults className='site-search-results'>
-                      {siteSearchResults?.map((s) => (
-                        <button
-                          key={s.item.id}
-                          type='button'
-                          className='text-button'
-                          onClick={() => onSiteClick(s.item)}
-                        >
-                          <HighlightedResult result={s} /> (Site ID: {s.item.id})
-                        </button>
-                      ))}
-                    </SearchBarResults>
-                  )}
-                </SearchBarContainer>
-                <input type='hidden' {...register('siteId')} />
+                {!newSite && (
+                  <div>
+                    <SearchBarContainer>
+                      <Input
+                        inputName='participantSearch'
+                        label='Search Participant Name to find Site ID'
+                      >
+                        <SearchBarInput
+                          inputClassName='search-input'
+                          fullBorder
+                          value={
+                            !selectedSite
+                              ? searchText
+                              : `${selectedSite.name} (Site ID ${selectedSite.id})`
+                          }
+                          onChange={onSearchInputChange}
+                          onFocus={() => setSelectedSite(undefined)}
+                        />
+                      </Input>
+                      {!selectedSite && searchText && (
+                        <SearchBarResults className='site-search-results'>
+                          {siteSearchResults?.map((s) => (
+                            <button
+                              key={s.item.id}
+                              type='button'
+                              className='text-button'
+                              onClick={() => onSiteClick(s.item)}
+                            >
+                              <HighlightedResult result={s} /> (Site ID: {s.item.id})
+                            </button>
+                          ))}
+                        </SearchBarResults>
+                      )}
+                    </SearchBarContainer>
+                    <Input inputName='siteId'>
+                      <input type='hidden' />
+                    </Input>
+                  </div>
+                )}
+                {newSite && (
+                  <TextInput
+                    inputName='siteName'
+                    label='New Site Name'
+                    className='text-input'
+                    rules={{ required: 'Please specify Site Name.' }}
+                  />
+                )}
               </div>
             </div>
           </div>

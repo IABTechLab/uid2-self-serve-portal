@@ -6,6 +6,7 @@ import { ParticipantApprovalPartial } from '../entities/Participant';
 import { User } from '../entities/User';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
+const AdminClientRole = z.enum(['ID_READER', 'GENERATOR', 'MAPPER', 'SHARER']);
 export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
 export const ClientTypeDescriptions: Record<ClientType, string> = {
   ADVERTISER: 'Advertiser',
@@ -41,6 +42,12 @@ export type SiteCreationDTO = {
   types: number[];
   domainNames?: string[];
 };
+
+export const SiteCreationRequest = z.object({
+  name: z.string(),
+  description: z.string(),
+  roles: z.array(AdminClientRole),
+});
 
 export type SharingListResponse = {
   allowed_sites: number[];
