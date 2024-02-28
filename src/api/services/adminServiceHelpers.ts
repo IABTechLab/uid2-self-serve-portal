@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
 import { ParticipantApprovalPartial } from '../entities/Participant';
-import { ParticipantTypeData, ParticipantTypeDTO } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
@@ -55,15 +54,15 @@ export type KeyPairDTO = {
   name?: string;
 };
 
-export const AllowedSiteRoles: Record<string, AvailableClientRole[]> = {
-  [ParticipantTypeData.Advertiser.typeName]: ['MAPPER', 'SHARER'],
-  [ParticipantTypeData.DataProvider.typeName]: ['MAPPER', 'SHARER'],
-  [ParticipantTypeData.DSP.typeName]: ['ID_READER', 'SHARER'],
-  [ParticipantTypeData.Publisher.typeName]: ['GENERATOR', 'SHARER'],
+export const AllowedSiteRolesById: Record<number, number[]> = {
+  1: [3], // DSP: ID_READER
+  2: [1], // Advertiser: MAPPER
+  3: [1], // Data Provider: MAPPER
+  4: [2], // Publisher: GENERATOR
 };
 
-export function GetRecommendedRoles(roles: ParticipantTypeDTO[]) {
-  const recommendedRolesWithDuplicates = roles.flatMap((r) => AllowedSiteRoles[r.typeName]);
+export function GetRecommendedRolesById(roleIds: number[]) {
+  const recommendedRolesWithDuplicates = roleIds.flatMap((r) => AllowedSiteRolesById[r]);
   return [...new Set(recommendedRolesWithDuplicates)];
 }
 

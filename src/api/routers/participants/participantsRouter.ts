@@ -73,6 +73,7 @@ import {
   getAllUserFromParticipant,
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
+import { createParticipant } from './participantsCreation';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
 import { getParticipantUsers } from './participantsUsers';
 
@@ -227,6 +228,8 @@ export function createParticipantsRouter() {
       return res.sendStatus(200);
     }
   );
+
+  participantsRouter.put('/', createParticipant);
 
   participantsRouter.use('/:participantId', checkParticipantId);
 

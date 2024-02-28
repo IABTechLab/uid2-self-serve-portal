@@ -133,7 +133,7 @@ function ParticipantApprovalForm({
             onFocus={() => setSelectedSite(undefined)}
           />
         </Input>
-        {!selectedSite && (
+        {!selectedSite && searchText && (
           <SearchBarResults className='site-search-results'>
             {siteSearchResults?.map((s) => (
               <button

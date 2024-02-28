@@ -138,7 +138,7 @@ describe('Form Component', () => {
     expect(formError).toHaveTextContent(serverErrorMessage);
   });
 
-  test('should render an error when unknow server error occurs', async () => {
+  test('should render an error when unknown server error occurs', async () => {
     (axios.isAxiosError as unknown as jest.Mock).mockReturnValue(true);
 
     mockOnSubmit.mockImplementation(() => {

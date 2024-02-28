@@ -52,6 +52,10 @@ export function CheckboxInput<
     field.onChange(Array.from(valueCopy));
   };
 
+  const isChecked = (value: TPath) => {
+    return ((field.value as Array<TPath>) ?? []).includes(value);
+  };
+
   return (
     <Input error={error} label={label} inputName={inputName}>
       <div className='inline-options'>
@@ -64,6 +68,7 @@ export function CheckboxInput<
               aria-invalid={error ? 'true' : 'false'}
               defaultChecked={isDefaultChecked(value)}
               onCheckedChange={(checked: boolean) => onCheckedChange(checked, value)}
+              checked={isChecked(value)}
             >
               <Checkbox.Indicator className='checkbox-indicator'>
                 <FontAwesomeIcon icon='check' />
