@@ -21,6 +21,7 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 1', value: 'option1' },
   { optionLabel: 'Option 2', value: 'option2' },
   { optionLabel: 'Option 3', value: 'option3' },
+  { optionLabel: 'Option 4', value: 'option4', disabled: true },
 ];
 
 export const WithLabel = Template.bind({});

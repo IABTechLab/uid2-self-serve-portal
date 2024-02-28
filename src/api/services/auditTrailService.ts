@@ -8,12 +8,10 @@ import {
   AuditTrailDTO,
   AuditTrailEvents,
 } from '../entities/AuditTrail';
-import {
-  Participant,
-  ParticipantApprovalPartial,
-  participantCreationAndApprovalPartial,
-} from '../entities/Participant';
+import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
+import { User } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
+import { ParticipantCreationAndApprovalPartial } from '../routers/participants/participantClasses';
 import { ClientType } from './adminServiceHelpers';
 import { findUserByEmail } from './usersService';
 
@@ -159,10 +157,9 @@ export const insertKeyPairAuditTrails = async (
 
 export const insertApproveAccountAuditTrail = async (
   participant: Participant,
-  userEmail: string,
+  user: User,
   data: z.infer<typeof ParticipantApprovalPartial>
 ) => {
-  const user = await findUserByEmail(userEmail);
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
     apiRoles: data.apiRoles.map((role) => role.id),
@@ -184,7 +181,7 @@ export const insertApproveAccountAuditTrail = async (
 
   return AuditTrail.query().insert({
     userId: user?.id!,
-    userEmail,
+    userEmail: user.email,
     event: AuditTrailEvents.ApproveAccount,
     eventData,
     succeeded: false,
@@ -193,7 +190,7 @@ export const insertApproveAccountAuditTrail = async (
 
 export const insertAddParticipantAuditTrail = async (
   userEmail: string,
-  data: z.infer<typeof participantCreationAndApprovalPartial>
+  data: z.infer<typeof ParticipantCreationAndApprovalPartial>
 ) => {
   const user = await findUserByEmail(userEmail);
   const eventData: AddParticipantEventData = {

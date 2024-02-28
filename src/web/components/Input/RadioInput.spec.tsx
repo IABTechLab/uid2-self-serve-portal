@@ -1,10 +1,10 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './RadioInput.stories';
 
-const { WithValidation } = composeStories(stories);
+const { WithValidation, WithLabel } = composeStories(stories);
 
 describe('RadioInput', () => {
   it('verifies field based on rule', async () => {
@@ -17,6 +17,15 @@ describe('RadioInput', () => {
     await userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));
     const option2Radio = screen.getByLabelText('Option 2');
     expect(option2Radio).toBeChecked();
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('verifies radio button is disabled', async () => {
+    render(<WithLabel />);
+    await userEvent.click(screen.getByRole('radio', { name: 'Option 4' }));
+    const option2Radio = screen.getByLabelText('Option 4');
+    expect(option2Radio).not.toBeChecked();
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
