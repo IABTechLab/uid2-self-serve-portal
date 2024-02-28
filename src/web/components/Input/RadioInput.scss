@@ -38,7 +38,7 @@
   align-items: center;
 
   .disabled {
-    background-color: #ebebe4 !important;
-    cursor: default !important;
+    background-color: var(--theme-disabled-button);
+    cursor: default;
   }
 }
