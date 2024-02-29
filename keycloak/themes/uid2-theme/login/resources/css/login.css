@@ -112,6 +112,10 @@ body {
   width: auto;
 }
 
+.pf-c-button.pf-m-control[data-password-toggle] {
+  display: none;
+}
+
 .pf-c-form-control {
   height: 45px !important;
   border-radius: 5px;
