@@ -6,8 +6,11 @@ import { ParticipantType } from '../../entities/ParticipantType';
 import { User, UserCreationPartial } from '../../entities/User';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
-import { getSiteList } from '../../services/adminServiceClient';
-import { SiteCreationRequest } from '../../services/adminServiceHelpers';
+import { addSite, getSiteList } from '../../services/adminServiceClient';
+import {
+  mapClientTypesToAdminEnums,
+  SiteCreationRequest,
+} from '../../services/adminServiceHelpers';
 import {
   insertAddParticipantAuditTrail,
   updateAuditTrailToProceed,
@@ -42,15 +45,15 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     return res.status(400).send('Requesting user already exists in Keycloak');
   }
 
-  if (!participantRequest.siteId) {
-    // check for duplicate site in admin
-    const { siteName } = participantRequest;
-    // this is dumb but we'd need a new endpoint in admin to search by name
-    const sites = await getSiteList();
-    if (sites.filter((site) => site.name === siteName).length > 0) {
-      return res.status(400).send('Requested site name already exists');
-    }
-  }
+  // if (!participantRequest.siteId) {
+  //   // check for duplicate site in admin
+  //   const { siteName } = participantRequest;
+  //   // this is dumb but we'd need a new endpoint in admin to search by name
+  //   const sites = await getSiteList();
+  //   if (sites.filter((site) => site.name === siteName).length > 0) {
+  //     return res.status(400).send('Requested site name already exists');
+  //   }
+  // }
 
   const traceId = getTraceId(req);
   const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
@@ -75,13 +78,14 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
 
   if (!participantRequest.siteId) {
     // create site (UID2-2631)
-    const adminApiRoles = apiRoles.map((role) => role.roleName);
+    const adminSiteTypes = mapClientTypesToAdminEnums(types).join(',');
     const newSite = SiteCreationRequest.parse({
       name: participantRequest.siteName,
       description: '',
-      roles: adminApiRoles,
+      types: adminSiteTypes,
     });
-    console.log(newSite);
+    const addedSite = addSite(newSite.name, newSite.description, newSite.types);
+    console.log(addedSite);
   }
 
   // create participant, user, and role/type mappings

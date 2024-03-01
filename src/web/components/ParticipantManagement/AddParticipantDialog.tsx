@@ -1,7 +1,6 @@
 import Fuse from 'fuse.js';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { boolean } from 'zod';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
@@ -13,6 +12,7 @@ import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { Dialog } from '../Core/Dialog';
 import { CheckboxInput } from '../Input/CheckboxInput';
+import { RootFormErrors } from '../Input/FormError';
 import { Input } from '../Input/Input';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
@@ -66,6 +66,7 @@ function AddParticipantDialog({
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
+      console.log(value);
       if (name === 'participantTypes') {
         const types = value.participantTypes;
         const roles = GetRecommendedRolesById(types as number[]);
@@ -81,15 +82,19 @@ function AddParticipantDialog({
 
   useEffect(() => {
     if (!open) {
+      // the dialog doesn't de-render on close, so we need to clean up our state
+      setSearchText('');
+      setSiteSearchResults(undefined);
+      setSelectedSite(undefined);
+      setNewSite(false);
       reset();
     }
   }, [open, reset]);
 
   const onSubmit = useCallback(
     async (formData: AddParticipantForm) => {
-      // const siteId = formData.siteId === '' ? null : formData.siteId;
       await onAddParticipant(formData);
-      setOpen(false);
+      // setOpen(false);
     },
     [onAddParticipant]
   );
@@ -129,11 +134,7 @@ function AddParticipantDialog({
       onOpenChange={setOpen}
       className='add-participant-dialog'
     >
-      {errors.root?.serverError && (
-        <p className='form-error' data-testid='formError'>
-          {errors.root?.serverError.message}
-        </p>
-      )}
+      <RootFormErrors fieldErrors={errors} />
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(submit)}>
           <h4>Participant Information</h4>

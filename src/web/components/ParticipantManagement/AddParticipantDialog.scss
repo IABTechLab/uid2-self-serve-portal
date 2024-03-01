@@ -26,6 +26,12 @@
     flex-direction: column;
     width: 400px;
 
+    .search-bar-input-container {
+      margin-top: 0.5rem;
+      padding: 11px;
+      border-radius: 5px 5px 0 0;
+    }
+
     .site-search-results {
       flex-grow: 1;
       overflow: scroll;

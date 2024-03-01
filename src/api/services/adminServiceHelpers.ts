@@ -2,11 +2,10 @@
 import { z } from 'zod';
 
 import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
-import { ParticipantApprovalPartial } from '../entities/Participant';
+import { ParticipantTypeSchema } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 
 type ClientRole = 'ID_READER' | 'GENERATOR' | 'MAPPER' | 'OPTOUT' | 'SHARER';
-const AdminClientRole = z.enum(['ID_READER', 'GENERATOR', 'MAPPER', 'SHARER']);
 export type ClientType = 'DSP' | 'ADVERTISER' | 'DATA_PROVIDER' | 'PUBLISHER';
 export const ClientTypeDescriptions: Record<ClientType, string> = {
   ADVERTISER: 'Advertiser',
@@ -46,7 +45,7 @@ export type SiteCreationDTO = {
 export const SiteCreationRequest = z.object({
   name: z.string(),
   description: z.string(),
-  roles: z.array(AdminClientRole),
+  types: z.string(),
 });
 
 export type SharingListResponse = {
@@ -82,9 +81,9 @@ export function GetRecommendedRolesById(roleIds: number[]) {
 }
 
 export const mapClientTypesToAdminEnums = (
-  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
+  types: z.infer<typeof ParticipantTypeSchema>[]
 ): string[] => {
-  return participantApprovalPartial.types.map((type) => {
+  return types.map((type) => {
     let adminEnum = 'UNKNOWN';
     switch (type.id) {
       case 1:

@@ -159,22 +159,23 @@ export const addKeyPair = async (
 export const addSite = async (
   name: string,
   description: string,
-  roles: string[]
+  types: string
 ): Promise<SiteCreationDTO | null> => {
-  console.log('adding site');
-  // const response = await adminServiceClient.post<SiteCreationDTO>('/api/site/add', {
-  //   name,
-  //   description,
-  //   roles,
-  // });
-  // return response.data;
-  return null;
+  const response = await adminServiceClient.post<SiteCreationDTO>('/api/site/add', null, {
+    params: {
+      name,
+      description,
+      types,
+      enabled: true,
+    },
+  });
+  return response.data;
 };
 
 export const setSiteClientTypes = async (
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
 ): Promise<void> => {
-  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial).join(',');
+  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial.types).join(',');
   const response = await adminServiceClient.post('/api/site/set-types', null, {
     params: {
       id: participantApprovalPartial.siteId,
