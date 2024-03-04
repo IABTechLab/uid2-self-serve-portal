@@ -1,12 +1,15 @@
 import { ReactKeycloakProvider } from '@react-keycloak/web';
+import Keycloak from 'keycloak-js';
 import { PropsWithChildren } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
-import keycloak from '../web/Keycloak';
+export const createTestKeycloakInstance = () => {
+  return new Keycloak('/api/keycloak-config');
+};
 
 export function TestContextProvider({ children }: PropsWithChildren) {
   return (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider authClient={createTestKeycloakInstance()}>
       <BrowserRouter>{children}</BrowserRouter>
     </ReactKeycloakProvider>
   );
