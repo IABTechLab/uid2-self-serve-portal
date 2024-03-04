@@ -57,8 +57,9 @@ function ManageParticipants() {
   };
 
   const onAddParticipant = async (form: AddParticipantForm) => {
-    await AddParticipant(form);
+    const response = await AddParticipant(form);
     handleParticipantUpdated();
+    return response;
   };
 
   return (

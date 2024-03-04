@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import Fuse from 'fuse.js';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -11,6 +12,7 @@ import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { Dialog } from '../Core/Dialog';
+import { SuccessToast } from '../Core/Toast';
 import { CheckboxInput } from '../Input/CheckboxInput';
 import { RootFormErrors } from '../Input/FormError';
 import { Input } from '../Input/Input';
@@ -24,7 +26,7 @@ import './AddParticipantDialog.scss';
 
 type AddParticipantDialogProps = {
   triggerButton: JSX.Element;
-  onAddParticipant: (form: AddParticipantForm) => Promise<void>;
+  onAddParticipant: (form: AddParticipantForm) => Promise<AxiosResponse>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
 };
@@ -93,8 +95,11 @@ function AddParticipantDialog({
 
   const onSubmit = useCallback(
     async (formData: AddParticipantForm) => {
-      await onAddParticipant(formData);
-      // setOpen(false);
+      const response = await onAddParticipant(formData);
+      if (response.status === 200) {
+        SuccessToast('Participant Added.');
+      }
+      setOpen(false);
     },
     [onAddParticipant]
   );

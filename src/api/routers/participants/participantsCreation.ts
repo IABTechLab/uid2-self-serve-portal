@@ -84,8 +84,8 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
       description: '',
       types: adminSiteTypes,
     });
-    const addedSite = addSite(newSite.name, newSite.description, newSite.types);
-    console.log(addedSite);
+    // const addedSite = addSite(newSite.name, newSite.description, newSite.types);
+    // console.log(addedSite);
   }
 
   // create participant, user, and role/type mappings
