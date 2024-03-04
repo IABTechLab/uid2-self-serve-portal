@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Keycloak, { KeycloakProfile } from 'keycloak-js';
 
 export function mockAuthenticatedKeycloak() {
