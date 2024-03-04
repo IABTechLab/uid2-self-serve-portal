@@ -6,7 +6,7 @@
 
   .search-bar-input-container {
     position: relative;
-    border-bottom: 2px solid var(--theme-action);
+    border-bottom: 2px solid var(--theme-input-border);
     padding: 14px 11px;
 
     svg {
@@ -30,7 +30,7 @@
 
   .full-border.search-bar-input-container {
     border-radius: 10px 10px 0 0;
-    border: 1px solid var(--theme-action);
+    border: 1px solid var(--theme-input-border);
   }
 
   .search-bar-input {
@@ -41,6 +41,6 @@
     background: var(--theme-background-content);
     box-shadow: 0 4px 8px var(--theme-box-shadow);
     border-radius: 0 0 10px 10px;
-    border: 1px solid var(--theme-action);
+    border: 1px solid var(--theme-input-border);
   }
 }

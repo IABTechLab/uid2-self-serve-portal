@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+  AddParticipantEventData,
   ApproveAccountEventData,
   AuditAction,
   AuditTrail,
@@ -8,7 +9,9 @@ import {
   AuditTrailEvents,
 } from '../entities/AuditTrail';
 import { Participant, ParticipantApprovalPartial } from '../entities/Participant';
+import { User } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
+import { ParticipantCreationAndApprovalPartial } from '../routers/participants/participantClasses';
 import { ClientType } from './adminServiceHelpers';
 import { findUserByEmail } from './usersService';
 
@@ -154,10 +157,9 @@ export const insertKeyPairAuditTrails = async (
 
 export const insertApproveAccountAuditTrail = async (
   participant: Participant,
-  userEmail: string,
+  user: User,
   data: z.infer<typeof ParticipantApprovalPartial>
 ) => {
-  const user = await findUserByEmail(userEmail);
   const eventData: ApproveAccountEventData = {
     siteId: data.siteId!,
     apiRoles: data.apiRoles.map((role) => role.id),
@@ -179,8 +181,33 @@ export const insertApproveAccountAuditTrail = async (
 
   return AuditTrail.query().insert({
     userId: user?.id!,
-    userEmail,
+    userEmail: user.email,
     event: AuditTrailEvents.ApproveAccount,
+    eventData,
+    succeeded: false,
+  });
+};
+
+export const insertAddParticipantAuditTrail = async (
+  userEmail: string,
+  data: z.infer<typeof ParticipantCreationAndApprovalPartial>
+) => {
+  const user = await findUserByEmail(userEmail);
+  const eventData: AddParticipantEventData = {
+    siteId: data.siteId!,
+    apiRoles: data.apiRoles.map((role) => role.id),
+    participantName: data.name,
+    email: data.users[0].email,
+    firstName: data.users[0].firstName,
+    lastName: data.users[0].lastName,
+    participantTypes: data.types.map((type) => type.id),
+    role: data.users[0].role!,
+  };
+
+  return AuditTrail.query().insert({
+    userId: user?.id!,
+    userEmail,
+    event: AuditTrailEvents.AddParticipant,
     eventData,
     succeeded: false,
   });

@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import axios from 'axios';
 import { ReactNode, useCallback } from 'react';
 import {
   DefaultValues,
@@ -9,6 +8,8 @@ import {
   useForm,
   UseFormRegisterReturn,
 } from 'react-hook-form';
+
+import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 
 import './Form.scss';
 
@@ -53,9 +54,7 @@ export function Form<T extends FieldValues>({
       } catch (err) {
         if (onError) onError(err);
         const message =
-          axios.isAxiosError(err) && (err.response?.data ?? [])[0]?.message
-            ? ((err.response?.data ?? [])[0]?.message as string)
-            : 'Something went wrong, please try again';
+          extractMessageFromAxiosError(err as Error) ?? 'Something went wrong, please try again';
 
         setError('root.serverError', {
           type: '400',

@@ -33,9 +33,10 @@ import {
   getTraceId,
 } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
-import { createParticipantsRouter } from './routers/participantsRouter';
+import { createParticipantsRouter } from './routers/participants/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
+import { LoggerService } from './services/loggerService';
 import { UserService } from './services/userService';
 
 const BASE_REQUEST_PATH = '/api';
@@ -64,9 +65,10 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath
   } as express.Handler;
 }
 
-export function configureAndStartApi(useMetrics: boolean = true) {
+export function configureAndStartApi(useMetrics: boolean = true, portNumber: number = 6540) {
   const container = new Container();
   container.bind<UserService>(TYPES.UserService).to(UserService);
+  container.bind<LoggerService>(TYPES.LoggerService).to(LoggerService);
   const app = express();
   const routers = {
     rootRouter: express.Router(),
@@ -193,10 +195,14 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     const traceId = getTraceId(req);
     errorLogger.error(`Fallback error handler invoked: ${err.message}`, traceId);
     let code = 500;
+    let currentMessage = `${err.message}`;
     if (err instanceof AxiosError) {
       errorLogger.error(`API Error: ${err.response?.data?.message}`, traceId);
       errorLogger.error(err.stack!, traceId);
       code = err.response?.status!;
+      if (err.response?.data?.message) {
+        currentMessage = `${err.response?.data?.message}`!;
+      }
     } else if (err.stack) {
       errorLogger.error(err.stack as string, traceId);
       if (err.statusCode) {
@@ -216,6 +222,11 @@ export function configureAndStartApi(useMetrics: boolean = true) {
         message: 'Unauthorized. You do not have the necessary permissions.',
         errorHash: req.headers.traceId,
       });
+    } else if (code === 404) {
+      res.status(404).json({
+        message: currentMessage,
+        errorHash: req.headers.traceId,
+      });
     } else {
       res.status(500).json({
         message:
@@ -225,7 +236,7 @@ export function configureAndStartApi(useMetrics: boolean = true) {
     }
   };
   app.use(errorHandler);
-  const port = 6540;
+  const port = portNumber;
   const inversifyExpressServer = new InversifyExpressServer(container, router, null, app);
   const server = inversifyExpressServer.build().listen(port, () => {
     logger.info(`Listening on port ${port}.`);

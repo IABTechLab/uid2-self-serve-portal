@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/routers/participantsRouter';
+import { ParticipantRequestDTO } from '../../../api/routers/participants/participantsRouter';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
@@ -133,7 +133,7 @@ function ParticipantApprovalForm({
             onFocus={() => setSelectedSite(undefined)}
           />
         </Input>
-        {!selectedSite && (
+        {!selectedSite && searchText && (
           <SearchBarResults className='site-search-results'>
             {siteSearchResults?.map((s) => (
               <button
