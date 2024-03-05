@@ -112,8 +112,23 @@ body {
   width: auto;
 }
 
+.pf-c-input-group {
+  position: relative;
+}
+
 .pf-c-button.pf-m-control[data-password-toggle] {
-  display: none;
+  position: absolute;
+  right: 0;
+  top: 7px;
+  background-color: transparent;
+  color: #b7c2ea;
+  z-index: 100;
+
+  --pf-c-button--after--BorderColor: transparent;
+}
+
+.pf-c-button.pf-m-control[data-password-toggle]:hover {
+  color: var(--theme-action);
 }
 
 .pf-c-form-control {
@@ -121,6 +136,7 @@ body {
   border-radius: 5px;
   margin-top: 8px;
   border: 1px solid var(--theme-input-border);
+  padding-right: 45px;
 }
 
 h1#kc-page-title {
