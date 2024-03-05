@@ -192,16 +192,16 @@ You will also see any lint errors in the console.
 
 ### `npm run api`
 
-Run the API on port 6540 by default. The API server will restart if you make edits, and you will see logs in the console. Useful if you need to debug the API.
+Run the API on port 6540 by default. The API server will restart if you make edits, and you will see logs in the console. Useful if you need to debug the API separately from the UI.
 
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+See Create React App's section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run test-api`
 
-Runs the API tests. Please ensure the docker container is running.
+Runs the API tests on port 6541 by default. You must ensure the docker container is running. You must run these tests manually on your branch as they do not automatically run as part of the [Build and Test workflow](/.github/workflows/build-and-test.yaml).
 
 ### `npm run build`
 
