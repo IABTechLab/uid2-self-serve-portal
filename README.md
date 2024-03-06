@@ -192,16 +192,16 @@ You will also see any lint errors in the console.
 
 ### `npm run api`
 
-Run the API on port 6540 by default. The API server will restart if you make edits, and you will see logs in the console. Useful if you need to debug the API.
+Run the API on port 6540 by default. The API server will restart if you make edits, and you will see logs in the console. Useful if you need to debug the API separately from the UI.
 
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+See Create React App's section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run test-api`
 
-Runs the API tests. Please ensure the docker container is running.
+Runs the API tests on port 6541 by default. You must ensure the docker container is running. You must run these tests manually on your branch as they do not automatically run as part of the [Build and Test workflow](/.github/workflows/build-and-test.yaml).
 
 ### `npm run build`
 
@@ -261,7 +261,7 @@ The following steps describe the minimal steps required to successfully log in t
 ### Connecting to local Admin service
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
-1. Ensure that the site ids of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing ids by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
+1. Ensure that the site IDs of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing IDs by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
 1. Ensure that you have a key in `admins.json` in `uid2-admin` with the `SHARING_PORTAL` role, and that key is in your `.env` as `SSP_ADMIN_SERVICE_CLIENT_KEY`.
    - You should be able to use an existing key in `admins.json`, rather than having to create a new one.
    - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file.
