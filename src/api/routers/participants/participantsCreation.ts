@@ -15,7 +15,11 @@ import {
   insertAddParticipantAuditTrail,
   updateAuditTrailToProceed,
 } from '../../services/auditTrailService';
-import { createNewUser, sendInviteEmail } from '../../services/kcUsersService';
+import {
+  assignClientRoleToUser,
+  createNewUser,
+  sendInviteEmail,
+} from '../../services/kcUsersService';
 import {
   ParticipantRequest,
   sendParticipantApprovedEmail,
@@ -45,15 +49,15 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     return res.status(400).send('Requesting user already exists in Keycloak');
   }
 
-  // if (!participantRequest.siteId) {
-  //   // check for duplicate site in admin
-  //   const { siteName } = participantRequest;
-  //   // this is dumb but we'd need a new endpoint in admin to search by name
-  //   const sites = await getSiteList();
-  //   if (sites.filter((site) => site.name === siteName).length > 0) {
-  //     return res.status(400).send('Requested site name already exists');
-  //   }
-  // }
+  if (!participantRequest.siteId) {
+    // check for duplicate site in admin
+    const { siteName } = participantRequest;
+    // this is dumb but we'd need a new endpoint in admin to search by name
+    const sites = await getSiteList();
+    if (sites.filter((site) => site.name === siteName).length > 0) {
+      return res.status(400).send('Requested site name already exists');
+    }
+  }
 
   const traceId = getTraceId(req);
   const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
@@ -65,17 +69,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
   const types = await ParticipantType.query().findByIds(participantRequest.participantTypes);
   const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
 
-  // const participantData = ParticipantCreationAndApprovalPartial.parse({
-  //   name: participantRequest.participantName,
-  //   types,
-  //   apiRoles,
-  //   status: ParticipantStatus.Approved,
-  //   siteId: participantRequest.siteId,
-  //   users: [user],
-  // });
-
-  // const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);
-
+  let site;
   if (!participantRequest.siteId) {
     // create site (UID2-2631)
     const adminSiteTypes = mapClientTypesToAdminEnums(types).join(',');
@@ -84,29 +78,42 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
       description: '',
       types: adminSiteTypes,
     });
-    // const addedSite = addSite(newSite.name, newSite.description, newSite.types);
-    // console.log(addedSite);
+    site = await addSite(newSite.name, newSite.description, newSite.types);
   }
 
+  const participantData = ParticipantCreationAndApprovalPartial.parse({
+    name: participantRequest.participantName,
+    types,
+    apiRoles,
+    status: ParticipantStatus.Approved,
+    siteId: participantRequest.siteId ?? site?.id,
+    users: [user],
+  });
+
+  const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);
+
   // create participant, user, and role/type mappings
-  // await Participant.query().insertGraphAndFetch([participantData], {
-  //   relate: true,
-  // });
+  await Participant.query().insertGraphAndFetch([participantData], {
+    relate: true,
+  });
 
   // Get newly created user
-  // const newUser = (await User.query().findOne('email', participantRequest.email)) as User;
+  const newUser = (await User.query().findOne('email', participantRequest.email)) as User;
 
   // create keyCloak user
-  // const newKcUser = await createNewUser(
-  //   kcAdminClient,
-  //   participantRequest.firstName,
-  //   participantRequest.lastName,
-  //   participantRequest.email
-  // );
+  const newKcUser = await createNewUser(
+    kcAdminClient,
+    participantRequest.firstName,
+    participantRequest.lastName,
+    participantRequest.email
+  );
 
-  // await sendInviteEmail(kcAdminClient, newKcUser);
-  // await sendParticipantApprovedEmail([newUser!], traceId);
-  // await updateAuditTrailToProceed(auditTrail.id);
+  // assign proper api access
+  assignClientRoleToUser(kcAdminClient, newUser.email, 'api-participant-member');
+
+  await sendInviteEmail(kcAdminClient, newKcUser);
+  await sendParticipantApprovedEmail([newUser!], traceId);
+  await updateAuditTrailToProceed(auditTrail.id);
 
   return res.sendStatus(200);
 }

@@ -10,7 +10,7 @@ import { Dialog } from '../Core/Dialog';
 import DisplaySecret from '../Core/DisplaySecret';
 import { Form } from '../Core/Form';
 import { InfoToast } from '../Core/Toast';
-import { CheckboxInput } from '../Input/CheckboxInput';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
 import './KeyCreationDialog.scss';
@@ -37,7 +37,7 @@ function CreateApiKeyForm({
       <h1>Create API Key</h1>
       <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
         <TextInput inputName='name' label='Name' required />
-        <CheckboxInput
+        <MultiCheckboxInput
           label='API Permissions'
           inputName='roles'
           options={sortApiRoles(availableRoles).map((role) => ({

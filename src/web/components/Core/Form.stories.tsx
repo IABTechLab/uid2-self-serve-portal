@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { CheckboxInput } from '../Input/CheckboxInput';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
@@ -48,7 +48,7 @@ WithInputFields.args = {
         },
       ]}
     />,
-    <CheckboxInput
+    <MultiCheckboxInput
       key='checkboxInput'
       inputName='checkboxInputValue'
       label='checkbox Input '
@@ -109,7 +109,7 @@ WithDefaultData.args = {
         },
       ]}
     />,
-    <CheckboxInput
+    <MultiCheckboxInput
       key='checkboxInput'
       inputName='checkboxInputValue'
       label='checkbox Input '

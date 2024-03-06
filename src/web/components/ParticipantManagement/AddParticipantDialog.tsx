@@ -6,16 +6,16 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserRole } from '../../../api/entities/User';
-import { GetRecommendedRolesById, SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { AddParticipantForm } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { Dialog } from '../Core/Dialog';
 import { SuccessToast } from '../Core/Toast';
-import { CheckboxInput } from '../Input/CheckboxInput';
 import { RootFormErrors } from '../Input/FormError';
 import { Input } from '../Input/Input';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
@@ -50,10 +50,10 @@ function AddParticipantDialog({
   const [searchText, setSearchText] = useState('');
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
   const [newSite, setNewSite] = useState(false);
+  const [siteNameModified, setSiteNameModified] = useState(false);
 
   const formMethods = useForm<AddParticipantForm>({ defaultValues: { siteIdType: 0 } });
   const {
-    register,
     setValue,
     watch,
     handleSubmit,
@@ -68,19 +68,23 @@ function AddParticipantDialog({
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      console.log(value);
-      if (name === 'participantTypes') {
-        const types = value.participantTypes;
-        const roles = GetRecommendedRolesById(types as number[]);
-        setValue('apiRoles', roles);
-      }
       if (name === 'siteIdType') {
         const type = value.siteIdType;
         setNewSite(type === 1);
       }
+      if (name === 'participantName') {
+        if (!siteNameModified) {
+          setValue('siteName', value.participantName!);
+        }
+      }
+      if (name === 'siteName') {
+        if (value.siteName !== value.participantName) {
+          setSiteNameModified(true);
+        }
+      }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setValue, open]);
+  }, [watch, setValue, open, siteNameModified]);
 
   useEffect(() => {
     if (!open) {
@@ -89,6 +93,7 @@ function AddParticipantDialog({
       setSiteSearchResults(undefined);
       setSelectedSite(undefined);
       setNewSite(false);
+      setSiteNameModified(false);
       reset();
     }
   }, [open, reset]);
@@ -123,6 +128,10 @@ function AddParticipantDialog({
 
   const onSiteClick = (site: SiteDTO) => {
     setValue('siteId', site.id);
+    setValue(
+      'apiRoles',
+      site.apiRoles.map((role) => role.id)
+    );
     setSelectedSite(site);
   };
 
@@ -153,7 +162,7 @@ function AddParticipantDialog({
             />
 
             <div className='right-column'>
-              <CheckboxInput
+              <MultiCheckboxInput
                 inputName='participantTypes'
                 label='Participant Type'
                 options={participantTypes.map((p) => ({
@@ -228,7 +237,7 @@ function AddParticipantDialog({
             </div>
           </div>
           <div className='add-participant-dialog-flex'>
-            <CheckboxInput
+            <MultiCheckboxInput
               inputName='apiRoles'
               label='API Roles'
               options={sortApiRoles(apiRoles).map((p) => ({

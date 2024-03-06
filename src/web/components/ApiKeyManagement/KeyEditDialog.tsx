@@ -7,7 +7,7 @@ import { EditApiKeyFormDTO } from '../../services/apiKeyService';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
-import { CheckboxInput } from '../Input/CheckboxInput';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { getUnapprovedRoles } from './KeyEditDialogHelper';
 
@@ -63,7 +63,7 @@ function KeyEditDialog({
           submitButtonText='Save Key'
         >
           <TextInput inputName='newName' label='Name' required />
-          <CheckboxInput
+          <MultiCheckboxInput
             label='API Permissions'
             inputName='newApiRoles'
             options={sortApiRoles(availableRoles.concat(unapprovedRoles)).map((role) => ({

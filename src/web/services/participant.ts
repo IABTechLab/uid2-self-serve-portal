@@ -158,6 +158,7 @@ export type AddParticipantForm = {
   participantTypes: number[];
   siteId?: number;
   siteIdType: number;
+  siteName?: string;
   role: string;
 };
 

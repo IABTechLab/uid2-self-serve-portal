@@ -10,8 +10,8 @@ import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
-import { CheckboxInput } from '../Input/CheckboxInput';
 import { Input } from '../Input/Input';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 
@@ -157,7 +157,7 @@ function ParticipantApprovalForm({
               rules={{ required: 'Please specify participant name.' }}
             />
             <input type='hidden' {...register('siteId')} />
-            <CheckboxInput
+            <MultiCheckboxInput
               inputName='types'
               label='Participant Type'
               rules={{ required: 'Please specify Participant type.' }}
@@ -166,7 +166,7 @@ function ParticipantApprovalForm({
                 value: p.id,
               }))}
             />
-            <CheckboxInput
+            <MultiCheckboxInput
               inputName='apiRoles'
               label='API Permissions'
               options={sortApiRoles(apiRoles).map((p) => ({

@@ -35,6 +35,7 @@ export type AdminSiteDTO = {
 export type SiteDTO = Omit<AdminSiteDTO, 'roles'> & { apiRoles: ApiRoleDTO[] };
 
 export type SiteCreationDTO = {
+  id: number;
   name: string;
   enabled: boolean;
   description?: string;

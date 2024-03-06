@@ -7,7 +7,7 @@ import { UpdateParticipantForm } from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
-import { CheckboxInput } from '../Input/CheckboxInput';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 
 type UpdateParticipantDialogProps = {
   triggerButton: JSX.Element;
@@ -46,7 +46,7 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
-        <CheckboxInput
+        <MultiCheckboxInput
           inputName='apiRoles'
           label='API Permissions'
           options={sortApiRoles(apiRoles).map((p) => ({
