@@ -14,9 +14,7 @@ import {
   mapClientTypesToAdminEnums,
   SharingListResponse,
   SiteCreationDTO,
-  SiteDTO,
 } from './adminServiceHelpers';
-import { SiteRequest } from './usersService';
 
 const adminServiceClient = axios.create({
   baseURL: SSP_ADMIN_SERVICE_BASE_URL,
@@ -160,7 +158,7 @@ export const addSite = async (
   name: string,
   description: string,
   types: string
-): Promise<SiteCreationDTO | null> => {
+): Promise<SiteCreationDTO> => {
   const response = await adminServiceClient.post<SiteCreationDTO>('/api/site/add', null, {
     params: {
       name,

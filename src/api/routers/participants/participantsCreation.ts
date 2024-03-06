@@ -52,7 +52,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
   if (!participantRequest.siteId) {
     // check for duplicate site in admin
     const { siteName } = participantRequest;
-    // this is dumb but we'd need a new endpoint in admin to search by name
+    // this is inefficient but we'd need a new endpoint in admin to search by name
     const sites = await getSiteList();
     if (sites.filter((site) => site.name === siteName).length > 0) {
       return res.status(400).send('Requested site name already exists');

@@ -7,7 +7,7 @@ import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
 
-const { WithValidation, OneOption } = composeStories(stories);
+const { WithValidation } = composeStories(stories);
 
 const checkBoxOptionsList = [
   [[{ optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' }]],
