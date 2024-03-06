@@ -7,7 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { App } from './web/App';
 import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
-import { createKeycloakInstance } from './web/Keycloak';
+import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
 import { Routes } from './web/screens/routes';
@@ -41,7 +41,7 @@ function Root() {
 
   return (
     <ReactKeycloakProvider
-      authClient={createKeycloakInstance()}
+      authClient={keycloak}
       initOptions={{
         checkLoginIframe: false,
       }}
