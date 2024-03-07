@@ -131,12 +131,20 @@ body {
   color: var(--theme-action);
 }
 
+input[name='password'].pf-c-form-control {
+  padding-right: 45px;
+}
+
+input[name='password'].pf-c-form-control[aria-invalid='true'] {
+  background-position-x: calc(100% - 50px);
+  padding-right: 75px;
+}
+
 .pf-c-form-control {
   height: 45px !important;
   border-radius: 5px;
   margin-top: 8px;
   border: 1px solid var(--theme-input-border);
-  padding-right: 45px;
 }
 
 h1#kc-page-title {
