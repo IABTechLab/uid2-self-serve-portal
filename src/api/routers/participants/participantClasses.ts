@@ -9,6 +9,7 @@ export const ParticipantCreationRequest = z.object({
   participantTypes: z.array(z.number()),
   apiRoles: z.array(z.number()),
   siteId: z.number().optional(),
+  siteName: z.string().optional(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),

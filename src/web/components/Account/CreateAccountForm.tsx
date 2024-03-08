@@ -7,8 +7,8 @@ import { CreateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
 import { withoutRef } from '../Core/Form';
 import { TermsAndConditionsForm } from '../Core/TermsAndConditions';
-import { CheckboxInput } from '../Input/CheckboxInput';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
+import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { SelectInput } from '../Input/SelectInput';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
@@ -60,7 +60,7 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
           label='Participant Name'
           rules={{ required: 'Please specify participant name.' }}
         />
-        <CheckboxInput
+        <MultiCheckboxInput
           inputName='companyType'
           label='Participant Type'
           options={resolvedParticipantTypes.map((p) => ({

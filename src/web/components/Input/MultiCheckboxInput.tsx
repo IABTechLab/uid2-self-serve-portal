@@ -7,9 +7,9 @@ import { Tooltip } from '../Core/Tooltip';
 import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
-import './CheckboxInput.scss';
+import './MultiCheckboxInput.scss';
 
-export function CheckboxInput<
+export function MultiCheckboxInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPath<TFieldValues>
 >({

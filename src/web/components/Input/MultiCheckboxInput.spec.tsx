@@ -3,11 +3,11 @@ import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-lib
 import userEvent from '@testing-library/user-event';
 
 import { Form } from '../Core/Form';
-import { CheckboxInput } from './CheckboxInput';
-import * as stories from './CheckboxInput.stories';
+import { MultiCheckboxInput } from './MultiCheckboxInput';
+import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
 
-const { WithValidation, OneOption } = composeStories(stories);
+const { WithValidation } = composeStories(stories);
 
 const checkBoxOptionsList = [
   [[{ optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' }]],
@@ -26,7 +26,7 @@ function loadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
 
   render(
     <Form onSubmit={onSubmitMock}>
-      <CheckboxInput inputName='default' label='Select options' options={options} />
+      <MultiCheckboxInput inputName='default' label='Select options' options={options} />
     </Form>
   );
 
@@ -95,7 +95,7 @@ describe('CheckboxInput', () => {
 
     render(
       <Form onSubmit={onSubmitMock} defaultValues={{ default: ['option1', 'option2'] }}>
-        <CheckboxInput
+        <MultiCheckboxInput
           inputName='default'
           label='Select options'
           options={[

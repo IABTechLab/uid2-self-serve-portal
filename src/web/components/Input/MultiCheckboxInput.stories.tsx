@@ -1,13 +1,13 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { Form } from '../Core/Form';
-import { CheckboxInput } from './CheckboxInput';
+import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
 
 export default {
   title: 'Inputs/Checkbox',
-  component: CheckboxInput,
-} as ComponentMeta<typeof CheckboxInput>;
+  component: MultiCheckboxInput,
+} as ComponentMeta<typeof MultiCheckboxInput>;
 
 const options: Option<string>[] = [
   { optionLabel: 'Option 1', value: 'option1' },
@@ -15,10 +15,10 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 3', value: 'option3' },
 ];
 
-const Template: ComponentStory<typeof CheckboxInput> = (args) => {
+const Template: ComponentStory<typeof MultiCheckboxInput> = (args) => {
   return (
     <Form onSubmit={(formData) => console.log(formData)}>
-      <CheckboxInput {...args} inputName='checkbox' />
+      <MultiCheckboxInput {...args} inputName='checkbox' />
     </Form>
   );
 };

@@ -19,6 +19,7 @@ import {
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
+  SiteCreationDTO,
 } from './adminServiceHelpers';
 
 let accessToken: string = '';
@@ -196,10 +197,26 @@ export const addKeyPair = async (
   return response.data;
 };
 
+export const addSite = async (
+  name: string,
+  description: string,
+  types: string
+): Promise<SiteCreationDTO> => {
+  const response = await adminServiceClient.post<SiteCreationDTO>('/api/site/add', null, {
+    params: {
+      name,
+      description,
+      types,
+      enabled: true,
+    },
+  });
+  return response.data;
+};
+
 export const setSiteClientTypes = async (
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
 ): Promise<void> => {
-  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial).join(',');
+  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial.types).join(',');
   const response = await adminServiceClient.post('/api/site/set-types', null, {
     params: {
       id: participantApprovalPartial.siteId,

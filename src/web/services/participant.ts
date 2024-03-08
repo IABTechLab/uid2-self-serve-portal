@@ -158,11 +158,13 @@ export type AddParticipantForm = {
   participantTypes: number[];
   siteId?: number;
   siteIdType: number;
+  siteName?: string;
   role: string;
 };
 
 export async function AddParticipant(formData: AddParticipantForm) {
-  await axios.put(`/participants/`, formData);
+  const response = await axios.put(`/participants/`, formData);
+  return response;
 }
 
 export async function UpdateParticipant(formData: UpdateParticipantForm, participantId?: number) {
