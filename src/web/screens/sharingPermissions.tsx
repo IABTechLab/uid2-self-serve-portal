@@ -145,13 +145,12 @@ function SharingPermissions() {
             />
           </>
         </Collapsible>
-        {(participant?.completedRecommendations || sharedSiteIds.length > 0) && (
-          <SharingPermissionsTable
-            sharedSiteIds={sharedSiteIds}
-            sharedTypes={sharedTypes}
-            onDeleteSharingPermission={handleDeleteSharingSite}
-          />
-        )}
+
+        <SharingPermissionsTable
+          sharedSiteIds={sharedSiteIds}
+          sharedTypes={sharedTypes}
+          onDeleteSharingPermission={handleDeleteSharingSite}
+        />
       </div>
     </SharingPermissionPageContainer>
   );
