@@ -262,6 +262,6 @@ The following steps describe the minimal steps required to successfully log in t
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
 1. Ensure that the site IDs of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing IDs by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
-1. Ensure that you have set the Okta client secret in your `.env` as `SSP_OKTA_CLIENT_SECRET`. Alternatively you can set "is_auth_disabled" to true in your admin config.
-   - You can find the key for local testing in 1Password under "Okta localhost deployment".
+1. If you wish to test uid2-admin service with Okta auth enabled, ensure that you have set `SSP_OKTA_AUTH_DISABLED` to false in your `.env`, and fill in the `SSP_OKTA_CLIENT_SECRET` value. You will also need to update `is_auth_disabled` to false in your uid2-admin local-config.json, and fill in the `okta_client_secret` value.
+   - You can find the keys for local testing in 1Password under "Okta localhost deployment". Make sure you use the key from the uid2-self-serve-portal subsection for ssportal and the value from the uid2-admin subsection for admin.
    - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file.
