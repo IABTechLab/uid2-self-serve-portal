@@ -66,7 +66,7 @@ const adminServiceClient = axios.create({
 
 adminServiceClient.interceptors.request.use(async (config) => {
   const updated = config;
-  if (!SSP_OKTA_AUTH_DISABLED) {
+  if (SSP_OKTA_AUTH_DISABLED === 'false') {
     updated.headers.Authorization = `Bearer ${await getAccessToken()}`;
   }
   return config;
