@@ -9,7 +9,6 @@ import {
 } from '../../entities/Participant';
 import { ParticipantType } from '../../entities/ParticipantType';
 import { User, UserCreationPartial } from '../../entities/User';
-import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
@@ -25,10 +24,7 @@ import {
   createNewUser,
   sendInviteEmail,
 } from '../../services/kcUsersService';
-import {
-  ParticipantRequest,
-  sendParticipantApprovedEmail,
-} from '../../services/participantsService';
+import { ParticipantRequest } from '../../services/participantsService';
 import { findUserByEmail } from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
@@ -75,7 +71,6 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     return res.status(400).send(validationError);
   }
 
-  const traceId = getTraceId(req);
   const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
   const user = UserCreationPartial.parse({
     ...req.body,
@@ -139,7 +134,6 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
 
   // send email
   await sendInviteEmail(kcAdminClient, newKcUser);
-  await sendParticipantApprovedEmail([newUser!], traceId);
   await updateAuditTrailToProceed(auditTrail.id);
 
   return res.sendStatus(200);
