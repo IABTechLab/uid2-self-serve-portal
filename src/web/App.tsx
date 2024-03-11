@@ -23,7 +23,6 @@ export function App() {
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);
-
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) rootRef.current!.classList.add('darkmode');
     else rootRef.current!.classList.remove('darkmode');
@@ -33,6 +32,8 @@ export function App() {
     LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
       ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`
       : undefined;
+  const isLocalDev = process.env.NODE_ENV === 'development';
+
   return (
     <StrictMode>
       <PortalErrorBoundary>
@@ -44,7 +45,7 @@ export function App() {
               setDarkMode={setDarkMode}
               logout={logout}
             />
-            <EnvironmentBanner />
+            {!isLocalDev && <EnvironmentBanner />}
             <Outlet />
             <ToastContainerWrapper />
           </div>
