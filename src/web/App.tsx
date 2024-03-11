@@ -45,7 +45,7 @@ export function App() {
               setDarkMode={setDarkMode}
               logout={logout}
             />
-            {!isLocalDev && <EnvironmentBanner />}
+            {isLocalDev && <EnvironmentBanner />}
             <Outlet />
             <ToastContainerWrapper />
           </div>
