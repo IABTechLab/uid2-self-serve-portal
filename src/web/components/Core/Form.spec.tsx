@@ -99,7 +99,7 @@ describe('Form Component', () => {
       expect(screen.getByDisplayValue('Option 1')).toBeInTheDocument();
     });
 
-    user.click(screen.getByRole('button', { name: 'Submit' }));
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
 
     await waitFor(async () => {
       expect(mockOnSubmit).toBeCalledWith(defaultFormData);
