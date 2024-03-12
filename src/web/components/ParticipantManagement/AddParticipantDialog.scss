@@ -21,32 +21,29 @@
   }
 
   .search-bar {
-    display: flex;
-    flex-direction: column;
+    position: relative;
     width: 400px;
 
     .search-bar-input-container {
       margin-top: 0.5rem;
       padding: 11px;
-      border-radius: 5px 5px 0 0;
+      border-radius: 5px;
     }
 
     .site-search-results {
-      flex-grow: 1;
-      overflow: scroll;
+      position: absolute;
+      padding: 10px;
+      width: 378px;
+
+      & > button {
+        padding: 10px;
+        display: block;
+        font-weight: normal;
+        color: var(--theme-primary);
+      }
     }
   }
-
-  .site-search-results {
-    padding: 10px;
-
-    & > button {
-      margin: 10px;
-      display: block;
-      font-weight: normal;
-      color: var(--theme-primary);
-    }
-  }
+  
   .request-button {
     display: flex;
     justify-content: center;
