@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
 import { BaseInputProps, Input } from '../Input/Input';
-import { SelectInputProps } from '../Input/SelectInput';
 
 import './SearchBar.scss';
 
