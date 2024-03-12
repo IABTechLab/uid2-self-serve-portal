@@ -37,6 +37,6 @@ export const SSP_OKTA_AUTH_SERVER_URL =
   process.env.SSP_OKTA_AUTH_SERVER_URL ?? 'https://uid2.okta.com/oauth2/aus1oqu660mF7W3hi1d8';
 export const SSP_OKTA_CLIENT_ID = process.env.SSP_OKTA_CLIENT_ID ?? '0oa1p0c8howKUR1Yf1d8';
 export const SSP_OKTA_CLIENT_SECRET = process.env.SSP_OKTA_CLIENT_SECRET ?? errorMessage;
-export const SSP_OKTA_AUTH_DISABLED = process.env.SSP_OKTA_AUTH_DISABLED ?? false;
+export const SSP_OKTA_AUTH_DISABLED = process.env.SSP_OKTA_AUTH_DISABLED ?? 'false';
 export const SSP_ADMIN_SERVICE_BASE_URL =
   process.env.SSP_ADMIN_SERVICE_BASE_URL ?? 'http://localhost:8089';
