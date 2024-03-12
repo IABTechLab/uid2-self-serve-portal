@@ -8,9 +8,11 @@ const { WithValidation, WithLabel } = composeStories(stories);
 
 describe('RadioInput', () => {
   it('verifies field based on rule', async () => {
+    const user = userEvent.setup();
+
     render(<WithValidation />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
-    userEvent.click(submitButton);
+    await user.click(submitButton);
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent('This field is required');
 

@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import axios from 'axios';
 
@@ -17,39 +17,37 @@ describe('Form Component', () => {
   });
 
   test('should load inputs and able to get formData from it', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     render(<WithInputFields onSubmit={mockOnSubmit} />);
 
     const textInput = screen.getByTestId('text-input');
 
-    userEvent.type(textInput, 'New value');
+    await user.type(textInput, 'New value');
     await waitFor(() => {
       expect(screen.getByDisplayValue('New value')).toBeInTheDocument();
     });
 
     const radio2 = screen.getByLabelText('No');
-    userEvent.click(radio2);
+    await user.click(radio2);
     await waitFor(() => {
       expect(radio2).toBeChecked();
     });
 
     const checkbox1 = screen.getByRole('checkbox', { name: 'Checkbox 1' });
-    userEvent.click(checkbox1);
+    await user.click(checkbox1);
     await waitFor(() => {
       expect(checkbox1).toBeChecked();
     });
 
-    userEvent.click(screen.getByRole('combobox', { name: 'selectInputValue' }));
+    await user.click(screen.getByRole('combobox', { name: 'selectInputValue' }));
 
     await waitFor(async () => {
       const option = screen.getByRole('option', { name: 'Option 2' });
       expect(option).toBeInTheDocument();
     });
-    userEvent.click(screen.getByRole('option', { name: 'Option 2' }));
+    await user.click(screen.getByRole('option', { name: 'Option 2' }));
 
-    await waitForElementToBeRemoved(screen.queryByRole('option', { name: 'Option 2' }));
-
-    userEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
 
     const expectFormData = {
       checkboxInputValue: ['1'],
@@ -69,7 +67,7 @@ describe('Form Component', () => {
   });
 
   test('should render input with default value', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     const defaultFormData = {
       checkboxInputValue: ['1', '2'],
       radioInputValue: 0,
@@ -101,7 +99,7 @@ describe('Form Component', () => {
       expect(screen.getByDisplayValue('Option 1')).toBeInTheDocument();
     });
 
-    userEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    user.click(screen.getByRole('button', { name: 'Submit' }));
 
     await waitFor(async () => {
       expect(mockOnSubmit).toBeCalledWith(defaultFormData);
@@ -109,9 +107,10 @@ describe('Form Component', () => {
   });
 
   test('should render error with user click submit', async () => {
+    const user = userEvent.setup();
     render(<SubmitWithError />);
     const button = await screen.findByRole('button');
-    userEvent.click(button);
+    await user.click(button);
     const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent('Something went wrong, please try again');
   });
@@ -131,9 +130,10 @@ describe('Form Component', () => {
       throw errorMessage;
     });
 
+    const user = userEvent.setup();
     render(<WithDefaultData onSubmit={mockOnSubmit} />);
     const button = await screen.findByRole('button');
-    userEvent.click(button);
+    await user.click(button);
     const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent(serverErrorMessage);
   });
@@ -150,9 +150,10 @@ describe('Form Component', () => {
       throw error;
     });
 
+    const user = userEvent.setup();
     render(<WithDefaultData onSubmit={mockOnSubmit} />);
     const button = await screen.findByRole('button');
-    userEvent.click(button);
+    await user.click(button);
     const formError = await screen.findByTestId('formError');
     expect(formError).toHaveTextContent('Something went wrong, please try again');
   });
