@@ -133,6 +133,9 @@ module.exports = {
   overrides: [
     {
       files: ['*.spec.*', '*.test.*'],
+      rules: {
+        '@typescript-eslint/no-floating-promises': ['warn'],
+      },
     },
     {
       files: ['*.stories.*'],
@@ -140,6 +143,7 @@ module.exports = {
         'import/no-extraneous-dependencies': 'off',
         'react/jsx-props-no-spreading': 'off',
         'react/function-component-definition': 'off',
+        'no-console': 'off',
       },
     },
     {

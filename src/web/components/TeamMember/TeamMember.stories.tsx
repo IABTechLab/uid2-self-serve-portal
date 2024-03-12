@@ -18,8 +18,8 @@ const Template: ComponentStory<typeof TeamMember> = (args) => (
   </div>
 );
 
-export const withAcceptedTerm = Template.bind({});
-withAcceptedTerm.args = {
+export const WithAcceptedTerm = Template.bind({});
+WithAcceptedTerm.args = {
   person: {
     id: 1,
     email: 'test@user.com',
@@ -35,8 +35,8 @@ withAcceptedTerm.args = {
     Promise.resolve(console.log(`Update userId: ${id} with ${JSON.stringify(formData)}`)),
 };
 
-export const pendingMember = Template.bind({});
-pendingMember.args = {
+export const PendingMember = Template.bind({});
+PendingMember.args = {
   person: {
     id: 2,
     email: 'test@user.com',

@@ -14,7 +14,6 @@ export const MultipleRoles: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
     onKeyCreation: (form) => {
-      // eslint-disable-next-line no-console
       console.log(`Add a new Key ${JSON.stringify(form)}`);
       return Promise.resolve({
         plaintextKey: 'Test_Plaintext',
@@ -34,7 +33,6 @@ export const OneRole: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
     onKeyCreation: (form) => {
-      // eslint-disable-next-line no-console
       console.log(`Add a new Key ${JSON.stringify(form)}`);
       return Promise.resolve({
         plaintextKey: 'Test_Plaintext',

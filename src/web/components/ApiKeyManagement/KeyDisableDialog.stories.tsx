@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable camelcase */
 
 import type { Meta, StoryObj } from '@storybook/react';
@@ -18,7 +17,6 @@ export const DisableApiKey: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
     onDisable: (key: ApiKeyDTO) => {
-      // eslint-disable-next-line no-console
       console.log(`Disabling Key ${key.name}`);
     },
     apiKey: {

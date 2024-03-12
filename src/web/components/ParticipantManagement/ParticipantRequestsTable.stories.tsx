@@ -85,7 +85,6 @@ export const ParticipantRequests: Story = {
       { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     onApprove: async (_id, form) => {
-      // eslint-disable-next-line no-console
       console.log(JSON.stringify(form));
     },
   },
@@ -113,7 +112,6 @@ export const NoParticipantRequests: Story = {
       { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
     onApprove: async (_id, form) => {
-      // eslint-disable-next-line no-console
       console.log(JSON.stringify(form));
     },
   },

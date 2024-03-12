@@ -14,7 +14,6 @@ export const Default: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
     onAddKeyPair: (form) =>
-      // eslint-disable-next-line no-console
       Promise.resolve(console.log(`Add new key pair ${JSON.stringify(form)}`)),
   },
 };
