@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { ParticipantApprovalPartial } from '../entities/Participant';
 import {
   SSP_ADMIN_SERVICE_BASE_URL,
+  SSP_OKTA_AUTH_DISABLED,
   SSP_OKTA_AUTH_SERVER_URL,
   SSP_OKTA_CLIENT_ID,
   SSP_OKTA_CLIENT_SECRET,
@@ -65,7 +66,9 @@ const adminServiceClient = axios.create({
 
 adminServiceClient.interceptors.request.use(async (config) => {
   const updated = config;
-  updated.headers.Authorization = `Bearer ${await getAccessToken()}`;
+  if (SSP_OKTA_AUTH_DISABLED === 'false') {
+    updated.headers.Authorization = `Bearer ${await getAccessToken()}`;
+  }
   return config;
 });
 
