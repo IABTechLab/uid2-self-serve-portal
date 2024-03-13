@@ -22,8 +22,8 @@ describe('#getParticipantUsers', () => {
 
     await getParticipantUsers(participantRequest, res);
 
-    expect(res.status).lastCalledWith(200);
-    expect(res.json).lastCalledWith([]);
+    expect(res.status).toHaveBeenLastCalledWith(200);
+    expect(res.json).toHaveBeenLastCalledWith([]);
   });
 
   test('return list with correct user', async () => {
@@ -45,8 +45,9 @@ describe('#getParticipantUsers', () => {
 
     const receivedUsers = json.mock.calls[0][0] as User[];
 
-    expect(res.status).lastCalledWith(200);
+    expect(res.status).toHaveBeenLastCalledWith(200);
     expect(receivedUsers.map((user) => user.id).sort()).toEqual([relatedUser.id].sort());
+    expect(receivedUsers.map((user) => user.id).sort()).not.toEqual([unrelatedUser.id].sort());
   });
 
   test('return list with multiple correct user', async () => {
@@ -71,7 +72,7 @@ describe('#getParticipantUsers', () => {
 
     const receivedUsers = json.mock.calls[0][0] as User[];
 
-    expect(res.status).lastCalledWith(200);
+    expect(res.status).toHaveBeenLastCalledWith(200);
     expect(receivedUsers.map((user) => user.id).sort()).toEqual(
       relatedUsers.map((user) => user.id).sort()
     );

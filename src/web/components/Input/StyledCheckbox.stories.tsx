@@ -16,7 +16,6 @@ const templateBuilder = (formProps?: UseFormProps<FormData>) => {
     const { register, control, watch, handleSubmit } = useForm<FormData>(formProps);
     const value = watch('boxIsChecked');
     const onSubmit = (data: FormData) => {
-      // eslint-disable-next-line no-console
       console.log('Submitted', data);
       return false;
     };

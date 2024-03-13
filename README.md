@@ -211,6 +211,12 @@ It correctly bundles React in production mode and optimizes the build for the be
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed! Note that builds for deployment are not made on developer machines - those happen in our CI pipeline.
 
+### `npm run lint`
+Runs [eslint](https://eslint.org/), to help find problems in the code.
+
+### `npm run lint-fix`
+Instructs ESLint to try to fix as many issues as possible, see https://eslint.org/docs/latest/use/command-line-interface#fix-problems.
+
 ## Setting up UI Dev Environment
 
 The following steps describe the minimal steps required to successfully log in to the portal UI.

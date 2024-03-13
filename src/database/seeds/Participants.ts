@@ -86,7 +86,7 @@ export async function CreateParticipant(
     participantTypeId: participantType[0].id as number,
   });
 
-  await apiRoleNames.forEach(async (role) => {
+  apiRoleNames.forEach(async (role) => {
     const apiRole = await knex('apiRoles').where('roleName', role);
     await knex('participantsToApiRoles').insert<{
       participantId: number;
