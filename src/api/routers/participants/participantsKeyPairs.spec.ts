@@ -77,8 +77,8 @@ describe('#getParticipantKeyPairs', () => {
 
     await getParticipantKeyPairs(participantRequest, res);
 
-    expect(res.status).lastCalledWith(400);
-    expect(res.send).lastCalledWith('Site id is not set');
+    expect(res.status).toHaveBeenLastCalledWith(400);
+    expect(res.send).toHaveBeenLastCalledWith('Site id is not set');
   });
 
   test.each([
@@ -107,7 +107,7 @@ describe('#getParticipantKeyPairs', () => {
 
     await getParticipantKeyPairs(participantRequest, res);
 
-    expect(res.status).lastCalledWith(200);
-    expect(res.json).lastCalledWith(keys);
+    expect(res.status).toHaveBeenLastCalledWith(200);
+    expect(res.json).toHaveBeenLastCalledWith(keys);
   });
 });

@@ -1,7 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
-import { AvailableParticipantDTO } from '../../../api/routers/participants/participantsRouter';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { SearchAndAddParticipants } from './SearchAndAddParticipants';
 

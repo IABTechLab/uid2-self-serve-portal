@@ -1,4 +1,4 @@
-import { getByRole, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
@@ -148,10 +148,10 @@ describe('Key creation dialog', () => {
     const copyButton2 = screen.getByTitle('Copy Key to clipboard');
 
     await userEvent.click(copyButton1);
-    expect(writeText).lastCalledWith('1234');
+    expect(writeText).toHaveBeenLastCalledWith('1234');
 
     await userEvent.click(copyButton2);
-    expect(writeText).lastCalledWith('ABCD');
+    expect(writeText).toHaveBeenLastCalledWith('ABCD');
   });
 
   it('should confirm copying before letting user close', async () => {

@@ -55,6 +55,7 @@ const BYPASS_PATHS = [
 ].map((path) => ({ url: path, method: 'GET' }));
 
 function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath[]) {
+  // eslint-disable-next-line func-names
   return function (req, res, next) {
     const bypassPath = paths.find((path) => path.url === req.path && path.method === req.method);
     if (bypassPath) {

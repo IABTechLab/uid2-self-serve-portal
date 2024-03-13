@@ -7,13 +7,13 @@ export default {
   component: SearchBarContainer,
 } as ComponentMeta<typeof SearchBarContainer>;
 
-export const basicSearchBar: ComponentStory<typeof SearchBarContainer> = (args) => (
+export const BasicSearchBar: ComponentStory<typeof SearchBarContainer> = (args) => (
   <SearchBarContainer {...args}>
     <SearchBarInput />
   </SearchBarContainer>
 );
 
-export const searchBarWithResults: ComponentStory<typeof SearchBarContainer> = (args) => (
+export const SearchBarWithResults: ComponentStory<typeof SearchBarContainer> = (args) => (
   <SearchBarContainer {...args}>
     <SearchBarInput fullBorder />
     <SearchBarResults>

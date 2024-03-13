@@ -127,7 +127,7 @@ describe('Key edit dialog', () => {
 
       await submitForm();
 
-      expect(onEditMock).lastCalledWith(
+      expect(onEditMock).toHaveBeenLastCalledWith(
         {
           keyId: 'F4lfa.fdas',
           newName: 'ApiKey Rename',
@@ -137,11 +137,11 @@ describe('Key edit dialog', () => {
       );
     });
     it('should show an error on submission if no roles selected', async () => {
-      const { onEditMock, setApiKeyMock } = loadComponent([Mapper], [Mapper]);
+      loadComponent([Mapper], [Mapper]);
       await openDialog();
 
       await renameKey('ApiKey Rename');
-      clickRole(Mapper);
+      await clickRole(Mapper);
 
       await submitForm();
 
