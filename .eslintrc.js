@@ -134,7 +134,7 @@ module.exports = {
     {
       files: ['*.spec.*', '*.test.*'],
       rules: {
-        '@typescript-eslint/no-floating-promises': ['warn'],
+        '@typescript-eslint/no-floating-promises': ['error'],
       },
     },
     {
