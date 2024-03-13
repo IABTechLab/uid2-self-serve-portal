@@ -1,7 +1,7 @@
 import request, { Request } from 'supertest';
 
 import { sendInviteEmail } from '../services/kcUsersService';
-import { mockParticipant, mockUser } from './queryMocks';
+import { mockParticipant, mockUser, mockUserOnce } from './queryMocks';
 import useTestServer, { api } from './utils';
 
 jest.mock('../keycloakAdminClient', () => ({
@@ -18,6 +18,7 @@ describe('Users API tests', () => {
   describe('When a user re-invites another user', () => {
     afterEach(() => {
       jest.restoreAllMocks();
+      jest.clearAllMocks();
     });
 
     test('From the same participant, the invitation is sent', async () => {
@@ -32,7 +33,7 @@ describe('Users API tests', () => {
 
     test('Should deny access to an authenticated user without permission', async () => {
       mockParticipant();
-      mockUser([{ participantId: 2 }, null]);
+      mockUserOnce([{ participantId: 2 }, null]);
       const req: Request = request(api).post('/api/users/1/resendInvitation');
       const res = await withToken(req);
 

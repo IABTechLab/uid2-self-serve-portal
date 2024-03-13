@@ -9,6 +9,7 @@ describe('Approvers Service Tests', () => {
   const withToken = useTestServer();
 
   afterEach(() => {
+    jest.restoreAllMocks();
     jest.resetAllMocks();
   });
 

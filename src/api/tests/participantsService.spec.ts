@@ -1,7 +1,7 @@
 import request, { Request } from 'supertest';
 
 import { ParticipantRequest } from '../services/participantsService';
-import { mockParticipant, mockUser } from './queryMocks';
+import { mockParticipant, mockUser, mockUserOnce } from './queryMocks';
 import useTestServer, { api, routers } from './utils';
 
 describe('Participant Service Tests', () => {
@@ -29,7 +29,7 @@ describe('Participant Service Tests', () => {
 
     it('should deny access to an authenticated user without permission', async () => {
       mockParticipant();
-      mockUser(null);
+      mockUserOnce([{}, null]);
       const req: Request = request(api).get('/api/participants/1/');
       const res = await withToken(req);
 
