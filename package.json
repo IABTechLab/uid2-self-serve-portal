@@ -112,6 +112,7 @@
     "build-storybook": "storybook build",
     "stylelint-check": "stylelint-config-prettier-check",
     "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "stylelint": "stylelint \"**/*.scss\"",
     "knex:migrate:latest": "knex --knexfile ./knexfile.ts migrate:latest",
     "knex:migrate:rollback": "knex --knexfile ./knexfile.ts migrate:rollback",
