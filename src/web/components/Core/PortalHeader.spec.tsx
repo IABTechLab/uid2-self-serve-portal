@@ -10,7 +10,7 @@ test('when the drop is clicked, a gravatar is displayed', async () => {
   const user = userEvent.setup();
   render(<ValidEmailAddress />);
   const button = await screen.findByRole('button');
-  user.click(button);
+  await user.click(button);
   const menu = await screen.findByRole('menu');
   const avatar = await within(menu).findByRole('img');
   expect(avatar).toHaveAttribute('src', expect.stringContaining('//www.gravatar.com/avatar/'));

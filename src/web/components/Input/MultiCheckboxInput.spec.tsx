@@ -1,5 +1,5 @@
 import { composeStories } from '@storybook/testing-react';
-import { render, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Form } from '../Core/Form';
@@ -47,12 +47,13 @@ describe('CheckboxInput', () => {
   it.each(checkBoxOptionsList)(
     'Should submit correctly when one option selected',
     async (checkboxOptions) => {
+      const user = userEvent.setup();
       const onSubmitMock = loadComponent(checkboxOptions);
 
-      await userEvent.click(screen.getByRole('checkbox', { name: checkboxOptions[0].optionLabel }));
+      await user.click(screen.getByRole('checkbox', { name: checkboxOptions[0].optionLabel }));
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
-      await userEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(onSubmitMock).toHaveBeenLastCalledWith({ default: [checkboxOptions[0].value] });
     }
@@ -61,14 +62,15 @@ describe('CheckboxInput', () => {
   it.each(checkBoxOptionsList)(
     'Should submit correctly when all options are selected',
     async (checkboxOptions) => {
+      const user = userEvent.setup();
       const onSubmitMock = loadComponent(checkboxOptions);
 
       checkboxOptions.map(async (checkboxOption) => {
-        await userEvent.click(screen.getByRole('checkbox', { name: checkboxOption.optionLabel }));
+        await user.click(screen.getByRole('checkbox', { name: checkboxOption.optionLabel }));
       });
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
-      await userEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(onSubmitMock).toHaveBeenLastCalledWith({
         default: checkboxOptions.map((checkboxOption) => checkboxOption.value),
@@ -79,10 +81,11 @@ describe('CheckboxInput', () => {
   it.each(checkBoxOptionsList)(
     'Should submit correctly when no options are selected',
     async (checkboxOptions) => {
+      const user = userEvent.setup();
       const onSubmitMock = loadComponent(checkboxOptions);
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
-      await userEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(onSubmitMock).toHaveBeenLastCalledWith({
         default: [],
@@ -92,6 +95,7 @@ describe('CheckboxInput', () => {
 
   it('should show default values as selected if given', async () => {
     const onSubmitMock = jest.fn(() => {});
+    const user = userEvent.setup();
 
     render(
       <Form onSubmit={onSubmitMock} defaultValues={{ default: ['option1', 'option2'] }}>
@@ -114,25 +118,26 @@ describe('CheckboxInput', () => {
     expect(option2).toBeChecked();
 
     const submitButton = screen.getByRole('button', { name: 'Submit' });
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
 
     expect(onSubmitMock).toHaveBeenLastCalledWith({ default: ['option1', 'option2'] });
   });
 
   it('Verifies field based on rule', async () => {
+    const user = userEvent.setup();
     render(<WithValidation />);
 
-    userEvent.click(screen.getByRole('checkbox', { name: 'Option 2' }));
+    await user.click(screen.getByRole('checkbox', { name: 'Option 2' }));
     await waitFor(() => {
       const option2 = screen.getByLabelText('Option 2');
       expect(option2).toBeChecked();
     });
     const submitButton = screen.getByRole('button', { name: 'Submit' });
-    userEvent.click(submitButton);
+    await user.click(submitButton);
     const errorMessage = await screen.findByRole('alert');
     expect(errorMessage).toHaveTextContent('At least two options are required');
 
-    userEvent.click(screen.getByRole('checkbox', { name: 'Option 3' }));
-    await waitForElementToBeRemoved(screen.queryByRole('alert'));
+    await user.click(screen.getByRole('checkbox', { name: 'Option 3' }));
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
