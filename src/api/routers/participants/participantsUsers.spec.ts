@@ -34,7 +34,7 @@ describe('#getParticipantUsers', () => {
     const relatedUser = await createUser({ participantId: relatedParticipant.id });
 
     const unrelatedParticipant = await createParticipant(knex, {});
-    await createUser({ participantId: unrelatedParticipant.id });
+    const unrelatedUser = await createUser({ participantId: unrelatedParticipant.id });
 
     const participantRequest = {
       participant: relatedParticipant,
