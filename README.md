@@ -95,13 +95,23 @@ Please add tests to your changes where possible! We don't have a minimum coverag
 
 Focus on testing functionality, not implementation. For example, if you have a button which waits 1 second and then displays a dialog, _do not_ simulate a click and then assert that `setTimeout(...)` was called. Instead, simulate a click, advance the timer, and make sure the dialog was displayed! Refer to the [Testing Library Guiding Principles](https://testing-library.com/docs/guiding-principles) and the section of the docs on [Query Priority](https://testing-library.com/docs/queries/about#priority).
 
-## Keycloak setup
+## Keycloak
+
+The portal uses [Keycloak](https://www.keycloak.org/) as the identity and access management solution.
+
+### Keycloak setup
 
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
 - To access [keycloak admin console](http://localhost:18080/admin/), you can find the username and password in the `docker-compose.yml`
 - If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console
 
 For more advanced setup, see [Keycloak Advanced Setup](./KeycloakAdvancedSetup.md).
+
+### Upgrading Keycloak
+
+See https://github.com/IABTechLab/uid2-self-serve-portal/pull/98/files for an example PR for how to upgrade Keycloak. Note that changes to `Dockerfile_keycloak` often need to be mirrored in `docker-compose.yml`. You can use `docker build` and `docker run` to manually test the `Dockerfile_keycloak` locally, see https://github.com/IABTechLab/uid2-self-serve-portal/pull/347 for an example. You will likely need to upgrade the [keycloak-js](https://www.npmjs.com/package/keycloak-js) package as well.
+
+Keycloak also provides [Upgrading Guides](https://www.keycloak.org/docs/latest/upgrading/index.html) for each version.
 
 ## Logging stack
 
@@ -212,9 +222,11 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed! Note that builds for deployment are not made on developer machines - those happen in our CI pipeline.
 
 ### `npm run lint`
+
 Runs [eslint](https://eslint.org/), to help find problems in the code.
 
 ### `npm run lint-fix`
+
 Instructs ESLint to try to fix as many issues as possible, see https://eslint.org/docs/latest/use/command-line-interface#fix-problems.
 
 ## Setting up UI Dev Environment
