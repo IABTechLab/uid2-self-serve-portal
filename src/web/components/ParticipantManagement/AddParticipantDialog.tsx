@@ -139,6 +139,11 @@ function AddParticipantDialog({
     setSearchText(event.target.value);
   };
 
+  const onSearchInputFocus = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedSite(undefined);
+    setValue('siteId', undefined);
+  };
+
   return (
     <Dialog
       triggerButton={triggerButton}
@@ -199,7 +204,7 @@ function AddParticipantDialog({
                             : `${selectedSite.name} (Site ID ${selectedSite.id})`
                         }
                         onChange={onSearchInputChange}
-                        onFocus={() => setSelectedSite(undefined)}
+                        onFocus={onSearchInputFocus}
                         label='Search Participant Name to find Site ID'
                         rules={{ required: 'Please specify Site ID.' }}
                       />
@@ -218,9 +223,6 @@ function AddParticipantDialog({
                         </SearchBarResults>
                       )}
                     </SearchBarContainer>
-                    <Input inputName='siteId'>
-                      <input type='hidden' />
-                    </Input>
                   </div>
                 )}
                 {newSite && (
