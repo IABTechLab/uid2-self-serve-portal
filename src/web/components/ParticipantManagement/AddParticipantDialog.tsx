@@ -14,7 +14,6 @@ import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { Dialog } from '../Core/Dialog';
 import { SuccessToast } from '../Core/Toast';
 import { RootFormErrors } from '../Input/FormError';
-import { Input } from '../Input/Input';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
