@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';

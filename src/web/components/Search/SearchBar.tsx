@@ -1,6 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
+import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
+
+import { BaseInputProps, Input } from '../Input/Input';
 
 import './SearchBar.scss';
 
@@ -56,6 +59,61 @@ export function SearchBarInput({
         {...rest}
       />
     </div>
+  );
+}
+
+export function SearchBarFormInput<
+  TFieldValues extends FieldValues,
+  TPath extends FieldPath<TFieldValues>
+>({
+  className,
+  inputClassName,
+  fullBorder,
+  inputName,
+  label,
+  rules,
+  ...rest
+}: SearchBarInputProps &
+  BaseInputProps<TFieldValues, TPath> &
+  React.InputHTMLAttributes<HTMLInputElement>) {
+  const { control, trigger } = useFormContext<TFieldValues>();
+  const {
+    field,
+    fieldState: { error },
+  } = useController({
+    control,
+    name: inputName,
+    rules,
+  });
+
+  useEffect(() => {
+    if (field.value !== undefined) {
+      trigger(inputName); // Trigger validation when the field value becomes defined
+    }
+  }, [field.value, inputName, trigger]);
+
+  return (
+    <Input error={error} label={label} inputName={inputName}>
+      <div
+        className={clsx(
+          'search-bar-input-container',
+          className,
+          {
+            'full-border': fullBorder,
+          },
+          { withError: error }
+        )}
+      >
+        <FontAwesomeIcon icon='search' className='search-icon' />
+        <input
+          type='text'
+          className={clsx('search-bar-input', inputClassName)}
+          aria-label={inputName}
+          aria-invalid={error ? 'true' : 'false'}
+          {...rest}
+        />
+      </div>
+    </Input>
   );
 }
 

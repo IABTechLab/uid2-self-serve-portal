@@ -9,6 +9,10 @@
     border-bottom: 2px solid var(--theme-input-border);
     padding: 14px 11px;
 
+    &.withError {
+      border: 1px solid var(--theme-error) !important;
+    }
+
     svg {
       position: absolute;
       right: 11px;

@@ -14,12 +14,11 @@ import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { Dialog } from '../Core/Dialog';
 import { SuccessToast } from '../Core/Toast';
 import { RootFormErrors } from '../Input/FormError';
-import { Input } from '../Input/Input';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
-import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
+import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Search/SearchBar';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
@@ -139,6 +138,11 @@ function AddParticipantDialog({
     setSearchText(event.target.value);
   };
 
+  const onSearchInputFocus = (event: ChangeEvent<HTMLInputElement>) => {
+    setSelectedSite(undefined);
+    setValue('siteId', undefined);
+  };
+
   return (
     <Dialog
       triggerButton={triggerButton}
@@ -189,22 +193,20 @@ function AddParticipantDialog({
                 {!newSite && (
                   <div>
                     <SearchBarContainer>
-                      <Input
-                        inputName='participantSearch'
+                      <SearchBarFormInput
+                        inputName='siteId'
+                        inputClassName='search-input'
+                        fullBorder
+                        value={
+                          !selectedSite
+                            ? searchText
+                            : `${selectedSite.name} (Site ID ${selectedSite.id})`
+                        }
+                        onChange={onSearchInputChange}
+                        onFocus={onSearchInputFocus}
                         label='Search Participant Name to find Site ID'
-                      >
-                        <SearchBarInput
-                          inputClassName='search-input'
-                          fullBorder
-                          value={
-                            !selectedSite
-                              ? searchText
-                              : `${selectedSite.name} (Site ID ${selectedSite.id})`
-                          }
-                          onChange={onSearchInputChange}
-                          onFocus={() => setSelectedSite(undefined)}
-                        />
-                      </Input>
+                        rules={{ required: 'Please specify Site ID.' }}
+                      />
                       {!selectedSite && searchText && (
                         <SearchBarResults className='site-search-results'>
                           {siteSearchResults?.map((s) => (
@@ -220,9 +222,6 @@ function AddParticipantDialog({
                         </SearchBarResults>
                       )}
                     </SearchBarContainer>
-                    <Input inputName='siteId'>
-                      <input type='hidden' />
-                    </Input>
                   </div>
                 )}
                 {newSite && (
