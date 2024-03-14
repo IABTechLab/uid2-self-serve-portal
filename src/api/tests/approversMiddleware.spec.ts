@@ -10,7 +10,6 @@ describe('Approvers Service Tests', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
-    jest.resetAllMocks();
   });
 
   beforeAll(() => {
