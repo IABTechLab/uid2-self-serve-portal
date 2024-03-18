@@ -49,7 +49,6 @@ function AddParticipantDialog({
   const [searchText, setSearchText] = useState('');
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
   const [newSite, setNewSite] = useState(false);
-  const [siteNameModified, setSiteNameModified] = useState(false);
 
   const formMethods = useForm<AddParticipantForm>({ defaultValues: { siteIdType: 0 } });
   const {
@@ -72,18 +71,11 @@ function AddParticipantDialog({
         setNewSite(type === 1);
       }
       if (name === 'participantName') {
-        if (!siteNameModified) {
-          setValue('siteName', value.participantName!);
-        }
-      }
-      if (name === 'siteName') {
-        if (value.siteName !== value.participantName) {
-          setSiteNameModified(true);
-        }
+        setValue('siteName', value.participantName!);
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setValue, open, siteNameModified]);
+  }, [watch, setValue, open]);
 
   useEffect(() => {
     if (!open) {
@@ -92,7 +84,6 @@ function AddParticipantDialog({
       setSiteSearchResults(undefined);
       setSelectedSite(undefined);
       setNewSite(false);
-      setSiteNameModified(false);
       reset();
     }
   }, [open, reset]);
@@ -222,6 +213,7 @@ function AddParticipantDialog({
               label='New Site Name'
               className='text-input'
               rules={{ required: 'Please specify Site Name.' }}
+              disabled
             />
           )}
           <div className='add-participant-dialog-flex'>
