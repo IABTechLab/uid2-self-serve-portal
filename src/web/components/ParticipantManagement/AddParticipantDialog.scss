@@ -46,9 +46,15 @@
       }
     }
   }
-  
+
   .request-button {
-    display: flex;
-    justify-content: center;
+    margin-top: 1rem;
+  }
+
+  .dialog-close-button {
+    display: block;
+    .transparent-button {
+      padding-left: 0;
+    }
   }
 }

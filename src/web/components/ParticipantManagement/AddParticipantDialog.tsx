@@ -151,90 +151,79 @@ function AddParticipantDialog({
       open={open}
       onOpenChange={setOpen}
       className='add-participant-dialog'
+      fullScreen
     >
       <RootFormErrors fieldErrors={errors} />
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(submit)}>
           <h4>Participant Information</h4>
           <span>Provide the following information about the company/participant.</span>
-          <div className='add-participant-dialog-flex'>
-            <TextInput
-              inputName='participantName'
-              label='Participant Name'
-              className='text-input'
-              rules={{ required: 'Please specify Participant Name.' }}
-            />
+          <TextInput
+            inputName='participantName'
+            label='Participant Name'
+            className='text-input'
+            rules={{ required: 'Please specify Participant Name.' }}
+          />
 
-            <div className='right-column'>
-              <MultiCheckboxInput
-                inputName='participantTypes'
-                label='Participant Type'
-                options={participantTypes.map((p) => ({
-                  optionLabel: p.typeName,
-                  value: p.id,
-                }))}
-                rules={{ required: 'Please specify Participant Type(s).' }}
-              />
-            </div>
+          <MultiCheckboxInput
+            inputName='participantTypes'
+            label='Participant Type'
+            options={participantTypes.map((p) => ({
+              optionLabel: p.typeName,
+              value: p.id,
+            }))}
+            rules={{ required: 'Please specify Participant Type(s).' }}
+          />
+          <div className='site-type'>
+            <RadioInput
+              inputName='siteIdType'
+              label='Site ID'
+              options={[
+                { optionLabel: 'Existing Site ID', value: 0 },
+                { optionLabel: 'New Site ID', value: 1 },
+              ]}
+            />
           </div>
-          <div>
-            <div className='add-participant-dialog-flex'>
-              <div className='site-type'>
-                <RadioInput
-                  inputName='siteIdType'
-                  label='Site ID'
-                  options={[
-                    { optionLabel: 'Existing Site ID', value: 0 },
-                    { optionLabel: 'New Site ID', value: 1 },
-                  ]}
+          {!newSite && (
+            <div>
+              <SearchBarContainer>
+                <SearchBarFormInput
+                  inputName='siteId'
+                  inputClassName='search-input'
+                  fullBorder
+                  value={
+                    !selectedSite ? searchText : `${selectedSite.name} (Site ID ${selectedSite.id})`
+                  }
+                  onChange={onSearchInputChange}
+                  onFocus={onSearchInputFocus}
+                  label='Search Participant Name to find Site ID'
+                  rules={{ required: 'Please specify Site ID.' }}
                 />
-              </div>
-              <div className='right-column'>
-                {!newSite && (
-                  <div>
-                    <SearchBarContainer>
-                      <SearchBarFormInput
-                        inputName='siteId'
-                        inputClassName='search-input'
-                        fullBorder
-                        value={
-                          !selectedSite
-                            ? searchText
-                            : `${selectedSite.name} (Site ID ${selectedSite.id})`
-                        }
-                        onChange={onSearchInputChange}
-                        onFocus={onSearchInputFocus}
-                        label='Search Participant Name to find Site ID'
-                        rules={{ required: 'Please specify Site ID.' }}
-                      />
-                      {!selectedSite && searchText && (
-                        <SearchBarResults className='site-search-results'>
-                          {siteSearchResults?.map((s) => (
-                            <button
-                              key={s.item.id}
-                              type='button'
-                              className='text-button'
-                              onClick={() => onSiteClick(s.item)}
-                            >
-                              <HighlightedResult result={s} /> (Site ID: {s.item.id})
-                            </button>
-                          ))}
-                        </SearchBarResults>
-                      )}
-                    </SearchBarContainer>
-                  </div>
+                {!selectedSite && searchText && (
+                  <SearchBarResults className='site-search-results'>
+                    {siteSearchResults?.map((s) => (
+                      <button
+                        key={s.item.id}
+                        type='button'
+                        className='text-button'
+                        onClick={() => onSiteClick(s.item)}
+                      >
+                        <HighlightedResult result={s} /> (Site ID: {s.item.id})
+                      </button>
+                    ))}
+                  </SearchBarResults>
                 )}
-                {newSite && (
-                  <TextInput
-                    inputName='siteName'
-                    label='New Site Name'
-                    className='text-input'
-                    rules={{ required: 'Please specify Site Name.' }}
-                  />
-                )}
-              </div>
+              </SearchBarContainer>
             </div>
-          </div>
+          )}
+          {newSite && (
+            <TextInput
+              inputName='siteName'
+              label='New Site Name'
+              className='text-input'
+              rules={{ required: 'Please specify Site Name.' }}
+            />
+          )}
           <div className='add-participant-dialog-flex'>
             <MultiCheckboxInput
               inputName='apiRoles'
@@ -271,28 +260,22 @@ function AddParticipantDialog({
                 />
               </div>
             </div>
-            <div className='add-participant-dialog-flex'>
-              <div>
-                <TextInput
-                  inputName='email'
-                  label='Contact Email'
-                  className='text-input'
-                  rules={{ required: 'Please specify Contact Email.' }}
-                />
-              </div>
-              <div>
-                <div className='user-roles right-column'>
-                  <SelectInput
-                    inputName='role'
-                    label='Job Function'
-                    rules={{ required: "Please specify the contact's job function." }}
-                    options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-                      optionLabel: UserRole[key],
-                      value: UserRole[key],
-                    }))}
-                  />
-                </div>
-              </div>
+            <TextInput
+              inputName='email'
+              label='Contact Email'
+              className='text-input'
+              rules={{ required: 'Please specify Contact Email.' }}
+            />
+            <div className='user-roles'>
+              <SelectInput
+                inputName='role'
+                label='Job Function'
+                rules={{ required: "Please specify the contact's job function." }}
+                options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
+                  optionLabel: UserRole[key],
+                  value: UserRole[key],
+                }))}
+              />
             </div>
           </div>
           <br />
