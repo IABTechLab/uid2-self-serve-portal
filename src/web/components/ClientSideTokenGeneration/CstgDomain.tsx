@@ -21,7 +21,7 @@ function DeleteConfirmationDialog({ domain, onRemoveDomain }: DeleteConfirmation
     <Dialog
       title='Are you sure you want to delete this domain?'
       triggerButton={
-        <button type='button' className='transparent-button'>
+        <button type='button' className='icon-button' aria-label='delete-domain-name'>
           <FontAwesomeIcon icon='trash-can' />
         </button>
       }
