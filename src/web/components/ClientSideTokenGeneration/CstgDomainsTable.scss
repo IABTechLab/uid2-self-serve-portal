@@ -2,6 +2,10 @@
   .cstg-domains-table {
     width: 100%;
 
+    td {
+      padding: 15px 5px 15px 0;
+    }
+
     th:first-of-type,
     td:first-of-type {
       padding-left: 10px;
