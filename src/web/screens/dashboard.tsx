@@ -12,9 +12,9 @@ import { SetTermsAccepted } from '../services/userAccount';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { AccountInformationRoute } from './accountInformation';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
+import { ClientSideIntegrationRoute } from './clientSideIntegration';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
-import { KeyPairRoute } from './keyPairsScreen';
 import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
@@ -34,10 +34,10 @@ export const StandardRoutes: PortalRoute[] = [
   TermsOfServiceRoute,
 ];
 
-// adding KeyPairRoute to AdminRoutes here while it's in development.  It should go under sharing permissions when ready
+// adding ClientSideIntegrationRoute to AdminRoutes here while it's in development.  It should go under sharing permissions when ready
 export const AdminRoutes: PortalRoute[] = [
   ManageParticipantsRoute,
-  KeyPairRoute,
+  ClientSideIntegrationRoute,
   ApiKeyManagementRoute,
 ];
 
