@@ -9,7 +9,7 @@ import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-function KeyPairsScreen() {
+function ClientSideIntegration() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
 
   const loadKeyPairs = useCallback(async () => {
@@ -46,9 +46,9 @@ function KeyPairsScreen() {
   );
 }
 
-export const KeyPairRoute: PortalRoute = {
+export const ClientSideIntegrationRoute: PortalRoute = {
   description: 'Client Side Integration',
-  element: <KeyPairsScreen />,
+  element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
-  path: '/dashboard/keyPairs',
+  path: '/dashboard/clientSideIntegration',
 };
