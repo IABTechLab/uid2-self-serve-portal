@@ -69,6 +69,8 @@ export class Participant extends BaseModel {
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
+  declare approverId?: Number;
+  declare approverDate?: Date;
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -88,6 +90,8 @@ export const ParticipantSchema = z.object({
   allowSharing: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
+  approverId: z.number().optional(),
+  approverDate: z.date().optional(),
 });
 
 export const ParticipantCreationPartial = ParticipantSchema.pick({
