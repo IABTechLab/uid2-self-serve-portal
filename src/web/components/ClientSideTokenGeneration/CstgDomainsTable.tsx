@@ -119,15 +119,6 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
             selectedDomains={selectedDomains}
           />
         )}
-        <button
-          className='transparent-button table-action-button'
-          type='button'
-          disabled={showNewRow}
-          onClick={toggleAddRow}
-        >
-          <FontAwesomeIcon icon='plus' className='cstg-domains-management-icon' />
-          Add Domain
-        </button>
       </div>
       <table className='cstg-domains-table'>
         <thead>
@@ -158,11 +149,16 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
       {!domains.length && !showNewRow && (
         <TableNoDataPlaceholder
           icon={<img src='/group-icon.svg' alt='group-icon' />}
-          title='No Approved Domains'
+          title='No Top-Level Domains'
         >
-          <span>There are no approved domains.</span>
+          <span>There are no Top-Level Domains.</span>
         </TableNoDataPlaceholder>
       )}
+      <div className='add-domain-button'>
+        <button className='small-button' type='button' disabled={showNewRow} onClick={toggleAddRow}>
+          Add Domain
+        </button>
+      </div>
     </div>
   );
 }

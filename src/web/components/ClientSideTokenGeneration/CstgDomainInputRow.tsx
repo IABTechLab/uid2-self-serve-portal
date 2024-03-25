@@ -114,7 +114,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
             onChange={handleInputChange}
           />
           {validationResult && (
-            <InlineMessage message={validationResult!.message} type={validationResult!.type} />
+            <InlineMessage message={validationResult.message} type={validationResult.type} />
           )}
         </div>
       </td>
@@ -125,7 +125,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
             data-testid='domain-input-save-btn'
             className='transparent-button'
             onClick={() => onAdd(newDomain)}
-            disabled={!!validationResult}
+            disabled={!!validationResult || newDomain === ''}
           >
             Save
           </button>
