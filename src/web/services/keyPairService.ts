@@ -16,7 +16,7 @@ export async function GetKeyPairs(participantId?: number) {
       `/participants/${participantId ?? 'current'}/keyPairs`
     );
     if (result.status === 200) {
-      return (result.data as KeyPairDTO[]).map(mapKeyPairDTOToModel);
+      return result.data.map(mapKeyPairDTOToModel);
     }
   } catch (e: unknown) {
     throw backendError(e, 'Could not get key pairs');

@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable camelcase */
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
@@ -22,9 +22,9 @@ const response: SiteDTO[] = [
       { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
     ],
     clientTypes: ['PUBLISHER'],
-    // eslint-disable-next-line camelcase
     client_count: 1,
     visible: true,
+    domain_names: [],
   },
   {
     id: 4,
@@ -32,9 +32,9 @@ const response: SiteDTO[] = [
     enabled: true,
     apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 }],
     clientTypes: ['PUBLISHER'],
-    // eslint-disable-next-line camelcase
     client_count: 1,
     visible: false,
+    domain_names: [],
   },
 ];
 

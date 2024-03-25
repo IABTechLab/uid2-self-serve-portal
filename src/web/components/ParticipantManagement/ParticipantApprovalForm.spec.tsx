@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { render, screen } from '@testing-library/react';
 import Fuse from 'fuse.js';
 
@@ -12,9 +13,9 @@ const createResult = (text: string, indices: [number, number][]) => {
       enabled: true,
       apiRoles: [],
       clientTypes: [],
-      // eslint-disable-next-line camelcase
       client_count: 1,
       visible: false,
+      domain_names: [],
     },
     matches: [
       {

@@ -17,6 +17,7 @@ export enum AuditTrailEvents {
   ManageKeyPair = 'ManageKeyPair',
   ManageApiKey = 'ManageApiKey',
   AddParticipant = 'AddParticipant',
+  UpdateDomainNames = 'UpdateDomainNames',
 }
 
 export type AuditTrailEventData =
@@ -25,7 +26,8 @@ export type AuditTrailEventData =
   | UpdateSharingTypesEventData
   | ManageKeyPairEventData
   | ManageApiKeyEventData
-  | AddParticipantEventData;
+  | AddParticipantEventData
+  | UpdateDomainNamesEventData;
 
 export type UpdateSharingPermissionEventData = {
   siteId: number;
@@ -72,12 +74,19 @@ export type ManageKeyPairEventData = {
 export type ManageApiKeyEventData = {
   siteId: number;
   action: AuditAction;
-  keyName: String;
-  apiRoles: String[];
+  keyName: string;
+  apiRoles: string[];
   participantId: number;
-  keyId?: String;
-  newKeyName?: String;
-  newApiRoles?: String[];
+  keyId?: string;
+  newKeyName?: string;
+  newApiRoles?: string[];
+};
+
+export type UpdateDomainNamesEventData = {
+  siteId: number;
+  action: AuditAction;
+  participantId: number;
+  domainNames: string[];
 };
 
 export class AuditTrail extends BaseModel {
