@@ -202,7 +202,7 @@ export const insertAddParticipantAuditTrail = async (
     lastName: data.users[0].lastName,
     participantTypes: data.types.map((type) => type.id),
     role: data.users[0].role!,
-    salesforceAgreementNumber: data.salesforceAgreementNumber,
+    crmAgreementNumber: data.crmAgreementNumber,
   };
 
   return AuditTrail.query().insert({

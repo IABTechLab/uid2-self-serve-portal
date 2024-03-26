@@ -39,7 +39,7 @@ export function ApprovedParticipantItem({
       <td>
         <ApiRolesCell apiRoles={participant.apiRoles ?? []} showRoleTooltip />
       </td>
-      <td>{participant.salesforceAgreementNumber}</td>
+      <td>{participant.crmAgreementNumber}</td>
       <td className='action'>
         <div className='action-cell'>
           <UpdateParticipantDialog

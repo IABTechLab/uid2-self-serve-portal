@@ -69,7 +69,7 @@ export class Participant extends BaseModel {
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
-  declare salesforceAgreementNumber?: string;
+  declare crmAgreementNumber?: string;
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -89,7 +89,7 @@ export const ParticipantSchema = z.object({
   allowSharing: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
-  salesforceAgreementNumber: z.string(),
+  crmAgreementNumber: z.string(),
 });
 
 export const ParticipantCreationPartial = ParticipantSchema.pick({

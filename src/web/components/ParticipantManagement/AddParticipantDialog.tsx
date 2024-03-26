@@ -19,7 +19,7 @@ import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Search/SearchBar';
-import { validateSalesforceAgreementNumber } from './AddParticipantDialogHelper';
+import { validatecrmAgreementNumber } from './AddParticipantDialogHelper';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
@@ -233,12 +233,12 @@ function AddParticipantDialog({
               />
             </div>
             <TextInput
-              inputName='salesforceAgreementNumber'
+              inputName='crmAgreementNumber'
               label='Salesforce Agreement Number'
               className='text-input'
               maxLength={8}
               rules={{
-                validate: validateSalesforceAgreementNumber,
+                validate: validatecrmAgreementNumber,
               }}
             />
             <div>
