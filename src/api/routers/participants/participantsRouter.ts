@@ -74,6 +74,7 @@ import {
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { createParticipant } from './participantsCreation';
+import { getParticipantDomainNames, setParticipantDomainNames } from './participantsDomainNames';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
 import { getParticipantUsers } from './participantsUsers';
 
@@ -354,7 +355,7 @@ export function createParticipantsRouter() {
 
       const traceId = getTraceId(req);
       const auditTrail = await insertManageApiKeyAuditTrail(
-        participant!,
+        participant,
         user!.id,
         user!.email,
         AuditAction.Update,
@@ -416,7 +417,7 @@ export function createParticipantsRouter() {
 
       const traceId = getTraceId(req);
       const auditTrail = await insertManageApiKeyAuditTrail(
-        participant!,
+        participant,
         user!.id,
         user!.email,
         AuditAction.Delete,
@@ -459,7 +460,7 @@ export function createParticipantsRouter() {
 
       const traceId = getTraceId(req);
       const auditTrail = await insertManageApiKeyAuditTrail(
-        participant!,
+        participant,
         user!.id,
         user!.email,
         AuditAction.Add,
@@ -468,11 +469,11 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      if (!validateApiRoles(apiRoles, await getApiRoles(participant!))) {
+      if (!validateApiRoles(apiRoles, await getApiRoles(participant))) {
         return res.status(400).send('Invalid API Permissions');
       }
 
-      const key = await createApiKey(keyName, apiRoles, participant!.siteId);
+      const key = await createApiKey(keyName, apiRoles, participant.siteId);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(200).json(createdApiKeyToApiKeySecrets(key));
@@ -543,6 +544,10 @@ export function createParticipantsRouter() {
   );
 
   participantsRouter.get('/:participantId/keyPairs', getParticipantKeyPairs);
+
+  participantsRouter.get('/:participantId/domainNames', getParticipantDomainNames);
+
+  participantsRouter.post('/:participantId/domainNames', setParticipantDomainNames);
 
   const removeSharingRelationParser = z.object({
     sharingSitesToRemove: z.array(z.number()),
