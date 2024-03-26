@@ -157,6 +157,8 @@ export const updateParticipantAndTypesAndRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
     status: ParticipantStatus;
+    approverId: number | undefined;
+    dateApproved: Date;
   }
 ) => {
   await Participant.transaction(async (trx) => {
@@ -164,6 +166,8 @@ export const updateParticipantAndTypesAndRoles = async (
       name: participantApprovalPartial.name,
       siteId: participantApprovalPartial.siteId,
       status: participantApprovalPartial.status,
+      approverId: participantApprovalPartial.approverId,
+      dateApproved: participantApprovalPartial.dateApproved,
     });
     await updateParticipantRequestTypesWithTransaction(
       participant,
