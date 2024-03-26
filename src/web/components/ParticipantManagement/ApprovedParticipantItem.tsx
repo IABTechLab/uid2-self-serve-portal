@@ -55,7 +55,7 @@ export function ApprovedParticipantItem({
         <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
       </td>
       <td>
-        <div className='approver-id'>{getApprover(participant.approver)}</div>
+        <div className='approver-name'>{getApprover(participant.approver)}</div>
       </td>
       <td>
         <div className='approver-date'>{getApproverDateString(participant.dateApproved)}</div>
