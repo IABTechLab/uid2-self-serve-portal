@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
-import { ContentContainer } from '../components/Core/ContentContainer';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
@@ -73,12 +73,12 @@ function ClientSideIntegration() {
         </a>
         .
       </p>
-      <ContentContainer>
+      <ScreenContentContainer>
         <KeyPairsTable keyPairs={keyPairData ?? []} onAddKeyPair={handleAddKeyPair} />
         {domainNames && (
           <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
         )}
-      </ContentContainer>
+      </ScreenContentContainer>
     </>
   );
 }

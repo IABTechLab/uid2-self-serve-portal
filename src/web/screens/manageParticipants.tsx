@@ -5,8 +5,8 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
-import { ContentContainer } from '../components/Core/ContentContainer';
 import { Loading } from '../components/Core/Loading';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
@@ -90,7 +90,7 @@ function ManageParticipants() {
                   />
                 </div>
               </div>
-              <ContentContainer>
+              <ScreenContentContainer>
                 <ParticipantRequestsTable
                   participantRequests={participantRequests}
                   participantTypes={participantTypes}
@@ -102,7 +102,7 @@ function ManageParticipants() {
                   apiRoles={apiRoles}
                   onUpdateParticipant={onUpdateParticipant}
                 />
-              </ContentContainer>
+              </ScreenContentContainer>
             </>
           )}
         </Await>

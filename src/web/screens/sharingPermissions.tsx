@@ -2,7 +2,7 @@ import { ReactNode, useContext, useEffect, useState } from 'react';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { Collapsible } from '../components/Core/Collapsible';
-import { ContentContainer } from '../components/Core/ContentContainer';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
@@ -128,7 +128,7 @@ function SharingPermissions() {
         <br />
         Note: This only enables the sharing permission. No data is sent.
       </p>
-      <ContentContainer>
+      <ScreenContentContainer>
         <BulkAddPermissions
           participant={participant}
           sharedTypes={sharedTypes ?? []}
@@ -151,7 +151,7 @@ function SharingPermissions() {
           sharedTypes={sharedTypes}
           onDeleteSharingPermission={handleDeleteSharingSite}
         />
-      </ContentContainer>
+      </ScreenContentContainer>
     </SharingPermissionPageContainer>
   );
 }
