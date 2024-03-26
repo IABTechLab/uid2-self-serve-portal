@@ -69,6 +69,7 @@ function AddParticipantDialog({
       if (name === 'siteIdType') {
         const type = value.siteIdType;
         setNewSite(type === 1);
+        setValue('apiRoles', []);
       }
       if (name === 'participantName') {
         setValue('siteName', value.participantName!);
