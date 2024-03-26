@@ -35,7 +35,7 @@ export const validateApiRoles = (keyRoles: string[], allowedRoles: ApiRoleDTO[])
   return true;
 };
 
-export const getApiKey = async (siteId: number, keyId: String): Promise<ApiKeyDTO | undefined> => {
+export const getApiKey = async (siteId: number, keyId: string): Promise<ApiKeyDTO | undefined> => {
   const apiKeyAdmin = await getApiKeyById(keyId);
 
   const isApiKeyAssociatedWithSite = apiKeyAdmin?.site_id === siteId;

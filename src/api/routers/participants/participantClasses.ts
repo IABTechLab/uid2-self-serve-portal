@@ -13,7 +13,7 @@ export const ParticipantCreationRequest = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
-  role: z.string(),
+  role: z.string().optional(),
 });
 
 export const ParticipantCreationAndApprovalPartial = ParticipantSchema.pick({

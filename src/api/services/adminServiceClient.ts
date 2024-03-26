@@ -145,7 +145,7 @@ export const getApiKeysBySite = async (siteId: number): Promise<ApiKeyAdmin[]> =
   return response.data;
 };
 
-export const getApiKeyById = async (keyId: String): Promise<ApiKeyAdmin> => {
+export const getApiKeyById = async (keyId: string): Promise<ApiKeyAdmin> => {
   const response = await adminServiceClient.get<ApiKeyAdmin>(`/api/client/keyId`, {
     params: { keyId },
   });
@@ -243,5 +243,15 @@ export const createApiKey = async (
     },
   });
 
+  return response.data;
+};
+
+export const setSiteDomainNames = async (
+  siteId: number,
+  domainNames: string[]
+): Promise<AdminSiteDTO> => {
+  const response = await adminServiceClient.post(`/api/site/domain_names?=id=${siteId}`, {
+    domain_names: domainNames,
+  });
   return response.data;
 };
