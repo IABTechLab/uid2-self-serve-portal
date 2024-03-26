@@ -180,7 +180,7 @@ export const insertApproveAccountAuditTrail = async (
   }
 
   return AuditTrail.query().insert({
-    userId: user?.id!,
+    userId: user?.id,
     userEmail: user.email,
     event: AuditTrailEvents.ApproveAccount,
     eventData,
@@ -202,6 +202,7 @@ export const insertAddParticipantAuditTrail = async (
     lastName: data.users[0].lastName,
     participantTypes: data.types.map((type) => type.id),
     role: data.users[0].role!,
+    salesforceAgreementNumber: data.salesforceAgreementNumber,
   };
 
   return AuditTrail.query().insert({
