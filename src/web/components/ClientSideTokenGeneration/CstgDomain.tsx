@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { Dialog } from '../Core/Dialog';
@@ -20,8 +21,8 @@ function DeleteConfirmationDialog({ domain, onRemoveDomain }: DeleteConfirmation
     <Dialog
       title='Are you sure you want to delete this domain?'
       triggerButton={
-        <button type='button' className='transparent-button'>
-          Delete
+        <button type='button' className='icon-button' aria-label='delete-domain-name'>
+          <FontAwesomeIcon icon='trash-can' />
         </button>
       }
       open={openConfirmation}

@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
-import { ChangeEvent, ReactNode, useState } from 'react';
+import { ChangeEvent, ReactNode, useEffect, useRef, useState } from 'react';
 import { parse } from 'tldts';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -31,6 +31,11 @@ type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
 export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps) {
   const [newDomain, setNewDomain] = useState<string>('');
   const [validationResult, setValidationResult] = useState<DomainValidationResult | null>();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef?.current?.focus();
+  }, []);
 
   const updateToNormalizedValue = (normalizedValue: string) => {
     setNewDomain(normalizedValue);
@@ -102,13 +107,14 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
       <td className='domain'>
         <div className='domain-input-wrapper'>
           <input
+            ref={inputRef}
             data-testid='domain-input-field'
             className={clsx('input-container', validationResult?.type)}
             value={newDomain}
             onChange={handleInputChange}
           />
           {validationResult && (
-            <InlineMessage message={validationResult!.message} type={validationResult!.type} />
+            <InlineMessage message={validationResult.message} type={validationResult.type} />
           )}
         </div>
       </td>
@@ -119,7 +125,7 @@ export function CstgDomainInputRow({ onAdd, onCancel }: CstgDomainInputRowProps)
             data-testid='domain-input-save-btn'
             className='transparent-button'
             onClick={() => onAdd(newDomain)}
-            disabled={!!validationResult}
+            disabled={!!validationResult || newDomain === ''}
           >
             Save
           </button>
