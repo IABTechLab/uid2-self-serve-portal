@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { User } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
 import UpdateParticipantDialog from './UpdateParticipantDialog';
@@ -30,6 +31,21 @@ export function ApprovedParticipantItem({
     ));
   }
 
+  function getApproverDateString(dateApproved: Date | undefined) {
+    let dateString: String = '';
+    if (dateApproved) {
+      const dateApprovedTest = new Date(dateApproved);
+      dateString = `${dateApprovedTest.getMonth()}/${dateApprovedTest.getDate()}/${dateApprovedTest.getFullYear()}`;
+    }
+    return dateString;
+  }
+
+  function getApprover(approver: User | undefined): String {
+    if (approver) return `${approver.firstName} ${approver.lastName}`;
+
+    return `Information not available`;
+  }
+
   return (
     <tr className='participant-management-item'>
       <td>
@@ -37,6 +53,12 @@ export function ApprovedParticipantItem({
       </td>
       <td>
         <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
+      </td>
+      <td>
+        <div className='approver-id'>{getApprover(participant.approver)}</div>
+      </td>
+      <td>
+        <div className='approver-date'>{getApproverDateString(participant.dateApproved)}</div>
       </td>
       <td>
         <ApiRolesCell

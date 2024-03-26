@@ -58,6 +58,14 @@ export class Participant extends BaseModel {
         to: 'businessContacts.participantId',
       },
     },
+    approver: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'User',
+      join: {
+        from: 'participants.approverId',
+        to: 'users.id',
+      },
+    },
   };
   declare id: number;
   declare name: string;
@@ -69,8 +77,9 @@ export class Participant extends BaseModel {
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
-  declare approverId?: Number;
-  declare approverDate?: Date;
+  declare approverId?: number;
+  declare approver?: User;
+  declare dateApproved?: Date;
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -91,7 +100,8 @@ export const ParticipantSchema = z.object({
   location: z.string().optional(),
   siteId: z.number().optional(),
   approverId: z.number().optional(),
-  approverDate: z.date().optional(),
+  approver: z.array(UserSchema).optional(),
+  dateApproved: z.date().optional(),
 });
 
 export const ParticipantCreationPartial = ParticipantSchema.pick({
