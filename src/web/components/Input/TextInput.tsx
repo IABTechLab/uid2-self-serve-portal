@@ -8,7 +8,7 @@ import './Input.scss';
 
 export function TextInput<
   TFieldValues extends FieldValues,
-  TPath extends FieldPathByValue<TFieldValues, String>
+  TPath extends FieldPathByValue<TFieldValues, string>
 >({
   inputName,
   label,

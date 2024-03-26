@@ -1,9 +1,10 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { Loading } from '../components/Core/Loading';
+import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
+import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -11,6 +12,7 @@ import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
+  const [domainNames, setDomainNames] = useState<string[]>();
 
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs();
@@ -18,9 +20,18 @@ function ClientSideIntegration() {
     setKeyPairData(sortedKeyPairs);
   }, []);
 
+  const loadDomainNames = useCallback(async () => {
+    const currentDomainNames = await GetDomainNames();
+    setDomainNames(currentDomainNames);
+  }, []);
+
   useEffect(() => {
     loadKeyPairs();
   }, [loadKeyPairs]);
+
+  useEffect(() => {
+    loadDomainNames();
+  }, [loadDomainNames]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name, disabled = false } = formData;
@@ -35,13 +46,38 @@ function ClientSideIntegration() {
     }
   };
 
+  const handleUpdateDomainNames = async (newDomainNames: string[]) => {
+    try {
+      const response = await UpdateDomainNames(newDomainNames);
+      setDomainNames(response);
+      SuccessToast('Domain Names updated.');
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  };
+
   return (
     <>
       <h1>Client Side Integration</h1>
-      <p className='heading-details'>View and manage Keys.</p>
-      <Suspense fallback={<Loading />}>
-        <KeyPairsTable keyPairs={keyPairData} onAddKeyPair={handleAddKeyPair} />
-      </Suspense>
+      <p className='heading-details'>
+        View and manage Client Side Integration Key Pairs and domain names. For more information,
+        see{' '}
+        <a
+          className='outside-link'
+          target='_blank'
+          href='https://unifiedid.com/docs/guides/publisher-client-side'
+          rel='noreferrer'
+        >
+          Client-Side Integration Guide
+        </a>
+        .
+      </p>
+      <div className='content-container'>
+        <KeyPairsTable keyPairs={keyPairData ?? []} onAddKeyPair={handleAddKeyPair} />
+        {domainNames && (
+          <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
+        )}
+      </div>
     </>
   );
 }

@@ -37,6 +37,7 @@ export type AdminSiteDTO = {
   clientTypes?: ClientType[];
   client_count: number;
   visible: boolean;
+  domain_names: string[];
 };
 
 export type SiteDTO = Omit<AdminSiteDTO, 'roles'> & { apiRoles: ApiRoleDTO[] };
@@ -129,7 +130,7 @@ export type CreatedApiKeyDTO = {
 
 export type ApiKeyAdmin = Omit<ApiKeyDTO, 'roles'> & { roles: string };
 
-function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String, ApiRoleDTO>) {
+function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<string, ApiRoleDTO>) {
   return adminRoles.map((adminRole) => {
     const adminRoleTrimmed = adminRole.trim();
 
@@ -147,9 +148,9 @@ function mapAdminRolesToApiRoleDTOs(adminRoles: string[], apiRoleMap: Map<String
   });
 }
 
-async function loadLoadRoleMaps(): Promise<Map<String, ApiRoleDTO>> {
+async function loadLoadRoleMaps(): Promise<Map<string, ApiRoleDTO>> {
   const apiRoleList = await ApiRole.query();
-  const apiRoleMap = new Map<String, ApiRoleDTO>(
+  const apiRoleMap = new Map<string, ApiRoleDTO>(
     apiRoleList.map((apiRole) => [apiRole.roleName, apiRole as ApiRoleDTO])
   );
 
@@ -191,6 +192,7 @@ export async function mapAdminSitesToSiteDTOs(adminSites: AdminSiteDTO[]): Promi
       visible: adminSite.visible,
       clientTypes: adminSite.clientTypes,
       apiRoles,
+      domain_names: adminSite.domain_names,
     };
   });
 }

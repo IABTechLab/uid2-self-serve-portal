@@ -9,7 +9,7 @@ import './SelectInput.scss';
 
 export type Option<T> = {
   optionLabel: string;
-  optionToolTip?: String;
+  optionToolTip?: string;
   value: T;
   disabled?: boolean;
 };
