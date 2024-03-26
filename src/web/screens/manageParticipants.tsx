@@ -5,6 +5,7 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
+import { ContentContainer } from '../components/Core/ContentContainer';
 import { Loading } from '../components/Core/Loading';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
@@ -89,17 +90,19 @@ function ManageParticipants() {
                   />
                 </div>
               </div>
-              <ParticipantRequestsTable
-                participantRequests={participantRequests}
-                participantTypes={participantTypes}
-                apiRoles={apiRoles}
-                onApprove={handleApproveParticipantRequest}
-              />
-              <ApprovedParticipantsTable
-                participants={participantApproved}
-                apiRoles={apiRoles}
-                onUpdateParticipant={onUpdateParticipant}
-              />
+              <ContentContainer>
+                <ParticipantRequestsTable
+                  participantRequests={participantRequests}
+                  participantTypes={participantTypes}
+                  apiRoles={apiRoles}
+                  onApprove={handleApproveParticipantRequest}
+                />
+                <ApprovedParticipantsTable
+                  participants={participantApproved}
+                  apiRoles={apiRoles}
+                  onUpdateParticipant={onUpdateParticipant}
+                />
+              </ContentContainer>
             </>
           )}
         </Await>
