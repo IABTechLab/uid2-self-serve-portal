@@ -4,7 +4,7 @@ import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDo
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
-import { GetDomainNames, SetDomainNames } from '../services/domainNamesService';
+import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
 import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -46,9 +46,9 @@ function ClientSideIntegration() {
     }
   };
 
-  const handleUpdateDomainNames = async (updatedDomainNames: string[]) => {
+  const handleUpdateDomainNames = async (newDomainNames: string[]) => {
     try {
-      const response = await SetDomainNames(updatedDomainNames);
+      const response = await UpdateDomainNames(newDomainNames);
       setDomainNames(response);
       SuccessToast('Domain Names updated.');
     } catch (e) {

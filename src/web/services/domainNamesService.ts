@@ -15,7 +15,7 @@ export async function GetDomainNames(participantId?: number) {
   }
 }
 
-export async function SetDomainNames(
+export async function UpdateDomainNames(
   domainNames: string[],
   participantId?: number
 ): Promise<string[]> {
