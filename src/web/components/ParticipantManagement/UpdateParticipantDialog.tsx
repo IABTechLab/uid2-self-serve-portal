@@ -3,6 +3,7 @@ import { SubmitHandler } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UpdateParticipantForm } from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
@@ -14,6 +15,7 @@ type UpdateParticipantDialogProps = {
   participant: ParticipantDTO;
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
+  participantTypes: ParticipantTypeDTO[];
 };
 
 function UpdateParticipantDialog({
@@ -21,6 +23,7 @@ function UpdateParticipantDialog({
   participant,
   onUpdateParticipant,
   apiRoles,
+  participantTypes,
 }: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
 
@@ -31,6 +34,7 @@ function UpdateParticipantDialog({
 
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
+    participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
   };
 
   return (
@@ -46,6 +50,14 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
+        <MultiCheckboxInput
+          inputName='participantTypes'
+          label='Participant Type'
+          options={participantTypes.map((p) => ({
+            optionLabel: p.typeName,
+            value: p.id,
+          }))}
+        />
         <MultiCheckboxInput
           inputName='apiRoles'
           label='API Permissions'
