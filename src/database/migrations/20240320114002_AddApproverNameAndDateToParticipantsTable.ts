@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 
-export enum AuditTrailEvents {
+enum AuditTrailEvents {
   UpdateSharingPermissions = 'UpdateSharingPermissions',
   UpdateSharingTypes = 'UpdateSharingTypes',
   ApproveAccount = 'ApproveAccount',
@@ -8,6 +8,14 @@ export enum AuditTrailEvents {
   ManageApiKey = 'ManageApiKey',
   AddParticipant = 'AddParticipant',
 }
+
+type AuditTrailEventData = {
+  siteId: number;
+  action: string;
+  name: string;
+  disabled: boolean;
+  participantId: number;
+};
 
 type AuditTrailDTO = {
   id: number;
@@ -22,11 +30,13 @@ type AuditTrailDTO = {
 
 async function updateParticipantsRow(approvedAuditTrail: AuditTrailDTO, knex: Knex) {
   const { userId } = approvedAuditTrail;
-  const { created_at } = approvedAuditTrail;
-  const { participantId } = JSON.parse(approvedAuditTrail.eventData);
+  const createdAt = approvedAuditTrail.created_at;
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const eventData: AuditTrailEventData = JSON.parse(approvedAuditTrail.eventData);
+  const { participantId } = eventData;
   await knex('participants').where('id', participantId).update({
     approverId: userId,
-    dateApproved: created_at,
+    dateApproved: createdAt,
   });
 }
 
@@ -38,6 +48,7 @@ function batchUpdateParticipantsWithApprovers(knex: Knex, approvedAuditTrails: A
 }
 
 async function migrateApproverToParticipants(knex: Knex) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const approvedAuditTrails: AuditTrailDTO[] = await knex('auditTrails')
     .where('event', 'ApproveAccount')
     .andWhere('succeeded', 1);
