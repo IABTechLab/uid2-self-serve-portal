@@ -27,8 +27,13 @@ function UpdateParticipantDialog({
   participantTypes,
 }: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
+  const [typesAndRolesError, setTypesAndRolesError] = useState(false);
 
   const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
+    if (formData.participantTypes.length === 0 || formData.apiRoles.length === 0) {
+      setTypesAndRolesError(true);
+      return;
+    }
     await onUpdateParticipant(formData, participant);
     setOpen(false);
   };
@@ -52,6 +57,11 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
+        {typesAndRolesError && (
+          <p className='form-error'>
+            Participant must have at least one participant type and at least one API permission.
+          </p>
+        )}
         <TextInput inputName='participantName' label='Participant Name' className='text-input' />
         <MultiCheckboxInput
           inputName='participantTypes'
