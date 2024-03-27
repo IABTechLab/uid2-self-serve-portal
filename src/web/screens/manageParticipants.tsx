@@ -98,6 +98,7 @@ function ManageParticipants() {
               <ApprovedParticipantsTable
                 participants={participantApproved}
                 apiRoles={apiRoles}
+                participantTypes={participantTypes}
                 onUpdateParticipant={onUpdateParticipant}
               />
             </>

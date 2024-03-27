@@ -2,21 +2,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
 import UpdateParticipantDialog from './UpdateParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
-type ApprovedParticipantProps = {
+type ApprovedParticipantProps = Readonly<{
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
+  participantTypes: ParticipantTypeDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
-};
+}>;
 
 export function ApprovedParticipantItem({
   participant,
   apiRoles,
+  participantTypes,
   onUpdateParticipant,
 }: ApprovedParticipantProps) {
   function getParticipantTypes(
@@ -46,6 +49,7 @@ export function ApprovedParticipantItem({
             apiRoles={apiRoles}
             onUpdateParticipant={onUpdateParticipant}
             participant={participant}
+            participantTypes={participantTypes}
             triggerButton={
               <button type='button' className='transparent-button'>
                 <FontAwesomeIcon icon='pencil' />

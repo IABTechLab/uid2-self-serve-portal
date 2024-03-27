@@ -24,12 +24,12 @@ import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
 
-type AddParticipantDialogProps = {
+type AddParticipantDialogProps = Readonly<{
   triggerButton: JSX.Element;
   onAddParticipant: (form: AddParticipantForm) => Promise<AxiosResponse>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
-};
+}>;
 
 function AddParticipantDialog({
   triggerButton,
