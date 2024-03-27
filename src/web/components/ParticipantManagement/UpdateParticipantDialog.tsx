@@ -36,6 +36,7 @@ function UpdateParticipantDialog({
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
+    participantName: participant.name,
   };
 
   return (
@@ -51,12 +52,7 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
-        <TextInput
-          inputName='participantName'
-          label='Participant Name'
-          className='text-input'
-          placeholder={participant.name}
-        />
+        <TextInput inputName='participantName' label='Participant Name' className='text-input' />
         <MultiCheckboxInput
           inputName='participantTypes'
           label='Participant Type'

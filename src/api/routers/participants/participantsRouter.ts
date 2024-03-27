@@ -111,13 +111,6 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
   };
 }
 
-// export const getCurrentParticipantType = async (currentParticipant: Participant) => {
-//   const cP = await ParticipantType.query()
-//     .where('id', currentParticipant.id)
-//     .withGraphFetched('participants');
-//   return cP;
-// };
-
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
@@ -223,7 +216,7 @@ export function createParticipantsRouter() {
   const updateParticipantParser = z.object({
     apiRoles: z.array(z.number()),
     participantTypes: z.array(z.number()),
-    participantName: z.string().optional(),
+    participantName: z.string(),
   });
 
   participantsRouter.put(
@@ -240,7 +233,7 @@ export function createParticipantsRouter() {
         req.body
       );
 
-      if (participantName) await updateParticipantName(participant, participantName);
+      await updateParticipantName(participant, participantName);
       await updateParticipantTypes(participant, participantTypes);
       await updateParticipantApiRoles(participant, apiRoles);
 
