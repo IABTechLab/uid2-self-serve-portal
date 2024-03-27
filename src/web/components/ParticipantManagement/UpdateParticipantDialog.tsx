@@ -51,7 +51,12 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
-        <TextInput inputName='participantName' label='Participant Name' className='text-input' />
+        <TextInput
+          inputName='participantName'
+          label='Participant Name'
+          className='text-input'
+          placeholder={participant.name}
+        />
         <MultiCheckboxInput
           inputName='participantTypes'
           label='Participant Type'
