@@ -11,10 +11,8 @@ import {
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { ParticipantType } from '../../entities/ParticipantType';
 import { UserDTO, UserRole } from '../../entities/User';
 import { getTraceId } from '../../helpers/loggingHelpers';
-import { mapClientTypeToParticipantType } from '../../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
 import {
@@ -23,13 +21,11 @@ import {
   disableApiKey,
   getApiKeysBySite,
   getSharingList,
-  getSiteList,
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
 } from '../../services/adminServiceClient';
 import {
-  AdminSiteDTO,
   mapAdminApiKeysToApiKeyDTOs,
   ParticipantApprovalResponse,
 } from '../../services/adminServiceHelpers';
