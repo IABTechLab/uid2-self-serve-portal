@@ -110,6 +110,13 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
   };
 }
 
+export const getCurrentParticipantType = async (currentParticipant: Participant) => {
+  const cP = await ParticipantType.query()
+    .where('id', currentParticipant.id)
+    .withGraphFetched('participants');
+  return cP;
+};
+
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
@@ -135,6 +142,7 @@ export function createParticipantsRouter() {
     const allParticipantTypes = await ParticipantType.query();
     const result = participants
       .map((p) => {
+        const currentParticipantTypes = getCurrentParticipantType(p);
         const currentSite = p?.siteId === undefined ? undefined : siteMap.get(p.siteId);
         return {
           ...p,
