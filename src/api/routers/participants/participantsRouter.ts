@@ -129,23 +129,6 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
     const participants = await getParticipantsApproved();
-
-    // const sitesList = await getSiteList();
-    // const siteMap = new Map<number, AdminSiteDTO>(sitesList.map((s) => [s.id, s]));
-
-    // const allParticipantTypes = await ParticipantType.query();
-    // const result = participants
-    //   .map((p) => {
-    //     const currentSite = p?.siteId === undefined ? undefined : siteMap.get(p.siteId);
-    //     return {
-    //       ...p,
-    //       types: mapClientTypeToParticipantType(
-    //         currentSite?.clientTypes || [],
-    //         allParticipantTypes
-    //       ),
-    //     };
-    //   })
-    //   .sort((a, b) => a.name.localeCompare(b.name));
     const result = participants.sort((a, b) => a.name.localeCompare(b.name));
     return res.status(200).json(result);
   });
