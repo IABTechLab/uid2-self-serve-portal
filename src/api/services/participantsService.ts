@@ -224,6 +224,10 @@ export const updateParticipantTypes = async (
   });
 };
 
+export const updateParticipantName = async (participant: Participant, participantName: string) => {
+  await Participant.query().where('id', participant.id).update({ name: participantName });
+};
+
 export const UpdateSharingTypes = async (
   participantSiteId: number,
   types: ClientType[],

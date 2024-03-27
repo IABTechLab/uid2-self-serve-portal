@@ -63,6 +63,7 @@ import {
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndRoles,
   updateParticipantApiRoles,
+  updateParticipantName,
   updateParticipantTypes,
   UpdateSharingTypes,
   UserParticipantRequest,
@@ -110,12 +111,12 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
   };
 }
 
-export const getCurrentParticipantType = async (currentParticipant: Participant) => {
-  const cP = await ParticipantType.query()
-    .where('id', currentParticipant.id)
-    .withGraphFetched('participants');
-  return cP;
-};
+// export const getCurrentParticipantType = async (currentParticipant: Participant) => {
+//   const cP = await ParticipantType.query()
+//     .where('id', currentParticipant.id)
+//     .withGraphFetched('participants');
+//   return cP;
+// };
 
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
@@ -222,6 +223,7 @@ export function createParticipantsRouter() {
   const updateParticipantParser = z.object({
     apiRoles: z.array(z.number()),
     participantTypes: z.array(z.number()),
+    participantName: z.string().optional(),
   });
 
   participantsRouter.put(
@@ -234,10 +236,13 @@ export function createParticipantsRouter() {
         return res.status(404).send('Unable to find participant');
       }
 
-      const { apiRoles, participantTypes } = updateParticipantParser.parse(req.body);
+      const { apiRoles, participantTypes, participantName } = updateParticipantParser.parse(
+        req.body
+      );
 
-      await updateParticipantApiRoles(participant, apiRoles);
+      if (participantName) await updateParticipantName(participant, participantName);
       await updateParticipantTypes(participant, participantTypes);
+      await updateParticipantApiRoles(participant, apiRoles);
 
       return res.sendStatus(200);
     }

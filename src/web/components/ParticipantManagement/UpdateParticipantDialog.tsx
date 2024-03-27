@@ -41,7 +41,7 @@ function UpdateParticipantDialog({
   return (
     <Dialog
       triggerButton={triggerButton}
-      title={`Edit ${participant.name}`}
+      title={`Edit Participant: ${participant.name}`}
       closeButtonText='Cancel'
       open={open}
       onOpenChange={setOpen}
