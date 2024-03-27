@@ -19,17 +19,16 @@ import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Search/SearchBar';
-import { validatecrmAgreementNumber } from './AddParticipantDialogHelper';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
 
-type AddParticipantDialogProps = {
+type AddParticipantDialogProps = Readonly<{
   triggerButton: JSX.Element;
   onAddParticipant: (form: AddParticipantForm) => Promise<AxiosResponse>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
-};
+}>;
 
 function AddParticipantDialog({
   triggerButton,
@@ -41,7 +40,7 @@ function AddParticipantDialog({
   const fuse = useMemo(
     () =>
       sites
-        ? new Fuse(sites, { keys: ['name'], includeMatches: true, findAllMatches: true })
+        ? new Fuse(sites!, { keys: ['name'], includeMatches: true, findAllMatches: true })
         : null,
     [sites]
   );
@@ -70,10 +69,9 @@ function AddParticipantDialog({
       if (name === 'siteIdType') {
         const type = value.siteIdType;
         setNewSite(type === 1);
-        setValue('apiRoles', []);
       }
       if (name === 'participantName') {
-        setValue('siteName', value.participantName);
+        setValue('siteName', value.participantName!);
       }
     });
     return () => subscription.unsubscribe();
@@ -233,15 +231,6 @@ function AddParticipantDialog({
                 rules={{ required: 'Please specify API Role(s).' }}
               />
             </div>
-            <TextInput
-              inputName='crmAgreementNumber'
-              label='Salesforce Agreement Number'
-              className='text-input'
-              maxLength={8}
-              rules={{
-                validate: validatecrmAgreementNumber,
-              }}
-            />
             <div>
               <h4>Participant Contact Information</h4>
               <span>

@@ -11,13 +11,13 @@ import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
-type UpdateParticipantDialogProps = {
+type UpdateParticipantDialogProps = Readonly<{
   triggerButton: JSX.Element;
   participant: ParticipantDTO;
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
-};
+}>;
 
 function UpdateParticipantDialog({
   triggerButton,

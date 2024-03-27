@@ -9,12 +9,12 @@ import UpdateParticipantDialog from './UpdateParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
-type ApprovedParticipantProps = {
+type ApprovedParticipantProps = Readonly<{
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
-};
+}>;
 
 export function ApprovedParticipantItem({
   participant,
