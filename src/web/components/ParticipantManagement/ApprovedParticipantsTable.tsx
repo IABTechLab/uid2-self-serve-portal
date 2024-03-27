@@ -39,6 +39,7 @@ export function ApprovedParticipantsTable({
             <th>Approver</th>
             <th>Date Approved</th>
             <th>API Permissions</th>
+            <th>Salesforce Agreement Number</th>
             <th className='action'>Action</th>
           </tr>
         </thead>

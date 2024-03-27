@@ -80,6 +80,7 @@ export class Participant extends BaseModel {
   declare approverId?: number;
   declare approver?: User;
   declare dateApproved?: Date;
+  declare crmAgreementNumber?: string;
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -102,6 +103,7 @@ export const ParticipantSchema = z.object({
   approverId: z.number().optional(),
   approver: z.array(UserSchema).optional(),
   dateApproved: z.date().optional(),
+  crmAgreementNumber: z.string(),
 });
 
 export const ParticipantCreationPartial = ParticipantSchema.pick({

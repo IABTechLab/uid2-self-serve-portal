@@ -48,9 +48,7 @@ export function ApprovedParticipantItem({
 
   return (
     <tr className='participant-management-item'>
-      <td>
-        <div className='participant-name'>{participant.name}</div>
-      </td>
+      <td>{participant.name}</td>
       <td>
         <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
       </td>
@@ -61,11 +59,9 @@ export function ApprovedParticipantItem({
         <div className='approver-date'>{getApproverDateString(participant.dateApproved)}</div>
       </td>
       <td>
-        <ApiRolesCell
-          apiRoles={participant.apiRoles == null ? [] : participant.apiRoles}
-          showRoleTooltip
-        />
+        <ApiRolesCell apiRoles={participant.apiRoles ?? []} showRoleTooltip />
       </td>
+      <td>{participant.crmAgreementNumber}</td>
       <td className='action'>
         <div className='action-cell'>
           <UpdateParticipantDialog

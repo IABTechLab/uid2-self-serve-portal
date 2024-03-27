@@ -61,6 +61,7 @@ export type AddParticipantEventData = {
   participantTypes: number[];
   role: string;
   siteId?: number;
+  crmAgreementNumber: string;
 };
 
 export type ManageKeyPairEventData = {

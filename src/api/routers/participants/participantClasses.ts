@@ -14,6 +14,7 @@ export const ParticipantCreationRequest = z.object({
   lastName: z.string(),
   email: z.string(),
   role: z.string().optional(),
+  crmAgreementNumber: z.string(),
 });
 
 export const ParticipantCreationAndApprovalPartial = ParticipantSchema.pick({
@@ -22,6 +23,7 @@ export const ParticipantCreationAndApprovalPartial = ParticipantSchema.pick({
   types: true,
   apiRoles: true,
   status: true,
+  crmAgreementNumber: true,
 }).extend({
   siteId: z.number().optional(),
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
