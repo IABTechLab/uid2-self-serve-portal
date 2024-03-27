@@ -9,6 +9,7 @@ import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
+import { TextInput } from '../Input/TextInput';
 
 type UpdateParticipantDialogProps = {
   triggerButton: JSX.Element;
@@ -50,6 +51,7 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
+        <TextInput inputName='participantName' label='Participant Name' className='text-input' />
         <MultiCheckboxInput
           inputName='participantTypes'
           label='Participant Type'

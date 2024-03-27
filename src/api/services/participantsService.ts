@@ -153,6 +153,25 @@ export const updateParticipantApiRolesWithTransaction = async (
   }
 };
 
+export const updateParticipantTypesWithTransaction = async (
+  participant: Participant,
+  participantTypeIds: {
+    id: number;
+  }[],
+  trx: TransactionOrKnex
+) => {
+  await participant.$relatedQuery('types', trx).unrelate();
+
+  const participantTypes = await ParticipantType.query().whereIn(
+    'id',
+    participantTypeIds.map((pType) => pType.id)
+  );
+
+  if (participantTypes.length > 0) {
+    await participant.$relatedQuery('types', trx).relate(participantTypes);
+  }
+};
+
 export const updateParticipantAndTypesAndRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
@@ -184,6 +203,21 @@ export const updateParticipantApiRoles = async (participant: Participant, apiRol
       participant,
       apiRoles.map((role) => ({
         id: role,
+      })),
+      trx
+    );
+  });
+};
+
+export const updateParticipantTypes = async (
+  participant: Participant,
+  participantTypes: number[]
+) => {
+  await Participant.transaction(async (trx) => {
+    await updateParticipantTypesWithTransaction(
+      participant,
+      participantTypes.map((pType) => ({
+        id: pType,
       })),
       trx
     );

@@ -63,6 +63,7 @@ import {
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndRoles,
   updateParticipantApiRoles,
+  updateParticipantTypes,
   UpdateSharingTypes,
   UserParticipantRequest,
 } from '../../services/participantsService';
@@ -210,7 +211,10 @@ export function createParticipantsRouter() {
     }
   );
 
-  const updateParticipantParser = z.object({ apiRoles: z.array(z.number()) });
+  const updateParticipantParser = z.object({
+    apiRoles: z.array(z.number()),
+    participantTypes: z.array(z.number()),
+  });
 
   participantsRouter.put(
     '/:participantId',
@@ -222,9 +226,10 @@ export function createParticipantsRouter() {
         return res.status(404).send('Unable to find participant');
       }
 
-      const { apiRoles } = updateParticipantParser.parse(req.body);
+      const { apiRoles, participantTypes } = updateParticipantParser.parse(req.body);
 
       await updateParticipantApiRoles(participant, apiRoles);
+      await updateParticipantTypes(participant, participantTypes);
 
       return res.sendStatus(200);
     }
