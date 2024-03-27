@@ -58,6 +58,14 @@ export class Participant extends BaseModel {
         to: 'businessContacts.participantId',
       },
     },
+    approver: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'User',
+      join: {
+        from: 'participants.approverId',
+        to: 'users.id',
+      },
+    },
   };
   declare id: number;
   declare name: string;
@@ -69,6 +77,9 @@ export class Participant extends BaseModel {
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
+  declare approverId?: number;
+  declare approver?: User;
+  declare dateApproved?: Date;
   declare crmAgreementNumber?: string;
 }
 
@@ -89,6 +100,9 @@ export const ParticipantSchema = z.object({
   allowSharing: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
+  approverId: z.number().optional(),
+  approver: z.array(UserSchema).optional(),
+  dateApproved: z.date().optional(),
   crmAgreementNumber: z.string(),
 });
 
