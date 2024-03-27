@@ -32,10 +32,15 @@ function UpdateParticipantDialog({
   const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
     if (formData.participantTypes.length === 0 || formData.apiRoles.length === 0) {
       setTypesAndRolesError(true);
-      return;
+    } else {
+      await onUpdateParticipant(formData, participant);
+      setOpen(false);
     }
-    await onUpdateParticipant(formData, participant);
-    setOpen(false);
+  };
+
+  const onOpenChange = () => {
+    setOpen(!open);
+    setTypesAndRolesError(false);
   };
 
   const originalFormValues: UpdateParticipantForm = {
@@ -50,7 +55,7 @@ function UpdateParticipantDialog({
       title={`Edit Participant: ${participant.name}`}
       closeButtonText='Cancel'
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={onOpenChange}
     >
       <Form<UpdateParticipantForm>
         onSubmit={onSubmit}
