@@ -15,17 +15,18 @@ on:
 
 jobs:
   incrementVersionNumber:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
     with:
       release_type: ${{ inputs.release_type }}
     secrets: inherit
 
   publishForApiUi:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@d6f80af59ac5a6551c8f8317df855700ece0e08b
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
       image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
+      git_tag_or_hash: ${{ needs.incrementVersionNumber.outputs.git_tag_or_hash }}
       release_type: ${{ inputs.release_type }}
       docker_file: Dockerfile_ssportal
       docker_image_name: iabtechlab/uid2-ssportal
@@ -33,11 +34,12 @@ jobs:
     secrets: inherit
 
   publishForDBMigration:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@d6f80af59ac5a6551c8f8317df855700ece0e08b
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
       image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
+      git_tag_or_hash: ${{ needs.incrementVersionNumber.outputs.git_tag_or_hash }}
       release_type: ${{ inputs.release_type }}
       docker_file: Dockerfile_ssportal_migration
       docker_image_name: iabtechlab/uid2-ssportal-migration
@@ -45,11 +47,12 @@ jobs:
     secrets: inherit
 
   publishForKeycloak:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@d6f80af59ac5a6551c8f8317df855700ece0e08b
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
       image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
+      git_tag_or_hash: ${{ needs.incrementVersionNumber.outputs.git_tag_or_hash }}
       release_type: ${{ inputs.release_type }}
       docker_file: Dockerfile_keycloak
       docker_image_name: iabtechlab/uid2-ssportal-keycloak
