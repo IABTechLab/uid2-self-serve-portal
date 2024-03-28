@@ -10,6 +10,7 @@ import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
+import { validatecrmAgreementNumber } from './AddParticipantDialogHelper';
 
 type UpdateParticipantDialogProps = Readonly<{
   triggerButton: JSX.Element;
@@ -84,6 +85,15 @@ function UpdateParticipantDialog({
             optionToolTip: p.roleName,
             value: p.id,
           }))}
+        />
+        <TextInput
+          inputName='crmAgreementNumber'
+          label='Salesforce Agreement Number'
+          className='text-input'
+          maxLength={8}
+          rules={{
+            validate: validatecrmAgreementNumber,
+          }}
         />
       </Form>
     </Dialog>
