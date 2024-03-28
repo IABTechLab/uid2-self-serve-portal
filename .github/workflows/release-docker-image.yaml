@@ -7,10 +7,10 @@ on:
         type: choice
         description: The type of release
         options:
-        - Major
-        - Minor
-        - Patch
-        - Snapshot
+          - Major
+          - Minor
+          - Patch
+          - Snapshot
         required: true
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
     secrets: inherit
 
   publishForApiUi:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@d6f80af59ac5a6551c8f8317df855700ece0e08b
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -33,7 +33,7 @@ jobs:
     secrets: inherit
 
   publishForDBMigration:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@d6f80af59ac5a6551c8f8317df855700ece0e08b
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -45,7 +45,7 @@ jobs:
     secrets: inherit
 
   publishForKeycloak:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@d6f80af59ac5a6551c8f8317df855700ece0e08b
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
