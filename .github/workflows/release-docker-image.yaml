@@ -15,13 +15,13 @@ on:
 
 jobs:
   incrementVersionNumber:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@e8397f48a990b2e9b781b9578237a379ca57955a
     with:
       release_type: ${{ inputs.release_type }}
     secrets: inherit
 
   publishForApiUi:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e8397f48a990b2e9b781b9578237a379ca57955a
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -34,7 +34,7 @@ jobs:
     secrets: inherit
 
   publishForDBMigration:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e8397f48a990b2e9b781b9578237a379ca57955a
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -47,7 +47,7 @@ jobs:
     secrets: inherit
 
   publishForKeycloak:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e02a67f261c1b1d03022eda085dee5fb9ecba14c
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@e8397f48a990b2e9b781b9578237a379ca57955a
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
