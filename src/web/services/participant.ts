@@ -192,6 +192,7 @@ export async function GetSharingList(participantId?: number): Promise<SharingLis
     );
     return result.data;
   } catch (e: unknown) {
+    // deal with no keysets properly here
     throw backendError(e, 'Could not load sharing participants');
   }
 }
