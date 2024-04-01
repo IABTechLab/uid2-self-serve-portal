@@ -187,15 +187,10 @@ export async function CompleteRecommendations(participantId: number): Promise<Pa
 }
 
 export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
-  try {
-    const result = await axios.get<SharingListResponse>(
-      `/participants/${participantId ?? 'current'}/sharingPermission`
-    );
-    return result.data;
-  } catch (e: unknown) {
-    // deal with no keysets properly here
-    throw backendError(e, 'Could not load sharing participants');
-  }
+  const result = await axios.get<SharingListResponse>(
+    `/participants/${participantId ?? 'current'}/sharingPermission`
+  );
+  return result.data;
 }
 
 export async function AddSharingParticipants(

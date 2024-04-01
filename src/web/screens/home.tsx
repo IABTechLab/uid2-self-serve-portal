@@ -1,4 +1,3 @@
-import axios from 'axios';
 import log from 'loglevel';
 import { useContext, useEffect, useState } from 'react';
 

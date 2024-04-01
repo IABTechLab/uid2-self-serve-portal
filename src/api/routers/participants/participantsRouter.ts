@@ -284,7 +284,9 @@ export function createParticipantsRouter() {
         return res.status(200).json(sharingList);
       } catch (err) {
         if (err instanceof AxiosError && err.response?.status === 404) {
-          return res.status(404).send('This site does not have a keyset.');
+          return res
+            .status(404)
+            .send({ message: 'This site does not have a keyset.', missingKeyset: true });
         }
         throw err;
       }

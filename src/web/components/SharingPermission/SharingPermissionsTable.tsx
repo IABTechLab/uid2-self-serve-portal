@@ -27,7 +27,7 @@ import {
 
 import './SharingPermissionsTable.scss';
 
-function NoParticipant() {
+export function NoParticipant() {
   return (
     <div className='no-participants-container'>
       <img src='/group-icon.svg' alt='group-icon' />

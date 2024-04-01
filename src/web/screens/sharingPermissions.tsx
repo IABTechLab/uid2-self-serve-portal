@@ -1,6 +1,8 @@
+import { AxiosError } from 'axios';
 import { ReactNode, useContext, useEffect, useState } from 'react';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
+import { Banner } from '../components/Core/Banner';
 import { Collapsible } from '../components/Core/Collapsible';
 import { SuccessToast } from '../components/Core/Toast';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
@@ -14,7 +16,7 @@ import {
   GetSharingList,
   UpdateSharingTypes,
 } from '../services/participant';
-import { ApiError, handleErrorToast } from '../utils/apiError';
+import { handleErrorToast } from '../utils/apiError';
 import { useAsyncError } from '../utils/errorHandler';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -32,6 +34,7 @@ function SharingPermissionPageContainer({ children }: { children: ReactNode }) {
 
 function SharingPermissions() {
   const [showNoKeySetError, setNoKeySetError] = useState(false);
+  const [sitesLoaded, setSitesLoaded] = useState(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
@@ -93,29 +96,35 @@ function SharingPermissions() {
         setSharedSiteIds(response.allowed_sites);
         setSharedTypes(response.allowed_types ?? []);
       } catch (e: unknown) {
-        if (e instanceof ApiError) {
-          if (e.statusCode === 404) {
+        if (e instanceof AxiosError) {
+          if (e.response?.data?.missingKeyset) {
             setNoKeySetError(true);
             return;
           }
           throwError(e);
         }
+      } finally {
+        setSitesLoaded(true);
       }
     };
     loadSharingList();
   }, [throwError]);
 
+  if (!sitesLoaded) {
+    return <div />;
+  }
+
   if (showNoKeySetError) {
     return (
-      <SharingPermissionPageContainer>
-        <p className='heading-details' role='alert'>
-          We&apos;re experiencing an issue on our end. Access to sharing permissions is currently
-          unavailable for you.
-          <br />
-          <br />
-          Please reach out to our support team for assistance.
-        </p>
-      </SharingPermissionPageContainer>
+      <div className='sharing-permissions-table'>
+        <SharingPermissionPageContainer>
+          <Banner
+            message='Use of sharing requires an API Key or Client Side Keypair.  Please reach out to our support team for assistance.'
+            type='Info'
+            fitContent
+          />
+        </SharingPermissionPageContainer>
+      </div>
     );
   }
 
