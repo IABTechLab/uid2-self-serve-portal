@@ -92,7 +92,6 @@ function SharingPermissions() {
     const loadSharingList = async () => {
       try {
         const response = await GetSharingList();
-        // deal with no keysets properly here
         setSharedSiteIds(response.allowed_sites);
         setSharedTypes(response.allowed_types ?? []);
       } catch (e: unknown) {

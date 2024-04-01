@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import log from 'loglevel';
 import { useContext, useEffect, useState } from 'react';
 
@@ -8,7 +9,6 @@ import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetSharingList } from '../services/participant';
 import { preloadAllSitesList } from '../services/site';
-import { ApiError } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -27,16 +27,15 @@ function Home() {
       let manualSites: number[] = [];
       let allowedTypes: ClientType[] = [];
       try {
-        // having no keyset is an expected state.  Don't error on this
         const sharingList = await GetSharingList();
         manualSites = sharingList.allowed_sites;
         allowedTypes = sharingList.allowed_types;
       } catch (e: unknown) {
-        if (e instanceof ApiError) {
-          if (!(e.statusCode === 404 && e.message.indexOf('keyset') < 0)) {
-            log.error(e);
-            setHasError(true);
-          }
+        if (e instanceof AxiosError && e.response?.data?.missingKeyset) {
+          // having no keyset is an expected state.  Don't error on this
+        } else {
+          log.error(e);
+          setHasError(true);
         }
       }
 
