@@ -27,6 +27,7 @@ import {
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
+  updateKeyPair,
 } from '../../services/adminServiceClient';
 import {
   AdminSiteDTO,
@@ -513,6 +514,7 @@ export function createParticipantsRouter() {
   const keyPairParser = z.object({
     name: z.string(),
     disabled: z.boolean(),
+    subscriptionId: z.string(),
   });
 
   participantsRouter.post(
@@ -535,6 +537,32 @@ export function createParticipantsRouter() {
       );
 
       const keyPairs = await addKeyPair(participant.siteId, name, disabled);
+
+      await updateAuditTrailToProceed(auditTrail.id);
+      return res.status(201).json(keyPairs);
+    }
+  );
+
+  participantsRouter.post(
+    '/:participantId/keyPair/update',
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
+      const traceId = getTraceId(req);
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+      const { name, subscriptionId, disabled } = keyPairParser.parse(req.body);
+      const auditTrail = await insertKeyPairAuditTrails(
+        participant,
+        user!.id,
+        user!.email,
+        AuditAction.Add,
+        name,
+        disabled,
+        traceId
+      );
+
+      const keyPairs = await updateKeyPair(subscriptionId, name);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(201).json(keyPairs);

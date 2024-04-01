@@ -5,7 +5,14 @@ import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
-import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
+import {
+  AddKeyPair,
+  AddKeyPairFormProps,
+  DisableKeyPair,
+  GetKeyPairs,
+  UpdateKeyPair,
+  UpdateKeyPairFormProps,
+} from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -18,6 +25,8 @@ function ClientSideIntegration() {
     const data = await GetKeyPairs();
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
+    console.log(sortedKeyPairs);
+    console.log(keyPairData);
   }, []);
 
   const loadDomainNames = useCallback(async () => {
@@ -46,6 +55,28 @@ function ClientSideIntegration() {
     }
   };
 
+  const handleUpdateKeyPair = async (formData: UpdateKeyPairFormProps) => {
+    const { name, subscriptionId, disabled = false } = formData;
+    try {
+      const response = await UpdateKeyPair({ name, subscriptionId, disabled });
+      if (response.status === 201) {
+        SuccessToast('Key Pair updated.');
+        loadKeyPairs();
+      }
+    } catch (e: unknown) {
+      handleErrorToast(e);
+    }
+  };
+
+  const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
+    try {
+      await DisableKeyPair(keyPair);
+      // reloader.revalidate();
+      SuccessToast('Your key pair has been deleted');
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  };
   const handleUpdateDomainNames = async (newDomainNames: string[]) => {
     try {
       const response = await UpdateDomainNames(newDomainNames);
@@ -68,12 +99,17 @@ function ClientSideIntegration() {
           href='https://unifiedid.com/docs/guides/publisher-client-side'
           rel='noreferrer'
         >
-          Client-Side Integration Guide
+          Client-Side Integration Guide{' '}
         </a>
         .
       </p>
       <div className='content-container'>
-        <KeyPairsTable keyPairs={keyPairData ?? []} onAddKeyPair={handleAddKeyPair} />
+        <KeyPairsTable
+          keyPairs={keyPairData ?? []}
+          onAddKeyPair={handleAddKeyPair}
+          onKeyPairEdit={handleUpdateKeyPair}
+          onKeyPairDisable={handleDisableKeyPair}
+        />
         {domainNames && (
           <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
         )}

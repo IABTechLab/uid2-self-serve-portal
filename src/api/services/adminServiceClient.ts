@@ -200,6 +200,19 @@ export const addKeyPair = async (
   return response.data;
 };
 
+export const updateKeyPair = async (
+  subscriptionId: string,
+  name: string,
+  disabled: boolean = false
+): Promise<KeyPairDTO> => {
+  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/update', {
+    subscription_id: subscriptionId,
+    disabled,
+    name,
+  });
+  return response.data;
+};
+
 export const addSite = async (
   name: string,
   description: string,
