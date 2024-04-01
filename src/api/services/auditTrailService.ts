@@ -62,12 +62,12 @@ export const insertManageApiKeyAuditTrail = async (
   userId: number,
   userEmail: string,
   action: AuditAction,
-  keyName: String,
-  apiRoles: String[],
+  keyName: string,
+  apiRoles: string[],
   traceId: string,
-  keyId?: String,
-  newKeyName?: String,
-  newApiRoles?: String[]
+  keyId?: string,
+  newKeyName?: string,
+  newApiRoles?: string[]
 ) => {
   try {
     const manageApiKeyTrail: Omit<AuditTrailDTO, 'id'> = {
@@ -155,6 +155,36 @@ export const insertKeyPairAuditTrails = async (
   }
 };
 
+export const insertDomainNamesAuditTrails = async (
+  participant: Participant,
+  userId: number,
+  userEmail: string,
+  action: AuditAction,
+  domainNames: string[],
+  traceId: string
+) => {
+  try {
+    const domainNamesAuditTrail: Omit<AuditTrailDTO, 'id'> = {
+      userId,
+      userEmail,
+      event: AuditTrailEvents.UpdateDomainNames,
+      eventData: {
+        siteId: participant.siteId!,
+        action,
+        participantId: participant.id,
+        domainNames,
+      },
+      succeeded: false,
+    };
+
+    return await AuditTrail.query().insert(domainNamesAuditTrail);
+  } catch (error) {
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Audit trails inserted failed: ${error}`, traceId);
+    throw error;
+  }
+};
+
 export const insertApproveAccountAuditTrail = async (
   participant: Participant,
   user: User,
@@ -180,7 +210,7 @@ export const insertApproveAccountAuditTrail = async (
   }
 
   return AuditTrail.query().insert({
-    userId: user?.id!,
+    userId: user?.id,
     userEmail: user.email,
     event: AuditTrailEvents.ApproveAccount,
     eventData,
@@ -202,6 +232,7 @@ export const insertAddParticipantAuditTrail = async (
     lastName: data.users[0].lastName,
     participantTypes: data.types.map((type) => type.id),
     role: data.users[0].role!,
+    crmAgreementNumber: data.crmAgreementNumber,
   };
 
   return AuditTrail.query().insert({

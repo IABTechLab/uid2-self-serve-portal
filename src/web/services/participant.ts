@@ -160,6 +160,7 @@ export type AddParticipantForm = {
   siteIdType: number;
   siteName?: string;
   role: string;
+  crmAgreementNumber: string;
 };
 
 export async function AddParticipant(formData: AddParticipantForm) {
