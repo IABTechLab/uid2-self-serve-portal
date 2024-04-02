@@ -213,14 +213,6 @@ export const updateKeyPair = async (
   return response.data;
 };
 
-export const disableKeyPair = async (subscriptionId: string): Promise<void> => {
-  await adminServiceClient.post('/api/client_side_keypairs/disable', null, {
-    params: {
-      subscriptionId,
-    },
-  });
-};
-
 export const addSite = async (
   name: string,
   description: string,

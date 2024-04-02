@@ -105,7 +105,7 @@ function ClientSideIntegration() {
       </p>
       <div className='content-container'>
         <KeyPairsTable
-          keyPairs={keyPairData ?? []}
+          keyPairs={keyPairData?.filter((key) => !key.disabled)}
           onAddKeyPair={handleAddKeyPair}
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}

@@ -21,7 +21,6 @@ import {
   addKeyPair,
   createApiKey,
   disableApiKey,
-  disableKeyPair,
   getApiKeysBySite,
   getSharingList,
   getSiteList,
@@ -592,7 +591,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      await disableKeyPair(subscriptionId);
+      await updateKeyPair(subscriptionId, name, disabled);
 
       await updateAuditTrailToProceed(auditTrail.id);
 
