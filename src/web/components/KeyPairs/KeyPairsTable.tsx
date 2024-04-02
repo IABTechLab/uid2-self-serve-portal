@@ -29,7 +29,6 @@ function KeyPairsTable({
             <th className='subscription-id'>Subscription Id</th>
             <th className='public-key'>Public Key</th>
             <th className='created'>Created</th>
-            <th className='disabled'>Disabled</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>

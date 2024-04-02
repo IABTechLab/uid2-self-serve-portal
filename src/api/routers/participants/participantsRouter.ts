@@ -21,6 +21,7 @@ import {
   addKeyPair,
   createApiKey,
   disableApiKey,
+  disableKeyPair,
   getApiKeysBySite,
   getSharingList,
   getSiteList,
@@ -556,16 +557,46 @@ export function createParticipantsRouter() {
         participant,
         user!.id,
         user!.email,
-        AuditAction.Add,
+        AuditAction.Update,
         name,
         disabled,
         traceId
       );
 
-      const keyPairs = await updateKeyPair(subscriptionId, name);
+      const updatedKeyPair = await updateKeyPair(subscriptionId, name);
 
       await updateAuditTrailToProceed(auditTrail.id);
-      return res.status(201).json(keyPairs);
+      return res.status(201).json(updatedKeyPair);
+    }
+  );
+
+  participantsRouter.delete(
+    '/:participantId/keyPair',
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { name, subscriptionId } = keyPairParser.parse(req.body.keyPair);
+      const disabled = true;
+
+      const traceId = getTraceId(req);
+      const auditTrail = await insertKeyPairAuditTrails(
+        participant,
+        user!.id,
+        user!.email,
+        AuditAction.Delete,
+        name,
+        disabled,
+        traceId
+      );
+
+      await disableKeyPair(subscriptionId);
+
+      await updateAuditTrailToProceed(auditTrail.id);
+
+      return res.sendStatus(200);
     }
   );
 
