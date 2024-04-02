@@ -1,17 +1,17 @@
 import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { Dialog } from '../Core/Dialog';
-import { Form } from '../Core/Form';
 import { TextInput } from '../Input/TextInput';
 
 export type OnApiKeyDisable = (apiKey: ApiKeyDTO) => void;
 
-type KeyDisableDialogProps = {
+type KeyDisableDialogProps = Readonly<{
   onDisable: OnApiKeyDisable;
   triggerButton: JSX.Element;
   apiKey: ApiKeyDTO;
-};
+}>;
 
 function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialogProps) {
   const [open, setOpen] = useState(false);
@@ -20,6 +20,12 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
     onDisable(apiKey);
     setOpen(false);
   };
+
+  const formMethods = useForm<ApiKeyDTO>({
+    defaultValues: { disabled: true },
+  });
+
+  const { handleSubmit } = formMethods;
 
   return (
     <Dialog
@@ -36,19 +42,26 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
         <br />
         Type the Key ID to confirm: <b>{apiKey.key_id}</b>
       </p>
-      <Form onSubmit={onSubmit} submitButtonText='Delete Key' disableSubmitWhenInvalid>
-        <TextInput
-          inputName='Key Id'
-          placeholder={apiKey.key_id}
-          rules={{
-            validate: (value) => {
-              return value === apiKey.key_id
-                ? true
-                : `Please enter the Key ID to confirm disabling`;
-            },
-          }}
-        />
-      </Form>
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextInput
+            inputName='Key Id'
+            placeholder={apiKey.key_id}
+            rules={{
+              validate: (value) => {
+                return value === apiKey.key_id
+                  ? true
+                  : `Please enter the Key ID to confirm disabling`;
+              },
+            }}
+          />
+          <div className='form-footer'>
+            <button type='submit' className='primary-button'>
+              Delete Key
+            </button>
+          </div>
+        </form>
+      </FormProvider>
     </Dialog>
   );
 }
