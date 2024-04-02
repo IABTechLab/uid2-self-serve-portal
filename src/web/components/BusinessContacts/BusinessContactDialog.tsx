@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
