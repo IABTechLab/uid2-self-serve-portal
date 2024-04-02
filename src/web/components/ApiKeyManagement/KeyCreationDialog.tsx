@@ -28,21 +28,24 @@ type CreateApiKeyFormProps = Readonly<{
   closeDialog: () => void;
 }>;
 
+type ApiKeySecretsProps = Readonly<{
+  keySecrets: ApiKeySecretsDTO;
+  closeDialog: () => void;
+}>;
+
 function CreateApiKeyForm(props: CreateApiKeyFormProps) {
-  const formMethods = useForm<CreateApiKeyFormDTO>({
-    defaultValues: { name: keyPair?.name, disabled: keyPair?.disabled },
-  });
+  const formMethods = useForm<CreateApiKeyFormDTO>();
   const { handleSubmit } = formMethods;
   return (
     <>
       <h1>Create API Key</h1>
-      <FormProvider {...formMethods} onSubmit={onFormSubmit} submitButtonText='Create API Key'>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(props.onFormSubmit)}>
           <TextInput inputName='name' label='Name' required />
           <MultiCheckboxInput
             label='API Permissions'
             inputName='roles'
-            options={sortApiRoles(availableRoles).map((role) => ({
+            options={sortApiRoles(props.availableRoles).map((role) => ({
               optionLabel: role.externalName,
               value: role.roleName,
             }))}
@@ -50,39 +53,39 @@ function CreateApiKeyForm(props: CreateApiKeyFormProps) {
               required: 'Please select at least one API permission.',
             }}
           />
-          <div className='button-container'>
-            <button
-              type='button'
-              className='transparent-button'
-              onClick={() => {
-                closeDialog();
-              }}
-            >
-              Cancel
+
+          <div className='form-footer'>
+            <button type='submit' className='primary-button'>
+              Create API Key
             </button>
           </div>
         </form>
       </FormProvider>
+      <div className='button-container'>
+        <button
+          type='button'
+          className='transparent-button'
+          onClick={() => {
+            props.closeDialog();
+          }}
+        >
+          Cancel
+        </button>
+      </div>
     </>
   );
 }
 
-function ShowApiKeySecrets({
-  keySecrets,
-  closeDialog,
-}: {
-  keySecrets: ApiKeySecretsDTO;
-  closeDialog: () => void;
-}) {
+function ShowApiKeySecrets(props: ApiKeySecretsProps) {
   const secrets: Secret[] = [
-    { value: keySecrets.secret, valueName: 'Secret' },
-    { value: keySecrets.plaintextKey, valueName: 'Key' },
+    { value: props.keySecrets.secret, valueName: 'Secret' },
+    { value: props.keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
   const [open, setOpen] = useState(false);
 
   const onCloseConfirmation = () => {
-    closeDialog();
+    props.closeDialog();
     setOpen(false);
   };
 
@@ -94,7 +97,7 @@ function ShowApiKeySecrets({
 
   return (
     <div>
-      <h1>API Key {keySecrets.name} Credentials</h1>
+      <h1>API Key {props.keySecrets.name} Credentials</h1>
       <p>
         Copy the key and secret, store them in a secure location, and do not share them. When you
         close the window, these values are not saved and are no longer available to you. If they are
