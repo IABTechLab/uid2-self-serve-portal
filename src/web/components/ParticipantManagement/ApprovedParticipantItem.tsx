@@ -9,11 +9,11 @@ import UpdateParticipantDialog from './UpdateParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
-type ApprovedParticipantProps = {
+type ApprovedParticipantProps = Readonly<{
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
-};
+}>;
 
 export function ApprovedParticipantItem({
   participant,
@@ -32,15 +32,15 @@ export function ApprovedParticipantItem({
   }
 
   function getApproverDateString(dateApproved: Date | undefined) {
-    let dateString: String = '';
+    let dateString: string = '';
     if (dateApproved) {
-      const dateApprovedTest = new Date(dateApproved);
-      dateString = `${dateApprovedTest.getMonth()}/${dateApprovedTest.getDate()}/${dateApprovedTest.getFullYear()}`;
+      const dateApprovedLocal = new Date(dateApproved);
+      dateString = `${dateApprovedLocal.getMonth()}/${dateApprovedLocal.getDate()}/${dateApprovedLocal.getFullYear()}`;
     }
     return dateString;
   }
 
-  function getApprover(approver: User | undefined): String {
+  function getApprover(approver: User | undefined): string {
     if (approver) return `${approver.firstName} ${approver.lastName}`;
 
     return `Information not available`;
