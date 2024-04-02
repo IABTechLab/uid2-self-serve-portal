@@ -1,28 +1,30 @@
 import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { Dialog } from '../Core/Dialog';
-import { Form } from '../Core/Form';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 
 import './KeyPairDialog.scss';
 
-type AddKeyPairDialogProps = {
+type AddKeyPairDialogProps = Readonly<{
   onAddKeyPair: (form: AddKeyPairFormProps) => Promise<void>;
   triggerButton: JSX.Element;
   keyPair?: KeyPairModel;
-};
+}>;
 
-type KeyPairDialogProps = AddKeyPairDialogProps;
-
-function KeyPairDialog(props: KeyPairDialogProps) {
+function KeyPairDialog(props: AddKeyPairDialogProps) {
   const [open, setOpen] = useState(false);
   const { keyPair, onAddKeyPair } = props;
 
-  const onSubmit: SubmitHandler<AddKeyPairFormProps> = async (formData) => {
+  const formMethods = useForm<AddKeyPairFormProps>({
+    defaultValues: { name: keyPair?.name, disabled: keyPair?.disabled },
+  });
+  const { handleSubmit } = formMethods;
+
+  const onSubmit = async (formData: AddKeyPairFormProps) => {
     await onAddKeyPair(formData);
     setOpen(false);
   };
@@ -36,17 +38,20 @@ function KeyPairDialog(props: KeyPairDialogProps) {
         open={open}
         onOpenChange={setOpen}
       >
-        <Form<AddKeyPairFormProps>
-          onSubmit={onSubmit}
-          submitButtonText='Create Key Pair'
-          defaultValues={keyPair}
-        >
-          <TextInput inputName='name' label='Name' />
-          <div className='disabled-checkbox'>
-            <FormStyledCheckbox name='disabled' />
-            <span className='checkbox-label'>Disabled</span>
-          </div>
-        </Form>
+        <FormProvider {...formMethods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextInput inputName='name' label='Name' />
+            <div className='disabled-checkbox'>
+              <FormStyledCheckbox name='disabled' />
+              <span className='checkbox-label'>Disabled</span>
+            </div>
+            <div className='form-footer'>
+              <button type='submit' className='primary-button'>
+                Approve Participant
+              </button>
+            </div>
+          </form>
+        </FormProvider>
       </Dialog>
     </div>
   );
