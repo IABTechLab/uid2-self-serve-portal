@@ -34,8 +34,7 @@ export function ApprovedParticipantItem({
   function getApproverDateString(dateApproved: Date | undefined) {
     let dateString: string = '';
     if (dateApproved) {
-      const dateApprovedLocal = new Date(dateApproved);
-      dateString = `${dateApprovedLocal.getMonth()}/${dateApprovedLocal.getDate()}/${dateApprovedLocal.getFullYear()}`;
+      dateString = new Date(dateApproved).toLocaleDateString();
     }
     return dateString;
   }

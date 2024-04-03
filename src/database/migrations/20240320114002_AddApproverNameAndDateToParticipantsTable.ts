@@ -33,8 +33,8 @@ async function updateParticipantsRow(approvedAuditTrail: AuditTrailDTO, knex: Kn
   const createdAt = approvedAuditTrail.created_at;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const eventData: AuditTrailEventData = JSON.parse(approvedAuditTrail.eventData);
-  const { participantId } = eventData;
-  await knex('participants').where('id', participantId).update({
+  const { siteId } = eventData;
+  await knex('participants').where('siteId', siteId).update({
     approverId: userId,
     dateApproved: createdAt,
   });
@@ -50,7 +50,8 @@ function batchUpdateParticipantsWithApprovers(knex: Knex, approvedAuditTrails: A
 async function migrateApproverToParticipants(knex: Knex) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const approvedAuditTrails: AuditTrailDTO[] = await knex('auditTrails')
-    .where('event', 'ApproveAccount')
+    .where('event', 'AddParticipant')
+    .orWhere('event', 'ApproveAccount')
     .andWhere('succeeded', 1);
 
   await batchUpdateParticipantsWithApprovers(knex, approvedAuditTrails);
@@ -60,7 +61,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('participants', (table) => {
     table.integer('approverId');
     table.foreign('approverId').references('users.id');
-    table.date('dateApproved');
+    table.dateTime('dateApproved');
   });
   await migrateApproverToParticipants(knex);
 }
