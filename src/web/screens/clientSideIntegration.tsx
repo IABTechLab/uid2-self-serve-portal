@@ -25,8 +25,6 @@ function ClientSideIntegration() {
     const data = await GetKeyPairs();
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
-    console.log(sortedKeyPairs);
-    console.log(keyPairData);
   }, []);
 
   const loadDomainNames = useCallback(async () => {
