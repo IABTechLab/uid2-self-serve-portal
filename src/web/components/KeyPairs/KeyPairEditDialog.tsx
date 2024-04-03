@@ -52,7 +52,7 @@ function KeyPairEditDialog({
         <Form<EditKeyPairFormDTO>
           onSubmit={onSubmit}
           defaultValues={defaultFormData}
-          submitButtonText='Save Key'
+          submitButtonText='Save Key Pair'
         >
           <TextInput inputName='name' label='Name' />
         </Form>

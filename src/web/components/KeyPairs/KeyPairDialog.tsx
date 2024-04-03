@@ -4,7 +4,6 @@ import { SubmitHandler } from 'react-hook-form';
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
-import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 
@@ -42,10 +41,6 @@ function KeyPairDialog(props: KeyPairDialogProps) {
           defaultValues={keyPair}
         >
           <TextInput inputName='name' label='Name' />
-          <div className='disabled-checkbox'>
-            <FormStyledCheckbox name='disabled' />
-            <span className='checkbox-label'>Disabled</span>
-          </div>
         </Form>
       </Dialog>
     </div>

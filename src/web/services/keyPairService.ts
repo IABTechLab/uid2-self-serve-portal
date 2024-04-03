@@ -7,7 +7,6 @@ import { backendError } from '../utils/apiError';
 export type AddKeyPairFormProps = {
   participantId?: number;
   name?: string;
-  disabled: boolean;
 };
 
 export type UpdateKeyPairFormProps = {

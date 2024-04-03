@@ -519,6 +519,10 @@ export function createParticipantsRouter() {
     subscriptionId: z.string(),
   });
 
+  const addKeyPairParser = z.object({
+    name: z.string(),
+  });
+
   participantsRouter.post(
     '/:participantId/keyPair/add',
     async (req: UserParticipantRequest, res: Response) => {
@@ -527,7 +531,8 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { name, disabled } = keyPairParser.parse(req.body);
+      const { name } = addKeyPairParser.parse(req.body);
+      const disabled = false;
       const auditTrail = await insertKeyPairAuditTrails(
         participant,
         user!.id,

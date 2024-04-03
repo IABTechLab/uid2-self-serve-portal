@@ -14,6 +14,7 @@ type KeyPairProps = Readonly<{
 
 function KeyPair({ keyPair: keyPairInitial, onEdit, onDisable }: KeyPairProps) {
   const [keyPair, updateKeyPair] = useState<KeyPairModel>(keyPairInitial);
+  console.log(keyPair);
   return (
     <tr>
       <td className='name'>{keyPair.name}</td>

@@ -1,6 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
+import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
+import { Loading } from '../components/Core/Loading';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
@@ -21,10 +24,19 @@ function ClientSideIntegration() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [domainNames, setDomainNames] = useState<string[]>();
 
+  // const data2 = useLoaderData() as {
+  //   result: KeyPairDTO[];
+  // };
+
+  // const reloader = useRevalidator();
+
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs();
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
+
+    // console.log(sortedKeyPairs);
+    // console.log(keyPairData);
   }, []);
 
   const loadDomainNames = useCallback(async () => {
@@ -40,10 +52,15 @@ function ClientSideIntegration() {
     loadDomainNames();
   }, [loadDomainNames]);
 
+  // useEffect(() => {
+  //   // console.log(keyPairData);
+  //   reloader.revalidate();
+  // }, [keyPairData, reloader]);
+
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
-    const { name, disabled = false } = formData;
+    const { name } = formData;
     try {
-      const response = await AddKeyPair({ name, disabled });
+      const response = await AddKeyPair({ name });
       if (response.status === 201) {
         SuccessToast('Key Pair added.');
         loadKeyPairs();
@@ -59,7 +76,8 @@ function ClientSideIntegration() {
       const response = await UpdateKeyPair({ name, subscriptionId, disabled });
       if (response.status === 201) {
         SuccessToast('Key Pair updated.');
-        loadKeyPairs();
+        await loadKeyPairs();
+        // reloader.revalidate();
       }
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -69,8 +87,8 @@ function ClientSideIntegration() {
   const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
     try {
       await DisableKeyPair(keyPair);
-      // reloader.revalidate();
       SuccessToast('Your key pair has been deleted');
+      loadKeyPairs();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -85,6 +103,7 @@ function ClientSideIntegration() {
     }
   };
 
+  // console.log(keyPairData);
   return (
     <>
       <h1>Client Side Integration</h1>
@@ -101,6 +120,8 @@ function ClientSideIntegration() {
         </a>
         .
       </p>
+      {/* <Suspense fallback={<Loading />}>
+        <Await resolve={data2.result}> */}
       <div className='content-container'>
         <KeyPairsTable
           keyPairs={keyPairData?.filter((key) => !key.disabled)}
@@ -112,6 +133,8 @@ function ClientSideIntegration() {
           <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
         )}
       </div>
+      {/* </Await>
+      </Suspense> */}
     </>
   );
 }
@@ -121,4 +144,11 @@ export const ClientSideIntegrationRoute: PortalRoute = {
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/clientSideIntegration',
+  loader: async () => {
+    const keyPairs = GetKeyPairs();
+    const promises = Promise.all([keyPairs]);
+    return defer({
+      result: promises,
+    });
+  },
 };
