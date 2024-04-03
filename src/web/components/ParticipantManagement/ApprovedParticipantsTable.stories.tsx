@@ -19,9 +19,20 @@ export const AllParticipants: Story = {
         id: 2,
         name: 'Participant 2',
         types: [{ id: 1, typeName: 'Type 1' }],
+        apiRoles: [],
         status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
+        approver: {
+          id: 1,
+          email: 'tes2@example.com',
+          firstName: 'Approver 2 First Name +',
+          lastName: 'Approver 2 Last Name',
+          role: UserRole.Marketing,
+          acceptedTerms: false,
+        },
+        dateApproved: new Date(),
+        crmAgreementNumber: '12345678',
         users: [
           {
             id: 1,
@@ -44,6 +55,16 @@ export const AllParticipants: Story = {
         status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
+        approver: {
+          id: 1,
+          email: 'tes3@example.com',
+          firstName: 'Approver 3 First Name +',
+          lastName: 'Approver 3 Last Name',
+          role: UserRole.Marketing,
+          acceptedTerms: false,
+        },
+        dateApproved: new Date(),
+        crmAgreementNumber: '23456789',
         users: [
           {
             id: 3,
@@ -70,6 +91,16 @@ export const AllParticipants: Story = {
         status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
+        approver: {
+          id: 1,
+          email: 'tes4@example.com',
+          firstName: 'Approver 4 First Name +',
+          lastName: 'Approver 4 Last Name',
+          role: UserRole.Marketing,
+          acceptedTerms: false,
+        },
+        dateApproved: new Date(),
+        crmAgreementNumber: '34567890',
         users: [
           {
             id: 4,
@@ -98,6 +129,7 @@ export const AllParticipants: Story = {
         status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
+        crmAgreementNumber: '45678901',
         users: [
           {
             id: 4,
@@ -109,6 +141,12 @@ export const AllParticipants: Story = {
           },
         ],
       },
+    ],
+    apiRoles: [
+      { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
+      { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
+      { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
+      { id: 4, roleName: 'Role4', externalName: 'Role 4', order: 4 },
     ],
   },
 };

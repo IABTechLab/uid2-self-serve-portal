@@ -109,6 +109,8 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     siteId: participantRequest.siteId ?? site?.id,
     users: [user],
     crmAgreementNumber: participantRequest.crmAgreementNumber,
+    approverId: requestingUser?.id,
+    dateApproved: new Date(),
   });
 
   const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);

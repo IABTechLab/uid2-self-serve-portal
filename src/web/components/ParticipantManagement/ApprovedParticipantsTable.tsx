@@ -6,11 +6,11 @@ import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
 import './ParticipantManagementTable.scss';
 
-type ApprovedParticipantsTableProps = {
+type ApprovedParticipantsTableProps = Readonly<{
   participants: ParticipantDTO[];
   apiRoles: ApiRoleDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
-};
+}>;
 
 function NoParticipants() {
   return (
@@ -36,6 +36,8 @@ export function ApprovedParticipantsTable({
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
+            <th>Approver</th>
+            <th>Date Approved</th>
             <th>API Permissions</th>
             <th>Salesforce Agreement Number</th>
             <th className='action'>Action</th>
