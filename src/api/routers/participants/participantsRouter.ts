@@ -59,6 +59,7 @@ import {
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndRoles,
   updateParticipantApiRoles,
+  updateParticipantCRMAgreementNumber,
   updateParticipantName,
   updateParticipantTypes,
   UpdateSharingTypes,
@@ -196,6 +197,7 @@ export function createParticipantsRouter() {
     apiRoles: z.array(z.number()),
     participantTypes: z.array(z.number()),
     participantName: z.string(),
+    crmAgreementNumber: z.string(),
   });
 
   participantsRouter.put(
@@ -208,13 +210,13 @@ export function createParticipantsRouter() {
         return res.status(404).send('Unable to find participant');
       }
 
-      const { apiRoles, participantTypes, participantName } = updateParticipantParser.parse(
-        req.body
-      );
+      const { apiRoles, participantTypes, participantName, crmAgreementNumber } =
+        updateParticipantParser.parse(req.body);
 
       await updateParticipantName(participant, participantName);
       await updateParticipantTypes(participant, participantTypes);
       await updateParticipantApiRoles(participant, apiRoles);
+      await updateParticipantCRMAgreementNumber(participant, crmAgreementNumber);
 
       return res.sendStatus(200);
     }

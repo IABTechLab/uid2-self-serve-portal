@@ -228,6 +228,13 @@ export const updateParticipantName = async (participant: Participant, participan
   await Participant.query().where('id', participant.id).update({ name: participantName });
 };
 
+export const updateParticipantCRMAgreementNumber = async (
+  participant: Participant,
+  crmAgreementNumber: string
+) => {
+  await Participant.query().where('id', participant.id).update({ crmAgreementNumber });
+};
+
 export const UpdateSharingTypes = async (
   participantSiteId: number,
   types: ClientType[],
