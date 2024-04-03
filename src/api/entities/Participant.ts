@@ -5,7 +5,7 @@ import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { User, UserCreationPartial, UserSchema } from './User';
+import { User, UserCreationPartial, UserDTO, UserSchema } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -58,6 +58,14 @@ export class Participant extends BaseModel {
         to: 'businessContacts.participantId',
       },
     },
+    approver: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'User',
+      join: {
+        from: 'participants.approverId',
+        to: 'users.id',
+      },
+    },
   };
   declare id: number;
   declare name: string;
@@ -69,6 +77,9 @@ export class Participant extends BaseModel {
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
+  declare approverId?: number;
+  declare approver?: UserDTO;
+  declare dateApproved?: Date;
   declare crmAgreementNumber?: string;
 }
 
@@ -89,6 +100,9 @@ export const ParticipantSchema = z.object({
   allowSharing: z.boolean(),
   location: z.string().optional(),
   siteId: z.number().optional(),
+  approverId: z.number().optional(),
+  approver: z.array(UserSchema).optional(),
+  dateApproved: z.date().optional(),
   crmAgreementNumber: z.string(),
 });
 

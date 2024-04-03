@@ -81,7 +81,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const getParticipantsApproved = async (): Promise<Participant[]> => {
   return Participant.query()
     .where('status', ParticipantStatus.Approved)
-    .withGraphFetched('[apiRoles, types]');
+    .withGraphFetched('[apiRoles, approver, types]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
@@ -176,6 +176,8 @@ export const updateParticipantAndTypesAndRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
     status: ParticipantStatus;
+    approverId: number | undefined;
+    dateApproved: Date;
   }
 ) => {
   await Participant.transaction(async (trx) => {
@@ -183,6 +185,8 @@ export const updateParticipantAndTypesAndRoles = async (
       name: participantApprovalPartial.name,
       siteId: participantApprovalPartial.siteId,
       status: participantApprovalPartial.status,
+      approverId: participantApprovalPartial.approverId,
+      dateApproved: participantApprovalPartial.dateApproved,
     });
     await updateParticipantRequestTypesWithTransaction(
       participant,

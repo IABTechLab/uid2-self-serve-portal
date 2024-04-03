@@ -167,6 +167,8 @@ export function createParticipantsRouter() {
       const data = {
         ...ParticipantApprovalPartial.parse(req.body),
         status: ParticipantStatus.Approved,
+        approverId: user?.id,
+        dateApproved: new Date(),
       };
 
       const auditTrail = await insertApproveAccountAuditTrail(participant!, user!, data);
