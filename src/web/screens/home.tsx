@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import log from 'loglevel';
 import { useContext, useEffect, useState } from 'react';
 
@@ -23,10 +24,22 @@ function Home() {
   useEffect(() => {
     const getSharingParticipantsCount = async () => {
       setIsLoading(true);
+      let manualSites: number[] = [];
+      let allowedTypes: ClientType[] = [];
       try {
         const sharingList = await GetSharingList();
-        const manualSites = sharingList.allowed_sites;
-        const allowedTypes = sharingList.allowed_types;
+        manualSites = sharingList.allowed_sites;
+        allowedTypes = sharingList.allowed_types;
+      } catch (e: unknown) {
+        if (e instanceof AxiosError && e.response?.data?.missingKeyset) {
+          // having no keyset is an expected state.  Don't error on this
+        } else {
+          log.error(e);
+          setHasError(true);
+        }
+      }
+
+      try {
         const allowedTypeSet = new Set<ClientType>(allowedTypes);
         const siteList = await preloadAllSitesList();
         const bulkSites = siteList.filter((item) => {
