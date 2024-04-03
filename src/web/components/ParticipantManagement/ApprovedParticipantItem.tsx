@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { User } from '../../../api/entities/User';
+import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
 import UpdateParticipantDialog from './UpdateParticipantDialog';
@@ -39,7 +39,7 @@ export function ApprovedParticipantItem({
     return dateString;
   }
 
-  function getApprover(approver: User | undefined): string {
+  function getApprover(approver: UserDTO | undefined): string {
     if (approver) return `${approver.firstName} ${approver.lastName}`;
 
     return `Information not available`;

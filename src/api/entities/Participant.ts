@@ -5,7 +5,7 @@ import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { User, UserCreationPartial, UserSchema } from './User';
+import { User, UserCreationPartial, UserDTO, UserSchema } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -78,7 +78,7 @@ export class Participant extends BaseModel {
   declare apiRoles?: ApiRole[];
   declare users?: User[];
   declare approverId?: number;
-  declare approver?: User;
+  declare approver?: UserDTO;
   declare dateApproved?: Date;
   declare crmAgreementNumber?: string;
 }

@@ -6,11 +6,11 @@ import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
 import './ParticipantManagementTable.scss';
 
-type ApprovedParticipantsTableProps = {
+type ApprovedParticipantsTableProps = Readonly<{
   participants: ParticipantDTO[];
   apiRoles: ApiRoleDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
-};
+}>;
 
 function NoParticipants() {
   return (
