@@ -10,7 +10,7 @@ import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
-import { validatecrmAgreementNumber } from './AddParticipantDialogHelper';
+import { validateEditcrmAgreementNumber } from './AddParticipantDialogHelper';
 
 type UpdateParticipantDialogProps = Readonly<{
   triggerButton: JSX.Element;
@@ -93,7 +93,7 @@ function UpdateParticipantDialog({
           className='text-input'
           maxLength={8}
           rules={{
-            validate: validatecrmAgreementNumber,
+            validate: validateEditcrmAgreementNumber,
           }}
         />
       </Form>
