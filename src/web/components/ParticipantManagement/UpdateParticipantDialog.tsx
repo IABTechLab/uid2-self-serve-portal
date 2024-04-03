@@ -48,6 +48,7 @@ function UpdateParticipantDialog({
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
     participantName: participant.name,
+    crmAgreementNumber: participant.crmAgreementNumber ?? '',
   };
 
   return (
