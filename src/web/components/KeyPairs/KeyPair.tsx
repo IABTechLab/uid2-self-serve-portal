@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
 
 import DisplaySecretTable from '../Core/DisplaySecretTable';
 import KeyPairDisableDialog, { OnKeyPairDisable } from './KeyPairDisableDialog';
@@ -12,9 +11,7 @@ type KeyPairProps = Readonly<{
   onDisable: OnKeyPairDisable;
 }>;
 
-function KeyPair({ keyPair: keyPairInitial, onEdit, onDisable }: KeyPairProps) {
-  const [keyPair, updateKeyPair] = useState<KeyPairModel>(keyPairInitial);
-  console.log(keyPair);
+function KeyPair({ keyPair, onEdit, onDisable }: KeyPairProps) {
   return (
     <tr>
       <td className='name'>{keyPair.name}</td>
@@ -28,7 +25,6 @@ function KeyPair({ keyPair: keyPairInitial, onEdit, onDisable }: KeyPairProps) {
           <KeyPairEditDialog
             keyPair={keyPair}
             onEdit={onEdit}
-            updateKeyPair={updateKeyPair}
             triggerButton={
               <button type='button' className='icon-button' title='Edit'>
                 <FontAwesomeIcon icon='pencil' />

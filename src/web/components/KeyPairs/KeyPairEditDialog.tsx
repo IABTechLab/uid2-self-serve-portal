@@ -18,16 +18,15 @@ type KeyPairEditDialogProps = Readonly<{
   onEdit: OnKeyPairEdit;
   triggerButton: JSX.Element;
   keyPair: KeyPairModel;
-  updateKeyPair: React.Dispatch<React.SetStateAction<KeyPairModel>>;
 }>;
 
 function KeyPairEditDialog({
   onEdit,
   triggerButton,
-  keyPair,
-  updateKeyPair,
+  keyPair: keyPairInitial,
 }: KeyPairEditDialogProps) {
   const [open, setOpen] = useState(false);
+  const [keyPair, updateKeyPair] = useState<KeyPairModel>(keyPairInitial);
 
   const onSubmit: SubmitHandler<EditKeyPairFormDTO> = async (formData) => {
     await onEdit(formData, updateKeyPair);
@@ -35,9 +34,9 @@ function KeyPairEditDialog({
   };
 
   const defaultFormData: EditKeyPairFormDTO = {
-    subscriptionId: keyPair.subscriptionId,
-    name: keyPair.name,
-    disabled: keyPair.disabled,
+    subscriptionId: keyPairInitial.subscriptionId,
+    name: keyPairInitial.name,
+    disabled: keyPairInitial.disabled,
   };
 
   return (

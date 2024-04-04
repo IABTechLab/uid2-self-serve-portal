@@ -24,19 +24,10 @@ function ClientSideIntegration() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [domainNames, setDomainNames] = useState<string[]>();
 
-  // const data2 = useLoaderData() as {
-  //   result: KeyPairDTO[];
-  // };
-
-  // const reloader = useRevalidator();
-
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs();
     const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
-
-    // console.log(sortedKeyPairs);
-    // console.log(keyPairData);
   }, []);
 
   const loadDomainNames = useCallback(async () => {
@@ -51,11 +42,6 @@ function ClientSideIntegration() {
   useEffect(() => {
     loadDomainNames();
   }, [loadDomainNames]);
-
-  // useEffect(() => {
-  //   // console.log(keyPairData);
-  //   reloader.revalidate();
-  // }, [keyPairData, reloader]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name } = formData;
@@ -76,8 +62,7 @@ function ClientSideIntegration() {
       const response = await UpdateKeyPair({ name, subscriptionId, disabled });
       if (response.status === 201) {
         SuccessToast('Key Pair updated.');
-        await loadKeyPairs();
-        // reloader.revalidate();
+        loadKeyPairs();
       }
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -103,7 +88,6 @@ function ClientSideIntegration() {
     }
   };
 
-  // console.log(keyPairData);
   return (
     <>
       <h1>Client Side Integration</h1>
