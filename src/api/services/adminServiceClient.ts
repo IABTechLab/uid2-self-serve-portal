@@ -180,11 +180,18 @@ export const getVisibleSiteList = async (): Promise<AdminSiteDTO[]> => {
   return siteList.filter((x) => x.visible !== false);
 };
 
-export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
+export const getKeyPairsList = async (
+  siteId: number,
+  showDisabled?: boolean
+): Promise<KeyPairDTO[]> => {
   const response = await adminServiceClient.get<KeyPairDTO[]>(
     `/api/v2/sites/${siteId}/client-side-keypairs`
   );
-  return response.data;
+  const allKeyPairs = response.data;
+  if (!showDisabled) {
+    return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+  }
+  return allKeyPairs;
 };
 
 export const addKeyPair = async (
