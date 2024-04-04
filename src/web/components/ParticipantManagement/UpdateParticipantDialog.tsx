@@ -48,7 +48,7 @@ function UpdateParticipantDialog({
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
     participantName: participant.name,
-    crmAgreementNumber: participant.crmAgreementNumber ?? '',
+    crmAgreementNumber: participant.crmAgreementNumber,
   };
 
   return (
@@ -69,7 +69,12 @@ function UpdateParticipantDialog({
             Participant must have at least one participant type and at least one API permission.
           </p>
         )}
-        <TextInput inputName='participantName' label='Participant Name' className='text-input' />
+        <TextInput
+          inputName='participantName'
+          label='Participant Name'
+          className='text-input'
+          required
+        />
         <MultiCheckboxInput
           inputName='participantTypes'
           label='Participant Type'

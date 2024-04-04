@@ -80,7 +80,7 @@ export class Participant extends BaseModel {
   declare approverId?: number;
   declare approver?: UserDTO;
   declare dateApproved?: Date;
-  declare crmAgreementNumber?: string;
+  declare crmAgreementNumber: string;
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
