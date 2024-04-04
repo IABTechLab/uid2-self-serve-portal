@@ -1,9 +1,7 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { defer } from 'react-router-dom';
 
-import { KeyPairDTO } from '../../api/services/adminServiceHelpers';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
-import { Loading } from '../components/Core/Loading';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
