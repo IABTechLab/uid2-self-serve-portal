@@ -51,8 +51,6 @@ function UpdateParticipantDialog({
     crmAgreementNumber: participant.crmAgreementNumber,
   };
 
-  console.log(originalFormValues);
-
   return (
     <Dialog
       triggerButton={triggerButton}

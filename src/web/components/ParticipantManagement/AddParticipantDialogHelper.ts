@@ -7,8 +7,6 @@ export const validateEditcrmAgreementNumber = (
   value: string,
   initialValue: string | null
 ): boolean | string => {
-  console.log('v', value);
-  console.log('iv', initialValue);
   if (initialValue === null && value === null) return true;
   if (initialValue === '' && value === '') return true;
 
