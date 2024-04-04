@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { defer } from 'react-router-dom';
 
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { SuccessToast } from '../components/Core/Toast';
@@ -102,8 +101,6 @@ function ClientSideIntegration() {
         </a>
         .
       </p>
-      {/* <Suspense fallback={<Loading />}>
-        <Await resolve={data2.result}> */}
       <div className='content-container'>
         <KeyPairsTable
           keyPairs={keyPairData?.filter((key) => !key.disabled)}
@@ -115,8 +112,6 @@ function ClientSideIntegration() {
           <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
         )}
       </div>
-      {/* </Await>
-      </Suspense> */}
     </>
   );
 }
@@ -126,11 +121,4 @@ export const ClientSideIntegrationRoute: PortalRoute = {
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/clientSideIntegration',
-  loader: async () => {
-    const keyPairs = GetKeyPairs();
-    const promises = Promise.all([keyPairs]);
-    return defer({
-      result: promises,
-    });
-  },
 };
