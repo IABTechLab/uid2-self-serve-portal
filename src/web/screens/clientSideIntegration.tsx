@@ -97,7 +97,7 @@ function ClientSideIntegration() {
           href='https://unifiedid.com/docs/guides/publisher-client-side'
           rel='noreferrer'
         >
-          Client-Side Integration Guide{' '}
+          Client-Side Integration Guide
         </a>
         .
       </p>
