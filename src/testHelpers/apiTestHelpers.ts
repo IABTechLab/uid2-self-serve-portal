@@ -26,6 +26,7 @@ export async function createParticipant(
     type = 'Publisher',
     apiRoleNames = [],
     completedRecommendations = false,
+    crmAgreementNumber = '12345678',
   }: {
     name?: string;
     allowSharing?: boolean;
@@ -33,6 +34,7 @@ export async function createParticipant(
     type?: string;
     completedRecommendations?: boolean;
     apiRoleNames?: string[];
+    crmAgreementNumber?: string;
   }
 ) {
   const data = {
@@ -40,6 +42,7 @@ export async function createParticipant(
     allowSharing,
     status,
     completedRecommendations,
+    crmAgreementNumber,
   };
 
   const participantId = await CreateParticipant(knex, data, type, apiRoleNames);

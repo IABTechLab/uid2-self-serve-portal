@@ -85,6 +85,7 @@ export const ParticipantWithNoRolesOrTypes: Story = {
       status: ParticipantStatus.Approved,
       allowSharing: true,
       completedRecommendations: false,
+      crmAgreementNumber: null,
       users: [
         {
           id: 4,

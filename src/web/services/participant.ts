@@ -149,7 +149,7 @@ export type UpdateParticipantForm = {
   apiRoles: number[];
   participantTypes: number[];
   participantName: string;
-  crmAgreementNumber: string;
+  crmAgreementNumber: string | null;
 };
 
 export type AddParticipantForm = {

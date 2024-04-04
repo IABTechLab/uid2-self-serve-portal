@@ -51,6 +51,8 @@ function UpdateParticipantDialog({
     crmAgreementNumber: participant.crmAgreementNumber,
   };
 
+  console.log(originalFormValues);
+
   return (
     <Dialog
       triggerButton={triggerButton}
@@ -98,7 +100,8 @@ function UpdateParticipantDialog({
           className='text-input'
           maxLength={8}
           rules={{
-            validate: validateEditcrmAgreementNumber,
+            validate: (value: string) =>
+              validateEditcrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
           }}
         />
       </Form>

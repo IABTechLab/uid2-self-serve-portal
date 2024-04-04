@@ -57,11 +57,8 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
+  updateParticipant,
   updateParticipantAndTypesAndRoles,
-  updateParticipantApiRoles,
-  updateParticipantCRMAgreementNumber,
-  updateParticipantName,
-  updateParticipantTypes,
   UpdateSharingTypes,
   UserParticipantRequest,
 } from '../../services/participantsService';
@@ -195,13 +192,6 @@ export function createParticipantsRouter() {
     }
   );
 
-  const updateParticipantParser = z.object({
-    apiRoles: z.array(z.number()),
-    participantTypes: z.array(z.number()),
-    participantName: z.string(),
-    crmAgreementNumber: z.string(),
-  });
-
   participantsRouter.put(
     '/:participantId',
     isApproverCheck,
@@ -212,13 +202,7 @@ export function createParticipantsRouter() {
         return res.status(404).send('Unable to find participant');
       }
 
-      const { apiRoles, participantTypes, participantName, crmAgreementNumber } =
-        updateParticipantParser.parse(req.body);
-
-      await updateParticipantName(participant, participantName);
-      await updateParticipantTypes(participant, participantTypes);
-      await updateParticipantApiRoles(participant, apiRoles);
-      await updateParticipantCRMAgreementNumber(participant, crmAgreementNumber);
+      await updateParticipant(participant, req);
 
       return res.sendStatus(200);
     }

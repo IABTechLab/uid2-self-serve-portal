@@ -23,7 +23,6 @@ export const ParticipantCreationAndApprovalPartial = ParticipantSchema.pick({
   types: true,
   apiRoles: true,
   status: true,
-  crmAgreementNumber: true,
   approverId: true,
   dateApproved: true,
 }).extend({
@@ -31,4 +30,5 @@ export const ParticipantCreationAndApprovalPartial = ParticipantSchema.pick({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
   users: z.array(UserCreationPartial),
+  crmAgreementNumber: z.string(),
 });

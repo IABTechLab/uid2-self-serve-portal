@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
+import { backendError } from '../../web/utils/apiError';
 import { ApiRole } from '../entities/ApiRole';
 import {
   Participant,
@@ -228,15 +229,27 @@ export const updateParticipantTypes = async (
   });
 };
 
-export const updateParticipantName = async (participant: Participant, participantName: string) => {
-  await Participant.query().where('id', participant.id).update({ name: participantName });
-};
+const updateParticipantParser = z.object({
+  apiRoles: z.array(z.number()),
+  participantTypes: z.array(z.number()),
+  participantName: z.string(),
+  crmAgreementNumber: z.string().nullable(),
+});
 
-export const updateParticipantCRMAgreementNumber = async (
-  participant: Participant,
-  crmAgreementNumber: string
-) => {
-  await Participant.query().where('id', participant.id).update({ crmAgreementNumber });
+export const updateParticipant = async (participant: Participant, req: ParticipantRequest) => {
+  const { apiRoles, participantTypes, participantName, crmAgreementNumber } =
+    updateParticipantParser.parse(req.body);
+  try {
+    await Participant.transaction(async () => {
+      await Participant.query()
+        .where('id', participant.id)
+        .update({ name: participantName, crmAgreementNumber });
+      await updateParticipantTypes(participant, participantTypes);
+      await updateParticipantApiRoles(participant, apiRoles);
+    });
+  } catch (error) {
+    throw backendError(error, 'Participant information not updated.');
+  }
 };
 
 export const UpdateSharingTypes = async (
