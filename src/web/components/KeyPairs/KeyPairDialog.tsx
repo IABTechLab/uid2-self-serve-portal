@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { Dialog } from '../Core/Dialog';
-import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 
@@ -20,7 +19,7 @@ function KeyPairDialog(props: AddKeyPairDialogProps) {
   const { keyPair, onAddKeyPair } = props;
 
   const formMethods = useForm<AddKeyPairFormProps>({
-    defaultValues: { name: keyPair?.name, disabled: keyPair?.disabled },
+    defaultValues: { name: keyPair?.name },
   });
   const { handleSubmit } = formMethods;
 
@@ -40,11 +39,11 @@ function KeyPairDialog(props: AddKeyPairDialogProps) {
       >
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextInput inputName='name' label='Name' />
-            <div className='disabled-checkbox'>
-              <FormStyledCheckbox name='disabled' />
-              <span className='checkbox-label'>Disabled</span>
-            </div>
+            <TextInput
+              inputName='name'
+              label='Name'
+              rules={{ required: 'Please specify a key pair name.' }}
+            />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
                 Approve Participant

@@ -1,16 +1,18 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
+import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UpdateParticipantForm } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
 import './ParticipantManagementTable.scss';
 
-type ApprovedParticipantsTableProps = {
+type ApprovedParticipantsTableProps = Readonly<{
   participants: ParticipantDTO[];
   apiRoles: ApiRoleDTO[];
+  participantTypes: ParticipantTypeDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
-};
+}>;
 
 function NoParticipants() {
   return (
@@ -26,6 +28,7 @@ function NoParticipants() {
 export function ApprovedParticipantsTable({
   participants,
   apiRoles,
+  participantTypes,
   onUpdateParticipant,
 }: ApprovedParticipantsTableProps) {
   return (
@@ -36,6 +39,8 @@ export function ApprovedParticipantsTable({
           <tr>
             <th>Participant Name</th>
             <th>Participant Type</th>
+            <th>Approver</th>
+            <th>Date Approved</th>
             <th>API Permissions</th>
             <th>Salesforce Agreement Number</th>
             <th className='action'>Action</th>
@@ -47,6 +52,7 @@ export function ApprovedParticipantsTable({
             <ApprovedParticipantItem
               key={participant.id}
               participant={participant}
+              participantTypes={participantTypes}
               apiRoles={apiRoles}
               onUpdateParticipant={onUpdateParticipant}
             />

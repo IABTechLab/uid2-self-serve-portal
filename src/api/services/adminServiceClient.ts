@@ -180,20 +180,35 @@ export const getVisibleSiteList = async (): Promise<AdminSiteDTO[]> => {
   return siteList.filter((x) => x.visible !== false);
 };
 
-export const getKeyPairsList = async (siteId: number): Promise<KeyPairDTO[]> => {
+export const getKeyPairsList = async (
+  siteId: number,
+  showDisabled?: boolean
+): Promise<KeyPairDTO[]> => {
   const response = await adminServiceClient.get<KeyPairDTO[]>(
     `/api/v2/sites/${siteId}/client-side-keypairs`
   );
+  const allKeyPairs = response.data;
+  if (!showDisabled) {
+    return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+  }
+  return allKeyPairs;
+};
+
+export const addKeyPair = async (siteId: number, name: string): Promise<KeyPairDTO> => {
+  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
+    site_id: siteId,
+    name,
+  });
   return response.data;
 };
 
-export const addKeyPair = async (
-  siteId: number,
+export const updateKeyPair = async (
+  subscriptionId: string,
   name: string,
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
-  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
-    site_id: siteId,
+  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/update', {
+    subscription_id: subscriptionId,
     disabled,
     name,
   });

@@ -14,6 +14,7 @@ const sampleParticipant = {
   allowSharing: true,
   location: 'Sydney',
   completedRecommendations: false,
+  crmAgreementNumber: '12345678',
 };
 const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
   {
