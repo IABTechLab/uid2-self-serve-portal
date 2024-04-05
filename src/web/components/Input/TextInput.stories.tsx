@@ -3,18 +3,26 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { TextInput } from './TextInput';
 
+import '../Core/Form.scss';
+
 export default {
   title: 'Inputs/Text',
   component: TextInput,
 } as ComponentMeta<typeof TextInput>;
 
 const Template: ComponentStory<typeof TextInput> = (args) => {
-  const methods = useForm();
+  const formMethods = useForm();
+  const { handleSubmit } = formMethods;
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={() => {}}>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(() => {})}>
         <TextInput {...args} inputName='textInput' data-testid='text-input' />
+        <div className='form-footer'>
+          <button type='submit' className='primary-button'>
+            Submit
+          </button>
+        </div>
       </form>
     </FormProvider>
   );

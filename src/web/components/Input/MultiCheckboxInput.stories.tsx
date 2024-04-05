@@ -1,8 +1,10 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
+
+import '../Core/Form.scss';
 
 export default {
   title: 'Inputs/Checkbox',
@@ -16,10 +18,20 @@ const options: Option<string>[] = [
 ];
 
 const Template: ComponentStory<typeof MultiCheckboxInput> = (args) => {
+  const formMethods = useForm();
+  const { handleSubmit } = formMethods;
+
   return (
-    <Form onSubmit={(formData) => console.log(formData)}>
-      <MultiCheckboxInput {...args} inputName='checkbox' />
-    </Form>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit((formData) => console.log(formData))}>
+        <MultiCheckboxInput {...args} inputName='checkbox' />
+      </form>
+      <div className='form-footer'>
+        <button type='submit' className='primary-button'>
+          Submit
+        </button>
+      </div>
+    </FormProvider>
   );
 };
 
