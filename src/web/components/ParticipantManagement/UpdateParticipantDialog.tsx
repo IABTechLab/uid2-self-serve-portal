@@ -62,7 +62,7 @@ function UpdateParticipantDialog({
           inputName='participantName'
           label='Participant Name'
           className='text-input'
-          required
+          rules={{ required: 'Please specify a participant name.' }}
         />
         <MultiCheckboxInput
           inputName='participantTypes'
