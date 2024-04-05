@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { Dialog } from '../Core/Dialog';
-import { Form } from '../Core/Form';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 
@@ -21,6 +21,11 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
     setOpen(false);
   };
 
+  const formMethods = useForm<KeyPairModel>({
+    defaultValues: keyPair,
+  });
+  const { handleSubmit } = formMethods;
+
   return (
     <Dialog
       closeButtonText='Cancel'
@@ -36,19 +41,26 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
         <br />
         Type the Subscription ID to confirm: <b>{keyPair.subscriptionId}</b>
       </p>
-      <Form onSubmit={onSubmit} submitButtonText='Delete Key' disableSubmitWhenInvalid>
-        <TextInput
-          inputName='Subscription Id'
-          placeholder={keyPair.subscriptionId}
-          rules={{
-            validate: (value) => {
-              return value === keyPair.subscriptionId
-                ? true
-                : `Please enter the Subscription ID to confirm disabling`;
-            },
-          }}
-        />
-      </Form>
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextInput
+            inputName='Subscription Id'
+            placeholder={keyPair.subscriptionId}
+            rules={{
+              validate: (value) => {
+                return value === keyPair.subscriptionId
+                  ? true
+                  : `Please enter the Subscription ID to confirm disabling`;
+              },
+            }}
+          />
+          <div className='form-footer'>
+            <button type='submit' className='primary-button'>
+              Delete Key Pair
+            </button>
+          </div>
+        </form>
+      </FormProvider>
     </Dialog>
   );
 }

@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import { Form } from '../Core/Form';
 import { TextInput } from './TextInput';
 
 export default {
@@ -10,9 +9,9 @@ export default {
 
 const Template: ComponentStory<typeof TextInput> = (args) => {
   return (
-    <Form onSubmit={() => {}}>
+    <form onSubmit={() => {}}>
       <TextInput {...args} inputName='textInput' data-testid='text-input' />
-    </Form>
+    </form>
   );
 };
 
