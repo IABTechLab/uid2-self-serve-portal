@@ -5,7 +5,14 @@ import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
-import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
+import {
+  AddKeyPair,
+  AddKeyPairFormProps,
+  DisableKeyPair,
+  GetKeyPairs,
+  UpdateKeyPair,
+  UpdateKeyPairFormProps,
+} from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -34,9 +41,9 @@ function ClientSideIntegration() {
   }, [loadDomainNames]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
-    const { name, disabled = false } = formData;
+    const { name } = formData;
     try {
-      const response = await AddKeyPair({ name, disabled });
+      const response = await AddKeyPair({ name });
       if (response.status === 201) {
         SuccessToast('Key Pair added.');
         loadKeyPairs();
@@ -46,6 +53,26 @@ function ClientSideIntegration() {
     }
   };
 
+  const handleUpdateKeyPair = async (formData: UpdateKeyPairFormProps) => {
+    const { name, subscriptionId, disabled = false } = formData;
+    try {
+      await UpdateKeyPair({ name, subscriptionId, disabled });
+      SuccessToast('Key Pair updated.');
+      loadKeyPairs();
+    } catch (e: unknown) {
+      handleErrorToast(e);
+    }
+  };
+
+  const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
+    try {
+      await DisableKeyPair(keyPair);
+      SuccessToast('Your key pair has been deleted');
+      loadKeyPairs();
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  };
   const handleUpdateDomainNames = async (newDomainNames: string[]) => {
     try {
       const response = await UpdateDomainNames(newDomainNames);
@@ -73,7 +100,12 @@ function ClientSideIntegration() {
         .
       </p>
       <div className='content-container'>
-        <KeyPairsTable keyPairs={keyPairData ?? []} onAddKeyPair={handleAddKeyPair} />
+        <KeyPairsTable
+          keyPairs={keyPairData}
+          onAddKeyPair={handleAddKeyPair}
+          onKeyPairEdit={handleUpdateKeyPair}
+          onKeyPairDisable={handleDisableKeyPair}
+        />
         {domainNames && (
           <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
         )}
