@@ -13,6 +13,7 @@ const sampleParticipant = {
   status: ParticipantStatus.AwaitingApproval,
   allowSharing: true,
   completedRecommendations: false,
+  crmAgreementNumber: '12345678',
 };
 const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
   {

@@ -17,6 +17,7 @@ const sampleData: Optional<
     siteId: 124,
     apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
+    crmAgreementNumber: '12345678',
   },
   {
     name: 'DSP example',
@@ -26,6 +27,7 @@ const sampleData: Optional<
     siteId: 123,
     apiRoleNames: ['ID_READER', 'SHARER'],
     completedRecommendations: false,
+    crmAgreementNumber: '23456789',
   },
   {
     name: 'DP example',
@@ -35,6 +37,7 @@ const sampleData: Optional<
     siteId: 125,
     apiRoleNames: ['MAPPER', 'SHARER'],
     completedRecommendations: false,
+    crmAgreementNumber: '34567890',
   },
   {
     name: 'Advertiser example',
@@ -44,6 +47,7 @@ const sampleData: Optional<
     siteId: 126,
     apiRoleNames: ['MAPPER', 'SHARER'],
     completedRecommendations: false,
+    crmAgreementNumber: '45678901',
   },
   {
     name: 'AwaitingSigning example',
@@ -52,6 +56,7 @@ const sampleData: Optional<
     type: 'Publisher',
     apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
+    crmAgreementNumber: '56789012',
   },
 ];
 

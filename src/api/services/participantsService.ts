@@ -13,7 +13,7 @@ import {
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
-import { getTraceId } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
@@ -81,7 +81,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const getParticipantsApproved = async (): Promise<Participant[]> => {
   return Participant.query()
     .where('status', ParticipantStatus.Approved)
-    .withGraphFetched('[apiRoles, types]');
+    .withGraphFetched('[apiRoles, approver, types]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
@@ -153,29 +153,12 @@ export const updateParticipantApiRolesWithTransaction = async (
   }
 };
 
-export const updateParticipantTypesWithTransaction = async (
-  participant: Participant,
-  participantTypeIds: {
-    id: number;
-  }[],
-  trx: TransactionOrKnex
-) => {
-  await participant.$relatedQuery('types', trx).unrelate();
-
-  const participantTypes = await ParticipantType.query().whereIn(
-    'id',
-    participantTypeIds.map((pType) => pType.id)
-  );
-
-  if (participantTypes.length > 0) {
-    await participant.$relatedQuery('types', trx).relate(participantTypes);
-  }
-};
-
 export const updateParticipantAndTypesAndRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
     status: ParticipantStatus;
+    approverId: number | undefined;
+    dateApproved: Date;
   }
 ) => {
   await Participant.transaction(async (trx) => {
@@ -183,6 +166,8 @@ export const updateParticipantAndTypesAndRoles = async (
       name: participantApprovalPartial.name,
       siteId: participantApprovalPartial.siteId,
       status: participantApprovalPartial.status,
+      approverId: participantApprovalPartial.approverId,
+      dateApproved: participantApprovalPartial.dateApproved,
     });
     await updateParticipantRequestTypesWithTransaction(
       participant,
@@ -197,35 +182,72 @@ export const updateParticipantAndTypesAndRoles = async (
   });
 };
 
-export const updateParticipantApiRoles = async (participant: Participant, apiRoles: number[]) => {
-  await Participant.transaction(async (trx) => {
-    await updateParticipantApiRolesWithTransaction(
-      participant,
-      apiRoles.map((role) => ({
-        id: role,
-      })),
-      trx
-    );
-  });
+export const updateParticipantApiRoles = async (
+  participant: Participant,
+  apiRoles: number[],
+  trx: TransactionOrKnex
+) => {
+  const apiRoleIds = apiRoles.map((role) => ({
+    id: role,
+  }));
+  await participant.$relatedQuery('apiRoles', trx).unrelate();
+
+  const apiRolesQuery = await ApiRole.query()
+    .whereIn(
+      'id',
+      apiRoleIds.map((role) => role.id)
+    )
+    .where('disabled', false);
+
+  if (apiRolesQuery.length > 0) {
+    await participant.$relatedQuery('apiRoles', trx).relate(apiRolesQuery);
+  }
 };
 
 export const updateParticipantTypes = async (
   participant: Participant,
-  participantTypes: number[]
+  participantTypes: number[],
+  trx: TransactionOrKnex
 ) => {
-  await Participant.transaction(async (trx) => {
-    await updateParticipantTypesWithTransaction(
-      participant,
-      participantTypes.map((pType) => ({
-        id: pType,
-      })),
-      trx
-    );
-  });
+  const participantTypeIds = participantTypes.map((pType) => ({
+    id: pType,
+  }));
+  await participant.$relatedQuery('types', trx).unrelate();
+
+  const participantTypesQuery = await ParticipantType.query().whereIn(
+    'id',
+    participantTypeIds.map((pType) => pType.id)
+  );
+
+  if (participantTypesQuery.length > 0) {
+    await participant.$relatedQuery('types', trx).relate(participantTypesQuery);
+  }
 };
 
-export const updateParticipantName = async (participant: Participant, participantName: string) => {
-  await Participant.query().where('id', participant.id).update({ name: participantName });
+const updateParticipantParser = z.object({
+  apiRoles: z.array(z.number()),
+  participantTypes: z.array(z.number()),
+  participantName: z.string(),
+  crmAgreementNumber: z.string().nullable(),
+});
+
+export const updateParticipant = async (participant: Participant, req: ParticipantRequest) => {
+  const { apiRoles, participantTypes, participantName, crmAgreementNumber } =
+    updateParticipantParser.parse(req.body);
+  try {
+    await Participant.transaction(async (trx) => {
+      await Participant.query()
+        .where('id', participant.id)
+        .update({ name: participantName, crmAgreementNumber });
+      await updateParticipantTypes(participant, participantTypes, trx);
+      await updateParticipantApiRoles(participant, apiRoles, trx);
+    });
+  } catch (error) {
+    const { errorLogger } = getLoggers();
+    const traceId = getTraceId(req);
+    errorLogger.error(`Participant information could not be updated: ${error}`, traceId);
+    throw error;
+  }
 };
 
 export const UpdateSharingTypes = async (
