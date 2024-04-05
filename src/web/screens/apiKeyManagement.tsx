@@ -65,7 +65,7 @@ function ApiKeyManagement() {
 
   return (
     <div className='api-key-management-page'>
-      <h1>Manage API Keys</h1>
+      <h1>API Keys</h1>
       <p className='heading-details'>
         View and manage your API keys. For more information, see{' '}
         <a
@@ -110,8 +110,8 @@ function ApiKeyManagement() {
 }
 
 export const ApiKeyManagementRoute: PortalRoute = {
-  path: '/dashboard/apiKeyManagement',
-  description: 'API Key Management',
+  path: '/dashboard/apiKeys',
+  description: 'API Keys',
   element: <ApiKeyManagement />,
   errorElement: <RouteErrorBoundary />,
   loader: async () => {
