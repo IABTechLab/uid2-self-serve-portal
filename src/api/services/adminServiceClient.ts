@@ -194,14 +194,9 @@ export const getKeyPairsList = async (
   return allKeyPairs;
 };
 
-export const addKeyPair = async (
-  siteId: number,
-  name: string,
-  disabled: boolean = false
-): Promise<KeyPairDTO> => {
+export const addKeyPair = async (siteId: number, name: string): Promise<KeyPairDTO> => {
   const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
     site_id: siteId,
-    disabled,
     name,
   });
   return response.data;

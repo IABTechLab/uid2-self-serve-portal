@@ -543,7 +543,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      const keyPairs = await addKeyPair(participant.siteId, name, disabled);
+      const keyPairs = await addKeyPair(participant.siteId, name);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(201).json(keyPairs);
