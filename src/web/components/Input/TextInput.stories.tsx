@@ -1,4 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { TextInput } from './TextInput';
 
@@ -8,10 +9,14 @@ export default {
 } as ComponentMeta<typeof TextInput>;
 
 const Template: ComponentStory<typeof TextInput> = (args) => {
+  const methods = useForm();
+
   return (
-    <form onSubmit={() => {}}>
-      <TextInput {...args} inputName='textInput' data-testid='text-input' />
-    </form>
+    <FormProvider {...methods}>
+      <form onSubmit={() => {}}>
+        <TextInput {...args} inputName='textInput' data-testid='text-input' />
+      </form>
+    </FormProvider>
   );
 };
 
