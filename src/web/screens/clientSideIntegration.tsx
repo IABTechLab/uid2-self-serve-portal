@@ -56,11 +56,9 @@ function ClientSideIntegration() {
   const handleUpdateKeyPair = async (formData: UpdateKeyPairFormProps) => {
     const { name, subscriptionId, disabled = false } = formData;
     try {
-      const response = await UpdateKeyPair({ name, subscriptionId, disabled });
-      if (response.status === 201) {
-        SuccessToast('Key Pair updated.');
-        loadKeyPairs();
-      }
+      await UpdateKeyPair({ name, subscriptionId, disabled });
+      SuccessToast('Key Pair updated.');
+      loadKeyPairs();
     } catch (e: unknown) {
       handleErrorToast(e);
     }

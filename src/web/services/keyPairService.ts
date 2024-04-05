@@ -45,11 +45,7 @@ export async function UpdateKeyPair(props: UpdateKeyPairFormProps) {
 }
 
 export async function DisableKeyPair(keyPair: KeyPairModel, participantId?: number) {
-  try {
-    await axios.delete(`/participants/${participantId ?? 'current'}/keyPair`, {
-      data: { keyPair },
-    });
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not disable Key Pair');
-  }
+  await axios.delete(`/participants/${participantId ?? 'current'}/keyPair`, {
+    data: { keyPair },
+  });
 }

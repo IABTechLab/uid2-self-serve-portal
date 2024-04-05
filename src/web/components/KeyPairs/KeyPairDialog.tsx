@@ -40,7 +40,7 @@ function KeyPairDialog(props: KeyPairDialogProps) {
           submitButtonText='Create Key Pair'
           defaultValues={keyPair}
         >
-          <TextInput inputName='name' label='Name' />
+          <TextInput inputName='name' label='Name' required />
         </Form>
       </Dialog>
     </div>

@@ -11,7 +11,7 @@ import '../ApiKeyManagement/KeyEditDialog.scss';
 
 export type OnKeyPairEdit = (
   form: EditKeyPairFormDTO,
-  updateKeyPair: React.Dispatch<React.SetStateAction<KeyPairModel>>
+  setKeyPair: React.Dispatch<React.SetStateAction<KeyPairModel>>
 ) => void;
 
 type KeyPairEditDialogProps = Readonly<{
@@ -26,10 +26,10 @@ function KeyPairEditDialog({
   keyPair: keyPairInitial,
 }: KeyPairEditDialogProps) {
   const [open, setOpen] = useState(false);
-  const [keyPair, updateKeyPair] = useState<KeyPairModel>(keyPairInitial);
+  const [keyPair, setKeyPair] = useState<KeyPairModel>(keyPairInitial);
 
   const onSubmit: SubmitHandler<EditKeyPairFormDTO> = async (formData) => {
-    await onEdit(formData, updateKeyPair);
+    await onEdit(formData, setKeyPair);
     setOpen(false);
   };
 
@@ -53,7 +53,7 @@ function KeyPairEditDialog({
           defaultValues={defaultFormData}
           submitButtonText='Save Key Pair'
         >
-          <TextInput inputName='name' label='Name' />
+          <TextInput inputName='name' label='Name' required />
         </Form>
       </Dialog>
     </div>
