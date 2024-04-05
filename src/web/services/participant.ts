@@ -147,6 +147,9 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
 
 export type UpdateParticipantForm = {
   apiRoles: number[];
+  participantTypes: number[];
+  participantName: string;
+  crmAgreementNumber: string | null;
 };
 
 export type AddParticipantForm = {
