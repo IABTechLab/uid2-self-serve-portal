@@ -11,10 +11,8 @@ import {
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { ParticipantType } from '../../entities/ParticipantType';
 import { UserDTO, UserRole } from '../../entities/User';
 import { getTraceId } from '../../helpers/loggingHelpers';
-import { mapClientTypeToParticipantType } from '../../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
 import {
@@ -23,14 +21,12 @@ import {
   disableApiKey,
   getApiKeysBySite,
   getSharingList,
-  getSiteList,
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
   updateKeyPair,
 } from '../../services/adminServiceClient';
 import {
-  AdminSiteDTO,
   mapAdminApiKeysToApiKeyDTOs,
   ParticipantApprovalResponse,
 } from '../../services/adminServiceHelpers';
@@ -62,8 +58,8 @@ import {
   ParticipantRequest,
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
+  updateParticipant,
   updateParticipantAndTypesAndRoles,
-  updateParticipantApiRoles,
   UpdateSharingTypes,
   UserParticipantRequest,
 } from '../../services/participantsService';
@@ -128,23 +124,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
     const participants = await getParticipantsApproved();
-
-    const sitesList = await getSiteList();
-    const siteMap = new Map<number, AdminSiteDTO>(sitesList.map((s) => [s.id, s]));
-
-    const allParticipantTypes = await ParticipantType.query();
-    const result = participants
-      .map((p) => {
-        const currentSite = p?.siteId === undefined ? undefined : siteMap.get(p.siteId);
-        return {
-          ...p,
-          types: mapClientTypeToParticipantType(
-            currentSite?.clientTypes || [],
-            allParticipantTypes
-          ),
-        };
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const result = participants.sort((a, b) => a.name.localeCompare(b.name));
     return res.status(200).json(result);
   });
 
@@ -213,8 +193,6 @@ export function createParticipantsRouter() {
     }
   );
 
-  const updateParticipantParser = z.object({ apiRoles: z.array(z.number()) });
-
   participantsRouter.put(
     '/:participantId',
     isApproverCheck,
@@ -225,9 +203,7 @@ export function createParticipantsRouter() {
         return res.status(404).send('Unable to find participant');
       }
 
-      const { apiRoles } = updateParticipantParser.parse(req.body);
-
-      await updateParticipantApiRoles(participant, apiRoles);
+      await updateParticipant(participant, req);
 
       return res.sendStatus(200);
     }
