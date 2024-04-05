@@ -28,20 +28,14 @@ function UpdateParticipantDialog({
   participantTypes,
 }: UpdateParticipantDialogProps) {
   const [open, setOpen] = useState(false);
-  const [typesAndRolesError, setTypesAndRolesError] = useState(false);
 
   const onSubmit: SubmitHandler<UpdateParticipantForm> = async (formData) => {
-    if (formData.participantTypes.length === 0 || formData.apiRoles.length === 0) {
-      setTypesAndRolesError(true);
-    } else {
-      await onUpdateParticipant(formData, participant);
-      setOpen(false);
-    }
+    await onUpdateParticipant(formData, participant);
+    setOpen(false);
   };
 
   const onOpenChange = () => {
     setOpen(!open);
-    setTypesAndRolesError(false);
   };
 
   const originalFormValues: UpdateParticipantForm = {
@@ -64,11 +58,6 @@ function UpdateParticipantDialog({
         submitButtonText='Save Participant'
         defaultValues={originalFormValues}
       >
-        {typesAndRolesError && (
-          <p className='form-error'>
-            Participant must have at least one participant type and at least one API permission.
-          </p>
-        )}
         <TextInput
           inputName='participantName'
           label='Participant Name'
@@ -82,6 +71,7 @@ function UpdateParticipantDialog({
             optionLabel: p.typeName,
             value: p.id,
           }))}
+          rules={{ required: 'Please specify Participant Type(s).' }}
         />
         <MultiCheckboxInput
           inputName='apiRoles'
@@ -91,6 +81,7 @@ function UpdateParticipantDialog({
             optionToolTip: p.roleName,
             value: p.id,
           }))}
+          rules={{ required: 'Please specify API Permission(s).' }}
         />
         <TextInput
           inputName='crmAgreementNumber'
