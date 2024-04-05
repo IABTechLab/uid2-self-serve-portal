@@ -24,6 +24,7 @@ import {
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
+  updateKeyPair,
 } from '../../services/adminServiceClient';
 import {
   mapAdminApiKeysToApiKeyDTOs,
@@ -493,6 +494,11 @@ export function createParticipantsRouter() {
   const keyPairParser = z.object({
     name: z.string(),
     disabled: z.boolean(),
+    subscriptionId: z.string(),
+  });
+
+  const addKeyPairParser = z.object({
+    name: z.string(),
   });
 
   participantsRouter.post(
@@ -503,7 +509,8 @@ export function createParticipantsRouter() {
       if (!participant?.siteId) {
         return res.status(400).send('Site id is not set');
       }
-      const { name, disabled } = keyPairParser.parse(req.body);
+      const { name } = addKeyPairParser.parse(req.body);
+      const disabled = false;
       const auditTrail = await insertKeyPairAuditTrails(
         participant,
         user!.id,
@@ -514,10 +521,66 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      const keyPairs = await addKeyPair(participant.siteId, name, disabled);
+      const keyPairs = await addKeyPair(participant.siteId, name);
 
       await updateAuditTrailToProceed(auditTrail.id);
       return res.status(201).json(keyPairs);
+    }
+  );
+
+  participantsRouter.post(
+    '/:participantId/keyPair/update',
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
+      const traceId = getTraceId(req);
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+      const { name, subscriptionId, disabled } = keyPairParser.parse(req.body);
+      const auditTrail = await insertKeyPairAuditTrails(
+        participant,
+        user!.id,
+        user!.email,
+        AuditAction.Update,
+        name,
+        disabled,
+        traceId
+      );
+
+      const updatedKeyPair = await updateKeyPair(subscriptionId, name);
+
+      await updateAuditTrailToProceed(auditTrail.id);
+      return res.status(201).json(updatedKeyPair);
+    }
+  );
+
+  participantsRouter.delete(
+    '/:participantId/keyPair',
+    async (req: UserParticipantRequest, res: Response) => {
+      const { participant, user } = req;
+      if (!participant?.siteId) {
+        return res.status(400).send('Site id is not set');
+      }
+
+      const { name, subscriptionId } = keyPairParser.parse(req.body.keyPair);
+      const disabled = true;
+
+      const traceId = getTraceId(req);
+      const auditTrail = await insertKeyPairAuditTrails(
+        participant,
+        user!.id,
+        user!.email,
+        AuditAction.Delete,
+        name,
+        disabled,
+        traceId
+      );
+
+      await updateKeyPair(subscriptionId, name, disabled);
+
+      await updateAuditTrailToProceed(auditTrail.id);
+
+      return res.sendStatus(200);
     }
   );
 
