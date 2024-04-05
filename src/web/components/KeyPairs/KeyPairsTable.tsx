@@ -1,4 +1,5 @@
 import { AddKeyPairFormProps } from '../../services/keyPairService';
+import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import KeyPair from './KeyPair';
 import KeyPairDialog from './KeyPairDialog';
 import { KeyPairModel } from './KeyPairModel';
@@ -42,6 +43,11 @@ function KeyPairsTable({ keyPairs, onAddKeyPair }: KeyPairTableProps) {
         </thead>
         <tbody>{keyPairs && keyPairs.map((k) => <KeyPair key={k.publicKey} keyPair={k} />)}</tbody>
       </table>
+      {!keyPairs?.length && (
+        <TableNoDataPlaceholder title='No Key Pairs'>
+          <span>There are no Key Pairs.</span>
+        </TableNoDataPlaceholder>
+      )}
     </div>
   );
 }
