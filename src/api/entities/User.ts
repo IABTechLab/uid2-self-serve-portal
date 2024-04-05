@@ -30,7 +30,7 @@ export class User extends BaseModel {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  static relationMappings = {
+  static readonly relationMappings = {
     participant: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'Participant',
@@ -44,7 +44,6 @@ export class User extends BaseModel {
   declare email: string;
   declare firstName: string;
   declare lastName: string;
-  declare location?: string;
   declare phone?: string;
   declare role: UserRole;
   declare participantId?: number | null;
@@ -58,7 +57,6 @@ export const UserSchema = z.object({
   email: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  location: z.string().optional(),
   phone: z.string().optional(),
   participantId: z.number().optional().nullable(),
   role: z.nativeEnum(UserRole).optional(),
@@ -69,7 +67,6 @@ export const UserCreationPartial = UserSchema.pick({
   email: true,
   firstName: true,
   lastName: true,
-  location: true,
   phone: true,
   role: true,
   acceptedTerms: true,
