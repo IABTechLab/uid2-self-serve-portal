@@ -16,7 +16,11 @@ export const isApproverCheck: Handler = async (req: ParticipantRequest, res, nex
       .findById(req.params.participantId)
       .withGraphFetched('types');
     const typeIds = await getApprovableParticipantTypeIds(req.auth?.payload?.email as string);
-    if (!participant?.types!.some((type) => typeIds.includes(type.id))) {
+    if (
+      participant &&
+      participant.types!.length > 0 &&
+      !participant?.types!.some((type) => typeIds.includes(type.id))
+    ) {
       return res.status(403).json({
         message: 'Unauthorized. You do not permission to update this participant.',
         errorHash: req.headers.traceId,
