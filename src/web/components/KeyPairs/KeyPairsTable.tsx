@@ -13,6 +13,23 @@ type KeyPairTableProps = {
 function KeyPairsTable({ keyPairs, onAddKeyPair }: KeyPairTableProps) {
   return (
     <div className='key-pairs'>
+      <div className='key-pairs-table-header'>
+        <div>
+          <h2>Key Pairs</h2>
+        </div>
+        <div className='key-pairs-table-header-right'>
+          <div className='add-key-pair'>
+            <KeyPairDialog
+              onAddKeyPair={onAddKeyPair}
+              triggerButton={
+                <button className='small-button' type='button'>
+                  Add Key Pair
+                </button>
+              }
+            />
+          </div>
+        </div>
+      </div>
       <table className='key-pairs-table'>
         <thead>
           <tr>
@@ -25,16 +42,6 @@ function KeyPairsTable({ keyPairs, onAddKeyPair }: KeyPairTableProps) {
         </thead>
         <tbody>{keyPairs && keyPairs.map((k) => <KeyPair key={k.publicKey} keyPair={k} />)}</tbody>
       </table>
-      <div className='add-key-pair'>
-        <KeyPairDialog
-          onAddKeyPair={onAddKeyPair}
-          triggerButton={
-            <button className='small-button' type='button'>
-              Add Key Pair
-            </button>
-          }
-        />
-      </div>
     </div>
   );
 }
