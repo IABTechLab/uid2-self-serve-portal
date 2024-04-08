@@ -39,4 +39,14 @@
   .add-domain-button {
     margin-top: 20px;
   }
+
+  .cstg-domains-table-header {
+    display: flex;
+    justify-content: space-between;
+
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
 }

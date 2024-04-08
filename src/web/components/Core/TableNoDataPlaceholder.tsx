@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import './TableNoDataPlaceholder.scss';
 
 type TableNoDataPlaceholderProps = {
-  icon: ReactNode;
+  icon?: ReactNode;
   title: string;
   children: ReactNode;
 };
