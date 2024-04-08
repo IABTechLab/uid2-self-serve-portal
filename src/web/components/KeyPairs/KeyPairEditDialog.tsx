@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { EditKeyPairFormDTO } from '../../../api/services/adminServiceHelpers';
 import { Dialog } from '../Core/Dialog';
