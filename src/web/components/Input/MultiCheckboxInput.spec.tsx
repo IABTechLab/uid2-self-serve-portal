@@ -1,11 +1,11 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FieldValues, FormProvider, useForm } from 'react-hook-form';
 
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
-import { Option } from './SelectInput';
+import { Option, SelectInputProps } from './SelectInput';
 
 import '../Core/Form.scss';
 
@@ -23,9 +23,9 @@ const checkBoxOptionsList = [
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function LoadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
+const LoadComponent = (options: Option<any>[]) => {
   const onSubmitMock = jest.fn(() => {});
-  const formMethods = useForm();
+  const formMethods = useForm<SelectInputProps<Option<string>>>();
   const { handleSubmit } = formMethods;
 
   render(
@@ -37,7 +37,7 @@ function LoadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
   );
 
   return onSubmitMock;
-}
+};
 
 describe('CheckboxInput', () => {
   it.each(checkBoxOptionsList)('Should show all options', (checkboxOptions) => {
@@ -103,7 +103,16 @@ describe('CheckboxInput', () => {
     const onSubmitMock = jest.fn(() => {});
     const user = userEvent.setup();
 
-    const formMethods = useForm({ defaultValues: { default: ['option1', 'option2'] } });
+    const options: Option<string>[] = [
+      { optionLabel: 'Option 1', value: 'option1' },
+      { optionLabel: 'Option 2', value: 'option2' },
+    ];
+
+    const formMethods = useForm<SelectInputProps<Option<string>>>({
+      defaultValues: {
+        options,
+      },
+    });
     const { handleSubmit } = formMethods;
 
     render(
