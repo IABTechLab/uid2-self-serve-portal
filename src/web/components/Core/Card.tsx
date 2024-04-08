@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+
 import './Card.scss';
 
 type CardProps = {

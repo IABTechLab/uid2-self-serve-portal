@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { Card } from '../Core/Card';
 import { KeyPairModel } from '../KeyPairs/KeyPairModel';
 
@@ -11,7 +12,7 @@ type ClientSideCompletionProps = Readonly<{
 export function ClientSideCompletion({ keyPairData, domainNames }: ClientSideCompletionProps) {
   const hasKeyPairData = !!keyPairData?.filter((kp) => !kp.disabled).length;
   const hasDomainNames = !!domainNames?.length;
-  if (hasKeyPairData && hasDomainNames) return <></>;
+  if (hasKeyPairData && hasDomainNames) return null;
   return (
     <Card className='client-side-completion'>
       <h2>
