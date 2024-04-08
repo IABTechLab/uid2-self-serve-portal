@@ -19,7 +19,7 @@ export function ClientSideCompletion({ keyPairData, domainNames }: ClientSideCom
         <FontAwesomeIcon icon='exclamation-triangle' /> Missing configuration
       </h2>
       <div>
-        Before you can use client side integration, you need to complete the following configuration
+        Before you can use client-side integration, you need to complete the following configuration
         steps.
       </div>
       <ul>
