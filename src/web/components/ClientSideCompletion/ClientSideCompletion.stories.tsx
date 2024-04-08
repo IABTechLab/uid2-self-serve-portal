@@ -1,7 +1,18 @@
+import { faker } from '@faker-js/faker';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { ClientSideCompletion } from './ClientSideCompletion';
-import { faker } from '@faker-js/faker';
+
+function createKeypairFake(disabled: boolean) {
+  return {
+    created: faker.date.recent(),
+    createdString: faker.date.recent().toLocaleTimeString(),
+    disabled,
+    publicKey: faker.string.hexadecimal(),
+    siteId: faker.number.int(),
+    subscriptionId: faker.string.alpha(),
+  };
+}
 
 const meta: Meta<typeof ClientSideCompletion> = {
   component: ClientSideCompletion,
@@ -46,14 +57,3 @@ export const NothingConfigured: Story = {
     keyPairData: [],
   },
 };
-
-function createKeypairFake(disabled: boolean) {
-  return {
-    created: faker.date.recent(),
-    createdString: faker.date.recent().toLocaleTimeString(),
-    disabled,
-    publicKey: faker.string.hexadecimal(),
-    siteId: faker.number.int(),
-    subscriptionId: faker.string.alpha(),
-  };
-}
