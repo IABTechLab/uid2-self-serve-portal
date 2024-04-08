@@ -1,11 +1,13 @@
 import { composeStories } from '@storybook/testing-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
+
+import '../Core/Form.scss';
 
 const { WithValidation } = composeStories(stories);
 
@@ -21,13 +23,17 @@ const checkBoxOptionsList = [
 ];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function loadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
+function LoadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
   const onSubmitMock = jest.fn(() => {});
+  const formMethods = useForm();
+  const { handleSubmit } = formMethods;
 
   render(
-    <Form onSubmit={onSubmitMock}>
-      <MultiCheckboxInput inputName='default' label='Select options' options={options} />
-    </Form>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmitMock)}>
+        <MultiCheckboxInput inputName='default' label='Select options' options={options} />
+      </form>
+    </FormProvider>
   );
 
   return onSubmitMock;
@@ -35,7 +41,7 @@ function loadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
 
 describe('CheckboxInput', () => {
   it.each(checkBoxOptionsList)('Should show all options', (checkboxOptions) => {
-    loadComponent(checkboxOptions);
+    LoadComponent(checkboxOptions);
 
     for (const checkboxOption of checkboxOptions) {
       expect(
@@ -48,7 +54,7 @@ describe('CheckboxInput', () => {
     'Should submit correctly when one option selected',
     async (checkboxOptions) => {
       const user = userEvent.setup();
-      const onSubmitMock = loadComponent(checkboxOptions);
+      const onSubmitMock = LoadComponent(checkboxOptions);
 
       await user.click(screen.getByRole('checkbox', { name: checkboxOptions[0].optionLabel }));
 
@@ -63,7 +69,7 @@ describe('CheckboxInput', () => {
     'Should submit correctly when all options are selected',
     async (checkboxOptions) => {
       const user = userEvent.setup();
-      const onSubmitMock = loadComponent(checkboxOptions);
+      const onSubmitMock = LoadComponent(checkboxOptions);
 
       checkboxOptions.map(async (checkboxOption) => {
         await user.click(screen.getByRole('checkbox', { name: checkboxOption.optionLabel }));
@@ -82,7 +88,7 @@ describe('CheckboxInput', () => {
     'Should submit correctly when no options are selected',
     async (checkboxOptions) => {
       const user = userEvent.setup();
-      const onSubmitMock = loadComponent(checkboxOptions);
+      const onSubmitMock = LoadComponent(checkboxOptions);
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
       await user.click(submitButton);
@@ -97,18 +103,23 @@ describe('CheckboxInput', () => {
     const onSubmitMock = jest.fn(() => {});
     const user = userEvent.setup();
 
+    const formMethods = useForm({ defaultValues: { default: ['option1', 'option2'] } });
+    const { handleSubmit } = formMethods;
+
     render(
-      <Form onSubmit={onSubmitMock} defaultValues={{ default: ['option1', 'option2'] }}>
-        <MultiCheckboxInput
-          inputName='default'
-          label='Select options'
-          options={[
-            { optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' },
-            { optionLabel: 'Option 2', optionToolTip: 'Option2', value: 'option2' },
-            { optionLabel: 'Option 3', optionToolTip: 'Option3', value: 'option3' },
-          ]}
-        />
-      </Form>
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(onSubmitMock)}>
+          <MultiCheckboxInput
+            inputName='default'
+            label='Select options'
+            options={[
+              { optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' },
+              { optionLabel: 'Option 2', optionToolTip: 'Option2', value: 'option2' },
+              { optionLabel: 'Option 3', optionToolTip: 'Option3', value: 'option3' },
+            ]}
+          />
+        </form>
+      </FormProvider>
     );
 
     const option1 = screen.getByRole('checkbox', { name: 'Option 1' });
