@@ -44,7 +44,7 @@ function KeyPairsTable({
         <thead>
           <tr>
             <th className='name'>Name</th>
-            <th className='subscription-id'>Subscription Id</th>
+            <th className='subscription-id'>Subscription ID</th>
             <th className='public-key'>Public Key</th>
             <th className='created'>Created</th>
             <th className='action'>Actions</th>

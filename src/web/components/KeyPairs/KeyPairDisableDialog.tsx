@@ -38,7 +38,7 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
       </p>
       <Form onSubmit={onSubmit} submitButtonText='Delete Key' disableSubmitWhenInvalid>
         <TextInput
-          inputName='Subscription Id'
+          inputName='Subscription ID'
           placeholder={keyPair.subscriptionId}
           rules={{
             validate: (value) => {
