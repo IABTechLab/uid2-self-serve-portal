@@ -1,4 +1,5 @@
 import { AddKeyPairFormProps } from '../../services/keyPairService';
+import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import KeyPair from './KeyPair';
 import KeyPairDialog from './KeyPairDialog';
 import { OnKeyPairDisable } from './KeyPairDisableDialog';
@@ -22,6 +23,23 @@ function KeyPairsTable({
 }: KeyPairTableProps) {
   return (
     <div className='key-pairs'>
+      <div className='key-pairs-table-header'>
+        <div>
+          <h2>Key Pairs</h2>
+        </div>
+        <div className='key-pairs-table-header-right'>
+          <div className='add-key-pair'>
+            <KeyPairDialog
+              onAddKeyPair={onAddKeyPair}
+              triggerButton={
+                <button className='small-button' type='button'>
+                  Add Key Pair
+                </button>
+              }
+            />
+          </div>
+        </div>
+      </div>
       <table className='key-pairs-table'>
         <thead>
           <tr>
@@ -44,16 +62,11 @@ function KeyPairsTable({
             ))}
         </tbody>
       </table>
-      <div className='add-key-pair'>
-        <KeyPairDialog
-          onAddKeyPair={onAddKeyPair}
-          triggerButton={
-            <button className='small-button' type='button'>
-              Add Key Pair
-            </button>
-          }
-        />
-      </div>
+      {!keyPairs?.length && (
+        <TableNoDataPlaceholder title='No Key Pairs'>
+          <span>There are no Key Pairs.</span>
+        </TableNoDataPlaceholder>
+      )}
     </div>
   );
 }
