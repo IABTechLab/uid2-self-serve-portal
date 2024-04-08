@@ -168,7 +168,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
       </table>
       {!domains.length && !showNewRow && (
         <TableNoDataPlaceholder title='No Top-Level Domains'>
-          <span>There are no Top-Level Domains.</span>
+          <span>There are no top-level domains.</span>
         </TableNoDataPlaceholder>
       )}
     </div>

@@ -79,7 +79,6 @@ describe('Participant Service Tests', () => {
       expect(res.body).toEqual({
         id: 1,
         name: 'Test Participant',
-        location: 'Test Location',
         allowSharing: true,
         types: [
           {

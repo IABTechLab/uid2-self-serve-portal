@@ -17,7 +17,7 @@ export class Participant extends BaseModel {
   static get tableName() {
     return 'participants';
   }
-  static relationMappings = {
+  static readonly relationMappings = {
     types: {
       relation: Model.ManyToManyRelation,
       modelClass: 'ParticipantType',
@@ -73,7 +73,6 @@ export class Participant extends BaseModel {
   declare allowSharing: boolean;
   declare completedRecommendations: boolean;
   declare siteId?: number;
-  declare location?: string;
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
@@ -98,7 +97,6 @@ export const ParticipantSchema = z.object({
   apiRoles: z.array(ApiRoleSchema).optional(),
   users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
-  location: z.string().optional(),
   siteId: z.number().optional(),
   approverId: z.number().optional(),
   approver: z.array(UserSchema).optional(),
@@ -108,7 +106,6 @@ export const ParticipantSchema = z.object({
 
 export const ParticipantCreationPartial = ParticipantSchema.pick({
   name: true,
-  location: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   users: z.array(UserCreationPartial).optional(),
