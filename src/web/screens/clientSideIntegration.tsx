@@ -16,6 +16,7 @@ import {
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
+import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 
 function ClientSideIntegration() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
@@ -100,6 +101,9 @@ function ClientSideIntegration() {
         .
       </p>
       <div className='content-container'>
+        {!!domainNames && !!keyPairData && (
+          <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
+        )}
         <KeyPairsTable
           keyPairs={keyPairData}
           onAddKeyPair={handleAddKeyPair}
