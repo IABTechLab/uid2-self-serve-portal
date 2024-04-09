@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
@@ -100,15 +101,14 @@ function ClientSideIntegration() {
         .
       </p>
       <div className='content-container'>
+        <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
         <KeyPairsTable
           keyPairs={keyPairData}
           onAddKeyPair={handleAddKeyPair}
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}
         />
-        {domainNames && (
-          <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
-        )}
+        <CstgDomainsTable domains={domainNames || []} onUpdateDomains={handleUpdateDomainNames} />
       </div>
     </>
   );
