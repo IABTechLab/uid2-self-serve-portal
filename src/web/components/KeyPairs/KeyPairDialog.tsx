@@ -19,9 +19,13 @@ type AddKeyPairDialogProps = {
 
 type KeyPairDialogProps = AddKeyPairDialogProps;
 
-function KeyPairDialog(props: KeyPairDialogProps) {
+function KeyPairDialog({
+  onAddKeyPair,
+  triggerButton,
+  keyPair,
+  existingKeyPairs,
+}: KeyPairDialogProps) {
   const [open, setOpen] = useState(false);
-  const { keyPair, onAddKeyPair } = props;
 
   const onSubmit: SubmitHandler<AddKeyPairFormProps> = async (formData) => {
     await onAddKeyPair(formData);
@@ -31,7 +35,7 @@ function KeyPairDialog(props: KeyPairDialogProps) {
   return (
     <div className='key-pair-dialog'>
       <Dialog
-        triggerButton={props.triggerButton}
+        triggerButton={triggerButton}
         title='Create Key Pair'
         closeButtonText='Cancel'
         open={open}
@@ -47,7 +51,7 @@ function KeyPairDialog(props: KeyPairDialogProps) {
             label='Name'
             rules={{
               required: 'Please specify key pair name.',
-              validate: (value: string) => validateUniqueKeyPairName(value, props.existingKeyPairs),
+              validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
             }}
           />
         </Form>
