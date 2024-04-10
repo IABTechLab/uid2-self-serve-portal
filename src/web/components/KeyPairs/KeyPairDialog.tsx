@@ -45,7 +45,7 @@ function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialo
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                Approve Participant
+                Create Key Pair
               </button>
             </div>
           </form>
