@@ -21,13 +21,17 @@ const checkBoxOptionsList = [
   ],
 ];
 
-type TestComponentProps = Readonly<{
+type TestComponentMultiCheckboxInputProps = Readonly<{
   options: Option<any>[];
   onSubmitMock: jest.Mock<void, [], any>;
   defaultOptions: string[];
 }>;
 
-function TestComponent({ options, onSubmitMock, defaultOptions }: TestComponentProps) {
+function TestComponentMultiCheckboxInput({
+  options,
+  onSubmitMock,
+  defaultOptions,
+}: TestComponentMultiCheckboxInputProps) {
   const formMethods = useForm({
     defaultValues: {
       checkboxInput: defaultOptions,
@@ -51,7 +55,13 @@ function TestComponent({ options, onSubmitMock, defaultOptions }: TestComponentP
 function LoadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
   const onSubmitMock = jest.fn(() => {});
 
-  render(<TestComponent options={options} onSubmitMock={onSubmitMock} defaultOptions={[]} />);
+  render(
+    <TestComponentMultiCheckboxInput
+      options={options}
+      onSubmitMock={onSubmitMock}
+      defaultOptions={[]}
+    />
+  );
 
   return onSubmitMock;
 }
@@ -138,7 +148,7 @@ describe('CheckboxInput', () => {
     ];
 
     render(
-      <TestComponent
+      <TestComponentMultiCheckboxInput
         options={options}
         onSubmitMock={onSubmitMock}
         defaultOptions={defaultOptions}
