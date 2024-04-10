@@ -6,9 +6,8 @@ import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { useAvailableSiteList } from '../../services/site';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
-import { withoutRef } from '../Core/Form';
 import { Loading } from '../Core/Loading';
-import { FormStyledCheckbox } from '../Input/StyledCheckbox';
+import { FormStyledCheckbox, withoutRef } from '../Input/StyledCheckbox';
 import {
   BulkAddPermissionsForm,
   getCheckedParticipantTypeNames,
