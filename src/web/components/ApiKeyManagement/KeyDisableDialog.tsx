@@ -33,7 +33,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
       open={open}
       onOpenChange={setOpen}
       triggerButton={triggerButton}
-      title={`Delete ${apiKey.name}`}
+      title={`Delete API Key: ${apiKey.name}`}
     >
       <p>
         Are you sure you want to delete your API key?{' '}

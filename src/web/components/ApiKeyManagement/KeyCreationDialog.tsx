@@ -41,7 +41,13 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
       <h1>Create API Key</h1>
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
-          <TextInput inputName='name' label='Name' required />
+          <TextInput
+            inputName='name'
+            label='Name'
+            rules={{
+              required: 'Please specify an API Key name.',
+            }}
+          />
           <MultiCheckboxInput
             label='API Permissions'
             inputName='roles'

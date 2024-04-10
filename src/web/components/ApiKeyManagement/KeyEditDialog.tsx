@@ -57,11 +57,17 @@ function KeyEditDialog({
         open={open}
         onOpenChange={setOpen}
         triggerButton={triggerButton}
-        title={`Edit ${apiKey.name}`}
+        title={`Edit API Key: ${apiKey.name}`}
       >
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextInput inputName='newName' label='Name' required />
+            <TextInput
+              inputName='newName'
+              label='Name'
+              rules={{
+                required: 'Please specify an API Key name.',
+              }}
+            />
             <MultiCheckboxInput
               label='API Permissions'
               inputName='newApiRoles'
