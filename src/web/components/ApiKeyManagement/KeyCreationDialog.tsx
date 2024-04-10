@@ -33,19 +33,19 @@ type ApiKeySecretsProps = Readonly<{
   closeDialog: () => void;
 }>;
 
-function CreateApiKeyForm(props: CreateApiKeyFormProps) {
+function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateApiKeyFormProps) {
   const formMethods = useForm<CreateApiKeyFormDTO>();
   const { handleSubmit } = formMethods;
   return (
     <>
       <h1>Create API Key</h1>
       <FormProvider {...formMethods}>
-        <form onSubmit={handleSubmit(props.onFormSubmit)}>
+        <form onSubmit={handleSubmit(onFormSubmit)}>
           <TextInput inputName='name' label='Name' required />
           <MultiCheckboxInput
             label='API Permissions'
             inputName='roles'
-            options={sortApiRoles(props.availableRoles).map((role) => ({
+            options={sortApiRoles(availableRoles).map((role) => ({
               optionLabel: role.externalName,
               value: role.roleName,
             }))}
@@ -66,7 +66,7 @@ function CreateApiKeyForm(props: CreateApiKeyFormProps) {
           type='button'
           className='transparent-button'
           onClick={() => {
-            props.closeDialog();
+            closeDialog();
           }}
         >
           Cancel
@@ -76,16 +76,16 @@ function CreateApiKeyForm(props: CreateApiKeyFormProps) {
   );
 }
 
-function ShowApiKeySecrets(props: ApiKeySecretsProps) {
+function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
   const secrets: Secret[] = [
-    { value: props.keySecrets.secret, valueName: 'Secret' },
-    { value: props.keySecrets.plaintextKey, valueName: 'Key' },
+    { value: keySecrets.secret, valueName: 'Secret' },
+    { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
   const [open, setOpen] = useState(false);
 
   const onCloseConfirmation = () => {
-    props.closeDialog();
+    closeDialog();
     setOpen(false);
   };
 
@@ -97,7 +97,7 @@ function ShowApiKeySecrets(props: ApiKeySecretsProps) {
 
   return (
     <div>
-      <h1>API Key {props.keySecrets.name} Credentials</h1>
+      <h1>API Key {keySecrets.name} Credentials</h1>
       <p>
         Copy the key and secret, store them in a secure location, and do not share them. When you
         close the window, these values are not saved and are no longer available to you. If they are
