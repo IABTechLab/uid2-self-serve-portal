@@ -30,14 +30,14 @@ function KeyPairDialog(props: KeyPairDialogProps) {
     <div className='key-pair-dialog'>
       <Dialog
         triggerButton={props.triggerButton}
-        title='Create Key Pair'
+        title='Add Key Pair'
         closeButtonText='Cancel'
         open={open}
         onOpenChange={setOpen}
       >
         <Form<AddKeyPairFormProps>
           onSubmit={onSubmit}
-          submitButtonText='Create Key Pair'
+          submitButtonText='Add Key Pair'
           defaultValues={keyPair}
         >
           <TextInput inputName='name' label='Name' required />
