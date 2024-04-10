@@ -25,12 +25,12 @@ const Template: ComponentStory<typeof MultiCheckboxInput> = (args) => {
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit((formData) => console.log(formData))}>
         <MultiCheckboxInput {...args} inputName='checkbox' />
+        <div className='form-footer'>
+          <button type='submit' className='primary-button'>
+            Submit
+          </button>
+        </div>
       </form>
-      <div className='form-footer'>
-        <button type='submit' className='primary-button'>
-          Submit
-        </button>
-      </div>
     </FormProvider>
   );
 };

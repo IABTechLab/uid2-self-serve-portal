@@ -100,7 +100,7 @@
     "dev": "run-p start api",
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --testPathPattern=src/web/**/MultiCheckboxInput.spec.tsx",
+    "test": "craco test --testPathPattern=src/web/",
     "api": "run-p check-env-file api-watch",
     "check-env-file": "npx ts-node src/checkEnvFile.ts",
     "api-watch": "nodemon -e \".ts\" --exec npm run babel-node-api",
