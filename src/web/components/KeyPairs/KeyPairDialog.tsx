@@ -14,9 +14,8 @@ type AddKeyPairDialogProps = Readonly<{
   keyPair?: KeyPairModel;
 }>;
 
-function KeyPairDialog(props: AddKeyPairDialogProps) {
+function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialogProps) {
   const [open, setOpen] = useState(false);
-  const { keyPair, onAddKeyPair } = props;
 
   const formMethods = useForm<AddKeyPairFormProps>({
     defaultValues: { name: keyPair?.name },
@@ -31,7 +30,7 @@ function KeyPairDialog(props: AddKeyPairDialogProps) {
   return (
     <div className='key-pair-dialog'>
       <Dialog
-        triggerButton={props.triggerButton}
+        triggerButton={triggerButton}
         title='Create Key Pair'
         closeButtonText='Cancel'
         open={open}
