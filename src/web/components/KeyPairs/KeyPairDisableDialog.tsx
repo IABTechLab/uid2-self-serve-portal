@@ -44,7 +44,7 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput
-            inputName='Subscription Id'
+            inputName='Subscription ID'
             placeholder={keyPair.subscriptionId}
             rules={{
               validate: (value) => {

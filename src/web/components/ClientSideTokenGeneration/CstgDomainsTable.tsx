@@ -114,15 +114,18 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
       <div className='cstg-domains-table-header'>
         <div>
           <h2>Top-Level Domains</h2>
-          <div className='table-actions'>
-            <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
-            {selectedDomains.length > 0 && (
-              <DeleteDomainDialog
-                onDeleteDomains={() => handleBulkDeleteDomains(selectedDomains)}
-                selectedDomains={selectedDomains}
-              />
-            )}
-          </div>
+          {domains?.length > 0 && (
+            <div className='table-actions'>
+              <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
+
+              {selectedDomains.length > 0 && (
+                <DeleteDomainDialog
+                  onDeleteDomains={() => handleBulkDeleteDomains(selectedDomains)}
+                  selectedDomains={selectedDomains}
+                />
+              )}
+            </div>
+          )}
         </div>
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
@@ -165,7 +168,7 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
       </table>
       {!domains.length && !showNewRow && (
         <TableNoDataPlaceholder title='No Top-Level Domains'>
-          <span>There are no Top-Level Domains.</span>
+          <span>There are no top-level domains.</span>
         </TableNoDataPlaceholder>
       )}
     </div>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
@@ -85,9 +86,9 @@ function ClientSideIntegration() {
 
   return (
     <>
-      <h1>Client Side Integration</h1>
+      <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage Client Side Integration Key Pairs and domain names. For more information,
+        View and manage client-side integration key pairs and domain names. For more information,
         see{' '}
         <a
           className='outside-link'
@@ -95,27 +96,26 @@ function ClientSideIntegration() {
           href='https://unifiedid.com/docs/guides/publisher-client-side'
           rel='noreferrer'
         >
-          Client-Side Integration Guide
+          Client-Side Integration Guide for JavaScript
         </a>
         .
       </p>
       <div className='content-container'>
+        <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
         <KeyPairsTable
           keyPairs={keyPairData}
           onAddKeyPair={handleAddKeyPair}
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}
         />
-        {domainNames && (
-          <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
-        )}
+        <CstgDomainsTable domains={domainNames || []} onUpdateDomains={handleUpdateDomainNames} />
       </div>
     </>
   );
 }
 
 export const ClientSideIntegrationRoute: PortalRoute = {
-  description: 'Client Side Integration',
+  description: 'Client-Side Integration',
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/clientSideIntegration',
