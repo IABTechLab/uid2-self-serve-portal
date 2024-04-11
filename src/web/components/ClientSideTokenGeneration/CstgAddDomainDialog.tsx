@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
+import { separateStringsWithSeparator } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { TextInput } from '../Input/TextInput';
 
 import '../KeyPairs/KeyPairDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
-  onAddDomains: (form: AddDomainNamesFormProps) => Promise<void>;
+  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
   triggerButton: JSX.Element;
 }>;
 
@@ -26,7 +27,8 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
   }, [open, setValue, reset]);
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    await onAddDomains(formData);
+    const newDomainNamesFormatted = separateStringsWithSeparator(formData.newDomainNames);
+    await onAddDomains(newDomainNamesFormatted);
     setOpen(false);
   };
 

@@ -62,7 +62,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
   onUpdateDomains: (domains: string[]) => Promise<void>;
-  onAddDomains: (form: AddDomainNamesFormProps) => Promise<void>;
+  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
 }>;
 
 export function CstgDomainsTable({

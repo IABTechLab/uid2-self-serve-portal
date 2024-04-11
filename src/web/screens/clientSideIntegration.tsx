@@ -5,11 +5,7 @@ import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDo
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
-import {
-  AddDomainNamesFormProps,
-  GetDomainNames,
-  UpdateDomainNames,
-} from '../services/domainNamesService';
+import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
 import {
   AddKeyPair,
   AddKeyPairFormProps,
@@ -20,7 +16,6 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
-import { separateStringsWithSeparator } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
@@ -89,8 +84,7 @@ function ClientSideIntegration() {
     }
   };
 
-  const onAddDomainNames = async (formData: AddDomainNamesFormProps) => {
-    const newDomainNamesFormatted = separateStringsWithSeparator(formData.newDomainNames);
+  const onAddDomainNames = async (newDomainNamesFormatted: string[]) => {
     if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames]);
     else handleUpdateDomainNames(newDomainNamesFormatted);
   };
