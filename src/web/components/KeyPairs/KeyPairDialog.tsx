@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddKeyPairFormProps } from '../../services/keyPairService';
@@ -20,7 +20,14 @@ function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialo
   const formMethods = useForm<AddKeyPairFormProps>({
     defaultValues: { name: keyPair?.name },
   });
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, setValue, reset } = formMethods;
+
+  useEffect(() => {
+    if (!open) {
+      setValue('name', '');
+      reset();
+    }
+  }, [open, reset]);
 
   const onSubmit = async (formData: AddKeyPairFormProps) => {
     await onAddKeyPair(formData);
