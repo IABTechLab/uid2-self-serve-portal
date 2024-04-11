@@ -23,3 +23,8 @@ export function formatUnixDate(timeValue: number) {
   const date = new Date(secondToMilliseconds(timeValue));
   return date.toLocaleDateString();
 }
+
+export const separateStringsWithSeparator = (strings: string): string[] => {
+  const stringsList = strings.split(/, |,/);
+  return stringsList;
+};

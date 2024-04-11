@@ -20,6 +20,7 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
+import { separateStringsWithSeparator } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
@@ -89,12 +90,9 @@ function ClientSideIntegration() {
   };
 
   const onAddDomainNames = async (formData: AddDomainNamesFormProps) => {
-    if (domainNames) {
-      const domainNamesFormatted = [...[formData.newDomainNames], ...domainNames];
-      handleUpdateDomainNames(domainNamesFormatted);
-    } else {
-      handleUpdateDomainNames([formData.newDomainNames]);
-    }
+    const newDomainNamesFormatted = separateStringsWithSeparator(formData.newDomainNames);
+    if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames]);
+    else handleUpdateDomainNames(newDomainNamesFormatted);
   };
 
   return (

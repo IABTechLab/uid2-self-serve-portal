@@ -34,18 +34,18 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
     <div className='key-pair-dialog'>
       <Dialog
         triggerButton={triggerButton}
-        title='Add Domain(s)'
+        title='Add Domains'
         closeButtonText='Cancel'
         open={open}
         onOpenChange={setOpen}
       >
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            You may enter a single domain name or enter domain names as a comma separated list.
-            <TextInput inputName='newDomainNames' label='Domain Name(s)' required />
+            You may enter a single domain or enter domains as a comma separated list.
+            <TextInput inputName='newDomainNames' label='Domain Names' required />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                Add domain(s)
+                Add domains
               </button>
             </div>
           </form>
