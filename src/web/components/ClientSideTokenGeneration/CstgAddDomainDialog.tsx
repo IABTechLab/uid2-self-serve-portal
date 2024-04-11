@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
@@ -15,12 +15,15 @@ type AddDomainNamesDialogProps = Readonly<{
 function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const formMethods = useForm<AddDomainNamesFormProps>({
-    defaultValues: {
-      newDomainNames: '',
-    },
-  });
-  const { handleSubmit } = formMethods;
+  const formMethods = useForm<AddDomainNamesFormProps>();
+  const { handleSubmit, setValue, reset } = formMethods;
+
+  useEffect(() => {
+    if (!open) {
+      setValue('newDomainNames', '');
+      reset();
+    }
+  }, [open, setValue, reset]);
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     await onAddDomains(formData);
