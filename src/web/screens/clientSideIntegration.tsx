@@ -5,7 +5,11 @@ import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDo
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
-import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
+import {
+  AddDomainNamesFormProps,
+  GetDomainNames,
+  UpdateDomainNames,
+} from '../services/domainNamesService';
 import {
   AddKeyPair,
   AddKeyPairFormProps,
@@ -84,6 +88,15 @@ function ClientSideIntegration() {
     }
   };
 
+  const onAddDomainNames = async (formData: AddDomainNamesFormProps) => {
+    if (domainNames) {
+      const domainNamesFormatted = [...[formData.newDomainNames], ...domainNames];
+      handleUpdateDomainNames(domainNamesFormatted);
+    } else {
+      handleUpdateDomainNames([formData.newDomainNames]);
+    }
+  };
+
   return (
     <>
       <h1>Client-Side Integration</h1>
@@ -108,7 +121,11 @@ function ClientSideIntegration() {
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}
         />
-        <CstgDomainsTable domains={domainNames || []} onUpdateDomains={handleUpdateDomainNames} />
+        <CstgDomainsTable
+          domains={domainNames || []}
+          onAddDomains={onAddDomainNames}
+          onUpdateDomains={handleUpdateDomainNames}
+        />
       </div>
     </>
   );

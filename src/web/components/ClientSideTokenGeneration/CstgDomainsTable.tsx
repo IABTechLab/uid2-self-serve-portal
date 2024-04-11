@@ -2,11 +2,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useState } from 'react';
 
+import { AddDomainNamesFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import CstgAddDomainDialog from './CstgAddDomainDialog';
 import { CstgDomainItem } from './CstgDomain';
-import { CstgDomainInputRow } from './CstgDomainInputRow';
 
 import './CstgDomainsTable.scss';
 
@@ -58,12 +59,17 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
   );
 }
 
-type CstgDomainsTableProps = {
+type CstgDomainsTableProps = Readonly<{
   domains: string[];
   onUpdateDomains: (domains: string[]) => Promise<void>;
-};
+  onAddDomains: (form: AddDomainNamesFormProps) => Promise<void>;
+}>;
 
-export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableProps) {
+export function CstgDomainsTable({
+  domains,
+  onUpdateDomains,
+  onAddDomains,
+}: CstgDomainsTableProps) {
   const [showNewRow, setShowNewRow] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
@@ -100,15 +106,6 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
     }
   };
 
-  const toggleAddRow = () => {
-    setShowNewRow((prev) => !prev);
-  };
-
-  const handleAddNewDomain = async (newDomain: string) => {
-    await onUpdateDomains([...domains, newDomain]);
-    setShowNewRow(false);
-  };
-
   return (
     <div className='cstg-domains-management'>
       <div className='cstg-domains-table-header'>
@@ -129,14 +126,14 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         </div>
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
-            <button
-              className='small-button'
-              type='button'
-              disabled={showNewRow}
-              onClick={toggleAddRow}
-            >
-              Add Domain
-            </button>
+            <CstgAddDomainDialog
+              onAddDomains={onAddDomains}
+              triggerButton={
+                <button className='small-button' type='button'>
+                  Add Domain
+                </button>
+              }
+            />
           </div>
         </div>
       </div>
@@ -158,12 +155,6 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
               checked={isDomainSelected(domain)}
             />
           ))}
-          {showNewRow && (
-            <CstgDomainInputRow
-              onAdd={(newDomain) => handleAddNewDomain(newDomain)}
-              onCancel={toggleAddRow}
-            />
-          )}
         </tbody>
       </table>
       {!domains.length && !showNewRow && (
