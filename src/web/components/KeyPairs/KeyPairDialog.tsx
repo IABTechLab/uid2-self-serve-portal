@@ -27,7 +27,7 @@ function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialo
       setValue('name', '');
       reset();
     }
-  }, [open, reset]);
+  }, [open, setValue, reset]);
 
   const onSubmit = async (formData: AddKeyPairFormProps) => {
     await onAddKeyPair(formData);
