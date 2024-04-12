@@ -81,6 +81,7 @@ export type EditKeyPairFormDTO = {
   subscriptionId: string;
   name?: string;
   disabled: boolean;
+  publicKey: string;
 };
 
 export const AllowedSiteRolesById: Record<number, number[]> = {

@@ -38,6 +38,7 @@ function KeyPairEditDialog({
 
   const defaultFormData: EditKeyPairFormDTO = {
     subscriptionId: keyPairInitial.subscriptionId,
+    publicKey: keyPairInitial.publicKey,
     name: keyPairInitial.name,
     disabled: keyPairInitial.disabled,
   };
@@ -64,6 +65,8 @@ function KeyPairEditDialog({
               validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
             }}
           />
+          <TextInput inputName='subscriptionId' label='Subscription ID' disabled />
+          <TextInput inputName='publicKey' label='Public Key' disabled />
         </Form>
       </Dialog>
     </div>
