@@ -8,6 +8,7 @@ import { sortApiRoles } from '../../utils/apiRoles';
 import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
 import DisplaySecret from '../Core/DisplaySecret';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { InfoToast } from '../Core/Toast';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
@@ -60,11 +61,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
             }}
           />
 
-          <div className='form-footer'>
-            <button type='submit' className='primary-button'>
-              Create API Key
-            </button>
-          </div>
+          <FormSubmitButton buttonText='Create API Key' />
         </form>
       </FormProvider>
       <div className='button-container'>

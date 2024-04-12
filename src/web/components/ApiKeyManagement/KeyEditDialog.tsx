@@ -6,6 +6,7 @@ import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { EditApiKeyFormDTO } from '../../services/apiKeyService';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { getUnapprovedRoles } from './KeyEditDialogHelper';
@@ -91,11 +92,7 @@ function KeyEditDialog({
                 this action.
               </div>
             )}
-            <div className='form-footer'>
-              <button type='submit' className='primary-button'>
-                Save Key
-              </button>
-            </div>
+            <FormSubmitButton buttonText='Save Key' />
           </form>
         </FormProvider>
       </Dialog>

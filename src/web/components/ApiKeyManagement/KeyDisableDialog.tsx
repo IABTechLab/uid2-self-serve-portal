@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 
 export type OnApiKeyDisable = (apiKey: ApiKeyDTO) => void;
@@ -55,11 +56,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
               },
             }}
           />
-          <div className='form-footer'>
-            <button type='submit' className='primary-button'>
-              Delete Key
-            </button>
-          </div>
+          <FormSubmitButton buttonText='Delete Key' />
         </form>
       </FormProvider>
     </Dialog>

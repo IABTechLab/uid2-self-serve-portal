@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 
@@ -50,11 +51,7 @@ function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialo
               label='Name'
               rules={{ required: 'Please specify a key pair name.' }}
             />
-            <div className='form-footer'>
-              <button type='submit' className='primary-button'>
-                Create Key Pair
-              </button>
-            </div>
+            <FormSubmitButton buttonText='Add Key Pair' />
           </form>
         </FormProvider>
       </Dialog>
