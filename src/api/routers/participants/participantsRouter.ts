@@ -563,6 +563,9 @@ export function createParticipantsRouter() {
       }
 
       const { name, subscriptionId } = keyPairParser.parse(req.body.keyPair);
+
+      const disabledDate = new Date().toISOString();
+      const disabledKeyPairName = `${name}-disabled-${disabledDate}`;
       const disabled = true;
 
       const traceId = getTraceId(req);
@@ -576,7 +579,7 @@ export function createParticipantsRouter() {
         traceId
       );
 
-      await updateKeyPair(subscriptionId, name, disabled);
+      await updateKeyPair(subscriptionId, disabledKeyPairName, disabled);
 
       await updateAuditTrailToProceed(auditTrail.id);
 

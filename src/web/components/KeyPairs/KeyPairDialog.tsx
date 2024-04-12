@@ -5,6 +5,7 @@ import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
+import { validateUniqueKeyPairName } from './KeyPairHelper';
 import { KeyPairModel } from './KeyPairModel';
 
 import './KeyPairDialog.scss';
@@ -13,9 +14,17 @@ type AddKeyPairDialogProps = Readonly<{
   onAddKeyPair: (form: AddKeyPairFormProps) => Promise<void>;
   triggerButton: JSX.Element;
   keyPair?: KeyPairModel;
+  existingKeyPairs: KeyPairModel[] | undefined;
 }>;
 
-function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialogProps) {
+type KeyPairDialogProps = AddKeyPairDialogProps;
+
+function KeyPairDialog({
+  onAddKeyPair,
+  triggerButton,
+  keyPair,
+  existingKeyPairs,
+}: KeyPairDialogProps) {
   const [open, setOpen] = useState(false);
 
   const formMethods = useForm<AddKeyPairFormProps>({
@@ -44,6 +53,7 @@ function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialo
         open={open}
         onOpenChange={setOpen}
       >
+<<<<<<< HEAD
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextInput
@@ -54,6 +64,22 @@ function KeyPairDialog({ onAddKeyPair, triggerButton, keyPair }: AddKeyPairDialo
             <FormSubmitButton buttonText='Add Key Pair' />
           </form>
         </FormProvider>
+=======
+        <Form<AddKeyPairFormProps>
+          onSubmit={onSubmit}
+          submitButtonText='Create Key Pair'
+          defaultValues={keyPair}
+        >
+          <TextInput
+            inputName='name'
+            label='Name'
+            rules={{
+              required: 'Please specify key pair name.',
+              validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
+            }}
+          />
+        </Form>
+>>>>>>> main
       </Dialog>
     </div>
   );

@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { EditKeyPairFormDTO } from '../../../api/services/adminServiceHelpers';
 import { Dialog } from '../Core/Dialog';
 import { TextInput } from '../Input/TextInput';
+import { validateUniqueKeyPairName } from './KeyPairHelper';
 import { KeyPairModel } from './KeyPairModel';
 
 import '../ApiKeyManagement/KeyEditDialog.scss';
@@ -17,12 +18,14 @@ type KeyPairEditDialogProps = Readonly<{
   onEdit: OnKeyPairEdit;
   triggerButton: JSX.Element;
   keyPair: KeyPairModel;
+  existingKeyPairs: KeyPairModel[];
 }>;
 
 function KeyPairEditDialog({
   onEdit,
   triggerButton,
   keyPair: keyPairInitial,
+  existingKeyPairs,
 }: KeyPairEditDialogProps) {
   const [open, setOpen] = useState(false);
   const [keyPair, setKeyPair] = useState<KeyPairModel>(keyPairInitial);
@@ -57,7 +60,10 @@ function KeyPairEditDialog({
             <TextInput
               inputName='name'
               label='Name'
-              rules={{ required: 'Please specify a key pair name.' }}
+              rules={{
+                required: 'Please specify a key pair name.',
+                validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
+              }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
