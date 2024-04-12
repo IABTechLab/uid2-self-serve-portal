@@ -21,7 +21,7 @@ function BusinessContactDialog({
   const [open, setOpen] = useState(false);
 
   const formMethods = useForm<BusinessContactForm>({
-    defaultValues: contact as BusinessContactForm,
+    defaultValues: contact,
   });
   const { handleSubmit } = formMethods;
 
