@@ -53,33 +53,19 @@ function KeyPairDialog({
         open={open}
         onOpenChange={setOpen}
       >
-<<<<<<< HEAD
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextInput
               inputName='name'
               label='Name'
-              rules={{ required: 'Please specify a key pair name.' }}
+              rules={{
+                required: 'Please specify a key pair name.',
+                validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
+              }}
             />
             <FormSubmitButton buttonText='Add Key Pair' />
           </form>
         </FormProvider>
-=======
-        <Form<AddKeyPairFormProps>
-          onSubmit={onSubmit}
-          submitButtonText='Create Key Pair'
-          defaultValues={keyPair}
-        >
-          <TextInput
-            inputName='name'
-            label='Name'
-            rules={{
-              required: 'Please specify key pair name.',
-              validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
-            }}
-          />
-        </Form>
->>>>>>> main
       </Dialog>
     </div>
   );
