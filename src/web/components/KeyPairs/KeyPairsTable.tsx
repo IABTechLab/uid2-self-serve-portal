@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import KeyPair from './KeyPair';
@@ -21,6 +23,12 @@ function KeyPairsTable({
   onKeyPairEdit,
   onKeyPairDisable,
 }: KeyPairTableProps) {
+  const [showKeyPairDialog, setShowKeyPairDialog] = useState(false);
+
+  useEffect(() => {
+    setShowKeyPairDialog(false);
+  });
+
   return (
     <div className='key-pairs'>
       <div className='key-pairs-table-header'>
