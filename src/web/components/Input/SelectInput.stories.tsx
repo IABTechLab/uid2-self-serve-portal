@@ -1,9 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { Option, SelectInput } from './SelectInput';
-
-import '../../styles/forms.scss';
 
 export default {
   title: 'Inputs/Select',
@@ -22,12 +21,7 @@ const Template: ComponentStory<typeof SelectInput> = (args) => {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(() => {})}>
-        <SelectInput {...args} inputName='select' />{' '}
-        <div className='form-footer'>
-          <button type='submit' className='primary-button'>
-            Submit
-          </button>
-        </div>
+        <SelectInput {...args} inputName='select' /> <FormSubmitButton />
       </form>
     </FormProvider>
   );

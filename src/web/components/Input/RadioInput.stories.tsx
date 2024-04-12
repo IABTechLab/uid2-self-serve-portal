@@ -1,10 +1,9 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { RadioInput } from './RadioInput';
 import { Option } from './SelectInput';
-
-import '../../styles/forms.scss';
 
 export default {
   title: 'Inputs/Radio',
@@ -17,12 +16,7 @@ const Template: ComponentStory<typeof RadioInput> = (args) => {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(() => {})}>
-        <RadioInput {...args} inputName='radio' />{' '}
-        <div className='form-footer'>
-          <button type='submit' className='primary-button'>
-            Submit
-          </button>
-        </div>
+        <RadioInput {...args} inputName='radio' /> <FormSubmitButton />
       </form>
     </FormProvider>
   );

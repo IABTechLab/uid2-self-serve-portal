@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Form } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
@@ -7,6 +8,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UpdateParticipantForm } from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { validateEditcrmAgreementNumber } from './AddParticipantDialogHelper';
@@ -94,11 +96,7 @@ function UpdateParticipantDialog({
                 validateEditcrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
             }}
           />
-          <div className='form-footer'>
-            <button type='submit' className='primary-button'>
-              Save Participant
-            </button>
-          </div>
+          <FormSubmitButton buttonText='Save Participant' />
         </form>
       </FormProvider>
     </Dialog>

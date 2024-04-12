@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { EditKeyPairFormDTO } from '../../../api/services/adminServiceHelpers';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueKeyPairName } from './KeyPairHelper';
 import { KeyPairModel } from './KeyPairModel';
@@ -65,11 +66,7 @@ function KeyPairEditDialog({
                 validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
               }}
             />
-            <div className='form-footer'>
-              <button type='submit' className='primary-button'>
-                Save Key Pair
-              </button>
-            </div>
+            <FormSubmitButton buttonText='Save Key Pair' />
           </form>
         </FormProvider>
       </Dialog>

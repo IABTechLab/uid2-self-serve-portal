@@ -1,9 +1,8 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from './TextInput';
-
-import '../../styles/forms.scss';
 
 export default {
   title: 'Inputs/Text',
@@ -18,11 +17,7 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(() => {})}>
         <TextInput {...args} inputName='textInput' data-testid='text-input' />
-        <div className='form-footer'>
-          <button type='submit' className='primary-button'>
-            Submit
-          </button>
-        </div>
+        <FormSubmitButton />
       </form>
     </FormProvider>
   );

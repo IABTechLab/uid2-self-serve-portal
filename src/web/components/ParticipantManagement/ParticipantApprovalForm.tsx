@@ -10,6 +10,7 @@ import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { Input } from '../Input/Input';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
@@ -192,11 +193,7 @@ function ParticipantApprovalForm({
             <Input inputName='readonly-requestor-job' label='Job Function'>
               <input className='input-container' disabled value={participant.requestingUser.role} />
             </Input>
-            <div className='form-footer'>
-              <button type='submit' className='primary-button'>
-                Approve Participant
-              </button>
-            </div>
+            <FormSubmitButton buttonText='Approve Participant' />
           </form>
         </FormProvider>
       )}

@@ -8,6 +8,7 @@ import {
   UserResponse,
 } from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 
@@ -86,11 +87,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               value: UserRole[key],
             }))}
           />
-          <div className='form-footer'>
-            <button type='submit' className='primary-button'>
-              Save Team Member
-            </button>
-          </div>
+          <FormSubmitButton buttonText='Save Team Member' />
         </form>
       </FormProvider>
     </Dialog>

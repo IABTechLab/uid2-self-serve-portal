@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ContactType } from '../../../api/entities/BusinessContact';
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 
@@ -65,11 +66,7 @@ function BusinessContactDialog({
               value: ContactType[key],
             }))}
           />
-          <div className='form-footer'>
-            <button type='submit' className='primary-button'>
-              Save Email Contact
-            </button>
-          </div>
+          <FormSubmitButton buttonText='Save Email Contact' />
         </form>
       </FormProvider>
     </Dialog>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 
@@ -54,11 +55,7 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
               },
             }}
           />
-          <div className='form-footer'>
-            <button type='submit' className='primary-button'>
-              Delete Key Pair
-            </button>
-          </div>
+          <FormSubmitButton buttonText='Delete Key Pair' />
         </form>
       </FormProvider>
     </Dialog>

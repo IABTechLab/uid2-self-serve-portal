@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
+import FormSubmitButton from '../Core/FormSubmitButton';
 
 const { WithValidation } = composeStories(stories);
 
@@ -42,11 +43,7 @@ function TestComponentMultiCheckboxInput({
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmitMock)}>
         <MultiCheckboxInput inputName='checkboxInput' label='Select options' options={options} />
-        <div className='form-footer'>
-          <button type='submit' className='primary-button' name='Submit'>
-            Submit
-          </button>
-        </div>
+        <FormSubmitButton />
       </form>
     </FormProvider>
   );
