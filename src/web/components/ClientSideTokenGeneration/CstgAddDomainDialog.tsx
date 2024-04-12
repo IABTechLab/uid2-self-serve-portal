@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { parse } from 'tldts';
 
@@ -21,11 +21,6 @@ type DomainProps = {
   domain: string | null;
 };
 
-type DomainValidationResult = {
-  type: 'Error' | 'Warning';
-  message: ReactNode;
-};
-
 type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
 
 function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDialogProps) {
@@ -38,6 +33,7 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
   useEffect(() => {
     if (!open) {
       setValue('newDomainNames', '');
+      setErrorMessage('');
       reset();
     }
   }, [open, setValue, reset]);
@@ -49,14 +45,21 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomainNamesFormatted = separateStringsWithSeparator(formData.newDomainNames);
     const allValid = newDomainNamesFormatted.every((newDomainName) => {
-      const domainProps = parse(newDomainName);
-      isValidDomain(domainProps);
+      return isValidDomain(parse(newDomainName));
     });
     if (!allValid) {
-      setErrorMessage('At least one domain you have entered is invalid.');
+      setErrorMessage('At least one domain you have entered is invalid, please try again.');
+    } else {
+      // if all are valid but there are some non top-level domains, we turn every domain into top-level
+      newDomainNamesFormatted.forEach((newDomainName, index) => {
+        const topLevelDomain = parse(newDomainName).domain;
+        if (topLevelDomain && topLevelDomain !== newDomainName) {
+          newDomainNamesFormatted[index] = topLevelDomain;
+        }
+      });
+      await onAddDomains(newDomainNamesFormatted);
+      setOpen(false);
     }
-    await onAddDomains(newDomainNamesFormatted);
-    setOpen(false);
   };
 
   return (
