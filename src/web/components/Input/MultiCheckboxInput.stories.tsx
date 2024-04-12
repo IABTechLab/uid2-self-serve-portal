@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
 
-import '../Core/Form.scss';
+import '../../styles/forms.scss';
 
 export default {
   title: 'Inputs/Checkbox',

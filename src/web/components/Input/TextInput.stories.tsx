@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { TextInput } from './TextInput';
 
-import '../Core/Form.scss';
+import '../../styles/forms.scss';
 
 export default {
   title: 'Inputs/Text',

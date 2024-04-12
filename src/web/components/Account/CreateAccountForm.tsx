@@ -13,7 +13,7 @@ import { FormStyledCheckbox, withoutRef } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 
 import './createAccountForm.scss';
-import '../Core/Form.scss';
+import '../../styles/forms.scss';
 
 export type CreateAccountFormProps = {
   resolvedParticipantTypes: ParticipantTypeDTO[];
