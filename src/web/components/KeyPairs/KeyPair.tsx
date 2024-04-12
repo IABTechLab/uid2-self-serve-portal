@@ -7,11 +7,12 @@ import { KeyPairModel } from './KeyPairModel';
 
 type KeyPairProps = Readonly<{
   keyPair: KeyPairModel;
+  existingKeyPairs: KeyPairModel[];
   onEdit: OnKeyPairEdit;
   onDisable: OnKeyPairDisable;
 }>;
 
-function KeyPair({ keyPair, onEdit, onDisable }: KeyPairProps) {
+function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps) {
   return (
     <tr>
       <td className='name'>{keyPair.name}</td>
@@ -24,6 +25,7 @@ function KeyPair({ keyPair, onEdit, onDisable }: KeyPairProps) {
         <div className='action-cell'>
           <KeyPairEditDialog
             keyPair={keyPair}
+            existingKeyPairs={existingKeyPairs}
             onEdit={onEdit}
             triggerButton={
               <button type='button' className='icon-button' title='Edit'>
