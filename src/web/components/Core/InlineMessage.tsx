@@ -12,7 +12,7 @@ export type InlineMessageProps = {
 export function InlineMessage({ message, type }: InlineMessageProps) {
   return (
     <div className={clsx('inline-message message-container', type)}>
-      <span data-testid='banner-message' className='banner-text'>
+      <span data-testid='banner-message' className='banner-text' role='alert'>
         {message}
       </span>
     </div>
