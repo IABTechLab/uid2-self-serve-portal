@@ -30,6 +30,7 @@ function KeyPairsTable({
         <div className='key-pairs-table-header-right'>
           <div className='add-key-pair'>
             <KeyPairDialog
+              existingKeyPairs={keyPairs}
               onAddKeyPair={onAddKeyPair}
               triggerButton={
                 <button className='small-button' type='button'>
@@ -56,6 +57,7 @@ function KeyPairsTable({
               <KeyPair
                 key={k.publicKey}
                 keyPair={k}
+                existingKeyPairs={keyPairs}
                 onEdit={onKeyPairEdit}
                 onDisable={onKeyPairDisable}
               />
