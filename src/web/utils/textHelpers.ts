@@ -1,3 +1,5 @@
+import { parse } from 'tldts';
+
 export const isVowel = (letter: string): boolean =>
   ['a', 'e', 'i', 'o', 'u'].includes(letter.toLowerCase());
 
@@ -24,7 +26,15 @@ export function formatUnixDate(timeValue: number) {
   return date.toLocaleDateString();
 }
 
-export const separateStringsWithSeparator = (strings: string): string[] => {
+export const separateStringsCommaSeparatedList = (strings: string): string[] => {
   const stringsList = strings.split(/, |,/);
   return stringsList;
+};
+
+export const extractTopLevelDomain = (domainName: string) => {
+  const topLevelDomain = parse(domainName).domain;
+  if (topLevelDomain && topLevelDomain !== domainName) {
+    return topLevelDomain;
+  }
+  return domainName;
 };

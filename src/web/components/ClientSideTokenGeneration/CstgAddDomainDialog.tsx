@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { parse } from 'tldts';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
-import { separateStringsWithSeparator } from '../../utils/textHelpers';
+import { extractTopLevelDomain, separateStringsCommaSeparatedList } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { TextInput } from '../Input/TextInput';
@@ -12,7 +12,7 @@ import '../KeyPairs/KeyPairDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
   onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
-  triggerButton: JSX.Element;
+  triggerButton?: JSX.Element;
 }>;
 
 type DomainProps = {
@@ -43,19 +43,16 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
   };
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomainNamesFormatted = separateStringsWithSeparator(formData.newDomainNames);
+    const newDomainNamesFormatted = separateStringsCommaSeparatedList(formData.newDomainNames);
     const allValid = newDomainNamesFormatted.every((newDomainName) => {
       return isValidDomain(parse(newDomainName));
     });
     if (!allValid) {
       setErrorMessage('At least one domain you have entered is invalid, please try again.');
     } else {
-      // if all are valid but there are some non top-level domains, we turn every domain into top-level
+      // if all are valid but there are some non top-level domains, we make sure every domain is top-level
       newDomainNamesFormatted.forEach((newDomainName, index) => {
-        const topLevelDomain = parse(newDomainName).domain;
-        if (topLevelDomain && topLevelDomain !== newDomainName) {
-          newDomainNamesFormatted[index] = topLevelDomain;
-        }
+        newDomainNamesFormatted[index] = extractTopLevelDomain(newDomainName);
       });
       await onAddDomains(newDomainNamesFormatted);
       setOpen(false);
@@ -75,7 +72,11 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             You may enter a single domain or enter domains as a comma separated list.
-            <TextInput inputName='newDomainNames' label='Domain Names' required />
+            <TextInput
+              inputName='newDomainNames'
+              label='Domain Names'
+              rules={{ required: 'Please specify domain name.' }}
+            />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
                 Add domains
