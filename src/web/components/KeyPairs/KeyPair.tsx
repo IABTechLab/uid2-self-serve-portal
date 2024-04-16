@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 
 import DisplaySecretTable from '../Core/DisplaySecretTable';
 import KeyPairDisableDialog, { OnKeyPairDisable } from './KeyPairDisableDialog';

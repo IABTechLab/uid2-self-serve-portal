@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddKeyPairFormProps } from '../../services/keyPairService';
@@ -11,48 +10,32 @@ import { KeyPairModel } from './KeyPairModel';
 import './KeyPairDialog.scss';
 
 type AddKeyPairDialogProps = Readonly<{
-  onAddKeyPair: (form: AddKeyPairFormProps) => Promise<void>;
-  triggerButton: JSX.Element;
+  onSubmitKeyPair: (form: AddKeyPairFormProps) => void;
   keyPair?: KeyPairModel;
   existingKeyPairs: KeyPairModel[] | undefined;
+  onOpenChange: () => void;
 }>;
 
 type KeyPairDialogProps = AddKeyPairDialogProps;
 
 function KeyPairDialog({
-  onAddKeyPair,
-  triggerButton,
+  onSubmitKeyPair,
   keyPair,
   existingKeyPairs,
+  onOpenChange,
 }: KeyPairDialogProps) {
-  const [open, setOpen] = useState(false);
-
   const formMethods = useForm<AddKeyPairFormProps>({
     defaultValues: { name: keyPair?.name },
   });
-  const { handleSubmit, setValue, reset } = formMethods;
+  const { handleSubmit } = formMethods;
 
-  useEffect(() => {
-    if (!open) {
-      setValue('name', '');
-      reset();
-    }
-  }, [open, setValue, reset]);
-
-  const onSubmit = async (formData: AddKeyPairFormProps) => {
-    await onAddKeyPair(formData);
-    setOpen(false);
+  const onSubmit = (formData: AddKeyPairFormProps) => {
+    onSubmitKeyPair(formData);
   };
 
   return (
     <div className='key-pair-dialog'>
-      <Dialog
-        triggerButton={triggerButton}
-        title='Create Key Pair'
-        closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <Dialog title='Create Key Pair' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextInput

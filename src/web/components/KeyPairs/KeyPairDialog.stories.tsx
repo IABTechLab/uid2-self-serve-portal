@@ -12,8 +12,8 @@ type Story = StoryObj<typeof KeyPairDialog>;
 
 export const Default: Story = {
   args: {
-    triggerButton: <button type='button'>Open</button>,
-    onAddKeyPair: (form) =>
+    // triggerButton: <button type='button'>Open</button>,
+    onSubmitKeyPair: (form) =>
       Promise.resolve(console.log(`Add new key pair ${JSON.stringify(form)}`)),
   },
 };
