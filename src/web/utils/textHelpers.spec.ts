@@ -1,5 +1,4 @@
 import {
-  extractTopLevelDomain,
   formatStringsWithSeparator,
   formatUnixDate,
   getArticle,
@@ -74,14 +73,5 @@ describe('Text helper tests', () => {
     it('should return empty array', () => {
       expect(separateStringsCommaSeparatedList('')).toEqual([]);
     });
-  });
-
-  describe('turn valid domains into top-level domains', () => {
-    it.each(['test.com', 'https://test.com', 'http://test.com'])(
-      'should return a top-level domain',
-      (stringsList) => {
-        expect(extractTopLevelDomain(stringsList)).toEqual('test.com');
-      }
-    );
   });
 });

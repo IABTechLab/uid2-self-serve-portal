@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { parse } from 'tldts';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
-import { extractTopLevelDomain, separateStringsCommaSeparatedList } from '../../utils/textHelpers';
+import { separateStringsCommaSeparatedList } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { TextInput } from '../Input/TextInput';
+import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
 import '../KeyPairs/KeyPairDialog.scss';
 
@@ -15,37 +16,16 @@ type AddDomainNamesDialogProps = Readonly<{
   onOpenChange: () => void;
 }>;
 
-type DomainProps = {
-  isIcann: boolean | null;
-  isPrivate: boolean | null;
-  domain: string | null;
-};
-
-type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
-
 function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialogProps) {
-  const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const formMethods = useForm<AddDomainNamesFormProps>();
-  const { handleSubmit, setValue, reset } = formMethods;
-
-  useEffect(() => {
-    if (!open) {
-      setValue('newDomainNames', '');
-      setErrorMessage('');
-      reset();
-    }
-  }, [open, setValue, reset]);
-
-  const isValidDomain = (domainProps: DomainProps): domainProps is ValidDomainProps => {
-    return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
-  };
+  const { handleSubmit } = formMethods;
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomainNamesFormatted = separateStringsCommaSeparatedList(formData.newDomainNames);
     const allValid = newDomainNamesFormatted.every((newDomainName) => {
-      return isValidDomain(parse(newDomainName));
+      return isValidDomain(newDomainName);
     });
     if (!allValid) {
       setErrorMessage('At least one domain you have entered is invalid, please try again.');
@@ -55,7 +35,6 @@ function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialo
         newDomainNamesFormatted[index] = extractTopLevelDomain(newDomainName);
       });
       await onAddDomains(newDomainNamesFormatted);
-      setOpen(false);
     }
   };
 

@@ -1,5 +1,3 @@
-import { parse } from 'tldts';
-
 export const isVowel = (letter: string): boolean =>
   ['a', 'e', 'i', 'o', 'u'].includes(letter.toLowerCase());
 
@@ -30,12 +28,4 @@ export const separateStringsCommaSeparatedList = (strings: string): string[] => 
   if (strings === '') return [];
   const stringsList = strings.split(/, |,/);
   return stringsList;
-};
-
-export const extractTopLevelDomain = (domainName: string) => {
-  const topLevelDomain = parse(domainName).domain;
-  if (topLevelDomain && topLevelDomain !== domainName) {
-    return topLevelDomain;
-  }
-  return domainName;
 };
