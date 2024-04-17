@@ -71,6 +71,7 @@ export function CstgDomainsTable({
   onAddDomains,
 }: CstgDomainsTableProps) {
   const [showNewRow, setShowNewRow] = useState<boolean>(false);
+  const [showAddDomainsDialog, setShowAddDomainsDialog] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
@@ -106,6 +107,15 @@ export function CstgDomainsTable({
     }
   };
 
+  const onOpenChangeAddDomainDialog = () => {
+    setShowAddDomainsDialog(!showAddDomainsDialog);
+  };
+
+  const onSubmitAddDomainDialog = async (newDomainNamesFormatted: string[]) => {
+    await onAddDomains(newDomainNamesFormatted);
+    setShowAddDomainsDialog(false);
+  };
+
   return (
     <div className='cstg-domains-management'>
       <div className='cstg-domains-table-header'>
@@ -126,14 +136,15 @@ export function CstgDomainsTable({
         </div>
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
-            <CstgAddDomainDialog
-              onAddDomains={onAddDomains}
-              triggerButton={
-                <button className='small-button' type='button'>
-                  Add Domain
-                </button>
-              }
-            />
+            <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
+              Add Domain
+            </button>
+            {showAddDomainsDialog && (
+              <CstgAddDomainDialog
+                onAddDomains={onSubmitAddDomainDialog}
+                onOpenChange={onOpenChangeAddDomainDialog}
+              />
+            )}
           </div>
         </div>
       </div>

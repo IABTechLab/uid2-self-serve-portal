@@ -12,7 +12,7 @@ import '../KeyPairs/KeyPairDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
   onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
-  triggerButton?: JSX.Element;
+  onOpenChange: () => void;
 }>;
 
 type DomainProps = {
@@ -23,7 +23,7 @@ type DomainProps = {
 
 type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
 
-function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDialogProps) {
+function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialogProps) {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 
@@ -61,13 +61,7 @@ function CstgAddDomainDialog({ onAddDomains, triggerButton }: AddDomainNamesDial
 
   return (
     <div className='key-pair-dialog'>
-      <Dialog
-        triggerButton={triggerButton}
-        title='Add Domains'
-        closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <Dialog title='Add Domains' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>

@@ -78,7 +78,7 @@ function ClientSideIntegration() {
     try {
       const response = await UpdateDomainNames(newDomainNames);
       setDomainNames(response);
-      SuccessToast('Domain Names updated.');
+      SuccessToast('Domain Names added.');
     } catch (e) {
       handleErrorToast(e);
     }

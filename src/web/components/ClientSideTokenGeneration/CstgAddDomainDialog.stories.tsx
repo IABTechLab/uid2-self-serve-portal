@@ -13,6 +13,5 @@ type Story = StoryObj<typeof CstgAddDomainDialog>;
 export const Default: Story = {
   args: {
     onAddDomains: (newDomain) => Promise.resolve(console.log('New domain added: ', newDomain)),
-    triggerButton: <button type='button'>Open</button>,
   },
 };
