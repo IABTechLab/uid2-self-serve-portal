@@ -27,6 +27,7 @@ export function formatUnixDate(timeValue: number) {
 }
 
 export const separateStringsCommaSeparatedList = (strings: string): string[] => {
+  if (strings === '') return [];
   const stringsList = strings.split(/, |,/);
   return stringsList;
 };

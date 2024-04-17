@@ -1,8 +1,9 @@
 import {
+  extractTopLevelDomain,
   formatStringsWithSeparator,
   formatUnixDate,
+  getArticle,
   isVowel,
-  sec,
   separateStringsCommaSeparatedList,
 } from './textHelpers';
 
@@ -20,6 +21,21 @@ describe('Text helper tests', () => {
     it('should check that capital consonant is invalid', () => {
       expect(isVowel('C')).toEqual(false);
     });
+  });
+
+  describe('get article check', () => {
+    it.each(['alpha', 'echo', 'india', 'oscar', 'uniform'])(
+      'should return the correct article',
+      (words) => {
+        expect(getArticle(words)).toEqual('an');
+      }
+    );
+    it.each(['bravo', 'golf', 'hotel', 'tango', 'yankee', ''])(
+      'should return the correct article',
+      (words) => {
+        expect(getArticle(words)).toEqual('a');
+      }
+    );
   });
 
   describe('concatenate strings', () => {
@@ -56,7 +72,16 @@ describe('Text helper tests', () => {
       expect(separateStringsCommaSeparatedList('test')).toEqual(['test']);
     });
     it('should return empty array', () => {
-      expect(separateStringsCommaSeparatedList('')).toEqual(['']);
+      expect(separateStringsCommaSeparatedList('')).toEqual([]);
     });
+  });
+
+  describe('turn valid domains into top-level domains', () => {
+    it.each(['test.com', 'https://test.com', 'http://test.com'])(
+      'should return a top-level domain',
+      (stringsList) => {
+        expect(extractTopLevelDomain(stringsList)).toEqual('test.com');
+      }
+    );
   });
 });
