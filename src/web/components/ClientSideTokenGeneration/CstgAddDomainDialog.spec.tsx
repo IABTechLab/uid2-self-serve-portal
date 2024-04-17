@@ -7,11 +7,6 @@ import * as stories from './CstgAddDomainDialog.stories';
 
 const { Default } = composeStories(stories);
 
-const openDialog = async () => {
-  const openButton = screen.getByRole('button', { name: 'Open' });
-  await userEvent.click(openButton);
-};
-
 const submitDialog = async () => {
   const createButton = screen.getByRole('button', { name: 'Add domains' });
   await userEvent.click(createButton);
@@ -26,8 +21,6 @@ describe('CstgDomainAddDomainDialog', () => {
     });
 
     render(<CstgAddDomainDialog onAddDomains={onAddDomainsMock} onOpenChange={() => {}} />);
-
-    await openDialog();
 
     await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test.com');
 
@@ -50,8 +43,6 @@ describe('CstgDomainAddDomainDialog', () => {
     });
 
     render(<CstgAddDomainDialog onAddDomains={onAddDomainsMock} onOpenChange={() => {}} />);
-
-    await openDialog();
 
     await user.type(
       screen.getByRole('textbox', { name: 'newDomainNames' }),
@@ -78,8 +69,6 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
     render(<Default />);
 
-    await openDialog();
-
     await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test');
 
     await submitDialog();
@@ -91,8 +80,6 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
     render(<Default />);
 
-    await openDialog();
-
     await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test, test2.com');
 
     await submitDialog();
@@ -102,8 +89,6 @@ describe('CstgDomainAddDomainDialog', () => {
 
   it('should render error if user submits empty text box for domain names', async () => {
     render(<Default />);
-
-    await openDialog();
     await submitDialog();
 
     expect(screen.getByRole('alert')).toBeInTheDocument();
