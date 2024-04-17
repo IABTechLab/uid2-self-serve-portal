@@ -1,26 +1,44 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { parse } from 'tldts';
 
 import { EditDomainFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
+import { InlineMessage } from '../Core/InlineMessage';
 import { TextInput } from '../Input/TextInput';
+import { isDuplicateDomain, isValidDomain } from './CstgDomainHelper';
 
-type EditDomainDialogProps = {
+type EditDomainDialogProps = Readonly<{
   domain: string;
+  existingDomains: string[];
   onEditDomainName: (newDomainName: string, originalDomainName: string) => void;
   onOpenChange: () => void;
-};
+}>;
 
-function EditDomainDialog({ domain, onEditDomainName, onOpenChange }: EditDomainDialogProps) {
+function EditDomainDialog({
+  domain,
+  onEditDomainName,
+  onOpenChange,
+  existingDomains,
+}: EditDomainDialogProps) {
+  const [errorMessage, setErrorMessage] = useState<string>();
   const defaultValues = {
     domainName: domain,
   };
 
-  const onSubmit: SubmitHandler<EditDomainFormProps> = async (formData) => {
-    const newDomainName = formData.domainName;
-    const originalDomainName = defaultValues.domainName;
-    await onEditDomainName(newDomainName, originalDomainName);
+  const onSubmit: SubmitHandler<EditDomainFormProps> = (formData) => {
+    const updatedDomainName = formData.domainName;
+
+    if (!isValidDomain(parse(updatedDomainName))) {
+      setErrorMessage('Domain name must be valid.');
+    } else if (isDuplicateDomain(updatedDomainName, existingDomains)) {
+      setErrorMessage('Domain name already exists.');
+    } else {
+      const originalDomainName = defaultValues.domainName;
+      onEditDomainName(updatedDomainName, originalDomainName);
+    }
   };
 
   return (
@@ -35,6 +53,7 @@ function EditDomainDialog({ domain, onEditDomainName, onOpenChange }: EditDomain
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
+      {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
       <Form<EditDomainFormProps>
         onSubmit={onSubmit}
         defaultValues={defaultValues}

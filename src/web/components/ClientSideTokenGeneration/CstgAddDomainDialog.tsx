@@ -7,6 +7,7 @@ import { extractTopLevelDomain, separateStringsCommaSeparatedList } from '../../
 import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { TextInput } from '../Input/TextInput';
+import { isValidDomain } from './CstgDomainHelper';
 
 import '../KeyPairs/KeyPairDialog.scss';
 
@@ -14,14 +15,6 @@ type AddDomainNamesDialogProps = Readonly<{
   onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
   onOpenChange: () => void;
 }>;
-
-type DomainProps = {
-  isIcann: boolean | null;
-  isPrivate: boolean | null;
-  domain: string | null;
-};
-
-type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
 
 function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialogProps) {
   const [open, setOpen] = useState(false);
@@ -37,10 +30,6 @@ function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialo
       reset();
     }
   }, [open, setValue, reset]);
-
-  const isValidDomain = (domainProps: DomainProps): domainProps is ValidDomainProps => {
-    return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
-  };
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomainNamesFormatted = separateStringsCommaSeparatedList(formData.newDomainNames);

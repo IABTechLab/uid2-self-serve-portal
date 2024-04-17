@@ -174,6 +174,7 @@ export function CstgDomainsTable({
             <CstgDomainItem
               key={domain}
               domain={domain}
+              existingDomains={domains}
               onClick={() => handleSelectDomain(domain)}
               onDelete={() => handleBulkDeleteDomains([domain])}
               onEditDomainName={handleEditDomain}

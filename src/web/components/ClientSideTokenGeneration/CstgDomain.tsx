@@ -5,22 +5,19 @@ import { Dialog } from '../Core/Dialog';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
 
-type DeleteConfirmationDialogProps = {
+type DeleteConfirmationDialogProps = Readonly<{
   domain: string;
   onRemoveDomain: () => void;
   onOpenChange: () => void;
-};
+}>;
 
 function DeleteConfirmationDialog({
   domain,
   onRemoveDomain,
   onOpenChange,
 }: DeleteConfirmationDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-
-  const handleRemove = async () => {
-    setOpenConfirmation(false);
-    await onRemoveDomain();
+  const handleRemove = () => {
+    onRemoveDomain();
   };
 
   return (
@@ -42,19 +39,21 @@ function DeleteConfirmationDialog({
   );
 }
 
-type CstgDomainItemProps = {
+type CstgDomainItemProps = Readonly<{
   domain: string;
+  existingDomains: string[];
   onClick: () => void;
-  onEditDomainName: (newDomainName: string, originalDomainName: string) => void;
+  onEditDomain: (newDomainName: string, originalDomainName: string) => void;
   onDelete: () => void;
   checked: boolean;
-};
+}>;
 
 export function CstgDomainItem({
   domain,
+  existingDomains,
   onClick,
   onDelete,
-  onEditDomainName,
+  onEditDomain,
   checked,
 }: CstgDomainItemProps) {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
@@ -88,7 +87,8 @@ export function CstgDomainItem({
           {showEditDialog && (
             <CstgEditDomainDialog
               domain={domain}
-              onEditDomainName={onEditDomainName}
+              existingDomains={existingDomains}
+              onEditDomainName={onEditDomain}
               onOpenChange={onEditDialogChange}
             />
           )}

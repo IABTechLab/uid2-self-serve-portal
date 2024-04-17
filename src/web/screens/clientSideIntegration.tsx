@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import { act } from 'react-dom/test-utils';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
