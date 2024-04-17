@@ -10,11 +10,6 @@ import {
 
 import './MultiCheckboxInput.scss';
 
-export function withoutRef<TFieldName extends string>(props: UseFormRegisterReturn<TFieldName>) {
-  const { ref, ...rest } = props;
-  return rest;
-}
-
 export function StyledCheckbox(props: Checkbox.CheckboxProps) {
   const className = `${props?.className ?? ''} checkbox-root`.trim();
   const childrenOrDefault = props.children ?? (

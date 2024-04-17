@@ -7,7 +7,7 @@ import { useAvailableSiteList } from '../../services/site';
 import { Banner } from '../Core/Banner';
 import { Collapsible } from '../Core/Collapsible';
 import { Loading } from '../Core/Loading';
-import { FormStyledCheckbox, withoutRef } from '../Input/StyledCheckbox';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import {
   BulkAddPermissionsForm,
   getCheckedParticipantTypeNames,
@@ -128,19 +128,13 @@ export function BulkAddPermissions({
         tokens.
       </p>
       <div className='participant-type-checkbox-section'>
-        <FormStyledCheckbox {...withoutRef(register('publisherChecked'))} data-testid='publisher' />
+        <FormStyledCheckbox {...register('publisherChecked')} data-testid='publisher' />
         <span className='checkbox-label'>Publisher</span>
-        <FormStyledCheckbox
-          {...withoutRef(register('advertiserChecked'))}
-          data-testid='advertiser'
-        />
+        <FormStyledCheckbox {...register('advertiserChecked')} data-testid='advertiser' />
         <span className='checkbox-label'>Advertiser</span>
-        <FormStyledCheckbox {...withoutRef(register('DSPChecked'))} data-testid='dsp' />
+        <FormStyledCheckbox {...register('DSPChecked')} data-testid='dsp' />
         <span className='checkbox-label'>DSP</span>
-        <FormStyledCheckbox
-          {...withoutRef(register('dataProviderChecked'))}
-          data-testid='data-provider'
-        />
+        <FormStyledCheckbox {...register('dataProviderChecked')} data-testid='data-provider' />
         <span className='checkbox-label'>Data Provider</span>
       </div>
       {hasCheckedType() && (

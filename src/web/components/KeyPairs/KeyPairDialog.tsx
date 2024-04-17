@@ -46,7 +46,7 @@ function KeyPairDialog({
                 validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
               }}
             />
-            <FormSubmitButton buttonText='Add Key Pair' />
+            <FormSubmitButton>Add Key Pair </FormSubmitButton>
           </form>
         </FormProvider>
       </Dialog>

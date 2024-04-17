@@ -9,7 +9,7 @@ import { TermsAndConditionsForm } from '../Core/TermsAndConditions';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { SelectInput } from '../Input/SelectInput';
-import { FormStyledCheckbox, withoutRef } from '../Input/StyledCheckbox';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 
 import './createAccountForm.scss';
@@ -80,8 +80,7 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
         <div className='terms-section'>
           <FormStyledCheckbox
             disabled={!watchAccept}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...withoutRef(register('agreeToTerms', { required: true }))}
+            {...register('agreeToTerms', { required: true })}
           />
           <span>
             I agree to the{' '}
