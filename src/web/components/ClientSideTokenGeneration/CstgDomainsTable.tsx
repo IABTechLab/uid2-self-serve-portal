@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useState } from 'react';
 
-import { AddDomainNamesFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
@@ -70,7 +69,6 @@ export function CstgDomainsTable({
   onUpdateDomains,
   onAddDomains,
 }: CstgDomainsTableProps) {
-  const [showNewRow, setShowNewRow] = useState<boolean>(false);
   const [showAddDomainsDialog, setShowAddDomainsDialog] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
@@ -114,6 +112,7 @@ export function CstgDomainsTable({
   const onSubmitAddDomainDialog = async (newDomainNamesFormatted: string[]) => {
     await onAddDomains(newDomainNamesFormatted);
     setShowAddDomainsDialog(false);
+    setSelectedDomains([]);
   };
 
   return (
@@ -168,7 +167,7 @@ export function CstgDomainsTable({
           ))}
         </tbody>
       </table>
-      {!domains.length && !showNewRow && (
+      {!domains.length && (
         <TableNoDataPlaceholder title='No Top-Level Domains'>
           <span>There are no top-level domains.</span>
         </TableNoDataPlaceholder>
