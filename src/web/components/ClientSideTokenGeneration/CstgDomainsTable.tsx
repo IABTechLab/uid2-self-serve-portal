@@ -60,7 +60,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
 
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
-  onUpdateDomains: (domains: string[]) => Promise<void>;
+  onUpdateDomains: (domains: string[], action: string) => Promise<void>;
   onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
 }>;
 
@@ -94,7 +94,10 @@ export function CstgDomainsTable({
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
   const handleBulkDeleteDomains = (deleteDomains: string[]) => {
-    onUpdateDomains(domains.filter((domain) => !deleteDomains.includes(domain)));
+    onUpdateDomains(
+      domains.filter((domain) => !deleteDomains.includes(domain)),
+      'deleted'
+    );
   };
 
   const handleSelectDomain = (domain: string) => {
@@ -103,6 +106,17 @@ export function CstgDomainsTable({
     } else {
       setSelectedDomains([...selectedDomains, domain]);
     }
+  };
+
+  const handleEditDomain = (updatedDomainName: string, originalDomainName: string) => {
+    // removes original domain name from list and adds new domain name
+    onUpdateDomains(
+      [
+        ...domains.filter((domain) => ![originalDomainName].includes(domain)),
+        ...[updatedDomainName],
+      ],
+      'updated'
+    );
   };
 
   const onOpenChangeAddDomainDialog = () => {
@@ -162,6 +176,7 @@ export function CstgDomainsTable({
               domain={domain}
               onClick={() => handleSelectDomain(domain)}
               onDelete={() => handleBulkDeleteDomains([domain])}
+              onEditDomainName={handleEditDomain}
               checked={isDomainSelected(domain)}
             />
           ))}

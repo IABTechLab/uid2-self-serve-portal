@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { act } from 'react-dom/test-utils';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
@@ -74,19 +75,19 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
-  const handleUpdateDomainNames = async (newDomainNames: string[]) => {
+  const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
     try {
-      const response = await UpdateDomainNames(newDomainNames);
+      const response = await UpdateDomainNames(updatedDomainNames);
       setDomainNames(response);
-      SuccessToast('Domain Names added.');
+      SuccessToast(`Domain names ${action}.`);
     } catch (e) {
       handleErrorToast(e);
     }
   };
 
   const onAddDomainNames = async (newDomainNamesFormatted: string[]) => {
-    if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames]);
-    else handleUpdateDomainNames(newDomainNamesFormatted);
+    if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames], 'added');
+    else handleUpdateDomainNames(newDomainNamesFormatted, 'added');
   };
 
   return (
