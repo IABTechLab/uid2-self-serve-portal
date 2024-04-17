@@ -56,7 +56,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
               },
             }}
           />
-          <FormSubmitButton buttonText='Delete Key' />
+          <FormSubmitButton>Delete Key</FormSubmitButton>
         </form>
       </FormProvider>
     </Dialog>

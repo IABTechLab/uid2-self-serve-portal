@@ -66,7 +66,7 @@ function BusinessContactDialog({
               value: ContactType[key],
             }))}
           />
-          <FormSubmitButton buttonText='Save Email Contact' />
+          <FormSubmitButton>Save Email Contact</FormSubmitButton>
         </form>
       </FormProvider>
     </Dialog>

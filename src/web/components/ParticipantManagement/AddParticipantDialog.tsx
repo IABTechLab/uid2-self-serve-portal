@@ -290,7 +290,7 @@ function AddParticipantDialog({
             </div>
             <br />
             <div className='action-container'>
-              <FormSubmitButton buttonText='Add Participant' />
+              <FormSubmitButton>Add Participant</FormSubmitButton>
               <div className='cancel-button'>
                 <button type='button' className='transparent-button' onClick={() => setOpen(false)}>
                   Cancel

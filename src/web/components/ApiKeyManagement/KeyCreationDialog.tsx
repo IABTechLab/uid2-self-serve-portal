@@ -61,7 +61,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
             }}
           />
 
-          <FormSubmitButton buttonText='Create API Key' />
+          <FormSubmitButton> Create API Key </FormSubmitButton>
         </form>
       </FormProvider>
       <div className='button-container'>

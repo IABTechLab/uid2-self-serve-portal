@@ -69,7 +69,7 @@ function KeyPairEditDialog({
             />
             <TextInput inputName='subscriptionId' label='Subscription ID' disabled />
             <TextInput inputName='publicKey' label='Public Key' disabled />
-            <FormSubmitButton buttonText='Save Key Pair' />
+            <FormSubmitButton>Save Key Pair</FormSubmitButton>
           </form>
         </FormProvider>
       </Dialog>

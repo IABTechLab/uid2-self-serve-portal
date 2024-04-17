@@ -95,7 +95,7 @@ function UpdateParticipantDialog({
                 validateEditcrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
             }}
           />
-          <FormSubmitButton buttonText='Save Participant' />
+          <FormSubmitButton>Save Participant</FormSubmitButton>
         </form>
       </FormProvider>
     </Dialog>

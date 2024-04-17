@@ -92,7 +92,7 @@ function KeyEditDialog({
                 this action.
               </div>
             )}
-            <FormSubmitButton buttonText='Save Key' />
+            <FormSubmitButton>Save Key</FormSubmitButton>
           </form>
         </FormProvider>
       </Dialog>

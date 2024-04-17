@@ -55,7 +55,7 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
               },
             }}
           />
-          <FormSubmitButton buttonText='Delete Key Pair' />
+          <FormSubmitButton>Delete Key Pair</FormSubmitButton>
         </form>
       </FormProvider>
     </Dialog>

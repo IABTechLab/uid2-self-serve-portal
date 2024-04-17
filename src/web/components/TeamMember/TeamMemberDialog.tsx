@@ -87,7 +87,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               value: UserRole[key],
             }))}
           />
-          <FormSubmitButton buttonText='Save Team Member' />
+          <FormSubmitButton>Save Team Member</FormSubmitButton>
         </form>
       </FormProvider>
     </Dialog>
