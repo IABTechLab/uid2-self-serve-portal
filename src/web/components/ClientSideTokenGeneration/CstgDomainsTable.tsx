@@ -14,6 +14,7 @@ type DeleteDomainDialogProps = {
   onDeleteDomains: () => void;
   selectedDomains: string[];
 };
+
 function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDialogProps) {
   const [openConfirmation, setOpenConfirmation] = useState(false);
 
@@ -110,15 +111,34 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
 
   return (
     <div className='cstg-domains-management'>
-      <h2>Top-Level Domains</h2>
-      <div className='table-actions'>
-        <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
-        {selectedDomains.length > 0 && (
-          <DeleteDomainDialog
-            onDeleteDomains={() => handleBulkDeleteDomains(selectedDomains)}
-            selectedDomains={selectedDomains}
-          />
-        )}
+      <div className='cstg-domains-table-header'>
+        <div>
+          <h2>Top-Level Domains</h2>
+          {domains?.length > 0 && (
+            <div className='table-actions'>
+              <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
+
+              {selectedDomains.length > 0 && (
+                <DeleteDomainDialog
+                  onDeleteDomains={() => handleBulkDeleteDomains(selectedDomains)}
+                  selectedDomains={selectedDomains}
+                />
+              )}
+            </div>
+          )}
+        </div>
+        <div className='cstg-domains-table-header-right'>
+          <div className='add-domain-button'>
+            <button
+              className='small-button'
+              type='button'
+              disabled={showNewRow}
+              onClick={toggleAddRow}
+            >
+              Add Domain
+            </button>
+          </div>
+        </div>
       </div>
       <table className='cstg-domains-table'>
         <thead>
@@ -147,18 +167,10 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         </tbody>
       </table>
       {!domains.length && !showNewRow && (
-        <TableNoDataPlaceholder
-          icon={<img src='/group-icon.svg' alt='group-icon' />}
-          title='No Top-Level Domains'
-        >
-          <span>There are no Top-Level Domains.</span>
+        <TableNoDataPlaceholder title='No Top-Level Domains'>
+          <span>There are no top-level domains.</span>
         </TableNoDataPlaceholder>
       )}
-      <div className='add-domain-button'>
-        <button className='small-button' type='button' disabled={showNewRow} onClick={toggleAddRow}>
-          Add Domain
-        </button>
-      </div>
     </div>
   );
 }

@@ -77,6 +77,13 @@ export type KeyPairDTO = {
   name?: string;
 };
 
+export type EditKeyPairFormDTO = {
+  subscriptionId: string;
+  name?: string;
+  disabled: boolean;
+  publicKey: string;
+};
+
 export const AllowedSiteRolesById: Record<number, number[]> = {
   1: [3], // DSP: ID_READER
   2: [1], // Advertiser: MAPPER

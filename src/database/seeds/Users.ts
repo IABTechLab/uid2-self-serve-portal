@@ -12,15 +12,14 @@ const sampleParticipant = {
   name: 'Awaiting Approval',
   status: ParticipantStatus.AwaitingApproval,
   allowSharing: true,
-  location: 'Sydney',
   completedRecommendations: false,
+  crmAgreementNumber: '12345678',
 };
 const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
   {
     email: 'test@example.com',
     firstName: 'Test',
     lastName: 'User',
-    location: 'Sydney, AU',
     phone: '+61298765432',
     role: UserRole.DA,
     acceptedTerms: false,

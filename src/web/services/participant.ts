@@ -147,6 +147,9 @@ export async function InviteTeamMember(formData: InviteTeamMemberForm, participa
 
 export type UpdateParticipantForm = {
   apiRoles: number[];
+  participantTypes: number[];
+  participantName: string;
+  crmAgreementNumber: string | null;
 };
 
 export type AddParticipantForm = {
@@ -160,6 +163,7 @@ export type AddParticipantForm = {
   siteIdType: number;
   siteName?: string;
   role: string;
+  crmAgreementNumber: string;
 };
 
 export async function AddParticipant(formData: AddParticipantForm) {
@@ -186,14 +190,10 @@ export async function CompleteRecommendations(participantId: number): Promise<Pa
 }
 
 export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
-  try {
-    const result = await axios.get<SharingListResponse>(
-      `/participants/${participantId ?? 'current'}/sharingPermission`
-    );
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load sharing participants');
-  }
+  const result = await axios.get<SharingListResponse>(
+    `/participants/${participantId ?? 'current'}/sharingPermission`
+  );
+  return result.data;
 }
 
 export async function AddSharingParticipants(

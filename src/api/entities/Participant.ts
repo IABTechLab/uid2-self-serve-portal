@@ -5,7 +5,7 @@ import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { User, UserCreationPartial, UserSchema } from './User';
+import { User, UserCreationPartial, UserDTO, UserSchema } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -17,7 +17,7 @@ export class Participant extends BaseModel {
   static get tableName() {
     return 'participants';
   }
-  static relationMappings = {
+  static readonly relationMappings = {
     types: {
       relation: Model.ManyToManyRelation,
       modelClass: 'ParticipantType',
@@ -58,6 +58,14 @@ export class Participant extends BaseModel {
         to: 'businessContacts.participantId',
       },
     },
+    approver: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: 'User',
+      join: {
+        from: 'participants.approverId',
+        to: 'users.id',
+      },
+    },
   };
   declare id: number;
   declare name: string;
@@ -65,10 +73,13 @@ export class Participant extends BaseModel {
   declare allowSharing: boolean;
   declare completedRecommendations: boolean;
   declare siteId?: number;
-  declare location?: string;
   declare types?: ParticipantType[];
   declare apiRoles?: ApiRole[];
   declare users?: User[];
+  declare approverId?: number;
+  declare approver?: UserDTO;
+  declare dateApproved?: Date;
+  declare crmAgreementNumber: string | null;
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -86,13 +97,15 @@ export const ParticipantSchema = z.object({
   apiRoles: z.array(ApiRoleSchema).optional(),
   users: z.array(UserSchema).optional(),
   allowSharing: z.boolean(),
-  location: z.string().optional(),
   siteId: z.number().optional(),
+  approverId: z.number().optional(),
+  approver: z.array(UserSchema).optional(),
+  dateApproved: z.date().optional(),
+  crmAgreementNumber: z.string().nullable(),
 });
 
 export const ParticipantCreationPartial = ParticipantSchema.pick({
   name: true,
-  location: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   users: z.array(UserCreationPartial).optional(),

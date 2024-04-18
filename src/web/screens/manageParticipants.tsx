@@ -100,7 +100,8 @@ function ManageParticipants() {
                 <ApprovedParticipantsTable
                   participants={participantApproved}
                   apiRoles={apiRoles}
-                  onUpdateParticipant={onUpdateParticipant}
+                  participantTypes={participantTypes}
+                onUpdateParticipant={onUpdateParticipant}
                 />
               </ScreenContentContainer>
             </>

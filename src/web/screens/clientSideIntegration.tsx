@@ -1,12 +1,20 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
-import { AddKeyPair, AddKeyPairFormProps, GetKeyPairs } from '../services/keyPairService';
+import {
+  AddKeyPair,
+  AddKeyPairFormProps,
+  DisableKeyPair,
+  GetKeyPairs,
+  UpdateKeyPair,
+  UpdateKeyPairFormProps,
+} from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -35,9 +43,9 @@ function ClientSideIntegration() {
   }, [loadDomainNames]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
-    const { name, disabled = false } = formData;
+    const { name } = formData;
     try {
-      const response = await AddKeyPair({ name, disabled });
+      const response = await AddKeyPair({ name });
       if (response.status === 201) {
         SuccessToast('Key Pair added.');
         loadKeyPairs();
@@ -47,6 +55,26 @@ function ClientSideIntegration() {
     }
   };
 
+  const handleUpdateKeyPair = async (formData: UpdateKeyPairFormProps) => {
+    const { name, subscriptionId, disabled = false } = formData;
+    try {
+      await UpdateKeyPair({ name, subscriptionId, disabled });
+      SuccessToast('Key Pair updated.');
+      loadKeyPairs();
+    } catch (e: unknown) {
+      handleErrorToast(e);
+    }
+  };
+
+  const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
+    try {
+      await DisableKeyPair(keyPair);
+      SuccessToast('Your key pair has been deleted');
+      loadKeyPairs();
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  };
   const handleUpdateDomainNames = async (newDomainNames: string[]) => {
     try {
       const response = await UpdateDomainNames(newDomainNames);
@@ -59,9 +87,9 @@ function ClientSideIntegration() {
 
   return (
     <>
-      <h1>Client Side Integration</h1>
+      <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage Client Side Integration Key Pairs and domain names. For more information,
+        View and manage client-side integration key pairs and domain names. For more information,
         see{' '}
         <a
           className='outside-link'
@@ -69,22 +97,26 @@ function ClientSideIntegration() {
           href='https://unifiedid.com/docs/guides/publisher-client-side'
           rel='noreferrer'
         >
-          Client-Side Integration Guide
+          Client-Side Integration Guide for JavaScript
         </a>
         .
       </p>
       <ScreenContentContainer>
-        <KeyPairsTable keyPairs={keyPairData ?? []} onAddKeyPair={handleAddKeyPair} />
-        {domainNames && (
-          <CstgDomainsTable domains={domainNames} onUpdateDomains={handleUpdateDomainNames} />
-        )}
+        <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
+        <KeyPairsTable
+          keyPairs={keyPairData}
+          onAddKeyPair={handleAddKeyPair}
+          onKeyPairEdit={handleUpdateKeyPair}
+          onKeyPairDisable={handleDisableKeyPair}
+        />
+        <CstgDomainsTable domains={domainNames || []} onUpdateDomains={handleUpdateDomainNames} />
       </ScreenContentContainer>
     </>
   );
 }
 
 export const ClientSideIntegrationRoute: PortalRoute = {
-  description: 'Client Side Integration',
+  description: 'Client-Side Integration',
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/clientSideIntegration',

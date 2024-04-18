@@ -21,7 +21,6 @@ export const mockParticipant = (
           : {
               id: 1,
               name: 'Test Participant',
-              location: 'Test Location',
               allowSharing: true,
               types: [
                 {

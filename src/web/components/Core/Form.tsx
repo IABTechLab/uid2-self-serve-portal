@@ -13,7 +13,7 @@ import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 
 import './Form.scss';
 
-type FormProps<T extends FieldValues> = {
+type FormProps<T extends FieldValues> = Readonly<{
   onSubmit: SubmitHandler<T>;
   children: ReactNode;
   onError?: (error: unknown) => void;
@@ -22,7 +22,7 @@ type FormProps<T extends FieldValues> = {
   submitButtonText?: string;
   customizeSubmit?: boolean;
   id?: string;
-};
+}>;
 
 export function withoutRef<TFieldName extends string>(props: UseFormRegisterReturn<TFieldName>) {
   const { ref, ...rest } = props;
