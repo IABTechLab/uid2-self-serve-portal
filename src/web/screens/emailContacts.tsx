@@ -2,6 +2,7 @@ import { Suspense, useCallback } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import {
   AddEmailContact,
@@ -71,18 +72,20 @@ export function BusinessContacts() {
         View and manage email contacts. We’ll send information about the latest updates and releases
         for UID2.
       </p>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={data.emailContacts}>
-          {(emailContacts: BusinessContactResponse[]) => (
-            <BusinessContactsTable
-              businessContacts={emailContacts}
-              onRemoveEmailContact={handleRemoveEmailContact}
-              onUpdateEmailContact={handleUpdateEmailContact}
-              onAddEmailContact={handleAddEmailContact}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <ScreenContentContainer>
+        <Suspense fallback={<Loading />}>
+          <Await resolve={data.emailContacts}>
+            {(emailContacts: BusinessContactResponse[]) => (
+              <BusinessContactsTable
+                businessContacts={emailContacts}
+                onRemoveEmailContact={handleRemoveEmailContact}
+                onUpdateEmailContact={handleUpdateEmailContact}
+                onAddEmailContact={handleAddEmailContact}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </ScreenContentContainer>
     </div>
   );
 }

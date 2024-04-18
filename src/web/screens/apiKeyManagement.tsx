@@ -8,6 +8,7 @@ import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import {
   CreateApiKey,
@@ -23,8 +24,6 @@ import {
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
-
-import './apiKeyManagement.scss';
 
 function ApiKeyManagement() {
   const data = useLoaderData() as {
@@ -64,7 +63,7 @@ function ApiKeyManagement() {
   };
 
   return (
-    <div className='api-key-management-page'>
+    <>
       <h1>API Keys</h1>
       <p className='heading-details'>
         View and manage your API keys. For more information, see{' '}
@@ -81,7 +80,7 @@ function ApiKeyManagement() {
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
-            <>
+            <ScreenContentContainer>
               <KeyTable
                 apiKeys={apiKeys.filter((key) => !key.disabled)}
                 onKeyEdit={onKeyEdit}
@@ -89,23 +88,21 @@ function ApiKeyManagement() {
                 availableRoles={apiRoles}
               />
               {apiRoles.length > 0 && (
-                <div className='create-new-key'>
-                  <KeyCreationDialog
-                    availableRoles={apiRoles}
-                    onKeyCreation={onKeyCreation}
-                    triggerButton={
-                      <button className='small-button' type='button'>
-                        Create Key
-                      </button>
-                    }
-                  />
-                </div>
+                <KeyCreationDialog
+                  availableRoles={apiRoles}
+                  onKeyCreation={onKeyCreation}
+                  triggerButton={
+                    <button className='small-button' type='button'>
+                      Create Key
+                    </button>
+                  }
+                />
               )}
-            </>
+            </ScreenContentContainer>
           )}
         </Await>
       </Suspense>
-    </div>
+    </>
   );
 }
 

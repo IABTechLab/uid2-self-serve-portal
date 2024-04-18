@@ -5,6 +5,10 @@
   flex-direction: column;
   align-items: stretch;
 
+  h2 {
+    margin-top: 0;
+  }
+
   .key-pairs-table {
     font-size: 0.875rem;
 
@@ -42,6 +46,7 @@
   .key-pairs-table-header {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
 
     &-right {
       display: flex;
