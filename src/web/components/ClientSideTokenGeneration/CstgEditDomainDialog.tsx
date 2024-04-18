@@ -1,12 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
-import { parse } from 'tldts';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { EditDomainFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
-import { Form } from '../Core/Form';
-import { InlineMessage } from '../Core/InlineMessage';
+import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
 import { isValidDomain } from './CstgDomainHelper';
 
@@ -23,20 +20,33 @@ function EditDomainDialog({
   onOpenChange,
   existingDomains,
 }: EditDomainDialogProps) {
-  const [errorMessage, setErrorMessage] = useState<string>();
-  const defaultValues = {
-    domainName: domain,
-  };
+  const formMethods = useForm<EditDomainFormProps>({
+    defaultValues: {
+      domainName: domain,
+    },
+  });
 
-  const onSubmit: SubmitHandler<EditDomainFormProps> = (formData) => {
+  const {
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = formMethods;
+
+  const onSubmit = async (formData: EditDomainFormProps) => {
     const updatedDomainName = formData.domainName;
 
     if (!isValidDomain(updatedDomainName)) {
-      setErrorMessage('Domain name must be valid.');
+      setError('root.serverError', {
+        type: '400',
+        message: 'Domain name must be valid.',
+      });
     } else if (existingDomains.includes(updatedDomainName)) {
-      setErrorMessage('Domain name already exists.');
+      setError('root.serverError', {
+        type: '400',
+        message: 'Domain name already exists.',
+      });
     } else {
-      const originalDomainName = defaultValues.domainName;
+      const originalDomainName = domain;
       onEditDomainName(updatedDomainName, originalDomainName);
     }
   };
@@ -53,20 +63,23 @@ function EditDomainDialog({
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
-      {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-      <Form<EditDomainFormProps>
-        onSubmit={onSubmit}
-        defaultValues={defaultValues}
-        submitButtonText='Save Domain'
-      >
-        <TextInput
-          inputName='domainName'
-          label='Domain Name'
-          rules={{
-            required: 'Please specify domain name.',
-          }}
-        />
-      </Form>
+      <RootFormErrors fieldErrors={errors} />
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <TextInput
+            inputName='domainName'
+            label='Domain Name'
+            rules={{
+              required: 'Please specify domain name.',
+            }}
+          />
+          <div className='form-footer'>
+            <button type='submit' className='primary-button'>
+              Save Domain
+            </button>
+          </div>
+        </form>
+      </FormProvider>
     </Dialog>
   );
 }
