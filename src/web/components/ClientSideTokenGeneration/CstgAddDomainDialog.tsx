@@ -8,14 +8,19 @@ import { InlineMessage } from '../Core/InlineMessage';
 import { TextInput } from '../Input/TextInput';
 import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
-import '../KeyPairs/KeyPairDialog.scss';
+import './CstgAddDomainDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
   onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
   onOpenChange: () => void;
+  existingDomains?: string[];
 }>;
 
-function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialogProps) {
+function CstgAddDomainDialog({
+  onAddDomains,
+  onOpenChange,
+  existingDomains,
+}: AddDomainNamesDialogProps) {
   const [errorMessage, setErrorMessage] = useState<string>();
 
   const formMethods = useForm<AddDomainNamesFormProps>();
@@ -23,22 +28,29 @@ function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialo
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomainNamesFormatted = separateStringsCommaSeparatedList(formData.newDomainNames);
-    const allValid = newDomainNamesFormatted.every((newDomainName) => {
-      return isValidDomain(newDomainName);
-    });
-    if (!allValid) {
-      setErrorMessage('At least one domain you have entered is invalid, please try again.');
+    const deduplicateDomainNames = newDomainNamesFormatted.filter(
+      (domain) => !existingDomains?.includes(domain)
+    );
+    if (deduplicateDomainNames.length === 0) {
+      setErrorMessage('This domain(s) already exists.');
     } else {
-      // if all are valid but there are some non top-level domains, we make sure every domain is top-level
-      newDomainNamesFormatted.forEach((newDomainName, index) => {
-        newDomainNamesFormatted[index] = extractTopLevelDomain(newDomainName);
+      const allValid = deduplicateDomainNames.every((newDomainName) => {
+        return isValidDomain(newDomainName);
       });
-      await onAddDomains(newDomainNamesFormatted);
+      if (!allValid) {
+        setErrorMessage('At least one domain you have entered is invalid, please try again.');
+      } else {
+        // if all are valid but there are some non top-level domains, we make sure every domain is top-level
+        deduplicateDomainNames.forEach((newDomainName, index) => {
+          deduplicateDomainNames[index] = extractTopLevelDomain(newDomainName);
+        });
+        await onAddDomains(deduplicateDomainNames);
+      }
     }
   };
 
   return (
-    <div className='key-pair-dialog'>
+    <div className='add-domain-dialog'>
       <Dialog title='Add Domain(s)' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
         <FormProvider {...formMethods}>

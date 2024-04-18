@@ -142,6 +142,7 @@ export function CstgDomainsTable({
               <CstgAddDomainDialog
                 onAddDomains={onSubmitAddDomainDialog}
                 onOpenChange={onOpenChangeAddDomainDialog}
+                existingDomains={domains}
               />
             )}
           </div>
