@@ -34,8 +34,8 @@ function CreateApiKeyForm({
 }) {
   return (
     <>
-      <h1>Create API Key</h1>
-      <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
+      <h1>Add API Key</h1>
+      <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Add API Key'>
         <TextInput inputName='name' label='Name' required />
         <MultiCheckboxInput
           label='API Permissions'

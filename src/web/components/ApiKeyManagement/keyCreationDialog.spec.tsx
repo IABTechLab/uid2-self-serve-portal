@@ -48,7 +48,7 @@ async function clickApiRole(apiRole: ApiRoleDTO) {
 }
 
 async function submitForm() {
-  const createButton = screen.getByRole('button', { name: 'Create API Key' });
+  const createButton = screen.getByRole('button', { name: 'Add API Key' });
   await userEvent.click(createButton);
 }
 
