@@ -84,9 +84,10 @@ function ClientSideIntegration() {
     }
   };
 
-  const onAddDomainNames = async (newDomainNamesFormatted: string[]) => {
-    if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames], 'added');
-    else handleUpdateDomainNames(newDomainNamesFormatted, 'added');
+  const onAddDomainNames = async (newDomains: string[]) => {
+    let updatedDomains = newDomains;
+    if (domainNames) updatedDomains = [...newDomains, ...domainNames];
+    handleUpdateDomainNames(updatedDomains, 'added');
   };
 
   return (
