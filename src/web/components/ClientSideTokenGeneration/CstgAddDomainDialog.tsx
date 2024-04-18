@@ -40,7 +40,7 @@ function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialo
 
   return (
     <div className='key-pair-dialog'>
-      <Dialog title='Add Domains' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
+      <Dialog title='Add Domain(s)' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -48,7 +48,7 @@ function CstgAddDomainDialog({ onAddDomains, onOpenChange }: AddDomainNamesDialo
             <TextInput
               inputName='newDomainNames'
               label='Domain Names'
-              rules={{ required: 'Please specify domain name.' }}
+              rules={{ required: 'Please specify domain name(s).' }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
