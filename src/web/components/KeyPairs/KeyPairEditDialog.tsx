@@ -67,7 +67,7 @@ function KeyPairEditDialog({
               validate: (value: string) =>
                 validateUniqueKeyPairName(
                   value,
-                  existingKeyPairs.filter((kp) => kp !== keyPairInitial)
+                  existingKeyPairs.filter((kp) => ![keyPairInitial].includes(kp))
                 ),
             }}
           />
