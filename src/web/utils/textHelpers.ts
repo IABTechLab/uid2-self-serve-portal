@@ -23,3 +23,13 @@ export function formatUnixDate(timeValue: number) {
   const date = new Date(secondToMilliseconds(timeValue));
   return date.toLocaleDateString();
 }
+
+export const separateStringsCommaSeparatedList = (strings: string): string[] => {
+  if (strings === '') return [];
+  const stringsList = strings.split(/, |,/);
+  return stringsList;
+};
+
+export const deduplicateStrings = (strings: string[]) => {
+  return strings.filter((val, index, arr) => arr.indexOf(val) === index);
+};

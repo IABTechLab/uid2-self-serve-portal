@@ -39,7 +39,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
   const { handleSubmit } = formMethods;
   return (
     <>
-      <h1>Create API Key</h1>
+      <h1>Add API Key</h1>
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <TextInput

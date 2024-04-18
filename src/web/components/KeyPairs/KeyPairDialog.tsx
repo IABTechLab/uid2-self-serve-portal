@@ -35,7 +35,7 @@ function KeyPairDialog({
 
   return (
     <div className='key-pair-dialog'>
-      <Dialog title='Create Key Pair' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
+      <Dialog title='Add Key Pair' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextInput

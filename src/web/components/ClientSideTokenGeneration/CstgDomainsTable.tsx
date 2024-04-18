@@ -5,8 +5,8 @@ import { useState } from 'react';
 import { Dialog } from '../Core/Dialog';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import CstgAddDomainDialog from './CstgAddDomainDialog';
 import { CstgDomainItem } from './CstgDomain';
-import { CstgDomainInputRow } from './CstgDomainInputRow';
 
 import './CstgDomainsTable.scss';
 
@@ -58,13 +58,18 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
   );
 }
 
-type CstgDomainsTableProps = {
+type CstgDomainsTableProps = Readonly<{
   domains: string[];
   onUpdateDomains: (domains: string[]) => Promise<void>;
-};
+  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
+}>;
 
-export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableProps) {
-  const [showNewRow, setShowNewRow] = useState<boolean>(false);
+export function CstgDomainsTable({
+  domains,
+  onUpdateDomains,
+  onAddDomains,
+}: CstgDomainsTableProps) {
+  const [showAddDomainsDialog, setShowAddDomainsDialog] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
@@ -100,13 +105,14 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
     }
   };
 
-  const toggleAddRow = () => {
-    setShowNewRow((prev) => !prev);
+  const onOpenChangeAddDomainDialog = () => {
+    setShowAddDomainsDialog(!showAddDomainsDialog);
   };
 
-  const handleAddNewDomain = async (newDomain: string) => {
-    await onUpdateDomains([...domains, newDomain]);
-    setShowNewRow(false);
+  const onSubmitAddDomainDialog = async (newDomainNamesFormatted: string[]) => {
+    await onAddDomains(newDomainNamesFormatted);
+    setShowAddDomainsDialog(false);
+    setSelectedDomains([]);
   };
 
   return (
@@ -129,14 +135,16 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
         </div>
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
-            <button
-              className='small-button'
-              type='button'
-              disabled={showNewRow}
-              onClick={toggleAddRow}
-            >
+            <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
               Add Domain
             </button>
+            {showAddDomainsDialog && (
+              <CstgAddDomainDialog
+                onAddDomains={onSubmitAddDomainDialog}
+                onOpenChange={onOpenChangeAddDomainDialog}
+                existingDomains={domains}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -158,15 +166,9 @@ export function CstgDomainsTable({ domains, onUpdateDomains }: CstgDomainsTableP
               checked={isDomainSelected(domain)}
             />
           ))}
-          {showNewRow && (
-            <CstgDomainInputRow
-              onAdd={(newDomain) => handleAddNewDomain(newDomain)}
-              onCancel={toggleAddRow}
-            />
-          )}
         </tbody>
       </table>
-      {!domains.length && !showNewRow && (
+      {!domains.length && (
         <TableNoDataPlaceholder title='No Top-Level Domains'>
           <span>There are no top-level domains.</span>
         </TableNoDataPlaceholder>

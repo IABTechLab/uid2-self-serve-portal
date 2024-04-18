@@ -95,7 +95,7 @@ function ApiKeyManagement() {
                     onKeyCreation={onKeyCreation}
                     triggerButton={
                       <button className='small-button' type='button'>
-                        Create Key
+                        Add API Key
                       </button>
                     }
                   />

@@ -78,10 +78,15 @@ function ClientSideIntegration() {
     try {
       const response = await UpdateDomainNames(newDomainNames);
       setDomainNames(response);
-      SuccessToast('Domain Names updated.');
+      SuccessToast('Domain Name(s) added.');
     } catch (e) {
       handleErrorToast(e);
     }
+  };
+
+  const onAddDomainNames = async (newDomainNamesFormatted: string[]) => {
+    if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames]);
+    else handleUpdateDomainNames(newDomainNamesFormatted);
   };
 
   return (
@@ -108,7 +113,11 @@ function ClientSideIntegration() {
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}
         />
-        <CstgDomainsTable domains={domainNames || []} onUpdateDomains={handleUpdateDomainNames} />
+        <CstgDomainsTable
+          domains={domainNames || []}
+          onAddDomains={onAddDomainNames}
+          onUpdateDomains={handleUpdateDomainNames}
+        />
       </div>
     </>
   );
