@@ -29,3 +29,7 @@ export const separateStringsCommaSeparatedList = (strings: string): string[] => 
   const stringsList = strings.split(/, |,/);
   return stringsList;
 };
+
+export const deduplicateStrings = (strings: string[]) => {
+  return strings.filter((val, index, arr) => arr.indexOf(val) === index);
+};

@@ -20,7 +20,13 @@ describe('CstgDomainAddDomainDialog', () => {
       return Promise.resolve();
     });
 
-    render(<CstgAddDomainDialog onAddDomains={onAddDomainsMock} onOpenChange={() => {}} />);
+    render(
+      <CstgAddDomainDialog
+        onAddDomains={onAddDomainsMock}
+        onOpenChange={() => {}}
+        existingDomains={[]}
+      />
+    );
 
     await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test.com');
 
@@ -42,7 +48,13 @@ describe('CstgDomainAddDomainDialog', () => {
       return Promise.resolve();
     });
 
-    render(<CstgAddDomainDialog onAddDomains={onAddDomainsMock} onOpenChange={() => {}} />);
+    render(
+      <CstgAddDomainDialog
+        onAddDomains={onAddDomainsMock}
+        onOpenChange={() => {}}
+        existingDomains={[]}
+      />
+    );
 
     await user.type(
       screen.getByRole('textbox', { name: 'newDomainNames' }),
@@ -73,7 +85,9 @@ describe('CstgDomainAddDomainDialog', () => {
 
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('At least one domain you have entered is invalid, please try again.')
+    ).toBeInTheDocument();
   });
 
   it('should render error if user types in at least one incorrect domain in a list', async () => {
@@ -84,13 +98,15 @@ describe('CstgDomainAddDomainDialog', () => {
 
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('At least one domain you have entered is invalid, please try again.')
+    ).toBeInTheDocument();
   });
 
   it('should render error if user submits empty text box for domain names', async () => {
     render(<Default />);
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(screen.getByText('Please specify domain name(s).')).toBeInTheDocument();
   });
 });
