@@ -8,7 +8,7 @@ import { Dialog } from '../Core/Dialog';
 import { Form } from '../Core/Form';
 import { InlineMessage } from '../Core/InlineMessage';
 import { TextInput } from '../Input/TextInput';
-import { isDuplicateDomain, isValidDomain } from './CstgDomainHelper';
+import { isValidDomain } from './CstgDomainHelper';
 
 type EditDomainDialogProps = Readonly<{
   domain: string;
@@ -31,9 +31,9 @@ function EditDomainDialog({
   const onSubmit: SubmitHandler<EditDomainFormProps> = (formData) => {
     const updatedDomainName = formData.domainName;
 
-    if (!isValidDomain(parse(updatedDomainName))) {
+    if (!isValidDomain(updatedDomainName)) {
       setErrorMessage('Domain name must be valid.');
-    } else if (isDuplicateDomain(updatedDomainName, existingDomains)) {
+    } else if (existingDomains.includes(updatedDomainName)) {
       setErrorMessage('Domain name already exists.');
     } else {
       const originalDomainName = defaultValues.domainName;

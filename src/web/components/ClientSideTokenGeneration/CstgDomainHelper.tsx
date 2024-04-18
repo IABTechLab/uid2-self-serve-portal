@@ -1,15 +1,20 @@
+import { parse } from 'tldts';
+
 type DomainProps = {
   isIcann: boolean | null;
   isPrivate: boolean | null;
-  domain: string | null;
+  domain?: string | null;
 };
 
-type ValidDomainProps = Omit<DomainProps, 'domain'> & { domain: string };
-
-export const isValidDomain = (domainProps: DomainProps): domainProps is ValidDomainProps => {
+export const isValidDomain = (domainName: string) => {
+  const domainProps: DomainProps = parse(domainName);
   return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
 };
 
-export const isDuplicateDomain = (domain: string, existingDomainNames: string[]) => {
-  return existingDomainNames.includes(domain);
+export const extractTopLevelDomain = (domainName: string) => {
+  const topLevelDomain = parse(domainName).domain;
+  if (topLevelDomain && topLevelDomain !== domainName) {
+    return topLevelDomain;
+  }
+  return domainName;
 };

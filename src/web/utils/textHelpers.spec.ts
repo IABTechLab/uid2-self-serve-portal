@@ -1,5 +1,5 @@
 import {
-  extractTopLevelDomain,
+  deduplicateStrings,
   formatStringsWithSeparator,
   formatUnixDate,
   getArticle,
@@ -76,12 +76,22 @@ describe('Text helper tests', () => {
     });
   });
 
-  describe('turn valid domains into top-level domains', () => {
-    it.each(['test.com', 'https://test.com', 'http://test.com'])(
-      'should return a top-level domain',
-      (stringsList) => {
-        expect(extractTopLevelDomain(stringsList)).toEqual('test.com');
+  describe('filter out duplicate elements', () => {
+    const testStringArr = [['test1', 'test1'], ['test1'], ['test1', 'test1']];
+    it.each(testStringArr)('should return array of only one unique element', () => {
+      for (const t of testStringArr) {
+        expect(deduplicateStrings(t)).toEqual(['test1']);
       }
-    );
+    });
+    const testStringArr2 = [
+      ['test1', 'test1', 'test2'],
+      ['test1', 'test2'],
+      ['test1', 'test1', 'test2', 'test2'],
+    ];
+    it.each(testStringArr2)('should return array of only one unique element', () => {
+      for (const t of testStringArr2) {
+        expect(deduplicateStrings(t)).toEqual(['test1', 'test2']);
+      }
+    });
   });
 });
