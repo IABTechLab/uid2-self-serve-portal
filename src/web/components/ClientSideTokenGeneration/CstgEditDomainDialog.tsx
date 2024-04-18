@@ -34,8 +34,10 @@ function EditDomainDialog({
 
   const onSubmit = async (formData: EditDomainFormProps) => {
     const updatedDomainName = formData.domainName;
-
-    if (!isValidDomain(updatedDomainName)) {
+    const originalDomainName = domain;
+    if (updatedDomainName === originalDomainName) {
+      onOpenChange();
+    } else if (!isValidDomain(updatedDomainName)) {
       setError('root.serverError', {
         type: '400',
         message: 'Domain name must be valid.',
@@ -46,7 +48,6 @@ function EditDomainDialog({
         message: 'Domain name already exists.',
       });
     } else {
-      const originalDomainName = domain;
       onEditDomainName(updatedDomainName, originalDomainName);
     }
   };
