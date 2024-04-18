@@ -3,30 +3,28 @@ import { useState } from 'react';
 
 import { Dialog } from '../Core/Dialog';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
+import CstgEditDomainDialog from './CstgEditDomainDialog';
 
-type DeleteConfirmationDialogProps = {
+type DeleteConfirmationDialogProps = Readonly<{
   domain: string;
   onRemoveDomain: () => void;
-};
+  onOpenChange: () => void;
+}>;
 
-function DeleteConfirmationDialog({ domain, onRemoveDomain }: DeleteConfirmationDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-
-  const handleRemove = async () => {
-    setOpenConfirmation(false);
-    await onRemoveDomain();
+function DeleteConfirmationDialog({
+  domain,
+  onRemoveDomain,
+  onOpenChange,
+}: DeleteConfirmationDialogProps) {
+  const handleRemove = () => {
+    onRemoveDomain();
   };
 
   return (
     <Dialog
       title='Are you sure you want to delete this domain?'
-      triggerButton={
-        <button type='button' className='icon-button' aria-label='delete-domain-name'>
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
-      }
-      open={openConfirmation}
-      onOpenChange={setOpenConfirmation}
+      open
+      onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
       <ul className='dot-list'>
@@ -41,14 +39,33 @@ function DeleteConfirmationDialog({ domain, onRemoveDomain }: DeleteConfirmation
   );
 }
 
-type CstgDomainItemProps = {
+type CstgDomainItemProps = Readonly<{
   domain: string;
+  existingDomains: string[];
   onClick: () => void;
+  onEditDomain: (newDomainName: string, originalDomainName: string) => void;
   onDelete: () => void;
   checked: boolean;
-};
+}>;
 
-export function CstgDomainItem({ domain, onClick, onDelete, checked }: CstgDomainItemProps) {
+export function CstgDomainItem({
+  domain,
+  existingDomains,
+  onClick,
+  onDelete,
+  onEditDomain,
+  checked,
+}: CstgDomainItemProps) {
+  const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+
+  const onEditDialogChange = () => {
+    setShowEditDialog(!showEditDialog);
+  };
+
+  const onDeleteDialogChange = () => {
+    setShowDeleteDialog(!showDeleteDialog);
+  };
   return (
     <tr>
       <td>
@@ -57,7 +74,41 @@ export function CstgDomainItem({ domain, onClick, onDelete, checked }: CstgDomai
       <td className='domain'>{domain}</td>
       <td className='action'>
         <div className='action-cell'>
-          <DeleteConfirmationDialog domain={domain} onRemoveDomain={onDelete} />
+          <button
+            type='button'
+            className='icon-button'
+            title='Edit'
+            onClick={() => {
+              setShowEditDialog(true);
+            }}
+          >
+            <FontAwesomeIcon icon='pencil' />
+          </button>
+          {showEditDialog && (
+            <CstgEditDomainDialog
+              domain={domain}
+              existingDomains={existingDomains}
+              onEditDomainName={onEditDomain}
+              onOpenChange={onEditDialogChange}
+            />
+          )}
+          <button
+            type='button'
+            className='icon-button'
+            aria-label='delete-domain-name'
+            onClick={() => {
+              setShowDeleteDialog(true);
+            }}
+          >
+            <FontAwesomeIcon icon='trash-can' />
+          </button>
+          {showDeleteDialog && (
+            <DeleteConfirmationDialog
+              domain={domain}
+              onRemoveDomain={onDelete}
+              onOpenChange={onDeleteDialogChange}
+            />
+          )}
         </div>
       </td>
     </tr>

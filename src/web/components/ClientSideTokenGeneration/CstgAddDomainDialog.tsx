@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { parse } from 'tldts';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
 import { separateStringsCommaSeparatedList } from '../../utils/textHelpers';
