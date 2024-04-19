@@ -5,7 +5,7 @@ import { EditDomainFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
-import { isValidDomain } from './CstgDomainHelper';
+import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
 type EditDomainDialogProps = Readonly<{
   domain: string;
@@ -35,20 +35,23 @@ function EditDomainDialog({
   const onSubmit = async (formData: EditDomainFormProps) => {
     const updatedDomainName = formData.domainName;
     const originalDomainName = domain;
-    if (updatedDomainName === originalDomainName) {
-      onOpenChange();
-    } else if (!isValidDomain(updatedDomainName)) {
+    if (!isValidDomain(updatedDomainName)) {
       setError('root.serverError', {
         type: '400',
         message: 'Domain name must be valid.',
       });
-    } else if (existingDomains.includes(updatedDomainName)) {
+      return;
+    }
+    const updatedTopLevelDomain = extractTopLevelDomain(updatedDomainName);
+    if (updatedTopLevelDomain === originalDomainName) {
+      onOpenChange();
+    } else if (existingDomains.includes(updatedTopLevelDomain)) {
       setError('root.serverError', {
         type: '400',
         message: 'Domain name already exists.',
       });
     } else {
-      onEditDomainName(updatedDomainName, originalDomainName);
+      onEditDomainName(updatedTopLevelDomain, originalDomainName);
     }
   };
 
