@@ -6,7 +6,7 @@ import { Dialog } from '../Core/Dialog';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
-import { CstgDomainItem } from './CstgDomain';
+import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
 

@@ -1,43 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
-import { Dialog } from '../Core/Dialog';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
+import CstgDeleteDomainConfirmationDialog from './CstgDeleteDomainConfirmationDialog';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
-
-type DeleteConfirmationDialogProps = Readonly<{
-  domain: string;
-  onRemoveDomain: () => void;
-  onOpenChange: () => void;
-}>;
-
-function DeleteConfirmationDialog({
-  domain,
-  onRemoveDomain,
-  onOpenChange,
-}: DeleteConfirmationDialogProps) {
-  const handleRemove = () => {
-    onRemoveDomain();
-  };
-
-  return (
-    <Dialog
-      title='Are you sure you want to delete this domain?'
-      open
-      onOpenChange={onOpenChange}
-      closeButtonText='Cancel'
-    >
-      <ul className='dot-list'>
-        <li>{domain}</li>
-      </ul>
-      <div className='dialog-footer-section'>
-        <button type='button' className='primary-button' onClick={handleRemove}>
-          Delete Domain
-        </button>
-      </div>
-    </Dialog>
-  );
-}
 
 type CstgDomainItemProps = Readonly<{
   domain: string;
@@ -103,7 +69,7 @@ export function CstgDomainItem({
             <FontAwesomeIcon icon='trash-can' />
           </button>
           {showDeleteDialog && (
-            <DeleteConfirmationDialog
+            <CstgDeleteDomainConfirmationDialog
               domain={domain}
               onRemoveDomain={onDelete}
               onOpenChange={onDeleteDialogChange}
