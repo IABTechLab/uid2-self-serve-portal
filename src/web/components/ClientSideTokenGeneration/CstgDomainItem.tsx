@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
-import CstgDeleteDomainConfirmationDialog from './CstgDeleteDomainConfirmationDialog';
+import CstgDeleteDomainConfirmationDialog from './CstgDeleteDomainDialog';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
 
 type CstgDomainItemProps = Readonly<{

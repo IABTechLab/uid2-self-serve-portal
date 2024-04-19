@@ -46,36 +46,34 @@ function KeyPairEditDialog({
   };
 
   return (
-    <div className='key-edit-dialog'>
-      <Dialog
-        closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-        triggerButton={triggerButton}
-        title={`Edit Key Pair: ${keyPair.name}`}
+    <Dialog
+      closeButtonText='Cancel'
+      open={open}
+      onOpenChange={setOpen}
+      triggerButton={triggerButton}
+      title={`Edit Key Pair: ${keyPair.name}`}
+    >
+      <Form<EditKeyPairFormDTO>
+        onSubmit={onSubmit}
+        defaultValues={defaultFormData}
+        submitButtonText='Save Key Pair'
       >
-        <Form<EditKeyPairFormDTO>
-          onSubmit={onSubmit}
-          defaultValues={defaultFormData}
-          submitButtonText='Save Key Pair'
-        >
-          <TextInput
-            inputName='name'
-            label='Name'
-            rules={{
-              required: 'Please specify key pair name.',
-              validate: (value: string) =>
-                validateUniqueKeyPairName(
-                  value,
-                  existingKeyPairs.filter((kp) => ![keyPairInitial].includes(kp))
-                ),
-            }}
-          />
-          <TextInput inputName='subscriptionId' label='Subscription ID' disabled />
-          <TextInput inputName='publicKey' label='Public Key' disabled />
-        </Form>
-      </Dialog>
-    </div>
+        <TextInput
+          inputName='name'
+          label='Name'
+          rules={{
+            required: 'Please specify key pair name.',
+            validate: (value: string) =>
+              validateUniqueKeyPairName(
+                value,
+                existingKeyPairs.filter((kp) => ![keyPairInitial].includes(kp))
+              ),
+          }}
+        />
+        <TextInput inputName='subscriptionId' label='Subscription ID' disabled />
+        <TextInput inputName='publicKey' label='Public Key' disabled />
+      </Form>
+    </Dialog>
   );
 }
 export default KeyPairEditDialog;
