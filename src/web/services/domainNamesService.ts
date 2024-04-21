@@ -6,6 +6,10 @@ export type AddDomainNamesFormProps = {
   newDomainNames: string;
 };
 
+export type EditDomainFormProps = {
+  domainName: string;
+};
+
 export async function GetDomainNames(participantId?: number) {
   try {
     const result = await axios.get<string[]>(

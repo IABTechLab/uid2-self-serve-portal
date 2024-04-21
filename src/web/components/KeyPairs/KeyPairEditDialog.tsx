@@ -32,7 +32,9 @@ function KeyPairEditDialog({
   const [keyPair, setKeyPair] = useState<KeyPairModel>(keyPairInitial);
 
   const onSubmit = async (formData: EditKeyPairFormDTO) => {
-    await onEdit(formData, setKeyPair);
+    if (formData.name !== keyPairInitial.name) {
+      await onEdit(formData, setKeyPair);
+    }
     setOpen(false);
   };
 
@@ -49,7 +51,7 @@ function KeyPairEditDialog({
   const { handleSubmit } = formMethods;
 
   return (
-    <div className='key-edit-dialog'>
+    <div>
       <Dialog
         closeButtonText='Cancel'
         open={open}
@@ -64,7 +66,11 @@ function KeyPairEditDialog({
               label='Name'
               rules={{
                 required: 'Please specify a key pair name.',
-                validate: (value: string) => validateUniqueKeyPairName(value, existingKeyPairs),
+                validate: (value: string) =>
+                  validateUniqueKeyPairName(
+                    value,
+                    existingKeyPairs.filter((kp) => ![keyPairInitial].includes(kp))
+                  ),
               }}
             />
             <TextInput inputName='subscriptionId' label='Subscription ID' disabled />

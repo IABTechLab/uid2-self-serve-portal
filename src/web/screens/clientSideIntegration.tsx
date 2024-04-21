@@ -74,19 +74,20 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
-  const handleUpdateDomainNames = async (newDomainNames: string[]) => {
+  const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
     try {
-      const response = await UpdateDomainNames(newDomainNames);
+      const response = await UpdateDomainNames(updatedDomainNames);
       setDomainNames(response);
-      SuccessToast('Domain Name(s) added.');
+      SuccessToast(`Domain name(s) ${action}.`);
     } catch (e) {
       handleErrorToast(e);
     }
   };
 
-  const onAddDomainNames = async (newDomainNamesFormatted: string[]) => {
-    if (domainNames) handleUpdateDomainNames([...newDomainNamesFormatted, ...domainNames]);
-    else handleUpdateDomainNames(newDomainNamesFormatted);
+  const onAddDomainNames = async (newDomains: string[]) => {
+    let updatedDomains = newDomains;
+    if (domainNames) updatedDomains = [...newDomains, ...domainNames];
+    handleUpdateDomainNames(updatedDomains, 'added');
   };
 
   return (
