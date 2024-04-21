@@ -4,6 +4,7 @@ import { AddDomainNamesFormProps } from '../../services/domainNamesService';
 import { deduplicateStrings, separateStringsCommaSeparatedList } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
+import { MultilineTextInput } from '../Input/MultilineTextInput';
 import { TextInput } from '../Input/TextInput';
 import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
@@ -63,7 +64,7 @@ function CstgAddDomainDialog({
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             You may enter a single domain or enter domains as a comma separated list.
-            <TextInput
+            <MultilineTextInput
               inputName='newDomainNames'
               label='Domain Name(s)'
               rules={{ required: 'Please specify domain name(s).' }}
