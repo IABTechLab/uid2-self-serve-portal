@@ -34,9 +34,8 @@ function CstgAddDomainDialog({
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomainNames = separateStringsList(formData.newDomainNames);
-    // filter for uniqueness on what the user entered AND against existing domains
-    const dedupedDomains = deduplicateStrings(newDomainNames);
-    const uniqueDomains = dedupedDomains.filter((domain) => !existingDomains?.includes(domain));
+    // filter out domain names that already exist in the list
+    const uniqueDomains = newDomainNames.filter((domain) => !existingDomains?.includes(domain));
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
@@ -64,7 +63,9 @@ function CstgAddDomainDialog({
         uniqueDomains.forEach((newDomainName, index) => {
           uniqueDomains[index] = extractTopLevelDomain(newDomainName);
         });
-        await onAddDomains(uniqueDomains);
+        // filter for uniqueness (e.g. 2 different domains entered could have the same top-level domain)
+        const dedupedDomains = deduplicateStrings(uniqueDomains);
+        await onAddDomains(dedupedDomains);
       }
     }
   };
