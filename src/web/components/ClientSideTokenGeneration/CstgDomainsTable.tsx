@@ -150,7 +150,7 @@ export function CstgDomainsTable({
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
-              Add Domain
+              Add Domain(s)
             </button>
             {showAddDomainsDialog && (
               <CstgAddDomainDialog

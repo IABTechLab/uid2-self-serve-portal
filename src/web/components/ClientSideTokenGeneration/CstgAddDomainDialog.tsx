@@ -84,7 +84,7 @@ function CstgAddDomainDialog({
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                Add domains
+                Add domain(s)
               </button>
             </div>
           </form>

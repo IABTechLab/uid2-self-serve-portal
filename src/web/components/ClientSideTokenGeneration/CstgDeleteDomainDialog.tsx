@@ -1,5 +1,7 @@
 import { Dialog } from '../Core/Dialog';
 
+import './CstgDeleteDomainDialog.scss';
+
 type DeleteConfirmationDialogProps = Readonly<{
   domain: string;
   onRemoveDomain: () => void;

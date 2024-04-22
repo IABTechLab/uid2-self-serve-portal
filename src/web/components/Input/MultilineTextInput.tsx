@@ -9,7 +9,13 @@ import './Input.scss';
 export function MultilineTextInput<
   TFieldValues extends FieldValues,
   TPath extends FieldPathByValue<TFieldValues, string>
->({ inputName, label, rules, ...rest }: BaseInputProps<TFieldValues, TPath>) {
+>({
+  inputName,
+  label,
+  rules,
+  className,
+  ...rest
+}: BaseInputProps<TFieldValues, TPath> & React.InputHTMLAttributes<HTMLTextAreaElement>) {
   const { control } = useFormContext<TFieldValues>();
   const {
     field,
@@ -24,7 +30,7 @@ export function MultilineTextInput<
   return (
     <Input error={error} label={label} inputName={inputName}>
       <textarea
-        className='multi-line-input-container'
+        className={clsx('multi-line-input-container', { withError: error }, className)}
         {...safeField}
         aria-label={inputName}
         aria-invalid={error ? 'true' : 'false'}
