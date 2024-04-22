@@ -1,7 +1,11 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
-import { deduplicateStrings, separateStringsCommaSeparatedList } from '../../utils/textHelpers';
+import {
+  deduplicateStrings,
+  formatStringsWithSeparator,
+  separateStringsList,
+} from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
@@ -29,7 +33,7 @@ function CstgAddDomainDialog({
   } = formMethods;
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomainNames = separateStringsCommaSeparatedList(formData.newDomainNames);
+    const newDomainNames = separateStringsList(formData.newDomainNames);
     // filter for uniqueness on what the user entered AND against existing domains
     const dedupedDomains = deduplicateStrings(newDomainNames);
     const uniqueDomains = dedupedDomains.filter((domain) => !existingDomains?.includes(domain));
@@ -39,13 +43,21 @@ function CstgAddDomainDialog({
         message: 'The domain(s) you have entered already exist.',
       });
     } else {
-      const allValid = uniqueDomains.every((newDomainName) => {
-        return isValidDomain(newDomainName);
+      const invalidDomains: string[] = [];
+      let allValid = true;
+      uniqueDomains.forEach((newDomainName) => {
+        if (!isValidDomain(newDomainName)) {
+          invalidDomains.push(newDomainName);
+          allValid = false;
+        }
       });
       if (!allValid) {
+        const message = `Some domains you have entered are invalid: ${formatStringsWithSeparator(
+          invalidDomains
+        )}`;
         setError('root.serverError', {
           type: '400',
-          message: 'At least one domain you have entered is invalid, please try again.',
+          message,
         });
       } else {
         // if all are valid but there are some non top-level domains, we make sure every domain is top-level
@@ -63,7 +75,7 @@ function CstgAddDomainDialog({
         <RootFormErrors fieldErrors={errors} />
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            You may enter a single domain or enter domains as a comma separated list.
+            You may enter a single or multiple domains.
             <MultilineTextInput
               inputName='newDomainNames'
               label='Domain Name(s)'

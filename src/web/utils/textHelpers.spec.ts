@@ -4,7 +4,7 @@ import {
   formatUnixDate,
   getArticle,
   isVowel,
-  separateStringsCommaSeparatedList,
+  separateStringsList,
 } from './textHelpers';
 
 describe('Text helper tests', () => {
@@ -65,14 +65,14 @@ describe('Text helper tests', () => {
     it.each(['test1, test2, test3', 'test1,test2,test3', 'test1, test2,test3'])(
       'should return list of strings',
       (stringsList) => {
-        expect(separateStringsCommaSeparatedList(stringsList)).toEqual(['test1', 'test2', 'test3']);
+        expect(separateStringsList(stringsList)).toEqual(['test1', 'test2', 'test3']);
       }
     );
     it('should return single string array', () => {
-      expect(separateStringsCommaSeparatedList('test')).toEqual(['test']);
+      expect(separateStringsList('test')).toEqual(['test']);
     });
     it('should return empty array', () => {
-      expect(separateStringsCommaSeparatedList('')).toEqual([]);
+      expect(separateStringsList('')).toEqual([]);
     });
   });
 
