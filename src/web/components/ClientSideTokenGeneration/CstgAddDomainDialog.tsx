@@ -1,16 +1,22 @@
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
-import { deduplicateStrings, separateStringsCommaSeparatedList } from '../../utils/textHelpers';
+import {
+  deduplicateStrings,
+  formatStringsWithSeparator,
+  separateStringsList,
+} from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
-import { TextInput } from '../Input/TextInput';
+import { MultilineTextInput } from '../Input/MultilineTextInput';
+import { StyledCheckbox } from '../Input/StyledCheckbox';
 import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
 import './CstgAddDomainDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
-  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
+  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
   onOpenChange: () => void;
   existingDomains: string[];
 }>;
@@ -20,6 +26,7 @@ function CstgAddDomainDialog({
   onOpenChange,
   existingDomains,
 }: AddDomainNamesDialogProps) {
+  const [deleteExistingList, setDeleteExistingList] = useState<boolean>(false);
   const formMethods = useForm<AddDomainNamesFormProps>();
   const {
     handleSubmit,
@@ -28,49 +35,70 @@ function CstgAddDomainDialog({
   } = formMethods;
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomainNames = separateStringsCommaSeparatedList(formData.newDomainNames);
-    // filter for uniqueness on what the user entered AND against existing domains
-    const dedupedDomains = deduplicateStrings(newDomainNames);
-    const uniqueDomains = dedupedDomains.filter((domain) => !existingDomains?.includes(domain));
+    const newDomains = separateStringsList(formData.newDomains);
+    // filter out domain names that already exist in the list unless existing list is being deleted
+    const uniqueDomains = deleteExistingList
+      ? newDomains
+      : newDomains.filter((domain) => !existingDomains?.includes(domain));
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
-        message: 'The domain(s) you have entered already exist.',
+        message: 'The domains entered already exist.',
       });
     } else {
-      const allValid = uniqueDomains.every((newDomainName) => {
-        return isValidDomain(newDomainName);
+      const invalidDomains: string[] = [];
+      let allValid = true;
+      uniqueDomains.forEach((newDomain) => {
+        if (!isValidDomain(newDomain)) {
+          invalidDomains.push(newDomain);
+          allValid = false;
+        }
       });
       if (!allValid) {
         setError('root.serverError', {
           type: '400',
-          message: 'At least one domain you have entered is invalid, please try again.',
+          message: `The domains entered are invalid: ${formatStringsWithSeparator(invalidDomains)}`,
         });
       } else {
         // if all are valid but there are some non top-level domains, we make sure every domain is top-level
-        uniqueDomains.forEach((newDomainName, index) => {
-          uniqueDomains[index] = extractTopLevelDomain(newDomainName);
+        uniqueDomains.forEach((newDomain, index) => {
+          uniqueDomains[index] = extractTopLevelDomain(newDomain);
         });
-        await onAddDomains(uniqueDomains);
+        // filter for uniqueness (e.g. 2 different domains entered could have the same top-level domain)
+        const dedupedDomains = deduplicateStrings(uniqueDomains);
+        await onAddDomains(dedupedDomains, deleteExistingList);
       }
     }
   };
 
+  const onClickCheckbox = () => {
+    setDeleteExistingList(!deleteExistingList);
+  };
+
   return (
     <div className='add-domain-dialog'>
-      <Dialog title='Add Domain(s)' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
+      <Dialog title='Add Domains' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         <RootFormErrors fieldErrors={errors} />
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            You may enter a single domain or enter domains as a comma separated list.
-            <TextInput
-              inputName='newDomainNames'
-              label='Domain Name(s)'
-              rules={{ required: 'Please specify domain name(s).' }}
+            Add one or more domains. <br />
+            Valid separators: comma, semicolon, space, tab, or new line.
+            <div className='checkbox-container'>
+              <StyledCheckbox
+                className='checkbox'
+                onClick={onClickCheckbox}
+                checked={deleteExistingList}
+              />
+              Replace all existing domains with the new ones.
+            </div>
+            <MultilineTextInput
+              inputName='newDomains'
+              label='Domains'
+              rules={{ required: 'Please specify domains.' }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                Add domains
+                {deleteExistingList ? 'Replace' : 'Add'} Domains
               </button>
             </div>
           </form>

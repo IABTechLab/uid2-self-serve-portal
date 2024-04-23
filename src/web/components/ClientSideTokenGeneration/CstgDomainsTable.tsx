@@ -2,66 +2,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useState } from 'react';
 
-import { Dialog } from '../Core/Dialog';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
+import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
 
-type DeleteDomainDialogProps = {
-  onDeleteDomains: () => void;
-  selectedDomains: string[];
-};
-
-function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-
-  const handleDeleteDomain = () => {
-    onDeleteDomains();
-    setOpenConfirmation(false);
-  };
-
-  return (
-    <Dialog
-      title='Are you sure you want to delete these domains?'
-      triggerButton={
-        <button className='transparent-button table-action-button' type='button'>
-          <FontAwesomeIcon icon={['far', 'trash-can']} className='cstg-domains-management-icon' />
-          Delete Domains
-        </button>
-      }
-      open={openConfirmation}
-      onOpenChange={setOpenConfirmation}
-    >
-      <div className='dialog-body-section'>
-        <ul className='dot-list'>
-          {selectedDomains.map((domain) => (
-            <li key={domain}>{domain}</li>
-          ))}
-        </ul>
-      </div>
-      <div className='dialog-footer-section'>
-        <button type='button' className='primary-button' onClick={handleDeleteDomain}>
-          Delete Domains
-        </button>
-        <button
-          type='button'
-          className='transparent-button'
-          onClick={() => setOpenConfirmation(false)}
-        >
-          Cancel
-        </button>
-      </div>
-    </Dialog>
-  );
-}
-
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
   onUpdateDomains: (domains: string[], action: string) => Promise<void>;
-  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
+  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
 }>;
 
 export function CstgDomainsTable({
@@ -70,6 +22,7 @@ export function CstgDomainsTable({
   onAddDomains,
 }: CstgDomainsTableProps) {
   const [showAddDomainsDialog, setShowAddDomainsDialog] = useState<boolean>(false);
+  const [showDeleteDomainsDialog, setShowDeleteDomainsDialog] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
@@ -123,8 +76,15 @@ export function CstgDomainsTable({
     setShowAddDomainsDialog(!showAddDomainsDialog);
   };
 
-  const onSubmitAddDomainDialog = async (newDomainNamesFormatted: string[]) => {
-    await onAddDomains(newDomainNamesFormatted);
+  const onOpenChangeDeleteDomainDialog = () => {
+    setShowDeleteDomainsDialog(!showDeleteDomainsDialog);
+  };
+
+  const onSubmitAddDomainDialog = async (
+    newDomainsFormatted: string[],
+    deleteExistingList: boolean
+  ) => {
+    await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
     setSelectedDomains([]);
   };
@@ -137,11 +97,26 @@ export function CstgDomainsTable({
           {domains?.length > 0 && (
             <div className='table-actions'>
               <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
+              {checkboxStatus && (
+                <button
+                  className='transparent-button table-action-button'
+                  type='button'
+                  onClick={onOpenChangeDeleteDomainDialog}
+                >
+                  {' '}
+                  <FontAwesomeIcon
+                    icon={['far', 'trash-can']}
+                    className='cstg-domains-management-icon'
+                  />
+                  Delete Domains{' '}
+                </button>
+              )}
 
-              {selectedDomains.length > 0 && (
-                <DeleteDomainDialog
-                  onDeleteDomains={() => handleBulkDeleteDomains(selectedDomains)}
-                  selectedDomains={selectedDomains}
+              {showDeleteDomainsDialog && selectedDomains.length > 0 && (
+                <CstgDeleteDomainDialog
+                  onRemoveDomains={() => handleBulkDeleteDomains(selectedDomains)}
+                  domains={selectedDomains}
+                  onOpenChange={onOpenChangeDeleteDomainDialog}
                 />
               )}
             </div>
@@ -150,7 +125,7 @@ export function CstgDomainsTable({
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
-              Add Domain
+              Add Domains
             </button>
             {showAddDomainsDialog && (
               <CstgAddDomainDialog

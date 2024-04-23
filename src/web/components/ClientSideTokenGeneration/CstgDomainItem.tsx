@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
-import CstgDeleteDomainConfirmationDialog from './CstgDeleteDomainDialog';
+import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
 
 type CstgDomainItemProps = Readonly<{
   domain: string;
   existingDomains: string[];
   onClick: () => void;
-  onEditDomain: (newDomainName: string, originalDomainName: string) => void;
+  onEditDomain: (newDomain: string, originalDomainName: string) => void;
   onDelete: () => void;
   checked: boolean;
 }>;
@@ -69,9 +69,9 @@ export function CstgDomainItem({
             <FontAwesomeIcon icon='trash-can' />
           </button>
           {showDeleteDialog && (
-            <CstgDeleteDomainConfirmationDialog
-              domain={domain}
-              onRemoveDomain={onDelete}
+            <CstgDeleteDomainDialog
+              domains={[domain]}
+              onRemoveDomains={onDelete}
               onOpenChange={onDeleteDialogChange}
             />
           )}

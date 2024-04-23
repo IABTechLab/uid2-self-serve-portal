@@ -8,7 +8,7 @@ import * as stories from './CstgAddDomainDialog.stories';
 const { Default } = composeStories(stories);
 
 const submitDialog = async () => {
-  const createButton = screen.getByRole('button', { name: 'Add domains' });
+  const createButton = screen.getByRole('button', { name: 'Add Domains' });
   await userEvent.click(createButton);
 };
 
@@ -28,14 +28,14 @@ describe('CstgDomainAddDomainDialog', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test.com');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test.com');
 
-    expect(screen.getByRole('button', { name: 'Add domains' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Add Domains' })).toBeEnabled();
 
     await submitDialog();
 
     await waitFor(() => {
-      expect(onAddDomainsMock).toHaveBeenCalledWith(['test.com']);
+      expect(onAddDomainsMock).toHaveBeenCalledWith(['test.com'], expect.anything());
     });
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -57,21 +57,19 @@ describe('CstgDomainAddDomainDialog', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'newDomainNames' }),
+      screen.getByRole('textbox', { name: 'newDomains' }),
       'test.com, test2.com, test3.com, http://test4.com'
     );
 
-    expect(screen.getByRole('button', { name: 'Add domains' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Add Domains' })).toBeEnabled();
 
     await submitDialog();
 
     await waitFor(() => {
-      expect(onAddDomainsMock).toHaveBeenCalledWith([
-        'test.com',
-        'test2.com',
-        'test3.com',
-        'test4.com',
-      ]);
+      expect(onAddDomainsMock).toHaveBeenCalledWith(
+        ['test.com', 'test2.com', 'test3.com', 'test4.com'],
+        expect.anything()
+      );
     });
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -81,32 +79,28 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
     render(<Default />);
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test');
 
     await submitDialog();
 
-    expect(
-      screen.getByText('At least one domain you have entered is invalid, please try again.')
-    ).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
   it('should render error if user types in at least one incorrect domain in a list', async () => {
     const user = userEvent.setup();
     render(<Default />);
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test, test2.com');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test, test2.com');
 
     await submitDialog();
 
-    expect(
-      screen.getByText('At least one domain you have entered is invalid, please try again.')
-    ).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
   it('should render error if user submits empty text box for domain names', async () => {
     render(<Default />);
     await submitDialog();
 
-    expect(screen.getByText('Please specify domain name(s).')).toBeInTheDocument();
+    expect(screen.getByText('Please specify domains.')).toBeInTheDocument();
   });
 });
