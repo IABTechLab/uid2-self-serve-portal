@@ -58,11 +58,6 @@ function EditDomainDialog({
   return (
     <Dialog
       title={`Edit Domain: ${domain}`}
-      triggerButton={
-        <button type='button' className='icon-button' title='Edit'>
-          <FontAwesomeIcon icon='pencil' />
-        </button>
-      }
       open
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'

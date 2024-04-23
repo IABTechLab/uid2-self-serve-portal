@@ -15,7 +15,6 @@ type Story = StoryObj<typeof KeyPairDisableDialog>;
 
 export const DisableApiKey: Story = {
   args: {
-    triggerButton: <button type='button'>Open</button>,
     onDisable: (keyPair: KeyPairModel) => {
       console.log(`Disabling Key ${keyPair.name}`);
     },

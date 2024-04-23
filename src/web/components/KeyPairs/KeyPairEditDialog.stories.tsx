@@ -27,6 +27,5 @@ export const Default: Story = {
       console.log(form);
       return Promise.resolve();
     },
-    triggerButton: <button type='button'>Open</button>,
   },
 };
