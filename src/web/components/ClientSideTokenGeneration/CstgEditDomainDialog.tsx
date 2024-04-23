@@ -74,7 +74,7 @@ function EditDomainDialog({
             inputName='domainName'
             label='Domain Name'
             rules={{
-              required: 'Please specify domain name.',
+              required: 'Please specify domain.',
             }}
           />
           <div className='form-footer'>

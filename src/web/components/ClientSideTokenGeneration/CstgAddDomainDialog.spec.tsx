@@ -28,7 +28,7 @@ describe('CstgDomainAddDomainDialog', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test.com');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test.com');
 
     expect(screen.getByRole('button', { name: 'Add Domains' })).toBeEnabled();
 
@@ -57,7 +57,7 @@ describe('CstgDomainAddDomainDialog', () => {
     );
 
     await user.type(
-      screen.getByRole('textbox', { name: 'newDomainNames' }),
+      screen.getByRole('textbox', { name: 'newDomains' }),
       'test.com, test2.com, test3.com, http://test4.com'
     );
 
@@ -79,7 +79,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
     render(<Default />);
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test');
 
     await submitDialog();
 
@@ -90,7 +90,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
     render(<Default />);
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test, test2.com');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test, test2.com');
 
     await submitDialog();
 
@@ -101,6 +101,6 @@ describe('CstgDomainAddDomainDialog', () => {
     render(<Default />);
     await submitDialog();
 
-    expect(screen.getByText('Please specify domain names.')).toBeInTheDocument();
+    expect(screen.getByText('Please specify domains.')).toBeInTheDocument();
   });
 });
