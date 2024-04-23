@@ -84,9 +84,9 @@ function ClientSideIntegration() {
     }
   };
 
-  const onAddDomainNames = async (newDomains: string[]) => {
+  const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
     let updatedDomains = newDomains;
-    if (domainNames) updatedDomains = [...newDomains, ...domainNames];
+    if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
     handleUpdateDomainNames(updatedDomains, 'added');
   };
 

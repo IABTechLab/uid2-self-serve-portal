@@ -61,7 +61,7 @@ function DeleteDomainDialog({ onDeleteDomains, selectedDomains }: DeleteDomainDi
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
   onUpdateDomains: (domains: string[], action: string) => Promise<void>;
-  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
+  onAddDomains: (newDomainNamesFormatted: string[], deleteExistingList: boolean) => Promise<void>;
 }>;
 
 export function CstgDomainsTable({
@@ -123,8 +123,11 @@ export function CstgDomainsTable({
     setShowAddDomainsDialog(!showAddDomainsDialog);
   };
 
-  const onSubmitAddDomainDialog = async (newDomainNamesFormatted: string[]) => {
-    await onAddDomains(newDomainNamesFormatted);
+  const onSubmitAddDomainDialog = async (
+    newDomainNamesFormatted: string[],
+    deleteExistingList: boolean
+  ) => {
+    await onAddDomains(newDomainNamesFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
     setSelectedDomains([]);
   };

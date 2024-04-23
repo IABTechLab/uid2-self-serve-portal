@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
@@ -7,15 +8,16 @@ import {
   separateStringsList,
 } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
+import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
-import { TextInput } from '../Input/TextInput';
+import { FormStyledCheckbox, StyledCheckbox } from '../Input/StyledCheckbox';
 import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
 import './CstgAddDomainDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
-  onAddDomains: (newDomainNamesFormatted: string[]) => Promise<void>;
+  onAddDomains: (newDomainNamesFormatted: string[], deleteExistingList: boolean) => Promise<void>;
   onOpenChange: () => void;
   existingDomains: string[];
 }>;
@@ -25,6 +27,7 @@ function CstgAddDomainDialog({
   onOpenChange,
   existingDomains,
 }: AddDomainNamesDialogProps) {
+  const [deleteExistingList, setDeleteExistingList] = useState<boolean>(false);
   const formMethods = useForm<AddDomainNamesFormProps>();
   const {
     handleSubmit,
@@ -65,9 +68,13 @@ function CstgAddDomainDialog({
         });
         // filter for uniqueness (e.g. 2 different domains entered could have the same top-level domain)
         const dedupedDomains = deduplicateStrings(uniqueDomains);
-        await onAddDomains(dedupedDomains);
+        await onAddDomains(dedupedDomains, deleteExistingList);
       }
     }
+  };
+
+  const onClickCheckbox = () => {
+    setDeleteExistingList(!deleteExistingList);
   };
 
   return (
@@ -77,6 +84,14 @@ function CstgAddDomainDialog({
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             You may enter a single or multiple domains.
+            <div className='checkbox-container'>
+              <StyledCheckbox
+                className='checkbox'
+                onClick={onClickCheckbox}
+                checked={deleteExistingList}
+              />
+              Option to delete all existing domains before adding new ones.
+            </div>
             <MultilineTextInput
               inputName='newDomainNames'
               label='Domain Name(s)'
