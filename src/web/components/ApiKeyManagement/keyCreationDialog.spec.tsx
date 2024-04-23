@@ -20,13 +20,12 @@ async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean =
       secret: '1234',
     });
   });
-  const triggerButton = <button type='button'>Open</button>;
 
   render(
     <KeyCreationDialog
       availableRoles={availableRoles}
       onKeyCreation={onKeyCreation}
-      triggerButton={triggerButton}
+      onKeyCreationDialogChange={() => {}}
     />
   );
 

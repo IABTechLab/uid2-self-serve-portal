@@ -19,8 +19,8 @@ type KeySecretProp = ApiKeySecretsDTO | undefined;
 
 type KeyCreationDialogProps = Readonly<{
   onKeyCreation: (form: CreateApiKeyFormDTO) => Promise<KeySecretProp>;
-  triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
+  onKeyCreationDialogChange: () => void;
 }>;
 
 type CreateApiKeyFormProps = Readonly<{
@@ -85,18 +85,9 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
     { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
-  const [open, setOpen] = useState(false);
-
   const onCloseConfirmation = () => {
     closeDialog();
-    setOpen(false);
   };
-
-  const triggerButton: JSX.Element = (
-    <button className='primary-button' type='button'>
-      Close
-    </button>
-  );
 
   return (
     <div>
@@ -114,12 +105,7 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
       ))}
 
       <div className='button-container'>
-        <Dialog
-          triggerButton={triggerButton}
-          open={open}
-          onOpenChange={setOpen}
-          closeButtonText='Cancel'
-        >
+        <Dialog open onOpenChange={onCloseConfirmation} closeButtonText='Cancel'>
           <p>
             Make sure you&apos;ve copied your API secret and key to a secure location. After you
             close this page, they are no longer accessible.
@@ -137,10 +123,9 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
 
 function KeyCreationDialog({
   onKeyCreation,
-  triggerButton,
   availableRoles,
+  onKeyCreationDialogChange,
 }: KeyCreationDialogProps) {
-  const [open, setOpen] = useState(false);
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
@@ -148,22 +133,17 @@ function KeyCreationDialog({
     InfoToast('Copy the credentials to a secure location before closing the page.');
   };
 
-  const closeDialog = () => {
-    setKeySecrets(undefined);
-    setOpen(false);
-  };
-
   return (
     <div className='key-creation-dialog'>
-      <Dialog triggerButton={triggerButton} open={open} onOpenChange={setOpen} hideCloseButtons>
+      <Dialog open onOpenChange={onKeyCreationDialogChange} hideCloseButtons>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}
             availableRoles={availableRoles}
-            closeDialog={closeDialog}
+            closeDialog={onKeyCreationDialogChange}
           />
         ) : (
-          <ShowApiKeySecrets closeDialog={closeDialog} keySecrets={keySecrets} />
+          <ShowApiKeySecrets closeDialog={onKeyCreationDialogChange} keySecrets={keySecrets} />
         )}
       </Dialog>
     </div>

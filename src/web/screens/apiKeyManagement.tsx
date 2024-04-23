@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
@@ -27,6 +27,7 @@ import { PortalRoute } from './routeUtils';
 import './apiKeyManagement.scss';
 
 function ApiKeyManagement() {
+  const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
   const data = useLoaderData() as {
     result: ApiKeyDTO[];
   };
@@ -63,6 +64,10 @@ function ApiKeyManagement() {
     }
   };
 
+  const onKeyCreationDialogChange = () => {
+    setShowKeyCreationDialog(!showKeyCreationDialog);
+  };
+
   return (
     <div className='api-key-management-page'>
       <h1>API Keys</h1>
@@ -90,15 +95,20 @@ function ApiKeyManagement() {
               />
               {apiRoles.length > 0 && (
                 <div className='create-new-key'>
-                  <KeyCreationDialog
-                    availableRoles={apiRoles}
-                    onKeyCreation={onKeyCreation}
-                    triggerButton={
-                      <button className='small-button' type='button'>
-                        Add API Key
-                      </button>
-                    }
-                  />
+                  <button
+                    className='small-button'
+                    type='button'
+                    onClick={onKeyCreationDialogChange}
+                  >
+                    Add API Key
+                  </button>
+                  {showKeyCreationDialog && (
+                    <KeyCreationDialog
+                      availableRoles={apiRoles}
+                      onKeyCreation={onKeyCreation}
+                      onKeyCreationDialogChange={onKeyCreationDialogChange}
+                    />
+                  )}
                 </div>
               )}
             </>
