@@ -79,7 +79,8 @@ function CstgAddDomainDialog({
         <RootFormErrors fieldErrors={errors} />
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            Add one or more domains.
+            Add one or more domains. <br />
+            Valid separators: comma, semicolon, space, tab, or new line.
             <div className='checkbox-container'>
               <StyledCheckbox
                 className='checkbox'
