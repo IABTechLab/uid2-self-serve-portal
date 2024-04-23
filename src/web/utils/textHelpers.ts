@@ -24,10 +24,10 @@ export function formatUnixDate(timeValue: number) {
   return date.toLocaleDateString();
 }
 
-export const separateStringsCommaSeparatedList = (strings: string): string[] => {
+export const separateStringsList = (strings: string): string[] => {
   if (strings === '') return [];
-  const stringsList = strings.split(/, |,/);
-  return stringsList;
+  const stringsTrimmed = strings.replace(/, |,| {2}|\n|;/gi, ' ').trim();
+  return stringsTrimmed.split(/[ ]+/);
 };
 
 export const deduplicateStrings = (strings: string[]) => {

@@ -73,7 +73,7 @@ function UpdateParticipantDialog({
               optionLabel: p.typeName,
               value: p.id,
             }))}
-            rules={{ required: 'Please specify Participant Type(s).' }}
+            rules={{ required: 'Please specify Participant Types.' }}
           />
           <MultiCheckboxInput
             inputName='apiRoles'
@@ -83,7 +83,7 @@ function UpdateParticipantDialog({
               optionToolTip: p.roleName,
               value: p.id,
             }))}
-            rules={{ required: 'Please specify API Permission(s).' }}
+            rules={{ required: 'Please specify API Permissions.' }}
           />
           <TextInput
             inputName='crmAgreementNumber'

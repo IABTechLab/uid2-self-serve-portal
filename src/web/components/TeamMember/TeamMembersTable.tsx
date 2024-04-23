@@ -51,7 +51,7 @@ function TeamMembersTable({
           onAddTeamMember={onAddTeamMember}
           triggerButton={
             <button className='small-button' type='button'>
-              Add team member
+              Add Team Member
             </button>
           }
         />

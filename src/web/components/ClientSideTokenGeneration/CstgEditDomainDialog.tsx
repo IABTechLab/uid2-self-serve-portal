@@ -10,7 +10,7 @@ import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 type EditDomainDialogProps = Readonly<{
   domain: string;
   existingDomains: string[];
-  onEditDomainName: (newDomainName: string, originalDomainName: string) => void;
+  onEditDomainName: (newDomain: string, originalDomainName: string) => void;
   onOpenChange: () => void;
 }>;
 
@@ -74,7 +74,7 @@ function EditDomainDialog({
             inputName='domainName'
             label='Domain Name'
             rules={{
-              required: 'Please specify domain name.',
+              required: 'Please specify domain.',
             }}
           />
           <div className='form-footer'>
