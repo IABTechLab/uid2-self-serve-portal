@@ -20,21 +20,19 @@ export type OnApiKeyEdit = (
 
 type KeyEditDialogProps = Readonly<{
   onEdit: OnApiKeyEdit;
-  triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
   apiKey: ApiKeyDTO;
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
+  onOpenChange: () => void;
 }>;
 
 function KeyEditDialog({
   availableRoles,
   onEdit,
-  triggerButton,
   apiKey,
   setApiKey,
+  onOpenChange,
 }: KeyEditDialogProps) {
-  const [open, setOpen] = useState(false);
-
   const formMethods = useForm<EditApiKeyFormDTO>({
     defaultValues: {
       keyId: apiKey.key_id,
@@ -44,9 +42,8 @@ function KeyEditDialog({
   });
   const { handleSubmit } = formMethods;
 
-  const onSubmit: SubmitHandler<EditApiKeyFormDTO> = async (formData) => {
+  const onSubmit = async (formData: EditApiKeyFormDTO) => {
     onEdit(formData, setApiKey);
-    setOpen(false);
   };
 
   const unapprovedRoles: ApiRoleDTO[] = getUnapprovedRoles(apiKey.roles, availableRoles);
@@ -55,9 +52,8 @@ function KeyEditDialog({
     <div className='key-edit-dialog'>
       <Dialog
         closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-        triggerButton={triggerButton}
+        open
+        onOpenChange={onOpenChange}
         title={`Edit API Key: ${apiKey.name}`}
       >
         <FormProvider {...formMethods}>

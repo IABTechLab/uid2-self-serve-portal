@@ -21,15 +21,13 @@ function loadComponent(apiKeyRoles: ApiRoleDTO[], participantApiRoles: ApiRoleDT
 
   const onEditMock = jest.fn(() => {});
 
-  const triggerButton = <button type='button'>Open</button>;
-
   render(
     <KeyEditDialog
       apiKey={apiKey}
       availableRoles={participantApiRoles}
       onEdit={onEditMock}
-      triggerButton={triggerButton}
       setApiKey={setApiKeyMock}
+      onOpenChange={() => {}}
     />
   );
 
