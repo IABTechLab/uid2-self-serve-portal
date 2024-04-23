@@ -10,8 +10,6 @@ describe('MultilineTextInput', () => {
   it('verifies field based on rule', async () => {
     const user = userEvent.setup();
     render(<WithValidation />);
-    const textInput = screen.getByTestId('multiline-text-input');
-    // await user.type(textInput, '');
     await waitFor(async () => expect(await screen.findByDisplayValue('')).toBeInTheDocument());
 
     const submitButton = screen.getByRole('button', { name: 'Submit' });
