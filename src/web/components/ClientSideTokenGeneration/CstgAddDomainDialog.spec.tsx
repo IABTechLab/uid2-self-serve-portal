@@ -8,7 +8,7 @@ import * as stories from './CstgAddDomainDialog.stories';
 const { Default } = composeStories(stories);
 
 const submitDialog = async () => {
-  const createButton = screen.getByRole('button', { name: 'Add domain(s)' });
+  const createButton = screen.getByRole('button', { name: 'Add domains' });
   await userEvent.click(createButton);
 };
 
@@ -30,7 +30,7 @@ describe('CstgDomainAddDomainDialog', () => {
 
     await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test.com');
 
-    expect(screen.getByRole('button', { name: 'Add domain(s)' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Add domains' })).toBeEnabled();
 
     await submitDialog();
 
@@ -61,7 +61,7 @@ describe('CstgDomainAddDomainDialog', () => {
       'test.com, test2.com, test3.com, http://test4.com'
     );
 
-    expect(screen.getByRole('button', { name: 'Add domain(s)' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Add domains' })).toBeEnabled();
 
     await submitDialog();
 
@@ -103,6 +103,6 @@ describe('CstgDomainAddDomainDialog', () => {
     render(<Default />);
     await submitDialog();
 
-    expect(screen.getByText('Please specify domain name(s).')).toBeInTheDocument();
+    expect(screen.getByText('Please specify domain names.')).toBeInTheDocument();
   });
 });

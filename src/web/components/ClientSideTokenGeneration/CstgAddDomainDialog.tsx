@@ -42,7 +42,7 @@ function CstgAddDomainDialog({
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
-        message: 'The domain(s) you have entered already exist.',
+        message: 'The domains you have entered already exist.',
       });
     } else {
       const invalidDomains: string[] = [];
@@ -79,27 +79,27 @@ function CstgAddDomainDialog({
 
   return (
     <div className='add-domain-dialog'>
-      <Dialog title='Add Domain(s)' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
+      <Dialog title='Add Domains' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
         <RootFormErrors fieldErrors={errors} />
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            You may enter a single or multiple domains.
+            Add one or more domains.
             <div className='checkbox-container'>
               <StyledCheckbox
                 className='checkbox'
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              Option to delete all existing domains before adding new ones.
+              Replace all existing domains with the new ones.
             </div>
             <MultilineTextInput
               inputName='newDomainNames'
-              label='Domain Name(s)'
-              rules={{ required: 'Please specify domain name(s).' }}
+              label='Domain Names'
+              rules={{ required: 'Please specify domain names.' }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                Add domain(s)
+                Add Domains
               </button>
             </div>
           </form>

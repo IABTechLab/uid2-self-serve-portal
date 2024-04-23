@@ -166,7 +166,7 @@ function AddParticipantDialog({
                 optionLabel: p.typeName,
                 value: p.id,
               }))}
-              rules={{ required: 'Please specify Participant Type(s).' }}
+              rules={{ required: 'Please specify Participant Types.' }}
             />
             <div className='site-type'>
               <RadioInput
@@ -230,7 +230,7 @@ function AddParticipantDialog({
                   optionToolTip: p.roleName,
                   value: p.id,
                 }))}
-                rules={{ required: 'Please specify API Role(s).' }}
+                rules={{ required: 'Please specify API Roles.' }}
               />
             </div>
             <TextInput
