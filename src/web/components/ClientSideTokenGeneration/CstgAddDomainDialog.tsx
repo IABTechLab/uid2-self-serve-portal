@@ -16,7 +16,7 @@ import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 import './CstgAddDomainDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
-  onAddDomains: (newDomainNamesFormatted: string[], deleteExistingList: boolean) => Promise<void>;
+  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
   onOpenChange: () => void;
   existingDomains: string[];
 }>;
@@ -35,9 +35,9 @@ function CstgAddDomainDialog({
   } = formMethods;
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomainNames = separateStringsList(formData.newDomainNames);
+    const newDomains = separateStringsList(formData.newDomains);
     // filter out domain names that already exist in the list
-    const uniqueDomains = newDomainNames.filter((domain) => !existingDomains?.includes(domain));
+    const uniqueDomains = newDomains.filter((domain) => !existingDomains?.includes(domain));
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
@@ -46,9 +46,9 @@ function CstgAddDomainDialog({
     } else {
       const invalidDomains: string[] = [];
       let allValid = true;
-      uniqueDomains.forEach((newDomainName) => {
-        if (!isValidDomain(newDomainName)) {
-          invalidDomains.push(newDomainName);
+      uniqueDomains.forEach((newDomain) => {
+        if (!isValidDomain(newDomain)) {
+          invalidDomains.push(newDomain);
           allValid = false;
         }
       });
@@ -59,8 +59,8 @@ function CstgAddDomainDialog({
         });
       } else {
         // if all are valid but there are some non top-level domains, we make sure every domain is top-level
-        uniqueDomains.forEach((newDomainName, index) => {
-          uniqueDomains[index] = extractTopLevelDomain(newDomainName);
+        uniqueDomains.forEach((newDomain, index) => {
+          uniqueDomains[index] = extractTopLevelDomain(newDomain);
         });
         // filter for uniqueness (e.g. 2 different domains entered could have the same top-level domain)
         const dedupedDomains = deduplicateStrings(uniqueDomains);
@@ -89,9 +89,9 @@ function CstgAddDomainDialog({
               Replace all existing domains with the new ones.
             </div>
             <MultilineTextInput
-              inputName='newDomainNames'
-              label='Domain Names'
-              rules={{ required: 'Please specify domain names.' }}
+              inputName='newDomains'
+              label='Domains'
+              rules={{ required: 'Please specify domains.' }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>

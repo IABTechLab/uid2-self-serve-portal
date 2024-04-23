@@ -9,7 +9,7 @@ type CstgDomainItemProps = Readonly<{
   domain: string;
   existingDomains: string[];
   onClick: () => void;
-  onEditDomain: (newDomainName: string, originalDomainName: string) => void;
+  onEditDomain: (newDomain: string, originalDomainName: string) => void;
   onDelete: () => void;
   checked: boolean;
 }>;

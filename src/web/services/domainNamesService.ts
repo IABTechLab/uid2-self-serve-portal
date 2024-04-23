@@ -3,7 +3,7 @@ import axios from 'axios';
 import { backendError } from '../utils/apiError';
 
 export type AddDomainNamesFormProps = {
-  newDomainNames: string;
+  newDomains: string;
 };
 
 export type EditDomainFormProps = {

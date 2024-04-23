@@ -10,7 +10,7 @@ import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 type EditDomainDialogProps = Readonly<{
   domain: string;
   existingDomains: string[];
-  onEditDomainName: (newDomainName: string, originalDomainName: string) => void;
+  onEditDomainName: (newDomain: string, originalDomainName: string) => void;
   onOpenChange: () => void;
 }>;
 

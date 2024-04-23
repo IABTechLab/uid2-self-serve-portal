@@ -13,7 +13,7 @@ import './CstgDomainsTable.scss';
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
   onUpdateDomains: (domains: string[], action: string) => Promise<void>;
-  onAddDomains: (newDomainNamesFormatted: string[], deleteExistingList: boolean) => Promise<void>;
+  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
 }>;
 
 export function CstgDomainsTable({
@@ -81,10 +81,10 @@ export function CstgDomainsTable({
   };
 
   const onSubmitAddDomainDialog = async (
-    newDomainNamesFormatted: string[],
+    newDomainsFormatted: string[],
     deleteExistingList: boolean
   ) => {
-    await onAddDomains(newDomainNamesFormatted, deleteExistingList);
+    await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
     setSelectedDomains([]);
   };
