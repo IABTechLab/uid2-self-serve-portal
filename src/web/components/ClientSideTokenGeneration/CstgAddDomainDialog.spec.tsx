@@ -8,7 +8,7 @@ import * as stories from './CstgAddDomainDialog.stories';
 const { Default } = composeStories(stories);
 
 const submitDialog = async () => {
-  const createButton = screen.getByRole('button', { name: 'Add domains' });
+  const createButton = screen.getByRole('button', { name: 'Add Domains' });
   await userEvent.click(createButton);
 };
 
@@ -30,12 +30,12 @@ describe('CstgDomainAddDomainDialog', () => {
 
     await user.type(screen.getByRole('textbox', { name: 'newDomainNames' }), 'test.com');
 
-    expect(screen.getByRole('button', { name: 'Add domains' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Add Domains' })).toBeEnabled();
 
     await submitDialog();
 
     await waitFor(() => {
-      expect(onAddDomainsMock).toHaveBeenCalledWith(['test.com']);
+      expect(onAddDomainsMock).toHaveBeenCalledWith(['test.com'], expect.anything());
     });
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -61,17 +61,15 @@ describe('CstgDomainAddDomainDialog', () => {
       'test.com, test2.com, test3.com, http://test4.com'
     );
 
-    expect(screen.getByRole('button', { name: 'Add domains' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Add Domains' })).toBeEnabled();
 
     await submitDialog();
 
     await waitFor(() => {
-      expect(onAddDomainsMock).toHaveBeenCalledWith([
-        'test.com',
-        'test2.com',
-        'test3.com',
-        'test4.com',
-      ]);
+      expect(onAddDomainsMock).toHaveBeenCalledWith(
+        ['test.com', 'test2.com', 'test3.com', 'test4.com'],
+        expect.anything()
+      );
     });
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
