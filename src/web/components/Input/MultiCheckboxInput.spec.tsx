@@ -1,11 +1,13 @@
+/* eslint-disable */
 import { composeStories } from '@storybook/testing-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Form } from '../Core/Form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
+import FormSubmitButton from '../Core/FormSubmitButton';
 
 const { WithValidation } = composeStories(stories);
 
@@ -20,14 +22,42 @@ const checkBoxOptionsList = [
   ],
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function loadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
+type TestComponentMultiCheckboxInputProps = Readonly<{
+  options: Option<any>[];
+  onSubmitMock: jest.Mock<void, [], any>;
+  defaultOptions: string[];
+}>;
+
+function TestComponentMultiCheckboxInput({
+  options,
+  onSubmitMock,
+  defaultOptions,
+}: TestComponentMultiCheckboxInputProps) {
+  const formMethods = useForm({
+    defaultValues: {
+      checkboxInput: defaultOptions,
+    },
+  });
+  const { handleSubmit } = formMethods;
+  return (
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmitMock)}>
+        <MultiCheckboxInput inputName='checkboxInput' label='Select options' options={options} />
+        <FormSubmitButton />
+      </form>
+    </FormProvider>
+  );
+}
+
+function LoadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
   const onSubmitMock = jest.fn(() => {});
 
   render(
-    <Form onSubmit={onSubmitMock}>
-      <MultiCheckboxInput inputName='default' label='Select options' options={options} />
-    </Form>
+    <TestComponentMultiCheckboxInput
+      options={options}
+      onSubmitMock={onSubmitMock}
+      defaultOptions={[]}
+    />
   );
 
   return onSubmitMock;
@@ -35,7 +65,7 @@ function loadComponent(options: Option<any>[]): jest.Mock<void, [], any> {
 
 describe('CheckboxInput', () => {
   it.each(checkBoxOptionsList)('Should show all options', (checkboxOptions) => {
-    loadComponent(checkboxOptions);
+    LoadComponent(checkboxOptions);
 
     for (const checkboxOption of checkboxOptions) {
       expect(
@@ -48,14 +78,17 @@ describe('CheckboxInput', () => {
     'Should submit correctly when one option selected',
     async (checkboxOptions) => {
       const user = userEvent.setup();
-      const onSubmitMock = loadComponent(checkboxOptions);
+      const onSubmitMock = LoadComponent(checkboxOptions);
 
       await user.click(screen.getByRole('checkbox', { name: checkboxOptions[0].optionLabel }));
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
       await user.click(submitButton);
 
-      expect(onSubmitMock).toHaveBeenLastCalledWith({ default: [checkboxOptions[0].value] });
+      expect(onSubmitMock).toHaveBeenLastCalledWith(
+        { checkboxInput: [checkboxOptions[0].value] },
+        expect.anything()
+      );
     }
   );
 
@@ -63,7 +96,7 @@ describe('CheckboxInput', () => {
     'Should submit correctly when all options are selected',
     async (checkboxOptions) => {
       const user = userEvent.setup();
-      const onSubmitMock = loadComponent(checkboxOptions);
+      const onSubmitMock = LoadComponent(checkboxOptions);
 
       checkboxOptions.map(async (checkboxOption) => {
         await user.click(screen.getByRole('checkbox', { name: checkboxOption.optionLabel }));
@@ -72,9 +105,12 @@ describe('CheckboxInput', () => {
       const submitButton = screen.getByRole('button', { name: 'Submit' });
       await user.click(submitButton);
 
-      expect(onSubmitMock).toHaveBeenLastCalledWith({
-        default: checkboxOptions.map((checkboxOption) => checkboxOption.value),
-      });
+      expect(onSubmitMock).toHaveBeenLastCalledWith(
+        {
+          checkboxInput: checkboxOptions.map((checkboxOption) => checkboxOption.value),
+        },
+        expect.anything()
+      );
     }
   );
 
@@ -82,14 +118,17 @@ describe('CheckboxInput', () => {
     'Should submit correctly when no options are selected',
     async (checkboxOptions) => {
       const user = userEvent.setup();
-      const onSubmitMock = loadComponent(checkboxOptions);
+      const onSubmitMock = LoadComponent(checkboxOptions);
 
       const submitButton = screen.getByRole('button', { name: 'Submit' });
       await user.click(submitButton);
 
-      expect(onSubmitMock).toHaveBeenLastCalledWith({
-        default: [],
-      });
+      expect(onSubmitMock).toHaveBeenLastCalledWith(
+        {
+          checkboxInput: [],
+        },
+        expect.anything()
+      );
     }
   );
 
@@ -97,18 +136,20 @@ describe('CheckboxInput', () => {
     const onSubmitMock = jest.fn(() => {});
     const user = userEvent.setup();
 
+    const defaultOptions = ['option1', 'option2'];
+
+    const options = [
+      { optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' },
+      { optionLabel: 'Option 2', optionToolTip: 'Option2', value: 'option2' },
+      { optionLabel: 'Option 3', optionToolTip: 'Option3', value: 'option3' },
+    ];
+
     render(
-      <Form onSubmit={onSubmitMock} defaultValues={{ default: ['option1', 'option2'] }}>
-        <MultiCheckboxInput
-          inputName='default'
-          label='Select options'
-          options={[
-            { optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' },
-            { optionLabel: 'Option 2', optionToolTip: 'Option2', value: 'option2' },
-            { optionLabel: 'Option 3', optionToolTip: 'Option3', value: 'option3' },
-          ]}
-        />
-      </Form>
+      <TestComponentMultiCheckboxInput
+        options={options}
+        onSubmitMock={onSubmitMock}
+        defaultOptions={defaultOptions}
+      />
     );
 
     const option1 = screen.getByRole('checkbox', { name: 'Option 1' });
@@ -120,7 +161,10 @@ describe('CheckboxInput', () => {
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     await user.click(submitButton);
 
-    expect(onSubmitMock).toHaveBeenLastCalledWith({ default: ['option1', 'option2'] });
+    expect(onSubmitMock).toHaveBeenLastCalledWith(
+      { checkboxInput: ['option1', 'option2'] },
+      expect.anything()
+    );
   });
 
   it('Verifies field based on rule', async () => {

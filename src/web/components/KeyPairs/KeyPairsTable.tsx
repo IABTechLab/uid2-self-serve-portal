@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import KeyPair from './KeyPair';
@@ -21,23 +23,36 @@ function KeyPairsTable({
   onKeyPairEdit,
   onKeyPairDisable,
 }: KeyPairTableProps) {
+  const [showKeyPairDialog, setShowKeyPairDialog] = useState(false);
+
+  const onOpenChangeKeyPairDialog = () => {
+    setShowKeyPairDialog(!showKeyPairDialog);
+  };
+
+  const onSubmitKeyPair = async (formData: AddKeyPairFormProps) => {
+    await onAddKeyPair(formData);
+    setShowKeyPairDialog(false);
+  };
+
   return (
     <div className='key-pairs'>
       <div className='key-pairs-table-header'>
         <div>
           <h2>Key Pairs</h2>
         </div>
+
         <div className='key-pairs-table-header-right'>
           <div className='add-key-pair'>
-            <KeyPairDialog
-              existingKeyPairs={keyPairs}
-              onAddKeyPair={onAddKeyPair}
-              triggerButton={
-                <button className='small-button' type='button'>
-                  Add Key Pair
-                </button>
-              }
-            />
+            <button className='small-button' type='button' onClick={onOpenChangeKeyPairDialog}>
+              Add Key Pair
+            </button>
+            {showKeyPairDialog && (
+              <KeyPairDialog
+                existingKeyPairs={keyPairs}
+                onSubmitKeyPair={onSubmitKeyPair}
+                onOpenChange={onOpenChangeKeyPairDialog}
+              />
+            )}
           </div>
         </div>
       </div>

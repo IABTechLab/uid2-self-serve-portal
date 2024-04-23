@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { EditKeyPairFormDTO } from '../../../api/services/adminServiceHelpers';
 import { Dialog } from '../Core/Dialog';
-import { Form } from '../Core/Form';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueKeyPairName } from './KeyPairHelper';
 import { KeyPairModel } from './KeyPairModel';
@@ -31,7 +31,7 @@ function KeyPairEditDialog({
   const [open, setOpen] = useState(false);
   const [keyPair, setKeyPair] = useState<KeyPairModel>(keyPairInitial);
 
-  const onSubmit: SubmitHandler<EditKeyPairFormDTO> = async (formData) => {
+  const onSubmit = async (formData: EditKeyPairFormDTO) => {
     if (formData.name !== keyPairInitial.name) {
       await onEdit(formData, setKeyPair);
     }
@@ -45,6 +45,11 @@ function KeyPairEditDialog({
     disabled: keyPairInitial.disabled,
   };
 
+  const formMethods = useForm<EditKeyPairFormDTO>({
+    defaultValues: defaultFormData,
+  });
+  const { handleSubmit } = formMethods;
+
   return (
     <div>
       <Dialog
@@ -54,26 +59,25 @@ function KeyPairEditDialog({
         triggerButton={triggerButton}
         title={`Edit Key Pair: ${keyPair.name}`}
       >
-        <Form<EditKeyPairFormDTO>
-          onSubmit={onSubmit}
-          defaultValues={defaultFormData}
-          submitButtonText='Save Key Pair'
-        >
-          <TextInput
-            inputName='name'
-            label='Name'
-            rules={{
-              required: 'Please specify key pair name.',
-              validate: (value: string) =>
-                validateUniqueKeyPairName(
-                  value,
-                  existingKeyPairs.filter((kp) => ![keyPairInitial].includes(kp))
-                ),
-            }}
-          />
-          <TextInput inputName='subscriptionId' label='Subscription ID' disabled />
-          <TextInput inputName='publicKey' label='Public Key' disabled />
-        </Form>
+        <FormProvider<EditKeyPairFormDTO> {...formMethods}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextInput
+              inputName='name'
+              label='Name'
+              rules={{
+                required: 'Please specify a key pair name.',
+                validate: (value: string) =>
+                  validateUniqueKeyPairName(
+                    value,
+                    existingKeyPairs.filter((kp) => ![keyPairInitial].includes(kp))
+                  ),
+              }}
+            />
+            <TextInput inputName='subscriptionId' label='Subscription ID' disabled />
+            <TextInput inputName='publicKey' label='Public Key' disabled />
+            <FormSubmitButton>Save Key Pair</FormSubmitButton>
+          </form>
+        </FormProvider>
       </Dialog>
     </div>
   );
