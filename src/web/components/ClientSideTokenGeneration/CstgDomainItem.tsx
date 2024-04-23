@@ -70,8 +70,8 @@ export function CstgDomainItem({
           </button>
           {showDeleteDialog && (
             <CstgDeleteDomainConfirmationDialog
-              domain={domain}
-              onRemoveDomain={onDelete}
+              domains={[domain]}
+              onRemoveDomains={onDelete}
               onOpenChange={onDeleteDialogChange}
             />
           )}

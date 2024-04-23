@@ -12,6 +12,6 @@ type Story = StoryObj<typeof CstgDeleteDomainConfirmationDialog>;
 
 export const Default: Story = {
   args: {
-    domain: 'testdomain.com',
+    domains: ['testdomain.com'],
   },
 };

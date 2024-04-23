@@ -8,10 +8,9 @@ import {
   separateStringsList,
 } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
-import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
-import { FormStyledCheckbox, StyledCheckbox } from '../Input/StyledCheckbox';
+import { StyledCheckbox } from '../Input/StyledCheckbox';
 import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
 import './CstgAddDomainDialog.scss';
