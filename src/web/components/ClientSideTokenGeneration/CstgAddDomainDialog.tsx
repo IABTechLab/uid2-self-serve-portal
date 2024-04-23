@@ -41,7 +41,7 @@ function CstgAddDomainDialog({
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
-        message: 'The domains  entered already exist.',
+        message: 'The domains entered already exist.',
       });
     } else {
       const invalidDomains: string[] = [];
