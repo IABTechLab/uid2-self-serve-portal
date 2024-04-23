@@ -1,14 +1,14 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import CstgDeleteDomainConfirmationDialog from './CstgDeleteDomainDialog';
+import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 
-const meta: Meta<typeof CstgDeleteDomainConfirmationDialog> = {
-  title: 'CSTG/CstgDeleteDomainConfirmationDialog',
-  component: CstgDeleteDomainConfirmationDialog,
+const meta: Meta<typeof CstgDeleteDomainDialog> = {
+  title: 'CSTG/CstgDeleteDomainDialog',
+  component: CstgDeleteDomainDialog,
 };
 export default meta;
 
-type Story = StoryObj<typeof CstgDeleteDomainConfirmationDialog>;
+type Story = StoryObj<typeof CstgDeleteDomainDialog>;
 
 export const Default: Story = {
   args: {
