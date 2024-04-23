@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Form } from '../Core/Form';
 import { MultilineTextInput } from './MultilineTextInput';
 
 export default {
@@ -9,18 +9,22 @@ export default {
 } as ComponentMeta<typeof MultilineTextInput>;
 
 const Template: ComponentStory<typeof MultilineTextInput> = (args) => {
+  const formMethods = useForm();
+  const { handleSubmit } = formMethods;
   return (
-    <Form
-      onSubmit={(formData) => {
-        console.log(formData);
-      }}
-    >
-      <MultilineTextInput
-        {...args}
-        inputName='multilineTextInput'
-        data-testid='multiline-text-input'
-      />
-    </Form>
+    <FormProvider {...formMethods}>
+      <form
+        onSubmit={handleSubmit((formData) => {
+          console.log(formData);
+        })}
+      >
+        <MultilineTextInput
+          {...args}
+          inputName='multilineTextInput'
+          data-testid='multiline-text-input'
+        />
+      </form>
+    </FormProvider>
   );
 };
 
