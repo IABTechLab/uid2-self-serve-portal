@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import BusinessContact from './BusinessContact';
@@ -10,19 +12,28 @@ function NoEmailContact({
 }: {
   onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
 }) {
+  const [showBusinessContactDialog, setShowBusinessContactDialog] = useState<boolean>(false);
+  const onOpenChangeBusinessContactDialog = () => {
+    setShowBusinessContactDialog(!showBusinessContactDialog);
+  };
   return (
     <TableNoDataPlaceholder
       icon={<img src='/email-icon.svg' alt='email-icon' />}
       title='No Email Contacts'
     >
-      <BusinessContactDialog
-        onFormSubmit={onAddEmailContact}
-        triggerButton={
-          <button className='transparent-button' type='button'>
-            Add Email Contact
-          </button>
-        }
-      />
+      <button
+        className='transparent-button'
+        type='button'
+        onClick={onOpenChangeBusinessContactDialog}
+      >
+        Add Email Contact
+      </button>
+      {showBusinessContactDialog && (
+        <BusinessContactDialog
+          onFormSubmit={onAddEmailContact}
+          onOpenChange={onOpenChangeBusinessContactDialog}
+        />
+      )}
     </TableNoDataPlaceholder>
   );
 }
@@ -40,6 +51,10 @@ function BusinessContactsTable({
   onUpdateEmailContact,
   onAddEmailContact,
 }: BusinessContactsTableProps) {
+  const [showBusinessContactDialog, setShowBusinessContactDialog] = useState<boolean>(false);
+  const onOpenChangeBusinessContactDialog = () => {
+    setShowBusinessContactDialog(!showBusinessContactDialog);
+  };
   return (
     <div className='business-contacts-table-container'>
       <table className='business-contacts-table'>
@@ -65,14 +80,19 @@ function BusinessContactsTable({
       {!businessContacts.length && <NoEmailContact onAddEmailContact={onAddEmailContact} />}
       {!!businessContacts.length && (
         <div className='add-new-item'>
-          <BusinessContactDialog
-            onFormSubmit={onAddEmailContact}
-            triggerButton={
-              <button className='small-button' type='button'>
-                Add Email Contact
-              </button>
-            }
-          />
+          <button
+            className='small-button'
+            type='button'
+            onClick={onOpenChangeBusinessContactDialog}
+          >
+            Add Email Contact
+          </button>
+          {showBusinessContactDialog && (
+            <BusinessContactDialog
+              onFormSubmit={onAddEmailContact}
+              onOpenChange={onOpenChangeBusinessContactDialog}
+            />
+          )}
         </div>
       )}
     </div>

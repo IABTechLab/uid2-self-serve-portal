@@ -10,17 +10,15 @@ import { TextInput } from '../Input/TextInput';
 
 type BusinessContactDialogProps = Readonly<{
   onFormSubmit: (formData: BusinessContactForm) => Promise<void>;
-  triggerButton: JSX.Element;
+  onOpenChange: () => void;
   contact?: BusinessContactResponse;
 }>;
 
 function BusinessContactDialog({
   onFormSubmit,
-  triggerButton,
+  onOpenChange,
   contact,
 }: BusinessContactDialogProps) {
-  const [open, setOpen] = useState(false);
-
   const formMethods = useForm<BusinessContactForm>({
     defaultValues: contact,
   });
@@ -28,16 +26,15 @@ function BusinessContactDialog({
 
   const onSubmit = async (formData: BusinessContactForm) => {
     await onFormSubmit(formData);
-    setOpen(false);
+    onOpenChange();
   };
 
   return (
     <Dialog
-      triggerButton={triggerButton}
       title={`${contact ? 'Edit' : 'Add'} Email Contact`}
       closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
+      open
+      onOpenChange={onOpenChange}
     >
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onSubmit)}>

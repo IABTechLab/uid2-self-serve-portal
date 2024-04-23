@@ -44,6 +44,7 @@ function KeyEditDialog({
 
   const onSubmit = async (formData: EditApiKeyFormDTO) => {
     onEdit(formData, setApiKey);
+    onOpenChange();
   };
 
   const unapprovedRoles: ApiRoleDTO[] = getUnapprovedRoles(apiKey.roles, availableRoles);
