@@ -95,7 +95,7 @@ function CstgAddDomainDialog({
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                Add Domains
+                {deleteExistingList ? 'Replace' : 'Add'} Domains
               </button>
             </div>
           </form>
