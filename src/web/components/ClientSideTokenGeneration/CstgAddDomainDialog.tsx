@@ -41,7 +41,7 @@ function CstgAddDomainDialog({
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
-        message: 'The domains you have entered already exist.',
+        message: 'The domains  entered already exist.',
       });
     } else {
       const invalidDomains: string[] = [];
@@ -53,12 +53,9 @@ function CstgAddDomainDialog({
         }
       });
       if (!allValid) {
-        const message = `Some domains you have entered are invalid: ${formatStringsWithSeparator(
-          invalidDomains
-        )}`;
         setError('root.serverError', {
           type: '400',
-          message,
+          message: `The domains entered are invalid: ${formatStringsWithSeparator(invalidDomains)}`,
         });
       } else {
         // if all are valid but there are some non top-level domains, we make sure every domain is top-level
