@@ -90,8 +90,8 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
     closeDialog();
   };
 
-  const onCloseAPIKeySecrets = () => {
-    setShowWarningDialog(true);
+  const onOpenChangeWarningDialog = () => {
+    setShowWarningDialog(!showWarningDialog);
   };
 
   return (
@@ -109,14 +109,14 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
         </div>
       ))}
       <div className='dialog-footer-section'>
-        <button className='primary-button' type='button' onClick={onCloseAPIKeySecrets}>
+        <button className='primary-button' type='button' onClick={onOpenChangeWarningDialog}>
           Close
         </button>
       </div>
 
       <div className='button-container'>
         {showWarningDialog && (
-          <Dialog open onOpenChange={onCloseConfirmation} closeButtonText='Cancel'>
+          <Dialog open onOpenChange={onOpenChangeWarningDialog} closeButtonText='Cancel'>
             <p>
               Make sure you&apos;ve copied your API secret and key to a secure location. After you
               close this page, they are no longer accessible.
@@ -138,18 +138,12 @@ function KeyCreationDialog({
   availableRoles,
   onKeyCreationDialogChange,
 }: KeyCreationDialogProps) {
-  // const [open, setOpen] = useState(false);
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
     setKeySecrets(await onKeyCreation(formData));
     InfoToast('Copy the credentials to a secure location before closing the page.');
   };
-
-  // const closeDialog = () => {
-  //   setKeySecrets(undefined);
-  //   //setOpen(false);
-  // };
 
   return (
     <div className='key-creation-dialog'>
