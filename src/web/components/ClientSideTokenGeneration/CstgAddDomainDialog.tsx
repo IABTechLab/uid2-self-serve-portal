@@ -36,8 +36,10 @@ function CstgAddDomainDialog({
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomains = separateStringsList(formData.newDomains);
-    // filter out domain names that already exist in the list
-    const uniqueDomains = newDomains.filter((domain) => !existingDomains?.includes(domain));
+    // filter out domain names that already exist in the list unless existing list is being deleted
+    const uniqueDomains = deleteExistingList
+      ? newDomains
+      : newDomains.filter((domain) => !existingDomains?.includes(domain));
     if (uniqueDomains.length === 0) {
       setError('root.serverError', {
         type: '400',
