@@ -36,7 +36,6 @@ export const StandardRoutes: PortalRoute[] = [
   ClientSideIntegrationRoute,
 ];
 
-// adding ClientSideIntegrationRoute to AdminRoutes here while it's in development.  It should go under sharing permissions when ready
 export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
 
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
