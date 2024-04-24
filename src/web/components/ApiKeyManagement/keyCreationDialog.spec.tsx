@@ -12,7 +12,7 @@ Object.assign(navigator, {
   },
 });
 
-async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean = true) {
+async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean = false) {
   const onKeyCreation = jest.fn(() => {
     return Promise.resolve({
       name: 'test_key',

@@ -34,11 +34,6 @@ function loadComponent(apiKeyRoles: ApiRoleDTO[], participantApiRoles: ApiRoleDT
   return { setApiKeyMock, onEditMock };
 }
 
-async function openDialog() {
-  const openButton = screen.getByText('Open');
-  await userEvent.click(openButton);
-}
-
 async function submitForm() {
   const saveButton = screen.getByRole('button', { name: 'Save Key' });
   await userEvent.click(saveButton);
@@ -78,14 +73,12 @@ describe('Key edit dialog', () => {
     (apiKeyRoles, participantApiRoles) => {
       it('should prefill name input', async () => {
         loadComponent(apiKeyRoles, participantApiRoles);
-        await openDialog();
 
         expect(screen.getByRole('textbox', { name: 'newName' })).toHaveValue('ApiKey');
       });
 
       it('should select the apiKey roles', async () => {
         loadComponent(apiKeyRoles, participantApiRoles);
-        await openDialog();
 
         for (const role of apiKeyRoles) {
           expect(screen.getByDisplayValue(role.roleName)).toBeChecked();
@@ -101,7 +94,7 @@ describe('Key edit dialog', () => {
 
       it('should return the correct value when submitted', async () => {
         const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
-        await openDialog();
+
         await submitForm();
 
         expect(onEditMock).toHaveBeenCalledWith(
@@ -119,7 +112,6 @@ describe('Key edit dialog', () => {
   describe('should return the correct values key after being edited', () => {
     it('should allow the key to be renamed', async () => {
       const { onEditMock, setApiKeyMock } = loadComponent([Mapper], [Mapper]);
-      await openDialog();
 
       await renameKey('ApiKey Rename');
 
@@ -136,7 +128,6 @@ describe('Key edit dialog', () => {
     });
     it('should show an error on submission if no roles selected', async () => {
       loadComponent([Mapper], [Mapper]);
-      await openDialog();
 
       await renameKey('ApiKey Rename');
       await clickRole(Mapper);
@@ -158,7 +149,6 @@ describe('Key edit dialog', () => {
       'should allow a role to be added with test array %#',
       async (apiKeyRoles, participantApiRoles) => {
         const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
-        await openDialog();
 
         await clickRole(Bidder);
 
@@ -190,7 +180,6 @@ describe('Key edit dialog', () => {
       'should allow a role to be removed with test array %#',
       async (apiKeyRoles, participantApiRoles) => {
         const { onEditMock, setApiKeyMock } = loadComponent(apiKeyRoles, participantApiRoles);
-        await openDialog();
 
         await clickRole(Mapper);
 

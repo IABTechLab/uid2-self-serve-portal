@@ -8,12 +8,12 @@ import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
-type KeyItemProps = {
+type KeyItemProps = Readonly<{
   apiKey: ApiKeyDTO;
   onEdit: OnApiKeyEdit;
   onDisable: OnApiKeyDisable;
   availableRoles: ApiRoleDTO[];
-};
+}>;
 function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: KeyItemProps) {
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
   const [showKeyDisableDialog, setShowKeyDisableDialog] = useState<boolean>(false);
