@@ -20,7 +20,7 @@ type KeySecretProp = ApiKeySecretsDTO | undefined;
 type KeyCreationDialogProps = Readonly<{
   onKeyCreation: (form: CreateApiKeyFormDTO) => Promise<KeySecretProp>;
   availableRoles: ApiRoleDTO[];
-  onKeyCreationDialogChange: () => void;
+  onOpenChange: () => void;
 }>;
 
 type CreateApiKeyFormProps = Readonly<{
@@ -81,6 +81,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
 
 function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
   const [showWarningDialog, setShowWarningDialog] = useState<boolean>(false);
+
   const secrets: Secret[] = [
     { value: keySecrets.secret, valueName: 'Secret' },
     { value: keySecrets.plaintextKey, valueName: 'Key' },
@@ -136,7 +137,7 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
 function KeyCreationDialog({
   onKeyCreation,
   availableRoles,
-  onKeyCreationDialogChange,
+  onOpenChange,
 }: KeyCreationDialogProps) {
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
 
@@ -147,15 +148,15 @@ function KeyCreationDialog({
 
   return (
     <div className='key-creation-dialog'>
-      <Dialog open onOpenChange={onKeyCreationDialogChange} hideCloseButtons>
+      <Dialog open onOpenChange={onOpenChange} hideCloseButtons>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}
             availableRoles={availableRoles}
-            closeDialog={onKeyCreationDialogChange}
+            closeDialog={onOpenChange}
           />
         ) : (
-          <ShowApiKeySecrets closeDialog={onKeyCreationDialogChange} keySecrets={keySecrets} />
+          <ShowApiKeySecrets closeDialog={onOpenChange} keySecrets={keySecrets} />
         )}
       </Dialog>
     </div>

@@ -25,7 +25,7 @@ async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean =
     <KeyCreationDialog
       availableRoles={availableRoles}
       onKeyCreation={onKeyCreation}
-      onKeyCreationDialogChange={() => {}}
+      onOpenChange={() => {}}
     />
   );
 

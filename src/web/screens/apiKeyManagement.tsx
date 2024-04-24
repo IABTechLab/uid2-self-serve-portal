@@ -106,7 +106,7 @@ function ApiKeyManagement() {
                     <KeyCreationDialog
                       availableRoles={apiRoles}
                       onKeyCreation={onKeyCreation}
-                      onKeyCreationDialogChange={onKeyCreationDialogChange}
+                      onOpenChange={onKeyCreationDialogChange}
                     />
                   )}
                 </div>
