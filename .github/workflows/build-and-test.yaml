@@ -1,5 +1,5 @@
 name: Build and Test
-on: [push]
+on: [pull_request,push]
 
 jobs:
   build:
@@ -20,3 +20,9 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
       - run: npm run build-api --if-present
+      - name: Vulnerability Scan
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan_filesystem@v2
+        with:
+          scan_severity: HIGH,CRITICAL
+          failure_severity: CRITICAL,HIGH
+          publish_vulnerabilities: true
