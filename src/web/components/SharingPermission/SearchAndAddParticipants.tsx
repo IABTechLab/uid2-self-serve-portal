@@ -9,21 +9,27 @@ import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 import './SearchAndAddParticipants.scss';
 
-type SearchAndAddParticipantsProps = {
+type SearchAndAddParticipantsProps = Readonly<{
   onSharingPermissionsAdded: (selectedSiteIds: number[]) => Promise<void>;
   sharedSiteIds: number[];
-};
+}>;
+
 export function SearchAndAddParticipants({
   onSharingPermissionsAdded,
   sharedSiteIds,
 }: SearchAndAddParticipantsProps) {
   const { sites, isLoading } = useAvailableSiteList();
-  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [showAddPermissionsDialog, setShowAddPermissionsDialog] = useState(false);
   const [selectedSites, setSelectedSites] = useState<Set<number>>(new Set());
   const [openSearchResult, setOpenSearchResult] = useState<boolean>(false);
   const { participant } = useContext(ParticipantContext);
+
+  const onOpenChangeAddPermissionsDialog = () => {
+    setShowAddPermissionsDialog(!showAddPermissionsDialog);
+  };
+
   const onHandleAddSites = () => {
-    setOpenConfirmation(false);
+    onOpenChangeAddPermissionsDialog();
     setSelectedSites(new Set());
     onSharingPermissionsAdded(Array.from(selectedSites));
   };
@@ -66,33 +72,34 @@ export function SearchAndAddParticipants({
       />
       <div className='action-section'>
         {selectedSites.size > 0 && <p>{getSitesText(selectedSites.size)} selected</p>}
-        <Dialog
-          title='Please review the following changes'
-          triggerButton={
-            <button
-              type='button'
-              className='primary-button add-participant-button'
-              disabled={!selectedSites.size}
-            >
-              Add Permissions
-            </button>
-          }
-          open={openConfirmation}
-          onOpenChange={setOpenConfirmation}
-          closeButtonText='Cancel'
+        <button
+          type='button'
+          className='primary-button add-participant-button'
+          disabled={!selectedSites.size}
+          onClick={onOpenChangeAddPermissionsDialog}
         >
-          Adding permissions for the following participants:
-          <ul className='dot-list'>
-            {selectedSiteList.map((selectedParticipant) => (
-              <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
-            ))}
-          </ul>
-          <div className='dialog-footer-section'>
-            <button type='button' className='primary-button' onClick={onHandleAddSites}>
-              Save
-            </button>
-          </div>
-        </Dialog>
+          Add Permissions
+        </button>
+        {showAddPermissionsDialog && (
+          <Dialog
+            title='Please review the following changes'
+            open
+            onOpenChange={onOpenChangeAddPermissionsDialog}
+            closeButtonText='Cancel'
+          >
+            Adding permissions for the following participants:
+            <ul className='dot-list'>
+              {selectedSiteList.map((selectedParticipant) => (
+                <li key={selectedParticipant.id}>{selectedParticipant.name}</li>
+              ))}
+            </ul>
+            <div className='dialog-footer-section'>
+              <button type='button' className='primary-button' onClick={onHandleAddSites}>
+                Save
+              </button>
+            </div>
+          </Dialog>
+        )}
       </div>
     </div>
   );
