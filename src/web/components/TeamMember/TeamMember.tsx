@@ -70,9 +70,14 @@ function TeamMember({
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
+  };
+
+  const onOpenChangeTeamMemberDialog = () => {
+    setShowTeamMemberDialog(!showTeamMemberDialog);
   };
 
   const onResendInvite = useCallback(async () => {
@@ -138,15 +143,16 @@ function TeamMember({
                 {reinviteState === InviteState.error && 'Try again later'}
               </button>
             )}
-            <TeamMemberDialog
-              onUpdateTeamMember={handleUpdateUser}
-              person={person}
-              triggerButton={
-                <button className='icon-button' aria-label='edit' type='button'>
-                  <FontAwesomeIcon icon='pencil' />
-                </button>
-              }
-            />
+            <button className='icon-button' aria-label='edit' type='button' onClick={onOpenChangeTeamMemberDialog}>
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+            {showTeamMemberDialog && (
+              <TeamMemberDialog
+                onUpdateTeamMember={handleUpdateUser}
+                person={person}
+                onOpenChange={onOpenChangeTeamMemberDialog}
+              />
+            )}
             <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
           </div>
         </div>
