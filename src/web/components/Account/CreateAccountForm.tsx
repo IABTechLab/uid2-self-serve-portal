@@ -5,7 +5,6 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserRole } from '../../../api/entities/User';
 import { CreateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog';
-import { withoutRef } from '../Core/Form';
 import { TermsAndConditionsForm } from '../Core/TermsAndConditions';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
@@ -14,7 +13,7 @@ import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 
 import './createAccountForm.scss';
-import '../Core/Form.scss';
+import '../../styles/forms.scss';
 
 export type CreateAccountFormProps = {
   resolvedParticipantTypes: ParticipantTypeDTO[];
@@ -81,8 +80,7 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
         <div className='terms-section'>
           <FormStyledCheckbox
             disabled={!watchAccept}
-            // eslint-disable-next-line react/jsx-props-no-spreading
-            {...withoutRef(register('agreeToTerms', { required: true }))}
+            {...register('agreeToTerms', { required: true })}
           />
           <span>
             I agree to the{' '}

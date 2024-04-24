@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Form } from '../Core/Form';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { Option, SelectInput } from './SelectInput';
 
 export default {
@@ -15,10 +16,14 @@ const options: Option<string>[] = [
 ];
 
 const Template: ComponentStory<typeof SelectInput> = (args) => {
+  const formMethods = useForm();
+  const { handleSubmit } = formMethods;
   return (
-    <Form onSubmit={() => {}}>
-      <SelectInput {...args} inputName='select' />{' '}
-    </Form>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(() => {})}>
+        <SelectInput {...args} inputName='select' /> <FormSubmitButton />
+      </form>
+    </FormProvider>
   );
 };
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SubmitHandler } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
@@ -8,7 +8,7 @@ import { sortApiRoles } from '../../utils/apiRoles';
 import { Secret } from '../Core/CopySecretButton';
 import { Dialog } from '../Core/Dialog';
 import DisplaySecret from '../Core/DisplaySecret';
-import { Form } from '../Core/Form';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { InfoToast } from '../Core/Toast';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
@@ -17,38 +17,53 @@ import './KeyCreationDialog.scss';
 
 type KeySecretProp = ApiKeySecretsDTO | undefined;
 
-type KeyCreationDialogProps = {
+type KeyCreationDialogProps = Readonly<{
   onKeyCreation: (form: CreateApiKeyFormDTO) => Promise<KeySecretProp>;
   triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
-};
+}>;
 
-function CreateApiKeyForm({
-  onFormSubmit,
-  availableRoles,
-  closeDialog,
-}: {
+type CreateApiKeyFormProps = Readonly<{
   onFormSubmit: SubmitHandler<CreateApiKeyFormDTO>;
   availableRoles: ApiRoleDTO[];
   closeDialog: () => void;
-}) {
+}>;
+
+type ApiKeySecretsProps = Readonly<{
+  keySecrets: ApiKeySecretsDTO;
+  closeDialog: () => void;
+}>;
+
+function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateApiKeyFormProps) {
+  const formMethods = useForm<CreateApiKeyFormDTO>();
+  const { handleSubmit } = formMethods;
   return (
     <>
-      <h1>Create API Key</h1>
-      <Form<CreateApiKeyFormDTO> onSubmit={onFormSubmit} submitButtonText='Create API Key'>
-        <TextInput inputName='name' label='Name' required />
-        <MultiCheckboxInput
-          label='API Permissions'
-          inputName='roles'
-          options={sortApiRoles(availableRoles).map((role) => ({
-            optionLabel: role.externalName,
-            value: role.roleName,
-          }))}
-          rules={{
-            required: 'Please select at least one API permission.',
-          }}
-        />
-      </Form>
+      <h1>Add API Key</h1>
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(onFormSubmit)}>
+          <TextInput
+            inputName='name'
+            label='Name'
+            rules={{
+              required: 'Please specify an API Key name.',
+            }}
+          />
+          <MultiCheckboxInput
+            label='API Permissions'
+            inputName='roles'
+            options={sortApiRoles(availableRoles).map((role) => ({
+              optionLabel: role.externalName,
+              value: role.roleName,
+            }))}
+            rules={{
+              required: 'Please select at least one API permission.',
+            }}
+          />
+
+          <FormSubmitButton> Add API Key </FormSubmitButton>
+        </form>
+      </FormProvider>
       <div className='button-container'>
         <button
           type='button'
@@ -64,13 +79,7 @@ function CreateApiKeyForm({
   );
 }
 
-function ShowApiKeySecrets({
-  keySecrets,
-  closeDialog,
-}: {
-  keySecrets: ApiKeySecretsDTO;
-  closeDialog: () => void;
-}) {
+function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
   const secrets: Secret[] = [
     { value: keySecrets.secret, valueName: 'Secret' },
     { value: keySecrets.plaintextKey, valueName: 'Key' },

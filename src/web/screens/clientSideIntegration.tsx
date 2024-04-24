@@ -75,14 +75,20 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
-  const handleUpdateDomainNames = async (newDomainNames: string[]) => {
+  const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
     try {
-      const response = await UpdateDomainNames(newDomainNames);
+      const response = await UpdateDomainNames(updatedDomainNames);
       setDomainNames(response);
-      SuccessToast('Domain Names updated.');
+      SuccessToast(`Domain names ${action}.`);
     } catch (e) {
       handleErrorToast(e);
     }
+  };
+
+  const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
+    let updatedDomains = newDomains;
+    if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
+    handleUpdateDomainNames(updatedDomains, 'added');
   };
 
   return (
@@ -109,7 +115,11 @@ function ClientSideIntegration() {
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}
         />
-        <CstgDomainsTable domains={domainNames || []} onUpdateDomains={handleUpdateDomainNames} />
+        <CstgDomainsTable
+          domains={domainNames || []}
+          onAddDomains={onAddDomainNames}
+          onUpdateDomains={handleUpdateDomainNames}
+        />
       </ScreenContentContainer>
     </>
   );

@@ -2,6 +2,14 @@ import axios from 'axios';
 
 import { backendError } from '../utils/apiError';
 
+export type AddDomainNamesFormProps = {
+  newDomains: string;
+};
+
+export type EditDomainFormProps = {
+  domainName: string;
+};
+
 export async function GetDomainNames(participantId?: number) {
   try {
     const result = await axios.get<string[]>(

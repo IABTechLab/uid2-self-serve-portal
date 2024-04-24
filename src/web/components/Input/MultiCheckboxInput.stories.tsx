@@ -1,6 +1,7 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { FormProvider, useForm } from 'react-hook-form';
 
-import { Form } from '../Core/Form';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
 
@@ -16,10 +17,16 @@ const options: Option<string>[] = [
 ];
 
 const Template: ComponentStory<typeof MultiCheckboxInput> = (args) => {
+  const formMethods = useForm();
+  const { handleSubmit } = formMethods;
+
   return (
-    <Form onSubmit={(formData) => console.log(formData)}>
-      <MultiCheckboxInput {...args} inputName='checkbox' />
-    </Form>
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit((formData) => console.log(formData))}>
+        <MultiCheckboxInput {...args} inputName='checkbox' />
+        <FormSubmitButton />
+      </form>
+    </FormProvider>
   );
 };
 

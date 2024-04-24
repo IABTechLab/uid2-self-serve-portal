@@ -23,7 +23,7 @@ export function ClientSideCompletion({ keyPairData, domainNames }: ClientSideCom
         steps.
       </div>
       <ul>
-        {!hasKeyPairData && <li>Create at least one key pair.</li>}
+        {!hasKeyPairData && <li>Add at least one key pair.</li>}
         {!hasDomainNames && <li>Provide at least one top-level domain name.</li>}
       </ul>
     </Card>

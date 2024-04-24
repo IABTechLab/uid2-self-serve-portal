@@ -2,21 +2,28 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
-import { TextInput } from './TextInput';
+import { MultilineTextInput } from './MultilineTextInput';
 
 export default {
-  title: 'Inputs/Text',
-  component: TextInput,
-} as ComponentMeta<typeof TextInput>;
+  title: 'Inputs/MultilineText',
+  component: MultilineTextInput,
+} as ComponentMeta<typeof MultilineTextInput>;
 
-const Template: ComponentStory<typeof TextInput> = (args) => {
+const Template: ComponentStory<typeof MultilineTextInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;
-
   return (
     <FormProvider {...formMethods}>
-      <form onSubmit={handleSubmit(() => {})}>
-        <TextInput {...args} inputName='textInput' data-testid='text-input' />
+      <form
+        onSubmit={handleSubmit((formData) => {
+          console.log(formData);
+        })}
+      >
+        <MultilineTextInput
+          {...args}
+          inputName='multilineTextInput'
+          data-testid='multiline-text-input'
+        />
         <FormSubmitButton />
       </form>
     </FormProvider>
@@ -33,5 +40,5 @@ export const WithValidation = Template.bind({});
 WithValidation.args = {
   name: 'text with rule',
   label: 'Enter text',
-  rules: { maxLength: { value: 2, message: 'Too many characters' } },
+  rules: { required: 'Please enter some text.' },
 };

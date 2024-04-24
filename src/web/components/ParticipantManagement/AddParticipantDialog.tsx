@@ -12,6 +12,7 @@ import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { Dialog } from '../Core/Dialog';
+import FormSubmitButton from '../Core/FormSubmitButton';
 import { SuccessToast } from '../Core/Toast';
 import { RootFormErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
@@ -166,7 +167,7 @@ function AddParticipantDialog({
                 optionLabel: p.typeName,
                 value: p.id,
               }))}
-              rules={{ required: 'Please specify Participant Type(s).' }}
+              rules={{ required: 'Please specify Participant Types.' }}
             />
             <div className='site-type'>
               <RadioInput
@@ -230,7 +231,7 @@ function AddParticipantDialog({
                   optionToolTip: p.roleName,
                   value: p.id,
                 }))}
-                rules={{ required: 'Please specify API Role(s).' }}
+                rules={{ required: 'Please specify API Roles.' }}
               />
             </div>
             <TextInput
@@ -289,11 +290,7 @@ function AddParticipantDialog({
             </div>
             <br />
             <div className='action-container'>
-              <div className='request-button'>
-                <button type='submit' className='primary-button'>
-                  Add Participant
-                </button>
-              </div>
+              <FormSubmitButton>Add Participant</FormSubmitButton>
               <div className='cancel-button'>
                 <button type='button' className='transparent-button' onClick={() => setOpen(false)}>
                   Cancel

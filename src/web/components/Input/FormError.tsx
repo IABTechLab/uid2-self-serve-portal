@@ -24,7 +24,11 @@ export function getGlobalErrorsAsArray(root: FieldErrors['root']) {
 }
 
 export function FormError({ display, children }: PropsWithChildren<{ display: boolean }>) {
-  return display ? <div className='form-error'>{children}</div> : null;
+  return display ? (
+    <div className='form-error' role='alert'>
+      {children}
+    </div>
+  ) : null;
 }
 
 type RootFormErrorsProps = {

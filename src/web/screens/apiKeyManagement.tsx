@@ -88,15 +88,17 @@ function ApiKeyManagement() {
                 availableRoles={apiRoles}
               />
               {apiRoles.length > 0 && (
-                <KeyCreationDialog
-                  availableRoles={apiRoles}
-                  onKeyCreation={onKeyCreation}
-                  triggerButton={
-                    <button className='small-button' type='button'>
-                      Create Key
-                    </button>
-                  }
-                />
+                <div className='create-new-key'>
+                  <KeyCreationDialog
+                    availableRoles={apiRoles}
+                    onKeyCreation={onKeyCreation}
+                    triggerButton={
+                      <button className='small-button' type='button'>
+                        Add API Key
+                      </button>
+                    }
+                  />
+                </div>
               )}
             </ScreenContentContainer>
           )}
