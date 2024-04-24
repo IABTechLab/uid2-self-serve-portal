@@ -10,12 +10,12 @@ import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantManagementItem.scss';
 
-type ParticipantRequestProps = {
+type ParticipantRequestProps = Readonly<{
   participantRequest: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
   apiRoles: ApiRoleDTO[];
   onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
-};
+}>;
 
 export function ParticipantRequestItem({
   participantRequest: participant,
@@ -72,20 +72,22 @@ export function ParticipantRequestItem({
           >
             Approve
           </button>
-          <Dialog
-            title='Approve Participant Request'
-            closeButtonText='Cancel'
-            open={open}
-            onOpenChange={setOpen}
-            className='participants-request-dialog'
-          >
-            <ParticipantApprovalForm
-              onApprove={handleApprove}
-              participant={participant}
-              participantTypes={participantTypes}
-              apiRoles={apiRoles}
-            />
-          </Dialog>
+          {open && (
+            <Dialog
+              title='Approve Participant Request'
+              closeButtonText='Cancel'
+              open
+              onOpenChange={setOpen}
+              className='participants-request-dialog'
+            >
+              <ParticipantApprovalForm
+                onApprove={handleApprove}
+                participant={participant}
+                participantTypes={participantTypes}
+                apiRoles={apiRoles}
+              />
+            </Dialog>
+          )}
         </div>
       </td>
     </tr>

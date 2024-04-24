@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
@@ -6,7 +7,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
-import UpdateParticipantDialog from './UpdateParticipantDialog';
+import UpdateParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
@@ -23,6 +24,12 @@ export function ApprovedParticipantItem({
   participantTypes,
   onUpdateParticipant,
 }: ApprovedParticipantProps) {
+  const [showUpdateParticipantDialog, setShowUpdateParticipantDialog] = useState<boolean>(false);
+
+  const onOpenChangeUpdateParticipantDialog = () => {
+    setShowUpdateParticipantDialog(!showUpdateParticipantDialog);
+  };
+
   function getParticipantTypes(
     currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
   ) {
@@ -66,17 +73,22 @@ export function ApprovedParticipantItem({
       <td>{participant.crmAgreementNumber}</td>
       <td className='action'>
         <div className='action-cell'>
-          <UpdateParticipantDialog
-            apiRoles={apiRoles}
-            onUpdateParticipant={onUpdateParticipant}
-            participant={participant}
-            participantTypes={participantTypes}
-            triggerButton={
-              <button type='button' className='transparent-button'>
-                <FontAwesomeIcon icon='pencil' />
-              </button>
-            }
-          />
+          <button
+            type='button'
+            className='transparent-button'
+            onClick={onOpenChangeUpdateParticipantDialog}
+          >
+            <FontAwesomeIcon icon='pencil' />
+          </button>
+          {showUpdateParticipantDialog && (
+            <UpdateParticipantDialog
+              apiRoles={apiRoles}
+              onUpdateParticipant={onUpdateParticipant}
+              participant={participant}
+              participantTypes={participantTypes}
+              onOpenChange={onOpenChangeUpdateParticipantDialog}
+            />
+          )}
         </div>
       </td>
     </tr>
