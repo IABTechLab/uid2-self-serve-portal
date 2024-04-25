@@ -24,7 +24,7 @@ export function ParticipantRequestItem({
   onApprove,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
+  const [showApproveParticipantDialog, setShowApproveParticipantDialog] = useState(false);
 
   function getParticipantTypes(
     currentParticipantTypes?: ParticipantRequestProps['participantRequest']['types']
@@ -43,6 +43,10 @@ export function ParticipantRequestItem({
     } catch (err) {
       setHasError(true);
     }
+  };
+
+  const onOpenChangeApproveParticipantDialog = () => {
+    setShowApproveParticipantDialog(!showApproveParticipantDialog);
   };
 
   return (
@@ -68,16 +72,16 @@ export function ParticipantRequestItem({
           <button
             type='button'
             className='transparent-button approve-button'
-            onClick={() => setOpen(true)}
+            onClick={onOpenChangeApproveParticipantDialog}
           >
             Approve
           </button>
-          {open && (
+          {showApproveParticipantDialog && (
             <Dialog
               title='Approve Participant Request'
               closeButtonText='Cancel'
               open
-              onOpenChange={setOpen}
+              onOpenChange={onOpenChangeApproveParticipantDialog}
               className='participants-request-dialog'
             >
               <ParticipantApprovalForm

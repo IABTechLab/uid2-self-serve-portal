@@ -24,10 +24,10 @@ export function ApprovedParticipantItem({
   participantTypes,
   onUpdateParticipant,
 }: ApprovedParticipantProps) {
-  const [showUpdateParticipantDialog, setShowUpdateParticipantDialog] = useState<boolean>(false);
+  const [showEditParticipantDialog, setShowEditParticipantDialog] = useState<boolean>(false);
 
-  const onOpenChangeUpdateParticipantDialog = () => {
-    setShowUpdateParticipantDialog(!showUpdateParticipantDialog);
+  const onOpenChangeEditParticipantDialog = () => {
+    setShowEditParticipantDialog(!showEditParticipantDialog);
   };
 
   function getParticipantTypes(
@@ -76,17 +76,17 @@ export function ApprovedParticipantItem({
           <button
             type='button'
             className='transparent-button'
-            onClick={onOpenChangeUpdateParticipantDialog}
+            onClick={onOpenChangeEditParticipantDialog}
           >
             <FontAwesomeIcon icon='pencil' />
           </button>
-          {showUpdateParticipantDialog && (
+          {showEditParticipantDialog && (
             <EditParticipantDialog
               apiRoles={apiRoles}
               onEditParticipant={onUpdateParticipant}
               participant={participant}
               participantTypes={participantTypes}
-              onOpenChange={onOpenChangeUpdateParticipantDialog}
+              onOpenChange={onOpenChangeEditParticipantDialog}
             />
           )}
         </div>

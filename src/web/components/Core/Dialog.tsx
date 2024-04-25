@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 
 import './Dialog.scss';
 
-export type DialogProps = {
+export type DialogProps = Readonly<{
   triggerButton?: JSX.Element;
   children: ReactNode;
   title?: string;
@@ -16,7 +16,7 @@ export type DialogProps = {
   className?: string;
   hideCloseButtons?: boolean;
   hideActionCloseButtonOnly?: boolean;
-};
+}>;
 export function Dialog({
   triggerButton,
   children,
