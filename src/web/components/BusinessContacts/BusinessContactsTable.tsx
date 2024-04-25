@@ -26,17 +26,6 @@ function BusinessContactsTable({
   };
   return (
     <div className='business-contacts-table-container'>
-      <div className='business-contacts-table-header'>
-        <div className='business-contacts-table-header-right'>
-          <button
-            className='small-button'
-            type='button'
-            onClick={onOpenChangeBusinessContactDialog}
-          >
-            Add Email Contact
-          </button>
-        </div>
-      </div>
       <table className='business-contacts-table'>
         <thead>
           <tr>
@@ -63,24 +52,18 @@ function BusinessContactsTable({
           icon={<img src='/email-icon.svg' alt='email-icon' />}
           title='No Email Contacts'
         >
-          {showBusinessContactDialog && (
-            <BusinessContactDialog
-              onFormSubmit={onAddEmailContact}
-              onOpenChange={onOpenChangeBusinessContactDialog}
-            />
-          )}
+          <span>There are no email contacts.</span>
         </TableNoDataPlaceholder>
       )}
 
-      {!!businessContacts.length && (
-        <div className='add-new-item'>
-          {showBusinessContactDialog && (
-            <BusinessContactDialog
-              onFormSubmit={onAddEmailContact}
-              onOpenChange={onOpenChangeBusinessContactDialog}
-            />
-          )}
-        </div>
+      <button className='small-button' type='button' onClick={onOpenChangeBusinessContactDialog}>
+        Add Email Contact
+      </button>
+      {showBusinessContactDialog && (
+        <BusinessContactDialog
+          onFormSubmit={onAddEmailContact}
+          onOpenChange={onOpenChangeBusinessContactDialog}
+        />
       )}
     </div>
   );
