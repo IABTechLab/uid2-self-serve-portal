@@ -86,7 +86,6 @@ function DeletePermissionDialog({
       {showDeletePermissionsDialog && (
         <Dialog
           title='Are you sure you want to delete these permissions?'
-          open
           onOpenChange={onOpenChangeDeletePermissionsDialog}
           closeButtonText='Cancel'
         >

@@ -80,7 +80,6 @@ export function ParticipantRequestItem({
             <Dialog
               title='Approve Participant Request'
               closeButtonText='Cancel'
-              open
               onOpenChange={onOpenChangeApproveParticipantDialog}
               className='participants-request-dialog'
             >

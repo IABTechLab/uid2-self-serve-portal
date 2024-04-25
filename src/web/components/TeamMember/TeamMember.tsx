@@ -10,29 +10,26 @@ import { InlineMessage } from '../Core/InlineMessage';
 import { SuccessToast } from '../Core/Toast';
 import TeamMemberDialog from './TeamMemberDialog';
 
-type DeleteConfirmationDialogProps = {
+type DeleteConfirmationDialogProps = Readonly<{
   person: UserResponse;
   onRemoveTeamMember: () => Promise<void>;
-};
+  onOpenChange: () => void;
+}>;
 
-function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirmationDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-
+function DeleteConfirmationDialog({
+  person,
+  onRemoveTeamMember,
+  onOpenChange,
+}: DeleteConfirmationDialogProps) {
   const handleRemove = async () => {
-    setOpenConfirmation(false);
     await onRemoveTeamMember();
+    onOpenChange();
   };
 
   return (
     <Dialog
       title='Are you sure you want to delete this team member?'
-      triggerButton={
-        <button className='icon-button' aria-label='delete' type='button'>
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
-      }
-      open={openConfirmation}
-      onOpenChange={setOpenConfirmation}
+      onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
       <ul className='dot-list'>
@@ -49,12 +46,12 @@ function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirma
   );
 }
 
-type TeamMemberProps = {
+type TeamMemberProps = Readonly<{
   person: UserResponse;
   resendInvite: (id: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
-};
+}>;
 
 enum InviteState {
   initial,
@@ -71,6 +68,7 @@ function TeamMember({
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
+  const [showDeleteTeamMemberDialog, setShowDeleteTeamMemberDialog] = useState<boolean>();
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
@@ -78,6 +76,10 @@ function TeamMember({
 
   const onOpenChangeTeamMemberDialog = () => {
     setShowTeamMemberDialog(!showTeamMemberDialog);
+  };
+
+  const onOpenChangeDeleteTeamMemberDialog = () => {
+    setShowDeleteTeamMemberDialog(!showDeleteTeamMemberDialog);
   };
 
   const onResendInvite = useCallback(async () => {
@@ -143,7 +145,12 @@ function TeamMember({
                 {reinviteState === InviteState.error && 'Try again later'}
               </button>
             )}
-            <button className='icon-button' aria-label='edit' type='button' onClick={onOpenChangeTeamMemberDialog}>
+            <button
+              className='icon-button'
+              aria-label='edit'
+              type='button'
+              onClick={onOpenChangeTeamMemberDialog}
+            >
               <FontAwesomeIcon icon='pencil' />
             </button>
             {showTeamMemberDialog && (
@@ -153,7 +160,21 @@ function TeamMember({
                 onOpenChange={onOpenChangeTeamMemberDialog}
               />
             )}
-            <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
+            <button
+              className='icon-button'
+              aria-label='delete'
+              type='button'
+              onClick={onOpenChangeDeleteTeamMemberDialog}
+            >
+              <FontAwesomeIcon icon='trash-can' />
+            </button>
+            {showDeleteTeamMemberDialog && (
+              <DeleteConfirmationDialog
+                onRemoveTeamMember={handleRemoveUser}
+                person={person}
+                onOpenChange={onOpenChangeDeleteTeamMemberDialog}
+              />
+            )}
           </div>
         </div>
       </td>

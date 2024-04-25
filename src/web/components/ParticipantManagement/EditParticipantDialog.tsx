@@ -47,7 +47,6 @@ function EditParticipantDialog({
     <Dialog
       title={`Edit Participant: ${participant.name}`}
       closeButtonText='Cancel'
-      open
       onOpenChange={onOpenChange}
     >
       <FormProvider {...formMethods}>

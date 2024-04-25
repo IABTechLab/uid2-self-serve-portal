@@ -83,7 +83,6 @@ export function SearchAndAddParticipants({
         {showAddPermissionsDialog && (
           <Dialog
             title='Please review the following changes'
-            open
             onOpenChange={onOpenChangeAddPermissionsDialog}
             closeButtonText='Cancel'
           >

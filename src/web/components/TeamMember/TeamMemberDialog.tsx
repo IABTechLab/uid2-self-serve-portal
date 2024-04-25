@@ -47,7 +47,6 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     <Dialog
       title={`${props.person ? 'Edit' : 'Add'} Team Member`}
       closeButtonText='Cancel'
-      open
       onOpenChange={props.onOpenChange}
     >
       <FormProvider {...formMethods}>
