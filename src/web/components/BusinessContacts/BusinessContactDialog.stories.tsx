@@ -14,7 +14,6 @@ const Template: ComponentStory<typeof BusinessContactDialog> = (args) => (
 
 export const WithoutBusinessContact = Template.bind({});
 WithoutBusinessContact.args = {
-  triggerButton: <button type='button'>Open</button>,
   onFormSubmit: (formData) =>
     Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`)),
 };

@@ -12,7 +12,6 @@ type Story = StoryObj<typeof KeyCreationDialog>;
 
 export const MultipleRoles: Story = {
   args: {
-    triggerButton: <button type='button'>Open</button>,
     onKeyCreation: (form) => {
       console.log(`Add a new Key ${JSON.stringify(form)}`);
       return Promise.resolve({
@@ -31,7 +30,6 @@ export const MultipleRoles: Story = {
 
 export const OneRole: Story = {
   args: {
-    triggerButton: <button type='button'>Open</button>,
     onKeyCreation: (form) => {
       console.log(`Add a new Key ${JSON.stringify(form)}`);
       return Promise.resolve({

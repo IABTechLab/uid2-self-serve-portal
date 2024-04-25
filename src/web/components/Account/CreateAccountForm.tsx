@@ -89,16 +89,14 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
             </button>{' '}
             (must click link)
           </span>
-          <Dialog
-            open={showTermsDialog}
-            onOpenChange={setShowTermsDialog}
-            className='terms-conditions-dialog'
-          >
-            <TermsAndConditionsForm
-              onAccept={handleAccept}
-              onCancel={() => setShowTermsDialog(false)}
-            />
-          </Dialog>
+          {showTermsDialog && (
+            <Dialog open onOpenChange={setShowTermsDialog} className='terms-conditions-dialog'>
+              <TermsAndConditionsForm
+                onAccept={handleAccept}
+                onCancel={() => setShowTermsDialog(false)}
+              />
+            </Dialog>
+          )}
         </div>
         <FormError display={!!errors.agreeToTerms}>
           Please click the link above to accept the terms and conditions.
