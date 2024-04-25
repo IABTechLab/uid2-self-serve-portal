@@ -117,7 +117,7 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
 
       <div className='button-container'>
         {showWarningDialog && (
-          <Dialog open onOpenChange={onOpenChangeWarningDialog} closeButtonText='Cancel'>
+          <Dialog onOpenChange={onOpenChangeWarningDialog} closeButtonText='Cancel'>
             <p>
               Make sure you&apos;ve copied your API secret and key to a secure location. After you
               close this page, they are no longer accessible.
@@ -148,7 +148,7 @@ function KeyCreationDialog({
 
   return (
     <div className='key-creation-dialog'>
-      <Dialog open onOpenChange={onOpenChange} hideCloseButtons>
+      <Dialog onOpenChange={onOpenChange} hideCloseButtons>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}

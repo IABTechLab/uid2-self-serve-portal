@@ -25,7 +25,6 @@ function DeleteBusinessContactDialog({
   return (
     <Dialog
       title='Are you sure you want to delete this email contact?'
-      open
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >

@@ -20,7 +20,6 @@ function DeleteConfirmationDialog({
   return (
     <Dialog
       title='Are you sure you want to delete these domains?'
-      open
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
