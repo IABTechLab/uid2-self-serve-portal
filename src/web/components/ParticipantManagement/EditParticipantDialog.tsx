@@ -11,23 +11,23 @@ import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { validateEditcrmAgreementNumber } from './AddParticipantDialogHelper';
 
-type UpdateParticipantDialogProps = Readonly<{
+type EditParticipantDialogProps = Readonly<{
   participant: ParticipantDTO;
-  onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
+  onEditParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
   onOpenChange: () => void;
 }>;
 
-function UpdateParticipantDialog({
+function EditParticipantDialog({
   participant,
-  onUpdateParticipant,
+  onEditParticipant,
   apiRoles,
   participantTypes,
   onOpenChange,
-}: UpdateParticipantDialogProps) {
+}: EditParticipantDialogProps) {
   const onSubmit = async (formData: UpdateParticipantForm) => {
-    await onUpdateParticipant(formData, participant);
+    await onEditParticipant(formData, participant);
     onOpenChange();
   };
 
@@ -94,4 +94,4 @@ function UpdateParticipantDialog({
   );
 }
 
-export default UpdateParticipantDialog;
+export default EditParticipantDialog;

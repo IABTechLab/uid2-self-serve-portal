@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
-import UpdateParticipantDialog from './EditParticipantDialog';
+import EditParticipantDialog from './EditParticipantDialog';
 
-const meta: Meta<typeof UpdateParticipantDialog> = {
-  component: UpdateParticipantDialog,
+const meta: Meta<typeof EditParticipantDialog> = {
+  component: EditParticipantDialog,
   title: 'Manage Participants/Update Participant Dialog',
 };
 export default meta;
 
-type Story = StoryObj<typeof UpdateParticipantDialog>;
+type Story = StoryObj<typeof EditParticipantDialog>;
 
 export const ParticipantWithExistingRoles: Story = {
   args: {
@@ -55,7 +55,7 @@ export const ParticipantWithExistingRoles: Story = {
         },
       ],
     },
-    onUpdateParticipant: (form) => {
+    onEditParticipant: (form) => {
       console.log(form);
       return Promise.resolve();
     },
@@ -96,7 +96,7 @@ export const ParticipantWithNoRolesOrTypes: Story = {
         },
       ],
     },
-    onUpdateParticipant: (form) => {
+    onEditParticipant: (form) => {
       console.log(form);
       return Promise.resolve();
     },

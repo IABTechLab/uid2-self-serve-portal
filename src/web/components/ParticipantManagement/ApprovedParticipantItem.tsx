@@ -7,7 +7,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
-import UpdateParticipantDialog from './EditParticipantDialog';
+import EditParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
@@ -81,9 +81,9 @@ export function ApprovedParticipantItem({
             <FontAwesomeIcon icon='pencil' />
           </button>
           {showUpdateParticipantDialog && (
-            <UpdateParticipantDialog
+            <EditParticipantDialog
               apiRoles={apiRoles}
-              onUpdateParticipant={onUpdateParticipant}
+              onEditParticipant={onUpdateParticipant}
               participant={participant}
               participantTypes={participantTypes}
               onOpenChange={onOpenChangeUpdateParticipantDialog}
