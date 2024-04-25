@@ -58,7 +58,7 @@ function ApiKeyManagement() {
     try {
       await DisableApiKey(apiKey);
       reloader.revalidate();
-      SuccessToast('Your key has been deleted');
+      SuccessToast('Your key has been deleted.');
     } catch (e) {
       handleErrorToast(e);
     }
