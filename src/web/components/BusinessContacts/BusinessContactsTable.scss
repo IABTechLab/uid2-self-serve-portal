@@ -3,6 +3,17 @@
     margin-top: 24px;
   }
 
+  .business-contacts-table-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    &-right {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   .business-contacts-table {
     margin-top: 28px;
 

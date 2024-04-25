@@ -7,43 +7,12 @@ import BusinessContactDialog from './BusinessContactDialog';
 
 import './BusinessContactsTable.scss';
 
-function NoEmailContact({
-  onAddEmailContact,
-}: {
-  onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
-}) {
-  const [showBusinessContactDialog, setShowBusinessContactDialog] = useState<boolean>(false);
-  const onOpenChangeBusinessContactDialog = () => {
-    setShowBusinessContactDialog(!showBusinessContactDialog);
-  };
-  return (
-    <TableNoDataPlaceholder
-      icon={<img src='/email-icon.svg' alt='email-icon' />}
-      title='No Email Contacts'
-    >
-      <button
-        className='transparent-button'
-        type='button'
-        onClick={onOpenChangeBusinessContactDialog}
-      >
-        Add Email Contact
-      </button>
-      {showBusinessContactDialog && (
-        <BusinessContactDialog
-          onFormSubmit={onAddEmailContact}
-          onOpenChange={onOpenChangeBusinessContactDialog}
-        />
-      )}
-    </TableNoDataPlaceholder>
-  );
-}
-
-type BusinessContactsTableProps = {
+type BusinessContactsTableProps = Readonly<{
   businessContacts: BusinessContactResponse[];
   onRemoveEmailContact: (id: number) => Promise<void>;
   onUpdateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
   onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
-};
+}>;
 
 function BusinessContactsTable({
   businessContacts,
@@ -57,6 +26,17 @@ function BusinessContactsTable({
   };
   return (
     <div className='business-contacts-table-container'>
+      <div className='business-contacts-table-header'>
+        <div className='business-contacts-table-header-right'>
+          <button
+            className='small-button'
+            type='button'
+            onClick={onOpenChangeBusinessContactDialog}
+          >
+            Add Email Contact
+          </button>
+        </div>
+      </div>
       <table className='business-contacts-table'>
         <thead>
           <tr>
@@ -77,16 +57,23 @@ function BusinessContactsTable({
           ))}
         </tbody>
       </table>
-      {!businessContacts.length && <NoEmailContact onAddEmailContact={onAddEmailContact} />}
+
+      {!businessContacts.length && (
+        <TableNoDataPlaceholder
+          icon={<img src='/email-icon.svg' alt='email-icon' />}
+          title='No Email Contacts'
+        >
+          {showBusinessContactDialog && (
+            <BusinessContactDialog
+              onFormSubmit={onAddEmailContact}
+              onOpenChange={onOpenChangeBusinessContactDialog}
+            />
+          )}
+        </TableNoDataPlaceholder>
+      )}
+
       {!!businessContacts.length && (
         <div className='add-new-item'>
-          <button
-            className='small-button'
-            type='button'
-            onClick={onOpenChangeBusinessContactDialog}
-          >
-            Add Email Contact
-          </button>
           {showBusinessContactDialog && (
             <BusinessContactDialog
               onFormSubmit={onAddEmailContact}
