@@ -36,7 +36,6 @@ export const MultipleRoles: Story = {
       console.log(form);
       return Promise.resolve();
     },
-    triggerButton: <button type='button'>Open</button>,
   },
 };
 
@@ -63,7 +62,6 @@ export const KeyWithRolesParticipantIsntAllowed: Story = {
       console.log(form);
       return Promise.resolve();
     },
-    triggerButton: <button type='button'>Open</button>,
   },
 };
 
@@ -84,6 +82,5 @@ export const KeyWithOnlyOneRole: Story = {
       console.log(form);
       return Promise.resolve();
     },
-    triggerButton: <button type='button'>Open</button>,
   },
 };

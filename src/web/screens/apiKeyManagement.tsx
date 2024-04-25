@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
@@ -27,6 +27,7 @@ import { PortalRoute } from './routeUtils';
 import './apiKeyManagement.scss';
 
 function ApiKeyManagement() {
+  const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
   const data = useLoaderData() as {
     result: ApiKeyDTO[];
   };
@@ -57,10 +58,14 @@ function ApiKeyManagement() {
     try {
       await DisableApiKey(apiKey);
       reloader.revalidate();
-      SuccessToast('Your key has been deleted');
+      SuccessToast('Your key has been deleted.');
     } catch (e) {
       handleErrorToast(e);
     }
+  };
+
+  const onKeyCreationDialogChange = () => {
+    setShowKeyCreationDialog(!showKeyCreationDialog);
   };
 
   return (
@@ -90,15 +95,20 @@ function ApiKeyManagement() {
               />
               {apiRoles.length > 0 && (
                 <div className='create-new-key'>
-                  <KeyCreationDialog
-                    availableRoles={apiRoles}
-                    onKeyCreation={onKeyCreation}
-                    triggerButton={
-                      <button className='small-button' type='button'>
-                        Add API Key
-                      </button>
-                    }
-                  />
+                  <button
+                    className='small-button'
+                    type='button'
+                    onClick={onKeyCreationDialogChange}
+                  >
+                    Add API Key
+                  </button>
+                  {showKeyCreationDialog && (
+                    <KeyCreationDialog
+                      availableRoles={apiRoles}
+                      onKeyCreation={onKeyCreation}
+                      onOpenChange={onKeyCreationDialogChange}
+                    />
+                  )}
                 </div>
               )}
             </>
