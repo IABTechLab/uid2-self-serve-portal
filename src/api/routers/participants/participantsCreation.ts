@@ -61,7 +61,6 @@ export async function validateParticipantCreationRequest(
       errorMessage = 'Requested site name already exists';
     }
   }
-
   return errorMessage;
 }
 
