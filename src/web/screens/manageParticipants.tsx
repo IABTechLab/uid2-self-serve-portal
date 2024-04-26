@@ -90,12 +90,14 @@ function ManageParticipants() {
                   <button type='button' onClick={onOpenChangeAddParticipantDialog}>
                     Add Participant
                   </button>
-                  <AddParticipantDialog
-                    apiRoles={apiRoles}
-                    participantTypes={participantTypes}
-                    onAddParticipant={onAddParticipant}
-                    onOpenChange={onOpenChangeAddParticipantDialog}
-                  />
+                  {showAddParticipantsDialog && (
+                    <AddParticipantDialog
+                      apiRoles={apiRoles}
+                      participantTypes={participantTypes}
+                      onAddParticipant={onAddParticipant}
+                      onOpenChange={onOpenChangeAddParticipantDialog}
+                    />
+                  )}
                 </div>
               </div>
               <ParticipantRequestsTable

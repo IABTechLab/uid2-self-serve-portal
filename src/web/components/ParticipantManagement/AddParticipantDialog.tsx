@@ -57,7 +57,6 @@ function AddParticipantDialog({
     setValue,
     watch,
     handleSubmit,
-    reset,
     setError,
     formState: { errors },
   } = formMethods;
@@ -78,18 +77,7 @@ function AddParticipantDialog({
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setValue, open]);
-
-  useEffect(() => {
-    if (!open) {
-      // the dialog doesn't de-render on close, so we need to clean up our state
-      setSearchText('');
-      setSiteSearchResults(undefined);
-      setSelectedSite(undefined);
-      setNewSite(false);
-      reset();
-    }
-  }, [open, reset]);
+  }, [watch, setValue]);
 
   const onSubmit = useCallback(
     async (formData: AddParticipantForm) => {
@@ -99,7 +87,7 @@ function AddParticipantDialog({
       }
       onOpenChange();
     },
-    [onAddParticipant]
+    [onAddParticipant, onOpenChange]
   );
 
   const submit = useCallback(
