@@ -81,7 +81,7 @@ function KeyPairsTable({
       </table>
       {!keyPairs?.length && (
         <TableNoDataPlaceholder title='No Key Pairs'>
-          <span>There are no Key Pairs.</span>
+          <span>There are no key pairs.</span>
         </TableNoDataPlaceholder>
       )}
     </div>
