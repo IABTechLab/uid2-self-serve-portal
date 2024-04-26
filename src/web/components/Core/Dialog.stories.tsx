@@ -38,11 +38,14 @@ WithoutCloseButtons.args = {
 
 export const WithOpenAndOnOpenChange = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const handleOpenChange = (open: boolean) => setIsOpen(open);
+
+  const handleOpenChange = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <div>
-      <button className='small-button' type='button' onClick={() => setIsOpen(true)}>
+      <button className='small-button' type='button' onClick={handleOpenChange}>
         Open Dialog
       </button>
       {isOpen && (

@@ -26,7 +26,7 @@ export function Dialog({
   hideActionCloseButtonOnly = false,
 }: DialogProps) {
   return (
-    <RadixDialog.Root onOpenChange={onOpenChange}>
+    <RadixDialog.Root open onOpenChange={onOpenChange}>
       <RadixDialog.Overlay className='dialog-overlay' />
       <RadixDialog.Content
         className='dialog-container'
