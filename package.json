@@ -70,7 +70,6 @@
     "react-router-dom": "^6.22.0",
     "react-toastify": "^10.0.4",
     "reflect-metadata": "^0.1.14",
-    "sass": "^1.70.0",
     "stream-browserify": "^3.0.0",
     "swr": "^2.2.4",
     "tldts": "^6.1.8",
@@ -81,8 +80,7 @@
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
     "winston": "^3.11.0",
-    "winston-loki": "^6.0.8",
-    "zod": "^3.22.4"
+    "winston-loki": "^6.0.8"
   },
   "scripts": {
     "dev": "run-p start api",
@@ -159,16 +157,12 @@
     "@babel/preset-typescript": "^7.23.3",
     "@craco/craco": "^7.1.0",
     "@faker-js/faker": "^8.3.1",
-    "@storybook/addon-actions": "^7.4.6",
     "@storybook/addon-essentials": "^7.6.12",
     "@storybook/addon-interactions": "^7.6.12",
     "@storybook/addon-links": "^7.6.12",
     "@storybook/addon-styling-webpack": "^0.0.6",
-    "@storybook/node-logger": "^7.4.6",
-    "@storybook/preset-create-react-app": "^7.6.12",
     "@storybook/react": "^7.4.6",
     "@storybook/react-webpack5": "^7.6.12",
-    "@storybook/testing-library": "^0.2.2",
     "@storybook/testing-react": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.3.0",
@@ -208,6 +202,7 @@
     "prop-types": "^15.8.1",
     "react-scripts": "5.0.1",
     "resize-observer-polyfill": "^1.5.1",
+    "sass": "^1.70.0",
     "sass-loader": "^13.3.3",
     "storybook": "^7.6.12",
     "style-loader": "^3.3.4",
@@ -220,7 +215,8 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "undici": "^6.4.0",
-    "webpack": "^5.90.1"
+    "webpack": "^5.90.1",
+    "zod": "^3.22.4"
   },
   "overrides": {
     "postcss": "^8.4.21",
