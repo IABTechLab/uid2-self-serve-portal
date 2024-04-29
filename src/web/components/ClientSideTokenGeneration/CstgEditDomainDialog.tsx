@@ -55,12 +55,7 @@ function EditDomainDialog({
   };
 
   return (
-    <Dialog
-      title={`Edit Domain: ${domain}`}
-      open
-      onOpenChange={onOpenChange}
-      closeButtonText='Cancel'
-    >
+    <Dialog title={`Edit Domain: ${domain}`} onOpenChange={onOpenChange} closeButtonText='Cancel'>
       <RootFormErrors fieldErrors={errors} />
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onSubmit)}>

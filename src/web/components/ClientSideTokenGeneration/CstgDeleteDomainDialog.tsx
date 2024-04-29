@@ -22,7 +22,6 @@ function DeleteConfirmationDialog({
       title={`Are you sure you want to delete ${
         domains.length > 1 ? 'these domains' : 'this domain'
       }?`}
-      open
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >

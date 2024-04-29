@@ -77,7 +77,7 @@ function CstgAddDomainDialog({
 
   return (
     <div className='add-domain-dialog'>
-      <Dialog title='Add Domains' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
+      <Dialog title='Add Domains' closeButtonText='Cancel' onOpenChange={onOpenChange}>
         <RootFormErrors fieldErrors={errors} />
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>

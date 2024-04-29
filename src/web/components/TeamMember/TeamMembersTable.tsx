@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   InviteTeamMemberForm,
   UpdateTeamMemberForm,
@@ -23,6 +25,12 @@ function TeamMembersTable({
   onRemoveTeamMember,
   onUpdateTeamMember,
 }: TeamMembersTableProps) {
+  const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
+
+  const onOpenChangeTeamMemberDialog = () => {
+    setShowTeamMemberDialog(!showTeamMemberDialog);
+  };
+
   return (
     <div className='portal-team'>
       <table className='portal-team-table'>
@@ -47,14 +55,15 @@ function TeamMembersTable({
         </tbody>
       </table>
       <div className='add-team-member'>
-        <TeamMemberDialog
-          onAddTeamMember={onAddTeamMember}
-          triggerButton={
-            <button className='small-button' type='button'>
-              Add Team Member
-            </button>
-          }
-        />
+        <button className='small-button' type='button' onClick={onOpenChangeTeamMemberDialog}>
+          Add Team Member
+        </button>
+        {showTeamMemberDialog && (
+          <TeamMemberDialog
+            onAddTeamMember={onAddTeamMember}
+            onOpenChange={onOpenChangeTeamMemberDialog}
+          />
+        )}
       </div>
     </div>
   );

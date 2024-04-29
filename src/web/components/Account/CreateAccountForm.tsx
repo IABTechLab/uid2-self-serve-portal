@@ -15,10 +15,10 @@ import { TextInput } from '../Input/TextInput';
 import './createAccountForm.scss';
 import '../../styles/forms.scss';
 
-export type CreateAccountFormProps = {
+export type CreateAccountFormProps = Readonly<{
   resolvedParticipantTypes: ParticipantTypeDTO[];
   onSubmit: (data: CreateParticipantForm) => Promise<string[] | void>;
-};
+}>;
 export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: CreateAccountFormProps) {
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const formMethods = useForm<CreateParticipantForm>({
@@ -90,7 +90,7 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
             (must click link)
           </span>
           {showTermsDialog && (
-            <Dialog open onOpenChange={setShowTermsDialog} className='terms-conditions-dialog'>
+            <Dialog onOpenChange={setShowTermsDialog} className='terms-conditions-dialog'>
               <TermsAndConditionsForm
                 onAccept={handleAccept}
                 onCancel={() => setShowTermsDialog(false)}

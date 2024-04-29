@@ -1,4 +1,4 @@
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
@@ -28,6 +28,8 @@ import { PortalRoute } from './routeUtils';
 import './manageParticipants.scss';
 
 function ManageParticipants() {
+  const [showAddParticipantsDialog, setShowAddParticipantsDialog] = useState<boolean>(false);
+
   const data = useLoaderData() as {
     results: [ParticipantRequestDTO[], ParticipantDTO[], ParticipantTypeDTO[], ApiRoleDTO[]];
   };
@@ -62,6 +64,10 @@ function ManageParticipants() {
     return response;
   };
 
+  const onOpenChangeAddParticipantDialog = () => {
+    setShowAddParticipantsDialog(!showAddParticipantsDialog);
+  };
+
   return (
     <div>
       <Suspense fallback={<Loading />}>
@@ -81,12 +87,17 @@ function ManageParticipants() {
                   </p>
                 </div>
                 <div className='manage-participants-header-right'>
-                  <AddParticipantDialog
-                    apiRoles={apiRoles}
-                    participantTypes={participantTypes}
-                    onAddParticipant={onAddParticipant}
-                    triggerButton={<button type='button'>Add Participant</button>}
-                  />
+                  <button type='button' onClick={onOpenChangeAddParticipantDialog}>
+                    Add Participant
+                  </button>
+                  {showAddParticipantsDialog && (
+                    <AddParticipantDialog
+                      apiRoles={apiRoles}
+                      participantTypes={participantTypes}
+                      onAddParticipant={onAddParticipant}
+                      onOpenChange={onOpenChangeAddParticipantDialog}
+                    />
+                  )}
                 </div>
               </div>
               <ParticipantRequestsTable
