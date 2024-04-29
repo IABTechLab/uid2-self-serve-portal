@@ -77,7 +77,18 @@ describe('CstgDomainAddDomainDialog', () => {
 
   it('should render error when user types single incorrect domain', async () => {
     const user = userEvent.setup();
-    render(<Default />);
+
+    const onAddDomainsMock = jest.fn(() => {
+      return Promise.resolve();
+    });
+
+    render(
+      <CstgAddDomainDialog
+        onAddDomains={onAddDomainsMock}
+        onOpenChange={() => {}}
+        existingDomains={[]}
+      />
+    );
 
     await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test');
 
@@ -88,7 +99,17 @@ describe('CstgDomainAddDomainDialog', () => {
 
   it('should render error if user types in at least one incorrect domain in a list', async () => {
     const user = userEvent.setup();
-    render(<Default />);
+    const onAddDomainsMock = jest.fn(() => {
+      return Promise.resolve();
+    });
+
+    render(
+      <CstgAddDomainDialog
+        onAddDomains={onAddDomainsMock}
+        onOpenChange={() => {}}
+        existingDomains={[]}
+      />
+    );
 
     await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test, test2.com');
 
@@ -98,7 +119,17 @@ describe('CstgDomainAddDomainDialog', () => {
   });
 
   it('should render error if user submits empty text box for domain names', async () => {
-    render(<Default />);
+    const onAddDomainsMock = jest.fn(() => {
+      return Promise.resolve();
+    });
+
+    render(
+      <CstgAddDomainDialog
+        onAddDomains={onAddDomainsMock}
+        onOpenChange={() => {}}
+        existingDomains={[]}
+      />
+    );
     await submitDialog();
 
     expect(screen.getByText('Please specify domains.')).toBeInTheDocument();
