@@ -108,7 +108,7 @@ export function CstgDomainsTable({
                     icon={['far', 'trash-can']}
                     className='cstg-domains-management-icon'
                   />
-                  Delete Domains{' '}
+                  {`Delete Domain${selectedDomains?.length > 1 ? 's' : ''}`}
                 </button>
               )}
 
@@ -146,7 +146,7 @@ export function CstgDomainsTable({
           </tr>
         </thead>
         <tbody>
-          {domains.map((domain) => (
+          {domains.sort().map((domain) => (
             <CstgDomainItem
               key={domain}
               domain={domain}
