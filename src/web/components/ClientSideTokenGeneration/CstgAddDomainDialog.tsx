@@ -89,7 +89,7 @@ function CstgAddDomainDialog({
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              Replace all existing domains with the new ones.
+              <div className='checkbox-text'>Replace all existing domains with the new ones.</div>
             </div>
             <MultilineTextInput
               inputName='newDomains'
