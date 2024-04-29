@@ -5,46 +5,10 @@ import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
-import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { SuccessToast } from '../Core/Toast';
+import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
 import TeamMemberDialog from './TeamMemberDialog';
-
-type DeleteConfirmationDialogProps = Readonly<{
-  person: UserResponse;
-  onRemoveTeamMember: () => Promise<void>;
-  onOpenChange: () => void;
-}>;
-
-function DeleteConfirmationDialog({
-  person,
-  onRemoveTeamMember,
-  onOpenChange,
-}: DeleteConfirmationDialogProps) {
-  const handleRemove = async () => {
-    await onRemoveTeamMember();
-    onOpenChange();
-  };
-
-  return (
-    <Dialog
-      title='Are you sure you want to delete this team member?'
-      onOpenChange={onOpenChange}
-      closeButtonText='Cancel'
-    >
-      <ul className='dot-list'>
-        <li>
-          {person.firstName} {person.lastName}
-        </li>
-      </ul>
-      <div className='dialog-footer-section'>
-        <button type='button' className='primary-button' onClick={handleRemove}>
-          Delete Team Member
-        </button>
-      </div>
-    </Dialog>
-  );
-}
 
 type TeamMemberProps = Readonly<{
   person: UserResponse;
@@ -169,7 +133,7 @@ function TeamMember({
               <FontAwesomeIcon icon='trash-can' />
             </button>
             {showDeleteTeamMemberDialog && (
-              <DeleteConfirmationDialog
+              <TeamMemberDeleteConfirmationDialog
                 onRemoveTeamMember={handleRemoveUser}
                 person={person}
                 onOpenChange={onOpenChangeDeleteTeamMemberDialog}

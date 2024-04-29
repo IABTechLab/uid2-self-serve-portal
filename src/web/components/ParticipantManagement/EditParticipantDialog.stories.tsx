@@ -6,7 +6,7 @@ import EditParticipantDialog from './EditParticipantDialog';
 
 const meta: Meta<typeof EditParticipantDialog> = {
   component: EditParticipantDialog,
-  title: 'Manage Participants/Update Participant Dialog',
+  title: 'Manage Participants/Edit Participant Dialog',
 };
 export default meta;
 
