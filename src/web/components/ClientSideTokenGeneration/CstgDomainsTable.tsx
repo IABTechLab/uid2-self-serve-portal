@@ -146,7 +146,7 @@ export function CstgDomainsTable({
           </tr>
         </thead>
         <tbody>
-          {domains.map((domain) => (
+          {domains.sort().map((domain) => (
             <CstgDomainItem
               key={domain}
               domain={domain}
