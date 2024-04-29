@@ -12,7 +12,7 @@ Object.assign(navigator, {
   },
 });
 
-async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean = true) {
+async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean = false) {
   const onKeyCreation = jest.fn(() => {
     return Promise.resolve({
       name: 'test_key',
@@ -20,13 +20,12 @@ async function loadComponent(availableRoles: ApiRoleDTO[], openDialog: boolean =
       secret: '1234',
     });
   });
-  const triggerButton = <button type='button'>Open</button>;
 
   render(
     <KeyCreationDialog
       availableRoles={availableRoles}
       onKeyCreation={onKeyCreation}
-      triggerButton={triggerButton}
+      onOpenChange={() => {}}
     />
   );
 
