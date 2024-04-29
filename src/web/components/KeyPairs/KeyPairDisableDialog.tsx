@@ -7,11 +7,11 @@ import { KeyPairModel } from './KeyPairModel';
 
 export type OnKeyPairDisable = (keyPair: KeyPairModel) => void;
 
-type KeyPairDisableDialogProps = {
+type KeyPairDisableDialogProps = Readonly<{
   onDisable: OnKeyPairDisable;
   keyPair: KeyPairModel;
   onOpenChange: () => void;
-};
+}>;
 
 function KeyPairDisableDialog({ onDisable, keyPair, onOpenChange }: KeyPairDisableDialogProps) {
   const onSubmit = () => {

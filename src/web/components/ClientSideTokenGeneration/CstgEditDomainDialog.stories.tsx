@@ -1,4 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
+import { useState } from 'react';
 
 import CstgEditDomainDialog from './CstgEditDomainDialog';
 
@@ -8,13 +9,25 @@ const meta: Meta<typeof CstgEditDomainDialog> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof CstgEditDomainDialog>;
+export const Default = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-export const Default: Story = {
-  args: {
-    domain: 'testdomain.com',
-    existingDomains: ['test.com', 'test2.com'],
-    onEditDomainName: (updatedDomain) =>
-      Promise.resolve(console.log('New domain added: ', updatedDomain)),
-  },
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <CstgEditDomainDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          domain='testdomain.com'
+          existingDomains={['test.com', 'test2.com']}
+          onEditDomainName={(updatedDomain) => {
+            Promise.resolve(console.log('New domain added: ', updatedDomain));
+            setIsOpen(!isOpen);
+          }}
+        />
+      )}
+    </div>
+  );
 };

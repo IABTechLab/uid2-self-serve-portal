@@ -1,4 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
+import { useState } from 'react';
 
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 
@@ -8,10 +9,44 @@ const meta: Meta<typeof CstgDeleteDomainDialog> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof CstgDeleteDomainDialog>;
+export const Default = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <CstgDeleteDomainDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          domains={['testdomain.com']}
+          onRemoveDomains={() => {
+            Promise.resolve(console.log(`Disabling Domain`));
+            setIsOpen(!isOpen);
+          }}
+        />
+      )}
+    </div>
+  );
+};
 
-export const Default: Story = {
-  args: {
-    domains: ['testdomain.com'],
-  },
+export const MultipleDomains = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <CstgDeleteDomainDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          domains={['testdomain.com', 'testdomain2.com', 'testdomain3.com']}
+          onRemoveDomains={() => {
+            Promise.resolve(console.log(`Disabling Domain`));
+            setIsOpen(!isOpen);
+          }}
+        />
+      )}
+    </div>
+  );
 };

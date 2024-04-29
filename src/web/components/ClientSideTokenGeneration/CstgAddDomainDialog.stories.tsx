@@ -1,4 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react';
+import { useState } from 'react';
 
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 
@@ -8,10 +9,29 @@ const meta: Meta<typeof CstgAddDomainDialog> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof CstgAddDomainDialog>;
-
-export const Default: Story = {
-  args: {
-    onAddDomains: (newDomain) => Promise.resolve(console.log('New domain added: ', newDomain)),
-  },
+export const Default = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <CstgAddDomainDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          existingDomains={[]}
+          onAddDomains={(newDomainsFormatted, deleteExistingList) => {
+            setIsOpen(!isOpen);
+            return Promise.resolve(
+              console.log(
+                `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
+                  deleteExistingList ? `Keeping existing list` : `Deleting existing list`
+                }`
+              )
+            );
+          }}
+        />
+      )}
+    </div>
+  );
 };
