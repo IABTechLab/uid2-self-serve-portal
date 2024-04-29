@@ -64,6 +64,7 @@ function KeyEditDialog({
                 required: 'Please specify an API Key name.',
               }}
             />
+            <TextInput inputName='keyId' label='Key ID' disabled />
             <MultiCheckboxInput
               label='API Permissions'
               inputName='newApiRoles'
