@@ -5,24 +5,20 @@ import { ReactNode } from 'react';
 
 import './Dialog.scss';
 
-export type DialogProps = {
-  triggerButton?: JSX.Element;
+export type DialogProps = Readonly<{
   children: ReactNode;
   title?: string;
   closeButtonText?: string;
-  open?: boolean;
   onOpenChange?: (open: boolean) => void;
   fullScreen?: boolean;
   className?: string;
   hideCloseButtons?: boolean;
   hideActionCloseButtonOnly?: boolean;
-};
+}>;
 export function Dialog({
-  triggerButton,
   children,
   title,
   closeButtonText,
-  open,
   onOpenChange,
   fullScreen,
   className,
@@ -30,8 +26,7 @@ export function Dialog({
   hideActionCloseButtonOnly = false,
 }: DialogProps) {
   return (
-    <RadixDialog.Root open={open} onOpenChange={onOpenChange}>
-      {triggerButton && <RadixDialog.Trigger asChild>{triggerButton}</RadixDialog.Trigger>}
+    <RadixDialog.Root open onOpenChange={onOpenChange}>
       <RadixDialog.Overlay className='dialog-overlay' />
       <RadixDialog.Content
         className='dialog-container'

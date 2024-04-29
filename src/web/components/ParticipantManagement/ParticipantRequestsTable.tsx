@@ -7,12 +7,12 @@ import { ParticipantRequestItem } from './ParticipantRequestItem';
 
 import './ParticipantManagementTable.scss';
 
-type ParticipantRequestsTableProps = {
+type ParticipantRequestsTableProps = Readonly<{
   participantRequests: ParticipantRequestDTO[];
   participantTypes: ParticipantTypeDTO[];
   apiRoles: ApiRoleDTO[];
   onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
-};
+}>;
 
 function NoParticipantRequests() {
   return (

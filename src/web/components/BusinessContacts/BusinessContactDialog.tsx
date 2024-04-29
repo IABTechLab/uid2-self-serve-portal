@@ -32,7 +32,6 @@ function BusinessContactDialog({
     <Dialog
       title={`${contact ? 'Edit' : 'Add'} Email Contact`}
       closeButtonText='Cancel'
-      open
       onOpenChange={onOpenChange}
     >
       <FormProvider {...formMethods}>

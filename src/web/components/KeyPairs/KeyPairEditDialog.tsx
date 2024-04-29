@@ -53,7 +53,6 @@ function KeyPairEditDialog({
     <div>
       <Dialog
         closeButtonText='Cancel'
-        open
         onOpenChange={onOpenChange}
         title={`Edit Key Pair: ${keyPair.name}`}
       >

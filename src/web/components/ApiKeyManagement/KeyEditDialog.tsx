@@ -52,7 +52,6 @@ function KeyEditDialog({
     <div className='key-edit-dialog'>
       <Dialog
         closeButtonText='Cancel'
-        open
         onOpenChange={onOpenChange}
         title={`Edit API Key: ${apiKey.name}`}
       >

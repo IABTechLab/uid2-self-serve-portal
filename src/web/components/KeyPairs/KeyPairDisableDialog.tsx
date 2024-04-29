@@ -27,7 +27,6 @@ function KeyPairDisableDialog({ onDisable, keyPair, onOpenChange }: KeyPairDisab
   return (
     <Dialog
       closeButtonText='Cancel'
-      open
       onOpenChange={onOpenChange}
       title={`Delete Key Pair: ${keyPair.name}`}
     >

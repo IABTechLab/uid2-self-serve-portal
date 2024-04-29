@@ -27,7 +27,6 @@ function KeyDisableDialog({ onDisable, onOpenChange, apiKey }: KeyDisableDialogP
   return (
     <Dialog
       closeButtonText='Cancel'
-      open
       onOpenChange={onOpenChange}
       title={`Delete API Key: ${apiKey.name}`}
     >

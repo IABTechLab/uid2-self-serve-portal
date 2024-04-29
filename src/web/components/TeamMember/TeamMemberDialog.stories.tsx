@@ -12,7 +12,6 @@ type Story = StoryObj<typeof TeamMemberDialog>;
 
 export const Default: Story = {
   args: {
-    triggerButton: <button type='button'>Open</button>,
     onAddTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
   },
 };
