@@ -15,7 +15,7 @@ export function SignedParticipants() {
   return (
     <>
       <h1>Signed Participants</h1>
-      <p className='heading-details'>Participants that have signed the UID2 participant policy.</p>
+      <p className='heading-details'>Participants that have signed the UID2 Participation Policy.</p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading />}>
           <Await resolve={data.signedParticipants}>
