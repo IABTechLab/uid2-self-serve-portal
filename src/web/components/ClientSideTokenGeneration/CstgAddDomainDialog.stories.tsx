@@ -25,7 +25,7 @@ export const Default = () => {
             return Promise.resolve(
               console.log(
                 `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
-                  deleteExistingList ? `Keeping existing list` : `Deleting existing list`
+                  deleteExistingList ? `Deleting existing list` : `Keeping existing list`
                 }`
               )
             );

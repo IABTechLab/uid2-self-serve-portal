@@ -23,7 +23,7 @@ export const Default = () => {
           domain='testdomain.com'
           existingDomains={['test.com', 'test2.com']}
           onEditDomainName={(updatedDomain) => {
-            Promise.resolve(console.log('New domain added: ', updatedDomain));
+            Promise.resolve(console.log('Domain edited: ', updatedDomain));
             setIsOpen(!isOpen);
           }}
         />
