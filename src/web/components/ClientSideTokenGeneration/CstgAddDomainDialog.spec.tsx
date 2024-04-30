@@ -1,11 +1,7 @@
-import { composeStories } from '@storybook/testing-react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import CstgAddDomainDialog from './CstgAddDomainDialog';
-import * as stories from './CstgAddDomainDialog.stories';
-
-const { Default } = composeStories(stories);
 
 const submitDialog = async () => {
   const createButton = screen.getByRole('button', { name: 'Add Domains' });

@@ -11,6 +11,13 @@ const meta: Meta<typeof KeyEditDialog> = {
 };
 export default meta;
 
+const availableRoles = [
+  { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+  { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+  { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+  { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
+];
+
 const apiKeyInitial = {
   contact: 'ApiKey',
   name: 'ApiKey',
@@ -38,12 +45,7 @@ export const MultipleRoles = () => {
         <KeyEditDialog
           onOpenChange={() => setIsOpen(!isOpen)}
           apiKey={apiKey}
-          availableRoles={[
-            { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-            { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-            { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-            { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-          ]}
+          availableRoles={availableRoles}
           onEdit={(form) => {
             console.log(form);
             return Promise.resolve();
@@ -69,15 +71,9 @@ export const KeyWithRolesParticipantIsntAllowed = () => {
           onOpenChange={() => setIsOpen(!isOpen)}
           apiKey={{
             ...apiKey,
-            roles: [
-              { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-              { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-            ],
+            roles: availableRoles.slice(0, 2),
           }}
-          availableRoles={[
-            { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-            { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-          ]}
+          availableRoles={availableRoles.slice(1, 3)}
           onEdit={(form) => {
             console.log(form);
             return Promise.resolve();
@@ -103,9 +99,9 @@ export const KeyWithOnlyOneRole = () => {
           onOpenChange={() => setIsOpen(!isOpen)}
           apiKey={{
             ...apiKey,
-            roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
+            roles: [availableRoles[0]],
           }}
-          availableRoles={[{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }]}
+          availableRoles={[availableRoles[0]]}
           onEdit={(form) => {
             console.log(form);
             return Promise.resolve();
