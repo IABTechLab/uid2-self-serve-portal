@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
+import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import {
   ApiKeyDTO,
@@ -102,6 +103,17 @@ export async function GetApprovedParticipants() {
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load approved participants');
+  }
+}
+
+export async function GetSignedParticipants() {
+  try {
+    const result = await axios.get<SignedParticipantDTO[]>(`/participants/signed`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load signed participants');
   }
 }
 
