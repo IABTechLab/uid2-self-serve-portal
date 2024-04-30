@@ -30,6 +30,12 @@
     .action-cell > button {
       padding: 5px 0 5px 10px;
     }
+
+    .cstg-domains-table-body {
+      height: 200px;
+      overflow: auto;
+      width: 100%;
+    }
   }
 
   .cstg-domains-management-icon {
@@ -44,6 +50,47 @@
     &-right {
       display: flex;
       align-items: center;
+    }
+
+    .sharing-permissions-search-bar-container {
+      width: 190px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--theme-action);
+      padding: 6px 2px;
+      justify-content: space-between;
+      ::placeholder {
+        color: var(--theme-action);
+        opacity: 1;
+      }
+    }
+
+    .sharing-permission-search-bar-icon {
+      color: var(--theme-action);
+      height: 16px;
+      margin-left: 8px;
+    }
+    .sharing-permissions-search-bar {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: var(--theme-action);
+      font-weight: 400;
+      font-size: 0.75rem;
+      line-height: 0.9375rem;
+    }
+  }
+
+  .domain-names-paging-right {
+    padding-top: 20px;
+    display: flex;
+    justify-content: right;
+
+    .button-item {
+      vertical-align: middle;
+      padding-right: 30px;
+      text-align: center;
+      color: var(--theme-action);
     }
   }
 }

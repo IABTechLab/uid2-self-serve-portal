@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
@@ -24,6 +24,16 @@ export function CstgDomainsTable({
   const [showAddDomainsDialog, setShowAddDomainsDialog] = useState<boolean>(false);
   const [showDeleteDomainsDialog, setShowDeleteDomainsDialog] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
+  const [filteredDomains, setFilteredDomains] = useState<string[]>(domains);
+  const [filterText, setFilterText] = useState('');
+  const [pageNumber, setPageNumber] = useState<number>(0);
+  const rowsPerPage = 15;
+
+  useEffect(() => {
+    setPageNumber(0);
+    setFilteredDomains(domains);
+  }, []);
+
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
@@ -51,6 +61,7 @@ export function CstgDomainsTable({
       domains.filter((domain) => !deleteDomains.includes(domain)),
       'deleted'
     );
+    setFilteredDomains(domains);
   };
 
   const handleSelectDomain = (domain: string) => {
@@ -59,6 +70,11 @@ export function CstgDomainsTable({
     } else {
       setSelectedDomains([...selectedDomains, domain]);
     }
+  };
+
+  const handleSearchDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilterText(event.target.value);
+    setFilteredDomains(domains.filter((d) => d.includes(event.target.value)));
   };
 
   const handleEditDomain = (updatedDomainName: string, originalDomainName: string) => {
@@ -86,9 +102,29 @@ export function CstgDomainsTable({
   ) => {
     await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
+    setFilteredDomains(domains);
     setSelectedDomains([]);
   };
 
+  const onIncreasePageNumber = () => {
+    if (pageNumber < filteredDomains.length / rowsPerPage - 1) {
+      setPageNumber(pageNumber + 1);
+    }
+  };
+
+  const onDecreasePageNumber = () => {
+    if (pageNumber > 0) {
+      setPageNumber(pageNumber - 1);
+    }
+  };
+
+  const toFirstPage = () => {
+    setPageNumber(0);
+  };
+
+  const toLastPage = () => {
+    setPageNumber(Math.ceil(filteredDomains.length / rowsPerPage) - 1);
+  };
   return (
     <div className='cstg-domains-management'>
       <div className='cstg-domains-table-header'>
@@ -122,6 +158,16 @@ export function CstgDomainsTable({
             </div>
           )}
         </div>
+        <div className='sharing-permissions-search-bar-container'>
+          <input
+            type='text'
+            className='sharing-permissions-search-bar'
+            onChange={handleSearchDomain}
+            placeholder='Search Domains'
+            value={filterText}
+          />
+          <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+        </div>
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
@@ -145,20 +191,60 @@ export function CstgDomainsTable({
             <th className='action'>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {domains.sort().map((domain) => (
-            <CstgDomainItem
-              key={domain}
-              domain={domain}
-              existingDomains={domains}
-              onClick={() => handleSelectDomain(domain)}
-              onDelete={() => handleBulkDeleteDomains([domain])}
-              onEditDomain={handleEditDomain}
-              checked={isDomainSelected(domain)}
-            />
-          ))}
+        <tbody className='cstg-domains-table-body'>
+          {filteredDomains
+            .sort()
+            .slice(pageNumber * rowsPerPage, pageNumber * rowsPerPage + rowsPerPage)
+            .map((domain) => (
+              <CstgDomainItem
+                key={domain}
+                domain={domain}
+                existingDomains={domains}
+                onClick={() => handleSelectDomain(domain)}
+                onDelete={() => handleBulkDeleteDomains([domain])}
+                onEditDomain={handleEditDomain}
+                checked={isDomainSelected(domain)}
+              />
+            ))}
         </tbody>
       </table>
+      <div className='domain-names-paging-right'>
+        <div className='button-item'>
+          <button type='button' className='icon-button' title='First Page' onClick={toFirstPage}>
+            <FontAwesomeIcon icon='circle-arrow-left' />
+          </button>
+          <p>First</p>
+        </div>
+        <div className='button-item'>
+          <button
+            type='button'
+            className='icon-button'
+            title='Previous Page'
+            onClick={onDecreasePageNumber}
+          >
+            <FontAwesomeIcon icon='arrow-left' />
+          </button>
+          <p>Previous</p>
+        </div>
+        <div className='button-item'>
+          <button
+            type='button'
+            className='icon-button'
+            title='Next Page'
+            onClick={onIncreasePageNumber}
+          >
+            <FontAwesomeIcon icon='arrow-right' />
+          </button>
+          <p>Next</p>
+        </div>
+        <div className='button-item'>
+          <button type='button' className='icon-button' title='Last Page' onClick={toLastPage}>
+            <FontAwesomeIcon icon='circle-arrow-right' />
+          </button>
+          <p>Last</p>
+        </div>
+      </div>
+
       {!domains.length && (
         <TableNoDataPlaceholder title='No Top-Level Domains'>
           <span>There are no top-level domains.</span>
