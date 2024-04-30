@@ -6,6 +6,7 @@ import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import { Loading } from '../components/Core/Loading';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
@@ -100,18 +101,20 @@ function ManageParticipants() {
                   )}
                 </div>
               </div>
-              <ParticipantRequestsTable
-                participantRequests={participantRequests}
-                participantTypes={participantTypes}
-                apiRoles={apiRoles}
-                onApprove={handleApproveParticipantRequest}
-              />
-              <ApprovedParticipantsTable
-                participants={participantApproved}
-                apiRoles={apiRoles}
-                participantTypes={participantTypes}
+              <ScreenContentContainer>
+                <ParticipantRequestsTable
+                  participantRequests={participantRequests}
+                  participantTypes={participantTypes}
+                  apiRoles={apiRoles}
+                  onApprove={handleApproveParticipantRequest}
+                />
+                <ApprovedParticipantsTable
+                  participants={participantApproved}
+                  apiRoles={apiRoles}
+                  participantTypes={participantTypes}
                 onUpdateParticipant={onUpdateParticipant}
-              />
+                />
+              </ScreenContentContainer>
             </>
           )}
         </Await>
