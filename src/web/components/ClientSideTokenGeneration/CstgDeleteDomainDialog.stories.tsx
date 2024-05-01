@@ -11,6 +11,8 @@ export default meta;
 
 export const Default = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const domain = ['testdomain.com'];
+
   return (
     <div>
       <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
@@ -19,9 +21,9 @@ export const Default = () => {
       {isOpen && (
         <CstgDeleteDomainDialog
           onOpenChange={() => setIsOpen(!isOpen)}
-          domains={['testdomain.com']}
+          domains={domain}
           onRemoveDomains={() => {
-            Promise.resolve(console.log(`Disabling Domain`));
+            Promise.resolve(console.log(`Disabling Domain: ${JSON.stringify(domain)}`));
             setIsOpen(!isOpen);
           }}
         />
@@ -32,6 +34,8 @@ export const Default = () => {
 
 export const MultipleDomains = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const domains = ['testdomain.com', 'testdomain2.com', 'testdomain3.com'];
+
   return (
     <div>
       <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
@@ -40,9 +44,9 @@ export const MultipleDomains = () => {
       {isOpen && (
         <CstgDeleteDomainDialog
           onOpenChange={() => setIsOpen(!isOpen)}
-          domains={['testdomain.com', 'testdomain2.com', 'testdomain3.com']}
+          domains={domains}
           onRemoveDomains={() => {
-            Promise.resolve(console.log(`Disabling Domain`));
+            Promise.resolve(console.log(`Disabling Domains: ${JSON.stringify(domains)}`));
             setIsOpen(!isOpen);
           }}
         />
