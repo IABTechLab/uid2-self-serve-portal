@@ -1,9 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useEffect, useState } from 'react';
 
+import { SelectDropdown, SelectOption } from '../Core/SelectDropdown';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { SelectInput } from '../Input/SelectInput';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 import { CstgDomainItem } from './CstgDomainItem';
@@ -27,12 +30,20 @@ export function CstgDomainsTable({
   const [filteredDomains, setFilteredDomains] = useState<string[]>(domains);
   const [filterText, setFilterText] = useState('');
   const [pageNumber, setPageNumber] = useState<number>(0);
-  const rowsPerPage = 15;
+  const [rowsPerPage, setRowsPerPage] = useState<number>(15);
 
   useEffect(() => {
     setPageNumber(0);
+    setRowsPerPage(15);
     setFilteredDomains(domains);
-  }, []);
+  }, [domains]);
+
+  const rowsPerPageOptions = Array.from({ length: domains.length }, (value, index) => index)
+    .filter((number) => number % 5 === 0)
+    .map((number) => ({
+      name: number.toString(),
+      id: number,
+    }));
 
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
   const getCheckboxStatus = () => {
@@ -75,6 +86,7 @@ export function CstgDomainsTable({
   const handleSearchDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilterText(event.target.value);
     setFilteredDomains(domains.filter((d) => d.includes(event.target.value)));
+    setPageNumber(0);
   };
 
   const handleEditDomain = (updatedDomainName: string, originalDomainName: string) => {
@@ -125,6 +137,11 @@ export function CstgDomainsTable({
   const toLastPage = () => {
     setPageNumber(Math.ceil(filteredDomains.length / rowsPerPage) - 1);
   };
+
+  const onChangeRowsPerPage = (selected: SelectOption<number>) => {
+    setRowsPerPage(Number(selected.id));
+  };
+
   return (
     <div className='cstg-domains-management'>
       <div className='cstg-domains-table-header'>
@@ -209,6 +226,12 @@ export function CstgDomainsTable({
         </tbody>
       </table>
       <div className='domain-names-paging-right'>
+        <SelectDropdown
+          title='Pages Per Row'
+          options={rowsPerPageOptions}
+          onSelectedChange={onChangeRowsPerPage}
+        />
+
         <div className='button-item'>
           <button type='button' className='icon-button' title='First Page' onClick={toFirstPage}>
             <FontAwesomeIcon icon='circle-arrow-left' />
