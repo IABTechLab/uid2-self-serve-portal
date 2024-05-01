@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
+import { Paging } from '../Core/PagingTool';
 import { SelectDropdown, SelectOption } from '../Core/SelectDropdown';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
@@ -28,7 +29,7 @@ export function CstgDomainsTable({
   const [filteredDomains, setFilteredDomains] = useState<string[]>(domains);
   const [filterText, setFilterText] = useState('');
   const [pageNumber, setPageNumber] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(15);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   useEffect(() => {
     setPageNumber(0);
@@ -36,7 +37,7 @@ export function CstgDomainsTable({
     setFilteredDomains(domains);
   }, [domains]);
 
-  const rowsPerPageOptions = [10, 25, 50, 100, 250, 500, 1000]
+  const rowsPerPageOptions = [10, 25, 50, 100, 250]
     .filter((number) => number <= domains.length)
     .map((number) => ({
       name: number.toString(),
@@ -229,47 +230,7 @@ export function CstgDomainsTable({
         </tbody>
       </table>
       <div className='domain-names-paging-right'>
-        <SelectDropdown
-          className='domain-select-rows-per-page'
-          title='Rows Per Page'
-          options={rowsPerPageOptions}
-          onSelectedChange={onChangeRowsPerPage}
-        />
-
-        <div className='button-item'>
-          <button type='button' className='icon-button' title='First Page' onClick={toFirstPage}>
-            <FontAwesomeIcon icon='circle-arrow-left' />
-          </button>
-          <p>First</p>
-        </div>
-        <div className='button-item'>
-          <button
-            type='button'
-            className='icon-button'
-            title='Previous Page'
-            onClick={onDecreasePageNumber}
-          >
-            <FontAwesomeIcon icon='arrow-left' />
-          </button>
-          <p>Previous</p>
-        </div>
-        <div className='button-item'>
-          <button
-            type='button'
-            className='icon-button'
-            title='Next Page'
-            onClick={onIncreasePageNumber}
-          >
-            <FontAwesomeIcon icon='arrow-right' />
-          </button>
-          <p>Next</p>
-        </div>
-        <div className='button-item'>
-          <button type='button' className='icon-button' title='Last Page' onClick={toLastPage}>
-            <FontAwesomeIcon icon='circle-arrow-right' />
-          </button>
-          <p>Last</p>
-        </div>
+        <Paging rows={filteredDomains} title='Domains Per Page' />
       </div>
 
       {!domains.length && (

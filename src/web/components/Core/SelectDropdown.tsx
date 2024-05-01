@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import './SelectDropdown.scss';
 
@@ -15,6 +15,7 @@ type SelectDropdownProps<TValue> = Readonly<{
   options: SelectOption<TValue>[];
   onSelectedChange: (selected: SelectOption<TValue>) => void;
   className?: string;
+  initialValue?: SelectOption<TValue>;
 }>;
 
 export function SelectDropdown<TValue>({
@@ -22,9 +23,16 @@ export function SelectDropdown<TValue>({
   options,
   onSelectedChange,
   className,
+  initialValue,
 }: SelectDropdownProps<TValue>) {
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (initialValue) {
+      setSelectedItem(initialValue);
+    }
+  }, [initialValue]);
 
   const onOptionToggle = useCallback(
     (id: TValue) => {
@@ -65,7 +73,7 @@ export function SelectDropdown<TValue>({
     <div className={clsx('select-dropdown', className)}>
       <DropdownMenu.Root open={open} onOpenChange={setOpen}>
         <DropdownMenu.Trigger className='select-dropdown-trigger'>
-          {title}: {selectedItem?.name || '10'}
+          {title}: {selectedItem?.name ?? initialValue?.name}
           {open ? <FontAwesomeIcon icon='chevron-up' /> : <FontAwesomeIcon icon='chevron-down' />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className='select-dropdown-content' sideOffset={10} align='start'>
