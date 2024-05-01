@@ -28,9 +28,13 @@ export function SelectDropdown<TValue>({
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
 
+  console.log('in select dropdown');
+
   useEffect(() => {
-    if (initialValue) {
+    if (initialValue && !selectedItem) {
       setSelectedItem(initialValue);
+      onSelectedChange(initialValue);
+      console.log('in use effect select dropdown');
     }
   }, [initialValue]);
 
