@@ -30,8 +30,9 @@ export function SelectDropdown<TValue>({
     (id: TValue) => {
       setSelectedItem(options.filter((option) => option.id === id)[0]);
       onSelectedChange(options.filter((option) => option.id === id)[0]);
+      setOpen(false);
     },
-    [onSelectedChange, selectedItem]
+    [onSelectedChange, options]
   );
 
   const checkboxItem = useCallback(

@@ -36,6 +36,10 @@
       overflow: auto;
       width: 100%;
     }
+
+    .no-search-results {
+      width: 500px;
+    }
   }
 
   .cstg-domains-management-icon {
@@ -49,20 +53,22 @@
 
     &-right {
       display: flex;
-      align-items: center;
+      align-items: right;
+      justify-content: right;
     }
 
     .sharing-permissions-search-bar-container {
       width: 190px;
       display: flex;
-      align-items: center;
+      align-items: right;
       border-bottom: 2px solid var(--theme-action);
       padding: 6px 2px;
-      justify-content: space-between;
+      justify-content: right;
       ::placeholder {
         color: var(--theme-action);
         opacity: 1;
       }
+      margin-left: 75%;
     }
 
     .sharing-permission-search-bar-icon {

@@ -221,6 +221,11 @@ export function CstgDomainsTable({
                 checked={isDomainSelected(domain)}
               />
             ))}
+          {!filteredDomains.length && (
+            <p className='no-search-results'>
+              There are no top-level domains that match this search.
+            </p>
+          )}
         </tbody>
       </table>
       <div className='domain-names-paging-right'>
