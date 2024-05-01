@@ -4,7 +4,7 @@ import KeyPairsTable from './KeyPairsTable';
 
 const meta: Meta<typeof KeyPairsTable> = {
   component: KeyPairsTable,
-  title: 'Key Pairs/Key Pair Table',
+  title: 'CSTG/Key Pairs/Key Pair Table',
 };
 export default meta;
 
