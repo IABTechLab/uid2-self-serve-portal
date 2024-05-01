@@ -1,12 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useEffect, useState } from 'react';
 
 import { SelectDropdown, SelectOption } from '../Core/SelectDropdown';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
-import { SelectInput } from '../Input/SelectInput';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 import { CstgDomainItem } from './CstgDomainItem';
@@ -34,12 +32,12 @@ export function CstgDomainsTable({
 
   useEffect(() => {
     setPageNumber(0);
-    setRowsPerPage(15);
+    setRowsPerPage(10);
     setFilteredDomains(domains);
   }, [domains]);
 
-  const rowsPerPageOptions = Array.from({ length: domains.length }, (value, index) => index)
-    .filter((number) => number % 5 === 0)
+  const rowsPerPageOptions = [10, 25, 50, 100, 250, 500, 1000]
+    .filter((number) => number <= domains.length)
     .map((number) => ({
       name: number.toString(),
       id: number,
@@ -227,7 +225,8 @@ export function CstgDomainsTable({
       </table>
       <div className='domain-names-paging-right'>
         <SelectDropdown
-          title='Pages Per Row'
+          className='domain-select-rows-per-page'
+          title='Rows Per Page'
           options={rowsPerPageOptions}
           onSelectedChange={onChangeRowsPerPage}
         />

@@ -86,6 +86,10 @@
     display: flex;
     justify-content: right;
 
+    .domain-select-rows-per-page {
+      padding-right: 20px;
+    }
+
     .button-item {
       vertical-align: middle;
       padding-right: 30px;

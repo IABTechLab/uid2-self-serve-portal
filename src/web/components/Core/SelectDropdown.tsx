@@ -14,12 +14,14 @@ type SelectDropdownProps<TValue> = Readonly<{
   title: string;
   options: SelectOption<TValue>[];
   onSelectedChange: (selected: SelectOption<TValue>) => void;
+  className?: string;
 }>;
 
 export function SelectDropdown<TValue>({
   title,
   options,
   onSelectedChange,
+  className,
 }: SelectDropdownProps<TValue>) {
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
@@ -59,10 +61,10 @@ export function SelectDropdown<TValue>({
   );
 
   return (
-    <div className={clsx('select-dropdown', { active: !!selectedItem })}>
+    <div className={clsx('select-dropdown', className)}>
       <DropdownMenu.Root open={open} onOpenChange={setOpen}>
         <DropdownMenu.Trigger className='select-dropdown-trigger'>
-          {title}: {selectedItem?.name}
+          {title}: {selectedItem?.name || '10'}
           {open ? <FontAwesomeIcon icon='chevron-up' /> : <FontAwesomeIcon icon='chevron-down' />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className='select-dropdown-content' sideOffset={10} align='start'>
