@@ -8,7 +8,7 @@ import { KeyPairModel } from './KeyPairModel';
 
 const meta: Meta<typeof KeyPairDisableDialog> = {
   component: KeyPairDisableDialog,
-  title: 'Key Pairs/Disable Key Pair Dialog',
+  title: 'CSTG/Key Pairs/Disable Key Pair Dialog',
 };
 export default meta;
 

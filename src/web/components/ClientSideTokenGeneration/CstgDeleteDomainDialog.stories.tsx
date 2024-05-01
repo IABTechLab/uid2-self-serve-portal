@@ -4,7 +4,7 @@ import { useState } from 'react';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 
 const meta: Meta<typeof CstgDeleteDomainDialog> = {
-  title: 'CSTG/CstgDeleteDomainDialog',
+  title: 'CSTG/Domains/Delete Domain Dialog',
   component: CstgDeleteDomainDialog,
 };
 export default meta;

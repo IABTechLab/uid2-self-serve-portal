@@ -5,7 +5,7 @@ import KeyPairDialog from './KeyPairDialog';
 
 const meta: Meta<typeof KeyPairDialog> = {
   component: KeyPairDialog,
-  title: 'Key Pairs/Key Pair Dialog',
+  title: 'CSTG/Key Pairs/Key Pair Dialog',
 };
 export default meta;
 

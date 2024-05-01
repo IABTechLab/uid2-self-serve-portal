@@ -4,7 +4,7 @@ import { useState } from 'react';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
 
 const meta: Meta<typeof CstgEditDomainDialog> = {
-  title: 'CSTG/CstgEditDomainDialog',
+  title: 'CSTG/Domains/Edit Domain Dialog',
   component: CstgEditDomainDialog,
 };
 export default meta;
