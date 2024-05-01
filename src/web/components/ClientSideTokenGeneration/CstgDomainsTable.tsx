@@ -46,6 +46,15 @@ export function CstgDomainsTable({
   };
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
+  const handleBulkDeleteDomains = (deleteDomains: string[]) => {
+    onUpdateDomains(
+      domains.filter((domain) => !deleteDomains.includes(domain)),
+      'deleted'
+    );
+    setShowDeleteDomainsDialog(false);
+    setSelectedDomains([]);
+  };
+
   const handleSelectDomain = (domain: string) => {
     if (isDomainSelected(domain)) {
       setSelectedDomains(selectedDomains.filter((d) => d !== domain));
@@ -71,14 +80,6 @@ export function CstgDomainsTable({
 
   const onOpenChangeDeleteDomainDialog = () => {
     setShowDeleteDomainsDialog(!showDeleteDomainsDialog);
-  };
-
-  const handleBulkDeleteDomains = (deleteDomains: string[]) => {
-    onUpdateDomains(
-      domains.filter((domain) => !deleteDomains.includes(domain)),
-      'deleted'
-    );
-    onOpenChangeDeleteDomainDialog();
   };
 
   const onSubmitAddDomainDialog = async (
