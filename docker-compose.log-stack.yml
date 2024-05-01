@@ -33,3 +33,24 @@ services:
       - GF_SERVER_HTTP_PORT=3101
     networks:
       - loki
+
+  agent:
+    image: 'grafana/agent:main'
+    volumes:
+      - '${AGENT_CONFIG_PATH_LOCAL}:${AGENT_CONFIG_PATH}'
+      - 'ssportal_logs:${AGENT_LOGS_PATH}'
+    # entrypoint:
+    #   - '/bin/grafana-agent'
+    #   - '-config.file=${AGENT_CONFIG_PATH}/${AGENT_CONFIG_FILE}'
+    #   - '-config.expand-env'
+    #   - '-config.enable-read-api'
+    #   - '-enable-features=integrations-next'
+    ports:
+      - '3102:3102'
+      - '${AGENT_PORT_APP_RECEIVER}:${AGENT_PORT_APP_RECEIVER}'
+      # - '${TEMPO_PORT_OTLP_RECEIVER}:${TEMPO_PORT_OTLP_RECEIVER}'
+    depends_on:
+      # - 'cortex'
+      - 'grafana'
+      - 'loki'
+      # - 'tempo'

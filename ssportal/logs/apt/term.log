@@ -1,0 +1,87 @@
+
+Log started: 2024-04-15  16:51:05
+Selecting previously unselected package libssl3:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4327 files and directories currently installed.)
+Preparing to unpack .../0-libssl3_3.0.10-1ubuntu2.3_amd64.deb ...
+Unpacking libssl3:amd64 (3.0.10-1ubuntu2.3) ...
+Selecting previously unselected package openssl.
+Preparing to unpack .../1-openssl_3.0.10-1ubuntu2.3_amd64.deb ...
+Unpacking openssl (3.0.10-1ubuntu2.3) ...
+Selecting previously unselected package ca-certificates.
+Preparing to unpack .../2-ca-certificates_20230311ubuntu1_all.deb ...
+Unpacking ca-certificates (20230311ubuntu1) ...
+Selecting previously unselected package libcap2-bin.
+Preparing to unpack .../3-libcap2-bin_1%3a2.66-4ubuntu1_amd64.deb ...
+Unpacking libcap2-bin (1:2.66-4ubuntu1) ...
+Selecting previously unselected package libpam-cap:amd64.
+Preparing to unpack .../4-libpam-cap_1%3a2.66-4ubuntu1_amd64.deb ...
+Unpacking libpam-cap:amd64 (1:2.66-4ubuntu1) ...
+Selecting previously unselected package tzdata.
+Preparing to unpack .../5-tzdata_2024a-0ubuntu0.23.10_all.deb ...
+Unpacking tzdata (2024a-0ubuntu0.23.10) ...
+Selecting previously unselected package tzdata-icu.
+Preparing to unpack .../6-tzdata-icu_2024a-0ubuntu0.23.10_all.deb ...
+Unpacking tzdata-icu (2024a-0ubuntu0.23.10) ...
+Selecting previously unselected package libsystemd-dev:amd64.
+Preparing to unpack .../7-libsystemd-dev_253.5-1ubuntu6.1_amd64.deb ...
+Unpacking libsystemd-dev:amd64 (253.5-1ubuntu6.1) ...
+Setting up libssl3:amd64 (3.0.10-1ubuntu2.3) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Setting up tzdata (2024a-0ubuntu0.23.10) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Configuring tzdata
+------------------
+
+Please select the geographic area in which you live. Subsequent configuration
+questions will narrow this down by presenting a list of cities, representing
+the time zones in which they are located.
+
+  1. Africa   3. Antarctica  5. Asia      7. Australia  9. Indian    11. Etc
+  2. America  4. Arctic      6. Atlantic  8. Europe     10. Pacific
+Geographic area: 
+Use of uninitialized value $_[1] in join or string at /usr/share/perl5/Debconf/DbDriver/Stack.pm line 111.
+
+Current default time zone: '/UTC'
+Local time is now:      Mon Apr 15 16:51:05 UTC 2024.
+Universal Time is now:  Mon Apr 15 16:51:05 UTC 2024.
+Run 'dpkg-reconfigure tzdata' if you wish to change it.
+
+Use of uninitialized value $val in substitution (s///) at /usr/share/perl5/Debconf/Format/822.pm line 83, <GEN6> line 4.
+Use of uninitialized value $val in concatenation (.) or string at /usr/share/perl5/Debconf/Format/822.pm line 84, <GEN6> line 4.
+Setting up libcap2-bin (1:2.66-4ubuntu1) ...
+Setting up openssl (3.0.10-1ubuntu2.3) ...
+Setting up libpam-cap:amd64 (1:2.66-4ubuntu1) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Setting up libsystemd-dev:amd64 (253.5-1ubuntu6.1) ...
+Setting up tzdata-icu (2024a-0ubuntu0.23.10) ...
+Setting up ca-certificates (20230311ubuntu1) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (TERM is not set, so the dialog frontend is not usable.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+debconf: falling back to frontend: Teletype
+Updating certificates in /etc/ssl/certs...
+137 added, 0 removed; done.
+Processing triggers for libc-bin (2.38-1ubuntu6.1) ...
+Processing triggers for ca-certificates (20230311ubuntu1) ...
+Updating certificates in /etc/ssl/certs...
+0 added, 0 removed; done.
+Running hooks in /etc/ca-certificates/update.d...
+done.
+Log ended: 2024-04-15  16:51:06

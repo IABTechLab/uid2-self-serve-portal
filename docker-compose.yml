@@ -1,6 +1,12 @@
 version: '3.8'
 volumes:
   mssqldata:
+  ssportal_logs:
+    driver: 'local'
+    driver_opts:
+      type: 'none'
+      device: '${PWD}/ssportal/logs'
+      o: 'bind'
 
 services:
   database:
