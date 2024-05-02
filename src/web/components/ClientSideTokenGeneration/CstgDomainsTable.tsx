@@ -90,7 +90,7 @@ export function CstgDomainsTable({
       'deleted'
     );
     setShowDeleteDomainsDialog(false);
-    // setSearchedDomains(domains);
+    setSelectedDomains([]);
   };
 
   const onSubmitAddDomainDialog = async (
