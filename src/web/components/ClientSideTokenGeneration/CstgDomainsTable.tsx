@@ -31,6 +31,10 @@ export function CstgDomainsTable({
 
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
+  useEffect(() => {
+    setSearchedDomains(domains);
+  }, [domains]);
+
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
       return TriStateCheckboxState.checked;
@@ -97,13 +101,12 @@ export function CstgDomainsTable({
     newDomainsFormatted: string[],
     deleteExistingList: boolean
   ) => {
-    console.log('in add domains');
-    console.log(domains.sort());
     await onAddDomains(newDomainsFormatted, deleteExistingList);
-    console.log(domains.sort());
     setShowAddDomainsDialog(false);
     setSearchedDomains(domains.sort());
+    setPagedDomains(domains.sort());
     setSelectedDomains([]);
+    setFilterText('');
   };
 
   const onChangeDisplayedDomains = (displayedDomains: string[]) => {
@@ -197,7 +200,7 @@ export function CstgDomainsTable({
       </table>
       <div className='domain-names-paging-right'>
         <PagingTool
-          totalRows={searchedDomains.length ? searchedDomains.sort() : domains.sort()}
+          totalRows={searchedDomains.sort()}
           rowsPerPageTitle='Domains per Page'
           initialRowsPerPage={10}
           onChangeRows={onChangeDisplayedDomains}

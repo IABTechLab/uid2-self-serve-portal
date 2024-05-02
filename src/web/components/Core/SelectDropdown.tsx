@@ -34,13 +34,8 @@ export function SelectDropdown<TValue>({
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
 
-  console.log('in select dropdown');
-  console.log('new options', options);
-  // console.log('selected item', selectedItem);
-
   const onOptionToggle = useCallback(
     (id: TValue) => {
-      console.log('in on option toggle:', id);
       setSelectedItem(options.filter((option) => option.id === id)[0]);
       onSelectedChange(options.filter((option) => option.id === id)[0]);
       setOpen(false);
@@ -49,19 +44,12 @@ export function SelectDropdown<TValue>({
   );
 
   useEffect(() => {
-    // console.log('initial value', initialValue);
-    // console.log('selectedItem', selectedItem);
     if (initialValue && !selectedItem) {
       setSelectedItem(options.filter((option) => option.id === initialValue.id)[0]);
-      console.log('in use effect');
-      // console.log('in use effect select dropdown');
-    } // else if (initialValue && JSON.stringify(initialValue) !== JSON.stringify(selectedItem)) {
-    // onOptionToggle(initialValue.id);
-    // }
+    }
   }, [initialValue]);
 
   useEffect(() => {
-    console.log('in use effect updated value');
     if (updatedValue && JSON.stringify(updatedValue) !== JSON.stringify(selectedItem)) {
       setSelectedItem(options.filter((option) => option.id === updatedValue.id)[0]);
     }
@@ -69,7 +57,6 @@ export function SelectDropdown<TValue>({
 
   const checkboxItem = useCallback(
     (option: SelectOption<TValue>) => {
-      console.log('in checkbox item');
       const checked = selectedItem ? selectedItem.id === option.id : false;
       return (
         <DropdownMenu.CheckboxItem
