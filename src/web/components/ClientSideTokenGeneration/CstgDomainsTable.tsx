@@ -51,6 +51,8 @@ export function CstgDomainsTable({
       domains.filter((domain) => !deleteDomains.includes(domain)),
       'deleted'
     );
+    setShowDeleteDomainsDialog(false);
+    setSelectedDomains([]);
   };
 
   const handleSelectDomain = (domain: string) => {
