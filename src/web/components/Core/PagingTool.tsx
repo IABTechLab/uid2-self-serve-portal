@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 
 import { SelectDropdown, SelectOption } from './SelectDropdown';
 
+import './PagingTool.scss';
+
 const rowsPerPageOptions = [10, 25, 50, 100, 250];
 
 type RowsPerPageOptions = 10 | 25 | 50 | 100 | 250;
@@ -17,15 +19,55 @@ type PagingProps<T> = Readonly<{
 export function PagingTool<T>({
   totalRows,
   rowsPerPageTitle = 'Rows Per Page',
-  initialRowsPerPage,
+  initialRowsPerPage = 10,
   onChangeRows,
 }: PagingProps<T>) {
-  const [rowsPerPage, setRowsPerPage] = useState<number>(initialRowsPerPage ?? 10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(initialRowsPerPage);
   const [pageNumber, setPageNumber] = useState<number>(0);
+  const [maxPageNumber, setMaxPageNumber] = useState<number>(
+    Math.ceil(totalRows.length / rowsPerPage)
+  );
+  const [pageNumberOptions, setPageNumberOptions] = useState<SelectOption<number>[]>(
+    Array.from(
+      { length: Math.ceil(totalRows.length / initialRowsPerPage) },
+      (_, index) => index + 1
+    ).map((number) => ({
+      name: number.toString(),
+      id: number,
+    }))
+  );
 
-  console.log('in paging tool');
-  console.log(totalRows);
-  console.log(initialRowsPerPage);
+  useEffect(() => {
+    setPageNumberOptions(
+      Array.from(
+        { length: Math.ceil(totalRows.length / initialRowsPerPage) },
+        (_, index) => index + 1
+      ).map((number) => ({
+        name: number.toString(),
+        id: number,
+      }))
+    );
+    // console.log('in use effect page number options');
+    // console.log('tr:', totalRows);
+    // console.log('init', initialRowsPerPage);
+    // console.log(
+    //   Array.from(
+    //     { length: Math.ceil(totalRows.length / initialRowsPerPage) },
+    //     (_, index) => index + 1
+    //   ).map((number) => ({
+    //     name: number.toString(),
+    //     id: number,
+    //   }))
+    // );
+  }, [totalRows]);
+
+  // console.log(maxPageNumber);
+  // console.log(pageNumber);
+  console.log('page number options:', pageNumberOptions);
+
+  // console.log('in paging tool');
+  // console.log(totalRows);
+  // console.log(initialRowsPerPage);
 
   const rowsPerPageFiltered = rowsPerPageOptions
     .filter((number) => number <= totalRows.length)
@@ -48,13 +90,14 @@ export function PagingTool<T>({
   useEffect(() => {
     console.log('in use effect paging tool');
     console.log(totalRows);
-    onChangeRows(filterRows(0, initialRowsPerPage ?? 10));
+    onChangeRows(filterRows(0, initialRowsPerPage));
   }, [totalRows]);
 
   const onIncreasePageNumber = () => {
     if (pageNumber < totalRows.length / rowsPerPage - 1) {
       setPageNumber(pageNumber + 1);
       onChangeRows(filterRows(pageNumber + 1, rowsPerPage));
+      // onChangePageNumber((pageNumber+1).map())
     }
   };
 
@@ -65,39 +108,52 @@ export function PagingTool<T>({
     }
   };
 
-  const toFirstPage = () => {
-    setPageNumber(0);
-    onChangeRows(filterRows(0, rowsPerPage));
+  const onChangePageNumberOptions = (maxPageNum: number) => {
+    const newPageNumberOptions = Array.from({ length: maxPageNum }, (_, index) => index + 1).map(
+      (number) => ({
+        name: number.toString(),
+        id: number,
+      })
+    );
+    setPageNumberOptions(newPageNumberOptions);
+    // console.log('inPageNumber options');
+    // console.log('new page number options', newPageNumberOptions);
   };
 
-  const toLastPage = () => {
-    const lastPageNumber = Math.ceil(totalRows.length / rowsPerPage) - 1;
-    setPageNumber(lastPageNumber);
-    onChangeRows(filterRows(lastPageNumber, rowsPerPage));
-  };
-
-  const onChangeRowsPerPage = async (selected: SelectOption<number>) => {
+  const onChangeRowsPerPage = (selected: SelectOption<number>) => {
     const newRowsPerPage = Number(selected.id);
     setRowsPerPage(newRowsPerPage);
     onChangeRows(filterRows(pageNumber, newRowsPerPage));
+    setMaxPageNumber(Math.ceil(totalRows.length / newRowsPerPage));
+    onChangePageNumberOptions(Math.ceil(totalRows.length / newRowsPerPage));
+  };
+
+  const onChangePageNumber = (selected: SelectOption<number>) => {
+    console.log('in on change page num', selected);
+    const newPageNumber = Number(selected.id);
+    setPageNumber(newPageNumber);
+    onChangeRows(filterRows(newPageNumber, rowsPerPage));
   };
 
   return (
     <div className='domain-names-paging-right'>
       <SelectDropdown
-        className='domain-select-rows-per-page'
+        containerClass='rows-per-page-dropdown-container'
+        className='rows-per-page-dropdown'
         initialValue={initialRowsPerPageOption}
         title={rowsPerPageTitle}
         options={rowsPerPageFiltered}
         onSelectedChange={onChangeRowsPerPage}
       />
-
-      <div className='button-item'>
-        <button type='button' className='icon-button' title='First Page' onClick={toFirstPage}>
-          <FontAwesomeIcon icon='circle-arrow-left' />
-        </button>
-        <p>First</p>
-      </div>
+      <p className='separator'>|</p>
+      <p className='showing-rows-text'>
+        {' '}
+        Showing {pageNumber * rowsPerPage + 1}-
+        {pageNumber * rowsPerPage + rowsPerPage <= totalRows.length
+          ? pageNumber * rowsPerPage + rowsPerPage
+          : totalRows.length}{' '}
+        of {totalRows.length}
+      </p>
       <div className='button-item'>
         <button
           type='button'
@@ -105,10 +161,18 @@ export function PagingTool<T>({
           title='Previous Page'
           onClick={onDecreasePageNumber}
         >
-          <FontAwesomeIcon icon='arrow-left' />
+          <FontAwesomeIcon icon='angle-left' />
         </button>
-        <p>Previous</p>
       </div>
+      <SelectDropdown
+        containerClass='page-numbers-dropdown-container'
+        className='page-numbers-dropdown'
+        initialValue={pageNumberOptions[0]}
+        updatedValue={pageNumberOptions.filter((number) => number.id === pageNumber + 1)[0]}
+        title=''
+        options={pageNumberOptions}
+        onSelectedChange={onChangePageNumber}
+      />
       <div className='button-item'>
         <button
           type='button'
@@ -116,15 +180,8 @@ export function PagingTool<T>({
           title='Next Page'
           onClick={onIncreasePageNumber}
         >
-          <FontAwesomeIcon icon='arrow-right' />
+          <FontAwesomeIcon icon='angle-right' />
         </button>
-        <p>Next</p>
-      </div>
-      <div className='button-item'>
-        <button type='button' className='icon-button' title='Last Page' onClick={toLastPage}>
-          <FontAwesomeIcon icon='circle-arrow-right' />
-        </button>
-        <p>Last</p>
       </div>
     </div>
   );

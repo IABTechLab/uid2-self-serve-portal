@@ -32,7 +32,7 @@
     }
 
     .cstg-domains-table-body {
-      height: 200px;
+      //height: 200px;
       overflow: auto;
       width: 100%;
     }
@@ -92,15 +92,12 @@
     display: flex;
     justify-content: right;
 
-    .domain-select-rows-per-page {
-      padding-right: 20px;
-    }
-
     .button-item {
       vertical-align: middle;
-      padding-right: 30px;
-      text-align: center;
+      align-items: center;
+      justify-content: center;
       color: var(--theme-action);
+      margin-top: 2px;
     }
   }
 }

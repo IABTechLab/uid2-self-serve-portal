@@ -97,7 +97,10 @@ export function CstgDomainsTable({
     newDomainsFormatted: string[],
     deleteExistingList: boolean
   ) => {
+    console.log('in add domains');
+    console.log(domains.sort());
     await onAddDomains(newDomainsFormatted, deleteExistingList);
+    console.log(domains.sort());
     setShowAddDomainsDialog(false);
     setSearchedDomains(domains.sort());
     setSelectedDomains([]);
@@ -115,19 +118,20 @@ export function CstgDomainsTable({
           {domains?.length > 0 && (
             <div className='table-actions'>
               <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
-
-              <button
-                className='transparent-button table-action-button'
-                type='button'
-                onClick={onOpenChangeDeleteDomainDialog}
-              >
-                {' '}
-                <FontAwesomeIcon
-                  icon={['far', 'trash-can']}
-                  className='cstg-domains-management-icon'
-                />
-                {`Delete Domain${selectedDomains?.length > 1 ? 's' : ''}`}
-              </button>
+              {checkboxStatus && (
+                <button
+                  className='transparent-button table-action-button'
+                  type='button'
+                  onClick={onOpenChangeDeleteDomainDialog}
+                >
+                  {' '}
+                  <FontAwesomeIcon
+                    icon={['far', 'trash-can']}
+                    className='cstg-domains-management-icon'
+                  />
+                  {`Delete Domain${selectedDomains?.length > 1 ? 's' : ''}`}
+                </button>
+              )}
 
               {showDeleteDomainsDialog && selectedDomains.length > 0 && (
                 <CstgDeleteDomainDialog
@@ -194,7 +198,7 @@ export function CstgDomainsTable({
       <div className='domain-names-paging-right'>
         <PagingTool
           totalRows={searchedDomains.length ? searchedDomains.sort() : domains.sort()}
-          rowsPerPageTitle='Domains Per Page'
+          rowsPerPageTitle='Domains per Page'
           initialRowsPerPage={10}
           onChangeRows={onChangeDisplayedDomains}
         />
