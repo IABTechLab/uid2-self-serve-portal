@@ -48,7 +48,8 @@ It is important to note that all the users in the realm will be removed. You may
 
 The following instructions detail how to assign a specific role to a user in Keycloak:
 
-1. From the [Keycloak admin console](./README.md/#keycloak-admin-console), change the realm from `Keycloak` to `UID2 Portal`.
+1. Login to the [Keycloak admin console](./README.md/#keycloak-admin-console). 
+1. Change the realm from `Keycloak` to `UID2 Portal`.
 1. Select `Users` from the left side menu.
 1. Locate the user from the user list. You can use the search bar if necessary.
 1. Click on the desired username to open the user's detail page. Then, select the `Role Mapping` tab.
