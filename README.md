@@ -279,6 +279,7 @@ The following steps describe the minimal steps required to successfully log in t
 
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
+1. Optionally give your user access to the [Admin screens/routes](#admin-screensroutes)
 1. Return to the UI and you should be good to go!
 
 ### Admin screens/routes
