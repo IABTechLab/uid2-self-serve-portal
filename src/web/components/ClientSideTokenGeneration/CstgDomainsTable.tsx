@@ -150,7 +150,8 @@ export function CstgDomainsTable({
             </div>
           )}
         </div>
-        <div className='right-aligned-items'>
+
+        <div className='cstg-domains-table-header-right'>
           <div className='domains-search-bar-container'>
             <input
               type='text'
@@ -161,19 +162,17 @@ export function CstgDomainsTable({
             />
             <FontAwesomeIcon icon='search' className='domains-search-bar-icon' />
           </div>
-          <div className='cstg-domains-table-header-right'>
-            <div className='add-domain-button'>
-              <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
-                Add Domains
-              </button>
-              {showAddDomainsDialog && (
-                <CstgAddDomainDialog
-                  onAddDomains={onSubmitAddDomainDialog}
-                  onOpenChange={onOpenChangeAddDomainDialog}
-                  existingDomains={domains}
-                />
-              )}
-            </div>
+          <div className='add-domain-button'>
+            <button className='small-button' type='button' onClick={onOpenChangeAddDomainDialog}>
+              Add Domains
+            </button>
+            {showAddDomainsDialog && (
+              <CstgAddDomainDialog
+                onAddDomains={onSubmitAddDomainDialog}
+                onOpenChange={onOpenChangeAddDomainDialog}
+                existingDomains={domains}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -185,7 +184,7 @@ export function CstgDomainsTable({
             <th className='action'>Actions</th>
           </tr>
         </thead>
-        <tbody className='cstg-domains-table-body'>
+        <tbody>
           {pagedDomains.map((domain) => (
             <CstgDomainItem
               key={domain}
