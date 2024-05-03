@@ -35,9 +35,7 @@ export function CstgDomainsTable({
 
   useEffect(() => {
     setSearchedDomains(domains.sort());
-    setPagedDomains(
-      domains.sort().filter((_, index) => index >= 1 && index < 1 + initialRowsPerPage)
-    );
+    setPagedDomains(domains.sort().filter((_, index) => index >= 0 && index < initialRowsPerPage));
   }, [domains]);
 
   const getCheckboxStatus = () => {
