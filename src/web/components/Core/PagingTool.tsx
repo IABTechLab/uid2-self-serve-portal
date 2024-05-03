@@ -35,6 +35,8 @@ export function PagingTool<T>({
   const [pageNumberOptions, setPageNumberOptions] =
     useState<SelectOption<number>[]>(initialPagingOptions);
 
+  console.log('current page number options', pageNumberOptions);
+
   useEffect(() => {
     setPageNumberOptions(
       Array.from(
@@ -92,8 +94,9 @@ export function PagingTool<T>({
   const onChangeRowsPerPage = (selected: SelectOption<number>) => {
     const newRowsPerPage = Number(selected.id);
     setRowsPerPage(newRowsPerPage);
-    onChangeRows(filterRows(pageNumber, newRowsPerPage));
+    onChangeRows(filterRows(1, newRowsPerPage));
     onChangePageNumberOptions(Math.ceil(totalRows.length / newRowsPerPage));
+    setPageNumber(1);
   };
 
   const onChangePageNumber = (selected: SelectOption<number>) => {
