@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { CstgDomainsTable } from './CstgDomainsTable';
 
 export default {
-  title: 'CSTG/CstgDomainsTable',
+  title: 'CSTG/Domains/Domains Table',
   component: CstgDomainsTable,
 } as Meta<typeof CstgDomainsTable>;
 
