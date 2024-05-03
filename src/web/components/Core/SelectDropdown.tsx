@@ -36,8 +36,11 @@ export function SelectDropdown<TValue>({
 
   const onOptionToggle = useCallback(
     (id: TValue) => {
-      setSelectedItem(options.filter((option) => option.id === id)[0]);
-      onSelectedChange(options.filter((option) => option.id === id)[0]);
+      const newSelectedItem = options.find((option) => option.id === id);
+      if (newSelectedItem) {
+        setSelectedItem(newSelectedItem);
+        onSelectedChange(newSelectedItem);
+      }
       setOpen(false);
     },
     [onSelectedChange, options]
@@ -45,15 +48,15 @@ export function SelectDropdown<TValue>({
 
   useEffect(() => {
     if (initialValue && !selectedItem) {
-      setSelectedItem(options.filter((option) => option.id === initialValue.id)[0]);
+      setSelectedItem(options.find((option) => option.id === initialValue.id));
     }
-  }, [initialValue]);
+  }, [initialValue, selectedItem, options]);
 
   useEffect(() => {
     if (updatedValue && JSON.stringify(updatedValue) !== JSON.stringify(selectedItem)) {
-      setSelectedItem(options.filter((option) => option.id === updatedValue.id)[0]);
+      setSelectedItem(options.find((option) => option.id === updatedValue.id));
     }
-  }, [updatedValue]);
+  }, [updatedValue, selectedItem, options]);
 
   const checkboxItem = useCallback(
     (option: SelectOption<TValue>) => {

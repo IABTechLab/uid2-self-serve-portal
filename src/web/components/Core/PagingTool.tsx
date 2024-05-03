@@ -30,8 +30,6 @@ export function PagingTool<T>({
     id: number,
   }));
 
-  console.log(totalRows);
-
   const [rowsPerPage, setRowsPerPage] = useState<number>(initialRowsPerPage);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [pageNumberOptions, setPageNumberOptions] =
