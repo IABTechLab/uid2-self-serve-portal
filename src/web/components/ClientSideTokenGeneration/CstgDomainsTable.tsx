@@ -27,12 +27,17 @@ export function CstgDomainsTable({
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
   const [searchedDomains, setSearchedDomains] = useState<string[]>(domains);
   const [pagedDomains, setPagedDomains] = useState<string[]>(domains);
-  const [filterText, setFilterText] = useState('');
+  const [searchText, setSearchText] = useState('');
 
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
+  const initialRowsPerPage = 10;
+
   useEffect(() => {
-    setSearchedDomains(domains);
+    setSearchedDomains(domains.sort());
+    setPagedDomains(
+      domains.sort().filter((_, index) => index >= 1 && index < 1 + initialRowsPerPage)
+    );
   }, [domains]);
 
   const getCheckboxStatus = () => {
@@ -65,7 +70,7 @@ export function CstgDomainsTable({
   };
 
   const handleSearchDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilterText(event.target.value);
+    setSearchText(event.target.value);
     setSearchedDomains(domains.filter((d) => d.includes(event.target.value)));
   };
 
@@ -104,9 +109,8 @@ export function CstgDomainsTable({
     await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
     setSearchedDomains(domains.sort());
-    setPagedDomains(domains.sort());
     setSelectedDomains([]);
-    setFilterText('');
+    setSearchText('');
   };
 
   const onChangeDisplayedDomains = (displayedDomains: string[]) => {
@@ -146,15 +150,15 @@ export function CstgDomainsTable({
             </div>
           )}
         </div>
-        <div className='sharing-permissions-search-bar-container'>
+        <div className='domains-search-bar-container'>
           <input
             type='text'
-            className='sharing-permissions-search-bar'
+            className='domains-search-bar'
             onChange={handleSearchDomain}
             placeholder='Search Domains'
-            value={filterText}
+            value={searchText}
           />
-          <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+          <FontAwesomeIcon icon='search' className='domains-search-bar-icon' />
         </div>
         <div className='cstg-domains-table-header-right'>
           <div className='add-domain-button'>
@@ -180,7 +184,7 @@ export function CstgDomainsTable({
           </tr>
         </thead>
         <tbody className='cstg-domains-table-body'>
-          {pagedDomains.sort().map((domain) => (
+          {pagedDomains.map((domain) => (
             <CstgDomainItem
               key={domain}
               domain={domain}
@@ -191,21 +195,20 @@ export function CstgDomainsTable({
               checked={isDomainSelected(domain)}
             />
           ))}
-          {filterText && !searchedDomains.length && (
+          {searchText && !searchedDomains.length && (
             <p className='no-search-results'>
               There are no top-level domains that match this search.
             </p>
           )}
         </tbody>
       </table>
-      <div className='domain-names-paging-right'>
-        <PagingTool
-          totalRows={searchedDomains.sort()}
-          rowsPerPageTitle='Domains per Page'
-          initialRowsPerPage={10}
-          onChangeRows={onChangeDisplayedDomains}
-        />
-      </div>
+
+      <PagingTool
+        totalRows={searchedDomains}
+        rowsPerPageTitle='Domains per Page'
+        initialRowsPerPage={initialRowsPerPage}
+        onChangeRows={onChangeDisplayedDomains}
+      />
 
       {!domains.length && (
         <TableNoDataPlaceholder title='No Top-Level Domains'>
