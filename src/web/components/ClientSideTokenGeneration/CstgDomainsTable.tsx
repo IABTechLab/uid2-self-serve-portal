@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
+import { sortStrings } from '../../utils/textHelpers';
 import { PagingTool } from '../Core/PagingTool';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
@@ -29,14 +30,36 @@ export function CstgDomainsTable({
   const [pagedDomains, setPagedDomains] = useState<string[]>(domains);
   const [searchText, setSearchText] = useState('');
 
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
   const initialRowsPerPage = 10;
 
   useEffect(() => {
-    setSearchedDomains(domains.sort());
-    setPagedDomains(domains.sort().filter((_, index) => index >= 0 && index < initialRowsPerPage));
-  }, [domains]);
+    if (pageNumber && rowsPerPage) {
+      if (searchText === '') {
+        setSearchedDomains(sortStrings(domains));
+      }
+      setPagedDomains(
+        sortStrings(searchedDomains).filter(
+          (_, index) =>
+            index >= (pageNumber - 1) * rowsPerPage &&
+            index < (pageNumber - 1) * rowsPerPage + rowsPerPage
+        )
+      );
+    } else {
+      setSearchedDomains(sortStrings(domains));
+      setPagedDomains(
+        sortStrings(domains).filter((_, index) => index >= 0 && index < initialRowsPerPage)
+      );
+    }
+  }, [domains, pageNumber, rowsPerPage, searchText, searchedDomains]);
+
+  useEffect(() => {
+    setPageNumber(1);
+  }, [searchedDomains.length]);
 
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
@@ -106,13 +129,14 @@ export function CstgDomainsTable({
   ) => {
     await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
-    setSearchedDomains(domains.sort());
+    setSearchedDomains(sortStrings(domains));
     setSelectedDomains([]);
     setSearchText('');
   };
 
-  const onChangeDisplayedDomains = (displayedDomains: string[]) => {
-    setPagedDomains(displayedDomains);
+  const onChangeDisplayedDomains = (currentPageNumber: number, currentRowsPerPage: number) => {
+    setPageNumber(currentPageNumber);
+    setRowsPerPage(currentRowsPerPage);
   };
 
   return (
@@ -148,7 +172,6 @@ export function CstgDomainsTable({
             </div>
           )}
         </div>
-
         <div className='cstg-domains-table-header-right'>
           <div className='domains-search-bar-container'>
             <input
@@ -203,7 +226,7 @@ export function CstgDomainsTable({
       </table>
 
       <PagingTool
-        totalRows={searchedDomains}
+        numberTotalRows={searchedDomains.length}
         rowsPerPageTitle='Domains per Page'
         initialRowsPerPage={initialRowsPerPage}
         onChangeRows={onChangeDisplayedDomains}

@@ -44,13 +44,22 @@ const totalDomains = [
 
 export const Default = () => {
   const [pagedDomains, setPagedDomains] = useState<string[]>(totalDomains);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
-  const onChangeDisplayedRows = (displayedDomains: string[]) => {
-    setPagedDomains(displayedDomains);
+  const onChangeDisplayedRows = (currentPageNumber: number, currentRowsPerPage: number) => {
+    setPageNumber(currentPageNumber);
+    setRowsPerPage(currentRowsPerPage);
   };
 
   useEffect(() => {
-    setPagedDomains(totalDomains.filter((_, index) => index >= 1 && index < 1 + 10));
+    setPagedDomains(
+      totalDomains.filter(
+        (_, index) =>
+          index >= (pageNumber - 1) * rowsPerPage &&
+          index < (pageNumber - 1) * rowsPerPage + rowsPerPage
+      )
+    );
   }, []);
 
   return (
@@ -65,7 +74,7 @@ export const Default = () => {
 
       <PagingTool
         rowsPerPageTitle='Domains Per Page'
-        totalRows={totalDomains}
+        numberTotalRows={totalDomains.length}
         initialRowsPerPage={10}
         onChangeRows={onChangeDisplayedRows}
       />

@@ -5,6 +5,7 @@ import {
   getArticle,
   isVowel,
   separateStringsList,
+  sortStrings,
 } from './textHelpers';
 
 describe('Text helper tests', () => {
@@ -91,6 +92,19 @@ describe('Text helper tests', () => {
     it.each(testStringArr2)('should return array of only one unique element', () => {
       for (const t of testStringArr2) {
         expect(deduplicateStrings(t)).toEqual(['test1', 'test2']);
+      }
+    });
+  });
+
+  describe('sortstrings', () => {
+    const testStringArr = [
+      ['atest', 'btest', 'ctest'],
+      ['btest', 'atest', 'ctest'],
+      ['ctest', 'btest', 'atest'],
+    ];
+    it.each(testStringArr)('should return array sorted alphabetically', () => {
+      for (const t of testStringArr) {
+        expect(sortStrings(t)).toEqual(['atest', 'btest', 'ctest']);
       }
     });
   });
