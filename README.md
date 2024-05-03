@@ -6,7 +6,7 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 
 ## Requirements
 
-- A recent version of Node. Recommended: 20.11 or later. See [package.json](./package.json) for the required version.
+- A recent version of Node. Recommended: 20.11 or later. See [package.json](./package.json) under `"engines"` for the required version.
 - Docker Desktop.
 - VS Code (or equivalent). Note that if you don't use VS Code, you will need to find equivalent extensions for things like linting.
 
@@ -22,6 +22,7 @@ Recommended VS Code extensions:
 | Docker | Helps you manage docker containers straight from VS Code. | No |
 | Auto Rename Tag | Fixes your closing tags as you edit opening tags | No |
 | Toggle Quotes | You can hit `ctrl-'` to cycle between quote styles (', ", and `) for the string you're editing. | No |
+| SonarLint | Detects and highlights issues that can lead to bugs, vulnerabilities, and code smells. | No |
 
 ## Docker
 
@@ -102,14 +103,17 @@ The portal uses [Keycloak](https://www.keycloak.org/) as the identity and access
 ### Keycloak setup
 
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
-- To access [keycloak admin console](http://localhost:18080/admin/), you can find the username and password in the `docker-compose.yml`
+
+#### Keycloak admin console
+- The Keycloak admin console runs at http://localhost:18080/admin/
+- The username and password are stored in [docker-compose.yml](./docker-compose.yml)
 - If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console
 
 For more advanced setup, see [Keycloak Advanced Setup](./KeycloakAdvancedSetup.md).
 
 ### Upgrading Keycloak
 
-See https://github.com/IABTechLab/uid2-self-serve-portal/pull/98/files for an example PR for how to upgrade Keycloak. Note that changes to `Dockerfile_keycloak` often need to be mirrored in `docker-compose.yml`. You can use `docker build` and `docker run` to manually test the `Dockerfile_keycloak` locally, see https://github.com/IABTechLab/uid2-self-serve-portal/pull/347 for an example. You will likely need to upgrade the [keycloak-js](https://www.npmjs.com/package/keycloak-js) package as well.
+See https://github.com/IABTechLab/uid2-self-serve-portal/pull/98/files for an example PR for how to upgrade Keycloak. Note that changes to `Dockerfile_keycloak` often need to be mirrored in [docker-compose.yml](./docker-compose.yml). You can use `docker build` and `docker run` to manually test the `Dockerfile_keycloak` locally, see https://github.com/IABTechLab/uid2-self-serve-portal/pull/347 for an example. You will likely need to upgrade the [keycloak-js](https://www.npmjs.com/package/keycloak-js) package as well.
 
 Keycloak also provides [Upgrading Guides](https://www.keycloak.org/docs/latest/upgrading/index.html) for each version.
 
@@ -174,7 +178,7 @@ This action should be triggered after adding or updating any templates and befor
 
 ## Environment Variables
 
-We do not have a committed `.env` file as it goes against best practice, per https://www.npmjs.com/package/dotenv. However, we do provide a sample `.env.sample` file that can be copied into a `.env` file to get development up and running.
+We do not have a committed `.env` file as it goes against best practice, per https://www.npmjs.com/package/dotenv. However, we do provide a [.env.sample](./.env.sample) file that can be copied into a `.env` file to get development up and running.
 
 ## Available Scripts
 
@@ -234,35 +238,35 @@ Instructs ESLint to try to fix as many issues as possible, see https://eslint.or
 The following steps describe the minimal steps required to successfully log in to the portal UI.
 
 1. Set up Docker, as described above: [Docker](README.md#docker)
-2. Set up your `.env` file per [Environment Variables](README.md#environment-variables)
-3. Ensure your `SSP_KK_SECRET` matches the value in the Keycloak admin console. If it does not, please try [Reset your keycloak realm](./KeycloakAdvancedSetup.md#reset-realm). If all else fails, manually generate your own secret by following: [Generating SSP_KK_SECRET](./KeycloakAdvancedSetup.md#generating-ssp_kk_secret)
-4. Run the following to install dependencies:
+1. Set up your `.env` file per [Environment Variables](README.md#environment-variables)
+1. Run the following to install dependencies:
    ```
    npm install
    ```
-5. Run the following to start the API and React front-end:
+1. Run the following to start the API and React front-end:
    ```
    npm run dev
    ```
    Successfully running this will result in the self-serve-portal opening in the browser.
-6. Run the following to build the database schema:
+1. Run the following to build the database schema:
    ```
    npm run knex:migrate:latest
    ```
-7. Run the following to populate test data:
+1. Run the following to populate test data:
    ```
    npm run knex:seed:run
    ```
-8. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
-9. Create an account in the UI by clicking `Create Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally.
-10. Go to local MailHog at http://localhost:18025/ and you will see an email from `test@self-serve-portal.com` with the subject `Verify email`
-11. Open the email and Click `Verify Email`
-12. Fill in the form however you want and submit the form
-13. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
-14. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-15. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
+1. Create an account in the UI by clicking `Request Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally. Regardless, using the [example.com](https://en.wikipedia.org/wiki/Example.com) domain is encouraged.
+1. Go to local MailHog at http://localhost:18025/ and you will see an email from `noreply@unifiedid.com` with the subject `Verify email`
+1. Open the email and Click `Verify Email`
+1. Fill in the form however you want and submit the form
+1. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
+1. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
+1. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
 
     ```
+    use [uid2_selfserve]
+
     declare @email as nvarchar(256) = '<Enter your email here>'
 
     update p
@@ -273,14 +277,49 @@ The following steps describe the minimal steps required to successfully log in t
     where u.email = @email
     ```
 
-16. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
-17. Return to the UI and you should be good to go!
+1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
+1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
+1. Return to the UI and you should be good to go!
+
+### Admin screens/routes
+
+Certain screens/routes are considered admin-only. Run the following to assign yourself as an admin:
+
+```
+use [uid2_selfserve]
+
+declare @displayName as nvarchar(256) = '<first name> <last name>'
+declare @email as nvarchar(256) = '<Enter your email here>'
+
+select * from dbo.approvers where email = @email
+
+insert into dbo.approvers (displayName, email, participantTypeId)
+values 
+(@displayName, @email, 1),
+(@displayName, @email, 2),
+(@displayName, @email, 3),
+(@displayName, @email, 4)
+
+select * from dbo.approvers where email = @email 
+```
 
 ### Connecting to local Admin service
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
 1. Ensure that the site IDs of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing IDs by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
+    1. To assign a site to your participant, run the following SQL:
+        ```
+        use [uid2_selfserve]
+
+        update dbo.participants
+        set siteId = <enter a valid site id> -- e.g. 999 
+        where id = <Enter your participant id> -- should be 7 for brand new devs
+
+        ```
 1. If you wish to test uid2-admin service with Okta auth enabled, ensure that you have set `SSP_OKTA_AUTH_DISABLED` to false in your `.env`, and fill in the `SSP_OKTA_CLIENT_SECRET` value. You will also need to update `is_auth_disabled` to false in your uid2-admin local-config.json, and fill in the `okta_client_secret` value.
    - You can find the keys for local testing in 1Password under "Okta localhost deployment".
    - Make sure you use the key from the uid2-self-serve-portal subsection for ssportal and the value from the uid2-admin subsection for admin.
    - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file.
+
+### Troubleshooting
+- Ensure your `SSP_KK_SECRET` matches the Client Secret in the Keycloak admin console, see: [Keycloak Client Secret](./KeycloakAdvancedSetup.md#keycloak-client-secret).
