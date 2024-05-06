@@ -1,6 +1,7 @@
 import { Suspense, useCallback, useContext } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
@@ -75,19 +76,21 @@ function TeamMembers() {
       <p className='heading-details'>
         View and manage team members who have access to the UID2 Portal.
       </p>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={data.users}>
-          {(users: UserResponse[]) => (
-            <TeamMembersTable
-              teamMembers={users}
-              onAddTeamMember={handleAddTeamMember}
-              resendInvite={ResendInvite}
-              onRemoveTeamMember={handleRemoveTeamMember}
-              onUpdateTeamMember={handleUpdateTeamMember}
-            />
-          )}
-        </Await>
-      </Suspense>
+      <ScreenContentContainer>
+        <Suspense fallback={<Loading />}>
+          <Await resolve={data.users}>
+            {(users: UserResponse[]) => (
+              <TeamMembersTable
+                teamMembers={users}
+                onAddTeamMember={handleAddTeamMember}
+                resendInvite={ResendInvite}
+                onRemoveTeamMember={handleRemoveTeamMember}
+                onUpdateTeamMember={handleUpdateTeamMember}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </ScreenContentContainer>
     </>
   );
 }

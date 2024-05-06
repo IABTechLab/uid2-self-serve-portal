@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Dialog } from '../Core/Dialog';
@@ -8,18 +7,16 @@ import { KeyPairModel } from './KeyPairModel';
 
 export type OnKeyPairDisable = (keyPair: KeyPairModel) => void;
 
-type KeyPairDisableDialogProps = {
+type KeyPairDisableDialogProps = Readonly<{
   onDisable: OnKeyPairDisable;
-  triggerButton: JSX.Element;
   keyPair: KeyPairModel;
-};
+  onOpenChange: () => void;
+}>;
 
-function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisableDialogProps) {
-  const [open, setOpen] = useState(false);
-
+function KeyPairDisableDialog({ onDisable, keyPair, onOpenChange }: KeyPairDisableDialogProps) {
   const onSubmit = () => {
     onDisable(keyPair);
-    setOpen(false);
+    onOpenChange();
   };
 
   const formMethods = useForm<KeyPairModel>({
@@ -30,9 +27,7 @@ function KeyPairDisableDialog({ onDisable, triggerButton, keyPair }: KeyPairDisa
   return (
     <Dialog
       closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
-      triggerButton={triggerButton}
+      onOpenChange={onOpenChange}
       title={`Delete Key Pair: ${keyPair.name}`}
     >
       <p>

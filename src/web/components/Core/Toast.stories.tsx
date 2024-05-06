@@ -48,6 +48,7 @@ function TestToast() {
 
 export default {
   component: TestToast,
+  title: 'Shared Components/ Toast',
 } as Meta<typeof TestToast>;
 
 type Story = StoryObj<typeof TestToast>;

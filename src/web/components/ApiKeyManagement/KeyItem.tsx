@@ -8,14 +8,24 @@ import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
 
-type KeyItemProps = {
+type KeyItemProps = Readonly<{
   apiKey: ApiKeyDTO;
   onEdit: OnApiKeyEdit;
   onDisable: OnApiKeyDisable;
   availableRoles: ApiRoleDTO[];
-};
+}>;
 function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: KeyItemProps) {
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
+  const [showKeyDisableDialog, setShowKeyDisableDialog] = useState<boolean>(false);
+  const [showKeyEditDialog, setShowKeyEditDialog] = useState<boolean>(false);
+
+  const onOpenChangeKeyDisableDialog = () => {
+    setShowKeyDisableDialog(!showKeyDisableDialog);
+  };
+
+  const onOpenChangeKeyEditDialog = () => {
+    setShowKeyEditDialog(!showKeyEditDialog);
+  };
 
   if (apiKey.disabled) {
     return <div />;
@@ -32,26 +42,38 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       {availableRoles.length > 0 && (
         <td className='action'>
           <div className='action-cell'>
-            <KeyEditDialog
-              apiKey={apiKey}
-              onEdit={onEdit}
-              triggerButton={
-                <button type='button' className='icon-button' title='Edit'>
-                  <FontAwesomeIcon icon='pencil' />
-                </button>
-              }
-              availableRoles={availableRoles}
-              setApiKey={setApiKey}
-            />
-            <KeyDisableDialog
-              apiKey={apiKey}
-              onDisable={onDisable}
-              triggerButton={
-                <button type='button' className='icon-button' title='Delete'>
-                  <FontAwesomeIcon icon='trash-can' />
-                </button>
-              }
-            />
+            <button
+              type='button'
+              className='icon-button'
+              title='Edit'
+              onClick={onOpenChangeKeyEditDialog}
+            >
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+            {showKeyEditDialog && (
+              <KeyEditDialog
+                apiKey={apiKey}
+                onEdit={onEdit}
+                availableRoles={availableRoles}
+                setApiKey={setApiKey}
+                onOpenChange={onOpenChangeKeyEditDialog}
+              />
+            )}
+            <button
+              type='button'
+              className='icon-button'
+              title='Delete'
+              onClick={onOpenChangeKeyDisableDialog}
+            >
+              <FontAwesomeIcon icon='trash-can' />
+            </button>
+            {showKeyDisableDialog && (
+              <KeyDisableDialog
+                apiKey={apiKey}
+                onDisable={onDisable}
+                onOpenChange={onOpenChangeKeyDisableDialog}
+              />
+            )}
           </div>
         </td>
       )}

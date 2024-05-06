@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
@@ -20,21 +19,19 @@ export type OnApiKeyEdit = (
 
 type KeyEditDialogProps = Readonly<{
   onEdit: OnApiKeyEdit;
-  triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
   apiKey: ApiKeyDTO;
   setApiKey: React.Dispatch<React.SetStateAction<ApiKeyDTO>>;
+  onOpenChange: () => void;
 }>;
 
 function KeyEditDialog({
   availableRoles,
   onEdit,
-  triggerButton,
   apiKey,
   setApiKey,
+  onOpenChange,
 }: KeyEditDialogProps) {
-  const [open, setOpen] = useState(false);
-
   const formMethods = useForm<EditApiKeyFormDTO>({
     defaultValues: {
       keyId: apiKey.key_id,
@@ -44,9 +41,9 @@ function KeyEditDialog({
   });
   const { handleSubmit } = formMethods;
 
-  const onSubmit: SubmitHandler<EditApiKeyFormDTO> = async (formData) => {
+  const onSubmit = async (formData: EditApiKeyFormDTO) => {
     onEdit(formData, setApiKey);
-    setOpen(false);
+    onOpenChange();
   };
 
   const unapprovedRoles: ApiRoleDTO[] = getUnapprovedRoles(apiKey.roles, availableRoles);
@@ -55,9 +52,7 @@ function KeyEditDialog({
     <div className='key-edit-dialog'>
       <Dialog
         closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-        triggerButton={triggerButton}
+        onOpenChange={onOpenChange}
         title={`Edit API Key: ${apiKey.name}`}
       >
         <FormProvider {...formMethods}>
@@ -69,6 +64,7 @@ function KeyEditDialog({
                 required: 'Please specify an API Key name.',
               }}
             />
+            <TextInput inputName='keyId' label='Key ID' disabled />
             <MultiCheckboxInput
               label='API Permissions'
               inputName='newApiRoles'

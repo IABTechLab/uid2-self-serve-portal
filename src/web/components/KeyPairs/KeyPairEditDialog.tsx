@@ -17,25 +17,24 @@ export type OnKeyPairEdit = (
 
 type KeyPairEditDialogProps = Readonly<{
   onEdit: OnKeyPairEdit;
-  triggerButton: JSX.Element;
   keyPair: KeyPairModel;
   existingKeyPairs: KeyPairModel[];
+  onOpenChange: () => void;
 }>;
 
 function KeyPairEditDialog({
   onEdit,
-  triggerButton,
   keyPair: keyPairInitial,
   existingKeyPairs,
+  onOpenChange,
 }: KeyPairEditDialogProps) {
-  const [open, setOpen] = useState(false);
   const [keyPair, setKeyPair] = useState<KeyPairModel>(keyPairInitial);
 
   const onSubmit = async (formData: EditKeyPairFormDTO) => {
     if (formData.name !== keyPairInitial.name) {
       await onEdit(formData, setKeyPair);
     }
-    setOpen(false);
+    onOpenChange();
   };
 
   const defaultFormData: EditKeyPairFormDTO = {
@@ -54,9 +53,7 @@ function KeyPairEditDialog({
     <div>
       <Dialog
         closeButtonText='Cancel'
-        open={open}
-        onOpenChange={setOpen}
-        triggerButton={triggerButton}
+        onOpenChange={onOpenChange}
         title={`Edit Key Pair: ${keyPair.name}`}
       >
         <FormProvider<EditKeyPairFormDTO> {...formMethods}>

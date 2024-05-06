@@ -5,56 +5,17 @@ import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
-import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import { SuccessToast } from '../Core/Toast';
+import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
 import TeamMemberDialog from './TeamMemberDialog';
 
-type DeleteConfirmationDialogProps = {
-  person: UserResponse;
-  onRemoveTeamMember: () => Promise<void>;
-};
-
-function DeleteConfirmationDialog({ person, onRemoveTeamMember }: DeleteConfirmationDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
-
-  const handleRemove = async () => {
-    setOpenConfirmation(false);
-    await onRemoveTeamMember();
-  };
-
-  return (
-    <Dialog
-      title='Are you sure you want to delete this team member?'
-      triggerButton={
-        <button className='icon-button' aria-label='delete' type='button'>
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
-      }
-      open={openConfirmation}
-      onOpenChange={setOpenConfirmation}
-      closeButtonText='Cancel'
-    >
-      <ul className='dot-list'>
-        <li>
-          {person.firstName} {person.lastName}
-        </li>
-      </ul>
-      <div className='dialog-footer-section'>
-        <button type='button' className='primary-button' onClick={handleRemove}>
-          Delete Team Member
-        </button>
-      </div>
-    </Dialog>
-  );
-}
-
-type TeamMemberProps = {
+type TeamMemberProps = Readonly<{
   person: UserResponse;
   resendInvite: (id: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
-};
+}>;
 
 enum InviteState {
   initial,
@@ -70,9 +31,19 @@ function TeamMember({
 }: TeamMemberProps) {
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
+  const [showDeleteTeamMemberDialog, setShowDeleteTeamMemberDialog] = useState<boolean>();
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
+  };
+
+  const onOpenChangeTeamMemberDialog = () => {
+    setShowTeamMemberDialog(!showTeamMemberDialog);
+  };
+
+  const onOpenChangeDeleteTeamMemberDialog = () => {
+    setShowDeleteTeamMemberDialog(!showDeleteTeamMemberDialog);
   };
 
   const onResendInvite = useCallback(async () => {
@@ -138,16 +109,36 @@ function TeamMember({
                 {reinviteState === InviteState.error && 'Try again later'}
               </button>
             )}
-            <TeamMemberDialog
-              onUpdateTeamMember={handleUpdateUser}
-              person={person}
-              triggerButton={
-                <button className='icon-button' aria-label='edit' type='button'>
-                  <FontAwesomeIcon icon='pencil' />
-                </button>
-              }
-            />
-            <DeleteConfirmationDialog onRemoveTeamMember={handleRemoveUser} person={person} />
+            <button
+              className='icon-button'
+              aria-label='edit'
+              type='button'
+              onClick={onOpenChangeTeamMemberDialog}
+            >
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+            {showTeamMemberDialog && (
+              <TeamMemberDialog
+                onUpdateTeamMember={handleUpdateUser}
+                person={person}
+                onOpenChange={onOpenChangeTeamMemberDialog}
+              />
+            )}
+            <button
+              className='icon-button'
+              aria-label='delete'
+              type='button'
+              onClick={onOpenChangeDeleteTeamMemberDialog}
+            >
+              <FontAwesomeIcon icon='trash-can' />
+            </button>
+            {showDeleteTeamMemberDialog && (
+              <TeamMemberDeleteConfirmationDialog
+                onRemoveTeamMember={handleRemoveUser}
+                person={person}
+                onOpenChange={onOpenChangeDeleteTeamMemberDialog}
+              />
+            )}
           </div>
         </div>
       </td>

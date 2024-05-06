@@ -15,10 +15,10 @@ import { TextInput } from '../Input/TextInput';
 import './createAccountForm.scss';
 import '../../styles/forms.scss';
 
-export type CreateAccountFormProps = {
+export type CreateAccountFormProps = Readonly<{
   resolvedParticipantTypes: ParticipantTypeDTO[];
   onSubmit: (data: CreateParticipantForm) => Promise<string[] | void>;
-};
+}>;
 export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: CreateAccountFormProps) {
   const [showTermsDialog, setShowTermsDialog] = useState(false);
   const formMethods = useForm<CreateParticipantForm>({
@@ -89,16 +89,14 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
             </button>{' '}
             (must click link)
           </span>
-          <Dialog
-            open={showTermsDialog}
-            onOpenChange={setShowTermsDialog}
-            className='terms-conditions-dialog'
-          >
-            <TermsAndConditionsForm
-              onAccept={handleAccept}
-              onCancel={() => setShowTermsDialog(false)}
-            />
-          </Dialog>
+          {showTermsDialog && (
+            <Dialog onOpenChange={setShowTermsDialog} className='terms-conditions-dialog'>
+              <TermsAndConditionsForm
+                onAccept={handleAccept}
+                onCancel={() => setShowTermsDialog(false)}
+              />
+            </Dialog>
+          )}
         </div>
         <FormError display={!!errors.agreeToTerms}>
           Please click the link above to accept the terms and conditions.

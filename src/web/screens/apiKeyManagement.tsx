@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
@@ -8,6 +8,7 @@ import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import {
   CreateApiKey,
@@ -24,9 +25,8 @@ import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-import './apiKeyManagement.scss';
-
 function ApiKeyManagement() {
+  const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
   const data = useLoaderData() as {
     result: ApiKeyDTO[];
   };
@@ -57,14 +57,18 @@ function ApiKeyManagement() {
     try {
       await DisableApiKey(apiKey);
       reloader.revalidate();
-      SuccessToast('Your key has been deleted');
+      SuccessToast('Your key has been deleted.');
     } catch (e) {
       handleErrorToast(e);
     }
   };
 
+  const onKeyCreationDialogChange = () => {
+    setShowKeyCreationDialog(!showKeyCreationDialog);
+  };
+
   return (
-    <div className='api-key-management-page'>
+    <>
       <h1>API Keys</h1>
       <p className='heading-details'>
         View and manage your API keys. For more information, see{' '}
@@ -81,7 +85,7 @@ function ApiKeyManagement() {
       <Suspense fallback={<Loading />}>
         <Await resolve={data.result}>
           {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
-            <>
+            <ScreenContentContainer>
               <KeyTable
                 apiKeys={apiKeys.filter((key) => !key.disabled)}
                 onKeyEdit={onKeyEdit}
@@ -90,22 +94,27 @@ function ApiKeyManagement() {
               />
               {apiRoles.length > 0 && (
                 <div className='create-new-key'>
-                  <KeyCreationDialog
-                    availableRoles={apiRoles}
-                    onKeyCreation={onKeyCreation}
-                    triggerButton={
-                      <button className='small-button' type='button'>
-                        Add API Key
-                      </button>
-                    }
-                  />
+                  <button
+                    className='small-button'
+                    type='button'
+                    onClick={onKeyCreationDialogChange}
+                  >
+                    Add API Key
+                  </button>
+                  {showKeyCreationDialog && (
+                    <KeyCreationDialog
+                      availableRoles={apiRoles}
+                      onKeyCreation={onKeyCreation}
+                      onOpenChange={onKeyCreationDialogChange}
+                    />
+                  )}
                 </div>
               )}
-            </>
+            </ScreenContentContainer>
           )}
         </Await>
       </Suspense>
-    </div>
+    </>
   );
 }
 

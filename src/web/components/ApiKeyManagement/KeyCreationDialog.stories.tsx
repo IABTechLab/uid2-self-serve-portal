@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta } from '@storybook/react';
+import { useState } from 'react';
 
 import KeyCreationDialog from './KeyCreationDialog';
 
@@ -8,38 +9,59 @@ const meta: Meta<typeof KeyCreationDialog> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof KeyCreationDialog>;
+export const MultipleRoles = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-export const MultipleRoles: Story = {
-  args: {
-    triggerButton: <button type='button'>Open</button>,
-    onKeyCreation: (form) => {
-      console.log(`Add a new Key ${JSON.stringify(form)}`);
-      return Promise.resolve({
-        plaintextKey: 'Test_Plaintext',
-        secret: 'Test_Secret',
-        name: 'Test_Key',
-      });
-    },
-    availableRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 3 },
-    ],
-  },
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <KeyCreationDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          availableRoles={[
+            { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+            { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+            { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+            { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
+          ]}
+          onKeyCreation={(form) => {
+            console.log(`Add a new Key ${JSON.stringify(form)}`);
+            return Promise.resolve({
+              plaintextKey: 'Test_Plaintext',
+              secret: 'Test_Secret',
+              name: 'Test_Key',
+            });
+          }}
+        />
+      )}
+    </div>
+  );
 };
 
-export const OneRole: Story = {
-  args: {
-    triggerButton: <button type='button'>Open</button>,
-    onKeyCreation: (form) => {
-      console.log(`Add a new Key ${JSON.stringify(form)}`);
-      return Promise.resolve({
-        plaintextKey: 'Test_Plaintext',
-        secret: 'Test_Secret',
-        name: 'Test_Key',
-      });
-    },
-    availableRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
-  },
+export const OneRole = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <KeyCreationDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          availableRoles={[{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }]}
+          onKeyCreation={(form) => {
+            console.log(`Add a new Key ${JSON.stringify(form)}`);
+            return Promise.resolve({
+              plaintextKey: 'Test_Plaintext',
+              secret: 'Test_Secret',
+              name: 'Test_Key',
+            });
+          }}
+        />
+      )}
+    </div>
+  );
 };

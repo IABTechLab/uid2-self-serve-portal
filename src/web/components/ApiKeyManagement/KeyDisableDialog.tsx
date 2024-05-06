@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
@@ -10,16 +9,13 @@ export type OnApiKeyDisable = (apiKey: ApiKeyDTO) => void;
 
 type KeyDisableDialogProps = Readonly<{
   onDisable: OnApiKeyDisable;
-  triggerButton: JSX.Element;
   apiKey: ApiKeyDTO;
+  onOpenChange: () => void;
 }>;
 
-function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialogProps) {
-  const [open, setOpen] = useState(false);
-
+function KeyDisableDialog({ onDisable, onOpenChange, apiKey }: KeyDisableDialogProps) {
   const onSubmit = () => {
     onDisable(apiKey);
-    setOpen(false);
   };
 
   const formMethods = useForm<ApiKeyDTO>({
@@ -31,9 +27,7 @@ function KeyDisableDialog({ onDisable, triggerButton, apiKey }: KeyDisableDialog
   return (
     <Dialog
       closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
-      triggerButton={triggerButton}
+      onOpenChange={onOpenChange}
       title={`Delete API Key: ${apiKey.name}`}
     >
       <p>

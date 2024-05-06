@@ -6,32 +6,26 @@ import { Dialog } from '../Core/Dialog';
 import { InlineMessage } from '../Core/InlineMessage';
 import BusinessContactDialog from './BusinessContactDialog';
 
-type DeleteBusinessContactDialogProps = {
+type DeleteBusinessContactDialogProps = Readonly<{
   contact: BusinessContactResponse;
   onRemoveContact: () => Promise<void>;
-};
+  onOpenChange: () => void;
+}>;
 
 function DeleteBusinessContactDialog({
   contact,
   onRemoveContact,
+  onOpenChange,
 }: DeleteBusinessContactDialogProps) {
-  const [openDialog, setOpenDialog] = useState(false);
-
   const handleRemove = async () => {
-    setOpenDialog(false);
     await onRemoveContact();
+    onOpenChange();
   };
 
   return (
     <Dialog
       title='Are you sure you want to delete this email contact?'
-      triggerButton={
-        <button className='icon-button' aria-label='delete' type='button'>
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
-      }
-      open={openDialog}
-      onOpenChange={setOpenDialog}
+      onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
       <ul className='dot-list'>
@@ -46,11 +40,11 @@ function DeleteBusinessContactDialog({
   );
 }
 
-type BusinessContactProps = {
+type BusinessContactProps = Readonly<{
   contact: BusinessContactResponse;
   onRemoveEmailContact: (id: number) => Promise<void>;
   onUpdateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
-};
+}>;
 
 function BusinessContact({
   contact,
@@ -58,14 +52,26 @@ function BusinessContact({
   onUpdateEmailContact,
 }: BusinessContactProps) {
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [showEditBusinessDialog, setShowEditBusinessDialog] = useState<boolean>(false);
+  const [showDeleteBusinessContactDialog, setShowDeleteBusinessContactDialog] =
+    useState<boolean>(false);
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
 
+  const onOpenChangeDeleteBusinessContactDialog = () => {
+    setShowDeleteBusinessContactDialog(!showDeleteBusinessContactDialog);
+  };
+
+  const onOpenChangeEditBusinessContactDialog = () => {
+    setShowEditBusinessDialog(!showEditBusinessDialog);
+  };
+
   const handleRemoveEmailContact = async () => {
     try {
       await onRemoveEmailContact(contact.id);
+      onOpenChangeDeleteBusinessContactDialog();
     } catch (e) {
       setErrorInfo(e as Error);
     }
@@ -88,19 +94,36 @@ function BusinessContact({
         <div className='action-cell'>
           {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
-            <BusinessContactDialog
-              onFormSubmit={handleUpdateEmailContact}
-              contact={contact}
-              triggerButton={
-                <button className='icon-button' aria-label='edit' type='button'>
-                  <FontAwesomeIcon icon='pencil' />
-                </button>
-              }
-            />
-            <DeleteBusinessContactDialog
-              onRemoveContact={handleRemoveEmailContact}
-              contact={contact}
-            />
+            <button
+              className='icon-button'
+              aria-label='edit'
+              type='button'
+              onClick={onOpenChangeEditBusinessContactDialog}
+            >
+              <FontAwesomeIcon icon='pencil' />
+            </button>
+            {showEditBusinessDialog && (
+              <BusinessContactDialog
+                onFormSubmit={handleUpdateEmailContact}
+                contact={contact}
+                onOpenChange={onOpenChangeEditBusinessContactDialog}
+              />
+            )}
+            <button
+              className='icon-button'
+              aria-label='delete'
+              type='button'
+              onClick={onOpenChangeDeleteBusinessContactDialog}
+            >
+              <FontAwesomeIcon icon='trash-can' />
+            </button>
+            {showDeleteBusinessContactDialog && (
+              <DeleteBusinessContactDialog
+                onRemoveContact={handleRemoveEmailContact}
+                contact={contact}
+                onOpenChange={onOpenChangeDeleteBusinessContactDialog}
+              />
+            )}
           </div>
         </div>
       </td>

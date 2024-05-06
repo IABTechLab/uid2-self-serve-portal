@@ -39,19 +39,23 @@ function NoParticipant() {
   );
 }
 
-type DeletePermissionDialogProps = {
+type DeletePermissionDialogProps = Readonly<{
   onDeleteSharingPermission: () => void;
   selectedSiteList: SharingSiteWithSource[];
-};
+}>;
 function DeletePermissionDialog({
   onDeleteSharingPermission,
   selectedSiteList,
 }: DeletePermissionDialogProps) {
-  const [openConfirmation, setOpenConfirmation] = useState(false);
+  const [showDeletePermissionsDialog, setShowDeletePermissionsDialog] = useState(false);
+
+  const onOpenChangeDeletePermissionsDialog = () => {
+    setShowDeletePermissionsDialog(!showDeletePermissionsDialog);
+  };
 
   const handleDeletePermissions = () => {
     onDeleteSharingPermission();
-    setOpenConfirmation(false);
+    onOpenChangeDeletePermissionsDialog();
   };
 
   const showDeletionNotice = (participant: SharingSiteWithSource) => {
@@ -70,44 +74,46 @@ function DeletePermissionDialog({
   };
 
   return (
-    <Dialog
-      title='Are you sure you want to delete these permissions?'
-      triggerButton={
-        <button className='transparent-button sharing-permission-delete-button' type='button'>
-          <FontAwesomeIcon
-            icon={['far', 'trash-can']}
-            className='sharing-permission-trashcan-icon'
-          />
-          Delete Permissions
-        </button>
-      }
-      open={openConfirmation}
-      onOpenChange={setOpenConfirmation}
-      closeButtonText='Cancel'
-    >
-      <div className='dialog-body-section'>
-        <ul className='dot-list'>
-          {selectedSiteList.map((participant) => (
-            <li key={participant.id}>
-              {participant.name}
-              {showDeletionNotice(participant)}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className='dialog-footer-section'>
-        <button type='button' className='primary-button' onClick={handleDeletePermissions}>
-          Delete Permissions
-        </button>
-      </div>
-    </Dialog>
+    <div>
+      <button
+        className='transparent-button sharing-permission-delete-button'
+        type='button'
+        onClick={onOpenChangeDeletePermissionsDialog}
+      >
+        <FontAwesomeIcon icon={['far', 'trash-can']} className='sharing-permission-trashcan-icon' />
+        Delete Permissions
+      </button>
+      {showDeletePermissionsDialog && (
+        <Dialog
+          title='Are you sure you want to delete these permissions?'
+          onOpenChange={onOpenChangeDeletePermissionsDialog}
+          closeButtonText='Cancel'
+        >
+          <div className='dialog-body-section'>
+            <ul className='dot-list'>
+              {selectedSiteList.map((participant) => (
+                <li key={participant.id}>
+                  {participant.name}
+                  {showDeletionNotice(participant)}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className='dialog-footer-section'>
+            <button type='button' className='primary-button' onClick={handleDeletePermissions}>
+              Delete Permissions
+            </button>
+          </div>
+        </Dialog>
+      )}
+    </div>
   );
 }
 
-type SharingPermissionsTableContentProps = {
+type SharingPermissionsTableContentProps = Readonly<{
   sharingSites: SharingSiteWithSource[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
-};
+}>;
 
 export function SharingPermissionsTableContent({
   sharingSites,
@@ -210,11 +216,11 @@ export function SharingPermissionsTableContent({
   );
 }
 
-type SharingPermissionsTableProps = {
+type SharingPermissionsTableProps = Readonly<{
   sharedSiteIds: number[];
   sharedTypes: ClientType[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
-};
+}>;
 
 export function SharingPermissionsTable({
   sharedSiteIds,

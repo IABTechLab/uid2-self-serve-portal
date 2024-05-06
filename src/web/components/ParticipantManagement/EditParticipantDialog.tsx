@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
@@ -12,30 +11,24 @@ import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { validateEditcrmAgreementNumber } from './AddParticipantDialogHelper';
 
-type UpdateParticipantDialogProps = Readonly<{
-  triggerButton: JSX.Element;
+type EditParticipantDialogProps = Readonly<{
   participant: ParticipantDTO;
-  onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
+  onEditParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
+  onOpenChange: () => void;
 }>;
 
-function UpdateParticipantDialog({
-  triggerButton,
+function EditParticipantDialog({
   participant,
-  onUpdateParticipant,
+  onEditParticipant,
   apiRoles,
   participantTypes,
-}: UpdateParticipantDialogProps) {
-  const [open, setOpen] = useState(false);
-
+  onOpenChange,
+}: EditParticipantDialogProps) {
   const onSubmit = async (formData: UpdateParticipantForm) => {
-    await onUpdateParticipant(formData, participant);
-    setOpen(false);
-  };
-
-  const onOpenChange = () => {
-    setOpen(!open);
+    await onEditParticipant(formData, participant);
+    onOpenChange();
   };
 
   const originalFormValues: UpdateParticipantForm = {
@@ -52,10 +45,8 @@ function UpdateParticipantDialog({
 
   return (
     <Dialog
-      triggerButton={triggerButton}
       title={`Edit Participant: ${participant.name}`}
       closeButtonText='Cancel'
-      open={open}
       onOpenChange={onOpenChange}
     >
       <FormProvider {...formMethods}>
@@ -102,4 +93,4 @@ function UpdateParticipantDialog({
   );
 }
 
-export default UpdateParticipantDialog;
+export default EditParticipantDialog;

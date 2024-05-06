@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
+import { LoaderFunction, LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 
 import { setAuthToken } from '../axios';
 import keycloak from '../Keycloak';
@@ -27,7 +27,7 @@ export const makePrivateRoute = (route: PortalRoute | RouteObject): PortalRoute 
             const token = localStorage.getItem('authToken');
             setAuthToken(token ?? undefined);
           }
-          return route.loader!(args);
+          return (route.loader as LoaderFunction)(args);
         }
       : undefined,
   };

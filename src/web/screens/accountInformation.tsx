@@ -1,5 +1,6 @@
 import { useContext, useMemo } from 'react';
 
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { Tooltip } from '../components/Core/Tooltip';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -17,22 +18,26 @@ function AccountInformation() {
     <>
       <h1>Participant Information</h1>
       <p className='heading-details'>View and manage your participant information.</p>
-      <div className='account-info-content'>
-        <h3 className='account-info-title'>
-          Participant Name
-          <Tooltip side='right'>
-            For any changes to participant information, please contact Support.
-          </Tooltip>
-        </h3>
-        <span>{participant?.name}</span>
-        <h3 className='account-info-title'>
-          Participant Type
-          <Tooltip side='right'>
-            For any changes to participant information, please contact Support.
-          </Tooltip>
-        </h3>
-        <span>{participantTypes}</span>
-      </div>
+      <ScreenContentContainer>
+        <div>
+          <h3 className='account-info-title'>
+            Participant Name
+            <Tooltip side='right'>
+              For any changes to participant information, please contact Support.
+            </Tooltip>
+          </h3>
+          <span>{participant?.name}</span>
+        </div>
+        <div>
+          <h3 className='account-info-title'>
+            Participant Type
+            <Tooltip side='right'>
+              For any changes to participant information, please contact Support.
+            </Tooltip>
+          </h3>
+          <span>{participantTypes}</span>
+        </div>
+      </ScreenContentContainer>
     </>
   );
 }

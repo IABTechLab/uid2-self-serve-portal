@@ -1,44 +1,58 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import type { Meta } from '@storybook/react';
+import { useState } from 'react';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
 import BusinessContactDialog from './BusinessContactDialog';
 
-export default {
-  title: 'Business Contacts/Business Contacts Dialog',
+const meta: Meta<typeof BusinessContactDialog> = {
   component: BusinessContactDialog,
-} as ComponentMeta<typeof BusinessContactDialog>;
+  title: 'Business Contacts/Business Contacts Dialog',
+};
+export default meta;
 
-const Template: ComponentStory<typeof BusinessContactDialog> = (args) => (
-  <BusinessContactDialog {...args} />
-);
+export const WithoutBusinessContact = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-export const WithoutBusinessContact = Template.bind({});
-WithoutBusinessContact.args = {
-  triggerButton: <button type='button'>Open</button>,
-  onFormSubmit: (formData) =>
-    Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`)),
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <BusinessContactDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          onFormSubmit={(formData) =>
+            Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`))
+          }
+        />
+      )}
+    </div>
+  );
 };
 
-export const WithBusinessContact = Template.bind({});
-WithBusinessContact.args = {
-  contact: {
-    id: 1,
-    name: 'Business Team',
-    emailAlias: 'Business_team@test.com',
-    contactType: ContactType.Business,
-    participantId: 1,
-  },
-  ...WithoutBusinessContact.args,
-};
+export const WithBusinessContact = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-export const WithSubmitError = Template.bind({});
-WithSubmitError.args = {
-  ...WithoutBusinessContact.args,
-  contact: {
-    id: 1,
-    name: 'Business Team',
-    emailAlias: 'Business_team@test.com',
-    contactType: ContactType.Business,
-    participantId: 1,
-  },
+  return (
+    <div>
+      <button className='small-button' type='button' onClick={() => setIsOpen(!isOpen)}>
+        Open Dialog
+      </button>
+      {isOpen && (
+        <BusinessContactDialog
+          onOpenChange={() => setIsOpen(!isOpen)}
+          onFormSubmit={(formData) =>
+            Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`))
+          }
+          contact={{
+            id: 1,
+            name: 'Business Team',
+            emailAlias: 'Business_team@test.com',
+            contactType: ContactType.Business,
+            participantId: 1,
+          }}
+        />
+      )}
+    </div>
+  );
 };

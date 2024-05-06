@@ -6,7 +6,7 @@ import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
 
 export default {
-  title: 'Sharing Permissions/BulkAddPermissions',
+  title: 'Sharing Permissions/Bulk Add Permissions',
   component: BulkAddPermissions,
 } as ComponentMeta<typeof BulkAddPermissions>;
 

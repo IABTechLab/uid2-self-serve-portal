@@ -10,12 +10,12 @@ import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantManagementItem.scss';
 
-type ParticipantRequestProps = {
+type ParticipantRequestProps = Readonly<{
   participantRequest: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
   apiRoles: ApiRoleDTO[];
   onApprove: (participantId: number, formData: ParticipantApprovalFormDetails) => Promise<void>;
-};
+}>;
 
 export function ParticipantRequestItem({
   participantRequest: participant,
@@ -24,7 +24,7 @@ export function ParticipantRequestItem({
   onApprove,
 }: ParticipantRequestProps) {
   const [hasError, setHasError] = useState<boolean>(false);
-  const [open, setOpen] = useState(false);
+  const [showApproveParticipantDialog, setShowApproveParticipantDialog] = useState(false);
 
   function getParticipantTypes(
     currentParticipantTypes?: ParticipantRequestProps['participantRequest']['types']
@@ -43,6 +43,10 @@ export function ParticipantRequestItem({
     } catch (err) {
       setHasError(true);
     }
+  };
+
+  const onOpenChangeApproveParticipantDialog = () => {
+    setShowApproveParticipantDialog(!showApproveParticipantDialog);
   };
 
   return (
@@ -68,24 +72,25 @@ export function ParticipantRequestItem({
           <button
             type='button'
             className='transparent-button approve-button'
-            onClick={() => setOpen(true)}
+            onClick={onOpenChangeApproveParticipantDialog}
           >
             Approve
           </button>
-          <Dialog
-            title='Approve Participant Request'
-            closeButtonText='Cancel'
-            open={open}
-            onOpenChange={setOpen}
-            className='participants-request-dialog'
-          >
-            <ParticipantApprovalForm
-              onApprove={handleApprove}
-              participant={participant}
-              participantTypes={participantTypes}
-              apiRoles={apiRoles}
-            />
-          </Dialog>
+          {showApproveParticipantDialog && (
+            <Dialog
+              title='Approve Participant Request'
+              closeButtonText='Cancel'
+              onOpenChange={onOpenChangeApproveParticipantDialog}
+              className='participants-request-dialog'
+            >
+              <ParticipantApprovalForm
+                onApprove={handleApprove}
+                participant={participant}
+                participantTypes={participantTypes}
+                apiRoles={apiRoles}
+              />
+            </Dialog>
+          )}
         </div>
       </td>
     </tr>

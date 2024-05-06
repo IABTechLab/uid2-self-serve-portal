@@ -77,7 +77,7 @@ function CstgAddDomainDialog({
 
   return (
     <div className='add-domain-dialog'>
-      <Dialog title='Add Domains' closeButtonText='Cancel' open onOpenChange={onOpenChange}>
+      <Dialog title='Add Domains' closeButtonText='Cancel' onOpenChange={onOpenChange}>
         <RootFormErrors fieldErrors={errors} />
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -89,7 +89,7 @@ function CstgAddDomainDialog({
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              Replace all existing domains with the new ones.
+              <div className='checkbox-text'>Replace all existing domains with the new ones.</div>
             </div>
             <MultilineTextInput
               inputName='newDomains'

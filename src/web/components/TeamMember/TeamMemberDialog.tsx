@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { UserRole } from '../../../api/entities/User';
@@ -14,12 +13,12 @@ import { TextInput } from '../Input/TextInput';
 
 type AddTeamMemberDialogProps = {
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
-  triggerButton: JSX.Element;
+  onOpenChange: () => void;
   person?: never;
 };
 type UpdateTeamMemberDialogProps = {
   onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
-  triggerButton: JSX.Element;
+  onOpenChange: () => void;
   person: UserResponse;
 };
 type TeamMemberDialogProps = AddTeamMemberDialogProps | UpdateTeamMemberDialogProps;
@@ -29,8 +28,6 @@ const isUpdateTeamMemberDialogProps = (
 ): props is UpdateTeamMemberDialogProps => 'person' in props;
 
 function TeamMemberDialog(props: TeamMemberDialogProps) {
-  const [open, setOpen] = useState(false);
-
   const formMethods = useForm<InviteTeamMemberForm>({
     defaultValues: props.person as InviteTeamMemberForm,
   });
@@ -43,16 +40,14 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     } else {
       await props.onAddTeamMember(formData);
     }
-    setOpen(false);
+    props.onOpenChange();
   };
 
   return (
     <Dialog
-      triggerButton={props.triggerButton}
       title={`${props.person ? 'Edit' : 'Add'} Team Member`}
       closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
+      onOpenChange={props.onOpenChange}
     >
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onSubmit)}>

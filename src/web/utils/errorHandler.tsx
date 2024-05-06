@@ -11,7 +11,7 @@ interface ErrorState {
   hasError?: boolean;
   message?: string;
   stack?: string;
-  componentStack?: string;
+  componentStack?: string | null;
 }
 
 export interface RenderedErrorProps {
@@ -19,7 +19,7 @@ export interface RenderedErrorProps {
   errorHash?: string;
   message?: string;
   stack?: string;
-  componentStack?: string;
+  componentStack?: string | null;
 }
 
 export interface ErrorBoundaryPropType {

@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { ParticipantItemSimple } from './ParticipantItem';
 
 export default {
-  title: 'Sharing Permissions/ParticipantItemSimple',
+  title: 'Sharing Permissions/Participant Item Simple',
   component: ParticipantItemSimple,
 } as ComponentMeta<typeof ParticipantItemSimple>;
 

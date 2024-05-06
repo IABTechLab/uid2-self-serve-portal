@@ -19,8 +19,9 @@ function DeleteConfirmationDialog({
 
   return (
     <Dialog
-      title='Are you sure you want to delete these domains?'
-      open
+      title={`Are you sure you want to delete ${
+        domains.length > 1 ? 'these domains' : 'this domain'
+      }?`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
@@ -31,7 +32,7 @@ function DeleteConfirmationDialog({
       </ul>
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
-          Delete Domains
+          {`Delete Domain${domains.length > 1 ? 's' : ''}`}
         </button>
       </div>
     </Dialog>

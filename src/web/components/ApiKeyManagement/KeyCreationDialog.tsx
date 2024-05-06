@@ -19,8 +19,8 @@ type KeySecretProp = ApiKeySecretsDTO | undefined;
 
 type KeyCreationDialogProps = Readonly<{
   onKeyCreation: (form: CreateApiKeyFormDTO) => Promise<KeySecretProp>;
-  triggerButton: JSX.Element;
   availableRoles: ApiRoleDTO[];
+  onOpenChange: () => void;
 }>;
 
 type CreateApiKeyFormProps = Readonly<{
@@ -80,23 +80,20 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
 }
 
 function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
+  const [showWarningDialog, setShowWarningDialog] = useState<boolean>(false);
+
   const secrets: Secret[] = [
     { value: keySecrets.secret, valueName: 'Secret' },
     { value: keySecrets.plaintextKey, valueName: 'Key' },
   ];
 
-  const [open, setOpen] = useState(false);
-
   const onCloseConfirmation = () => {
     closeDialog();
-    setOpen(false);
   };
 
-  const triggerButton: JSX.Element = (
-    <button className='primary-button' type='button'>
-      Close
-    </button>
-  );
+  const onOpenChangeWarningDialog = () => {
+    setShowWarningDialog(!showWarningDialog);
+  };
 
   return (
     <div>
@@ -112,24 +109,26 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
           <DisplaySecret secret={secret} />
         </div>
       ))}
+      <div className='dialog-footer-section'>
+        <button className='primary-button' type='button' onClick={onOpenChangeWarningDialog}>
+          Close
+        </button>
+      </div>
 
       <div className='button-container'>
-        <Dialog
-          triggerButton={triggerButton}
-          open={open}
-          onOpenChange={setOpen}
-          closeButtonText='Cancel'
-        >
-          <p>
-            Make sure you&apos;ve copied your API secret and key to a secure location. After you
-            close this page, they are no longer accessible.
-          </p>
-          <div className='button-container'>
-            <button onClick={onCloseConfirmation} className='primary-button' type='button'>
-              Close
-            </button>
-          </div>
-        </Dialog>
+        {showWarningDialog && (
+          <Dialog onOpenChange={onOpenChangeWarningDialog} closeButtonText='Cancel'>
+            <p>
+              Make sure you&apos;ve copied your API secret and key to a secure location. After you
+              close this page, they are no longer accessible.
+            </p>
+            <div className='button-container'>
+              <button onClick={onCloseConfirmation} className='primary-button' type='button'>
+                Close
+              </button>
+            </div>
+          </Dialog>
+        )}
       </div>
     </div>
   );
@@ -137,10 +136,9 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
 
 function KeyCreationDialog({
   onKeyCreation,
-  triggerButton,
   availableRoles,
+  onOpenChange,
 }: KeyCreationDialogProps) {
-  const [open, setOpen] = useState(false);
   const [keySecrets, setKeySecrets] = useState<KeySecretProp>(undefined);
 
   const onFormSubmit: SubmitHandler<CreateApiKeyFormDTO> = async (formData) => {
@@ -148,22 +146,17 @@ function KeyCreationDialog({
     InfoToast('Copy the credentials to a secure location before closing the page.');
   };
 
-  const closeDialog = () => {
-    setKeySecrets(undefined);
-    setOpen(false);
-  };
-
   return (
     <div className='key-creation-dialog'>
-      <Dialog triggerButton={triggerButton} open={open} onOpenChange={setOpen} hideCloseButtons>
+      <Dialog onOpenChange={onOpenChange} hideCloseButtons>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}
             availableRoles={availableRoles}
-            closeDialog={closeDialog}
+            closeDialog={onOpenChange}
           />
         ) : (
-          <ShowApiKeySecrets closeDialog={closeDialog} keySecrets={keySecrets} />
+          <ShowApiKeySecrets closeDialog={onOpenChange} keySecrets={keySecrets} />
         )}
       </Dialog>
     </div>

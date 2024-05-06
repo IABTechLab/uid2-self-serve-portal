@@ -75,7 +75,7 @@ function Dashboard() {
       <div className='dashboard-content'>
         <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (
-          <Dialog open className='terms-conditions-dialog'>
+          <Dialog className='terms-conditions-dialog'>
             <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
               {showMustAccept && (
                 <div className='accept-error'>

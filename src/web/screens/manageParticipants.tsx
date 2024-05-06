@@ -1,4 +1,4 @@
-import { Suspense, useCallback } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
@@ -6,6 +6,7 @@ import { ParticipantDTO } from '../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import { Loading } from '../components/Core/Loading';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
@@ -28,6 +29,8 @@ import { PortalRoute } from './routeUtils';
 import './manageParticipants.scss';
 
 function ManageParticipants() {
+  const [showAddParticipantsDialog, setShowAddParticipantsDialog] = useState<boolean>(false);
+
   const data = useLoaderData() as {
     results: [ParticipantRequestDTO[], ParticipantDTO[], ParticipantTypeDTO[], ApiRoleDTO[]];
   };
@@ -62,6 +65,10 @@ function ManageParticipants() {
     return response;
   };
 
+  const onOpenChangeAddParticipantDialog = () => {
+    setShowAddParticipantsDialog(!showAddParticipantsDialog);
+  };
+
   return (
     <div>
       <Suspense fallback={<Loading />}>
@@ -81,26 +88,33 @@ function ManageParticipants() {
                   </p>
                 </div>
                 <div className='manage-participants-header-right'>
-                  <AddParticipantDialog
-                    apiRoles={apiRoles}
-                    participantTypes={participantTypes}
-                    onAddParticipant={onAddParticipant}
-                    triggerButton={<button type='button'>Add Participant</button>}
-                  />
+                  <button type='button' onClick={onOpenChangeAddParticipantDialog}>
+                    Add Participant
+                  </button>
+                  {showAddParticipantsDialog && (
+                    <AddParticipantDialog
+                      apiRoles={apiRoles}
+                      participantTypes={participantTypes}
+                      onAddParticipant={onAddParticipant}
+                      onOpenChange={onOpenChangeAddParticipantDialog}
+                    />
+                  )}
                 </div>
               </div>
-              <ParticipantRequestsTable
-                participantRequests={participantRequests}
-                participantTypes={participantTypes}
-                apiRoles={apiRoles}
-                onApprove={handleApproveParticipantRequest}
-              />
-              <ApprovedParticipantsTable
-                participants={participantApproved}
-                apiRoles={apiRoles}
-                participantTypes={participantTypes}
+              <ScreenContentContainer>
+                <ParticipantRequestsTable
+                  participantRequests={participantRequests}
+                  participantTypes={participantTypes}
+                  apiRoles={apiRoles}
+                  onApprove={handleApproveParticipantRequest}
+                />
+                <ApprovedParticipantsTable
+                  participants={participantApproved}
+                  apiRoles={apiRoles}
+                  participantTypes={participantTypes}
                 onUpdateParticipant={onUpdateParticipant}
-              />
+                />
+              </ScreenContentContainer>
             </>
           )}
         </Await>

@@ -9,7 +9,7 @@ export default {
 } as ComponentMeta<typeof TermsAndConditionsForm | typeof TermsAndConditions>;
 
 const Template: ComponentStory<typeof TermsAndConditionsForm> = (args) => (
-  <Dialog open className='terms-conditions-dialog'>
+  <Dialog className='terms-conditions-dialog'>
     <TermsAndConditionsForm {...args} />
   </Dialog>
 );

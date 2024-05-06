@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { EditDomainFormProps } from '../../services/domainNamesService';
@@ -56,17 +55,7 @@ function EditDomainDialog({
   };
 
   return (
-    <Dialog
-      title={`Edit Domain: ${domain}`}
-      triggerButton={
-        <button type='button' className='icon-button' title='Edit'>
-          <FontAwesomeIcon icon='pencil' />
-        </button>
-      }
-      open
-      onOpenChange={onOpenChange}
-      closeButtonText='Cancel'
-    >
+    <Dialog title={`Edit Domain: ${domain}`} onOpenChange={onOpenChange} closeButtonText='Cancel'>
       <RootFormErrors fieldErrors={errors} />
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onSubmit)}>

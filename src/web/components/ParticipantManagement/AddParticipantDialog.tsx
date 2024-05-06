@@ -26,17 +26,17 @@ import { HighlightedResult } from './ParticipantApprovalForm';
 import './AddParticipantDialog.scss';
 
 type AddParticipantDialogProps = Readonly<{
-  triggerButton: JSX.Element;
   onAddParticipant: (form: AddParticipantForm) => Promise<AxiosResponse>;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
+  onOpenChange: () => void;
 }>;
 
 function AddParticipantDialog({
-  triggerButton,
   onAddParticipant,
   apiRoles,
   participantTypes,
+  onOpenChange,
 }: AddParticipantDialogProps) {
   const { sites } = useSiteList();
   const fuse = useMemo(
@@ -46,7 +46,7 @@ function AddParticipantDialog({
         : null,
     [sites]
   );
-  const [open, setOpen] = useState(false);
+
   const [siteSearchResults, setSiteSearchResults] = useState<Fuse.FuseResult<SiteDTO>[]>();
   const [searchText, setSearchText] = useState('');
   const [selectedSite, setSelectedSite] = useState<SiteDTO>();
@@ -57,7 +57,6 @@ function AddParticipantDialog({
     setValue,
     watch,
     handleSubmit,
-    reset,
     setError,
     formState: { errors },
   } = formMethods;
@@ -78,18 +77,7 @@ function AddParticipantDialog({
       }
     });
     return () => subscription.unsubscribe();
-  }, [watch, setValue, open]);
-
-  useEffect(() => {
-    if (!open) {
-      // the dialog doesn't de-render on close, so we need to clean up our state
-      setSearchText('');
-      setSiteSearchResults(undefined);
-      setSelectedSite(undefined);
-      setNewSite(false);
-      reset();
-    }
-  }, [open, reset]);
+  }, [watch, setValue]);
 
   const onSubmit = useCallback(
     async (formData: AddParticipantForm) => {
@@ -97,9 +85,9 @@ function AddParticipantDialog({
       if (response.status === 200) {
         SuccessToast('Participant Added.');
       }
-      setOpen(false);
+      onOpenChange();
     },
-    [onAddParticipant]
+    [onAddParticipant, onOpenChange]
   );
 
   const submit = useCallback(
@@ -139,11 +127,9 @@ function AddParticipantDialog({
 
   return (
     <Dialog
-      triggerButton={triggerButton}
       title='Add Participant'
       closeButtonText='Cancel'
-      open={open}
-      onOpenChange={setOpen}
+      onOpenChange={onOpenChange}
       className='add-participant-dialog'
       hideActionCloseButtonOnly
     >
@@ -292,7 +278,7 @@ function AddParticipantDialog({
             <div className='action-container'>
               <FormSubmitButton>Add Participant</FormSubmitButton>
               <div className='cancel-button'>
-                <button type='button' className='transparent-button' onClick={() => setOpen(false)}>
+                <button type='button' className='transparent-button' onClick={onOpenChange}>
                   Cancel
                 </button>
               </div>
