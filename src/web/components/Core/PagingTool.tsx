@@ -117,6 +117,7 @@ export function PagingTool({
         containerClass='rows-per-page-dropdown-container'
         className='rows-per-page-dropdown'
         initialValue={initialRowsPerPageOption}
+        updatedValue={rowsPerPageOptions.find((number) => number.id === rowsPerPage)}
         title={rowsPerPageTitle}
         options={rowsPerPageOptions}
         onSelectedChange={onChangeRowsPerPage}
