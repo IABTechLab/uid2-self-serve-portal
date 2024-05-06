@@ -152,7 +152,7 @@ export function CstgDomainsTable({
     <div className='cstg-domains-management'>
       <div className='cstg-domains-table-header'>
         <div>
-          <h2>Top-Level Domains</h2>
+          <h2>Root-Level Domains</h2>
           {domains?.length > 0 && (
             <div className='table-actions'>
               <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
@@ -230,23 +230,24 @@ export function CstgDomainsTable({
           ))}
           {searchText && !searchedDomains.length && (
             <p className='no-search-results'>
-              There are no top-level domains that match this search.
+              There are no root-level domains that match this search.
             </p>
           )}
         </tbody>
       </table>
-
-      <PagingTool
-        numberTotalRows={searchedDomains.length}
-        rowsPerPageTitle='Domains per Page'
-        initialRowsPerPage={rowsPerPage}
-        initialPageNumber={pageNumber}
-        onChangeRows={onChangeDisplayedDomains}
-      />
+      {!!domains.length && (
+        <PagingTool
+          numberTotalRows={searchedDomains.length}
+          rowsPerPageTitle='Domains per Page'
+          initialRowsPerPage={rowsPerPage}
+          initialPageNumber={pageNumber}
+          onChangeRows={onChangeDisplayedDomains}
+        />
+      )}
 
       {!domains.length && (
-        <TableNoDataPlaceholder title='No Top-Level Domains'>
-          <span>There are no top-level domains.</span>
+        <TableNoDataPlaceholder title='No Root-Level Domains'>
+          <span>There are no root-level domains.</span>
         </TableNoDataPlaceholder>
       )}
     </div>

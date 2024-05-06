@@ -3,8 +3,8 @@ import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 const validDomainsList = ['test.com', 'https://test.com', 'http://test.com'];
 
 describe('test domain helper functions', () => {
-  describe('turn valid domains into top-level domains', () => {
-    it.each(validDomainsList)('should return a top-level domain', (stringsList) => {
+  describe('turn valid domains into root-level domains', () => {
+    it.each(validDomainsList)('should return a root-level domain', (stringsList) => {
       expect(extractTopLevelDomain(stringsList)).toEqual('test.com');
     });
   });
