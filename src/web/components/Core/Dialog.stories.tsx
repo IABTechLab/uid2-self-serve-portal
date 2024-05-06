@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta } from '@storybook/react';
 import { useState } from 'react';
 
 import { Dialog } from './Dialog';
@@ -6,34 +6,36 @@ import { Dialog } from './Dialog';
 export default {
   title: 'Shared Components/Dialog',
   component: Dialog,
-} as ComponentMeta<typeof Dialog>;
+} as Meta<typeof Dialog>;
 
-const Template: ComponentStory<typeof Dialog> = (args) => <Dialog {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  title: 'Dialog Title',
-  closeButtonText: 'Close',
-  children: 'Dialog content goes here',
+export const Default = {
+  args: {
+    title: 'Dialog Title',
+    closeButtonText: 'Close',
+    children: 'Dialog content goes here',
+  },
 };
 
-export const WithoutTitle = Template.bind({});
-WithoutTitle.args = {
-  ...Default.args,
-  title: undefined,
+export const WithoutTitle = {
+  args: {
+    ...Default.args,
+    title: undefined,
+  },
 };
 
-export const WithoutCloseText = Template.bind({});
-WithoutCloseText.args = {
-  ...Default.args,
-  closeButtonText: undefined,
+export const WithoutCloseText = {
+  args: {
+    ...Default.args,
+    closeButtonText: undefined,
+  },
 };
 
-export const WithoutCloseButtons = Template.bind({});
-WithoutCloseButtons.args = {
-  ...Default.args,
-  closeButtonText: undefined,
-  hideCloseButtons: true,
+export const WithoutCloseButtons = {
+  args: {
+    ...Default.args,
+    closeButtonText: undefined,
+    hideCloseButtons: true,
+  },
 };
 
 export const WithOpenAndOnOpenChange = () => {

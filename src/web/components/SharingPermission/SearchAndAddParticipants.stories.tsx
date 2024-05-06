@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
@@ -7,7 +7,7 @@ import { SearchAndAddParticipants } from './SearchAndAddParticipants';
 export default {
   title: 'Sharing Permissions/Search and Add Participants',
   component: SearchAndAddParticipants,
-} as ComponentMeta<typeof SearchAndAddParticipants>;
+} as Meta<typeof SearchAndAddParticipants>;
 
 const response: SharingSiteDTO[] = [
   {
@@ -42,17 +42,20 @@ const response: SharingSiteDTO[] = [
   },
 ];
 
-const Template: ComponentStory<typeof SearchAndAddParticipants> = (args) => (
+const Template: StoryFn<typeof SearchAndAddParticipants> = (args) => (
   <TestAvailableSiteListProvider response={response}>
     <SearchAndAddParticipants {...args} />
   </TestAvailableSiteListProvider>
 );
 
-export const Default = Template.bind({});
-Default.args = {
-  sharedSiteIds: [],
+export const Default = {
+  render: Template,
 
-  onSharingPermissionsAdded: (selectedSiteIds) => {
-    return Promise.resolve(console.log('selectedSiteIds:', selectedSiteIds));
+  args: {
+    sharedSiteIds: [],
+
+    onSharingPermissionsAdded: (selectedSiteIds) => {
+      return Promise.resolve(console.log('selectedSiteIds:', selectedSiteIds));
+    },
   },
 };

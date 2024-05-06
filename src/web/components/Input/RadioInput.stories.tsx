@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
@@ -8,9 +8,9 @@ import { Option } from './SelectInput';
 export default {
   title: 'Inputs/Radio',
   component: RadioInput,
-} as ComponentMeta<typeof RadioInput>;
+} as Meta<typeof RadioInput>;
 
-const Template: ComponentStory<typeof RadioInput> = (args) => {
+const Template: StoryFn<typeof RadioInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;
   return (
@@ -29,17 +29,23 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 4', value: 'option4', disabled: true },
 ];
 
-export const WithLabel = Template.bind({});
-WithLabel.args = {
-  inputName: 'default radio',
-  label: 'Select an option',
-  options,
+export const WithLabel = {
+  render: Template,
+
+  args: {
+    inputName: 'default radio',
+    label: 'Select an option',
+    options,
+  },
 };
 
-export const WithValidation = Template.bind({});
-WithValidation.args = {
-  inputName: 'checkbox with rule',
-  label: 'Select options',
-  options,
-  rules: { required: 'This field is required' },
+export const WithValidation = {
+  render: Template,
+
+  args: {
+    inputName: 'checkbox with rule',
+    label: 'Select options',
+    options,
+    rules: { required: 'This field is required' },
+  },
 };

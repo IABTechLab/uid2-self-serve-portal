@@ -1,21 +1,27 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import SharingPermissionCard from './SharingPermissionCard';
 
 export default {
   title: 'Home/Sharing Permissions Card',
   component: SharingPermissionCard,
-} as ComponentMeta<typeof SharingPermissionCard>;
-const Template: ComponentStory<typeof SharingPermissionCard> = (args) => {
+} as Meta<typeof SharingPermissionCard>;
+const Template: StoryFn<typeof SharingPermissionCard> = (args) => {
   return <SharingPermissionCard {...args} />;
 };
 
-export const Default = Template.bind({});
-Default.args = {
-  sharingPermissionsCount: 100,
+export const Default = {
+  render: Template,
+
+  args: {
+    sharingPermissionsCount: 100,
+  },
 };
 
-export const WithError = Template.bind({});
-WithError.args = {
-  hasError: true,
+export const WithError = {
+  render: Template,
+
+  args: {
+    hasError: true,
+  },
 };

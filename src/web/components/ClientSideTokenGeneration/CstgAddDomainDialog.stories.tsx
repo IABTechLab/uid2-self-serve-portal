@@ -26,8 +26,8 @@ export const Default = () => {
               console.log(
                 `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
                   deleteExistingList ? `Deleting existing list` : `Keeping existing list`
-                }`
-              )
+                }`,
+              ),
             );
           }}
         />

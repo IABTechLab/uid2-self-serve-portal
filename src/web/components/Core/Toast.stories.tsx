@@ -11,7 +11,7 @@ function TestToast() {
           type='button'
           onClick={() => {
             SuccessToast(
-              'Your key has been updated fdasfdasfsdafsadf fdasf sdafasdw fda fasdf asdfasd ff'
+              'Your key has been updated fdasfdasfsdafsadf fdasf sdafasdw fda fasdf asdfasd ff',
             );
           }}
         >

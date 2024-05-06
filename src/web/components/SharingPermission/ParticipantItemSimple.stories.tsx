@@ -1,13 +1,13 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 
 import { ParticipantItemSimple } from './ParticipantItem';
 
 export default {
   title: 'Sharing Permissions/ParticipantItemSimple',
   component: ParticipantItemSimple,
-} as ComponentMeta<typeof ParticipantItemSimple>;
+} as Meta<typeof ParticipantItemSimple>;
 
-const Template: ComponentStory<typeof ParticipantItemSimple> = (args) => (
+const Template: StoryFn<typeof ParticipantItemSimple> = (args) => (
   <table>
     <tbody>
       <tr>
@@ -17,12 +17,15 @@ const Template: ComponentStory<typeof ParticipantItemSimple> = (args) => (
   </table>
 );
 
-export const Default = Template.bind({});
-Default.args = {
-  site: {
-    id: 1,
-    name: 'Participant 1',
-    clientTypes: ['DSP'],
-    canBeSharedWith: true,
+export const Default = {
+  render: Template,
+
+  args: {
+    site: {
+      id: 1,
+      name: 'Participant 1',
+      clientTypes: ['DSP'],
+      canBeSharedWith: true,
+    },
   },
 };
