@@ -23,7 +23,7 @@
   "accessCodeLifespan": 60,
   "accessCodeLifespanUserAction": 300,
   "accessCodeLifespanLogin": 1800,
-  "actionTokenGeneratedByAdminLifespan": 43200,
+  "actionTokenGeneratedByAdminLifespan": 604800,
   "actionTokenGeneratedByUserLifespan": 300,
   "oauth2DeviceCodeLifespan": 600,
   "oauth2DevicePollingInterval": 5,
