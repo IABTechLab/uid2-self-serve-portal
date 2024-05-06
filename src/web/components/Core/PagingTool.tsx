@@ -52,7 +52,7 @@ export function PagingTool({
   }, [numberTotalRows, initialRowsPerPage, initialPageNumber]);
 
   const rowsPerPageOptions =
-    numberTotalRows > 10
+    numberTotalRows > rowsPerPageValues[0]
       ? rowsPerPageValues
           .filter((value) => value <= numberTotalRows)
           .map((value) => ({
