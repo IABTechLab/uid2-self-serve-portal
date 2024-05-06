@@ -13,7 +13,7 @@ export default meta;
 
 type Story = StoryObj<typeof KeyDisableDialog>;
 
-export const DisableApiKey: Story = {
+export const DisableAPIKey: Story = {
   args: {
     triggerButton: <button type='button'>Open</button>,
     onDisable: (key: ApiKeyDTO) => {

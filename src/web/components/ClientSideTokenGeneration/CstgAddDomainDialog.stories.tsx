@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 
 const meta: Meta<typeof CstgAddDomainDialog> = {
-  title: 'CSTG/CstgAddDomainDialog',
+  title: 'CSTG/Cstg Add Domain Dialog',
   component: CstgAddDomainDialog,
 };
 export default meta;

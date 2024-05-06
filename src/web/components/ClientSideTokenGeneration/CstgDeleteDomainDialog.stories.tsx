@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 
 const meta: Meta<typeof CstgDeleteDomainDialog> = {
-  title: 'CSTG/CstgDeleteDomainDialog',
+  title: 'CSTG/Cstg Delete Domain Dialog',
   component: CstgDeleteDomainDialog,
 };
 export default meta;
