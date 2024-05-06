@@ -60,7 +60,7 @@ export const Default = () => {
           index < (pageNumber - 1) * rowsPerPage + rowsPerPage
       )
     );
-  }, []);
+  }, [pageNumber, rowsPerPage]);
 
   return (
     <div>

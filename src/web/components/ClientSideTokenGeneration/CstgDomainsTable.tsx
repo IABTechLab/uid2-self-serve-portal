@@ -3,7 +3,7 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
 import { sortStrings } from '../../utils/textHelpers';
-import { PagingTool } from '../Core/PagingTool';
+import { PagingTool, RowsPerPageValues } from '../Core/PagingTool';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
@@ -23,6 +23,9 @@ export function CstgDomainsTable({
   onUpdateDomains,
   onAddDomains,
 }: CstgDomainsTableProps) {
+  const initialRowsPerPage = 10;
+  const initialPageNumber = 1;
+
   const [showAddDomainsDialog, setShowAddDomainsDialog] = useState<boolean>(false);
   const [showDeleteDomainsDialog, setShowDeleteDomainsDialog] = useState<boolean>(false);
   const [selectedDomains, setSelectedDomains] = useState<string[]>([]);
@@ -30,12 +33,10 @@ export function CstgDomainsTable({
   const [pagedDomains, setPagedDomains] = useState<string[]>(domains);
   const [searchText, setSearchText] = useState('');
 
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
+  const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
 
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
-
-  const initialRowsPerPage = 10;
 
   useEffect(() => {
     if (pageNumber && rowsPerPage) {
@@ -52,14 +53,19 @@ export function CstgDomainsTable({
     } else {
       setSearchedDomains(sortStrings(domains));
       setPagedDomains(
-        sortStrings(domains).filter((_, index) => index >= 0 && index < initialRowsPerPage)
+        sortStrings(domains).filter(
+          (_, index) => index >= initialPageNumber - 1 && index < initialRowsPerPage
+        )
       );
     }
   }, [domains, pageNumber, rowsPerPage, searchText, searchedDomains]);
 
   useEffect(() => {
-    setPageNumber(1);
-  }, [searchedDomains.length]);
+    if (searchText !== '') {
+      setPageNumber(initialPageNumber);
+      setRowsPerPage(initialRowsPerPage);
+    }
+  }, [searchedDomains.length, searchText]);
 
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
@@ -111,7 +117,7 @@ export function CstgDomainsTable({
         ...domains.filter((domain) => ![originalDomainName].includes(domain)),
         ...[updatedDomainName],
       ],
-      'updated'
+      'edited'
     );
   };
 
@@ -134,7 +140,10 @@ export function CstgDomainsTable({
     setSearchText('');
   };
 
-  const onChangeDisplayedDomains = (currentPageNumber: number, currentRowsPerPage: number) => {
+  const onChangeDisplayedDomains = (
+    currentPageNumber: number,
+    currentRowsPerPage: RowsPerPageValues
+  ) => {
     setPageNumber(currentPageNumber);
     setRowsPerPage(currentRowsPerPage);
   };
@@ -158,7 +167,9 @@ export function CstgDomainsTable({
                     icon={['far', 'trash-can']}
                     className='cstg-domains-management-icon'
                   />
-                  {`Delete Domain${selectedDomains?.length > 1 ? 's' : ''}`}
+                  {`Delete ${selectedDomains.length === domains.length ? 'All' : ''} Domain${
+                    selectedDomains?.length > 1 ? 's' : ''
+                  }`}
                 </button>
               )}
 
@@ -228,7 +239,8 @@ export function CstgDomainsTable({
       <PagingTool
         numberTotalRows={searchedDomains.length}
         rowsPerPageTitle='Domains per Page'
-        initialRowsPerPage={initialRowsPerPage}
+        initialRowsPerPage={rowsPerPage}
+        initialPageNumber={pageNumber}
         onChangeRows={onChangeDisplayedDomains}
       />
 

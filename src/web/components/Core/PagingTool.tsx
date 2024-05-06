@@ -5,24 +5,26 @@ import { SelectDropdown, SelectOption } from './SelectDropdown';
 
 import './PagingTool.scss';
 
-const rowsPerPageValues = [10, 25, 50, 100, 250];
+const rowsPerPageValues = [10, 25, 50, 100, 250] as const;
 
-type RowsPerPageValues = 10 | 25 | 50 | 100 | 250;
+export type RowsPerPageValues = (typeof rowsPerPageValues)[number];
 
 type PagingProps = Readonly<{
   numberTotalRows: number;
-  onChangeRows: (currentPageNumber: number, currentRowsPerPage: number) => void;
+  onChangeRows: (currentPageNumber: number, currentRowsPerPage: RowsPerPageValues) => void;
   rowsPerPageTitle?: string;
   initialRowsPerPage?: RowsPerPageValues;
+  initialPageNumber?: number;
 }>;
 
-export function PagingTool<T>({
+export function PagingTool({
   numberTotalRows,
   onChangeRows,
   rowsPerPageTitle = 'Rows Per Page',
   initialRowsPerPage = 10,
+  initialPageNumber = 1,
 }: PagingProps) {
-  const initialPageOptions = Array.from(
+  const initialPageNumberOptions = Array.from(
     { length: Math.ceil(numberTotalRows / initialRowsPerPage) },
     (_, index) => index + 1
   ).map((number) => ({
@@ -30,10 +32,10 @@ export function PagingTool<T>({
     id: number,
   }));
 
-  const [rowsPerPage, setRowsPerPage] = useState<number>(initialRowsPerPage);
-  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
+  const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [pageNumberOptions, setPageNumberOptions] =
-    useState<SelectOption<number>[]>(initialPageOptions);
+    useState<SelectOption<number>[]>(initialPageNumberOptions);
 
   useEffect(() => {
     setPageNumberOptions(
@@ -45,19 +47,19 @@ export function PagingTool<T>({
         id: number,
       }))
     );
-    setPageNumber(1);
+    setPageNumber(initialPageNumber);
     setRowsPerPage(initialRowsPerPage);
-  }, [numberTotalRows, initialRowsPerPage]);
+  }, [numberTotalRows, initialRowsPerPage, initialPageNumber]);
 
   const rowsPerPageOptions =
     numberTotalRows > 10
       ? rowsPerPageValues
-          .filter((number) => number <= numberTotalRows)
-          .map((number) => ({
-            name: number.toString(),
-            id: number,
+          .filter((value) => value <= numberTotalRows)
+          .map((value) => ({
+            name: value.toString(),
+            id: value,
           }))
-      : [{ name: '10', id: 10 }];
+      : [{ name: rowsPerPageValues[0].toString(), id: rowsPerPageValues[0] }];
 
   const initialRowsPerPageOption = rowsPerPageOptions.find(
     (number) => number.id === initialRowsPerPage
@@ -87,8 +89,8 @@ export function PagingTool<T>({
     setPageNumberOptions(newPageNumberOptions);
   };
 
-  const onChangeRowsPerPage = (selected: SelectOption<number>) => {
-    const newRowsPerPage = Number(selected.id);
+  const onChangeRowsPerPage = (selected: SelectOption<RowsPerPageValues>) => {
+    const newRowsPerPage = selected.id;
     setRowsPerPage(newRowsPerPage);
     onChangeRows(1, newRowsPerPage);
     onChangePageNumberOptions(Math.ceil(numberTotalRows / newRowsPerPage));
@@ -102,7 +104,7 @@ export function PagingTool<T>({
   };
 
   const getShowingRowsText = () => {
-    const firstRow = (pageNumber - 1) * rowsPerPage + 1;
+    const firstRow = numberTotalRows > 0 ? (pageNumber - 1) * rowsPerPage + 1 : 0;
     const lastRow = (pageNumber - 1) * rowsPerPage + rowsPerPage;
     return `Showing ${firstRow} -
         ${lastRow <= numberTotalRows ? lastRow : numberTotalRows}
