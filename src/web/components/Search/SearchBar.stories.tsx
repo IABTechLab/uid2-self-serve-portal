@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from './SearchBar';
 
 export default {
-  title: 'Shared Components/SearchBar',
+  title: 'Shared Components/Search Bar',
   component: SearchBarContainer,
 } as ComponentMeta<typeof SearchBarContainer>;
 

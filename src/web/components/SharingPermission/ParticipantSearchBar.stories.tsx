@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 export default {
-  title: 'Sharing Permissions/ParticipantSearchBar',
+  title: 'Sharing Permissions/Participant Search Bar',
   component: ParticipantSearchBar,
 } as ComponentMeta<typeof ParticipantSearchBar>;
 

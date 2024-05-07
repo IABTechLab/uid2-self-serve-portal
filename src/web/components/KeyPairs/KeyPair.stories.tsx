@@ -4,7 +4,7 @@ import KeyPair from './KeyPair';
 
 const meta: Meta<typeof KeyPair> = {
   component: KeyPair,
-  title: 'Key Pairs/Key Pair',
+  title: 'CSTG/Key Pairs/Key Pair',
 };
 export default meta;
 

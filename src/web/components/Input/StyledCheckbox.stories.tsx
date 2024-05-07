@@ -4,7 +4,7 @@ import { useForm, UseFormProps } from 'react-hook-form';
 import { FormStyledCheckbox } from './StyledCheckbox';
 
 export default {
-  title: 'Inputs/StyledCheckbox',
+  title: 'Shared Components/Inputs/Styled Checkbox',
   component: FormStyledCheckbox,
 } as ComponentMeta<typeof FormStyledCheckbox>;
 
