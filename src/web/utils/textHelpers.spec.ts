@@ -5,7 +5,7 @@ import {
   getArticle,
   isVowel,
   separateStringsList,
-  sortStrings,
+  sortStringsAlphabetically,
 } from './textHelpers';
 
 describe('Text helper tests', () => {
@@ -96,7 +96,7 @@ describe('Text helper tests', () => {
     });
   });
 
-  describe('sortstrings', () => {
+  describe('sort strings alphabetically', () => {
     const testStringArr = [
       ['atest', 'btest', 'ctest'],
       ['btest', 'atest', 'ctest'],
@@ -104,7 +104,31 @@ describe('Text helper tests', () => {
     ];
     it.each(testStringArr)('should return array sorted alphabetically', () => {
       for (const t of testStringArr) {
-        expect(sortStrings(t)).toEqual(['atest', 'btest', 'ctest']);
+        expect(sortStringsAlphabetically(t)).toEqual(['atest', 'btest', 'ctest']);
+      }
+    });
+
+    const testStringArrNumbers = [['1test', '7test', '10test']];
+    it.each(testStringArrNumbers)('should return array sorted alphabetically', () => {
+      for (const t of testStringArrNumbers) {
+        expect(sortStringsAlphabetically(t)).toEqual(['10test', '1test', '7test']);
+      }
+    });
+
+    const testStringArrNumbers2 = [['test9', 'test90', 'test40']];
+    it.each(testStringArrNumbers2)('should return array sorted alphabetically', () => {
+      for (const t of testStringArrNumbers2) {
+        expect(sortStringsAlphabetically(t)).toEqual(['test40', 'test9', 'test90']);
+      }
+    });
+
+    const testStringArrNumbers3 = [
+      ['1', '2', '10'],
+      ['1', '10', '2'],
+    ];
+    it.each(testStringArrNumbers3)('should return array sorted alphabetically', () => {
+      for (const t of testStringArrNumbers3) {
+        expect(sortStringsAlphabetically(t)).toEqual(['1', '10', '2']);
       }
     });
   });

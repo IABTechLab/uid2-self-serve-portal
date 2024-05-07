@@ -17,6 +17,7 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
+import { sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
@@ -31,7 +32,10 @@ function ClientSideIntegration() {
 
   const loadDomainNames = useCallback(async () => {
     const currentDomainNames = await GetDomainNames();
-    setDomainNames(currentDomainNames);
+    const currentDomainNamesSorted = currentDomainNames
+      ? sortStringsAlphabetically(currentDomainNames)
+      : currentDomainNames;
+    setDomainNames(currentDomainNamesSorted);
   }, []);
 
   useEffect(() => {
@@ -78,7 +82,7 @@ function ClientSideIntegration() {
   const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      setDomainNames(response);
+      setDomainNames(sortStringsAlphabetically(response));
       SuccessToast(`Domain names ${action}.`);
     } catch (e) {
       handleErrorToast(e);

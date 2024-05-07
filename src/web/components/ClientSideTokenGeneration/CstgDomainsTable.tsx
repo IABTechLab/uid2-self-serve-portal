@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
-import { sortStrings } from '../../utils/textHelpers';
 import { PagingTool, RowsPerPageValues } from '../Core/PagingTool';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
@@ -52,11 +51,11 @@ export function CstgDomainsTable({
 
   useEffect(() => {
     if (searchText === '') {
-      setSearchedDomains(sortStrings(domains));
+      setSearchedDomains(domains);
     }
     if (['Edit', 'DeleteOne', 'Add', 'PagingChange'].includes(domainAction)) {
       setPagedDomains(
-        sortStrings(searchedDomains).filter(
+        searchedDomains.filter(
           (_, index) =>
             index >= (pageNumber - 1) * rowsPerPage &&
             index < (pageNumber - 1) * rowsPerPage + rowsPerPage
@@ -66,7 +65,7 @@ export function CstgDomainsTable({
       setPageNumber(initialPageNumber);
       setRowsPerPage(initialRowsPerPage);
       setPagedDomains(
-        sortStrings(searchedDomains).filter(
+        searchedDomains.filter(
           (_, index) => index >= initialPageNumber - 1 && index < initialRowsPerPage
         )
       );
@@ -149,7 +148,7 @@ export function CstgDomainsTable({
   ) => {
     await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
-    setSearchedDomains(sortStrings(domains));
+    setSearchedDomains(domains);
     setSelectedDomains([]);
     setSearchText('');
     const currentDomainAction = deleteExistingList ? 'AddAndReplace' : 'Add';

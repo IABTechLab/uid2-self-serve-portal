@@ -60,11 +60,11 @@ function CstgAddDomainDialog({
           message: `The domains entered are invalid: ${formatStringsWithSeparator(invalidDomains)}`,
         });
       } else {
-        // if all are valid but there are some non top-level domains, we make sure every domain is top-level
+        // if all are valid but there are some non root-level domains, we make sure every domain is root-level
         uniqueDomains.forEach((newDomain, index) => {
           uniqueDomains[index] = extractTopLevelDomain(newDomain);
         });
-        // filter for uniqueness (e.g. 2 different domains entered could have the same top-level domain)
+        // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
         const dedupedDomains = deduplicateStrings(uniqueDomains);
         await onAddDomains(dedupedDomains, deleteExistingList);
       }
