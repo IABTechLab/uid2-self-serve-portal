@@ -63,6 +63,7 @@ import {
   UpdateSharingTypes,
   UserParticipantRequest,
 } from '../../services/participantsService';
+import { getSignedParticipants } from '../../services/signedParticipantsService';
 import {
   createUserInPortal,
   enrichCurrentUser,
@@ -125,6 +126,12 @@ export function createParticipantsRouter() {
   participantsRouter.get('/approved', isApproverCheck, async (req, res) => {
     const participants = await getParticipantsApproved();
     const result = participants.sort((a, b) => a.name.localeCompare(b.name));
+    return res.status(200).json(result);
+  });
+
+  participantsRouter.get('/signed', async (_req, res) => {
+    const signedParticipants = await getSignedParticipants();
+    const result = signedParticipants.sort((a, b) => a.name.localeCompare(b.name));
     return res.status(200).json(result);
   });
 

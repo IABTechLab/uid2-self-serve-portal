@@ -19,6 +19,7 @@ import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
+import { SignedParticipantsRoute } from './signedParticipants';
 import { TeamMembersRoute } from './teamMembers';
 import { TermsOfServiceRoute } from './termsOfService';
 
@@ -36,7 +37,7 @@ export const StandardRoutes: PortalRoute[] = [
   ClientSideIntegrationRoute,
 ];
 
-export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute, SignedParticipantsRoute];
 
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 
