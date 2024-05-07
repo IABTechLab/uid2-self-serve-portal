@@ -35,10 +35,9 @@ export const StandardRoutes: PortalRoute[] = [
   TermsOfServiceRoute,
   ApiKeyManagementRoute,
   ClientSideIntegrationRoute,
-  SignedParticipantsRoute,
 ];
 
-export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute, SignedParticipantsRoute];
 
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 
