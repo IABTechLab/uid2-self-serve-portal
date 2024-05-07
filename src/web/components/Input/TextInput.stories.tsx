@@ -5,7 +5,7 @@ import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from './TextInput';
 
 export default {
-  title: 'Inputs/Text',
+  title: 'Shared Components/Inputs/Text',
   component: TextInput,
 } as ComponentMeta<typeof TextInput>;
 

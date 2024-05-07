@@ -7,7 +7,7 @@ import KeyEditDialog from './KeyEditDialog';
 
 const meta: Meta<typeof KeyEditDialog> = {
   component: KeyEditDialog,
-  title: 'Api Management/Edit Key Dialog',
+  title: 'Api Management/Key Edit Dialog',
 };
 export default meta;
 

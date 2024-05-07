@@ -8,7 +8,7 @@ import KeyTable from './KeyTable';
 
 const meta: Meta<typeof KeyTable> = {
   component: KeyTable,
-  title: 'Api Management/API key table',
+  title: 'Api Management/API Key Table',
 };
 export default meta;
 

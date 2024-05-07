@@ -6,7 +6,7 @@ import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
 
 export default {
-  title: 'Inputs/Checkbox',
+  title: 'Shared Components/Inputs/Checkbox',
   component: MultiCheckboxInput,
 } as ComponentMeta<typeof MultiCheckboxInput>;
 

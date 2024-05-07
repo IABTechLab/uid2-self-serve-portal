@@ -4,6 +4,7 @@ import { TableNoDataPlaceholder } from './TableNoDataPlaceholder';
 
 export default {
   component: TableNoDataPlaceholder,
+  title: 'Shared Components/ Table No Data Placeholder',
 } as Meta<typeof TableNoDataPlaceholder>;
 
 type Story = StoryObj<typeof TableNoDataPlaceholder>;

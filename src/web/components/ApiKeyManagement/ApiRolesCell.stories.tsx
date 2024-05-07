@@ -4,7 +4,7 @@ import ApiRolesCell from './ApiRolesCell';
 
 const meta: Meta<typeof ApiRolesCell> = {
   component: ApiRolesCell,
-  title: 'Api Management/Api Roles cell',
+  title: 'API Management/API Roles Cell',
   decorators: [
     (Story) => (
       <div>
