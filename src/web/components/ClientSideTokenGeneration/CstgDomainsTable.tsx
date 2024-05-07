@@ -60,7 +60,7 @@ export function CstgDomainsTable({
     } else if (['AddAndReplace', 'DeleteMany', 'Search', 'Initial'].includes(domainAction)) {
       setPageNumber(initialPageNumber);
       setRowsPerPage(initialRowsPerPage);
-      setPagedDomains(getPagedDomains(searchedDomains, pageNumber, rowsPerPage));
+      setPagedDomains(getPagedDomains(searchedDomains, initialPageNumber, initialRowsPerPage));
     }
   }, [domains, pageNumber, rowsPerPage, searchText, searchedDomains, domainAction]);
 

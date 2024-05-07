@@ -13,14 +13,23 @@ export const getPageNumberOptions = (numberTotalRows: number, rowsPerPage: RowsP
 };
 
 export const getRowsPerPageOptions = (numberTotalRows: number) => {
-  return numberTotalRows > rowsPerPageValues[0]
-    ? rowsPerPageValues
-        .filter((value) => value <= numberTotalRows)
-        .map((value) => ({
-          name: value.toString(),
-          id: value,
-        }))
-    : [{ name: rowsPerPageValues[0].toString(), id: rowsPerPageValues[0] }];
+  const rowsPerPageOptions: RowsPerPageValues[] = [];
+  let i = 0;
+  while (i < rowsPerPageValues.length) {
+    rowsPerPageOptions.push(rowsPerPageValues[i]);
+    if (numberTotalRows < rowsPerPageValues[i]) break;
+    i += 1;
+  }
+  return rowsPerPageOptions.map((value) => ({
+    name: value.toString(),
+    id: value,
+  }));
+  // return rowsPerPageValues
+  //   .filter((value) => value <= numberTotalRows)
+  //   .map((value) => ({
+  //     name: value.toString(),
+  //     id: value,
+  //   }));
 };
 
 export const getShowingRowsText = (

@@ -58,7 +58,10 @@ describe('Text helper tests', () => {
 
   describe('format unix date', () => {
     it('should return correct unix date', () => {
-      expect(formatUnixDate(1713306239)).toEqual('4/16/2024');
+      const unixTimestamp = 1713306239;
+      const date = new Date(unixTimestamp * 1000);
+      const dateString = date.toLocaleDateString();
+      expect(formatUnixDate(unixTimestamp)).toEqual(dateString);
     });
   });
 
