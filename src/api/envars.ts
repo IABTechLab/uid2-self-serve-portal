@@ -8,6 +8,34 @@ export const SSP_IS_DEVELOPMENT = !SSP_IS_PRODUCTION;
 // Loki Config
 export const SSP_LOKI_HOST = process.env.SSP_LOKI_HOST ?? 'http://loki:3100';
 
+// Agent Config
+export const AGENT_CONFIG_FILE =
+  process.env.AGENT_CONFIG_FILE ?? `${errorMessage}AGENT_CONFIG_FILE`;
+export const AGENT_CONFIG_PATH =
+  process.env.AGENT_CONFIG_PATH ?? `${errorMessage}AGENT_CONFIG_PATH`;
+export const AGENT_CONFIG_PATH_LOCAL =
+  process.env.AGENT_CONFIG_PATH_LOCAL ?? `${errorMessage}AGENT_CONFIG_PATH_LOCAL`;
+export const AGENT_KEY_APP_RECEIVER =
+  process.env.AGENT_KEY_APP_RECEIVER ?? `${errorMessage}AGENT_KEY_APP_RECEIVER`;
+export const AGENT_HOST = process.env.AGENT_HOST ?? `${errorMessage}AGENT_HOST`;
+export const AGENT_LOGS_PATH = process.env.AGENT_LOGS_PATH ?? `${errorMessage}AGENT_LOGS_PATH`;
+export const AGENT_PORT = process.env.AGENT_PORT ?? `${errorMessage}AGENT_PORT`;
+export const AGENT_PORT_APP_RECEIVER =
+  process.env.AGENT_PORT_APP_RECEIVER ?? `${errorMessage}AGENT_PORT_APP_RECEIVER`;
+export const AGENT_TEMP_PATH = process.env.AGENT_TEMP_PATH ?? `${errorMessage}AGENT_TEMP_PATH`;
+export const AGENT_WAL_PATH = process.env.AGENT_WAL_PATH ?? `${errorMessage}AGENT_WAL_PATH`;
+
+// Faro Config
+export const CLIENT_PACKAGE_NAME =
+  process.env.CLIENT_PACKAGE_NAME ?? `${errorMessage}CLIENT_PACKAGE_NAME`;
+export const PACKAGE_VERSION = process.env.PACKAGE_VERSION ?? `${errorMessage}PACKAGE_VERSION`;
+export const SERVER_AGENT_HOST =
+  process.env.SERVER_AGENT_HOST ?? `${errorMessage}SERVER_AGENT_HOST`;
+export const SERVER_LOGS_NAME = process.env.SERVER_LOGS_NAME ?? `${errorMessage}SERVER_LOGS_NAME`;
+export const SERVER_LOGS_PATH = process.env.SERVER_LOGS_PATH ?? `${errorMessage}SERVER_LOGS_PATH`;
+export const SERVER_PACKAGE_NAME =
+  process.env.SERVER_PACKAGE_NAME ?? `${errorMessage}SERVER_PACKAGE_NAME`;
+
 // Keycloak Config
 export const SSP_KK_AUDIENCE = process.env.SSP_KK_AUDIENCE ?? errorMessage;
 export const SSP_KK_SECRET = process.env.SSP_KK_SECRET ?? errorMessage;

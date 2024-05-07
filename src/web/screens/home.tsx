@@ -1,3 +1,4 @@
+import { faro, LogLevel } from '@grafana/faro-react';
 import { AxiosError } from 'axios';
 import log from 'loglevel';
 import { useContext, useEffect, useState } from 'react';
@@ -57,6 +58,9 @@ function Home() {
     };
     if (LoggedInUser) getSharingParticipantsCount();
   }, [LoggedInUser]);
+
+  console.log(faro);
+  faro.api.pushEvent('home page');
 
   return (
     <>

@@ -15,6 +15,15 @@ import { TYPES } from './constant/types';
 import { ApiRole } from './entities/ApiRole';
 import { ParticipantType } from './entities/ParticipantType';
 import {
+  AGENT_HOST,
+  AGENT_KEY_APP_RECEIVER,
+  AGENT_PORT_APP_RECEIVER,
+  CLIENT_PACKAGE_NAME,
+  PACKAGE_VERSION,
+  SERVER_AGENT_HOST,
+  SERVER_LOGS_NAME,
+  SERVER_LOGS_PATH,
+  SERVER_PACKAGE_NAME,
   SSP_IS_DEVELOPMENT,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
@@ -126,6 +135,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
         return roles.includes('api-participant-member');
       }),
       { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
+      { url: `${BASE_REQUEST_PATH}/faroConfig`, method: 'GET' },
       { url: `${BASE_REQUEST_PATH}/participantTypes`, method: 'GET' },
       { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
       { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
@@ -171,6 +181,28 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     const baseUrl = SSP_WEB_BASE_URL;
     const isDevelopment = SSP_IS_DEVELOPMENT;
     return res.json({ baseUrl, isDevelopment });
+  });
+
+  router.get('/faroConfig', async (_req, res) => {
+    const apiKey = AGENT_KEY_APP_RECEIVER;
+    const portAppReceiver = AGENT_PORT_APP_RECEIVER;
+    const host = SERVER_AGENT_HOST || AGENT_HOST;
+    const clientPackageName = CLIENT_PACKAGE_NAME;
+    const packageVersion = PACKAGE_VERSION;
+    const serverLogsPath = SERVER_LOGS_PATH;
+    const serverLogsName = SERVER_LOGS_NAME;
+    const serverPackageName = SERVER_PACKAGE_NAME;
+
+    return res.json({
+      apiKey,
+      portAppReceiver,
+      host,
+      clientPackageName,
+      packageVersion,
+      serverLogsPath,
+      serverLogsName,
+      serverPackageName,
+    });
   });
 
   router.get('/keycloak-config', async (_req, res) => {
