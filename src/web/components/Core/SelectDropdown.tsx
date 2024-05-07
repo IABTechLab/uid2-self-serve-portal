@@ -69,15 +69,15 @@ export function SelectDropdown<TValue>({
           onCheckedChange={() => onOptionToggle(option.id)}
           onSelect={(e) => e.preventDefault()} // Prevent dropdown close
         >
-          <button
+          {/* <button
             type='button'
             role='checkbox'
             aria-checked={checked}
             className={clsx({ uncheck: !checked })}
           >
             {checked && <FontAwesomeIcon icon='check' />}
-          </button>
-          {option.name}
+          </button> */}
+          <div className={clsx({ checked })}>{option.name}</div>
         </DropdownMenu.CheckboxItem>
       );
     },
