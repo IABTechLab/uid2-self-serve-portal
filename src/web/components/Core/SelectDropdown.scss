@@ -1,4 +1,9 @@
 .select-dropdown {
+  .select-dropdown-content {
+    max-height: 400px;
+    overflow: auto;
+  }
+
   & > button {
     border: none;
     padding: 5px 12px;
