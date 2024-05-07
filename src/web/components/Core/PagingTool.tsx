@@ -1,13 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
+import {
+  getPageNumberOptions,
+  getRowsPerPageOptions,
+  getShowingRowsText,
+  RowsPerPageValues,
+} from './PagingToolHelper';
 import { SelectDropdown, SelectOption } from './SelectDropdown';
 
 import './PagingTool.scss';
-
-const rowsPerPageValues = [10, 25, 50, 100, 250] as const;
-
-export type RowsPerPageValues = (typeof rowsPerPageValues)[number];
 
 type PagingProps = Readonly<{
   numberTotalRows: number;
@@ -22,13 +24,11 @@ export function PagingTool({
   initialRowsPerPage = 10,
   initialPageNumber = 1,
 }: PagingProps) {
-  const initialPageNumberOptions = Array.from(
-    { length: Math.ceil(numberTotalRows / initialRowsPerPage) },
-    (_, index) => index + 1
-  ).map((number) => ({
-    name: number.toString(),
-    id: number,
-  }));
+  const initialPageNumberOptions = getPageNumberOptions(numberTotalRows, initialRowsPerPage);
+  const rowsPerPageOptions = getRowsPerPageOptions(numberTotalRows);
+  const initialRowsPerPageOption = rowsPerPageOptions.find(
+    (number) => number.id === initialRowsPerPage
+  );
 
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
@@ -36,32 +36,10 @@ export function PagingTool({
     useState<SelectOption<number>[]>(initialPageNumberOptions);
 
   useEffect(() => {
-    setPageNumberOptions(
-      Array.from(
-        { length: Math.ceil(numberTotalRows / initialRowsPerPage) },
-        (_, index) => index + 1
-      ).map((number) => ({
-        name: number.toString(),
-        id: number,
-      }))
-    );
+    setPageNumberOptions(getPageNumberOptions(numberTotalRows, initialRowsPerPage));
     setPageNumber(initialPageNumber);
     setRowsPerPage(initialRowsPerPage);
   }, [numberTotalRows, initialRowsPerPage, initialPageNumber]);
-
-  const rowsPerPageOptions =
-    numberTotalRows > rowsPerPageValues[0]
-      ? rowsPerPageValues
-          .filter((value) => value <= numberTotalRows)
-          .map((value) => ({
-            name: value.toString(),
-            id: value,
-          }))
-      : [{ name: rowsPerPageValues[0].toString(), id: rowsPerPageValues[0] }];
-
-  const initialRowsPerPageOption = rowsPerPageOptions.find(
-    (number) => number.id === initialRowsPerPage
-  );
 
   const onIncreasePageNumber = () => {
     if (pageNumber < Math.ceil(numberTotalRows / rowsPerPage)) {
@@ -77,21 +55,11 @@ export function PagingTool({
     }
   };
 
-  const onChangePageNumberOptions = (maxPageNum: number) => {
-    const newPageNumberOptions = Array.from({ length: maxPageNum }, (_, index) => index + 1).map(
-      (number) => ({
-        name: number.toString(),
-        id: number,
-      })
-    );
-    setPageNumberOptions(newPageNumberOptions);
-  };
-
   const onChangeRowsPerPage = (selected: SelectOption<RowsPerPageValues>) => {
     const newRowsPerPage = selected.id;
     setRowsPerPage(newRowsPerPage);
     onChangeRows(1, newRowsPerPage);
-    onChangePageNumberOptions(Math.ceil(numberTotalRows / newRowsPerPage));
+    setPageNumberOptions(getPageNumberOptions(numberTotalRows, newRowsPerPage));
     setPageNumber(1);
   };
 
@@ -99,14 +67,6 @@ export function PagingTool({
     const newPageNumber = Number(selected.id);
     setPageNumber(newPageNumber);
     onChangeRows(newPageNumber, rowsPerPage);
-  };
-
-  const getShowingRowsText = () => {
-    const firstRow = numberTotalRows > 0 ? (pageNumber - 1) * rowsPerPage + 1 : 0;
-    const lastRow = (pageNumber - 1) * rowsPerPage + rowsPerPage;
-    return `Showing ${firstRow} -
-        ${lastRow <= numberTotalRows ? lastRow : numberTotalRows}
-        of ${numberTotalRows}`;
   };
 
   return (
@@ -121,7 +81,9 @@ export function PagingTool({
         onSelectedChange={onChangeRowsPerPage}
       />
       <p className='separator'>|</p>
-      <p className='showing-rows-text'>{getShowingRowsText()}</p>
+      <p className='showing-rows-text'>
+        {getShowingRowsText(pageNumber, rowsPerPage, numberTotalRows)}
+      </p>
       <div className='paging-button'>
         <button
           type='button'

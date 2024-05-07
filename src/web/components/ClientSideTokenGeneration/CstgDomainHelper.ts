@@ -1,6 +1,6 @@
 import { parse } from 'tldts';
 
-import { RowsPerPageValues } from '../Core/PagingTool';
+import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
 type DomainProps = {
   isIcann: boolean | null;
