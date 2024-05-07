@@ -15,8 +15,8 @@ import {
 
 import { getFaroConfig } from '../api/faroConfig';
 
-export function initializeFaro(): Faro {
-  const config = getFaroConfig();
+export async function initializeFaro(): Promise<Faro> {
+  const config = await getFaroConfig();
   const faro = coreInit({
     url: `http://localhost:${config.faro.portAppReceiver}/collect`,
     apiKey: config.faro.apiKey,
