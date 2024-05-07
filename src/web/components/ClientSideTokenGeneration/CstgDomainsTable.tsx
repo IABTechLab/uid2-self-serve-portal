@@ -228,17 +228,16 @@ export function CstgDomainsTable({
               checked={isDomainSelected(domain)}
             />
           ))}
-          {searchText && !searchedDomains.length && (
-            <p className='no-search-results'>
-              There are no root-level domains that match this search.
-            </p>
-          )}
         </tbody>
       </table>
+      {searchText && !searchedDomains.length && (
+        <TableNoDataPlaceholder title='No Root-Level Domains'>
+          <span>There are no root-level domains that match this search.</span>
+        </TableNoDataPlaceholder>
+      )}
       {!!domains.length && (
         <PagingTool
           numberTotalRows={searchedDomains.length}
-          rowsPerPageTitle='Domains per Page'
           initialRowsPerPage={rowsPerPage}
           initialPageNumber={pageNumber}
           onChangeRows={onChangeDisplayedDomains}

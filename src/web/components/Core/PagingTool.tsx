@@ -12,7 +12,6 @@ export type RowsPerPageValues = (typeof rowsPerPageValues)[number];
 type PagingProps = Readonly<{
   numberTotalRows: number;
   onChangeRows: (currentPageNumber: number, currentRowsPerPage: RowsPerPageValues) => void;
-  rowsPerPageTitle?: string;
   initialRowsPerPage?: RowsPerPageValues;
   initialPageNumber?: number;
 }>;
@@ -20,7 +19,6 @@ type PagingProps = Readonly<{
 export function PagingTool({
   numberTotalRows,
   onChangeRows,
-  rowsPerPageTitle = 'Rows Per Page',
   initialRowsPerPage = 10,
   initialPageNumber = 1,
 }: PagingProps) {
@@ -118,7 +116,7 @@ export function PagingTool({
         className='rows-per-page-dropdown'
         initialValue={initialRowsPerPageOption}
         updatedValue={rowsPerPageOptions.find((number) => number.id === rowsPerPage)}
-        title={rowsPerPageTitle}
+        title='Rows Per Page'
         options={rowsPerPageOptions}
         onSelectedChange={onChangeRowsPerPage}
       />

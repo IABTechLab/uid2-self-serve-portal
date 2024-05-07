@@ -73,7 +73,6 @@ export const Default = () => {
       ))}
 
       <PagingTool
-        rowsPerPageTitle='Domains Per Page'
         numberTotalRows={totalDomains.length}
         initialRowsPerPage={10}
         onChangeRows={onChangeDisplayedRows}
