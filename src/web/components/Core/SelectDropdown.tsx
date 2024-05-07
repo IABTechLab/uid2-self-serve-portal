@@ -11,7 +11,6 @@ export type SelectOption<TValue> = {
 };
 
 type SelectDropdownProps<TValue> = Readonly<{
-  title: string;
   options: SelectOption<TValue>[];
   onSelectedChange: (selected: SelectOption<TValue>) => void;
   containerClass?: string;
@@ -20,16 +19,17 @@ type SelectDropdownProps<TValue> = Readonly<{
   // there are use cases where the selected item will be changed outside the dropdown, e.g. outside arrows
   // this is where updatedValue would be used
   updatedValue?: SelectOption<TValue>;
+  title?: string;
 }>;
 
 export function SelectDropdown<TValue>({
-  title,
   options,
   onSelectedChange,
   containerClass,
   className,
   initialValue,
   updatedValue,
+  title,
 }: SelectDropdownProps<TValue>) {
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
@@ -69,14 +69,6 @@ export function SelectDropdown<TValue>({
           onCheckedChange={() => onOptionToggle(option.id)}
           onSelect={(e) => e.preventDefault()} // Prevent dropdown close
         >
-          {/* <button
-            type='button'
-            role='checkbox'
-            aria-checked={checked}
-            className={clsx({ uncheck: !checked })}
-          >
-            {checked && <FontAwesomeIcon icon='check' />}
-          </button> */}
           <div className={clsx({ checked })}>{option.name}</div>
         </DropdownMenu.CheckboxItem>
       );

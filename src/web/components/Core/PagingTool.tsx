@@ -138,7 +138,6 @@ export function PagingTool({
         className='page-numbers-dropdown'
         initialValue={pageNumberOptions[0]}
         updatedValue={pageNumberOptions.find((number) => number.id === pageNumber)}
-        title=''
         options={pageNumberOptions}
         onSelectedChange={onChangePageNumber}
       />

@@ -7,6 +7,7 @@ import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
+import { getPagedDomains } from './CstgDomainHelper';
 import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
@@ -54,21 +55,11 @@ export function CstgDomainsTable({
       setSearchedDomains(domains);
     }
     if (['Edit', 'DeleteOne', 'Add', 'PagingChange'].includes(domainAction)) {
-      setPagedDomains(
-        searchedDomains.filter(
-          (_, index) =>
-            index >= (pageNumber - 1) * rowsPerPage &&
-            index < (pageNumber - 1) * rowsPerPage + rowsPerPage
-        )
-      );
+      setPagedDomains(getPagedDomains(searchedDomains, pageNumber, rowsPerPage));
     } else if (['AddAndReplace', 'DeleteMany', 'Search', 'Initial'].includes(domainAction)) {
       setPageNumber(initialPageNumber);
       setRowsPerPage(initialRowsPerPage);
-      setPagedDomains(
-        searchedDomains.filter(
-          (_, index) => index >= initialPageNumber - 1 && index < initialRowsPerPage
-        )
-      );
+      setPagedDomains(getPagedDomains(searchedDomains, pageNumber, rowsPerPage));
     }
   }, [domains, pageNumber, rowsPerPage, searchText, searchedDomains, domainAction]);
 
