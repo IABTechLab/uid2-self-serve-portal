@@ -17,19 +17,13 @@ export const getRowsPerPageOptions = (numberTotalRows: number) => {
   let i = 0;
   while (i < rowsPerPageValues.length) {
     rowsPerPageOptions.push(rowsPerPageValues[i]);
-    if (numberTotalRows < rowsPerPageValues[i]) break;
+    if (numberTotalRows <= rowsPerPageValues[i]) break;
     i += 1;
   }
   return rowsPerPageOptions.map((value) => ({
     name: value.toString(),
     id: value,
   }));
-  // return rowsPerPageValues
-  //   .filter((value) => value <= numberTotalRows)
-  //   .map((value) => ({
-  //     name: value.toString(),
-  //     id: value,
-  //   }));
 };
 
 export const getShowingRowsText = (
@@ -39,7 +33,7 @@ export const getShowingRowsText = (
 ) => {
   const firstRow = numberTotalRows > 0 ? (pageNumber - 1) * rowsPerPage + 1 : 0;
   const lastRow = (pageNumber - 1) * rowsPerPage + rowsPerPage;
-  return `Showing ${firstRow} -
-        ${lastRow <= numberTotalRows ? lastRow : numberTotalRows}
-        of ${numberTotalRows}`;
+  return `Showing ${firstRow} - ${
+    lastRow <= numberTotalRows ? lastRow : numberTotalRows
+  } of ${numberTotalRows}`;
 };
