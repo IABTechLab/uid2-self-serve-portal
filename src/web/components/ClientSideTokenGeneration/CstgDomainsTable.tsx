@@ -43,9 +43,7 @@ export function CstgDomainsTable({
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
   useEffect(() => {
-    console.log(searchedDomains);
     if (searchedDomains.length === 0 && searchText === '') {
-      console.log('in use effect');
       setSearchedDomains(domains);
       setPagedDomains(getPagedDomains(domains, initialPageNumber, initialRowsPerPage));
     }
@@ -81,6 +79,7 @@ export function CstgDomainsTable({
     setSelectedDomains([]);
     setSearchText('');
     if (newDomains) {
+      setSearchedDomains(newDomains);
       if (deleteDomains.length === 1) {
         setPagedDomains(getPagedDomains(newDomains, pageNumber, rowsPerPage));
       } else {
@@ -140,15 +139,10 @@ export function CstgDomainsTable({
     setSelectedDomains([]);
     setSearchText('');
     if (newDomains) {
-      if (deleteExistingList) {
-        console.log('in delete existing lists');
-        console.log(newDomains);
-        setPageNumber(initialPageNumber);
-        setRowsPerPage(initialRowsPerPage);
-        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
-      } else {
-        setPagedDomains(getPagedDomains(newDomains, pageNumber, rowsPerPage));
-      }
+      setPageNumber(initialPageNumber);
+      setRowsPerPage(initialRowsPerPage);
+      setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+      setSearchedDomains(newDomains);
     }
   };
 
