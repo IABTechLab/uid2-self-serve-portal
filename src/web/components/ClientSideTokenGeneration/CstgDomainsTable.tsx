@@ -109,15 +109,15 @@ export function CstgDomainsTable({
 
   const handleEditDomain = async (updatedDomainName: string, originalDomainName: string) => {
     // removes original domain name from list and adds new domain name
-    const updatedDomains = await onUpdateDomains(
+    const editedDomains = await onUpdateDomains(
       [
         ...domains.filter((domain) => ![originalDomainName].includes(domain)),
         ...[updatedDomainName],
       ],
       'edited'
     );
-    if (updatedDomains) {
-      setPagedDomains(getPagedDomains(updatedDomains, pageNumber, rowsPerPage));
+    if (editedDomains) {
+      setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
     }
   };
 
