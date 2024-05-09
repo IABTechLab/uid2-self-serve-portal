@@ -13,20 +13,13 @@ import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
 
-type DomainActions =
-  | 'Edit'
-  | 'DeleteOne'
-  | 'DeleteMany'
-  | 'AddAndReplace'
-  | 'Add'
-  | 'Search'
-  | 'PagingChange'
-  | 'Initial';
-
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
-  onUpdateDomains: (domains: string[], action: string) => Promise<void>;
-  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
+  onUpdateDomains: (domains: string[], action: string) => Promise<string[] | undefined>;
+  onAddDomains: (
+    newDomainsFormatted: string[],
+    deleteExistingList: boolean
+  ) => Promise<string[] | undefined>;
 }>;
 
 export function CstgDomainsTable({
@@ -47,22 +40,16 @@ export function CstgDomainsTable({
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
 
-  const [domainAction, setDomainAction] = useState<DomainActions>('Initial');
-
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
   useEffect(() => {
-    if (searchText === '') {
+    console.log(searchedDomains);
+    if (searchedDomains.length === 0 && searchText === '') {
+      console.log('in use effect');
       setSearchedDomains(domains);
+      setPagedDomains(getPagedDomains(domains, initialPageNumber, initialRowsPerPage));
     }
-    if (['Edit', 'DeleteOne', 'Add', 'PagingChange'].includes(domainAction)) {
-      setPagedDomains(getPagedDomains(searchedDomains, pageNumber, rowsPerPage));
-    } else if (['AddAndReplace', 'DeleteMany', 'Search', 'Initial'].includes(domainAction)) {
-      setPageNumber(initialPageNumber);
-      setRowsPerPage(initialRowsPerPage);
-      setPagedDomains(getPagedDomains(searchedDomains, initialPageNumber, initialRowsPerPage));
-    }
-  }, [domains, pageNumber, rowsPerPage, searchText, searchedDomains, domainAction]);
+  }, [domains, initialPageNumber, initialRowsPerPage, searchedDomains, searchText]);
 
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
@@ -85,17 +72,23 @@ export function CstgDomainsTable({
   };
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
-  const handleBulkDeleteDomains = (deleteDomains: string[]) => {
-    onUpdateDomains(
+  const handleBulkDeleteDomains = async (deleteDomains: string[]) => {
+    const newDomains = await onUpdateDomains(
       domains.filter((domain) => !deleteDomains.includes(domain)),
       'deleted'
     );
     setShowDeleteDomainsDialog(false);
     setSelectedDomains([]);
-    setSearchedDomains([]);
     setSearchText('');
-    if (deleteDomains.length === 1) setDomainAction('DeleteOne');
-    else setDomainAction('DeleteMany');
+    if (newDomains) {
+      if (deleteDomains.length === 1) {
+        setPagedDomains(getPagedDomains(newDomains, pageNumber, rowsPerPage));
+      } else {
+        setPageNumber(initialPageNumber);
+        setRowsPerPage(initialRowsPerPage);
+        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+      }
+    }
   };
 
   const handleSelectDomain = (domain: string) => {
@@ -108,22 +101,25 @@ export function CstgDomainsTable({
 
   const handleSearchDomain = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(event.target.value);
-    setSearchedDomains(domains.filter((d) => d.includes(event.target.value)));
-    if (event.target.value !== '') {
-      setDomainAction('Search');
-    }
+    const newSearchDomains = domains.filter((d) => d.includes(event.target.value));
+    setSearchedDomains(newSearchDomains);
+    setPageNumber(initialPageNumber);
+    setRowsPerPage(initialRowsPerPage);
+    setPagedDomains(getPagedDomains(newSearchDomains, initialPageNumber, initialRowsPerPage));
   };
 
-  const handleEditDomain = (updatedDomainName: string, originalDomainName: string) => {
+  const handleEditDomain = async (updatedDomainName: string, originalDomainName: string) => {
     // removes original domain name from list and adds new domain name
-    onUpdateDomains(
+    const updatedDomains = await onUpdateDomains(
       [
         ...domains.filter((domain) => ![originalDomainName].includes(domain)),
         ...[updatedDomainName],
       ],
       'edited'
     );
-    setDomainAction('Edit');
+    if (updatedDomains) {
+      setPagedDomains(getPagedDomains(updatedDomains, pageNumber, rowsPerPage));
+    }
   };
 
   const onOpenChangeAddDomainDialog = () => {
@@ -138,13 +134,22 @@ export function CstgDomainsTable({
     newDomainsFormatted: string[],
     deleteExistingList: boolean
   ) => {
-    await onAddDomains(newDomainsFormatted, deleteExistingList);
+    const newDomains = await onAddDomains(newDomainsFormatted, deleteExistingList);
     setShowAddDomainsDialog(false);
     setSearchedDomains(domains);
     setSelectedDomains([]);
     setSearchText('');
-    const currentDomainAction = deleteExistingList ? 'AddAndReplace' : 'Add';
-    setDomainAction(currentDomainAction);
+    if (newDomains) {
+      if (deleteExistingList) {
+        console.log('in delete existing lists');
+        console.log(newDomains);
+        setPageNumber(initialPageNumber);
+        setRowsPerPage(initialRowsPerPage);
+        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+      } else {
+        setPagedDomains(getPagedDomains(newDomains, pageNumber, rowsPerPage));
+      }
+    }
   };
 
   const onChangeDisplayedDomains = (
@@ -153,7 +158,7 @@ export function CstgDomainsTable({
   ) => {
     setPageNumber(currentPageNumber);
     setRowsPerPage(currentRowsPerPage);
-    setDomainAction('PagingChange');
+    setPagedDomains(getPagedDomains(searchedDomains, currentPageNumber, currentRowsPerPage));
   };
 
   return (

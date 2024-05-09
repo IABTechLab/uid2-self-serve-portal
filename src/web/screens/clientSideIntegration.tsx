@@ -84,6 +84,7 @@ function ClientSideIntegration() {
       const response = await UpdateDomainNames(updatedDomainNames);
       setDomainNames(sortStringsAlphabetically(response));
       SuccessToast(`Domain names ${action}.`);
+      return response;
     } catch (e) {
       handleErrorToast(e);
     }
@@ -92,7 +93,7 @@ function ClientSideIntegration() {
   const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
     let updatedDomains = newDomains;
     if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
-    handleUpdateDomainNames(updatedDomains, 'added');
+    return handleUpdateDomainNames(updatedDomains, 'added');
   };
 
   return (
