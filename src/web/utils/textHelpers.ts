@@ -35,6 +35,9 @@ export const deduplicateStrings = (strings: string[]) => {
 };
 
 export const sortStringsAlphabetically = (strings: string[]) => {
+  if (strings.length === 0 || strings.length === 1) {
+    return strings;
+  }
   return strings.sort((a: string, b: string) => {
     if (a > b) return 1;
     if (a < b) return -1;

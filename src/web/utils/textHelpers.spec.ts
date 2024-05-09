@@ -129,5 +129,91 @@ describe('Text helper tests', () => {
     it.each(testStringArrNumbers3)('should return array sorted alphabetically', (a, b, c) => {
       expect(sortStringsAlphabetically([a, b, c])).toEqual(['1', '10', '2']);
     });
+
+    const testStringsDuplicates = ['test3', 'test1', 'test2', 'test1', 'test2'];
+    it('should return array sorted with duplicates beside each other', () => {
+      expect(sortStringsAlphabetically(testStringsDuplicates)).toEqual([
+        'test1',
+        'test1',
+        'test2',
+        'test2',
+        'test3',
+      ]);
+    });
+
+    const testOneString = [['test'], ['t'], ['1test'], ['']];
+    it.each(testOneString)('should return same array as given', (t) => {
+      expect(sortStringsAlphabetically([t])).toEqual([t]);
+    });
+
+    const testEmptyArray: string[] = [];
+    it('should return empty array', () => {
+      expect(sortStringsAlphabetically(testEmptyArray)).toEqual(testEmptyArray);
+    });
+
+    const testStringsCamelcase = [
+      ['testString', 'teststring'],
+      ['teststring', 'testString'],
+    ];
+    it.each(testStringsCamelcase)('should return array sorted with upper case first', (a, b) => {
+      expect(sortStringsAlphabetically([a, b])).toEqual(['testString', 'teststring']);
+    });
+
+    const testSpecialChars = [
+      '!',
+      '@',
+      '#',
+      '$',
+      '%',
+      '^',
+      '&',
+      '*',
+      '(',
+      ')',
+      '+',
+      '=',
+      '-',
+      '[',
+      ']',
+      ';',
+      '.',
+      '/',
+      '{',
+      '}',
+      '|',
+      ':',
+      '<',
+      '>',
+      '?',
+    ];
+    it('should return sorted special characters array', () => {
+      expect(sortStringsAlphabetically(testSpecialChars)).toEqual([
+        '!',
+        '#',
+        '$',
+        '%',
+        '&',
+        '(',
+        ')',
+        '*',
+        '+',
+        '-',
+        '.',
+        '/',
+        ':',
+        ';',
+        '<',
+        '=',
+        '>',
+        '?',
+        '@',
+        '[',
+        ']',
+        '^',
+        '{',
+        '|',
+        '}',
+      ]);
+    });
   });
 });
