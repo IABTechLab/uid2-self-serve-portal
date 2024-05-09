@@ -304,6 +304,8 @@ values
 select * from dbo.approvers where email = @email 
 ```
 
+You will then want to assign some API Permissions to your participant in the `Manage Participants` screen. This will allow you to use the full functionality of the `API Keys` screen.
+
 ### Connecting to local Admin service
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin

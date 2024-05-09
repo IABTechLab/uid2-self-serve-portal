@@ -20,7 +20,7 @@ import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Search/SearchBar';
-import { validatecrmAgreementNumber } from './AddParticipantDialogHelper';
+import { validateCrmAgreementNumber } from './AddParticipantDialogHelper';
 import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
@@ -226,7 +226,7 @@ function AddParticipantDialog({
               className='text-input'
               maxLength={8}
               rules={{
-                validate: validatecrmAgreementNumber,
+                validate: validateCrmAgreementNumber,
               }}
             />
             <div>

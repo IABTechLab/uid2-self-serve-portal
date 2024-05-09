@@ -9,7 +9,7 @@ import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
-import { validateEditcrmAgreementNumber } from './AddParticipantDialogHelper';
+import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
 
 type EditParticipantDialogProps = Readonly<{
   participant: ParticipantDTO;
@@ -83,7 +83,7 @@ function EditParticipantDialog({
             maxLength={8}
             rules={{
               validate: (value: string) =>
-                validateEditcrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
+                validateEditCrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
             }}
           />
           <FormSubmitButton>Save Participant</FormSubmitButton>
