@@ -143,8 +143,8 @@ describe('Key creation dialog', () => {
     await clickApiRole(apiRoles[0]);
     await submitForm();
 
-    const copyButton1 = screen.getByTitle('Copy Secret to clipboard');
-    const copyButton2 = screen.getByTitle('Copy Key to clipboard');
+    const copyButton1 = screen.getByTitle('Copy secret to clipboard.');
+    const copyButton2 = screen.getByTitle('Copy key to clipboard.');
 
     await userEvent.click(copyButton1);
     expect(writeText).toHaveBeenLastCalledWith('1234');
