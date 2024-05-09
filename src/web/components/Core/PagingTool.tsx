@@ -2,6 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
 import {
+  canDecreasePageNumber,
+  canIncreasePageNumber,
   getPageNumberOptions,
   getRowsPerPageOptions,
   getShowingRowsText,
@@ -42,14 +44,14 @@ export function PagingTool({
   }, [numberTotalRows, initialRowsPerPage, initialPageNumber]);
 
   const onIncreasePageNumber = () => {
-    if (pageNumber < Math.ceil(numberTotalRows / rowsPerPage)) {
+    if (canIncreasePageNumber(pageNumber, numberTotalRows, rowsPerPage)) {
       setPageNumber(pageNumber + 1);
       onChangeRows(pageNumber + 1, rowsPerPage);
     }
   };
 
   const onDecreasePageNumber = () => {
-    if (pageNumber > 1) {
+    if (canDecreasePageNumber(pageNumber)) {
       setPageNumber(pageNumber - 1);
       onChangeRows(pageNumber - 1, rowsPerPage);
     }
