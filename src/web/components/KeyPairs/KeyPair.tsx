@@ -30,7 +30,7 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
       <td className='name'>{keyPair.name}</td>
       <td className='subscription-id'>{keyPair.subscriptionId}</td>
       <td>
-        <DisplaySecretTable secret={{ valueName: 'Public Key', value: keyPair.publicKey }} />
+        <DisplaySecretTable secret={{ valueName: 'Public key', value: keyPair.publicKey }} />
       </td>
       <td className='created'>{keyPair.createdString}</td>
       <td className='action'>

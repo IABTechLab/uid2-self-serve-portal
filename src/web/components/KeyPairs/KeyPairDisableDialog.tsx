@@ -46,7 +46,7 @@ function KeyPairDisableDialog({ onDisable, keyPair, onOpenChange }: KeyPairDisab
               validate: (value) => {
                 return value === keyPair.subscriptionId
                   ? true
-                  : `Please enter the Subscription ID to confirm disabling`;
+                  : `To confirm deletion, provide the Subscription ID. You can copy and paste the value.`;
               },
             }}
           />

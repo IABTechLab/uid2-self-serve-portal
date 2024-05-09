@@ -56,7 +56,7 @@ export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
           </a>
         </NavigationMenuItem>
         <div className='side-nav-divider' />
-        <li className='side-nav-item'>&copy; 2023 Unified ID</li>
+        <li className='side-nav-item'>&copy; 2024 Unified ID</li>
         <NavigationMenuItem className='side-nav-item'>
           <a
             target='_blank'

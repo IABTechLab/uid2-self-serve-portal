@@ -47,7 +47,7 @@ function ClientSideIntegration() {
     try {
       const response = await AddKeyPair({ name });
       if (response.status === 201) {
-        SuccessToast('Key Pair added.');
+        SuccessToast('Key pair added.');
         loadKeyPairs();
       }
     } catch (e: unknown) {
@@ -69,7 +69,7 @@ function ClientSideIntegration() {
   const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
     try {
       await DisableKeyPair(keyPair);
-      SuccessToast('Your key pair has been deleted');
+      SuccessToast('Key pair deleted.');
       loadKeyPairs();
     } catch (e) {
       handleErrorToast(e);
