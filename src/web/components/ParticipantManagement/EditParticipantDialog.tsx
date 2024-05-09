@@ -10,6 +10,7 @@ import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
+import { getContactInformation } from './EditParticipantDialogHelpers';
 
 type EditParticipantDialogProps = Readonly<{
   participant: ParticipantDTO;
@@ -31,11 +32,16 @@ function EditParticipantDialog({
     onOpenChange();
   };
 
+  const contact = getContactInformation(participant);
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
     participantName: participant.name,
     crmAgreementNumber: participant.crmAgreementNumber,
+    siteId: participant.siteId!,
+    contactFirstName: contact.firstName,
+    contactLastName: contact.lastName,
+    contactEmail: contact.email,
   };
 
   const formMethods = useForm<UpdateParticipantForm>({
@@ -66,6 +72,7 @@ function EditParticipantDialog({
             }))}
             rules={{ required: 'Please specify Participant Types.' }}
           />
+          <TextInput inputName='siteId' label='Site ID' disabled />
           <MultiCheckboxInput
             inputName='apiRoles'
             label='API Permissions'
@@ -86,6 +93,9 @@ function EditParticipantDialog({
                 validateEditCrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
             }}
           />
+          <TextInput inputName='contactFirstName' label='Contact First Name' disabled />
+          <TextInput inputName='contactLastName' label='Contact Last Name' disabled />
+          <TextInput inputName='contactEmail' label='Contact Email' disabled />
           <FormSubmitButton>Save Participant</FormSubmitButton>
         </form>
       </FormProvider>

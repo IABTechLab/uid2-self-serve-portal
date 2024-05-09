@@ -162,6 +162,10 @@ export type UpdateParticipantForm = {
   participantTypes: number[];
   participantName: string;
   crmAgreementNumber: string | null;
+  siteId: number;
+  contactFirstName: string;
+  contactLastName: string;
+  contactEmail: string;
 };
 
 export type AddParticipantForm = {
