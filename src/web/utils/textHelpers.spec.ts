@@ -81,21 +81,22 @@ describe('Text helper tests', () => {
   });
 
   describe('filter out duplicate elements', () => {
-    const testStringArr = [['test1', 'test1'], ['test1'], ['test1', 'test1']];
-    it.each(testStringArr)('should return array of only one unique element', () => {
-      for (const t of testStringArr) {
-        expect(deduplicateStrings(t)).toEqual(['test1']);
-      }
+    const testStringArrs = [['test1', 'test1'], ['test1'], ['test1', 'test1']];
+    testStringArrs.forEach((testStringArr) => {
+      it('should return array of only one unique element', () => {
+        expect(deduplicateStrings(testStringArr)).toEqual(['test1']);
+      });
     });
-    const testStringArr2 = [
+
+    const testStringArrs2 = [
       ['test1', 'test1', 'test2'],
       ['test1', 'test2'],
       ['test1', 'test1', 'test2', 'test2'],
     ];
-    it.each(testStringArr2)('should return array of only one unique element', () => {
-      for (const t of testStringArr2) {
-        expect(deduplicateStrings(t)).toEqual(['test1', 'test2']);
-      }
+    testStringArrs2.forEach((testStringArr2) => {
+      it('should return array of unique elements', () => {
+        expect(deduplicateStrings(testStringArr2)).toEqual(['test1', 'test2']);
+      });
     });
   });
 
@@ -105,34 +106,28 @@ describe('Text helper tests', () => {
       ['btest', 'atest', 'ctest'],
       ['ctest', 'btest', 'atest'],
     ];
-    it.each(testStringArr)('should return array sorted alphabetically', () => {
-      for (const t of testStringArr) {
-        expect(sortStringsAlphabetically(t)).toEqual(['atest', 'btest', 'ctest']);
-      }
+    it.each(testStringArr)('should return array sorted alphabetically', (a, b, c) => {
+      expect(sortStringsAlphabetically([a, b, c])).toEqual(['atest', 'btest', 'ctest']);
     });
 
-    const testStringArrNumbers = [['1test', '7test', '10test']];
-    it.each(testStringArrNumbers)('should return array sorted alphabetically', () => {
-      for (const t of testStringArrNumbers) {
-        expect(sortStringsAlphabetically(t)).toEqual(['10test', '1test', '7test']);
-      }
-    });
-
-    const testStringArrNumbers2 = [['test9', 'test90', 'test40']];
-    it.each(testStringArrNumbers2)('should return array sorted alphabetically', () => {
-      for (const t of testStringArrNumbers2) {
-        expect(sortStringsAlphabetically(t)).toEqual(['test40', 'test9', 'test90']);
-      }
+    const testStringArrNumbers = ['1test', '7test', '10test'];
+    const testStringArrNumbers2 = ['test9', 'test90', 'test40'];
+    it('should return array sorted alphabetically not numerically', () => {
+      expect(sortStringsAlphabetically(testStringArrNumbers)).toEqual(['10test', '1test', '7test']);
+      expect(sortStringsAlphabetically(testStringArrNumbers2)).toEqual([
+        'test40',
+        'test9',
+        'test90',
+      ]);
     });
 
     const testStringArrNumbers3 = [
       ['1', '2', '10'],
       ['1', '10', '2'],
+      ['2', '1', '10'],
     ];
-    it.each(testStringArrNumbers3)('should return array sorted alphabetically', () => {
-      for (const t of testStringArrNumbers3) {
-        expect(sortStringsAlphabetically(t)).toEqual(['1', '10', '2']);
-      }
+    it.each(testStringArrNumbers3)('should return array sorted alphabetically', (a, b, c) => {
+      expect(sortStringsAlphabetically([a, b, c])).toEqual(['1', '10', '2']);
     });
   });
 });
