@@ -119,7 +119,7 @@ function SharingPermissions() {
       <div className='sharing-permissions-table'>
         <SharingPermissionPageContainer>
           <Banner
-            message='Use of sharing requires an API Key or Client Side Keypair.  Please reach out to our support team for assistance.'
+            message='Use of sharing requires an API key or client-side key pair.  Please reach out to our support team for assistance.'
             type='Info'
             fitContent
           />
