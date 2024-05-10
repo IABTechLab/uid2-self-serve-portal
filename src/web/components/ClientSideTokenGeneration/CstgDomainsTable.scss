@@ -52,6 +52,7 @@
 
     .domains-search-bar-container {
       display: flex;
+      align-items: center;
       border-bottom: 2px solid var(--theme-action);
       padding: 6px 2px;
       ::placeholder {
@@ -74,7 +75,6 @@
       color: var(--theme-action);
       font-weight: 400;
       font-size: 0.75rem;
-      line-height: 0.9375rem;
     }
   }
 }

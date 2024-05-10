@@ -80,7 +80,7 @@ export function CstgDomainsTable({
     setSearchText('');
     if (newDomains) {
       setSearchedDomains(newDomains);
-      if (deleteDomains.length === 1) {
+      if (deleteDomains.every((domain) => pagedDomains.includes(domain))) {
         setPagedDomains(getPagedDomains(newDomains, pageNumber, rowsPerPage));
       } else {
         setPageNumber(initialPageNumber);

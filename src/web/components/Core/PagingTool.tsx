@@ -44,17 +44,13 @@ export function PagingTool({
   }, [numberTotalRows, initialRowsPerPage, initialPageNumber]);
 
   const onIncreasePageNumber = () => {
-    if (canIncreasePageNumber(pageNumber, numberTotalRows, rowsPerPage)) {
-      setPageNumber(pageNumber + 1);
-      onChangeRows(pageNumber + 1, rowsPerPage);
-    }
+    setPageNumber(pageNumber + 1);
+    onChangeRows(pageNumber + 1, rowsPerPage);
   };
 
   const onDecreasePageNumber = () => {
-    if (canDecreasePageNumber(pageNumber)) {
-      setPageNumber(pageNumber - 1);
-      onChangeRows(pageNumber - 1, rowsPerPage);
-    }
+    setPageNumber(pageNumber - 1);
+    onChangeRows(pageNumber - 1, rowsPerPage);
   };
 
   const onChangeRowsPerPage = (selected: SelectOption<RowsPerPageValues>) => {
@@ -92,7 +88,7 @@ export function PagingTool({
           className='icon-button'
           title='Previous Page'
           onClick={onDecreasePageNumber}
-          disabled={pageNumber === 1}
+          disabled={!canDecreasePageNumber(pageNumber)}
         >
           <FontAwesomeIcon icon='angle-left' />
         </button>
@@ -111,7 +107,7 @@ export function PagingTool({
           className='icon-button'
           title='Next Page'
           onClick={onIncreasePageNumber}
-          disabled={pageNumber === Math.ceil(numberTotalRows / rowsPerPage)}
+          disabled={!canIncreasePageNumber(pageNumber, numberTotalRows, rowsPerPage)}
         >
           <FontAwesomeIcon icon='angle-right' />
         </button>
