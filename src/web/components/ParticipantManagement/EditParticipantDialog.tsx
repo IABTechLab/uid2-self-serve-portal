@@ -12,6 +12,8 @@ import { TextInput } from '../Input/TextInput';
 import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
 import { getContactInformation } from './EditParticipantDialogHelpers';
 
+import './EditParticipantDialog.scss';
+
 type EditParticipantDialogProps = Readonly<{
   participant: ParticipantDTO;
   onEditParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
@@ -53,6 +55,7 @@ function EditParticipantDialog({
     <Dialog
       title={`Edit Participant: ${participant.name}`}
       closeButtonText='Cancel'
+      className='edit-participant-dialog'
       onOpenChange={onOpenChange}
     >
       <FormProvider {...formMethods}>
@@ -93,8 +96,10 @@ function EditParticipantDialog({
                 validateEditCrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
             }}
           />
-          <TextInput inputName='contactFirstName' label='Contact First Name' disabled />
-          <TextInput inputName='contactLastName' label='Contact Last Name' disabled />
+          <div className='contact-name'>
+            <TextInput inputName='contactFirstName' label='Contact First Name' disabled />
+            <TextInput inputName='contactLastName' label='Contact Last Name' disabled />
+          </div>
           <TextInput inputName='contactEmail' label='Contact Email' disabled />
           <FormSubmitButton>Save Participant</FormSubmitButton>
         </form>
