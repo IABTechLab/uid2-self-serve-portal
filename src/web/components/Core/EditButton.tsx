@@ -4,10 +4,10 @@ import clsx from 'clsx';
 import '../../styles/buttons.scss';
 
 type EditButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
-  containerClass?: string;
+  iconClassName?: string;
 };
 function EditButton(props: EditButtonProps) {
-  const { className, containerClass, onClick, ...buttonProps } = props;
+  const { children, className, iconClassName, onClick, ...buttonProps } = props;
   return (
     <button
       type='button'
@@ -15,7 +15,8 @@ function EditButton(props: EditButtonProps) {
       onClick={onClick}
       {...buttonProps}
     >
-      <FontAwesomeIcon icon='pencil' />
+      <FontAwesomeIcon icon='pencil' className={iconClassName} />
+      {children}
     </button>
   );
 }

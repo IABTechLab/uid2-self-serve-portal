@@ -4,10 +4,10 @@ import clsx from 'clsx';
 import '../../styles/buttons.scss';
 
 type DeleteButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
-  containerClass?: string;
+  iconClassName?: string;
 };
 function DeleteButton(props: DeleteButtonProps) {
-  const { className, containerClass, onClick, ...buttonProps } = props;
+  const { children, className, iconClassName, onClick, ...buttonProps } = props;
   return (
     <button
       type='button'
@@ -15,7 +15,8 @@ function DeleteButton(props: DeleteButtonProps) {
       onClick={onClick}
       {...buttonProps}
     >
-      <FontAwesomeIcon icon='trash-can' />
+      <FontAwesomeIcon icon='trash-can' className={iconClassName} />
+      {children}
     </button>
   );
 }
