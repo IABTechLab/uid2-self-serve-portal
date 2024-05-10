@@ -30,6 +30,10 @@
     .action-cell > button {
       padding: 5px 0 5px 10px;
     }
+
+    .no-search-results {
+      width: 500px;
+    }
   }
 
   .cstg-domains-management-icon {
@@ -43,7 +47,34 @@
 
     &-right {
       display: flex;
+      justify-content: right;
+    }
+
+    .domains-search-bar-container {
+      display: flex;
       align-items: center;
+      border-bottom: 2px solid var(--theme-action);
+      padding: 6px 2px;
+      ::placeholder {
+        color: var(--theme-action);
+        opacity: 1;
+      }
+      margin-right: 20px;
+    }
+
+    .domains-search-bar-icon {
+      color: var(--theme-action);
+      height: 16px;
+      margin-left: 8px;
+    }
+
+    .domains-search-bar {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: var(--theme-action);
+      font-weight: 400;
+      font-size: 0.75rem;
     }
   }
 }

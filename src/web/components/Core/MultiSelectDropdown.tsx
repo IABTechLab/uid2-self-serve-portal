@@ -12,11 +12,11 @@ type SelectOption<TValue> = {
   name: string;
 };
 
-type MultiSelectDropdownProps<TValue> = {
+type MultiSelectDropdownProps<TValue> = Readonly<{
   title: string;
   options: SelectOption<TValue>[];
   onSelectedChange: (selected: Set<TValue>) => void;
-};
+}>;
 
 export function MultiSelectDropdown<TValue>({
   title,

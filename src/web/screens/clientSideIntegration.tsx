@@ -17,6 +17,7 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
+import { sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
@@ -31,7 +32,10 @@ function ClientSideIntegration() {
 
   const loadDomainNames = useCallback(async () => {
     const currentDomainNames = await GetDomainNames();
-    setDomainNames(currentDomainNames);
+    const currentDomainNamesSorted = currentDomainNames
+      ? sortStringsAlphabetically(currentDomainNames)
+      : currentDomainNames;
+    setDomainNames(currentDomainNamesSorted);
   }, []);
 
   useEffect(() => {
@@ -78,8 +82,9 @@ function ClientSideIntegration() {
   const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      setDomainNames(response);
+      setDomainNames(sortStringsAlphabetically(response));
       SuccessToast(`Domain names ${action}.`);
+      return response;
     } catch (e) {
       handleErrorToast(e);
     }
@@ -88,7 +93,7 @@ function ClientSideIntegration() {
   const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
     let updatedDomains = newDomains;
     if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
-    handleUpdateDomainNames(updatedDomains, 'added');
+    return handleUpdateDomainNames(updatedDomains, 'added');
   };
 
   return (

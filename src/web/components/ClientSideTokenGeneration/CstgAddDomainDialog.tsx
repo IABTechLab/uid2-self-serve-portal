@@ -60,11 +60,11 @@ function CstgAddDomainDialog({
           message: `The domains entered are invalid: ${formatStringsWithSeparator(invalidDomains)}`,
         });
       } else {
-        // if all are valid but there are some non top-level domains, we make sure every domain is top-level
+        // if all are valid but there are some non root-level domains, we make sure every domain is root-level
         uniqueDomains.forEach((newDomain, index) => {
           uniqueDomains[index] = extractTopLevelDomain(newDomain);
         });
-        // filter for uniqueness (e.g. 2 different domains entered could have the same top-level domain)
+        // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
         const dedupedDomains = deduplicateStrings(uniqueDomains);
         await onAddDomains(dedupedDomains, deleteExistingList);
       }
@@ -78,7 +78,9 @@ function CstgAddDomainDialog({
   return (
     <div className='add-domain-dialog'>
       <Dialog title='Add Domains' closeButtonText='Cancel' onOpenChange={onOpenChange}>
-        <RootFormErrors fieldErrors={errors} />
+        <div className='domains-form-error'>
+          <RootFormErrors fieldErrors={errors} />
+        </div>
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             Add one or more domains. <br />

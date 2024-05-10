@@ -1,5 +1,7 @@
 import { parse } from 'tldts';
 
+import { RowsPerPageValues } from '../Core/PagingToolHelper';
+
 type DomainProps = {
   isIcann: boolean | null;
   isPrivate: boolean | null;
@@ -17,4 +19,16 @@ export const extractTopLevelDomain = (domainName: string) => {
     return topLevelDomain;
   }
   return domainName;
+};
+
+export const getPagedDomains = (
+  domains: string[],
+  pageNumber: number,
+  rowsPerPage: RowsPerPageValues
+) => {
+  return domains.filter(
+    (_, index) =>
+      index >= (pageNumber - 1) * rowsPerPage &&
+      index < (pageNumber - 1) * rowsPerPage + rowsPerPage
+  );
 };

@@ -1,6 +1,8 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCircleCheck, faTrashCan as farTranshCan } from '@fortawesome/free-regular-svg-icons';
 import {
+  faAngleLeft,
+  faAngleRight,
   faCheck,
   faChevronDown,
   faChevronUp,
@@ -45,4 +47,6 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faPlus);
   library.add(faCopy);
   library.add(faEye);
+  library.add(faAngleRight);
+  library.add(faAngleLeft);
 }
