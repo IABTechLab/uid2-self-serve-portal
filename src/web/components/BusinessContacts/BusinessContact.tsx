@@ -2,7 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import DeleteButton from '../Core/DeleteButton';
 import { Dialog } from '../Core/Dialog';
+import EditButton from '../Core/EditButton';
 import { InlineMessage } from '../Core/InlineMessage';
 import BusinessContactDialog from './BusinessContactDialog';
 
@@ -94,14 +96,7 @@ function BusinessContact({
         <div className='action-cell'>
           {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
-            <button
-              className='icon-button'
-              aria-label='edit'
-              type='button'
-              onClick={onOpenChangeEditBusinessContactDialog}
-            >
-              <FontAwesomeIcon icon='pencil' />
-            </button>
+            <EditButton onClick={onOpenChangeEditBusinessContactDialog} />
             {showEditBusinessDialog && (
               <BusinessContactDialog
                 onFormSubmit={handleUpdateEmailContact}
@@ -109,14 +104,8 @@ function BusinessContact({
                 onOpenChange={onOpenChangeEditBusinessContactDialog}
               />
             )}
-            <button
-              className='icon-button'
-              aria-label='delete'
-              type='button'
-              onClick={onOpenChangeDeleteBusinessContactDialog}
-            >
-              <FontAwesomeIcon icon='trash-can' />
-            </button>
+
+            <DeleteButton onClick={onOpenChangeDeleteBusinessContactDialog} />
             {showDeleteBusinessContactDialog && (
               <DeleteBusinessContactDialog
                 onRemoveContact={handleRemoveEmailContact}

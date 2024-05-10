@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
+import DeleteButton from '../Core/DeleteButton';
+import EditButton from '../Core/EditButton';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
@@ -42,14 +44,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       {availableRoles.length > 0 && (
         <td className='action'>
           <div className='action-cell'>
-            <button
-              type='button'
-              className='icon-button'
-              title='Edit'
-              onClick={onOpenChangeKeyEditDialog}
-            >
-              <FontAwesomeIcon icon='pencil' />
-            </button>
+            <EditButton onClick={onOpenChangeKeyEditDialog} />
             {showKeyEditDialog && (
               <KeyEditDialog
                 apiKey={apiKey}
@@ -59,14 +54,8 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
                 onOpenChange={onOpenChangeKeyEditDialog}
               />
             )}
-            <button
-              type='button'
-              className='icon-button'
-              title='Delete'
-              onClick={onOpenChangeKeyDisableDialog}
-            >
-              <FontAwesomeIcon icon='trash-can' />
-            </button>
+
+            <DeleteButton onClick={onOpenChangeKeyDisableDialog} />
             {showKeyDisableDialog && (
               <KeyDisableDialog
                 apiKey={apiKey}

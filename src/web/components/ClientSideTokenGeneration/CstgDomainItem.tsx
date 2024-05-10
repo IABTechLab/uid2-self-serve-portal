@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
+import DeleteButton from '../Core/DeleteButton';
+import EditButton from '../Core/EditButton';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
@@ -40,16 +42,7 @@ export function CstgDomainItem({
       <td className='domain'>{domain}</td>
       <td className='action'>
         <div className='action-cell'>
-          <button
-            type='button'
-            className='icon-button'
-            title='Edit'
-            onClick={() => {
-              setShowEditDialog(true);
-            }}
-          >
-            <FontAwesomeIcon icon='pencil' />
-          </button>
+          <EditButton onClick={onEditDialogChange} />
           {showEditDialog && (
             <CstgEditDomainDialog
               domain={domain}
@@ -58,16 +51,8 @@ export function CstgDomainItem({
               onOpenChange={onEditDialogChange}
             />
           )}
-          <button
-            type='button'
-            className='icon-button'
-            aria-label='delete-domain-name'
-            onClick={() => {
-              setShowDeleteDialog(true);
-            }}
-          >
-            <FontAwesomeIcon icon='trash-can' />
-          </button>
+
+          <DeleteButton onClick={() => setShowDeleteDialog(true)} />
           {showDeleteDialog && (
             <CstgDeleteDomainDialog
               domains={[domain]}
