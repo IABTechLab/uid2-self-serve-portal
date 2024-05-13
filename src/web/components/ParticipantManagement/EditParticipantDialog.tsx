@@ -9,7 +9,10 @@ import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
-import { validateEditcrmAgreementNumber } from './AddParticipantDialogHelper';
+import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
+import { getContactInformation } from './EditParticipantDialogHelpers';
+
+import './EditParticipantDialog.scss';
 
 type EditParticipantDialogProps = Readonly<{
   participant: ParticipantDTO;
@@ -31,11 +34,16 @@ function EditParticipantDialog({
     onOpenChange();
   };
 
+  const contact = getContactInformation(participant);
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
     participantName: participant.name,
     crmAgreementNumber: participant.crmAgreementNumber,
+    siteId: participant.siteId!,
+    contactFirstName: contact.firstName,
+    contactLastName: contact.lastName,
+    contactEmail: contact.email,
   };
 
   const formMethods = useForm<UpdateParticipantForm>({
@@ -47,6 +55,7 @@ function EditParticipantDialog({
     <Dialog
       title={`Edit Participant: ${participant.name}`}
       closeButtonText='Cancel'
+      className='edit-participant-dialog'
       onOpenChange={onOpenChange}
     >
       <FormProvider {...formMethods}>
@@ -66,6 +75,7 @@ function EditParticipantDialog({
             }))}
             rules={{ required: 'Please specify Participant Types.' }}
           />
+          <TextInput inputName='siteId' label='Site ID' disabled />
           <MultiCheckboxInput
             inputName='apiRoles'
             label='API Permissions'
@@ -83,9 +93,14 @@ function EditParticipantDialog({
             maxLength={8}
             rules={{
               validate: (value: string) =>
-                validateEditcrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
+                validateEditCrmAgreementNumber(value, originalFormValues.crmAgreementNumber),
             }}
           />
+          <div className='contact-name'>
+            <TextInput inputName='contactFirstName' label='Contact First Name' disabled />
+            <TextInput inputName='contactLastName' label='Contact Last Name' disabled />
+          </div>
+          <TextInput inputName='contactEmail' label='Contact Email' disabled />
           <FormSubmitButton>Save Participant</FormSubmitButton>
         </form>
       </FormProvider>
