@@ -26,6 +26,7 @@ export const Default = () => {
             Promise.resolve(console.log('Domain edited: ', updatedDomain));
             setIsOpen(!isOpen);
           }}
+          isEditedValid
         />
       )}
     </div>

@@ -2,20 +2,9 @@ import { parse } from 'tldts';
 
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
-type DomainProps = {
-  isIcann: boolean | null;
-  isPrivate: boolean | null;
-  domain?: string | null;
-};
-
 export type UpdateDomainNamesResponse = {
   domains: string[];
   isValid: boolean;
-};
-
-export const isValidDomain = (domainName: string) => {
-  const domainProps: DomainProps = parse(domainName);
-  return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
 };
 
 export const extractTopLevelDomain = (domainName: string) => {

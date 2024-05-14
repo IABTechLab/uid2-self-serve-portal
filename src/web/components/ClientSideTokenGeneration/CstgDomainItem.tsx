@@ -12,6 +12,7 @@ type CstgDomainItemProps = Readonly<{
   onEditDomain: (newDomain: string, originalDomainName: string) => void;
   onDelete: () => void;
   checked: boolean;
+  isEditedValid: boolean;
 }>;
 
 export function CstgDomainItem({
@@ -21,6 +22,7 @@ export function CstgDomainItem({
   onDelete,
   onEditDomain,
   checked,
+  isEditedValid,
 }: CstgDomainItemProps) {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
@@ -56,6 +58,7 @@ export function CstgDomainItem({
               existingDomains={existingDomains}
               onEditDomainName={onEditDomain}
               onOpenChange={onEditDialogChange}
+              isEditedValid={isEditedValid}
             />
           )}
           <button

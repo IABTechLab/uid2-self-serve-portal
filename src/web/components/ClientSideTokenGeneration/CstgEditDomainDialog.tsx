@@ -1,16 +1,18 @@
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { EditDomainFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
-import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
+import { extractTopLevelDomain } from './CstgDomainHelper';
 
 type EditDomainDialogProps = Readonly<{
   domain: string;
   existingDomains: string[];
   onEditDomainName: (newDomain: string, originalDomainName: string) => void;
   onOpenChange: () => void;
+  isEditedValid: boolean;
 }>;
 
 function EditDomainDialog({
@@ -18,6 +20,7 @@ function EditDomainDialog({
   onEditDomainName,
   onOpenChange,
   existingDomains,
+  isEditedValid,
 }: EditDomainDialogProps) {
   const formMethods = useForm<EditDomainFormProps>({
     defaultValues: {
@@ -31,16 +34,18 @@ function EditDomainDialog({
     formState: { errors },
   } = formMethods;
 
+  useEffect(() => {
+    if (!isEditedValid) {
+      setError('root.serverError', {
+        type: '400',
+        message: 'Edited domain is an invalid root-level domain.',
+      });
+    }
+  }, [isEditedValid, setError]);
+
   const onSubmit = async (formData: EditDomainFormProps) => {
     const updatedDomainName = formData.domainName;
     const originalDomainName = domain;
-    if (!isValidDomain(updatedDomainName)) {
-      setError('root.serverError', {
-        type: '400',
-        message: 'Domain name must be valid.',
-      });
-      return;
-    }
     const updatedTopLevelDomain = extractTopLevelDomain(updatedDomainName);
     if (updatedTopLevelDomain === originalDomainName) {
       onOpenChange();

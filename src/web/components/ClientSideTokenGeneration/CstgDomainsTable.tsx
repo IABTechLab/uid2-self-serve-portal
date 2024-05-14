@@ -123,9 +123,14 @@ export function CstgDomainsTable({
       'edited'
     );
     const editedDomains = editedDomainsResponse?.domains;
-    if (editedDomains) {
-      setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
-    }
+    const isValid = editedDomainsResponse?.isValid;
+    if (editedDomains)
+      if (isValid) {
+        setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
+        setInvalidDomains([]);
+      } else {
+        setInvalidDomains(editedDomains);
+      }
   };
 
   const onOpenChangeAddDomainDialog = () => {
@@ -249,6 +254,7 @@ export function CstgDomainsTable({
               onDelete={() => handleBulkDeleteDomains([domain])}
               onEditDomain={handleEditDomain}
               checked={isDomainSelected(domain)}
+              isEditedValid={invalidDomains.length === 0}
             />
           ))}
         </tbody>
