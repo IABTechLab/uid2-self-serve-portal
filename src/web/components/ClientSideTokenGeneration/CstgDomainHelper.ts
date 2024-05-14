@@ -4,7 +4,7 @@ import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
 export type UpdateDomainNamesResponse = {
   domains: string[];
-  isValid: boolean;
+  isValidDomains: boolean;
 };
 
 export const extractTopLevelDomain = (domainName: string) => {

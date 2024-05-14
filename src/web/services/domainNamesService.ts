@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
+import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
 import { backendError } from '../utils/apiError';
 
 export type AddDomainNamesFormProps = {
@@ -26,7 +27,7 @@ export async function GetDomainNames(participantId?: number) {
 export async function UpdateDomainNames(
   domainNames: string[],
   participantId?: number
-): Promise<string[]> {
+): Promise<UpdateDomainNamesResponse> {
   try {
     const result = await axios.post<string[]>(
       `/participants/${participantId ?? 'current'}/domainNames`,
@@ -34,10 +35,11 @@ export async function UpdateDomainNames(
         domainNames,
       }
     );
-    return result.data;
+    return { domains: result.data, isValidDomains: true };
   } catch (e: unknown) {
     if (e instanceof AxiosError && e?.response?.status === 400) {
-      return [e?.response?.data.message];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      return { domains: [e?.response?.data.message], isValidDomains: false };
     }
 
     throw backendError(e, 'Could not set domain names');

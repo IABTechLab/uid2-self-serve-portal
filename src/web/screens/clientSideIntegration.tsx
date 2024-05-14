@@ -86,19 +86,18 @@ function ClientSideIntegration() {
   ): Promise<UpdateDomainNamesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      let domains = response;
-      let isValid = true;
-      if (domains.length === 1 && domains[0].includes('Invalid Domains')) {
-        const invalidDomains = separateStringsList(domains[0].replace('Invalid Domains', ''));
+      let domains = response?.domains;
+      const isValidDomains = response?.isValidDomains;
+      if (!isValidDomains) {
+        const invalidDomains = separateStringsList(domains[0]);
         domains = invalidDomains;
-        isValid = false;
       } else {
-        setDomainNames(sortStringsAlphabetically(response));
+        setDomainNames(sortStringsAlphabetically(domains));
         SuccessToast(`Domain names ${action}.`);
       }
       const updatedDomainNamesResponse: UpdateDomainNamesResponse = {
         domains,
-        isValid,
+        isValidDomains,
       };
       return updatedDomainNamesResponse;
     } catch (e) {

@@ -16,7 +16,7 @@ export const WithDomains: Story = {
     onUpdateDomains: (domains: string[]) => {
       Promise.resolve(console.log('update domains to:', domains));
       return new Promise<UpdateDomainNamesResponse | undefined>((resolve) => {
-        resolve({ domains, isValid: true });
+        resolve({ domains, isValidDomains: true });
       });
     },
   },
@@ -28,7 +28,7 @@ export const WithoutDomains: Story = {
     onUpdateDomains: (domains: string[]) => {
       Promise.resolve(console.log('update domains to:', domains));
       return new Promise<UpdateDomainNamesResponse | undefined>((resolve) => {
-        resolve({ domains: [''], isValid: true });
+        resolve({ domains: [''], isValidDomains: true });
       });
     },
   },

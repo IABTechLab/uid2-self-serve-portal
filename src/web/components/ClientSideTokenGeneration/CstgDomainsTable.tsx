@@ -123,9 +123,9 @@ export function CstgDomainsTable({
       'edited'
     );
     const editedDomains = editedDomainsResponse?.domains;
-    const isValid = editedDomainsResponse?.isValid;
+    const isValidDomains = editedDomainsResponse?.isValidDomains;
     if (editedDomains)
-      if (isValid) {
+      if (isValidDomains) {
         setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
         setInvalidDomains([]);
       } else {
@@ -148,8 +148,8 @@ export function CstgDomainsTable({
   ) => {
     const newDomainsResponse = await onAddDomains(newDomainsFormatted, deleteExistingList);
     const newDomains = newDomainsResponse?.domains;
-    const isValid = newDomainsResponse?.isValid;
-    if (isValid) {
+    const isValidDomains = newDomainsResponse?.isValidDomains;
+    if (isValidDomains) {
       setShowAddDomainsDialog(false);
       setSearchedDomains(domains);
       setSelectedDomains([]);
