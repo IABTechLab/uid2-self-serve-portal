@@ -1,4 +1,3 @@
-import { withFaroRouterInstrumentation } from '@grafana/faro-react';
 import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useCallback } from 'react';
