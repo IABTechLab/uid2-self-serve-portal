@@ -21,6 +21,7 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
+        invalidDomains={[]}
       />
     );
 
@@ -49,6 +50,7 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
+        invalidDomains={[]}
       />
     );
 
@@ -83,6 +85,7 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
+        invalidDomains={[]}
       />
     );
 
@@ -104,6 +107,7 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
+        invalidDomains={[]}
       />
     );
 
@@ -124,6 +128,7 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
+        invalidDomains={[]}
       />
     );
     await submitDialog();

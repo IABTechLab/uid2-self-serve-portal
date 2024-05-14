@@ -11,7 +11,6 @@ import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
 import { StyledCheckbox } from '../Input/StyledCheckbox';
-import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
 
 import './CstgAddDomainDialog.scss';
 

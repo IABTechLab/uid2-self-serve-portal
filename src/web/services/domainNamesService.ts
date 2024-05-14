@@ -36,8 +36,8 @@ export async function UpdateDomainNames(
     );
     return result.data;
   } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      return e?.response?.data.message;
+    if (e instanceof AxiosError && e?.response?.status === 400) {
+      return [e?.response?.data.message];
     }
 
     throw backendError(e, 'Could not set domain names');

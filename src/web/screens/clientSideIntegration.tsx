@@ -88,8 +88,8 @@ function ClientSideIntegration() {
       const response = await UpdateDomainNames(updatedDomainNames);
       let domains = response;
       let isValid = true;
-      if (typeof response === 'string') {
-        const invalidDomains = separateStringsList(response);
+      if (domains.length === 1 && domains[0].includes('Invalid Domains')) {
+        const invalidDomains = separateStringsList(domains[0].replace('Invalid Domains', ''));
         domains = invalidDomains;
         isValid = false;
       } else {
