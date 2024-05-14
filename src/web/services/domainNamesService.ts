@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { backendError } from '../utils/apiError';
 
@@ -36,6 +36,10 @@ export async function UpdateDomainNames(
     );
     return result.data;
   } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      return e?.response?.data.message;
+    }
+
     throw backendError(e, 'Could not set domain names');
   }
 }

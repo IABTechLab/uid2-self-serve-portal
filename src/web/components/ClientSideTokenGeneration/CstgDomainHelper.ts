@@ -8,6 +8,11 @@ type DomainProps = {
   domain?: string | null;
 };
 
+export type UpdateDomainNamesResponse = {
+  domains: string[];
+  isValid: boolean;
+};
+
 export const isValidDomain = (domainName: string) => {
   const domainProps: DomainProps = parse(domainName);
   return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);

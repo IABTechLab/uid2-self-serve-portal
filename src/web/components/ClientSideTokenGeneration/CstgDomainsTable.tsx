@@ -8,18 +8,21 @@ import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
-import { getPagedDomains } from './CstgDomainHelper';
+import { getPagedDomains, UpdateDomainNamesResponse } from './CstgDomainHelper';
 import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
 
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
-  onUpdateDomains: (domains: string[], action: string) => Promise<string[] | undefined>;
+  onUpdateDomains: (
+    domains: string[],
+    action: string
+  ) => Promise<UpdateDomainNamesResponse | undefined>;
   onAddDomains: (
     newDomainsFormatted: string[],
     deleteExistingList: boolean
-  ) => Promise<string[] | undefined>;
+  ) => Promise<UpdateDomainNamesResponse | undefined>;
 }>;
 
 export function CstgDomainsTable({
@@ -39,6 +42,8 @@ export function CstgDomainsTable({
 
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
+
+  const [invalidDomains, setInvalidDomains] = useState<string[]>([]);
 
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
@@ -71,10 +76,11 @@ export function CstgDomainsTable({
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
   const handleBulkDeleteDomains = async (deleteDomains: string[]) => {
-    const newDomains = await onUpdateDomains(
+    const newDomainsResponse = await onUpdateDomains(
       domains.filter((domain) => !deleteDomains.includes(domain)),
       'deleted'
     );
+    const newDomains = newDomainsResponse?.domains;
     setShowDeleteDomainsDialog(false);
     setSelectedDomains([]);
     setSearchText('');
@@ -109,13 +115,14 @@ export function CstgDomainsTable({
 
   const handleEditDomain = async (updatedDomainName: string, originalDomainName: string) => {
     // removes original domain name from list and adds new domain name
-    const editedDomains = await onUpdateDomains(
+    const editedDomainsResponse = await onUpdateDomains(
       [
         ...domains.filter((domain) => ![originalDomainName].includes(domain)),
         ...[updatedDomainName],
       ],
       'edited'
     );
+    const editedDomains = editedDomainsResponse?.domains;
     if (editedDomains) {
       setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
     }
@@ -123,6 +130,7 @@ export function CstgDomainsTable({
 
   const onOpenChangeAddDomainDialog = () => {
     setShowAddDomainsDialog(!showAddDomainsDialog);
+    setInvalidDomains([]);
   };
 
   const onOpenChangeDeleteDomainDialog = () => {
@@ -133,16 +141,23 @@ export function CstgDomainsTable({
     newDomainsFormatted: string[],
     deleteExistingList: boolean
   ) => {
-    const newDomains = await onAddDomains(newDomainsFormatted, deleteExistingList);
-    setShowAddDomainsDialog(false);
-    setSearchedDomains(domains);
-    setSelectedDomains([]);
-    setSearchText('');
-    if (newDomains) {
-      setPageNumber(initialPageNumber);
-      setRowsPerPage(initialRowsPerPage);
-      setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
-      setSearchedDomains(newDomains);
+    const newDomainsResponse = await onAddDomains(newDomainsFormatted, deleteExistingList);
+    const newDomains = newDomainsResponse?.domains;
+    const isValid = newDomainsResponse?.isValid;
+    if (isValid) {
+      setShowAddDomainsDialog(false);
+      setSearchedDomains(domains);
+      setSelectedDomains([]);
+      setSearchText('');
+      setInvalidDomains([]);
+      if (newDomains) {
+        setPageNumber(initialPageNumber);
+        setRowsPerPage(initialRowsPerPage);
+        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+        setSearchedDomains(newDomains);
+      }
+    } else if (newDomains) {
+      setInvalidDomains(newDomains);
     }
   };
 
@@ -210,6 +225,7 @@ export function CstgDomainsTable({
                 onAddDomains={onSubmitAddDomainDialog}
                 onOpenChange={onOpenChangeAddDomainDialog}
                 existingDomains={domains}
+                invalidDomains={invalidDomains}
               />
             )}
           </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
@@ -19,12 +19,14 @@ type AddDomainNamesDialogProps = Readonly<{
   onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
   onOpenChange: () => void;
   existingDomains: string[];
+  invalidDomains: string[];
 }>;
 
 function CstgAddDomainDialog({
   onAddDomains,
   onOpenChange,
   existingDomains,
+  invalidDomains,
 }: AddDomainNamesDialogProps) {
   const [deleteExistingList, setDeleteExistingList] = useState<boolean>(false);
   const formMethods = useForm<AddDomainNamesFormProps>();
@@ -33,6 +35,17 @@ function CstgAddDomainDialog({
     setError,
     formState: { errors },
   } = formMethods;
+
+  useEffect(() => {
+    if (invalidDomains.length > 0) {
+      setError('root.serverError', {
+        type: '400',
+        message: `The domains entered are invalid root-level domains: ${formatStringsWithSeparator(
+          invalidDomains
+        )}`,
+      });
+    }
+  }, [invalidDomains, setError]);
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomains = separateStringsList(formData.newDomains);
@@ -46,28 +59,9 @@ function CstgAddDomainDialog({
         message: 'The domains entered already exist.',
       });
     } else {
-      const invalidDomains: string[] = [];
-      let allValid = true;
-      uniqueDomains.forEach((newDomain) => {
-        if (!isValidDomain(newDomain)) {
-          invalidDomains.push(newDomain);
-          allValid = false;
-        }
-      });
-      if (!allValid) {
-        setError('root.serverError', {
-          type: '400',
-          message: `The domains entered are invalid: ${formatStringsWithSeparator(invalidDomains)}`,
-        });
-      } else {
-        // if all are valid but there are some non root-level domains, we make sure every domain is root-level
-        uniqueDomains.forEach((newDomain, index) => {
-          uniqueDomains[index] = extractTopLevelDomain(newDomain);
-        });
-        // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
-        const dedupedDomains = deduplicateStrings(uniqueDomains);
-        await onAddDomains(dedupedDomains, deleteExistingList);
-      }
+      // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
+      const dedupedDomains = deduplicateStrings(uniqueDomains);
+      await onAddDomains(dedupedDomains, deleteExistingList);
     }
   };
 
