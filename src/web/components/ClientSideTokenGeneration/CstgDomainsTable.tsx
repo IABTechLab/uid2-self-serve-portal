@@ -113,7 +113,10 @@ export function CstgDomainsTable({
     setPagedDomains(getPagedDomains(newSearchDomains, initialPageNumber, initialRowsPerPage));
   };
 
-  const handleEditDomain = async (updatedDomainName: string, originalDomainName: string) => {
+  const handleEditDomain = async (
+    updatedDomainName: string,
+    originalDomainName: string
+  ): Promise<boolean> => {
     // removes original domain name from list and adds new domain name
     const editedDomainsResponse = await onUpdateDomains(
       [
@@ -128,9 +131,12 @@ export function CstgDomainsTable({
       if (isValidDomains) {
         setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
         setInvalidDomains([]);
+        return true;
       } else {
         setInvalidDomains(editedDomains);
+        return false;
       }
+    return false;
   };
 
   const onOpenChangeAddDomainDialog = () => {
@@ -173,6 +179,10 @@ export function CstgDomainsTable({
     setPageNumber(currentPageNumber);
     setRowsPerPage(currentRowsPerPage);
     setPagedDomains(getPagedDomains(searchedDomains, currentPageNumber, currentRowsPerPage));
+  };
+
+  const handleCloseEditDomainDialog = () => {
+    setInvalidDomains([]);
   };
 
   return (
@@ -254,7 +264,8 @@ export function CstgDomainsTable({
               onDelete={() => handleBulkDeleteDomains([domain])}
               onEditDomain={handleEditDomain}
               checked={isDomainSelected(domain)}
-              isEditedValid={invalidDomains.length === 0}
+              invalidDomains={invalidDomains}
+              onCloseEditDomainDialog={handleCloseEditDomainDialog}
             />
           ))}
         </tbody>

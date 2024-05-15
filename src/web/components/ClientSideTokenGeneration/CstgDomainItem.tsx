@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
@@ -9,10 +9,11 @@ type CstgDomainItemProps = Readonly<{
   domain: string;
   existingDomains: string[];
   onClick: () => void;
-  onEditDomain: (newDomain: string, originalDomainName: string) => void;
+  onEditDomain: (newDomain: string, originalDomainName: string) => Promise<boolean>;
   onDelete: () => void;
   checked: boolean;
-  isEditedValid: boolean;
+  invalidDomains: string[];
+  onCloseEditDomainDialog: () => void;
 }>;
 
 export function CstgDomainItem({
@@ -22,13 +23,20 @@ export function CstgDomainItem({
   onDelete,
   onEditDomain,
   checked,
-  isEditedValid,
+  invalidDomains,
+  onCloseEditDomainDialog,
 }: CstgDomainItemProps) {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [isEditedValid, setIsEditedValid] = useState<boolean>(invalidDomains.length === 0);
+
+  useEffect(() => {
+    setIsEditedValid(invalidDomains.length === 0);
+  }, [invalidDomains]);
 
   const onEditDialogChange = () => {
     setShowEditDialog(!showEditDialog);
+    onCloseEditDomainDialog();
   };
 
   const onDeleteDialogChange = () => {
@@ -58,7 +66,6 @@ export function CstgDomainItem({
               existingDomains={existingDomains}
               onEditDomainName={onEditDomain}
               onOpenChange={onEditDialogChange}
-              isEditedValid={isEditedValid}
             />
           )}
           <button
