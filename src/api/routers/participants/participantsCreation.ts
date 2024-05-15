@@ -74,7 +74,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
   const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
   const user = UserCreationPartial.parse({
     ...req.body,
-    acceptedTerms: true,
+    acceptedTerms: false,
   });
 
   const types = await ParticipantType.query().findByIds(participantRequest.participantTypes);
