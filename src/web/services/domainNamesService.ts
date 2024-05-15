@@ -37,9 +37,17 @@ export async function UpdateDomainNames(
     );
     return { domains: result.data, isValidDomains: true };
   } catch (e: unknown) {
-    if (e instanceof AxiosError && e?.response?.status === 400) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      return { domains: [e?.response?.data.message], isValidDomains: false };
+    if (
+      e instanceof AxiosError &&
+      e?.response?.status === 400 &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      e?.response?.data.message.includes('Invalid Domain Names')
+    ) {
+      return {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+        domains: [e?.response?.data.message.replace('Invalid Domain Names:', '')],
+        isValidDomains: false,
+      };
     }
 
     throw backendError(e, 'Could not set domain names');
