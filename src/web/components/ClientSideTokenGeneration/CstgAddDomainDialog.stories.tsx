@@ -20,16 +20,14 @@ export const Default = () => {
         <CstgAddDomainDialog
           onOpenChange={() => setIsOpen(!isOpen)}
           existingDomains={[]}
-          invalidDomains={[]}
           onAddDomains={(newDomainsFormatted, deleteExistingList) => {
             setIsOpen(!isOpen);
-            return Promise.resolve(
-              console.log(
-                `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
-                  deleteExistingList ? `Deleting existing list` : `Keeping existing list`
-                }`
-              )
+            console.log(
+              `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
+                deleteExistingList ? `Deleting existing list` : `Keeping existing list`
+              }`
             );
+            return Promise.resolve([]);
           }}
         />
       )}

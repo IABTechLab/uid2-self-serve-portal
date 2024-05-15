@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddDomainNamesFormProps } from '../../services/domainNamesService';
@@ -15,17 +15,15 @@ import { StyledCheckbox } from '../Input/StyledCheckbox';
 import './CstgAddDomainDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
-  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
+  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<string[]>;
   onOpenChange: () => void;
   existingDomains: string[];
-  invalidDomains: string[];
 }>;
 
 function CstgAddDomainDialog({
   onAddDomains,
   onOpenChange,
   existingDomains,
-  invalidDomains,
 }: AddDomainNamesDialogProps) {
   const [deleteExistingList, setDeleteExistingList] = useState<boolean>(false);
   const formMethods = useForm<AddDomainNamesFormProps>();
@@ -34,17 +32,6 @@ function CstgAddDomainDialog({
     setError,
     formState: { errors },
   } = formMethods;
-
-  useEffect(() => {
-    if (invalidDomains.length > 0) {
-      setError('root.serverError', {
-        type: '400',
-        message: `The domains entered are invalid root-level domains: ${formatStringsWithSeparator(
-          invalidDomains
-        )}`,
-      });
-    }
-  }, [invalidDomains, setError]);
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
     const newDomains = separateStringsList(formData.newDomains);
@@ -60,7 +47,15 @@ function CstgAddDomainDialog({
     } else {
       // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
       const dedupedDomains = deduplicateStrings(uniqueDomains);
-      await onAddDomains(dedupedDomains, deleteExistingList);
+      const invalidDomains = await onAddDomains(dedupedDomains, deleteExistingList);
+      if (invalidDomains.length > 0) {
+        setError('root.serverError', {
+          type: '400',
+          message: `The domains entered are invalid root-level domains: ${formatStringsWithSeparator(
+            invalidDomains
+          )}`,
+        });
+      }
     }
   };
 

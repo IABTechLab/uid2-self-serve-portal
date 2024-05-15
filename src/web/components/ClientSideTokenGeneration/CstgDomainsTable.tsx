@@ -43,8 +43,6 @@ export function CstgDomainsTable({
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
 
-  const [invalidDomains, setInvalidDomains] = useState<string[]>([]);
-
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
   useEffect(() => {
@@ -130,10 +128,8 @@ export function CstgDomainsTable({
     if (editedDomains)
       if (isValidDomains) {
         setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
-        setInvalidDomains([]);
         return true;
       } else {
-        setInvalidDomains(editedDomains);
         return false;
       }
     return false;
@@ -141,7 +137,6 @@ export function CstgDomainsTable({
 
   const onOpenChangeAddDomainDialog = () => {
     setShowAddDomainsDialog(!showAddDomainsDialog);
-    setInvalidDomains([]);
   };
 
   const onOpenChangeDeleteDomainDialog = () => {
@@ -151,7 +146,7 @@ export function CstgDomainsTable({
   const onSubmitAddDomainDialog = async (
     newDomainsFormatted: string[],
     deleteExistingList: boolean
-  ) => {
+  ): Promise<string[]> => {
     const newDomainsResponse = await onAddDomains(newDomainsFormatted, deleteExistingList);
     const newDomains = newDomainsResponse?.domains;
     const isValidDomains = newDomainsResponse?.isValidDomains;
@@ -160,16 +155,17 @@ export function CstgDomainsTable({
       setSearchedDomains(domains);
       setSelectedDomains([]);
       setSearchText('');
-      setInvalidDomains([]);
       if (newDomains) {
         setPageNumber(initialPageNumber);
         setRowsPerPage(initialRowsPerPage);
         setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
         setSearchedDomains(newDomains);
+        return [];
       }
     } else if (newDomains) {
-      setInvalidDomains(newDomains);
+      return newDomains;
     }
+    return [];
   };
 
   const onChangeDisplayedDomains = (
@@ -179,10 +175,6 @@ export function CstgDomainsTable({
     setPageNumber(currentPageNumber);
     setRowsPerPage(currentRowsPerPage);
     setPagedDomains(getPagedDomains(searchedDomains, currentPageNumber, currentRowsPerPage));
-  };
-
-  const handleCloseEditDomainDialog = () => {
-    setInvalidDomains([]);
   };
 
   return (
@@ -240,7 +232,6 @@ export function CstgDomainsTable({
                 onAddDomains={onSubmitAddDomainDialog}
                 onOpenChange={onOpenChangeAddDomainDialog}
                 existingDomains={domains}
-                invalidDomains={invalidDomains}
               />
             )}
           </div>
@@ -264,8 +255,6 @@ export function CstgDomainsTable({
               onDelete={() => handleBulkDeleteDomains([domain])}
               onEditDomain={handleEditDomain}
               checked={isDomainSelected(domain)}
-              invalidDomains={invalidDomains}
-              onCloseEditDomainDialog={handleCloseEditDomainDialog}
             />
           ))}
         </tbody>

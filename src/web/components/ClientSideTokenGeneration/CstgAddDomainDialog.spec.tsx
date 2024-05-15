@@ -13,7 +13,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
 
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve([]);
     });
 
     render(
@@ -21,7 +21,6 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
-        invalidDomains={[]}
       />
     );
 
@@ -42,7 +41,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
 
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve([]);
     });
 
     render(
@@ -50,7 +49,6 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
-        invalidDomains={[]}
       />
     );
 
@@ -68,7 +66,7 @@ describe('CstgDomainAddDomainDialog', () => {
 
   it('should render error when user types single incorrect domain', async () => {
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve(['newDomains']);
     });
 
     render(
@@ -76,7 +74,6 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
-        invalidDomains={['newDomains']}
       />
     );
 
@@ -87,7 +84,7 @@ describe('CstgDomainAddDomainDialog', () => {
 
   it('should render error if user types in at least one incorrect domain in a list', async () => {
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve(['test', 'test2']);
     });
 
     render(
@@ -95,7 +92,6 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
-        invalidDomains={['test', 'test2']}
       />
     );
 
@@ -106,7 +102,7 @@ describe('CstgDomainAddDomainDialog', () => {
 
   it('should render error if user submits empty text box for domain names', async () => {
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve([]);
     });
 
     render(
@@ -114,7 +110,6 @@ describe('CstgDomainAddDomainDialog', () => {
         onAddDomains={onAddDomainsMock}
         onOpenChange={() => {}}
         existingDomains={[]}
-        invalidDomains={[]}
       />
     );
     await submitDialog();
