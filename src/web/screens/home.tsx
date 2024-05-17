@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import log from 'loglevel';
-import { Suspense, useContext, useEffect, useState } from 'react';
+import { Suspense, useContext } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
@@ -10,7 +10,7 @@ import DocumentationCard from '../components/Home/DocumentationCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetSharingList } from '../services/participant';
-import { getAllSites, preloadAllSitesList } from '../services/site';
+import { getAllSites } from '../services/site';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
