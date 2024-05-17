@@ -1,6 +1,8 @@
 import { Suspense, useCallback, useContext } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { useRevalidator } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
+import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
@@ -14,24 +16,22 @@ import {
   ResendInvite,
   UpdateTeamMemberForm,
   UpdateUser,
-  UserResponse,
 } from '../services/userAccount';
 import { handleErrorToast } from '../utils/apiError';
+import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-function Loading() {
-  return <div>Loading team data...</div>;
-}
+const loader = makeLoader(() => {
+  const users = GetAllUsersOfParticipant();
+  return defer({ users });
+});
 
 function TeamMembers() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
-  const data = useLoaderData() as { users: UserResponse[] };
+  const data = useLoaderData<typeof loader>();
   const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
-  const onTeamMembersUpdated = useCallback(() => {
-    reloader.revalidate();
-  }, [reloader]);
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
     try {
@@ -39,7 +39,7 @@ function TeamMembers() {
       if (response.status === 201) {
         SuccessToast('Team member added.');
       }
-      onTeamMembersUpdated();
+      reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -51,7 +51,7 @@ function TeamMembers() {
       if (response.status === 200) {
         SuccessToast('Team member removed.');
       }
-      onTeamMembersUpdated();
+      reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -63,7 +63,7 @@ function TeamMembers() {
       if (response.status === 200) {
         SuccessToast('Team member updated.');
       }
-      onTeamMembersUpdated();
+      reloader.revalidate();
       if (LoggedInUser?.user?.id === userId) await loadUser();
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -77,9 +77,9 @@ function TeamMembers() {
         View and manage team members who have access to the UID2 Portal.
       </p>
       <ScreenContentContainer>
-        <Suspense fallback={<Loading />}>
-          <Await resolve={data.users}>
-            {(users: UserResponse[]) => (
+        <Suspense fallback={<Loading innerText='Loading team data...' />}>
+          <AwaitTypesafe resolve={data.users}>
+            {(users) => (
               <TeamMembersTable
                 teamMembers={users}
                 onAddTeamMember={handleAddTeamMember}
@@ -88,7 +88,7 @@ function TeamMembers() {
                 onUpdateTeamMember={handleUpdateTeamMember}
               />
             )}
-          </Await>
+          </AwaitTypesafe>
         </Suspense>
       </ScreenContentContainer>
     </>
@@ -100,8 +100,5 @@ export const TeamMembersRoute: PortalRoute = {
   element: <TeamMembers />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/team',
-  loader: () => {
-    const users = GetAllUsersOfParticipant();
-    return defer({ users });
-  },
+  loader,
 };

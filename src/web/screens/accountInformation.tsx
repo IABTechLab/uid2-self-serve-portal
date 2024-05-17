@@ -10,9 +10,7 @@ import './accountInformation.scss';
 
 function AccountInformation() {
   const { participant } = useContext(ParticipantContext);
-  const participantTypes: string = useMemo(() => {
-    return participant?.types?.map((t) => t.typeName).join(', ') ?? '';
-  }, [participant]);
+  const participantTypes = participant?.types?.map((t) => t.typeName).join(', ') ?? '';
 
   return (
     <>
