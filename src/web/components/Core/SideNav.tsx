@@ -49,7 +49,7 @@ export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
           <a
             target='_blank'
             className='outside-link'
-            href='http://unifiedid.com/docs/getting-started/gs-sharing'
+            href='http://unifiedid.com/docs/intro'
             rel='noreferrer'
           >
             UID2 Portal Documentation
