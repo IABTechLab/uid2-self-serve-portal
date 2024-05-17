@@ -37,7 +37,7 @@ export const preloadAvailableSiteList = availableSiteSwrHook.preloadFunction;
 export const TestAvailableSiteListProvider = availableSiteSwrHook.TestDataProvider;
 
 const allSitesEndpoint = `/sites/`;
-const allSitesFetcher = async () => {
+export const getAllSites = async () => {
   try {
     const result = await axios.get<SharingSiteDTO[]>(allSitesEndpoint);
     return result.data;
@@ -46,7 +46,7 @@ const allSitesFetcher = async () => {
   }
 };
 
-const allSitesSwrHook = createSwrHook<SharingSiteDTO[]>(allSitesEndpoint, allSitesFetcher);
+const allSitesSwrHook = createSwrHook<SharingSiteDTO[]>(allSitesEndpoint, getAllSites);
 export const useAllSitesList = allSitesSwrHook.hookFunction;
 export const preloadAllSitesList = allSitesSwrHook.preloadFunction;
 export const TestAllSitesListProvider = allSitesSwrHook.TestDataProvider;

@@ -14,8 +14,3 @@ export const Default = Template.bind({});
 Default.args = {
   sharingPermissionsCount: 100,
 };
-
-export const WithError = Template.bind({});
-WithError.args = {
-  hasError: true,
-};
