@@ -42,9 +42,7 @@ describe('Error boundary', () => {
       </TestContextProvider>
     );
     expect(
-      await screen.findByText(
-        'There was an unexpected error. Please try again. If the problem persists, contact Support and provide the following information:'
-      )
+      await screen.findByText('There was an unexpected error. Please try again.')
     ).toBeInTheDocument();
     portalSpy.mockRestore();
   });

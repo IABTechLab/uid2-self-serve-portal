@@ -23,7 +23,7 @@ import {
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
-import { useAsyncError } from '../utils/errorHandler';
+import { useAsyncThrowError } from '../utils/errorHandler';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 

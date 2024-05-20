@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Loading } from '../components/Core/Loading';
 import { GetLoggedInUserAccount, UserAccount } from '../services/userAccount';
-import { useAsyncError } from '../utils/errorHandler';
+import { useAsyncThrowError } from '../utils/errorHandler';
 
 type UserContextWithSetter = {
   LoggedInUser: UserAccount | null;
@@ -23,7 +23,7 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
-  const throwError = useAsyncError();
+  const throwError = useAsyncThrowError();
 
   const loadUser = useCallback(async () => {
     setIsLoading(true);

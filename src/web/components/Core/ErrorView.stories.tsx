@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ErrorView from './ErrorView';
+import { ErrorView } from './ErrorView';
 
 import '../../utils/errorHandler.scss';
 

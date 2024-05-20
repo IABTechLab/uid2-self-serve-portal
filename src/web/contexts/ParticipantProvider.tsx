@@ -5,7 +5,7 @@ import { ParticipantDTO, ParticipantStatus } from '../../api/entities/Participan
 import { Loading } from '../components/Core/Loading';
 import { GetCurrentUsersParticipant } from '../services/participant';
 import { ApiError } from '../utils/apiError';
-import { useAsyncError } from '../utils/errorHandler';
+import { useAsyncThrowError } from '../utils/errorHandler';
 import { CurrentUserContext } from './CurrentUserProvider';
 
 type ParticipantWithSetter = {
@@ -23,7 +23,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const throwError = useAsyncError();
+  const throwError = useAsyncThrowError();
   const user = LoggedInUser?.user || null;
 
   useEffect(() => {
