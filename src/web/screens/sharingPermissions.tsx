@@ -1,9 +1,13 @@
+/* eslint-disable camelcase */
 import { AxiosError } from 'axios';
-import { ReactNode, useContext, useEffect, useState } from 'react';
+import { ReactNode, Suspense, useContext, useEffect, useState } from 'react';
+import { useRevalidator } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
-import { ClientType } from '../../api/services/adminServiceHelpers';
+import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { Banner } from '../components/Core/Banner';
 import { Collapsible } from '../components/Core/Collapsible';
+import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
@@ -18,13 +22,38 @@ import {
   UpdateSharingTypes,
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
+import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { useAsyncError } from '../utils/errorHandler';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './sharingPermissions.scss';
 
-function SharingPermissionPageContainer({ children }: { children: ReactNode }) {
+type SharingListLoaderData =
+  | { hasKeyset: false }
+  | {
+      hasKeyset: true;
+      sharedSiteIds: SharingListResponse['allowed_sites'];
+      sharedTypes: SharingListResponse['allowed_types'];
+    };
+async function loadSharingList(): Promise<SharingListLoaderData> {
+  try {
+    const response = await GetSharingList();
+    return {
+      hasKeyset: true,
+      sharedSiteIds: response.allowed_sites,
+      sharedTypes: response.allowed_types ?? [],
+    };
+  } catch (e: unknown) {
+    if (e instanceof AxiosError && e.response?.data?.missingKeyset) {
+      return { hasKeyset: false };
+    }
+    throw e;
+  }
+}
+const loader = makeLoader(() => defer({ sharingList: loadSharingList() }));
+
+function SharingPermissionPageContainer({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <div className='sharingPermissions'>
       <h1>Sharing Permissions</h1>
@@ -34,16 +63,13 @@ function SharingPermissionPageContainer({ children }: { children: ReactNode }) {
 }
 
 function SharingPermissions() {
-  const [showNoKeySetError, setNoKeySetError] = useState(false);
-  const [sitesLoaded, setSitesLoaded] = useState(false);
+  const data = useLoaderData<typeof loader>();
+  const reloader = useRevalidator();
   const { participant, setParticipant } = useContext(ParticipantContext);
-  const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
-  const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
-  const throwError = useAsyncError();
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
-      const response = await UpdateSharingTypes(participant!.id, selectedTypes);
+      await UpdateSharingTypes(participant!.id, selectedTypes);
       SuccessToast(
         `${
           selectedTypes.length === 1
@@ -51,11 +77,11 @@ function SharingPermissions() {
             : `${selectedTypes.length} Participant types`
         } saved to your Sharing Permissions`
       );
-      setSharedTypes(response.allowed_types ?? []);
       if (!participant?.completedRecommendations) {
         const updatedParticipant = await CompleteRecommendations(participant!.id);
         setParticipant(updatedParticipant);
       }
+      reloader.revalidate();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -63,13 +89,13 @@ function SharingPermissions() {
 
   const handleAddSharingSite = async (selectedSiteIds: number[]) => {
     try {
-      const response = await AddSharingParticipants(participant!.id, selectedSiteIds);
+      await AddSharingParticipants(participant!.id, selectedSiteIds);
       SuccessToast(
         `${
           selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
         } added to your Sharing Permissions`
       );
-      setSharedSiteIds(response.allowed_sites);
+      reloader.revalidate();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -77,90 +103,70 @@ function SharingPermissions() {
 
   const handleDeleteSharingSite = async (siteIdsToDelete: number[]) => {
     try {
-      const response = await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
+      await DeleteSharingParticipants(participant!.id, siteIdsToDelete);
       SuccessToast(
         `${siteIdsToDelete.length} sharing ${
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
         } deleted`
       );
-      setSharedSiteIds(response.allowed_sites);
+      reloader.revalidate();
     } catch (e) {
       handleErrorToast(e);
     }
   };
 
-  useEffect(() => {
-    const loadSharingList = async () => {
-      try {
-        const response = await GetSharingList();
-        setSharedSiteIds(response.allowed_sites);
-        setSharedTypes(response.allowed_types ?? []);
-      } catch (e: unknown) {
-        if (e instanceof AxiosError) {
-          if (e.response?.data?.missingKeyset) {
-            setNoKeySetError(true);
-            return;
-          }
-          throwError(e);
-        }
-      } finally {
-        setSitesLoaded(true);
-      }
-    };
-    loadSharingList();
-  }, [throwError]);
-
-  if (!sitesLoaded) {
-    return <div />;
-  }
-
-  if (showNoKeySetError) {
-    return (
-      <div className='sharing-permissions-table'>
-        <SharingPermissionPageContainer>
-          <Banner
-            message='Use of sharing requires an API key or client-side key pair.  Please reach out to our support team for assistance.'
-            type='Info'
-            fitContent
-          />
-        </SharingPermissionPageContainer>
-      </div>
-    );
-  }
-
   return (
     <SharingPermissionPageContainer>
-      <p className='heading-details'>
-        Adding a sharing permission allows the participant you’re sharing with to decrypt your UID2
-        tokens.
-        <br />
-        <br />
-        Note: This only enables the sharing permission. No data is sent.
-      </p>
-      <ScreenContentContainer>
-        <BulkAddPermissions
-          participant={participant}
-          sharedTypes={sharedTypes ?? []}
-          onBulkAddSharingPermission={handleSaveSharingType}
-        />
-        <Collapsible title='Add Permissions — Individual' defaultOpen>
-          <>
-            <p className='search-description'>
-              Add individual participants, using search, and click to grant them permission to
-              decrypt your UID2 tokens.
-            </p>
-            <SearchAndAddParticipants
-              onSharingPermissionsAdded={handleAddSharingSite}
-              sharedSiteIds={sharedSiteIds}
-            />
-          </>
-        </Collapsible>
-        <SharingPermissionsTable
-          sharedSiteIds={sharedSiteIds}
-          sharedTypes={sharedTypes}
-          onDeleteSharingPermission={handleDeleteSharingSite}
-        />
-      </ScreenContentContainer>
+      <Suspense fallback={<Loading />}>
+        <AwaitTypesafe resolve={data.sharingList}>
+          {(sharingList) => (
+            <>
+              {!sharingList.hasKeyset && (
+                <Banner
+                  message='Use of sharing requires an API key or client-side key pair.  Please reach out to our support team for assistance.'
+                  type='Info'
+                  fitContent
+                />
+              )}
+              {sharingList.hasKeyset && (
+                <>
+                  <p className='heading-details'>
+                    Adding a sharing permission allows the participant you’re sharing with to
+                    decrypt your UID2 tokens.
+                    <br />
+                    <br />
+                    Note: This only enables the sharing permission. No data is sent.
+                  </p>
+                  <ScreenContentContainer>
+                    <BulkAddPermissions
+                      participant={participant}
+                      sharedTypes={sharingList.sharedTypes ?? []}
+                      onBulkAddSharingPermission={handleSaveSharingType}
+                    />
+                    <Collapsible title='Add Permissions — Individual' defaultOpen>
+                      <>
+                        <p className='search-description'>
+                          Add individual participants, using search, and click to grant them
+                          permission to decrypt your UID2 tokens.
+                        </p>
+                        <SearchAndAddParticipants
+                          onSharingPermissionsAdded={handleAddSharingSite}
+                          sharedSiteIds={sharingList.sharedSiteIds}
+                        />
+                      </>
+                    </Collapsible>
+                    <SharingPermissionsTable
+                      sharedSiteIds={sharingList.sharedSiteIds}
+                      sharedTypes={sharingList.sharedTypes}
+                      onDeleteSharingPermission={handleDeleteSharingSite}
+                    />
+                  </ScreenContentContainer>
+                </>
+              )}
+            </>
+          )}
+        </AwaitTypesafe>
+      </Suspense>
     </SharingPermissionPageContainer>
   );
 }
@@ -170,4 +176,5 @@ export const SharingPermissionsRoute: PortalRoute = {
   element: <SharingPermissions />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/sharing',
+  loader,
 };
