@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { Tooltip } from '../components/Core/Tooltip';

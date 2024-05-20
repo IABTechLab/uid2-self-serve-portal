@@ -9,7 +9,6 @@ import { SuccessToast } from '../components/Core/Toast';
 import {
   AddEmailContact,
   BusinessContactForm,
-  BusinessContactResponse,
   GetEmailContacts,
   RemoveEmailContact,
   UpdateEmailContact,

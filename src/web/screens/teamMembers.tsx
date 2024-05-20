@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useContext } from 'react';
+import { Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
