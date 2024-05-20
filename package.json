@@ -70,6 +70,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.50.0",
     "react-router-dom": "^6.22.0",
+    "react-router-typesafe": "^1.5.0",
     "react-toastify": "^10.0.4",
     "reflect-metadata": "^0.1.14",
     "stream-browserify": "^3.0.0",

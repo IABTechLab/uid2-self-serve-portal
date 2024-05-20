@@ -5,27 +5,21 @@ import './SharingPermissionCard.scss';
 type SharingPermissionCardProps = {
   sharingPermissionsCount?: number;
   bulkPermissionsCount?: number;
-  hasError: boolean;
 };
 
 function SharingPermissionCard({
   sharingPermissionsCount,
   bulkPermissionsCount,
-  hasError,
 }: SharingPermissionCardProps) {
   return (
     <div className='sharing-permission-card'>
       <h2>Your Sharing Permissions</h2>
       <span>Participants you&apos;re sharing with to decrypt your encrypted UID2s. </span>
       <div className='permissions-count-section'>
-        {hasError ? (
-          <p className='error'>Uh Oh, something went wrong! </p>
-        ) : (
-          <div>
-            <div className='permissions-count'>{sharingPermissionsCount}</div>
-            <span>MANUAL PERMISSIONS</span>
-          </div>
-        )}
+        <div>
+          <div className='permissions-count'>{sharingPermissionsCount}</div>
+          <span>MANUAL PERMISSIONS</span>
+        </div>
         <div className='divider' />
         <div>
           <div className='permissions-count'>{bulkPermissionsCount}</div>
