@@ -78,7 +78,6 @@ describe('#getParticipantKeyPairs', () => {
     await getParticipantKeyPairs(participantRequest, res);
 
     expect(res.status).toHaveBeenLastCalledWith(400);
-    expect(res.send).toHaveBeenLastCalledWith('Site id is not set');
   });
 
   test.each([

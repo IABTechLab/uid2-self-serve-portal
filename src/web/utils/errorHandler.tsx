@@ -86,7 +86,7 @@ export function errorHandler<P extends ErrorBoundaryPropType>(
  * This is needed to make the react render loop aware of errors in async events.
  * Refer [this issue](https://github.com/facebook/react/issues/14981#issuecomment-468460187)
  */
-export function useAsyncError() {
+export function useAsyncThrowError() {
   const [, setError] = React.useState();
   return React.useCallback(
     (e: Error) => {

@@ -18,7 +18,7 @@ import {
   UpdateSharingTypes,
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
-import { useAsyncError } from '../utils/errorHandler';
+import { useAsyncThrowError } from '../utils/errorHandler';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -39,7 +39,7 @@ function SharingPermissions() {
   const { participant, setParticipant } = useContext(ParticipantContext);
   const [sharedSiteIds, setSharedSiteIds] = useState<number[]>([]);
   const [sharedTypes, setSharedTypes] = useState<ClientType[]>([]);
-  const throwError = useAsyncError();
+  const throwError = useAsyncThrowError();
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {

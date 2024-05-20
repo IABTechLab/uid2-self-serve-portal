@@ -4,7 +4,7 @@ import { Suspense, useContext } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
-import ErrorView from '../components/Core/ErrorView';
+import { AsyncErrorView } from '../components/Core/ErrorView';
 import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
@@ -61,7 +61,7 @@ function Home() {
       <h1>Welcome back, {LoggedInUser?.profile.firstName}</h1>
       <div className='dashboard-cards-container'>
         <Suspense fallback={<Loading />}>
-          <AwaitTypesafe resolve={data.counts} errorElement={<ErrorView />}>
+          <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
             {(counts) => (
               <SharingPermissionCard
                 sharingPermissionsCount={counts.sharingPermissionsCount}
