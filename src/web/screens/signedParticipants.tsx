@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
-import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SignedParticipantsTable } from '../components/SignedParticipants/SignedParticipantsTable';

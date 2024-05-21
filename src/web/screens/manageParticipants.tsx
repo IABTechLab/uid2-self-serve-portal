@@ -1,11 +1,8 @@
-import { Suspense, useCallback, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
-import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
-import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';

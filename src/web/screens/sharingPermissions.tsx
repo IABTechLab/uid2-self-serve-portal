@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { AxiosError } from 'axios';
 import { ReactNode, Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
