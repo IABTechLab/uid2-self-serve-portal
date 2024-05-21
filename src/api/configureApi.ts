@@ -46,13 +46,24 @@ type BypassPath = {
   method: string;
 };
 
-const BYPASS_PATHS = [
-  `/favicon.ico`,
-  `${BASE_REQUEST_PATH}/`,
-  `${BASE_REQUEST_PATH}/metrics`,
-  `${BASE_REQUEST_PATH}/health`,
-  `${BASE_REQUEST_PATH}/keycloak-config`,
-].map((path) => ({ url: path, method: 'GET' }));
+const BYPASS_AUTH_PATHS = [
+  { url: `/favicon.ico`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/metrics`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/health`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/keycloak-config`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/users/selfResendInvitation`, method: 'POST' },
+];
+
+const BYPASS_CLAIM_PATHS = [
+  { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/participantTypes`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
+  { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/users/current/participant`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/users/current/acceptTerms`, method: 'PUT' },
+];
 
 function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath[]) {
   // eslint-disable-next-line func-names
@@ -106,7 +117,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
         audience: SSP_KK_AUDIENCE,
         issuerBaseURL: SSP_KK_ISSUER_BASE_URL,
       }),
-      ...BYPASS_PATHS
+      ...BYPASS_AUTH_PATHS
     )
   );
 
@@ -125,13 +136,8 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
         const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
         return roles.includes('api-participant-member');
       }),
-      { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
-      { url: `${BASE_REQUEST_PATH}/participantTypes`, method: 'GET' },
-      { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
-      { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
-      { url: `${BASE_REQUEST_PATH}/users/current/participant`, method: 'GET' },
-      { url: `${BASE_REQUEST_PATH}/users/current/acceptTerms`, method: 'PUT' },
-      ...BYPASS_PATHS
+      ...BYPASS_CLAIM_PATHS,
+      ...BYPASS_AUTH_PATHS
     )
   );
 
