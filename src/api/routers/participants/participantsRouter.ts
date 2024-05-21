@@ -12,6 +12,7 @@ import {
   ParticipantStatus,
 } from '../../entities/Participant';
 import { UserDTO, UserRole } from '../../entities/User';
+import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
@@ -262,7 +263,7 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
       const traceId = getTraceId(req);
       try {
@@ -284,7 +285,7 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
 
       const adminApiKeys = await getApiKeysBySite(participant.siteId);
@@ -302,7 +303,7 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res: Response) => {
       const { participant } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
 
       const { keyId } = apiKeyIdParser.parse(req.query);
@@ -329,7 +330,7 @@ export function createParticipantsRouter() {
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
 
       const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
@@ -391,7 +392,7 @@ export function createParticipantsRouter() {
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
 
       const { keyId } = apiKeyDeleteInputParser.parse(req.body);
@@ -439,7 +440,7 @@ export function createParticipantsRouter() {
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
 
       const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
@@ -475,7 +476,7 @@ export function createParticipantsRouter() {
       const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
       const { newParticipantSites } = sharingRelationParser.parse(req.body);
       const auditTrail = await insertSharingAuditTrails(
@@ -514,7 +515,7 @@ export function createParticipantsRouter() {
       const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
       const { name } = addKeyPairParser.parse(req.body);
       const disabled = false;
@@ -541,7 +542,7 @@ export function createParticipantsRouter() {
       const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
       const { name, subscriptionId, disabled } = keyPairParser.parse(req.body);
       const auditTrail = await insertKeyPairAuditTrails(
@@ -566,7 +567,7 @@ export function createParticipantsRouter() {
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
 
       const { name, subscriptionId } = keyPairParser.parse(req.body.keyPair);
@@ -610,7 +611,7 @@ export function createParticipantsRouter() {
       const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
       const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
       const auditTrail = await insertSharingAuditTrails(
@@ -643,7 +644,7 @@ export function createParticipantsRouter() {
       const { participant, user } = req;
       const traceId = getTraceId(req);
       if (!participant?.siteId) {
-        return res.status(400).send('Site id is not set');
+        return siteIdNotSetError(req, res);
       }
       const { types } = sharingTypesParser.parse(req.body);
       const auditTrail = await insertSharingTypesAuditTrail(
