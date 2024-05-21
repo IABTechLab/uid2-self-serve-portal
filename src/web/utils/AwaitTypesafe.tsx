@@ -12,10 +12,10 @@ export type AwaitProps<T> = {
 
 export const AwaitTypesafe = RRAwait as <T>(props: AwaitProps<T>) => React.JSX.Element;
 
-/*
-Accepts an object consisting of keys and values that are promises, passes them through
-Promise.all, and destructures the result back to the Promise results mapped to the original keys.
-*/
+/**
+ * Accepts an object consisting of keys and values that are promises, passes them through
+ * Promise.all, and destructures the result back to the Promise results mapped to the original keys.
+ */
 export function resolveAll<T extends Record<string | number | symbol, Promise<unknown>>>(
   t: T
 ): Promise<{
