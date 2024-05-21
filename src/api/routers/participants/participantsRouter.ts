@@ -12,7 +12,7 @@ import {
   ParticipantStatus,
 } from '../../entities/Participant';
 import { UserDTO, UserRole } from '../../entities/User';
-import { errorResponse, siteIdNotSetError } from '../../helpers/errorHelpers';
+import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
