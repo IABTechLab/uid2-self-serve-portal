@@ -4,7 +4,7 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { User, UserCreationPartial, UserDTO } from '../../api/entities/User';
-import { UserWithIsApprover } from '../../api/services/usersService';
+import { SelfResendInviteRequest, UserWithIsApprover } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
@@ -50,7 +50,24 @@ export async function ResendInvite(id: number): Promise<void> {
   try {
     return await axios.post(`/users/${id}/resendInvitation`);
   } catch (e: unknown) {
-    const error = backendError(e, 'Unable to resend invite');
+    const error = backendError(e, 'Unable to resend invitation');
+    log.error(error);
+    throw error;
+  }
+}
+
+export type SelfResendInvitationForm = {
+  email: string;
+};
+
+export async function SelfResendInvitation(formData: SelfResendInvitationForm): Promise<void> {
+  try {
+    const { email } = formData;
+    return await axios.post(`/users/selfResendInvitation`, {
+      email,
+    });
+  } catch (e: unknown) {
+    const error = backendError(e, 'Unable to resend invitation');
     log.error(error);
     throw error;
   }

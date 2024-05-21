@@ -14,6 +14,7 @@ import { v4 as uuid } from 'uuid';
 
 import { TYPES } from '../constant/types';
 import { Participant, ParticipantStatus } from '../entities/Participant';
+import { User } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
@@ -24,8 +25,13 @@ import {
   updateUserProfile,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
-import { DeletedUser, UpdateUserParser, UserService } from '../services/userService';
-import { UserRequest } from '../services/usersService';
+import {
+  DeletedUser,
+  SelfResendInvitationParser,
+  UpdateUserParser,
+  UserService,
+} from '../services/userService';
+import { findUserByEmail, SelfResendInviteRequest, UserRequest } from '../services/usersService';
 
 @controller('/users')
 export class UserController {
@@ -74,6 +80,23 @@ export class UserController {
       assignClientRoleToUser(kcAdminClient, req.user?.email!, 'api-participant-member'),
     ];
     await Promise.all(promises);
+    res.sendStatus(200);
+  }
+
+  @httpPost('/selfResendInvitation')
+  public async selfResendInvitation(
+    @request() req: SelfResendInviteRequest,
+    @response() res: Response
+  ): Promise<void> {
+    const { email } = SelfResendInvitationParser.parse(req.body);
+    const logger = this.loggerService.getLogger(req);
+    const kcAdminClient = await getKcAdminClient();
+    const user = await queryUsersByEmail(kcAdminClient, email);
+    if (user.length !== 1) {
+      res.sendStatus(200);
+    }
+    logger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`);
+    await sendInviteEmail(kcAdminClient, user[0]);
     res.sendStatus(200);
   }
 

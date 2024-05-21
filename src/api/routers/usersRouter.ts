@@ -16,6 +16,10 @@ const createUsersRouter = () => {
     '/current/participant',
     userController.getCurrentParticipant.bind(userController)
   );
+  usersRouter.post(
+    '/selfResendInvitation',
+    userController.selfResendInvitation.bind(userController)
+  );
   usersRouter.use('/:userId', enrichWithUserFromParams);
   usersRouter.get('/:userId', userController.getUserById.bind(userController));
   usersRouter.post(

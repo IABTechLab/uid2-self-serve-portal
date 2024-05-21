@@ -4,6 +4,7 @@ import { AccountPendingRoute } from './accountPending';
 import { CreateAccountRoute } from './createAccount';
 import { DashboardRoute } from './dashboard';
 import { makePrivateRoute, PortalRoute } from './routeUtils';
+import { SelfReinviteRoute } from './selfReinvite';
 
 const AccountCreationRoute: PortalRoute = {
   path: '/account',
@@ -15,4 +16,7 @@ const AccountCreationRoute: PortalRoute = {
 export const Routes: PortalRoute[] = [
   makePrivateRoute(DashboardRoute),
   makePrivateRoute(AccountCreationRoute),
+
+  // Unauthenticated routes
+  SelfReinviteRoute,
 ];

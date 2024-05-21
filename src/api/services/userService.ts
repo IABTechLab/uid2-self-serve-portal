@@ -20,6 +20,8 @@ export const UpdateUserParser = z.object({
   role: z.nativeEnum(UserRole),
 });
 
+export const SelfResendInvitationParser = z.object({ email: z.string() });
+
 @injectable()
 export class UserService {
   public async getCurrentUser(req: UserRequest) {
