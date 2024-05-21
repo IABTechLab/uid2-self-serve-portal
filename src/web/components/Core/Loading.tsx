@@ -1,12 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import './Loading.scss';
+
 type LoadingProps = Readonly<{
   message?: string;
 }>;
 export function Loading({ message = 'Loading...' }: LoadingProps) {
   return (
-    <div>
-      <FontAwesomeIcon icon='spinner' spin /> {message}
+    <div className='loading-component'>
+      <FontAwesomeIcon icon='spinner' spin />
+      <span>{message}</span>
     </div>
   );
 }
