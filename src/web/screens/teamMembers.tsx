@@ -77,7 +77,7 @@ function TeamMembers() {
         View and manage team members who have access to the UID2 Portal.
       </p>
       <ScreenContentContainer>
-        <Suspense fallback={<Loading innerText='Loading team data...' />}>
+        <Suspense fallback={<Loading message='Loading team data...' />}>
           <AwaitTypesafe resolve={data.users}>
             {(users) => (
               <TeamMembersTable

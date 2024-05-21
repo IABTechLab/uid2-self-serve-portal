@@ -73,7 +73,7 @@ export function BusinessContacts() {
         for UID2.
       </p>
       <ScreenContentContainer>
-        <Suspense fallback={<Loading innerText='Loading business contacts...' />}>
+        <Suspense fallback={<Loading message='Loading business contacts...' />}>
           <AwaitTypesafe resolve={data.emailContacts}>
             {(emailContacts) => (
               <BusinessContactsTable
