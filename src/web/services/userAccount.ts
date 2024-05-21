@@ -4,7 +4,7 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { User, UserCreationPartial, UserDTO } from '../../api/entities/User';
-import { SelfResendInviteRequest, UserWithIsApprover } from '../../api/services/usersService';
+import { UserWithIsApprover } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {

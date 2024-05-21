@@ -14,7 +14,6 @@ import { v4 as uuid } from 'uuid';
 
 import { TYPES } from '../constant/types';
 import { Participant, ParticipantStatus } from '../entities/Participant';
-import { User } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
@@ -31,7 +30,7 @@ import {
   UpdateUserParser,
   UserService,
 } from '../services/userService';
-import { findUserByEmail, SelfResendInviteRequest, UserRequest } from '../services/usersService';
+import { SelfResendInviteRequest, UserRequest } from '../services/usersService';
 
 @controller('/users')
 export class UserController {
