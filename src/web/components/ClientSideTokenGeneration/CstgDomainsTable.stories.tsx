@@ -14,10 +14,8 @@ export const WithDomains: Story = {
   args: {
     domains: ['test.com', 'abc.com', '123.com'],
     onUpdateDomains: (domains: string[]) => {
-      Promise.resolve(console.log('update domains to:', domains));
-      return new Promise<UpdateDomainNamesResponse | undefined>((resolve) => {
-        resolve({ domains, isValidDomains: true });
-      });
+      console.log('update domains to:', domains);
+      return Promise.resolve({ domains, isValidDomains: true });
     },
   },
 };

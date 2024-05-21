@@ -125,13 +125,10 @@ export function CstgDomainsTable({
     );
     const editedDomains = editedDomainsResponse?.domains;
     const isValidDomains = editedDomainsResponse?.isValidDomains;
-    if (editedDomains)
-      if (isValidDomains) {
-        setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
-        return true;
-      } else {
-        return false;
-      }
+    if (editedDomains && isValidDomains) {
+      setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
+      return true;
+    }
     return false;
   };
 
@@ -160,9 +157,10 @@ export function CstgDomainsTable({
         setRowsPerPage(initialRowsPerPage);
         setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
         setSearchedDomains(newDomains);
-        return [];
       }
-    } else if (newDomains) {
+      return [];
+    }
+    if (newDomains) {
       return newDomains;
     }
     return [];

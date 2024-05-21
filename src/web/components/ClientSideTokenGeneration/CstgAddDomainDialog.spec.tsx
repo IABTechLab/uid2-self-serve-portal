@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 
 const submitDialog = async () => {
-  const createButton = screen.getByRole('button', { name: 'Add Domains' });
-  await userEvent.click(createButton);
+  const submitButton = screen.getByRole('button', { name: 'Add Domains' });
+  await userEvent.click(submitButton);
 };
 
 describe('CstgDomainAddDomainDialog', () => {

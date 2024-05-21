@@ -27,8 +27,7 @@ export function formatUnixDate(timeValue: number) {
 export const separateStringsList = (strings: string): string[] => {
   if (strings === '') return [];
   const stringsTrimmed = strings.replace(/, |,| {2}|\n|;|]|\[/gi, ' ').trim();
-  const ts = stringsTrimmed.split(/[ ]+/);
-  return ts;
+  return stringsTrimmed.split(/[ ]+/);
 };
 
 export const deduplicateStrings = (strings: string[]) => {

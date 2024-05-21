@@ -33,28 +33,35 @@ function CstgAddDomainDialog({
     formState: { errors },
   } = formMethods;
 
-  const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomains = separateStringsList(formData.newDomains);
+  const getUniqueDomains = (newDomains: string[]) => {
     // filter out domain names that already exist in the list unless existing list is being deleted
     const uniqueDomains = deleteExistingList
       ? newDomains
       : newDomains.filter((domain) => !existingDomains?.includes(domain));
-    if (uniqueDomains.length === 0) {
-      setError('root.serverError', {
-        type: '400',
-        message: 'The domains entered already exist.',
-      });
+    return uniqueDomains;
+  };
+
+  const handleError = (message: string) => {
+    setError('root.serverError', {
+      type: '400',
+      message,
+    });
+  };
+
+  const onSubmit = async (formData: AddDomainNamesFormProps) => {
+    const newDomains = getUniqueDomains(separateStringsList(formData.newDomains));
+    if (newDomains.length === 0) {
+      handleError('The domains entered already exist.');
     } else {
       // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
-      const dedupedDomains = deduplicateStrings(uniqueDomains);
-      const invalidDomains = await onAddDomains(dedupedDomains, deleteExistingList);
+      const dedupedRootLevelDomains = deduplicateStrings(newDomains);
+      const invalidDomains = await onAddDomains(dedupedRootLevelDomains, deleteExistingList);
       if (invalidDomains.length > 0) {
-        setError('root.serverError', {
-          type: '400',
-          message: `The domains entered are invalid root-level domains: ${formatStringsWithSeparator(
+        handleError(
+          `The domains entered are invalid root-level domains: ${formatStringsWithSeparator(
             invalidDomains
-          )}`,
-        });
+          )}`
+        );
       }
     }
   };
