@@ -9,6 +9,7 @@ export type EnvironmentVariable = {
 
 export type ClientConfig = {
   faroUrl: string;
+  environment: string;
 };
 
 const hostedFaroUrl =
@@ -17,12 +18,15 @@ const hostedFaroUrl =
 const configMaps: { [index: string]: ClientConfig } = {
   'portal.integ.unifiedid.com': {
     faroUrl: hostedFaroUrl,
+    environment: 'integ',
   },
   'portal.unifiedid.com': {
     faroUrl: hostedFaroUrl,
+    environment: 'prod',
   },
   localhost: {
     faroUrl: '',
+    environment: 'dev',
   },
 };
 
