@@ -45,9 +45,6 @@ function ManageParticipants() {
   const data = useLoaderData<typeof loader>();
 
   const reloader = useRevalidator();
-  const handleParticipantUpdated = useCallback(() => {
-    reloader.revalidate();
-  }, [reloader]);
 
   const handleApproveParticipantRequest = async (
     participantId: number,
@@ -59,18 +56,18 @@ function ManageParticipants() {
         'Participant approved. Since no users are attached to participant, email confirmation sent to approver.'
       );
     }
-    handleParticipantUpdated();
+    reloader.revalidate();
   };
 
   const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
     SuccessToast('Participant updated');
-    handleParticipantUpdated();
+    reloader.revalidate();
   };
 
   const onAddParticipant = async (form: AddParticipantForm) => {
     const response = await AddParticipant(form);
-    handleParticipantUpdated();
+    reloader.revalidate();
     return response;
   };
 
