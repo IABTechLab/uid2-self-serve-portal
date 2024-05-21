@@ -1,10 +1,12 @@
 import { Faro, initializeFaro as coreInit } from '@grafana/faro-react';
 
 import config from '../../package.json';
+import { GetClientConfig } from './services/environmentVariables';
 
+const { faroUrl } = GetClientConfig();
 export async function initializeFaro(): Promise<Faro> {
   const faro = coreInit({
-    url: process.env.REACT_APP_FARO_URL,
+    url: faroUrl,
     app: {
       name: config.name,
       version: config.version,
