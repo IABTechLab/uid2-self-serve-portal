@@ -26,3 +26,15 @@ export const getPagedDomains = (
       index < (pageNumber - 1) * rowsPerPage + rowsPerPage
   );
 };
+
+export const getUniqueDomains = (
+  newDomains: string[],
+  existingDomains: string[],
+  deleteExistingList: boolean
+) => {
+  // filter out domain names that already exist in the list unless existing list is being deleted
+  const uniqueDomains = deleteExistingList
+    ? newDomains
+    : newDomains.filter((domain) => !existingDomains?.includes(domain));
+  return uniqueDomains;
+};

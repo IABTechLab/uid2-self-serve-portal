@@ -11,6 +11,7 @@ import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
 import { StyledCheckbox } from '../Input/StyledCheckbox';
+import { extractTopLevelDomain, getUniqueDomains } from './CstgDomainHelper';
 
 import './CstgAddDomainDialog.scss';
 
@@ -33,14 +34,6 @@ function CstgAddDomainDialog({
     formState: { errors },
   } = formMethods;
 
-  const getUniqueDomains = (newDomains: string[]) => {
-    // filter out domain names that already exist in the list unless existing list is being deleted
-    const uniqueDomains = deleteExistingList
-      ? newDomains
-      : newDomains.filter((domain) => !existingDomains?.includes(domain));
-    return uniqueDomains;
-  };
-
   const handleError = (message: string) => {
     setError('root.serverError', {
       type: '400',
@@ -49,10 +42,17 @@ function CstgAddDomainDialog({
   };
 
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomains = getUniqueDomains(separateStringsList(formData.newDomains));
+    const newDomains = getUniqueDomains(
+      separateStringsList(formData.newDomains),
+      existingDomains,
+      deleteExistingList
+    );
     if (newDomains.length === 0) {
       handleError('The domains entered already exist.');
     } else {
+      newDomains.forEach((newDomain, index) => {
+        newDomains[index] = extractTopLevelDomain(newDomain);
+      });
       // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
       const dedupedRootLevelDomains = deduplicateStrings(newDomains);
       const invalidDomains = await onAddDomains(dedupedRootLevelDomains, deleteExistingList);

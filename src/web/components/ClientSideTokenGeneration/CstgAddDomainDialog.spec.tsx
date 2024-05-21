@@ -65,6 +65,8 @@ describe('CstgDomainAddDomainDialog', () => {
   });
 
   it('should render error when user types single incorrect domain', async () => {
+    const user = userEvent.setup();
+
     const onAddDomainsMock = jest.fn(() => {
       return Promise.resolve(['newDomains']);
     });
@@ -77,14 +79,20 @@ describe('CstgDomainAddDomainDialog', () => {
       />
     );
 
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'newDomains');
+
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('The domains entered are invalid root-level domains', { exact: false })
+    ).toBeInTheDocument();
   });
 
   it('should render error if user types in at least one incorrect domain in a list', async () => {
+    const user = userEvent.setup();
+
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve(['test', 'test2']);
+      return Promise.resolve(['test1', 'test2']);
     });
 
     render(
@@ -95,9 +103,13 @@ describe('CstgDomainAddDomainDialog', () => {
       />
     );
 
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'newDomains');
+
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('The domains entered are invalid root-level domains', { exact: false })
+    ).toBeInTheDocument();
   });
 
   it('should render error if user submits empty text box for domain names', async () => {
