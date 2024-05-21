@@ -61,6 +61,11 @@ describe('CstgDomainAddDomainDialog', () => {
 
     await submitDialog();
 
+    expect(onAddDomainsMock).toHaveBeenCalledWith(
+      ['test.com', 'test2.com', 'test3.com', 'test4.com'],
+      expect.anything()
+    );
+
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
