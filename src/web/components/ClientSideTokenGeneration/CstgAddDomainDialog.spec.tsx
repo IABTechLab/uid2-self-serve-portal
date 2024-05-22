@@ -4,8 +4,8 @@ import userEvent from '@testing-library/user-event';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 
 const submitDialog = async () => {
-  const createButton = screen.getByRole('button', { name: 'Add Domains' });
-  await userEvent.click(createButton);
+  const submitButton = screen.getByRole('button', { name: 'Add Domains' });
+  await userEvent.click(submitButton);
 };
 
 describe('CstgDomainAddDomainDialog', () => {
@@ -13,7 +13,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
 
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve([]);
     });
 
     render(
@@ -41,7 +41,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
 
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve([]);
     });
 
     render(
@@ -61,12 +61,10 @@ describe('CstgDomainAddDomainDialog', () => {
 
     await submitDialog();
 
-    await waitFor(() => {
-      expect(onAddDomainsMock).toHaveBeenCalledWith(
-        ['test.com', 'test2.com', 'test3.com', 'test4.com'],
-        expect.anything()
-      );
-    });
+    expect(onAddDomainsMock).toHaveBeenCalledWith(
+      ['test.com', 'test2.com', 'test3.com', 'test4.com'],
+      expect.anything()
+    );
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
@@ -75,7 +73,7 @@ describe('CstgDomainAddDomainDialog', () => {
     const user = userEvent.setup();
 
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve(['newDomains']);
     });
 
     render(
@@ -86,17 +84,20 @@ describe('CstgDomainAddDomainDialog', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'newDomains');
 
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('The domains entered are invalid root-level domains', { exact: false })
+    ).toBeInTheDocument();
   });
 
   it('should render error if user types in at least one incorrect domain in a list', async () => {
     const user = userEvent.setup();
+
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve(['test1', 'test2']);
     });
 
     render(
@@ -107,16 +108,18 @@ describe('CstgDomainAddDomainDialog', () => {
       />
     );
 
-    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'test, test2.com');
+    await user.type(screen.getByRole('textbox', { name: 'newDomains' }), 'newDomains');
 
     await submitDialog();
 
-    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('The domains entered are invalid root-level domains', { exact: false })
+    ).toBeInTheDocument();
   });
 
   it('should render error if user submits empty text box for domain names', async () => {
     const onAddDomainsMock = jest.fn(() => {
-      return Promise.resolve();
+      return Promise.resolve([]);
     });
 
     render(

@@ -2,15 +2,9 @@ import { parse } from 'tldts';
 
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
-type DomainProps = {
-  isIcann: boolean | null;
-  isPrivate: boolean | null;
-  domain?: string | null;
-};
-
-export const isValidDomain = (domainName: string) => {
-  const domainProps: DomainProps = parse(domainName);
-  return Boolean((domainProps.isIcann || domainProps.isPrivate) && domainProps.domain);
+export type UpdateDomainNamesResponse = {
+  domains: string[];
+  isValidDomains: boolean;
 };
 
 export const extractTopLevelDomain = (domainName: string) => {
@@ -31,4 +25,16 @@ export const getPagedDomains = (
       index >= (pageNumber - 1) * rowsPerPage &&
       index < (pageNumber - 1) * rowsPerPage + rowsPerPage
   );
+};
+
+export const getUniqueDomains = (
+  newDomains: string[],
+  existingDomains: string[],
+  deleteExistingList: boolean
+) => {
+  // filter out domain names that already exist in the list unless existing list is being deleted
+  const uniqueDomains = deleteExistingList
+    ? newDomains
+    : newDomains.filter((domain) => !existingDomains?.includes(domain));
+  return uniqueDomains;
 };

@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { UpdateDomainNamesResponse } from './CstgDomainHelper';
 import { CstgDomainsTable } from './CstgDomainsTable';
 
 export default {
@@ -12,11 +13,9 @@ type Story = StoryObj<typeof CstgDomainsTable>;
 export const WithDomains: Story = {
   args: {
     domains: ['test.com', 'abc.com', '123.com'],
-    onUpdateDomains: (domains) => {
-      Promise.resolve(console.log('update domains to:', domains));
-      return new Promise<string[] | undefined>((resolve) => {
-        resolve(['']);
-      });
+    onUpdateDomains: (domains: string[]) => {
+      console.log('update domains to:', domains);
+      return Promise.resolve({ domains, isValidDomains: true });
     },
   },
 };
@@ -24,10 +23,10 @@ export const WithDomains: Story = {
 export const WithoutDomains: Story = {
   args: {
     domains: [],
-    onUpdateDomains: (domains) => {
+    onUpdateDomains: (domains: string[]) => {
       Promise.resolve(console.log('update domains to:', domains));
-      return new Promise<string[] | undefined>((resolve) => {
-        resolve(['']);
+      return new Promise<UpdateDomainNamesResponse | undefined>((resolve) => {
+        resolve({ domains: [''], isValidDomains: true });
       });
     },
   },

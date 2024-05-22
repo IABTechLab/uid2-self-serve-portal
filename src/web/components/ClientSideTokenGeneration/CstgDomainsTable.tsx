@@ -8,18 +8,21 @@ import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
-import { getPagedDomains } from './CstgDomainHelper';
+import { getPagedDomains, UpdateDomainNamesResponse } from './CstgDomainHelper';
 import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
 
 type CstgDomainsTableProps = Readonly<{
   domains: string[];
-  onUpdateDomains: (domains: string[], action: string) => Promise<string[] | undefined>;
+  onUpdateDomains: (
+    domains: string[],
+    action: string
+  ) => Promise<UpdateDomainNamesResponse | undefined>;
   onAddDomains: (
     newDomainsFormatted: string[],
     deleteExistingList: boolean
-  ) => Promise<string[] | undefined>;
+  ) => Promise<UpdateDomainNamesResponse | undefined>;
 }>;
 
 export function CstgDomainsTable({
@@ -71,10 +74,11 @@ export function CstgDomainsTable({
   const isDomainSelected = (domain: string) => selectedDomains.includes(domain);
 
   const handleBulkDeleteDomains = async (deleteDomains: string[]) => {
-    const newDomains = await onUpdateDomains(
+    const newDomainsResponse = await onUpdateDomains(
       domains.filter((domain) => !deleteDomains.includes(domain)),
       'deleted'
     );
+    const newDomains = newDomainsResponse?.domains;
     setShowDeleteDomainsDialog(false);
     setSelectedDomains([]);
     setSearchText('');
@@ -107,18 +111,25 @@ export function CstgDomainsTable({
     setPagedDomains(getPagedDomains(newSearchDomains, initialPageNumber, initialRowsPerPage));
   };
 
-  const handleEditDomain = async (updatedDomainName: string, originalDomainName: string) => {
+  const handleEditDomain = async (
+    updatedDomainName: string,
+    originalDomainName: string
+  ): Promise<boolean> => {
     // removes original domain name from list and adds new domain name
-    const editedDomains = await onUpdateDomains(
+    const editedDomainsResponse = await onUpdateDomains(
       [
         ...domains.filter((domain) => ![originalDomainName].includes(domain)),
         ...[updatedDomainName],
       ],
       'edited'
     );
-    if (editedDomains) {
+    const editedDomains = editedDomainsResponse?.domains;
+    const isValidDomains = editedDomainsResponse?.isValidDomains;
+    if (editedDomains && isValidDomains) {
       setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
+      return true;
     }
+    return false;
   };
 
   const onOpenChangeAddDomainDialog = () => {
@@ -132,18 +143,27 @@ export function CstgDomainsTable({
   const onSubmitAddDomainDialog = async (
     newDomainsFormatted: string[],
     deleteExistingList: boolean
-  ) => {
-    const newDomains = await onAddDomains(newDomainsFormatted, deleteExistingList);
-    setShowAddDomainsDialog(false);
-    setSearchedDomains(domains);
-    setSelectedDomains([]);
-    setSearchText('');
-    if (newDomains) {
-      setPageNumber(initialPageNumber);
-      setRowsPerPage(initialRowsPerPage);
-      setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
-      setSearchedDomains(newDomains);
+  ): Promise<string[]> => {
+    const newDomainsResponse = await onAddDomains(newDomainsFormatted, deleteExistingList);
+    const newDomains = newDomainsResponse?.domains;
+    const isValidDomains = newDomainsResponse?.isValidDomains;
+    if (isValidDomains) {
+      setShowAddDomainsDialog(false);
+      setSearchedDomains(domains);
+      setSelectedDomains([]);
+      setSearchText('');
+      if (newDomains) {
+        setPageNumber(initialPageNumber);
+        setRowsPerPage(initialRowsPerPage);
+        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+        setSearchedDomains(newDomains);
+      }
+      return [];
     }
+    if (newDomains) {
+      return newDomains;
+    }
+    return [];
   };
 
   const onChangeDisplayedDomains = (

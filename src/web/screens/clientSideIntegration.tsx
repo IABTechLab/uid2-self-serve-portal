@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
+import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
@@ -17,7 +18,7 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
-import { sortStringsAlphabetically } from '../utils/textHelpers';
+import { separateStringsList, sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
@@ -79,12 +80,26 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
-  const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
+  const handleUpdateDomainNames = async (
+    updatedDomainNames: string[],
+    action: string
+  ): Promise<UpdateDomainNamesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      setDomainNames(sortStringsAlphabetically(response));
-      SuccessToast(`Domain names ${action}.`);
-      return response;
+      let domains = response?.domains;
+      const isValidDomains = response?.isValidDomains;
+      if (!isValidDomains) {
+        const invalidDomains = separateStringsList(domains[0]);
+        domains = invalidDomains;
+      } else {
+        setDomainNames(sortStringsAlphabetically(domains));
+        SuccessToast(`Domain names ${action}.`);
+      }
+      const updatedDomainNamesResponse: UpdateDomainNamesResponse = {
+        domains,
+        isValidDomains,
+      };
+      return updatedDomainNamesResponse;
     } catch (e) {
       handleErrorToast(e);
     }

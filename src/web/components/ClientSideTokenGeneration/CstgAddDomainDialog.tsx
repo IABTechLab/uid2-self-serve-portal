@@ -11,12 +11,12 @@ import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
 import { StyledCheckbox } from '../Input/StyledCheckbox';
-import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
+import { extractTopLevelDomain, getUniqueDomains } from './CstgDomainHelper';
 
 import './CstgAddDomainDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
-  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<void>;
+  onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<string[]>;
   onOpenChange: () => void;
   existingDomains: string[];
 }>;
@@ -34,39 +34,34 @@ function CstgAddDomainDialog({
     formState: { errors },
   } = formMethods;
 
+  const handleError = (message: string) => {
+    setError('root.serverError', {
+      type: '400',
+      message,
+    });
+  };
+
   const onSubmit = async (formData: AddDomainNamesFormProps) => {
-    const newDomains = separateStringsList(formData.newDomains);
-    // filter out domain names that already exist in the list unless existing list is being deleted
-    const uniqueDomains = deleteExistingList
-      ? newDomains
-      : newDomains.filter((domain) => !existingDomains?.includes(domain));
-    if (uniqueDomains.length === 0) {
-      setError('root.serverError', {
-        type: '400',
-        message: 'The domains entered already exist.',
-      });
+    const newDomains = getUniqueDomains(
+      separateStringsList(formData.newDomains),
+      existingDomains,
+      deleteExistingList
+    );
+    if (newDomains.length === 0) {
+      handleError('The domains entered already exist.');
     } else {
-      const invalidDomains: string[] = [];
-      let allValid = true;
-      uniqueDomains.forEach((newDomain) => {
-        if (!isValidDomain(newDomain)) {
-          invalidDomains.push(newDomain);
-          allValid = false;
-        }
+      newDomains.forEach((newDomain, index) => {
+        newDomains[index] = extractTopLevelDomain(newDomain);
       });
-      if (!allValid) {
-        setError('root.serverError', {
-          type: '400',
-          message: `The domains entered are invalid: ${formatStringsWithSeparator(invalidDomains)}`,
-        });
-      } else {
-        // if all are valid but there are some non root-level domains, we make sure every domain is root-level
-        uniqueDomains.forEach((newDomain, index) => {
-          uniqueDomains[index] = extractTopLevelDomain(newDomain);
-        });
-        // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
-        const dedupedDomains = deduplicateStrings(uniqueDomains);
-        await onAddDomains(dedupedDomains, deleteExistingList);
+      // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
+      const dedupedRootLevelDomains = deduplicateStrings(newDomains);
+      const invalidDomains = await onAddDomains(dedupedRootLevelDomains, deleteExistingList);
+      if (invalidDomains.length > 0) {
+        handleError(
+          `The domains entered are invalid root-level domains: ${formatStringsWithSeparator(
+            invalidDomains
+          )}`
+        );
       }
     }
   };

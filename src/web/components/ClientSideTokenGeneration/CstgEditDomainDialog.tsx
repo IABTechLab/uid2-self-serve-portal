@@ -4,12 +4,12 @@ import { EditDomainFormProps } from '../../services/domainNamesService';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
-import { extractTopLevelDomain, isValidDomain } from './CstgDomainHelper';
+import { extractTopLevelDomain } from './CstgDomainHelper';
 
 type EditDomainDialogProps = Readonly<{
   domain: string;
   existingDomains: string[];
-  onEditDomainName: (newDomain: string, originalDomainName: string) => void;
+  onEditDomainName: (newDomain: string, originalDomainName: string) => Promise<boolean>;
   onOpenChange: () => void;
 }>;
 
@@ -34,13 +34,6 @@ function EditDomainDialog({
   const onSubmit = async (formData: EditDomainFormProps) => {
     const updatedDomainName = formData.domainName;
     const originalDomainName = domain;
-    if (!isValidDomain(updatedDomainName)) {
-      setError('root.serverError', {
-        type: '400',
-        message: 'Domain name must be valid.',
-      });
-      return;
-    }
     const updatedTopLevelDomain = extractTopLevelDomain(updatedDomainName);
     if (updatedTopLevelDomain === originalDomainName) {
       onOpenChange();
@@ -50,7 +43,13 @@ function EditDomainDialog({
         message: 'Domain name already exists.',
       });
     } else {
-      onEditDomainName(updatedTopLevelDomain, originalDomainName);
+      const editDomainSuccess = await onEditDomainName(updatedTopLevelDomain, originalDomainName);
+      if (!editDomainSuccess) {
+        setError('root.serverError', {
+          type: '400',
+          message: 'Edited domain is an invalid root-level domain.',
+        });
+      }
     }
   };
 
