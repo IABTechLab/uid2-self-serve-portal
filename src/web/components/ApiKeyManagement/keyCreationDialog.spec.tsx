@@ -130,7 +130,7 @@ describe('Key creation dialog', () => {
     await clickApiRole(apiRoles[0]);
     await submitForm();
 
-    expect(screen.getByText('ABCD')).toBeInTheDocument();
+    expect(await screen.findByText('ABCD')).toBeInTheDocument();
     expect(screen.getByText('1234')).toBeInTheDocument();
   });
 
