@@ -4,6 +4,7 @@ import { Loading } from './Loading';
 
 const meta: Meta<typeof Loading> = {
   component: Loading,
+  title: 'Shared Components/Loading',
 };
 export default meta;
 
