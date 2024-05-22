@@ -1,8 +1,7 @@
 import { Suspense, useState } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { useRevalidator } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
-import { ApiRoleDTO } from '../../api/entities/ApiRole';
-import { ApiKeyDTO } from '../../api/services/adminServiceHelpers';
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
 import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog';
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
@@ -22,14 +21,20 @@ import {
   GetParticipantApiRoles,
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
+import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
+const loader = makeLoader(() => {
+  return defer({
+    apiKeys: GetParticipantApiKeys(),
+    apiRoles: GetParticipantApiRoles(),
+  });
+});
+
 function ApiKeyManagement() {
   const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
-  const data = useLoaderData() as {
-    result: ApiKeyDTO[];
-  };
+  const data = useLoaderData<typeof loader>();
 
   const reloader = useRevalidator();
 
@@ -82,38 +87,40 @@ function ApiKeyManagement() {
         </a>
         .
       </p>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={data.result}>
-          {([apiKeys, apiRoles]: [ApiKeyDTO[], ApiRoleDTO[]]) => (
-            <ScreenContentContainer>
-              <KeyTable
-                apiKeys={apiKeys.filter((key) => !key.disabled)}
-                onKeyEdit={onKeyEdit}
-                onKeyDisable={onKeyDisable}
-                availableRoles={apiRoles}
-              />
-              {apiRoles.length > 0 && (
-                <div className='create-new-key'>
-                  <button
-                    className='small-button'
-                    type='button'
-                    onClick={onKeyCreationDialogChange}
-                  >
-                    Add API Key
-                  </button>
-                  {showKeyCreationDialog && (
-                    <KeyCreationDialog
-                      availableRoles={apiRoles}
-                      onKeyCreation={onKeyCreation}
-                      onOpenChange={onKeyCreationDialogChange}
-                    />
-                  )}
-                </div>
-              )}
-            </ScreenContentContainer>
-          )}
-        </Await>
-      </Suspense>
+      <ScreenContentContainer>
+        <Suspense fallback={<Loading />}>
+          <AwaitTypesafe resolve={resolveAll({ apiKeys: data.apiKeys, apiRoles: data.apiRoles })}>
+            {(loadedData) => (
+              <>
+                <KeyTable
+                  apiKeys={loadedData.apiKeys.filter((key) => !key.disabled)}
+                  onKeyEdit={onKeyEdit}
+                  onKeyDisable={onKeyDisable}
+                  availableRoles={loadedData.apiRoles}
+                />
+                {loadedData.apiRoles.length > 0 && (
+                  <div className='create-new-key'>
+                    <button
+                      className='small-button'
+                      type='button'
+                      onClick={onKeyCreationDialogChange}
+                    >
+                      Add API Key
+                    </button>
+                    {showKeyCreationDialog && (
+                      <KeyCreationDialog
+                        availableRoles={loadedData.apiRoles}
+                        onKeyCreation={onKeyCreation}
+                        onOpenChange={onKeyCreationDialogChange}
+                      />
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </AwaitTypesafe>
+        </Suspense>
+      </ScreenContentContainer>
     </>
   );
 }
@@ -123,12 +130,5 @@ export const ApiKeyManagementRoute: PortalRoute = {
   description: 'API Keys',
   element: <ApiKeyManagement />,
   errorElement: <RouteErrorBoundary />,
-  loader: async () => {
-    const apiKeysPromise = GetParticipantApiKeys();
-    const apiRolesPromise = GetParticipantApiRoles();
-    const promises = Promise.all([apiKeysPromise, apiRolesPromise]);
-    return defer({
-      result: promises,
-    });
-  },
+  loader,
 };

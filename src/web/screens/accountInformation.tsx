@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { Tooltip } from '../components/Core/Tooltip';
@@ -10,9 +10,7 @@ import './accountInformation.scss';
 
 function AccountInformation() {
   const { participant } = useContext(ParticipantContext);
-  const participantTypes: string = useMemo(() => {
-    return participant?.types?.map((t) => t.typeName).join(', ') ?? '';
-  }, [participant]);
+  const participantTypes = participant?.types?.map((t) => t.typeName).join(', ') ?? '';
 
   return (
     <>

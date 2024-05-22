@@ -1,28 +1,35 @@
 import { Suspense } from 'react';
-import { Await, defer, useLoaderData } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
-import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SignedParticipantsTable } from '../components/SignedParticipants/SignedParticipantsTable';
 import { GetSignedParticipants } from '../services/participant';
+import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
+const loader = makeLoader(() => {
+  const signedParticipants = GetSignedParticipants();
+  return defer({ signedParticipants });
+});
+
 export function SignedParticipants() {
-  const data = useLoaderData() as { signedParticipants: SignedParticipantDTO[] };
+  const data = useLoaderData<typeof loader>();
 
   return (
     <>
       <h1>Signed Participants</h1>
-      <p className='heading-details'>Participants that have signed the UID2 Participation Policy.</p>
+      <p className='heading-details'>
+        Participants that have signed the UID2 Participation Policy.
+      </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading />}>
-          <Await resolve={data.signedParticipants}>
-            {(signedParticipants: SignedParticipantDTO[]) => (
+          <AwaitTypesafe resolve={data.signedParticipants}>
+            {(signedParticipants) => (
               <SignedParticipantsTable signedParticipants={signedParticipants} />
             )}
-          </Await>
+          </AwaitTypesafe>
         </Suspense>
       </ScreenContentContainer>
     </>
@@ -34,8 +41,5 @@ export const SignedParticipantsRoute: PortalRoute = {
   description: 'Signed Participants',
   element: <SignedParticipants />,
   errorElement: <RouteErrorBoundary />,
-  loader: async () => {
-    const signedParticipants = GetSignedParticipants();
-    return defer({ signedParticipants });
-  },
+  loader,
 };
