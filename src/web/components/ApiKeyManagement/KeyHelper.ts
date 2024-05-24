@@ -1,6 +1,6 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 
-export const yearInSeconds = 31556952;
+const yearInSeconds = 31556952;
 
 export const needsRotating = (apiKey: ApiKeyDTO): boolean => {
   const currentDate = new Date().getTime();
