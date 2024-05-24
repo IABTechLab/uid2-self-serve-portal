@@ -4,12 +4,14 @@ import { Suspense, useContext } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
+import { Banner } from '../components/Core/Banner';
 import { AsyncErrorView } from '../components/Core/ErrorView';
 import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
+import RotateApiKeysCard from '../components/Home/RotateAPIKeysCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { GetSharingList } from '../services/participant';
+import { GetEmailContacts, GetParticipantApiKeys, GetSharingList } from '../services/participant';
 import { getAllSites } from '../services/site';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -50,7 +52,29 @@ async function getSharingCounts() {
     throw e;
   }
 }
-const loader = makeLoader(() => defer({ counts: getSharingCounts() }));
+
+async function getEmailContacts() {
+  const emailContacts = await GetEmailContacts();
+  if (emailContacts.length === 0) {
+    return false;
+  }
+  return true;
+}
+
+// async function getApiKeysToRotate() {
+//   const apiKeys = await GetParticipantApiKeys();
+//   const currentDate = new Date().getTime();
+//   const currentDateFormat = Math.floor(currentDate / 1000);
+//   apiKeys.filter((apiKey) => currentDateFormat - apiKey.created > 2629800);
+//   if (apiKeys.length === 0) {
+//   } else if (apiKeys.length === 1) {
+//   } else {
+//   }
+// }
+
+const loader = makeLoader(() =>
+  defer({ counts: getSharingCounts(), hasEmailContacts: getEmailContacts() })
+);
 
 function Home() {
   const { LoggedInUser } = useContext(CurrentUserContext);
@@ -59,6 +83,21 @@ function Home() {
   return (
     <>
       <h1>Welcome back, {LoggedInUser?.profile.firstName}</h1>
+      <Suspense fallback={<Loading />}>
+        <AwaitTypesafe resolve={data.hasEmailContacts} errorElement={<AsyncErrorView />}>
+          {(hasEmailContacts) => (
+            <div>
+              {!hasEmailContacts && (
+                <Banner
+                  message='Please add your email contacts to stay up to date on all UID2 updates.'
+                  type='Info'
+                  fitContent
+                />
+              )}
+            </div>
+          )}
+        </AwaitTypesafe>
+      </Suspense>
       <div className='dashboard-cards-container'>
         <Suspense fallback={<Loading />}>
           <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
@@ -70,6 +109,7 @@ function Home() {
             )}
           </AwaitTypesafe>
         </Suspense>
+        <RotateApiKeysCard dateCreated='06/30/23' />
         <DocumentationCard />
       </div>
     </>
