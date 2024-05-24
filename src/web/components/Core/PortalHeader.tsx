@@ -39,7 +39,6 @@ export function PortalHeader({
 
   const handleSelect = () => {
     setMenuOpen(false);
-    console.log(menuOpen);
   };
   /*
   const [darkToggleState, setDarkToggleState] = useState(false);
