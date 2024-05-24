@@ -96,9 +96,10 @@ function TeamMembers() {
 }
 
 export const TeamMembersRoute: PortalRoute = {
-  description: 'Team Members',
+  description: 'Manage Team Members',
   element: <TeamMembers />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/team',
   loader,
+  isHidden: true,
 };
