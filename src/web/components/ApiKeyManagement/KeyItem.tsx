@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
-import { Tooltip } from '../Core/Tooltip';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
@@ -34,28 +33,10 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   useEffect(() => {
     const currentDate = new Date().getTime();
     const currentDateFormat = Math.floor(currentDate / 1000);
-    console.log(formatUnixDate(apiKey.created));
-    console.log(currentDateFormat);
-    console.log(apiKey.created);
-    console.log(currentDateFormat - apiKey.created);
     if (currentDateFormat - apiKey.created > 2629800) {
-      console.log('in if statement');
       setKeyNeedsRotating(true);
     }
   }, [apiKey]);
-
-  // console.log('date:');
-  // console.log(apiKey.created);
-  // console.log(formatUnixDate(apiKey.created));
-  // const currentDate = new Date().getTime();
-  // const seconds = Math.floor(currentDate / 1000);
-  // console.log(seconds);
-
-  // const newDate = currentDate.toDateString();
-  // console.log(newDate);
-  // console.log(currentDate.getTime());
-  // console.log(Date.parse(newDate));
-  // console.log(formatUnixDate(currentDate.getTime()));
 
   if (apiKey.disabled) {
     return <div />;
@@ -75,7 +56,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
             {keyNeedsRotating && (
               <FontAwesomeIcon
                 icon='triangle-exclamation'
-                title='Rotate API Key'
+                title='We recommend you rotate your API key every year.'
                 className='warning-button'
               />
             )}

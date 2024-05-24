@@ -1,4 +1,4 @@
-.dashboard-cards-container {
+.dashboard-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 22px;
@@ -17,4 +17,9 @@
     font-size: 1.25rem;
     margin: 0 0 8px;
   }
+}
+
+.dashboard-cards-container {
+  display: flex;
+  gap: 25px;
 }

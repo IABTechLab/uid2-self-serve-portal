@@ -61,19 +61,22 @@ async function getEmailContacts() {
   return true;
 }
 
-// async function getApiKeysToRotate() {
-//   const apiKeys = await GetParticipantApiKeys();
-//   const currentDate = new Date().getTime();
-//   const currentDateFormat = Math.floor(currentDate / 1000);
-//   apiKeys.filter((apiKey) => currentDateFormat - apiKey.created > 2629800);
-//   if (apiKeys.length === 0) {
-//   } else if (apiKeys.length === 1) {
-//   } else {
-//   }
-// }
+async function getApiKeysToRotate() {
+  const apiKeys = await GetParticipantApiKeys();
+  console.log(apiKeys);
+  const currentDate = new Date().getTime();
+  const currentDateFormat = Math.floor(currentDate / 1000);
+  return apiKeys.filter(
+    (apiKey) => apiKey.disabled === false && currentDateFormat - apiKey.created > 2629800
+  );
+}
 
 const loader = makeLoader(() =>
-  defer({ counts: getSharingCounts(), hasEmailContacts: getEmailContacts() })
+  defer({
+    counts: getSharingCounts(),
+    hasEmailContacts: getEmailContacts(),
+    apiKeysToRotate: getApiKeysToRotate(),
+  })
 );
 
 function Home() {
@@ -99,18 +102,35 @@ function Home() {
         </AwaitTypesafe>
       </Suspense>
       <div className='dashboard-cards-container'>
-        <Suspense fallback={<Loading />}>
-          <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
-            {(counts) => (
-              <SharingPermissionCard
-                sharingPermissionsCount={counts.sharingPermissionsCount}
-                bulkPermissionsCount={counts.bulkPermissionsCount}
-              />
-            )}
-          </AwaitTypesafe>
-        </Suspense>
-        <RotateApiKeysCard dateCreated='06/30/23' />
-        <DocumentationCard />
+        <div>
+          <Suspense fallback={<Loading />}>
+            <AwaitTypesafe resolve={data.apiKeysToRotate} errorElement={<AsyncErrorView />}>
+              {(apiKeysToRotate) =>
+                apiKeysToRotate.length > 0 && (
+                  <div className='dashboard-cards'>
+                    <RotateApiKeysCard apiKeysToRotate={apiKeysToRotate} />{' '}
+                  </div>
+                )
+              }
+            </AwaitTypesafe>
+          </Suspense>
+
+          <div className='dashboard-cards'>
+            <Suspense fallback={<Loading />}>
+              <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
+                {(counts) => (
+                  <SharingPermissionCard
+                    sharingPermissionsCount={counts.sharingPermissionsCount}
+                    bulkPermissionsCount={counts.bulkPermissionsCount}
+                  />
+                )}
+              </AwaitTypesafe>
+            </Suspense>
+          </div>
+        </div>
+        <div className='dashboard-cards'>
+          <DocumentationCard />
+        </div>
       </div>
     </>
   );
