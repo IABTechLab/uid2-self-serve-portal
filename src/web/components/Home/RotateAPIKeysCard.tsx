@@ -21,8 +21,6 @@ function RotateApiKeysCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
     return datesCreatedString;
   };
 
-  console.log(apiKeysToRotate);
-
   return (
     <div className='rotate-api-keys-card'>
       <FontAwesomeIcon icon='triangle-exclamation' className='warning-button' />

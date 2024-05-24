@@ -4,6 +4,7 @@ import { Suspense, useContext } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
+import { needsRotating } from '../components/ApiKeyManagement/KeyHelper';
 import { Banner } from '../components/Core/Banner';
 import { AsyncErrorView } from '../components/Core/ErrorView';
 import { Loading } from '../components/Core/Loading';
@@ -63,12 +64,7 @@ async function getEmailContacts() {
 
 async function getApiKeysToRotate() {
   const apiKeys = await GetParticipantApiKeys();
-  console.log(apiKeys);
-  const currentDate = new Date().getTime();
-  const currentDateFormat = Math.floor(currentDate / 1000);
-  return apiKeys.filter(
-    (apiKey) => apiKey.disabled === false && currentDateFormat - apiKey.created > 2629800
-  );
+  return apiKeys.filter((apiKey) => apiKey.disabled === false && needsRotating(apiKey) === true);
 }
 
 const loader = makeLoader(() =>

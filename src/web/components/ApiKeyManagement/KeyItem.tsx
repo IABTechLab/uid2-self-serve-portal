@@ -7,6 +7,7 @@ import { formatUnixDate } from '../../utils/textHelpers';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
+import { needsRotating } from './KeyHelper';
 
 import './KeyItem.scss';
 
@@ -31,11 +32,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   };
 
   useEffect(() => {
-    const currentDate = new Date().getTime();
-    const currentDateFormat = Math.floor(currentDate / 1000);
-    if (currentDateFormat - apiKey.created > 2629800) {
-      setKeyNeedsRotating(true);
-    }
+    setKeyNeedsRotating(needsRotating(apiKey));
   }, [apiKey]);
 
   if (apiKey.disabled) {
