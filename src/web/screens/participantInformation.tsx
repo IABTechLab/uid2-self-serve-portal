@@ -6,9 +6,9 @@ import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-import './accountInformation.scss';
+import './participantInformation.scss';
 
-function AccountInformation() {
+function ParticipantInformation() {
   const { participant } = useContext(ParticipantContext);
   const participantTypes = participant?.types?.map((t) => t.typeName).join(', ') ?? '';
 
@@ -18,7 +18,7 @@ function AccountInformation() {
       <p className='heading-details'>View and manage your participant information.</p>
       <ScreenContentContainer>
         <div>
-          <h3 className='account-info-title'>
+          <h3 className='participant-info-title'>
             Participant Name
             <Tooltip side='right'>
               For any changes to participant information, please contact Support.
@@ -27,7 +27,7 @@ function AccountInformation() {
           <span>{participant?.name}</span>
         </div>
         <div>
-          <h3 className='account-info-title'>
+          <h3 className='participant-info-title'>
             Participant Type
             <Tooltip side='right'>
               For any changes to participant information, please contact Support.
@@ -40,9 +40,10 @@ function AccountInformation() {
   );
 }
 
-export const AccountInformationRoute: PortalRoute = {
+export const ParticipantInformationRoute: PortalRoute = {
   description: 'Participant Information',
-  element: <AccountInformation />,
+  element: <ParticipantInformation />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/info',
+  isHidden: true,
 };
