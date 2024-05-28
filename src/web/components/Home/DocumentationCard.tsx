@@ -1,8 +1,10 @@
+import { Card } from '../Core/Card';
+
 import './DocumentationCard.scss';
 
 function DocumentationCard() {
   return (
-    <div className='document-card'>
+    <Card className='document-card'>
       <img src='/document.svg' alt='document' width='50px' />
       <div>
         <h2>Documentation</h2>
@@ -36,7 +38,7 @@ function DocumentationCard() {
           Data Providers
         </a>
       </div>
-    </div>
+    </Card>
   );
 }
 

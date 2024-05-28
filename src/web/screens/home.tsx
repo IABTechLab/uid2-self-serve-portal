@@ -83,7 +83,7 @@ function Home() {
 
   return (
     <>
-      <h1>Welcome back, {LoggedInUser?.profile.firstName}</h1>
+      <h1>Hello, {LoggedInUser?.profile.firstName}</h1>
       <Suspense fallback={<Loading />}>
         <AwaitTypesafe resolve={data.hasEmailContacts} errorElement={<AsyncErrorView />}>
           {(hasEmailContacts) => (
@@ -105,15 +105,15 @@ function Home() {
             <AwaitTypesafe resolve={data.apiKeysToRotate} errorElement={<AsyncErrorView />}>
               {(apiKeysToRotate) =>
                 apiKeysToRotate.length > 0 && (
-                  <div className='dashboard-cards'>
-                    <RotateApiKeysCard apiKeysToRotate={apiKeysToRotate} />{' '}
+                  <div className='dashboard-card'>
+                    <RotateApiKeysCard apiKeysToRotate={apiKeysToRotate} />
                   </div>
                 )
               }
             </AwaitTypesafe>
           </Suspense>
 
-          <div className='dashboard-cards'>
+          <div className='dashboard-card'>
             <Suspense fallback={<Loading />}>
               <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
                 {(counts) => (
@@ -126,7 +126,7 @@ function Home() {
             </Suspense>
           </div>
         </div>
-        <div className='dashboard-cards'>
+        <div className='dashboard-card'>
           <DocumentationCard />
         </div>
       </div>

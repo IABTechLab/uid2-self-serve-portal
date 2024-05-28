@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
+import { Tooltip } from '../Core/Tooltip';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
@@ -21,7 +22,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
   const [showKeyDisableDialog, setShowKeyDisableDialog] = useState<boolean>(false);
   const [showKeyEditDialog, setShowKeyEditDialog] = useState<boolean>(false);
-  const [keyShouldRotate, setKeyShouldRotate] = useState<boolean>(false);
+  const [showRotateKeyWarning, setShowRotateKeyWarning] = useState<boolean>(false);
 
   const onOpenChangeKeyDisableDialog = () => {
     setShowKeyDisableDialog(!showKeyDisableDialog);
@@ -32,7 +33,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   };
 
   useEffect(() => {
-    setKeyShouldRotate(shouldRotateApiKey(apiKey));
+    setShowRotateKeyWarning(shouldRotateApiKey(apiKey));
   }, [apiKey]);
 
   if (apiKey.disabled) {
@@ -50,12 +51,12 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       {availableRoles.length > 0 && (
         <td className='action'>
           <div className='action-cell'>
-            {keyShouldRotate && (
-              <FontAwesomeIcon
-                icon='triangle-exclamation'
-                title='We recommend you rotate your API key every year.'
-                className='warning-button'
-              />
+            {showRotateKeyWarning && (
+              <Tooltip
+                trigger={<FontAwesomeIcon icon='triangle-exclamation' className='warning-icon' />}
+              >
+                We recommend rotating API keys every year.
+              </Tooltip>
             )}
             <button
               type='button'

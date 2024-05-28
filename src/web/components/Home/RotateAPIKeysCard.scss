@@ -1,13 +1,12 @@
 .rotate-api-keys-card {
-  box-shadow: 0 4px 8px var(--theme-box-shadow);
-  height: auto;
-
   .rotate-api-keys-text {
     margin-bottom: 20px;
   }
 
-  .warning-button {
+  .warning-icon {
     padding: 0;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    color: var(--theme-warning);
+    height: 25px;
   }
 }

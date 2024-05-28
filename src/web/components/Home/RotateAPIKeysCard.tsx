@@ -7,8 +7,9 @@ import {
   formatStringsWithSeparator,
   formatUnixDate,
 } from '../../utils/textHelpers';
+import { Card } from '../Core/Card';
 
-import './RotateAPIKeysCard.scss';
+import './RotateApiKeysCard.scss';
 
 type RotateApiKeysCardProps = Readonly<{
   apiKeysToRotate: ApiKeyDTO[];
@@ -22,16 +23,14 @@ function RotateApiKeysCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
   };
 
   return (
-    <div className='rotate-api-keys-card'>
-      <FontAwesomeIcon icon='triangle-exclamation' className='warning-button' />
+    <Card className='rotate-api-keys-card'>
+      <FontAwesomeIcon icon='triangle-exclamation' className='warning-icon' />
       <h2>Rotate Your API Key{apiKeysToRotate.length > 1 && 's'}</h2>
       <div className='rotate-api-keys-text'>
         <span>
           {`Your API key${
             apiKeysToRotate.length > 1 ? 's were' : ' was'
-          } created on ${getDatesCreated()}. We recommend you rotate your API key${
-            apiKeysToRotate.length > 1 ? 's' : ''
-          } every year.`}{' '}
+          } created on ${getDatesCreated()}. We recommend rotating API keys every year.`}
         </span>
       </div>
 
@@ -40,7 +39,7 @@ function RotateApiKeysCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
           Rotate API Key{apiKeysToRotate.length > 1 && 's'}
         </button>
       </Link>
-    </div>
+    </Card>
   );
 }
 
