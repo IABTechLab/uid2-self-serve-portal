@@ -1,14 +1,17 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
 
-export default {
+const meta: Meta<typeof MultiCheckboxInput> = {
   title: 'Shared Components/Inputs/Checkbox',
   component: MultiCheckboxInput,
-} as Meta<typeof MultiCheckboxInput>;
+};
+
+export default meta;
+type Story = StoryObj<typeof MultiCheckboxInput>;
 
 const options: Option<string>[] = [
   { optionLabel: 'Option 1', value: 'option1' },
@@ -30,7 +33,7 @@ const Template: StoryFn<typeof MultiCheckboxInput> = (args) => {
   );
 };
 
-export const WithLabel = {
+export const WithLabel: Story = {
   render: Template,
 
   args: {
@@ -40,7 +43,7 @@ export const WithLabel = {
   },
 };
 
-export const WithToolTip = {
+export const WithToolTip: Story = {
   render: Template,
 
   args: {
@@ -54,7 +57,7 @@ export const WithToolTip = {
   },
 };
 
-export const OneOption = {
+export const OneOption: Story = {
   render: Template,
 
   args: {
@@ -64,7 +67,7 @@ export const OneOption = {
   },
 };
 
-export const WithValidation = {
+export const WithValidation: Story = {
   render: Template,
 
   args: {
@@ -72,7 +75,6 @@ export const WithValidation = {
     label: 'Select options',
     options,
     rules: {
-      // @ts-ignore
       validate: (value) => (value && value.length > 1) || 'At least two options are required',
     },
   },

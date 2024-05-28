@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { UserRole } from '../../../api/entities/User';
 import TeamMemberDialog from './TeamMemberDialog';
 
-export default {
+const meta: Meta<typeof TeamMemberDialog> = {
   title: 'Team Member/Team Member Dialog',
   component: TeamMemberDialog,
-} as Meta<typeof TeamMemberDialog>;
+};
+
+export default meta;
 
 export const Default = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

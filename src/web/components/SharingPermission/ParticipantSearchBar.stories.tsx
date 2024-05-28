@@ -1,12 +1,15 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
-export default {
+const meta: Meta<typeof ParticipantSearchBar> = {
   title: 'Sharing Permissions/Participant Search Bar',
   component: ParticipantSearchBar,
-} as Meta<typeof ParticipantSearchBar>;
+};
+export default meta;
+
+type Story = StoryObj<typeof ParticipantSearchBar>;
 
 const Template: StoryFn<typeof ParticipantSearchBar> = (args) => {
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set([1, 3]));
@@ -22,7 +25,7 @@ const Template: StoryFn<typeof ParticipantSearchBar> = (args) => {
   );
 };
 
-export const SearchBar = {
+export const SearchBar: Story = {
   render: Template,
 
   args: {

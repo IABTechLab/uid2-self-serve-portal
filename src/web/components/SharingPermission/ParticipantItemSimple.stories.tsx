@@ -1,25 +1,27 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantItemSimple } from './ParticipantItem';
 
-export default {
+const meta: Meta<typeof ParticipantItemSimple> = {
   title: 'Sharing Permissions/Participant Item Simple',
   component: ParticipantItemSimple,
-} as Meta<typeof ParticipantItemSimple>;
+  decorators: [
+    (Story) => (
+      <table>
+        <tbody>
+          <tr>
+            <Story />
+          </tr>
+        </tbody>
+      </table>
+    ),
+  ],
+};
+export default meta;
 
-const Template: StoryFn<typeof ParticipantItemSimple> = (args) => (
-  <table>
-    <tbody>
-      <tr>
-        <ParticipantItemSimple {...args} />
-      </tr>
-    </tbody>
-  </table>
-);
+type Story = StoryObj<typeof ParticipantItemSimple>;
 
-export const Default = {
-  render: Template,
-
+export const Default: Story = {
   args: {
     site: {
       id: 1,

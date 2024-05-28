@@ -1,14 +1,16 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
 
-export default {
+const meta: Meta<typeof BulkAddPermissions> = {
   title: 'Sharing Permissions/Bulk Add Permissions',
   component: BulkAddPermissions,
-} as Meta<typeof BulkAddPermissions>;
+};
+
+export default meta;
 
 const response: SharingSiteDTO[] = [
   {
@@ -49,9 +51,11 @@ const Template: StoryFn<typeof BulkAddPermissions> = (args) => (
   </TestAvailableSiteListProvider>
 );
 
+type Story = StoryObj<typeof BulkAddPermissions>;
+
 const onBulkAddSharingPermission = (types: string[]) => Promise.resolve(console.log(types));
 
-export const Publisher = {
+export const Publisher: Story = {
   render: Template,
 
   args: {
@@ -69,7 +73,7 @@ export const Publisher = {
   },
 };
 
-export const AdvertiserAndDSP = {
+export const AdvertiserAndDSP: Story = {
   render: Template,
 
   args: {
@@ -90,7 +94,7 @@ export const AdvertiserAndDSP = {
   },
 };
 
-export const AllTypes = {
+export const AllTypes: Story = {
   render: Template,
 
   args: {
@@ -113,7 +117,7 @@ export const AllTypes = {
   },
 };
 
-export const HasSharedWithPublisher = {
+export const HasSharedWithPublisher: Story = {
   render: Template,
 
   args: {

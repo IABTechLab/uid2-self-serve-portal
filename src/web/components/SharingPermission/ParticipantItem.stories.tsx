@@ -1,23 +1,25 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantItem } from './ParticipantItem';
 
-export default {
+const meta: Meta<typeof ParticipantItem> = {
   title: 'Sharing Permissions/Participant Item',
   component: ParticipantItem,
-} as Meta<typeof ParticipantItem>;
+  decorators: [
+    (Story) => (
+      <table>
+        <tbody>
+          <Story />
+        </tbody>
+      </table>
+    ),
+  ],
+};
 
-const Template: StoryFn<typeof ParticipantItem> = (args) => (
-  <table>
-    <tbody>
-      <ParticipantItem {...args} />
-    </tbody>
-  </table>
-);
+export default meta;
+type Story = StoryObj<typeof ParticipantItem>;
 
-export const Checked = {
-  render: Template,
-
+export const Checked: Story = {
   args: {
     site: {
       id: 1,
@@ -30,9 +32,7 @@ export const Checked = {
   },
 };
 
-export const Unchecked = {
-  render: Template,
-
+export const Unchecked: Story = {
   args: {
     site: {
       id: 2,
@@ -45,9 +45,7 @@ export const Unchecked = {
   },
 };
 
-export const AddedByManual = {
-  render: Template,
-
+export const AddedByManual: Story = {
   args: {
     site: {
       id: 2,
@@ -61,9 +59,7 @@ export const AddedByManual = {
   },
 };
 
-export const AddedByAuto = {
-  render: Template,
-
+export const AddedByAuto: Story = {
   args: {
     site: {
       id: 2,
@@ -77,9 +73,7 @@ export const AddedByAuto = {
   },
 };
 
-export const AddedByAutoAndManual = {
-  render: Template,
-
+export const AddedByAutoAndManual: Story = {
   args: {
     site: {
       id: 2,

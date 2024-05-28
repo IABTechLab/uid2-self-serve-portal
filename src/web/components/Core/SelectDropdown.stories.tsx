@@ -1,13 +1,16 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { SelectDropdown } from './SelectDropdown';
 
-export default {
+const meta: Meta<typeof SelectDropdown> = {
   title: 'Shared Components/Select Dropdown',
   component: SelectDropdown,
-} as Meta<typeof SelectDropdown>;
+};
 
-export const Default = {
+export default meta;
+type Story = StoryObj<typeof SelectDropdown>;
+
+export const Default: Story = {
   args: {
     title: 'Participant Types',
     options: [
@@ -28,12 +31,11 @@ export const Default = {
         id: 4,
       },
     ],
-    // @ts-ignore
     onSelectedChange: (ids) => console.log('Selected:', ids),
   },
 };
 
-export const WithInitialValue = {
+export const WithInitialValue: Story = {
   args: {
     title: 'Rows Per Page',
     options: [
@@ -58,7 +60,6 @@ export const WithInitialValue = {
       name: '10',
       id: 10,
     },
-    // @ts-ignore
     onSelectedChange: (ids) => console.log('Selected:', ids),
   },
 };

@@ -1,26 +1,28 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { UserRole } from '../../../api/entities/User';
 import TeamMember from './TeamMember';
 
-export default {
+const meta: Meta<typeof TeamMember> = {
   title: 'Team Member/Team Member',
   component: TeamMember,
-} as Meta<typeof TeamMember>;
+  decorators: [
+    (Story) => (
+      <div className='portal-team'>
+        <table className='portal-team-table'>
+          <tbody>
+            <Story />
+          </tbody>
+        </table>
+      </div>
+    ),
+  ],
+};
+export default meta;
 
-const Template: StoryFn<typeof TeamMember> = (args) => (
-  <div className='portal-team'>
-    <table className='portal-team-table'>
-      <tbody>
-        <TeamMember {...args} />
-      </tbody>
-    </table>
-  </div>
-);
+type Story = StoryObj<typeof TeamMember>;
 
-export const WithAcceptedTerm = {
-  render: Template,
-
+export const WithAcceptedTerm: Story = {
   args: {
     person: {
       id: 1,
@@ -38,9 +40,7 @@ export const WithAcceptedTerm = {
   },
 };
 
-export const PendingMember = {
-  render: Template,
-
+export const PendingMember: Story = {
   args: {
     person: {
       id: 2,

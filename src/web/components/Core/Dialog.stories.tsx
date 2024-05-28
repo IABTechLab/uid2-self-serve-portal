@@ -1,14 +1,17 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 import { Dialog } from './Dialog';
 
-export default {
+const meta: Meta<typeof Dialog> = {
   title: 'Shared Components/Dialog',
   component: Dialog,
-} as Meta<typeof Dialog>;
+};
 
-export const Default = {
+export default meta;
+type Story = StoryObj<typeof Dialog>;
+
+export const Default: Story = {
   args: {
     title: 'Dialog Title',
     closeButtonText: 'Close',
@@ -16,21 +19,21 @@ export const Default = {
   },
 };
 
-export const WithoutTitle = {
+export const WithoutTitle: Story = {
   args: {
     ...Default.args,
     title: undefined,
   },
 };
 
-export const WithoutCloseText = {
+export const WithoutCloseText: Story = {
   args: {
     ...Default.args,
     closeButtonText: undefined,
   },
 };
 
-export const WithoutCloseButtons = {
+export const WithoutCloseButtons: Story = {
   args: {
     ...Default.args,
     closeButtonText: undefined,

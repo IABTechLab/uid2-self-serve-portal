@@ -1,15 +1,16 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import DocumentationCard from './DocumentationCard';
 
-export default {
+const meta: Meta<typeof DocumentationCard> = {
   title: 'Home/Documentation Card',
   component: DocumentationCard,
-} as Meta<typeof DocumentationCard>;
-const Template: StoryFn<typeof DocumentationCard> = () => {
-  return <DocumentationCard />;
 };
 
-export const Default = {
-  render: Template,
+export default meta;
+
+type Story = StoryObj<typeof DocumentationCard>;
+
+export const Default: Story = {
+  render: () => <DocumentationCard />,
 };

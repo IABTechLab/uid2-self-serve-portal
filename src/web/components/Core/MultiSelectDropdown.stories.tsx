@@ -1,13 +1,16 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { MultiSelectDropdown } from './MultiSelectDropdown';
 
-export default {
+const meta: Meta<typeof MultiSelectDropdown> = {
   title: 'Shared Components/Inputs/Multi-Select Dropdown',
   component: MultiSelectDropdown,
-} as Meta<typeof MultiSelectDropdown>;
+};
 
-export const Default = {
+export default meta;
+type Story = StoryObj<typeof MultiSelectDropdown>;
+
+export const Default: Story = {
   args: {
     title: 'Participant Types',
     options: [
@@ -28,7 +31,6 @@ export const Default = {
         id: 4,
       },
     ],
-    // @ts-ignore
     onSelectedChange: (ids) => console.log('Selected:', ids),
   },
 };

@@ -10,9 +10,7 @@ function TestToast() {
         <button
           type='button'
           onClick={() => {
-            SuccessToast(
-              'Your key has been updated fdasfdasfsdafsadf fdasf sdafasdw fda fasdf asdfasd ff',
-            );
+            SuccessToast('Success!');
           }}
         >
           Success
@@ -20,7 +18,7 @@ function TestToast() {
         <button
           type='button'
           onClick={() => {
-            InfoToast('TESTING');
+            InfoToast('Info!');
           }}
         >
           Info
@@ -28,7 +26,7 @@ function TestToast() {
         <button
           type='button'
           onClick={() => {
-            WarningToast('TESTING');
+            WarningToast('Warning!');
           }}
         >
           Warning
@@ -36,7 +34,7 @@ function TestToast() {
         <button
           type='button'
           onClick={() => {
-            ErrorToast('TESTING');
+            ErrorToast('Error!');
           }}
         >
           Error
@@ -46,11 +44,12 @@ function TestToast() {
   );
 }
 
-export default {
+const meta: Meta<typeof TestToast> = {
   component: TestToast,
   title: 'Shared Components/ Toast',
-} as Meta<typeof TestToast>;
+};
 
+export default meta;
 type Story = StoryObj<typeof TestToast>;
 
 export const Default: Story = {};

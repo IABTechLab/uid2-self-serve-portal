@@ -1,14 +1,18 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { RadioInput } from './RadioInput';
 import { Option } from './SelectInput';
 
-export default {
+const meta: Meta<typeof RadioInput> = {
   title: 'Shared Components/Inputs/Radio',
+
   component: RadioInput,
-} as Meta<typeof RadioInput>;
+};
+
+export default meta;
+type Story = StoryObj<typeof RadioInput>;
 
 const Template: StoryFn<typeof RadioInput> = (args) => {
   const formMethods = useForm();
@@ -29,7 +33,7 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 4', value: 'option4', disabled: true },
 ];
 
-export const WithLabel = {
+export const WithLabel: Story = {
   render: Template,
 
   args: {
@@ -39,7 +43,7 @@ export const WithLabel = {
   },
 };
 
-export const WithValidation = {
+export const WithValidation: Story = {
   render: Template,
 
   args: {

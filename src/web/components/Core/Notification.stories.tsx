@@ -1,27 +1,30 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Notification } from './Notification';
 
-export default {
+const meta: Meta<typeof Notification> = {
   title: 'Shared Components/Notification',
   component: Notification,
-} as Meta<typeof Notification>;
+};
 
-export const WithIcon = {
+export default meta;
+type Story = StoryObj<typeof Notification>;
+
+export const WithIcon: Story = {
   args: {
     icon: 'check-circle',
     notification: <p>Here is notification</p>,
   },
 };
 
-export const WithTitle = {
+export const WithTitle: Story = {
   args: {
     notification: <p>Here is notification information</p>,
     title: 'An title',
   },
 };
 
-export const WithoutIconAndTitle = {
+export const WithoutIconAndTitle: Story = {
   args: {
     notification: <p>Here is just notification</p>,
   },

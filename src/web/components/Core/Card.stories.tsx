@@ -1,26 +1,28 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Card } from './Card';
 
-export default {
+const meta: Meta<typeof Card> = {
   title: 'Shared Components/Card',
   component: Card,
-} as Meta<typeof Card>;
+};
+export default meta;
+type Story = StoryObj<typeof Card>;
 
-export const WithTitle = {
+export const WithTitle: Story = {
   args: {
     title: 'Card Title',
   },
 };
 
-export const WithDescription = {
+export const WithDescription: Story = {
   args: {
     title: 'Title',
     description: 'Here is the description',
   },
 };
 
-export const NoHeader = {
+export const NoHeader: Story = {
   args: {
     children: 'test',
   },

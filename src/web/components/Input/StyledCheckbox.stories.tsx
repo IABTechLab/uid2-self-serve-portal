@@ -1,12 +1,15 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { useForm, UseFormProps } from 'react-hook-form';
 
 import { FormStyledCheckbox } from './StyledCheckbox';
 
-export default {
+const meta: Meta<typeof FormStyledCheckbox> = {
   title: 'Shared Components/Inputs/Styled Checkbox',
   component: FormStyledCheckbox,
-} as Meta<typeof FormStyledCheckbox>;
+};
+
+export default meta;
+type Story = StoryObj<typeof FormStyledCheckbox>;
 
 type FormData = {
   boxIsChecked: boolean;
@@ -38,15 +41,15 @@ const templateBuilder = (formProps?: UseFormProps<FormData>) => {
   return Template;
 };
 
-export const BasicExample = templateBuilder().bind({});
+export const BasicExample: Story = templateBuilder().bind({});
 BasicExample.args = {};
 
-export const DefaultTrueExample = templateBuilder({ defaultValues: { boxIsChecked: true } }).bind(
-  {},
-);
+export const DefaultTrueExample: Story = templateBuilder({
+  defaultValues: { boxIsChecked: true },
+}).bind({});
 DefaultTrueExample.args = {};
 
-export const DefaultFalseExample = templateBuilder({ defaultValues: { boxIsChecked: false } }).bind(
-  {},
-);
+export const DefaultFalseExample: Story = templateBuilder({
+  defaultValues: { boxIsChecked: false },
+}).bind({});
 DefaultFalseExample.args = { defaultValue: false };

@@ -1,14 +1,17 @@
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { TriStateCheckbox, TriStateCheckboxState } from './TriStateCheckbox';
 
-export default {
+const meta: Meta<typeof TriStateCheckbox> = {
   title: 'Shared Components/Inputs/TriState Checkbox',
   component: TriStateCheckbox,
-} as Meta<typeof TriStateCheckbox>;
+};
 
-export const Checked = {
+export default meta;
+type Story = StoryObj<typeof TriStateCheckbox>;
+
+export const Checked: Story = {
   args: {
     status: TriStateCheckboxState.checked,
     onClick: () => {
@@ -17,7 +20,7 @@ export const Checked = {
   },
 };
 
-export const Indeterminate = {
+export const Indeterminate: Story = {
   args: {
     status: TriStateCheckboxState.indeterminate as CheckedState,
     onClick: () => {
@@ -26,7 +29,7 @@ export const Indeterminate = {
   },
 };
 
-export const Unchecked = {
+export const Unchecked: Story = {
   args: {
     status: TriStateCheckboxState.unchecked,
     onClick: () => {
@@ -35,7 +38,7 @@ export const Unchecked = {
   },
 };
 
-export const Disabled = {
+export const Disabled: Story = {
   args: {
     status: TriStateCheckboxState.unchecked,
     onClick: () => {

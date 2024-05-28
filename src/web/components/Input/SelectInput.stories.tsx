@@ -1,13 +1,16 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { Option, SelectInput } from './SelectInput';
 
-export default {
+const meta: Meta<typeof SelectInput> = {
   title: 'Shared Components/Inputs/Select',
   component: SelectInput,
-} as Meta<typeof SelectInput>;
+};
+
+export default meta;
+type Story = StoryObj<typeof SelectInput>;
 
 const options: Option<string>[] = [
   { optionLabel: 'Option 1', value: 'option1' },
@@ -27,7 +30,7 @@ const Template: StoryFn<typeof SelectInput> = (args) => {
   );
 };
 
-export const WithLabel = {
+export const WithLabel: Story = {
   render: Template,
 
   args: {
@@ -36,7 +39,7 @@ export const WithLabel = {
   },
 };
 
-export const WithValidation = {
+export const WithValidation: Story = {
   render: Template,
 
   args: {

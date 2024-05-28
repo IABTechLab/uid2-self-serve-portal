@@ -1,17 +1,20 @@
 /* eslint-disable camelcase */
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
-import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
-export default {
+const meta: Meta<typeof ParticipantApprovalForm> = {
   title: 'Manage Participants/Participant Approval Form',
+
   component: ParticipantApprovalForm,
-} as Meta<typeof ParticipantApprovalForm>;
+};
+
+export default meta;
+type Story = StoryObj<typeof ParticipantApprovalForm>;
 
 const response: SiteDTO[] = [
   {
@@ -47,7 +50,7 @@ const Template: StoryFn<typeof ParticipantApprovalForm> = (args) => {
   );
 };
 
-export const ParticipantApprovalMatchingSite = {
+export const ParticipantApprovalMatchingSite: Story = {
   render: Template,
 
   args: {
@@ -76,13 +79,13 @@ export const ParticipantApprovalMatchingSite = {
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
       { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
-    onApprove: async (form: ParticipantApprovalFormDetails) => {
+    onApprove: async (form) => {
       console.log(JSON.stringify(form));
     },
   },
 };
 
-export const ParticipantApprovalSiteSearch = {
+export const ParticipantApprovalSiteSearch: Story = {
   render: Template,
 
   args: {
@@ -111,7 +114,7 @@ export const ParticipantApprovalSiteSearch = {
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
       { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
-    onApprove: async (form: ParticipantApprovalFormDetails) => {
+    onApprove: async (form) => {
       console.log(JSON.stringify(form));
     },
   },

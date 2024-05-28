@@ -1,13 +1,17 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultilineTextInput } from './MultilineTextInput';
 
-export default {
+const meta: Meta<typeof MultilineTextInput> = {
   title: 'Shared Components/Inputs/MultilineText',
+
   component: MultilineTextInput,
-} as Meta<typeof MultilineTextInput>;
+};
+
+export default meta;
+type Story = StoryObj<typeof MultilineTextInput>;
 
 const Template: StoryFn<typeof MultilineTextInput> = (args) => {
   const formMethods = useForm();
@@ -30,7 +34,7 @@ const Template: StoryFn<typeof MultilineTextInput> = (args) => {
   );
 };
 
-export const WithLabel = {
+export const WithLabel: Story = {
   render: Template,
 
   args: {
@@ -39,7 +43,7 @@ export const WithLabel = {
   },
 };
 
-export const WithValidation = {
+export const WithValidation: Story = {
   render: Template,
 
   args: {

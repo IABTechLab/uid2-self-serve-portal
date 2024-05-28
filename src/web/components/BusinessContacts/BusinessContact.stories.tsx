@@ -1,15 +1,17 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import { BusinessContactForm } from '../../services/participant';
 import BusinessContact from './BusinessContact';
 
-export default {
+const meta: Meta<typeof BusinessContact> = {
   title: 'Business Contacts/Business Contact Item',
   component: BusinessContact,
-} as Meta<typeof BusinessContact>;
+};
 
-export const Default = {
+export default meta;
+type Story = StoryObj<typeof BusinessContact>;
+
+export const Default: Story = {
   args: {
     contact: {
       id: 1,
@@ -18,8 +20,8 @@ export const Default = {
       contactType: ContactType.Business,
       participantId: 1,
     },
-    onRemoveEmailContact: (id: number) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
-    onUpdateEmailContact: (id: number, form: BusinessContactForm) =>
+    onRemoveEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
+    onUpdateEmailContact: (id, form) =>
       Promise.resolve(console.log(`Update contact id: ${id} with ${JSON.stringify(form)}`)),
   },
 };

@@ -1,13 +1,17 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Collapsible } from './Collapsible';
 
-export default {
+const meta: Meta<typeof Collapsible> = {
   title: 'Shared Components/Collapsible',
-  component: Collapsible,
-} as Meta<typeof Collapsible>;
 
-export const Open = {
+  component: Collapsible,
+};
+
+export default meta;
+type Story = StoryObj<typeof Collapsible>;
+
+export const Open: Story = {
   args: {
     title: 'Test Collapsible Title',
     children: 'Test Collapsible Content',
@@ -15,7 +19,7 @@ export const Open = {
   },
 };
 
-export const Collapsed = {
+export const Collapsed: Story = {
   args: {
     title: 'Test Collapsible Title',
     children: 'Test Collapsible Content',
@@ -23,7 +27,7 @@ export const Collapsed = {
   },
 };
 
-export const WithLabel = {
+export const WithLabel: Story = {
   args: {
     title: 'Test Collapsible Title',
     children: 'Test Collapsible Content',

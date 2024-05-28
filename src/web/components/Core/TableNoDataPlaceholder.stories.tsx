@@ -2,11 +2,12 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { TableNoDataPlaceholder } from './TableNoDataPlaceholder';
 
-export default {
-  component: TableNoDataPlaceholder,
+const meta: Meta<typeof TableNoDataPlaceholder> = {
   title: 'Shared Components/ Table No Data Placeholder',
-} as Meta<typeof TableNoDataPlaceholder>;
+  component: TableNoDataPlaceholder,
+};
 
+export default meta;
 type Story = StoryObj<typeof TableNoDataPlaceholder>;
 
 export const Default: Story = {

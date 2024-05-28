@@ -1,17 +1,19 @@
-import { Meta } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TypeFilter } from './TypeFilter';
 
-export default {
+const meta: Meta<typeof TypeFilter> = {
   title: 'Sharing Permissions/Type Filter',
   component: TypeFilter,
-} as Meta<typeof TypeFilter>;
+};
+export default meta;
 
-export const Default = {
+type Story = StoryObj<typeof TypeFilter>;
+
+export const Default: Story = {
   args: {
     types: ['DSP', 'PUBLISHER', 'DATA_PROVIDER'],
-    onFilterChange: (selectedTypeIds: Set<ClientType>) => {
+    onFilterChange: (selectedTypeIds) => {
       console.log('Selected type IDs: ', Array.from(selectedTypeIds));
     },
     selectedTypeIds: new Set(),

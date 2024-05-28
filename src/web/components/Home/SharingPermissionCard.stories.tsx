@@ -2,10 +2,12 @@ import { Meta, StoryFn } from '@storybook/react';
 
 import SharingPermissionCard from './SharingPermissionCard';
 
-export default {
+const meta: Meta<typeof SharingPermissionCard> = {
   title: 'Home/Sharing Permissions Card',
   component: SharingPermissionCard,
-} as Meta<typeof SharingPermissionCard>;
+};
+export default meta;
+
 const Template: StoryFn<typeof SharingPermissionCard> = (args) => {
   return <SharingPermissionCard {...args} />;
 };

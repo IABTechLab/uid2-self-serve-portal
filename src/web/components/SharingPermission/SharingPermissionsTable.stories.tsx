@@ -1,13 +1,8 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
-
-export default {
-  title: 'Sharing Permissions/Sharing Permission Table',
-  component: SharingPermissionsTable,
-} as Meta<typeof SharingPermissionsTable>;
 
 const response: SharingSiteDTO[] = [
   {
@@ -59,15 +54,23 @@ const response: SharingSiteDTO[] = [
     canBeSharedWith: false,
   },
 ];
-const Template: StoryFn<typeof SharingPermissionsTable> = (args) => (
-  <TestAllSitesListProvider response={response}>
-    <SharingPermissionsTable {...args} />
-  </TestAllSitesListProvider>
-);
 
-export const SharedWithParticipants = {
-  render: Template,
+const meta: Meta<typeof SharingPermissionsTable> = {
+  title: 'Sharing Permissions/Sharing Permissions Table',
+  component: SharingPermissionsTable,
+  decorators: [
+    (Story) => (
+      <TestAllSitesListProvider response={response}>
+        <Story />
+      </TestAllSitesListProvider>
+    ),
+  ],
+};
+export default meta;
 
+type Story = StoryObj<typeof SharingPermissionsTable>;
+
+export const SharedWithParticipants: Story = {
   args: {
     sharedSiteIds: [10, 11, 12, 14, 15, 17],
     sharedTypes: ['DSP', 'DATA_PROVIDER'],

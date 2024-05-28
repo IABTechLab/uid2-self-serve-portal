@@ -1,13 +1,17 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from './TextInput';
 
-export default {
+const meta: Meta<typeof TextInput> = {
   title: 'Shared Components/Inputs/Text',
+
   component: TextInput,
-} as Meta<typeof TextInput>;
+};
+
+export default meta;
+type Story = StoryObj<typeof TextInput>;
 
 const Template: StoryFn<typeof TextInput> = (args) => {
   const formMethods = useForm();
@@ -23,7 +27,7 @@ const Template: StoryFn<typeof TextInput> = (args) => {
   );
 };
 
-export const WithLabel = {
+export const WithLabel: Story = {
   render: Template,
 
   args: {
@@ -32,7 +36,7 @@ export const WithLabel = {
   },
 };
 
-export const WithValidation = {
+export const WithValidation: Story = {
   render: Template,
 
   args: {

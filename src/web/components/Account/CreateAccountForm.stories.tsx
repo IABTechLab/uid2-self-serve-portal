@@ -3,12 +3,13 @@ import { useState } from 'react';
 
 import { CreateAccountForm, CreateAccountFormProps } from './CreateAccountForm';
 
-export default {
+const meta: Meta<typeof CreateAccountForm> = {
   title: 'Forms/CreateAccount',
   component: CreateAccountForm,
-} as Meta<typeof CreateAccountForm>;
+};
 
-export {};
+export default meta;
+
 const participantTypes = [
   {
     id: 1,

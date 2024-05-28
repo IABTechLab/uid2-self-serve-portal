@@ -2,12 +2,16 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from './SearchBar';
 
-export default {
+const meta: Meta<typeof SearchBarContainer> = {
   title: 'Shared Components/Search Bar',
-  component: SearchBarContainer,
-} as Meta<typeof SearchBarContainer>;
 
-export const BasicSearchBar: StoryObj<typeof SearchBarContainer> = {
+  component: SearchBarContainer,
+};
+
+export default meta;
+type Story = StoryObj<typeof SearchBarContainer>;
+
+export const BasicSearchBar: Story = {
   render: (args) => (
     <SearchBarContainer {...args}>
       <SearchBarInput />
@@ -15,7 +19,7 @@ export const BasicSearchBar: StoryObj<typeof SearchBarContainer> = {
   ),
 };
 
-export const SearchBarWithResults: StoryObj<typeof SearchBarContainer> = {
+export const SearchBarWithResults: Story = {
   render: (args) => (
     <SearchBarContainer {...args}>
       <SearchBarInput fullBorder />
