@@ -4,6 +4,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
@@ -75,7 +76,7 @@ export const ParticipantApprovalMatchingSite = {
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
       { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
-    onApprove: async (form) => {
+    onApprove: async (form: ParticipantApprovalFormDetails) => {
       console.log(JSON.stringify(form));
     },
   },
@@ -110,7 +111,7 @@ export const ParticipantApprovalSiteSearch = {
       { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
       { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
     ],
-    onApprove: async (form) => {
+    onApprove: async (form: ParticipantApprovalFormDetails) => {
       console.log(JSON.stringify(form));
     },
   },

@@ -28,6 +28,7 @@ export const Default = {
         id: 4,
       },
     ],
+    // @ts-ignore
     onSelectedChange: (ids) => console.log('Selected:', ids),
   },
 };

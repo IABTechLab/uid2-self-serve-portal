@@ -72,6 +72,7 @@ export const WithValidation = {
     label: 'Select options',
     options,
     rules: {
+      // @ts-ignore
       validate: (value) => (value && value.length > 1) || 'At least two options are required',
     },
   },

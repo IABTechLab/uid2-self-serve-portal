@@ -1,6 +1,7 @@
 import { Meta } from '@storybook/react';
 
 import { UserRole } from '../../../api/entities/User';
+import { InviteTeamMemberForm } from '../../services/userAccount';
 import TeamMembersTable from './TeamMembersTable';
 
 export default {
@@ -11,10 +12,11 @@ export default {
 export const WithoutTeamMembers = {
   args: {
     teamMembers: [],
-    resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
-    onAddTeamMember: (form) => Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
-    onRemoveTeamMember: (id) => Promise.resolve(console.log(`Remove userId: ${id}`)),
-    onUpdateTeamMember: (id, formData) =>
+    resendInvite: (id: number) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
+    onAddTeamMember: (form: InviteTeamMemberForm) =>
+      Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`)),
+    onRemoveTeamMember: (id: number) => Promise.resolve(console.log(`Remove userId: ${id}`)),
+    onUpdateTeamMember: (id: number, formData: InviteTeamMemberForm) =>
       Promise.resolve(console.log(`Update userId: ${id} with ${JSON.stringify(formData)}`)),
   },
 };
@@ -48,6 +50,7 @@ export const WithTeamMembers = {
 export const WithDeleteError = {
   args: {
     ...WithTeamMembers.args,
-    onRemoveTeamMember: (id) => Promise.reject(console.log(`Failed to remove userId: ${id}`)),
+    onRemoveTeamMember: (id: number) =>
+      Promise.reject(console.log(`Failed to remove userId: ${id}`)),
   },
 };

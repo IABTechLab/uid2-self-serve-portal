@@ -54,7 +54,7 @@ export const Default = {
   args: {
     sharedSiteIds: [],
 
-    onSharingPermissionsAdded: (selectedSiteIds) => {
+    onSharingPermissionsAdded: (selectedSiteIds: number[]) => {
       return Promise.resolve(console.log('selectedSiteIds:', selectedSiteIds));
     },
   },

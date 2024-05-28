@@ -1,6 +1,7 @@
 import { Meta } from '@storybook/react';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
+import { BusinessContactForm } from '../../services/participant';
 import BusinessContactsTable from './BusinessContactsTable';
 
 export default {
@@ -11,13 +12,10 @@ export default {
 export const WithoutBusinessContacts = {
   args: {
     businessContacts: [],
-    // @ts-ignore
-    onRemoveEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
-    // @ts-ignore
-    onUpdateEmailContact: (id, form) =>
+    onRemoveEmailContact: (id: number) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
+    onUpdateEmailContact: (id: number, form: BusinessContactForm) =>
       Promise.resolve(console.log(`Update contact id: ${id} with ${JSON.stringify(form)}`)),
-    // @ts-ignore
-    onAddEmailContact: (form) =>
+    onAddEmailContact: (form: BusinessContactForm) =>
       Promise.resolve(console.log(`Add contact ${JSON.stringify(form)}`)),
   },
 };
@@ -47,7 +45,7 @@ export const WithBusinessContacts = {
 export const WithDeleteError = {
   args: {
     ...WithBusinessContacts.args,
-    // @ts-ignore
-    onRemoveEmailContact: (id) => Promise.reject(console.log(`Failed to delete contact id: ${id}`)),
+    onRemoveEmailContact: (id: number) =>
+      Promise.reject(console.log(`Failed to delete contact id: ${id}`)),
   },
 };
