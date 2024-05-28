@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { EnvironmentVariable, GetEnvironmentVariables } from '../../services/environmentVariables';
 import { ApiError } from '../../utils/apiError';
-import { useAsyncError } from '../../utils/errorHandler';
+import { useAsyncThrowError } from '../../utils/errorHandler';
 import { Banner } from './Banner';
 
 function EnvironmentBanner() {
@@ -10,7 +10,7 @@ function EnvironmentBanner() {
     baseUrl: '',
     isDevelopment: false,
   });
-  const throwError = useAsyncError();
+  const throwError = useAsyncThrowError();
 
   useEffect(() => {
     const loadEnvironmentVariables = async () => {

@@ -5,7 +5,7 @@ import FormSubmitButton from '../Core/FormSubmitButton';
 import { Option, SelectInput } from './SelectInput';
 
 export default {
-  title: 'Inputs/Select',
+  title: 'Shared Components/Inputs/Select',
   component: SelectInput,
 } as Meta<typeof SelectInput>;
 

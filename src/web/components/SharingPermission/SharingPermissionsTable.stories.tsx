@@ -5,7 +5,7 @@ import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
 
 export default {
-  title: 'Sharing Permissions/SharingPermissionTable',
+  title: 'Sharing Permissions/Sharing Permission Table',
   component: SharingPermissionsTable,
 } as Meta<typeof SharingPermissionsTable>;
 

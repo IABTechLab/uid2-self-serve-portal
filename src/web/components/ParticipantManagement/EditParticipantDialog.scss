@@ -1,0 +1,12 @@
+.edit-participant-dialog {
+  max-height: calc(100vh - 10px);
+
+  .contact-name {
+    display: flex;
+    justify-content: space-between;
+
+    .input-wrapper {
+      width: 45%;
+    }
+  }
+}

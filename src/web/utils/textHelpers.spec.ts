@@ -5,6 +5,7 @@ import {
   getArticle,
   isVowel,
   separateStringsList,
+  sortStringsAlphabetically,
 } from './textHelpers';
 
 describe('Text helper tests', () => {
@@ -57,7 +58,10 @@ describe('Text helper tests', () => {
 
   describe('format unix date', () => {
     it('should return correct unix date', () => {
-      expect(formatUnixDate(1713306239)).toEqual('4/16/2024');
+      const unixTimestamp = 1713306239;
+      const date = new Date(unixTimestamp * 1000);
+      const dateString = date.toLocaleDateString();
+      expect(formatUnixDate(unixTimestamp)).toEqual(dateString);
     });
   });
 
@@ -77,21 +81,139 @@ describe('Text helper tests', () => {
   });
 
   describe('filter out duplicate elements', () => {
-    const testStringArr = [['test1', 'test1'], ['test1'], ['test1', 'test1']];
-    it.each(testStringArr)('should return array of only one unique element', () => {
-      for (const t of testStringArr) {
-        expect(deduplicateStrings(t)).toEqual(['test1']);
-      }
+    const testStringArrs = [['test1', 'test1'], ['test1'], ['test1', 'test1']];
+    testStringArrs.forEach((testStringArr) => {
+      it('should return array of only one unique element', () => {
+        expect(deduplicateStrings(testStringArr)).toEqual(['test1']);
+      });
     });
-    const testStringArr2 = [
+
+    const testStringArrs2 = [
       ['test1', 'test1', 'test2'],
       ['test1', 'test2'],
       ['test1', 'test1', 'test2', 'test2'],
     ];
-    it.each(testStringArr2)('should return array of only one unique element', () => {
-      for (const t of testStringArr2) {
-        expect(deduplicateStrings(t)).toEqual(['test1', 'test2']);
-      }
+    testStringArrs2.forEach((testStringArr2) => {
+      it('should return array of unique elements', () => {
+        expect(deduplicateStrings(testStringArr2)).toEqual(['test1', 'test2']);
+      });
+    });
+  });
+
+  describe('sort strings alphabetically', () => {
+    const testStringArr = [
+      ['atest', 'btest', 'ctest'],
+      ['btest', 'atest', 'ctest'],
+      ['ctest', 'btest', 'atest'],
+    ];
+    it.each(testStringArr)('should return array sorted alphabetically', (a, b, c) => {
+      expect(sortStringsAlphabetically([a, b, c])).toEqual(['atest', 'btest', 'ctest']);
+    });
+
+    const testStringArrNumbers = ['1test', '7test', '10test'];
+    const testStringArrNumbers2 = ['test9', 'test90', 'test40'];
+    it('should return array sorted alphabetically not numerically', () => {
+      expect(sortStringsAlphabetically(testStringArrNumbers)).toEqual(['10test', '1test', '7test']);
+      expect(sortStringsAlphabetically(testStringArrNumbers2)).toEqual([
+        'test40',
+        'test9',
+        'test90',
+      ]);
+    });
+
+    const testStringArrNumbers3 = [
+      ['1', '2', '10'],
+      ['1', '10', '2'],
+      ['2', '1', '10'],
+    ];
+    it.each(testStringArrNumbers3)('should return array sorted alphabetically', (a, b, c) => {
+      expect(sortStringsAlphabetically([a, b, c])).toEqual(['1', '10', '2']);
+    });
+
+    const testStringsDuplicates = ['test3', 'test1', 'test2', 'test1', 'test2'];
+    it('should return array sorted with duplicates beside each other', () => {
+      expect(sortStringsAlphabetically(testStringsDuplicates)).toEqual([
+        'test1',
+        'test1',
+        'test2',
+        'test2',
+        'test3',
+      ]);
+    });
+
+    const testOneString = [['test'], ['t'], ['1test'], ['']];
+    it.each(testOneString)('should return same array as given', (t) => {
+      expect(sortStringsAlphabetically([t])).toEqual([t]);
+    });
+
+    const testEmptyArray: string[] = [];
+    it('should return empty array', () => {
+      expect(sortStringsAlphabetically(testEmptyArray)).toEqual(testEmptyArray);
+    });
+
+    const testStringsCamelcase = [
+      ['testString', 'teststring'],
+      ['teststring', 'testString'],
+    ];
+    it.each(testStringsCamelcase)('should return array sorted with upper case first', (a, b) => {
+      expect(sortStringsAlphabetically([a, b])).toEqual(['testString', 'teststring']);
+    });
+
+    const testSpecialChars = [
+      '!',
+      '@',
+      '#',
+      '$',
+      '%',
+      '^',
+      '&',
+      '*',
+      '(',
+      ')',
+      '+',
+      '=',
+      '-',
+      '[',
+      ']',
+      ';',
+      '.',
+      '/',
+      '{',
+      '}',
+      '|',
+      ':',
+      '<',
+      '>',
+      '?',
+    ];
+    it('should return sorted special characters array', () => {
+      expect(sortStringsAlphabetically(testSpecialChars)).toEqual([
+        '!',
+        '#',
+        '$',
+        '%',
+        '&',
+        '(',
+        ')',
+        '*',
+        '+',
+        '-',
+        '.',
+        '/',
+        ':',
+        ';',
+        '<',
+        '=',
+        '>',
+        '?',
+        '@',
+        '[',
+        ']',
+        '^',
+        '{',
+        '|',
+        '}',
+      ]);
     });
   });
 });

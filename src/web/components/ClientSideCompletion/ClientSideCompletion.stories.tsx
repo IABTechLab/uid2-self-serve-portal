@@ -15,7 +15,7 @@ function createKeypairFake(disabled: boolean) {
 }
 
 const meta: Meta<typeof ClientSideCompletion> = {
-  title: 'CSTG/ClientSideCompletion',
+  title: 'CSTG/Client Side Completion',
   component: ClientSideCompletion,
 };
 

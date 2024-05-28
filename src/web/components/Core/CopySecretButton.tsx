@@ -4,10 +4,10 @@ import { SuccessToast } from './Toast';
 
 import './CopySecretButton.scss';
 
-export type Secret = {
+export type Secret = Readonly<{
   value: string;
   valueName: string;
-};
+}>;
 
 function CopyKeyButton({ secret }: { secret: Secret }) {
   const copyKey = (): void => {
@@ -22,7 +22,7 @@ function CopyKeyButton({ secret }: { secret: Secret }) {
         aria-label='copy'
         type='button'
         onClick={() => copyKey()}
-        title={`Copy ${secret.valueName} to clipboard`}
+        title={`Copy ${secret.valueName.toLowerCase()} to clipboard.`}
       >
         <FontAwesomeIcon icon='copy' />
       </button>

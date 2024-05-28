@@ -5,7 +5,7 @@ import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultilineTextInput } from './MultilineTextInput';
 
 export default {
-  title: 'Inputs/MultilineText',
+  title: 'Shared Components/Inputs/MultilineText',
   component: MultilineTextInput,
 } as Meta<typeof MultilineTextInput>;
 

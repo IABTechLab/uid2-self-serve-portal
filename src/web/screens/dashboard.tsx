@@ -10,15 +10,16 @@ import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { SetTermsAccepted } from '../services/userAccount';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
-import { AccountInformationRoute } from './accountInformation';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
 import { ClientSideIntegrationRoute } from './clientSideIntegration';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
 import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
+import { ParticipantInformationRoute } from './participantInformation';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
+import { SignedParticipantsRoute } from './signedParticipants';
 import { TeamMembersRoute } from './teamMembers';
 import { TermsOfServiceRoute } from './termsOfService';
 
@@ -28,7 +29,7 @@ export const StandardRoutes: PortalRoute[] = [
   HomeRoute,
   LogoutRoute,
   SharingPermissionsRoute,
-  AccountInformationRoute,
+  ParticipantInformationRoute,
   TeamMembersRoute,
   EmailContactsRoute,
   TermsOfServiceRoute,
@@ -36,7 +37,7 @@ export const StandardRoutes: PortalRoute[] = [
   ClientSideIntegrationRoute,
 ];
 
-export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute, SignedParticipantsRoute];
 
 export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 

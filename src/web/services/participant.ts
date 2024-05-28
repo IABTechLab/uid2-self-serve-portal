@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
+import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import {
   ApiKeyDTO,
@@ -105,6 +106,17 @@ export async function GetApprovedParticipants() {
   }
 }
 
+export async function GetSignedParticipants() {
+  try {
+    const result = await axios.get<SignedParticipantDTO[]>(`/participants/signed`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load signed participants');
+  }
+}
+
 export async function GetParticipantApiKeys(participantId?: number) {
   try {
     const result = await axios.get<ApiKeyDTO[]>(
@@ -150,6 +162,10 @@ export type UpdateParticipantForm = {
   participantTypes: number[];
   participantName: string;
   crmAgreementNumber: string | null;
+  siteId: number;
+  contactFirstName: string;
+  contactLastName: string;
+  contactEmail: string;
 };
 
 export type AddParticipantForm = {

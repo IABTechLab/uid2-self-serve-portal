@@ -8,7 +8,7 @@ import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 export default {
-  title: 'Manage Participants/ParticipantApprovalForm',
+  title: 'Manage Participants/Participant Approval Form',
   component: ParticipantApprovalForm,
 } as Meta<typeof ParticipantApprovalForm>;
 

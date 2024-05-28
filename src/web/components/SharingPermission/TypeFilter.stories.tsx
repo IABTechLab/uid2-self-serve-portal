@@ -4,7 +4,7 @@ import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TypeFilter } from './TypeFilter';
 
 export default {
-  title: 'Sharing Permissions/TypeFilter',
+  title: 'Sharing Permissions/Type Filter',
   component: TypeFilter,
 } as Meta<typeof TypeFilter>;
 

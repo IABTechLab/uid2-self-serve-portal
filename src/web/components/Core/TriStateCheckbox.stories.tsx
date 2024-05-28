@@ -4,7 +4,7 @@ import { Meta } from '@storybook/react';
 import { TriStateCheckbox, TriStateCheckboxState } from './TriStateCheckbox';
 
 export default {
-  title: 'Shared Components/TriStateCheckbox',
+  title: 'Shared Components/Inputs/TriState Checkbox',
   component: TriStateCheckbox,
 } as Meta<typeof TriStateCheckbox>;
 

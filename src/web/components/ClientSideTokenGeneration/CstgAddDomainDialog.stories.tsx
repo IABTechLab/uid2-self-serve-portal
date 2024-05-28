@@ -22,13 +22,12 @@ export const Default = () => {
           existingDomains={[]}
           onAddDomains={(newDomainsFormatted, deleteExistingList) => {
             setIsOpen(!isOpen);
-            return Promise.resolve(
-              console.log(
-                `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
-                  deleteExistingList ? `Deleting existing list` : `Keeping existing list`
-                }`,
-              ),
+            console.log(
+              `Adding Domains ${JSON.stringify(newDomainsFormatted)}, ${
+                deleteExistingList ? `Deleting existing list` : `Keeping existing list`
+              }`
             );
+            return Promise.resolve([]);
           }}
         />
       )}

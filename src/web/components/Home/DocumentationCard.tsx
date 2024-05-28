@@ -3,7 +3,7 @@ import './DocumentationCard.scss';
 function DocumentationCard() {
   return (
     <div className='document-card'>
-      <img src='/document.svg' alt='document' />
+      <img src='/document.svg' alt='document' width='50px' />
       <div>
         <h2>Documentation</h2>
         <span>Check out documentation for implementation resources</span>

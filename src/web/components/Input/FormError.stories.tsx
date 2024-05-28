@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { FormError } from './FormError';
 
 export default {
-  title: 'Inputs/FormError',
+  title: 'Shared Components/Inputs/Form Error',
   component: FormError,
 } as Meta<typeof FormError>;
 

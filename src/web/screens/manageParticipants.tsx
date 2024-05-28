@@ -1,10 +1,8 @@
-import { Suspense, useCallback, useState } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { Suspense, useState } from 'react';
+import { useRevalidator } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
-import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
-import { ParticipantTypeDTO } from '../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
@@ -23,22 +21,27 @@ import {
   UpdateParticipantForm,
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
+import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './manageParticipants.scss';
 
+const loader = makeLoader(() => {
+  return defer({
+    participantsAwaitingApproval: GetParticipantsAwaitingApproval(),
+    participantsApproved: GetApprovedParticipants(),
+    participantTypes: GetAllParticipantTypes(),
+    apiRoles: GetAllEnabledApiRoles(),
+  });
+});
+
 function ManageParticipants() {
   const [showAddParticipantsDialog, setShowAddParticipantsDialog] = useState<boolean>(false);
 
-  const data = useLoaderData() as {
-    results: [ParticipantRequestDTO[], ParticipantDTO[], ParticipantTypeDTO[], ApiRoleDTO[]];
-  };
+  const data = useLoaderData<typeof loader>();
 
   const reloader = useRevalidator();
-  const handleParticipantUpdated = useCallback(() => {
-    reloader.revalidate();
-  }, [reloader]);
 
   const handleApproveParticipantRequest = async (
     participantId: number,
@@ -50,18 +53,18 @@ function ManageParticipants() {
         'Participant approved. Since no users are attached to participant, email confirmation sent to approver.'
       );
     }
-    handleParticipantUpdated();
+    reloader.revalidate();
   };
 
   const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
     await UpdateParticipant(form, participant.id);
     SuccessToast('Participant updated');
-    handleParticipantUpdated();
+    reloader.revalidate();
   };
 
   const onAddParticipant = async (form: AddParticipantForm) => {
     const response = await AddParticipant(form);
-    handleParticipantUpdated();
+    reloader.revalidate();
     return response;
   };
 
@@ -71,54 +74,66 @@ function ManageParticipants() {
 
   return (
     <div>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={data.results}>
-          {([participantRequests, participantApproved, participantTypes, apiRoles]: [
-            ParticipantRequestDTO[],
-            ParticipantDTO[],
-            ParticipantTypeDTO[],
-            ApiRoleDTO[]
-          ]) => (
-            <>
-              <div className='manage-participants-header'>
-                <div className='manage-participants-header-left'>
-                  <h1>Manage Participants</h1>
-                  <p className='heading-details'>
-                    View and manage UID2 Portal participant requests and information.
-                  </p>
-                </div>
-                <div className='manage-participants-header-right'>
-                  <button type='button' onClick={onOpenChangeAddParticipantDialog}>
-                    Add Participant
-                  </button>
-                  {showAddParticipantsDialog && (
-                    <AddParticipantDialog
-                      apiRoles={apiRoles}
-                      participantTypes={participantTypes}
-                      onAddParticipant={onAddParticipant}
-                      onOpenChange={onOpenChangeAddParticipantDialog}
-                    />
-                  )}
-                </div>
-              </div>
-              <ScreenContentContainer>
-                <ParticipantRequestsTable
-                  participantRequests={participantRequests}
-                  participantTypes={participantTypes}
-                  apiRoles={apiRoles}
-                  onApprove={handleApproveParticipantRequest}
-                />
-                <ApprovedParticipantsTable
-                  participants={participantApproved}
-                  apiRoles={apiRoles}
-                  participantTypes={participantTypes}
-                onUpdateParticipant={onUpdateParticipant}
-                />
-              </ScreenContentContainer>
-            </>
-          )}
-        </Await>
-      </Suspense>
+      <div className='manage-participants-header'>
+        <div className='manage-participants-header-left'>
+          <h1>Manage Participants</h1>
+          <p className='heading-details'>
+            View and manage UID2 Portal participant requests and information.
+          </p>
+        </div>
+        <div className='manage-participants-header-right'>
+          <button type='button' onClick={onOpenChangeAddParticipantDialog}>
+            Add Participant
+          </button>
+        </div>
+      </div>
+      <ScreenContentContainer>
+        <Suspense fallback={<Loading />}>
+          <AwaitTypesafe
+            resolve={resolveAll({
+              participantTypes: data.participantTypes,
+              apiRoles: data.apiRoles,
+            })}
+          >
+            {(loadedData) => (
+              <>
+                {showAddParticipantsDialog && (
+                  <AddParticipantDialog
+                    apiRoles={loadedData.apiRoles}
+                    participantTypes={loadedData.participantTypes}
+                    onAddParticipant={onAddParticipant}
+                    onOpenChange={onOpenChangeAddParticipantDialog}
+                  />
+                )}
+                <Suspense fallback={<Loading />}>
+                  <AwaitTypesafe resolve={data.participantsAwaitingApproval}>
+                    {(participantsAwaitingApproval) => (
+                      <ParticipantRequestsTable
+                        participantRequests={participantsAwaitingApproval}
+                        participantTypes={loadedData.participantTypes}
+                        apiRoles={loadedData.apiRoles}
+                        onApprove={handleApproveParticipantRequest}
+                      />
+                    )}
+                  </AwaitTypesafe>
+                </Suspense>
+                <Suspense fallback={<Loading />}>
+                  <AwaitTypesafe resolve={data.participantsApproved}>
+                    {(participantsApproved) => (
+                      <ApprovedParticipantsTable
+                        participants={participantsApproved}
+                        apiRoles={loadedData.apiRoles}
+                        participantTypes={loadedData.participantTypes}
+                        onUpdateParticipant={onUpdateParticipant}
+                      />
+                    )}
+                  </AwaitTypesafe>
+                </Suspense>
+              </>
+            )}
+          </AwaitTypesafe>
+        </Suspense>
+      </ScreenContentContainer>
     </div>
   );
 }
@@ -128,19 +143,5 @@ export const ManageParticipantsRoute: PortalRoute = {
   description: 'Manage Participants',
   element: <ManageParticipants />,
   errorElement: <RouteErrorBoundary />,
-  loader: async () => {
-    const participantsAwaitingApproval = GetParticipantsAwaitingApproval();
-    const participantsApproved = GetApprovedParticipants();
-    const participantTypes = GetAllParticipantTypes();
-    const apiRoles = GetAllEnabledApiRoles();
-    const promises = Promise.all([
-      participantsAwaitingApproval,
-      participantsApproved,
-      participantTypes,
-      apiRoles,
-    ]);
-    return defer({
-      results: promises,
-    });
-  },
+  loader,
 };
