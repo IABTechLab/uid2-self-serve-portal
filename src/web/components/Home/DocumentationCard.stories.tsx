@@ -12,5 +12,5 @@ export default meta;
 type Story = StoryObj<typeof DocumentationCard>;
 
 export const Default: Story = {
-  render: () => <DocumentationCard />,
+  args: {},
 };
