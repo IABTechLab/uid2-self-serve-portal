@@ -20,17 +20,14 @@ export const Open: Story = {
 
 export const Collapsed: Story = {
   args: {
-    title: 'Test Collapsible Title',
-    children: 'Test Collapsible Content',
+    ...Open.args,
     defaultOpen: false,
   },
 };
 
 export const WithLabel: Story = {
   args: {
-    title: 'Test Collapsible Title',
-    children: 'Test Collapsible Content',
-    defaultOpen: true,
+    ...Open.args,
     label: 'TEST LABEL',
   },
 };
