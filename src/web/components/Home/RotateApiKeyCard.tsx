@@ -9,13 +9,13 @@ import {
 } from '../../utils/textHelpers';
 import { Card } from '../Core/Card';
 
-import './RotateApiKeysCard.scss';
+import './RotateApiKeyCard.scss';
 
 type RotateApiKeysCardProps = Readonly<{
   apiKeysToRotate: ApiKeyDTO[];
 }>;
 
-function RotateApiKeysCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
+function RotateApiKeyCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
   const getDatesCreated = () => {
     const datesCreated = apiKeysToRotate.map((apiKey) => formatUnixDate(apiKey.created).toString());
     const datesCreatedString = formatStringsWithSeparator(deduplicateStrings(datesCreated));
@@ -43,4 +43,4 @@ function RotateApiKeysCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
   );
 }
 
-export default RotateApiKeysCard;
+export default RotateApiKeyCard;

@@ -9,7 +9,7 @@ import { Banner } from '../components/Core/Banner';
 import { AsyncErrorView } from '../components/Core/ErrorView';
 import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
-import RotateApiKeysCard from '../components/Home/RotateApiKeysCard';
+import RotateApiKeysCard from '../components/Home/RotateApiKeyCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetEmailContacts, GetParticipantApiKeys, GetSharingList } from '../services/participant';

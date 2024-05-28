@@ -1,14 +1,14 @@
 /* eslint-disable camelcase */
 import { ComponentMeta, ComponentStory } from '@storybook/react';
 
-import RotateApiKeysCard from './RotateApiKeysCard';
+import RotateApiKeyCard from './RotateApiKeyCard';
 
 export default {
-  title: 'Home/Rotate API Keys Card',
-  component: RotateApiKeysCard,
-} as ComponentMeta<typeof RotateApiKeysCard>;
-const Template: ComponentStory<typeof RotateApiKeysCard> = (args) => {
-  return <RotateApiKeysCard {...args} />;
+  title: 'Home/Rotate API Key Card',
+  component: RotateApiKeyCard,
+} as ComponentMeta<typeof RotateApiKeyCard>;
+const Template: ComponentStory<typeof RotateApiKeyCard> = (args) => {
+  return <RotateApiKeyCard {...args} />;
 };
 
 const testApiKey1 = {
