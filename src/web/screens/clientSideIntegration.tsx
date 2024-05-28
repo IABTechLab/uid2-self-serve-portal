@@ -115,7 +115,8 @@ function ClientSideIntegration() {
     <>
       <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage client-side integration key pairs and domain names. For more information,
+        View and manage client-side integration key pairs and domain names.
+        {/* For more information,
         see{' '}
         <a
           className='outside-link'
@@ -125,7 +126,7 @@ function ClientSideIntegration() {
         >
           Client-Side Integration Guide for JavaScript
         </a>
-        .
+        . */}
       </p>
       <ScreenContentContainer>
         <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
