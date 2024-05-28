@@ -7,7 +7,7 @@ import { formatUnixDate } from '../../utils/textHelpers';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
-import { needsRotating } from './KeyHelper';
+import { shouldRotateApiKey } from './KeyHelper';
 
 import './KeyItem.scss';
 
@@ -21,7 +21,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
   const [showKeyDisableDialog, setShowKeyDisableDialog] = useState<boolean>(false);
   const [showKeyEditDialog, setShowKeyEditDialog] = useState<boolean>(false);
-  const [keyNeedsRotating, setKeyNeedsRotating] = useState<boolean>(false);
+  const [keyShouldRotate, setKeyShouldRotate] = useState<boolean>(false);
 
   const onOpenChangeKeyDisableDialog = () => {
     setShowKeyDisableDialog(!showKeyDisableDialog);
@@ -32,7 +32,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   };
 
   useEffect(() => {
-    setKeyNeedsRotating(needsRotating(apiKey));
+    setKeyShouldRotate(shouldRotateApiKey(apiKey));
   }, [apiKey]);
 
   if (apiKey.disabled) {
@@ -50,7 +50,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       {availableRoles.length > 0 && (
         <td className='action'>
           <div className='action-cell'>
-            {keyNeedsRotating && (
+            {keyShouldRotate && (
               <FontAwesomeIcon
                 icon='triangle-exclamation'
                 title='We recommend you rotate your API key every year.'

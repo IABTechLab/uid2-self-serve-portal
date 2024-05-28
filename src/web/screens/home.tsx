@@ -4,12 +4,12 @@ import { Suspense, useContext } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
-import { needsRotating } from '../components/ApiKeyManagement/KeyHelper';
+import { shouldRotateApiKey } from '../components/ApiKeyManagement/KeyHelper';
 import { Banner } from '../components/Core/Banner';
 import { AsyncErrorView } from '../components/Core/ErrorView';
 import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
-import RotateApiKeysCard from '../components/Home/RotateAPIKeysCard';
+import RotateApiKeysCard from '../components/Home/RotateApiKeysCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetEmailContacts, GetParticipantApiKeys, GetSharingList } from '../services/participant';
@@ -64,7 +64,9 @@ async function getEmailContacts() {
 
 async function getApiKeysToRotate() {
   const apiKeys = await GetParticipantApiKeys();
-  return apiKeys.filter((apiKey) => apiKey.disabled === false && needsRotating(apiKey) === true);
+  return apiKeys.filter(
+    (apiKey) => apiKey.disabled === false && shouldRotateApiKey(apiKey) === true
+  );
 }
 
 const loader = makeLoader(() =>
