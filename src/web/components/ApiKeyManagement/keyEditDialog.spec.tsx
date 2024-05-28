@@ -49,10 +49,10 @@ async function clickRole(role: ApiRoleDTO) {
   await userEvent.click(screen.getByRole('checkbox', { name: role.externalName }));
 }
 
-const Mapper: ApiRoleDTO = apiRoles.filter((apiRole) => apiRole.externalName === 'Mapper')[0];
-const Generator: ApiRoleDTO = apiRoles.filter((apiRole) => apiRole.externalName === 'Generator')[0];
-const Bidder: ApiRoleDTO = apiRoles.filter((apiRole) => apiRole.externalName === 'Bidder')[0];
-const Sharer: ApiRoleDTO = apiRoles.filter((apiRole) => apiRole.externalName === 'Sharer')[0];
+const Mapper: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Mapper')!;
+const Generator: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Generator')!;
+const Bidder: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Bidder')!;
+const Sharer: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Sharer')!;
 
 const testingValues = [
   [[Bidder], [Bidder]],
