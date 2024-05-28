@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import SharingPermissionCard from './SharingPermissionCard';
 
@@ -8,22 +8,10 @@ const meta: Meta<typeof SharingPermissionCard> = {
 };
 export default meta;
 
-const Template: StoryFn<typeof SharingPermissionCard> = (args) => {
-  return <SharingPermissionCard {...args} />;
-};
+type Story = StoryObj<typeof SharingPermissionCard>;
 
-export const Default = {
-  render: Template,
-
+export const Default: Story = {
   args: {
     sharingPermissionsCount: 100,
-  },
-};
-
-export const WithError = {
-  render: Template,
-
-  args: {
-    hasError: true,
   },
 };
