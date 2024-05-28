@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ApiRoleDTO, apiRoles } from '../../../api/entities/ApiRole';
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { OnApiKeyDisable } from './KeyDisableDialog';
 import { OnApiKeyEdit } from './KeyEditDialog';
 import KeyTable from './KeyTable';
@@ -13,6 +13,14 @@ const meta: Meta<typeof KeyTable> = {
 export default meta;
 
 type Story = StoryObj<typeof KeyTable>;
+
+const apiRoles: ApiRoleDTO[] = [
+  { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
+  { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
+  { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
+  { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
+  { id: 5, roleName: 'OPTOUT', externalName: 'Opt-Out', order: 100 },
+];
 
 const apiRolesMap = new Map<string, ApiRoleDTO>(
   apiRoles.map((apiRole) => [apiRole.roleName, apiRole])
