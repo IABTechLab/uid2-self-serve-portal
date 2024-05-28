@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ApiRoleDTO, apiRoles } from '../../../api/entities/ApiRole';
+import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import KeyCreationDialog from './KeyCreationDialog';
 
 const writeText = jest.fn();
@@ -51,10 +51,10 @@ async function submitForm() {
   await userEvent.click(createButton);
 }
 
-const Mapper: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Mapper')!;
-const Generator: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Generator')!;
-const Bidder: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Bidder')!;
-const Sharer: ApiRoleDTO = apiRoles.find((apiRole) => apiRole.externalName === 'Sharer')!;
+const Mapper: ApiRoleDTO = { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 };
+const Generator: ApiRoleDTO = { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 };
+const Bidder: ApiRoleDTO = { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 };
+const Sharer: ApiRoleDTO = { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 };
 
 const apiRoleTests = [
   [[Mapper]],
@@ -64,18 +64,18 @@ const apiRoleTests = [
 ];
 
 describe('Key creation dialog', () => {
-  test.each(apiRoleTests)('Should should show apiRole external names', async (apiRoleTest) => {
-    await loadComponent(apiRoleTest);
+  test.each(apiRoleTests)('Should should show apiRole external names', async (apiRoles) => {
+    await loadComponent(apiRoles);
 
-    for (const role of apiRoleTest) {
+    for (const role of apiRoles) {
       expect(screen.getByRole('checkbox', { name: role.externalName })).toBeInTheDocument();
     }
   });
 
   test.each(apiRoleTests)(
     'Should show error when submitting with no roles selected',
-    async (apiRoleTest) => {
-      await loadComponent(apiRoleTest);
+    async (apiRoles) => {
+      await loadComponent(apiRoles);
 
       await enterApiName('apiKey');
 
@@ -87,27 +87,27 @@ describe('Key creation dialog', () => {
     }
   );
 
-  test.each(apiRoleTests)('should submit form when you choose one role', async (apiRoleTest) => {
-    const onSubmitMock = await loadComponent(apiRoleTest);
+  test.each(apiRoleTests)('should submit form when you choose one role', async (apiRoles) => {
+    const onSubmitMock = await loadComponent(apiRoles);
 
     await enterApiName('key_name');
-    await clickApiRole(apiRoleTest[0]);
+    await clickApiRole(apiRoles[0]);
     await submitForm();
 
     await waitFor(() => {
       expect(onSubmitMock).toHaveBeenCalledWith({
         name: 'key_name',
-        roles: [apiRoleTest[0].roleName],
+        roles: [apiRoles[0].roleName],
       });
     });
   });
 
-  test.each(apiRoleTests)('should submit form when you choose all roles', async (apiRoleTest) => {
-    const onSubmitMock = await loadComponent(apiRoleTest);
+  test.each(apiRoleTests)('should submit form when you choose all roles', async (apiRoles) => {
+    const onSubmitMock = await loadComponent(apiRoles);
 
     await enterApiName('key_name');
 
-    await apiRoleTest.map(async (apiRole) => {
+    await apiRoles.map(async (apiRole) => {
       await clickApiRole(apiRole);
     });
 
@@ -115,7 +115,7 @@ describe('Key creation dialog', () => {
 
     const expectedValue = {
       name: 'key_name',
-      roles: apiRoleTest.map((apiRole) => apiRole.roleName),
+      roles: apiRoles.map((apiRole) => apiRole.roleName),
     };
 
     await waitFor(() => {
@@ -123,11 +123,11 @@ describe('Key creation dialog', () => {
     });
   });
 
-  test.each(apiRoleTests)('Should display key after form submitted', async (apiRoleTest) => {
-    await loadComponent(apiRoleTest);
+  test.each(apiRoleTests)('Should display key after form submitted', async (apiRoles) => {
+    await loadComponent(apiRoles);
 
     await enterApiName('key_name');
-    await clickApiRole(apiRoleTest[0]);
+    await clickApiRole(apiRoles[0]);
     await submitForm();
 
     expect(screen.getByText('ABCD')).toBeInTheDocument();
@@ -135,12 +135,12 @@ describe('Key creation dialog', () => {
   });
 
   it('should let you copy each secret', async () => {
-    const apiRoleTest = [Mapper, Bidder];
+    const apiRoles = [Mapper, Bidder];
 
-    await loadComponent(apiRoleTest);
+    await loadComponent(apiRoles);
 
     await enterApiName('key_name');
-    await clickApiRole(apiRoleTest[0]);
+    await clickApiRole(apiRoles[0]);
     await submitForm();
 
     const copyButton1 = screen.getByTitle('Copy secret to clipboard.');
@@ -154,12 +154,12 @@ describe('Key creation dialog', () => {
   });
 
   it('should confirm copying before letting user close', async () => {
-    const apiRoleTest = [Mapper, Bidder];
+    const apiRoles = [Mapper, Bidder];
 
-    await loadComponent(apiRoleTest);
+    await loadComponent(apiRoles);
 
     await enterApiName('key_name');
-    await clickApiRole(apiRoleTest[0]);
+    await clickApiRole(apiRoles[0]);
     await submitForm();
 
     await userEvent.click(screen.queryAllByRole('button', { name: 'Close' })[0]);
