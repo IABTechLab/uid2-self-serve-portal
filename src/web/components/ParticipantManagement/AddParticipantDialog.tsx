@@ -259,7 +259,13 @@ function AddParticipantDialog({
                     inputName='email'
                     label='Contact Email'
                     className='text-input'
-                    rules={{ required: 'Please specify Contact Email.' }}
+                    rules={{
+                      required: 'Please specify Contact Email.',
+                      pattern: {
+                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        message: 'Entered value does not match email format',
+                      },
+                    }}
                   />
                 </div>
                 <div className='user-roles right-column'>
