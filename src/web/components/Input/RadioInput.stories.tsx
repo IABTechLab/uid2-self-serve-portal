@@ -7,7 +7,6 @@ import { Option } from './SelectInput';
 
 const meta: Meta<typeof RadioInput> = {
   title: 'Shared Components/Inputs/Radio',
-
   component: RadioInput,
 };
 

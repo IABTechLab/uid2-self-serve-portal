@@ -4,7 +4,6 @@ import { PortalHeader } from './PortalHeader';
 
 const meta: Meta<typeof PortalHeader> = {
   title: 'Shared Components/Portal Header',
-
   component: PortalHeader,
 };
 

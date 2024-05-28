@@ -4,7 +4,6 @@ import { Collapsible } from './Collapsible';
 
 const meta: Meta<typeof Collapsible> = {
   title: 'Shared Components/Collapsible',
-
   component: Collapsible,
 };
 

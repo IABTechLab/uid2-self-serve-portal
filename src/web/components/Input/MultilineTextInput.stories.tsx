@@ -6,7 +6,6 @@ import { MultilineTextInput } from './MultilineTextInput';
 
 const meta: Meta<typeof MultilineTextInput> = {
   title: 'Shared Components/Inputs/MultilineText',
-
   component: MultilineTextInput,
 };
 

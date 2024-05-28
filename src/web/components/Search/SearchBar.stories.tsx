@@ -4,7 +4,6 @@ import { SearchBarContainer, SearchBarInput, SearchBarResults } from './SearchBa
 
 const meta: Meta<typeof SearchBarContainer> = {
   title: 'Shared Components/Search Bar',
-
   component: SearchBarContainer,
 };
 

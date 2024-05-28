@@ -9,7 +9,6 @@ import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 const meta: Meta<typeof ParticipantApprovalForm> = {
   title: 'Manage Participants/Participant Approval Form',
-
   component: ParticipantApprovalForm,
 };
 

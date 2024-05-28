@@ -4,7 +4,6 @@ import { InlineMessage } from './InlineMessage';
 
 const meta: Meta<typeof InlineMessage> = {
   title: 'Shared Components/Inline Message',
-
   component: InlineMessage,
 };
 

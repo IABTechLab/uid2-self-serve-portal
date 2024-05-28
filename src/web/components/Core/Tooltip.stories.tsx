@@ -4,7 +4,6 @@ import { Tooltip } from './Tooltip';
 
 const meta: Meta<typeof Tooltip> = {
   title: 'Shared Components/Tooltip',
-
   component: Tooltip,
 };
 export default meta;
