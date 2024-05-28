@@ -11,9 +11,12 @@ export default {
 export const WithoutBusinessContacts = {
   args: {
     businessContacts: [],
+    // @ts-ignore
     onRemoveEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
+    // @ts-ignore
     onUpdateEmailContact: (id, form) =>
       Promise.resolve(console.log(`Update contact id: ${id} with ${JSON.stringify(form)}`)),
+    // @ts-ignore
     onAddEmailContact: (form) =>
       Promise.resolve(console.log(`Add contact ${JSON.stringify(form)}`)),
   },
@@ -44,6 +47,7 @@ export const WithBusinessContacts = {
 export const WithDeleteError = {
   args: {
     ...WithBusinessContacts.args,
+    // @ts-ignore
     onRemoveEmailContact: (id) => Promise.reject(console.log(`Failed to delete contact id: ${id}`)),
   },
 };
