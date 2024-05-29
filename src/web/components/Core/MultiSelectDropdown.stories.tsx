@@ -1,36 +1,36 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { MultiSelectDropdown } from './MultiSelectDropdown';
 
-export default {
+const meta: Meta<typeof MultiSelectDropdown> = {
   title: 'Shared Components/Inputs/Multi-Select Dropdown',
   component: MultiSelectDropdown,
-} as ComponentMeta<typeof MultiSelectDropdown>;
+};
 
-const Template: ComponentStory<typeof MultiSelectDropdown> = (args) => (
-  <MultiSelectDropdown {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof MultiSelectDropdown>;
 
-export const Default = Template.bind({});
-Default.args = {
-  title: 'Participant Types',
-  options: [
-    {
-      name: 'Type 1',
-      id: 1,
-    },
-    {
-      name: 'Type 2',
-      id: 2,
-    },
-    {
-      name: 'Type 3',
-      id: 3,
-    },
-    {
-      name: 'Type 4',
-      id: 4,
-    },
-  ],
-  onSelectedChange: (ids) => console.log('Selected:', ids),
+export const Default: Story = {
+  args: {
+    title: 'Participant Types',
+    options: [
+      {
+        name: 'Type 1',
+        id: 1,
+      },
+      {
+        name: 'Type 2',
+        id: 2,
+      },
+      {
+        name: 'Type 3',
+        id: 3,
+      },
+      {
+        name: 'Type 4',
+        id: 4,
+      },
+    ],
+    onSelectedChange: (ids) => console.log('Selected:', ids),
+  },
 };

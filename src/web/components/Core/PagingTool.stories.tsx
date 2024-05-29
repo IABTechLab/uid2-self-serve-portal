@@ -57,8 +57,7 @@ export const Default = () => {
   return (
     <div>
       {pagedDomains.map((domain) => (
-        <div>
-          {' '}
+        <div key={domain}>
           {domain}
           <br />
         </div>
