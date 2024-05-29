@@ -1,15 +1,15 @@
 /* eslint-disable camelcase */
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import RotateApiKeyCard from './RotateApiKeyCard';
 
-export default {
+const meta: Meta<typeof RotateApiKeyCard> = {
   title: 'Home/Rotate API Key Card',
   component: RotateApiKeyCard,
-} as ComponentMeta<typeof RotateApiKeyCard>;
-const Template: ComponentStory<typeof RotateApiKeyCard> = (args) => {
-  return <RotateApiKeyCard {...args} />;
 };
+export default meta;
+
+type Story = StoryObj<typeof RotateApiKeyCard>;
 
 const testApiKey1 = {
   contact: 'ApiKey1',
@@ -36,12 +36,14 @@ const testApiKey2 = {
   site_id: 1,
 };
 
-export const Default = Template.bind({});
-Default.args = {
-  apiKeysToRotate: [testApiKey1],
+export const Default: Story = {
+  args: {
+    apiKeysToRotate: [testApiKey1],
+  },
 };
 
-export const MutipleKeysToRotate = Template.bind({});
-MutipleKeysToRotate.args = {
-  apiKeysToRotate: [testApiKey1, testApiKey2],
+export const MutipleKeysToRotate: Story = {
+  args: {
+    apiKeysToRotate: [testApiKey1, testApiKey2],
+  },
 };
