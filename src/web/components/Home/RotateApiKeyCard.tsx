@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
+import { ApiKeyManagementRoute } from '../../screens/apiKeyManagement';
 import {
   deduplicateStrings,
   formatStringsWithSeparator,
@@ -34,7 +35,7 @@ function RotateApiKeyCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
         </span>
       </div>
 
-      <Link to='/dashboard/apiKeys'>
+      <Link to={ApiKeyManagementRoute.path}>
         <button className='primary-button small-button' type='button'>
           Rotate API Key{apiKeysToRotate.length > 1 && 's'}
         </button>
