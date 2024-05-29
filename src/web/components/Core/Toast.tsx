@@ -14,7 +14,7 @@ function GetIcon({ status }: { status: ToastStatus }) {
     case 'Error':
       return <FontAwesomeIcon icon='exclamation-circle' />;
     case 'Warning':
-      return <FontAwesomeIcon icon='exclamation-triangle' />;
+      return <FontAwesomeIcon icon='triangle-exclamation' />;
     case 'Info':
     default:
       return <FontAwesomeIcon icon='circle-info' />;

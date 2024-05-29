@@ -2,23 +2,30 @@ import { Meta, StoryObj } from '@storybook/react';
 
 import { CstgDomainsTable } from './CstgDomainsTable';
 
-export default {
+const meta: Meta<typeof CstgDomainsTable> = {
   title: 'CSTG/Domains/Domains Table',
   component: CstgDomainsTable,
-} as Meta<typeof CstgDomainsTable>;
+};
 
+export default meta;
 type Story = StoryObj<typeof CstgDomainsTable>;
 
 export const WithDomains: Story = {
   args: {
     domains: ['test.com', 'abc.com', '123.com'],
-    onUpdateDomains: (domains) => Promise.resolve(console.log('update domains to:', domains)),
+    onUpdateDomains: (domains: string[]) => {
+      console.log('update domains to:', domains);
+      return Promise.resolve({ domains, isValidDomains: true });
+    },
   },
 };
 
 export const WithoutDomains: Story = {
   args: {
     domains: [],
-    onUpdateDomains: (domains) => Promise.resolve(console.log('update domains to:', domains)),
+    onUpdateDomains: (domains: string[]) => {
+      Promise.resolve(console.log('update domains to:', domains));
+      return Promise.resolve({ domains: [''], isValidDomains: true });
+    },
   },
 };

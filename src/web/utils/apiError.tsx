@@ -30,7 +30,7 @@ export function backendError(e: unknown, overrideMessage: string) {
 
 const isError = (obj: unknown): obj is Error => obj instanceof Error;
 
-const getHash = (e: Error) => {
+export const getErrorHash = (e: Error) => {
   let result = '';
   if (e instanceof ApiError) {
     result = e.errorHash ?? '';
@@ -43,7 +43,7 @@ const getHash = (e: Error) => {
 
 export const handleErrorToast = (e: unknown) => {
   if (isError(e)) {
-    const hash = getHash(e);
+    const hash = getErrorHash(e);
     const hashMessage = hash.length > 0 ? `: (${hash})` : '';
     ErrorToast(`${e.message}${hashMessage}`);
   }

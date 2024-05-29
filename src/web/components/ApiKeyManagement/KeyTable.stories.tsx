@@ -23,7 +23,7 @@ const apiRoles: ApiRoleDTO[] = [
 ];
 
 const apiRolesMap = new Map<string, ApiRoleDTO>(
-  apiRoles.map((apiRole) => [apiRole.roleName, apiRole])
+  apiRoles.map((apiRole) => [apiRole.roleName, apiRole]),
 );
 
 const apiRoleNameToApiRoleDTO = (roleNames: string[]) => {

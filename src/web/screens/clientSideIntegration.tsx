@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
+import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
 import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
@@ -17,6 +18,7 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
+import { separateStringsList, sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
 function ClientSideIntegration() {
@@ -31,7 +33,10 @@ function ClientSideIntegration() {
 
   const loadDomainNames = useCallback(async () => {
     const currentDomainNames = await GetDomainNames();
-    setDomainNames(currentDomainNames);
+    const currentDomainNamesSorted = currentDomainNames
+      ? sortStringsAlphabetically(currentDomainNames)
+      : currentDomainNames;
+    setDomainNames(currentDomainNamesSorted);
   }, []);
 
   useEffect(() => {
@@ -75,11 +80,26 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
-  const handleUpdateDomainNames = async (updatedDomainNames: string[], action: string) => {
+  const handleUpdateDomainNames = async (
+    updatedDomainNames: string[],
+    action: string
+  ): Promise<UpdateDomainNamesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      setDomainNames(response);
-      SuccessToast(`Domain names ${action}.`);
+      let domains = response?.domains;
+      const isValidDomains = response?.isValidDomains;
+      if (!isValidDomains) {
+        const invalidDomains = separateStringsList(domains[0]);
+        domains = invalidDomains;
+      } else {
+        setDomainNames(sortStringsAlphabetically(domains));
+        SuccessToast(`Domain names ${action}.`);
+      }
+      const updatedDomainNamesResponse: UpdateDomainNamesResponse = {
+        domains,
+        isValidDomains,
+      };
+      return updatedDomainNamesResponse;
     } catch (e) {
       handleErrorToast(e);
     }
@@ -88,14 +108,15 @@ function ClientSideIntegration() {
   const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
     let updatedDomains = newDomains;
     if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
-    handleUpdateDomainNames(updatedDomains, 'added');
+    return handleUpdateDomainNames(updatedDomains, 'added');
   };
 
   return (
     <>
       <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage client-side integration key pairs and domain names. For more information,
+        View and manage client-side integration key pairs and domain names.
+        {/* For more information,
         see{' '}
         <a
           className='outside-link'
@@ -105,7 +126,7 @@ function ClientSideIntegration() {
         >
           Client-Side Integration Guide for JavaScript
         </a>
-        .
+        . */}
       </p>
       <ScreenContentContainer>
         <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />

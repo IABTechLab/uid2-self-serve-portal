@@ -1,33 +1,33 @@
-import { Suspense, useCallback } from 'react';
-import { Await, defer, useLoaderData, useRevalidator } from 'react-router-dom';
+import { Suspense } from 'react';
+import { useRevalidator } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
+import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import {
   AddEmailContact,
   BusinessContactForm,
-  BusinessContactResponse,
   GetEmailContacts,
   RemoveEmailContact,
   UpdateEmailContact,
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
+import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './emailContacts.scss';
 
-function Loading() {
-  return <div>Loading business contacts...</div>;
-}
+const loader = makeLoader(() => {
+  const emailContacts = GetEmailContacts();
+  return defer({ emailContacts });
+});
 
 export function BusinessContacts() {
-  const data = useLoaderData() as { emailContacts: BusinessContactResponse[] };
+  const data = useLoaderData<typeof loader>();
   const reloader = useRevalidator();
-  const handleBusinessContactUpdated = useCallback(() => {
-    reloader.revalidate();
-  }, [reloader]);
 
   const handleRemoveEmailContact = async (contactId: number) => {
     try {
@@ -35,7 +35,7 @@ export function BusinessContacts() {
       if (response.status === 200) {
         SuccessToast('Email contact removed.');
       }
-      handleBusinessContactUpdated();
+      reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -47,7 +47,7 @@ export function BusinessContacts() {
       if (response.status === 200) {
         SuccessToast('Email contact updated.');
       }
-      handleBusinessContactUpdated();
+      reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -59,7 +59,7 @@ export function BusinessContacts() {
       if (response.status === 201) {
         SuccessToast('Email contact added.');
       }
-      handleBusinessContactUpdated();
+      reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -73,9 +73,9 @@ export function BusinessContacts() {
         for UID2.
       </p>
       <ScreenContentContainer>
-        <Suspense fallback={<Loading />}>
-          <Await resolve={data.emailContacts}>
-            {(emailContacts: BusinessContactResponse[]) => (
+        <Suspense fallback={<Loading message='Loading business contacts...' />}>
+          <AwaitTypesafe resolve={data.emailContacts}>
+            {(emailContacts) => (
               <BusinessContactsTable
                 businessContacts={emailContacts}
                 onRemoveEmailContact={handleRemoveEmailContact}
@@ -83,7 +83,7 @@ export function BusinessContacts() {
                 onAddEmailContact={handleAddEmailContact}
               />
             )}
-          </Await>
+          </AwaitTypesafe>
         </Suspense>
       </ScreenContentContainer>
     </div>
@@ -95,8 +95,6 @@ export const EmailContactsRoute: PortalRoute = {
   element: <BusinessContacts />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/emailContacts',
-  loader: () => {
-    const emailContacts = GetEmailContacts();
-    return defer({ emailContacts });
-  },
+  loader,
+  isHidden: true,
 };

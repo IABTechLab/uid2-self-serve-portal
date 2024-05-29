@@ -1,36 +1,39 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import { InlineMessage, InlineMessageProps } from './InlineMessage';
+import { InlineMessage } from './InlineMessage';
 
-export default {
+const meta: Meta<typeof InlineMessage> = {
   title: 'Shared Components/Inline Message',
   component: InlineMessage,
-} as ComponentMeta<typeof InlineMessage>;
-
-const Template: ComponentStory<typeof InlineMessage> = (args: InlineMessageProps) => (
-  <InlineMessage {...args} />
-);
-
-export const Info = Template.bind({});
-Info.args = {
-  message: 'here is an info',
-  type: 'Info',
 };
 
-export const Warning = Template.bind({});
-Warning.args = {
-  message: 'here is a warning',
-  type: 'Warning',
+export default meta;
+type Story = StoryObj<typeof InlineMessage>;
+
+export const Info: Story = {
+  args: {
+    message: 'here is an info',
+    type: 'Info',
+  },
 };
 
-export const Error = Template.bind({});
-Error.args = {
-  message: 'here is an error',
-  type: 'Error',
+export const Warning: Story = {
+  args: {
+    message: 'here is a warning',
+    type: 'Warning',
+  },
 };
 
-export const Success = Template.bind({});
-Success.args = {
-  message: 'here is a success',
-  type: 'Success',
+export const ErrorMessage: Story = {
+  args: {
+    message: 'here is an error',
+    type: 'Error',
+  },
+};
+
+export const Success: Story = {
+  args: {
+    message: 'here is a success',
+    type: 'Success',
+  },
 };

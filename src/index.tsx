@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { App } from './web/App';
 import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
+import { initializeFaro } from './web/initializeFaro';
 import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
@@ -16,7 +17,7 @@ import { PortalErrorBoundary } from './web/utils/PortalErrorBoundary';
 import './web/index.scss';
 
 configureLogging();
-
+initializeFaro();
 const router = createBrowserRouter([
   {
     path: '/',

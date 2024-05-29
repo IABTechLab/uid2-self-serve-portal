@@ -52,6 +52,10 @@ export interface SiteRequest extends Request {
   siteId?: number;
 }
 
+export interface SelfResendInviteRequest extends Request {
+  email?: string;
+}
+
 const userIdParser = z.object({
   userId: z.coerce.number(),
 });

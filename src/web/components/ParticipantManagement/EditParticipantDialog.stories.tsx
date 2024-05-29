@@ -49,6 +49,7 @@ const participant = {
       acceptedTerms: false,
     },
   ],
+  siteId: 123,
 };
 
 export const ParticipantWithExistingRoles = () => {

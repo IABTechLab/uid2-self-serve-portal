@@ -1,15 +1,18 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { TextInput } from './TextInput';
 
-export default {
+const meta: Meta<typeof TextInput> = {
   title: 'Shared Components/Inputs/Text',
   component: TextInput,
-} as ComponentMeta<typeof TextInput>;
+};
 
-const Template: ComponentStory<typeof TextInput> = (args) => {
+export default meta;
+type Story = StoryObj<typeof TextInput>;
+
+const Template: StoryFn<typeof TextInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;
 
@@ -23,15 +26,21 @@ const Template: ComponentStory<typeof TextInput> = (args) => {
   );
 };
 
-export const WithLabel = Template.bind({});
-WithLabel.args = {
-  name: 'default',
-  label: 'Enter text',
+export const WithLabel: Story = {
+  render: Template,
+
+  args: {
+    name: 'default',
+    label: 'Enter text',
+  },
 };
 
-export const WithValidation = Template.bind({});
-WithValidation.args = {
-  name: 'text with rule',
-  label: 'Enter text',
-  rules: { maxLength: { value: 2, message: 'Too many characters' } },
+export const WithValidation: Story = {
+  render: Template,
+
+  args: {
+    name: 'text with rule',
+    label: 'Enter text',
+    rules: { maxLength: { value: 2, message: 'Too many characters' } },
+  },
 };

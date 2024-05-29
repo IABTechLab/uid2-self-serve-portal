@@ -50,7 +50,24 @@ export async function ResendInvite(id: number): Promise<void> {
   try {
     return await axios.post(`/users/${id}/resendInvitation`);
   } catch (e: unknown) {
-    const error = backendError(e, 'Unable to resend invite');
+    const error = backendError(e, 'Unable to resend invitation');
+    log.error(error);
+    throw error;
+  }
+}
+
+export type SelfResendInvitationForm = {
+  email: string;
+};
+
+export async function SelfResendInvitation(formData: SelfResendInvitationForm): Promise<void> {
+  try {
+    const { email } = formData;
+    return await axios.post(`/users/selfResendInvitation`, {
+      email,
+    });
+  } catch (e: unknown) {
+    const error = backendError(e, 'Unable to resend invitation');
     log.error(error);
     throw error;
   }

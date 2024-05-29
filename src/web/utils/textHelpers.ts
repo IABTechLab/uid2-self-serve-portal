@@ -26,10 +26,21 @@ export function formatUnixDate(timeValue: number) {
 
 export const separateStringsList = (strings: string): string[] => {
   if (strings === '') return [];
-  const stringsTrimmed = strings.replace(/, |,| {2}|\n|;/gi, ' ').trim();
+  const stringsTrimmed = strings.replace(/, |,| {2}|\n|;|]|\[/gi, ' ').trim();
   return stringsTrimmed.split(/[ ]+/);
 };
 
 export const deduplicateStrings = (strings: string[]) => {
   return strings.filter((val, index, arr) => arr.indexOf(val) === index);
+};
+
+export const sortStringsAlphabetically = (strings: string[]) => {
+  if (strings.length === 0 || strings.length === 1) {
+    return strings;
+  }
+  return strings.sort((a: string, b: string) => {
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+  });
 };

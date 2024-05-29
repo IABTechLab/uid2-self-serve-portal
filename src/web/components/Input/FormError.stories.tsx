@@ -1,13 +1,19 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { FormError } from './FormError';
 
-export default {
+const meta: Meta<typeof FormError> = {
   title: 'Shared Components/Inputs/Form Error',
   component: FormError,
-} as ComponentMeta<typeof FormError>;
+};
 
-export const ErrorExample: ComponentStory<typeof FormError> = (args) => (
-  <FormError {...args}>Some error text that should be shown to the user.</FormError>
-);
-ErrorExample.args = { display: true };
+export default meta;
+type Story = StoryObj<typeof FormError>;
+
+export const ErrorExample: Story = {
+  render: (args) => (
+    <FormError {...args}>Some error text that should be shown to the user.</FormError>
+  ),
+
+  args: { display: true },
+};

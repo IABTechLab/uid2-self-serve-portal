@@ -81,7 +81,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const getParticipantsApproved = async (): Promise<Participant[]> => {
   return Participant.query()
     .where('status', ParticipantStatus.Approved)
-    .withGraphFetched('[apiRoles, approver, types]');
+    .withGraphFetched('[apiRoles, approver, types, users]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {

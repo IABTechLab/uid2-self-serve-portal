@@ -1,6 +1,8 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCircleCheck, faTrashCan as farTranshCan } from '@fortawesome/free-regular-svg-icons';
 import {
+  faAngleLeft,
+  faAngleRight,
   faCheck,
   faChevronDown,
   faChevronUp,
@@ -9,7 +11,6 @@ import {
   faCopy,
   faEllipsisH,
   faExclamationCircle,
-  faExclamationTriangle,
   faEye,
   faMinus,
   faPencil,
@@ -18,7 +19,9 @@ import {
   faSort,
   faSortDown,
   faSortUp,
+  faSpinner,
   faTrashCan,
+  faTriangleExclamation,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -38,11 +41,14 @@ export function configureFontAwesomeLibrary(): void {
   library.add(fasCircleCheck);
   library.add(faSearch);
   library.add(faMinus);
-  library.add(faExclamationTriangle);
   library.add(faSort);
   library.add(faSortUp);
   library.add(faSortDown);
+  library.add(faSpinner);
   library.add(faPlus);
   library.add(faCopy);
   library.add(faEye);
+  library.add(faAngleRight);
+  library.add(faAngleLeft);
+  library.add(faTriangleExclamation);
 }
