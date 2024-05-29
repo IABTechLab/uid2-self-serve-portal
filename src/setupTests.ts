@@ -5,7 +5,7 @@
 import '@testing-library/jest-dom';
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { setProjectAnnotations } from '@storybook/testing-react';
+import { setProjectAnnotations } from '@storybook/react';
 
 import * as globalStorybookConfig from '../.storybook/preview';
 import { configureFontAwesomeLibrary } from './web/configureFontAwesomeLibrary';

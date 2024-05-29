@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/testing-react';
+import { composeStories } from '@storybook/react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 
 import * as stories from './BulkAddPermissions.stories';
