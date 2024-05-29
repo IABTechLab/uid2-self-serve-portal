@@ -28,7 +28,7 @@ export function Banner({ message, type, fitContent }: BannerProps) {
       case 'Warning':
         return (
           <FontAwesomeIcon
-            icon='exclamation-triangle'
+            icon='triangle-exclamation'
             data-testid='banner-icon'
             className='banner-icon'
           />

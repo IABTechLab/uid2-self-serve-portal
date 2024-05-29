@@ -11,7 +11,6 @@ import {
   faCopy,
   faEllipsisH,
   faExclamationCircle,
-  faExclamationTriangle,
   faEye,
   faMinus,
   faPencil,
@@ -22,6 +21,7 @@ import {
   faSortUp,
   faSpinner,
   faTrashCan,
+  faTriangleExclamation,
   faXmark,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -41,7 +41,6 @@ export function configureFontAwesomeLibrary(): void {
   library.add(fasCircleCheck);
   library.add(faSearch);
   library.add(faMinus);
-  library.add(faExclamationTriangle);
   library.add(faSort);
   library.add(faSortUp);
   library.add(faSortDown);
@@ -51,4 +50,5 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faEye);
   library.add(faAngleRight);
   library.add(faAngleLeft);
+  library.add(faTriangleExclamation);
 }
