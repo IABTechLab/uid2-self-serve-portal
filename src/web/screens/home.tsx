@@ -64,9 +64,7 @@ async function getEmailContacts() {
 
 async function getApiKeysToRotate() {
   const apiKeys = await GetParticipantApiKeys();
-  return apiKeys.filter(
-    (apiKey) => apiKey.disabled === false && shouldRotateApiKey(apiKey) === true
-  );
+  return apiKeys.filter((apiKey) => shouldRotateApiKey(apiKey) === true);
 }
 
 const loader = makeLoader(() =>
