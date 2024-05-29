@@ -1,21 +1,21 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
-import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TypeFilter } from './TypeFilter';
 
-export default {
+const meta: Meta<typeof TypeFilter> = {
   title: 'Sharing Permissions/Type Filter',
   component: TypeFilter,
-} as ComponentMeta<typeof TypeFilter>;
+};
+export default meta;
 
-const Template: ComponentStory<typeof TypeFilter> = (args) => <TypeFilter {...args} />;
+type Story = StoryObj<typeof TypeFilter>;
 
-export const Default = Template.bind({});
-
-Default.args = {
-  types: ['DSP', 'PUBLISHER', 'DATA_PROVIDER'],
-  onFilterChange: (selectedTypeIds: Set<ClientType>) => {
-    console.log('Selected type IDs: ', Array.from(selectedTypeIds));
+export const Default: Story = {
+  args: {
+    types: ['DSP', 'PUBLISHER', 'DATA_PROVIDER'],
+    onFilterChange: (selectedTypeIds) => {
+      console.log('Selected type IDs: ', Array.from(selectedTypeIds));
+    },
+    selectedTypeIds: new Set(),
   },
-  selectedTypeIds: new Set(),
 };

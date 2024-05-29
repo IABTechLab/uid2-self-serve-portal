@@ -1,16 +1,17 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import SharingPermissionCard from './SharingPermissionCard';
 
-export default {
+const meta: Meta<typeof SharingPermissionCard> = {
   title: 'Home/Sharing Permissions Card',
   component: SharingPermissionCard,
-} as ComponentMeta<typeof SharingPermissionCard>;
-const Template: ComponentStory<typeof SharingPermissionCard> = (args) => {
-  return <SharingPermissionCard {...args} />;
 };
+export default meta;
 
-export const Default = Template.bind({});
-Default.args = {
-  sharingPermissionsCount: 100,
+type Story = StoryObj<typeof SharingPermissionCard>;
+
+export const Default: Story = {
+  args: {
+    sharingPermissionsCount: 100,
+  },
 };

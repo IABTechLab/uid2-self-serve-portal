@@ -1,18 +1,21 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { useForm, UseFormProps } from 'react-hook-form';
 
 import { FormStyledCheckbox } from './StyledCheckbox';
 
-export default {
+const meta: Meta<typeof FormStyledCheckbox> = {
   title: 'Shared Components/Inputs/Styled Checkbox',
   component: FormStyledCheckbox,
-} as ComponentMeta<typeof FormStyledCheckbox>;
+};
+
+export default meta;
+type Story = StoryObj<typeof FormStyledCheckbox>;
 
 type FormData = {
   boxIsChecked: boolean;
 };
 const templateBuilder = (formProps?: UseFormProps<FormData>) => {
-  const Template: ComponentStory<typeof FormStyledCheckbox> = (args) => {
+  const Template: StoryFn<typeof FormStyledCheckbox> = (args) => {
     const { register, control, watch, handleSubmit } = useForm<FormData>(formProps);
     const value = watch('boxIsChecked');
     const onSubmit = (data: FormData) => {
@@ -38,15 +41,15 @@ const templateBuilder = (formProps?: UseFormProps<FormData>) => {
   return Template;
 };
 
-export const BasicExample = templateBuilder().bind({});
+export const BasicExample: Story = templateBuilder().bind({});
 BasicExample.args = {};
 
-export const DefaultTrueExample = templateBuilder({ defaultValues: { boxIsChecked: true } }).bind(
-  {}
-);
+export const DefaultTrueExample: Story = templateBuilder({
+  defaultValues: { boxIsChecked: true },
+}).bind({});
 DefaultTrueExample.args = {};
 
-export const DefaultFalseExample = templateBuilder({ defaultValues: { boxIsChecked: false } }).bind(
-  {}
-);
+export const DefaultFalseExample: Story = templateBuilder({
+  defaultValues: { boxIsChecked: false },
+}).bind({});
 DefaultFalseExample.args = { defaultValue: false };

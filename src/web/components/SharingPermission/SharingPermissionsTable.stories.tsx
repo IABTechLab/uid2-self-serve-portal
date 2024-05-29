@@ -1,13 +1,8 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
-
-export default {
-  title: 'Sharing Permissions/Sharing Permission Table',
-  component: SharingPermissionsTable,
-} as ComponentMeta<typeof SharingPermissionsTable>;
 
 const response: SharingSiteDTO[] = [
   {
@@ -59,15 +54,26 @@ const response: SharingSiteDTO[] = [
     canBeSharedWith: false,
   },
 ];
-const Template: ComponentStory<typeof SharingPermissionsTable> = (args) => (
-  <TestAllSitesListProvider response={response}>
-    <SharingPermissionsTable {...args} />
-  </TestAllSitesListProvider>
-);
 
-export const SharedWithParticipants = Template.bind({});
-SharedWithParticipants.args = {
-  sharedSiteIds: [10, 11, 12, 14, 15, 17],
-  sharedTypes: ['DSP', 'DATA_PROVIDER'],
-  onDeleteSharingPermission: () => Promise.resolve(),
+const meta: Meta<typeof SharingPermissionsTable> = {
+  title: 'Sharing Permissions/Sharing Permissions Table',
+  component: SharingPermissionsTable,
+  decorators: [
+    (Story) => (
+      <TestAllSitesListProvider response={response}>
+        <Story />
+      </TestAllSitesListProvider>
+    ),
+  ],
+};
+export default meta;
+
+type Story = StoryObj<typeof SharingPermissionsTable>;
+
+export const SharedWithParticipants: Story = {
+  args: {
+    sharedSiteIds: [10, 11, 12, 14, 15, 17],
+    sharedTypes: ['DSP', 'DATA_PROVIDER'],
+    onDeleteSharingPermission: () => Promise.resolve(),
+  },
 };

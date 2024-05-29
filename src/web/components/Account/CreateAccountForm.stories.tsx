@@ -1,14 +1,15 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react';
 import { useState } from 'react';
 
 import { CreateAccountForm, CreateAccountFormProps } from './CreateAccountForm';
 
-export default {
+const meta: Meta<typeof CreateAccountForm> = {
   title: 'Forms/CreateAccount',
   component: CreateAccountForm,
-} as ComponentMeta<typeof CreateAccountForm>;
+};
 
-export {};
+export default meta;
+
 const participantTypes = [
   {
     id: 1,
@@ -53,10 +54,8 @@ const CreateAccountStory = ({ onSubmit }: CreateAccountStoryProps) => {
   );
 };
 
-export const SubmitSucceeds: ComponentStory<typeof CreateAccountForm> = () => (
-  <CreateAccountStory />
-);
-export const SubmitFailsWithErrors: ComponentStory<typeof CreateAccountForm> = () => (
+export const SubmitSucceeds: StoryFn<typeof CreateAccountForm> = () => <CreateAccountStory />;
+export const SubmitFailsWithErrors: StoryFn<typeof CreateAccountForm> = () => (
   <CreateAccountStory
     onSubmit={async () => ['There was a server error', 'There was a second server error']}
   />

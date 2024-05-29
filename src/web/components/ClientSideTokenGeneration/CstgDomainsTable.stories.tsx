@@ -1,13 +1,13 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { UpdateDomainNamesResponse } from './CstgDomainHelper';
 import { CstgDomainsTable } from './CstgDomainsTable';
 
-export default {
+const meta: Meta<typeof CstgDomainsTable> = {
   title: 'CSTG/Domains/Domains Table',
   component: CstgDomainsTable,
-} as Meta<typeof CstgDomainsTable>;
+};
 
+export default meta;
 type Story = StoryObj<typeof CstgDomainsTable>;
 
 export const WithDomains: Story = {
@@ -25,9 +25,7 @@ export const WithoutDomains: Story = {
     domains: [],
     onUpdateDomains: (domains: string[]) => {
       Promise.resolve(console.log('update domains to:', domains));
-      return new Promise<UpdateDomainNamesResponse | undefined>((resolve) => {
-        resolve({ domains: [''], isValidDomains: true });
-      });
+      return Promise.resolve({ domains: [''], isValidDomains: true });
     },
   },
 };

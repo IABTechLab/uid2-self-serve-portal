@@ -1,28 +1,33 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantItemSimple } from './ParticipantItem';
 
-export default {
+const meta: Meta<typeof ParticipantItemSimple> = {
   title: 'Sharing Permissions/Participant Item Simple',
   component: ParticipantItemSimple,
-} as ComponentMeta<typeof ParticipantItemSimple>;
+  decorators: [
+    (Story) => (
+      <table>
+        <tbody>
+          <tr>
+            <Story />
+          </tr>
+        </tbody>
+      </table>
+    ),
+  ],
+};
+export default meta;
 
-const Template: ComponentStory<typeof ParticipantItemSimple> = (args) => (
-  <table>
-    <tbody>
-      <tr>
-        <ParticipantItemSimple {...args} />
-      </tr>
-    </tbody>
-  </table>
-);
+type Story = StoryObj<typeof ParticipantItemSimple>;
 
-export const Default = Template.bind({});
-Default.args = {
-  site: {
-    id: 1,
-    name: 'Participant 1',
-    clientTypes: ['DSP'],
-    canBeSharedWith: true,
+export const Default: Story = {
+  args: {
+    site: {
+      id: 1,
+      name: 'Participant 1',
+      clientTypes: ['DSP'],
+      canBeSharedWith: true,
+    },
   },
 };
