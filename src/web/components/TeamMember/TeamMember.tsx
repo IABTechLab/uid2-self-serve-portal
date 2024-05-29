@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useState } from 'react';
 
+import { UserDTO } from '../../../api/entities/User';
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import { InlineMessage } from '../Core/InlineMessage';
@@ -11,6 +12,7 @@ import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
 import TeamMemberDialog from './TeamMemberDialog';
 
 type TeamMemberProps = Readonly<{
+  existingTeamMembers: UserDTO[];
   person: UserResponse;
   resendInvite: (id: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
@@ -24,6 +26,7 @@ enum InviteState {
   error,
 }
 function TeamMember({
+  existingTeamMembers,
   person,
   resendInvite,
   onRemoveTeamMember,
@@ -119,6 +122,7 @@ function TeamMember({
             </button>
             {showTeamMemberDialog && (
               <TeamMemberDialog
+                teamMembers={existingTeamMembers}
                 onUpdateTeamMember={handleUpdateUser}
                 person={person}
                 onOpenChange={onOpenChangeTeamMemberDialog}
