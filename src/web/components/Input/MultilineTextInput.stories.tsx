@@ -1,15 +1,18 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { MultilineTextInput } from './MultilineTextInput';
 
-export default {
+const meta: Meta<typeof MultilineTextInput> = {
   title: 'Shared Components/Inputs/MultilineText',
   component: MultilineTextInput,
-} as ComponentMeta<typeof MultilineTextInput>;
+};
 
-const Template: ComponentStory<typeof MultilineTextInput> = (args) => {
+export default meta;
+type Story = StoryObj<typeof MultilineTextInput>;
+
+const Template: StoryFn<typeof MultilineTextInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;
   return (
@@ -30,15 +33,21 @@ const Template: ComponentStory<typeof MultilineTextInput> = (args) => {
   );
 };
 
-export const WithLabel = Template.bind({});
-WithLabel.args = {
-  name: 'default',
-  label: 'Enter text',
+export const WithLabel: Story = {
+  render: Template,
+
+  args: {
+    name: 'default',
+    label: 'Enter text',
+  },
 };
 
-export const WithValidation = Template.bind({});
-WithValidation.args = {
-  name: 'text with rule',
-  label: 'Enter text',
-  rules: { required: 'Please enter some text.' },
+export const WithValidation: Story = {
+  render: Template,
+
+  args: {
+    name: 'text with rule',
+    label: 'Enter text',
+    rules: { required: 'Please enter some text.' },
+  },
 };
