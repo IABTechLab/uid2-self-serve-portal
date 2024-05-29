@@ -4,13 +4,13 @@ import { ReactNode } from 'react';
 
 import './Tooltip.scss';
 
-type TooltipProps = {
+type TooltipProps = Readonly<{
   children: ReactNode;
   trigger?: ReactNode;
   side?: 'top' | 'right' | 'bottom' | 'left';
   align?: 'center' | 'start' | 'end';
   delayDuration?: number;
-};
+}>;
 export function Tooltip({ children, trigger, side, align, delayDuration }: TooltipProps) {
   const DEFAULT_DELAY_DURATION = 300;
 

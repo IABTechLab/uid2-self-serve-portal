@@ -16,7 +16,7 @@ export function ClientSideCompletion({ keyPairData, domainNames }: ClientSideCom
   return (
     <Card className='client-side-completion'>
       <h2>
-        <FontAwesomeIcon icon='exclamation-triangle' /> Missing Configuration
+        <FontAwesomeIcon icon='triangle-exclamation' /> Missing Configuration
       </h2>
       <div>Before you can use client-side integration, you must complete the following:</div>
       <ul>
