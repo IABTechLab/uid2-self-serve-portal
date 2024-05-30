@@ -6,7 +6,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
-import EditButton from '../Core/EditButton';
+import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
 import EditParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
@@ -73,7 +73,7 @@ export function ApprovedParticipantItem({
       <td>{participant.crmAgreementNumber}</td>
       <td className='action'>
         <div className='action-cell'>
-          <EditButton onClick={onOpenChangeEditParticipantDialog} />
+          <ActionButton onClick={onOpenChangeEditParticipantDialog} icon={ActionButtonIcon.edit} />
           {showEditParticipantDialog && (
             <EditParticipantDialog
               apiRoles={apiRoles}

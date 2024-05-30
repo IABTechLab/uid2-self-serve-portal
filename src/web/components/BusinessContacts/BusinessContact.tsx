@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
-import DeleteButton from '../Core/DeleteButton';
+import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
 import { Dialog } from '../Core/Dialog';
-import EditButton from '../Core/EditButton';
 import { InlineMessage } from '../Core/InlineMessage';
 import BusinessContactDialog from './BusinessContactDialog';
 
@@ -95,7 +94,7 @@ function BusinessContact({
         <div className='action-cell'>
           {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
-            <EditButton onClick={onOpenChangeEditBusinessContactDialog} />
+            <ActionButton onClick={onOpenChangeEditBusinessContactDialog} className='action-button' icon={ActionButtonIcon.edit} />
             {showEditBusinessDialog && (
               <BusinessContactDialog
                 onFormSubmit={handleUpdateEmailContact}
@@ -104,7 +103,7 @@ function BusinessContact({
               />
             )}
 
-            <DeleteButton onClick={onOpenChangeDeleteBusinessContactDialog} />
+            <ActionButton onClick={onOpenChangeDeleteBusinessContactDialog} className='action-button' icon={ActionButtonIcon.delete} />
             {showDeleteBusinessContactDialog && (
               <DeleteBusinessContactDialog
                 onRemoveContact={handleRemoveEmailContact}

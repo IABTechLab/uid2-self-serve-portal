@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import DeleteButton from '../Core/DeleteButton';
-import EditButton from '../Core/EditButton';
+import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
 import CstgEditDomainDialog from './CstgEditDomainDialog';
@@ -41,7 +40,7 @@ export function CstgDomainItem({
       <td className='domain'>{domain}</td>
       <td className='action'>
         <div className='action-cell'>
-          <EditButton onClick={onEditDialogChange} />
+          <ActionButton onClick={onEditDialogChange} className='action-button' icon={ActionButtonIcon.edit}/>
           {showEditDialog && (
             <CstgEditDomainDialog
               domain={domain}
@@ -51,7 +50,7 @@ export function CstgDomainItem({
             />
           )}
 
-          <DeleteButton onClick={() => setShowDeleteDialog(true)} />
+          <ActionButton onClick={() => setShowDeleteDialog(true)} className='action-button' icon={ActionButtonIcon.delete} />
           {showDeleteDialog && (
             <CstgDeleteDomainDialog
               domains={[domain]}

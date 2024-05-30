@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
-import ActionButton from '../Core/ActionButton';
-import DeleteButton from '../Core/DeleteButton';
-import EditButton from '../Core/EditButton';
+import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
 import { Tooltip } from '../Core/Tooltip';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
@@ -61,7 +59,11 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
                 We recommend rotating API keys every year.
               </Tooltip>
             )}
-            <EditButton onClick={onOpenChangeKeyEditDialog} />
+            <ActionButton
+              onClick={onOpenChangeKeyEditDialog}
+              icon={ActionButtonIcon.edit}
+              className='action-button'
+            />
 
             {showKeyEditDialog && (
               <KeyEditDialog
@@ -73,7 +75,11 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
               />
             )}
 
-            <ActionButton onClick={onOpenChangeKeyDisableDialog} icon='trash-can' />
+            <ActionButton
+              onClick={onOpenChangeKeyDisableDialog}
+              icon={ActionButtonIcon.delete}
+              className='action-button'
+            />
             {showKeyDisableDialog && (
               <KeyDisableDialog
                 apiKey={apiKey}

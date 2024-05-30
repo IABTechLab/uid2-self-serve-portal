@@ -3,7 +3,10 @@ import clsx from 'clsx';
 
 import '../../styles/buttons.scss';
 
-export type ActionButtonIcon = 'pencil' | 'trash-can';
+export enum ActionButtonIcon {
+  edit = 'pencil',
+  delete = 'trash-can'
+};
 
 type ActionButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
   icon: ActionButtonIcon;

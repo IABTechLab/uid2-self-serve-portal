@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
-import DeleteButton from '../Core/DeleteButton';
+import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
 import DisplaySecretTable from '../Core/DisplaySecretTable';
-import EditButton from '../Core/EditButton';
 import KeyPairDisableDialog, { OnKeyPairDisable } from './KeyPairDisableDialog';
 import KeyPairEditDialog, { OnKeyPairEdit } from './KeyPairEditDialog';
 import { KeyPairModel } from './KeyPairModel';
@@ -36,7 +35,7 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
       <td className='created'>{keyPair.createdString}</td>
       <td className='action'>
         <div className='action-cell'>
-          <EditButton onClick={onOpenChangeKeyPairEditDialog} />
+          <ActionButton onClick={onOpenChangeKeyPairEditDialog} className='action-button' icon={ActionButtonIcon.edit}/>
           {showKeyPairEditDialog && (
             <KeyPairEditDialog
               keyPair={keyPair}
@@ -46,7 +45,7 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
             />
           )}
 
-          <DeleteButton onClick={onOpenChangeKeyPairDisableDialog} />
+          <ActionButton onClick={onOpenChangeKeyPairDisableDialog} className='action-button' icon={ActionButtonIcon.delete} />
           {showKeyPairDisableDialog && (
             <KeyPairDisableDialog
               keyPair={keyPair}
