@@ -12,6 +12,7 @@ type ActionButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>>
   icon: ActionButtonIcon;
   iconClassName?: string;
 };
+
 function ActionButton(props: ActionButtonProps) {
   const { children, className, icon, iconClassName, onClick, ...buttonProps } = props;
   return (
@@ -26,4 +27,5 @@ function ActionButton(props: ActionButtonProps) {
     </button>
   );
 }
+
 export default ActionButton;
