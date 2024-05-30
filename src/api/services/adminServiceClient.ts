@@ -232,7 +232,7 @@ export const addSite = async (
   return response.data;
 };
 
-const siteClientTypesParser = ParticipantSchema.pick({
+const ParticipantUpdatePartial = ParticipantSchema.pick({
   siteId: true,
   types: true,
 }).extend({
@@ -240,12 +240,12 @@ const siteClientTypesParser = ParticipantSchema.pick({
 });
 
 export const setSiteClientTypes = async (
-  siteClientTypesRequest: z.infer<typeof siteClientTypesParser>
+  participantUpdatePartial: z.infer<typeof ParticipantUpdatePartial>
 ): Promise<void> => {
-  const adminTypes = mapClientTypesToAdminEnums(siteClientTypesRequest.types).join(',');
+  const adminTypes = mapClientTypesToAdminEnums(participantUpdatePartial.types).join(',');
   const response = await adminServiceClient.post('/api/site/set-types', null, {
     params: {
-      id: siteClientTypesRequest.siteId,
+      id: participantUpdatePartial.siteId,
       types: adminTypes,
     },
   });
