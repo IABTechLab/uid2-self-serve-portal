@@ -1,6 +1,6 @@
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 
-export const yearInSeconds = 60 * 60 * 24;
+export const yearInSeconds = 60 * 60 * 24 * 365.25;
 
 export const shouldRotateApiKey = (apiKey: ApiKeyDTO): boolean => {
   if (apiKey.disabled === true) {
