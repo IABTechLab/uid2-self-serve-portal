@@ -2,13 +2,14 @@
 import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
-import { ParticipantApprovalPartial } from '../entities/Participant';
+import { ParticipantSchema } from '../entities/Participant';
+import { ParticipantTypeSchema } from '../entities/ParticipantType';
 import {
   SSP_ADMIN_SERVICE_BASE_URL,
   SSP_OKTA_AUTH_DISABLED,
   SSP_OKTA_AUTH_SERVER_URL,
   SSP_OKTA_CLIENT_ID,
-  SSP_OKTA_CLIENT_SECRET,
+  SSP_OKTA_CLIENT_SECRET
 } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
@@ -20,7 +21,7 @@ import {
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
-  SiteCreationDTO,
+  SiteCreationDTO
 } from './adminServiceHelpers';
 
 let accessToken: string = '';
@@ -231,13 +232,20 @@ export const addSite = async (
   return response.data;
 };
 
+const siteClientTypesParser = ParticipantSchema.pick({
+  siteId: true,
+  types: true,
+}).extend({
+  types: z.array(ParticipantTypeSchema.pick({ id: true })),
+});
+
 export const setSiteClientTypes = async (
-  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
+  siteClientTypesRequest: z.infer<typeof siteClientTypesParser>
 ): Promise<void> => {
-  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial.types).join(',');
+  const adminTypes = mapClientTypesToAdminEnums(siteClientTypesRequest.types).join(',');
   const response = await adminServiceClient.post('/api/site/set-types', null, {
     params: {
-      id: participantApprovalPartial.siteId,
+      id: siteClientTypesRequest.siteId,
       types: adminTypes,
     },
   });

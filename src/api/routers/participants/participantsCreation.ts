@@ -3,32 +3,29 @@ import { z } from 'zod';
 
 import { ApiRole } from '../../entities/ApiRole';
 import {
-  Participant,
-  ParticipantApprovalPartial,
-  ParticipantStatus,
+  Participant, ParticipantStatus
 } from '../../entities/Participant';
-import { ParticipantType } from '../../entities/ParticipantType';
 import { User, UserCreationPartial } from '../../entities/User';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
   mapClientTypesToAdminEnums,
-  SiteCreationRequest,
+  SiteCreationRequest
 } from '../../services/adminServiceHelpers';
 import {
   insertAddParticipantAuditTrail,
-  updateAuditTrailToProceed,
+  updateAuditTrailToProceed
 } from '../../services/auditTrailService';
 import {
   assignClientRoleToUser,
   createNewUser,
-  sendInviteEmail,
+  sendInviteEmail
 } from '../../services/kcUsersService';
-import { ParticipantRequest } from '../../services/participantsService';
+import { getParticipantTypesByIds, ParticipantRequest } from '../../services/participantsService';
 import { findUserByEmail } from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
-  ParticipantCreationRequest,
+  ParticipantCreationRequest
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
@@ -77,7 +74,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     acceptedTerms: false,
   });
 
-  const types = await ParticipantType.query().findByIds(participantRequest.participantTypes);
+  const types = await getParticipantTypesByIds(participantRequest.participantTypes);
   const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
 
   let site;
@@ -92,13 +89,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     site = await addSite(newSite.name, newSite.description, newSite.types);
   } else {
     // existing site.  Update client types
-    const approvalPartial = ParticipantApprovalPartial.parse({
-      name: participantRequest.participantName,
-      siteId: participantRequest.siteId,
-      types,
-      apiRoles,
-    });
-    setSiteClientTypes(approvalPartial);
+    setSiteClientTypes({ siteId: participantRequest.siteId, types });
   }
 
   const participantData = ParticipantCreationAndApprovalPartial.parse({
