@@ -9,6 +9,9 @@ function DocumentationCard() {
       <div>
         <h2>Documentation</h2>
         <span>Check out documentation for implementation resources</span>
+        <a href='https://unifiedid.com/docs/category/uid2-portal' target='_blank' rel='noreferrer'>
+          UID2 Portal Documentation
+        </a>
         <a
           href='https://unifiedid.com/docs/overviews/overview-publishers'
           target='_blank'
