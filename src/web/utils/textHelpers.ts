@@ -44,3 +44,5 @@ export const sortStringsAlphabetically = (strings: string[]) => {
     return 0;
   });
 };
+
+export const validateEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;

@@ -25,6 +25,7 @@ export const Default = () => {
           onAddTeamMember={(form) =>
             Promise.resolve(console.log(`Add new user ${JSON.stringify(form)}`))
           }
+          teamMembers={[]}
         />
       )}
     </div>
@@ -54,6 +55,7 @@ export const WithTeamMember = () => {
             acceptedTerms: true,
             participantId: 1,
           }}
+          teamMembers={[]}
         />
       )}
     </div>

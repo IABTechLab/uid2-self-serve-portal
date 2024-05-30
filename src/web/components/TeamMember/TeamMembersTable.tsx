@@ -10,13 +10,13 @@ import TeamMemberDialog from './TeamMemberDialog';
 
 import './TeamMembersTable.scss';
 
-type TeamMembersTableProps = {
+type TeamMembersTableProps = Readonly<{
   teamMembers: UserResponse[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
   resendInvite: (id: number) => Promise<void>;
-};
+}>;
 
 function TeamMembersTable({
   teamMembers,
@@ -45,6 +45,7 @@ function TeamMembersTable({
         <tbody>
           {teamMembers.map((t) => (
             <TeamMember
+              existingTeamMembers={teamMembers}
               key={t.email}
               person={t}
               resendInvite={resendInvite}
@@ -60,6 +61,7 @@ function TeamMembersTable({
         </button>
         {showTeamMemberDialog && (
           <TeamMemberDialog
+            teamMembers={teamMembers}
             onAddTeamMember={onAddTeamMember}
             onOpenChange={onOpenChangeTeamMemberDialog}
           />
