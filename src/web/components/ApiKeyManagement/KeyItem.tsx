@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
+import ActionButton from '../Core/ActionButton';
 import DeleteButton from '../Core/DeleteButton';
 import EditButton from '../Core/EditButton';
 import { Tooltip } from '../Core/Tooltip';
@@ -72,7 +73,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
               />
             )}
 
-            <DeleteButton onClick={onOpenChangeKeyDisableDialog} />
+            <ActionButton onClick={onOpenChangeKeyDisableDialog} icon='trash-can' />
             {showKeyDisableDialog && (
               <KeyDisableDialog
                 apiKey={apiKey}
