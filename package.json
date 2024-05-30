@@ -17,7 +17,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@grafana/faro-react": "^1.7.2",
+    "@grafana/faro-react": "^1.7.3",
     "@keycloak/keycloak-admin-client": "18.0.2",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-checkbox": "^1.0.4",

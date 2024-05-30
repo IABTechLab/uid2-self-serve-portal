@@ -11,6 +11,7 @@ import { AddParticipantForm } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
+import { validateEmailRegex } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { SuccessToast } from '../Core/Toast';
@@ -262,7 +263,7 @@ function AddParticipantDialog({
                     rules={{
                       required: 'Please specify Contact Email.',
                       pattern: {
-                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                        value: validateEmailRegex,
                         message: 'Entered value does not match email format',
                       },
                     }}
