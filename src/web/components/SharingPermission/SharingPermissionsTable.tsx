@@ -8,13 +8,12 @@ import {
   ClientTypes,
 } from '../../../api/services/adminServiceHelpers';
 import { useAllSitesList } from '../../services/site';
-import { formatStringsWithSeparator } from '../../utils/textHelpers';
-import { Dialog } from '../Core/Dialog';
 import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { DeletePermissionDialog } from './DeletePermissionDialog';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
   disableSelectAllCheckbox,
@@ -39,77 +38,6 @@ function NoParticipant() {
   );
 }
 
-type DeletePermissionDialogProps = Readonly<{
-  onDeleteSharingPermission: () => void;
-  selectedSiteList: SharingSiteWithSource[];
-}>;
-function DeletePermissionDialog({
-  onDeleteSharingPermission,
-  selectedSiteList,
-}: DeletePermissionDialogProps) {
-  const [showDeletePermissionsDialog, setShowDeletePermissionsDialog] = useState(false);
-
-  const onOpenChangeDeletePermissionsDialog = () => {
-    setShowDeletePermissionsDialog(!showDeletePermissionsDialog);
-  };
-
-  const handleDeletePermissions = () => {
-    onDeleteSharingPermission();
-    onOpenChangeDeletePermissionsDialog();
-  };
-
-  const showDeletionNotice = (participant: SharingSiteWithSource) => {
-    const remainSources = participant.addedBy.filter(
-      (source) => source !== MANUALLY_ADDED
-    ) as ClientType[];
-    const remainSourceDescriptions = remainSources.map((x) => ClientTypeDescriptions[x]);
-    if (remainSourceDescriptions.length) {
-      return (
-        <span>
-          {' '}
-          (This site will remain shared by {formatStringsWithSeparator(remainSourceDescriptions)})
-        </span>
-      );
-    }
-  };
-
-  return (
-    <div>
-      <button
-        className='transparent-button sharing-permission-delete-button'
-        type='button'
-        onClick={onOpenChangeDeletePermissionsDialog}
-      >
-        <FontAwesomeIcon icon={['far', 'trash-can']} className='sharing-permission-trashcan-icon' />
-        Delete Permissions
-      </button>
-      {showDeletePermissionsDialog && (
-        <Dialog
-          title='Are you sure you want to delete these permissions?'
-          onOpenChange={onOpenChangeDeletePermissionsDialog}
-          closeButtonText='Cancel'
-        >
-          <div className='dialog-body-section'>
-            <ul className='dot-list'>
-              {selectedSiteList.map((participant) => (
-                <li key={participant.id}>
-                  {participant.name}
-                  {showDeletionNotice(participant)}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className='dialog-footer-section'>
-            <button type='button' className='primary-button' onClick={handleDeletePermissions}>
-              Delete Permissions
-            </button>
-          </div>
-        </Dialog>
-      )}
-    </div>
-  );
-}
-
 type SharingPermissionsTableContentProps = Readonly<{
   sharingSites: SharingSiteWithSource[];
   onDeleteSharingPermission: (siteIds: number[]) => Promise<void>;
@@ -122,6 +50,7 @@ export function SharingPermissionsTableContent({
   const [filterText, setFilterText] = useState('');
   const [checkedSites, setCheckedSites] = useState<Set<number>>(new Set());
   const [selectedTypes, setSelectedTypes] = useState(new Set<ClientType>());
+  const [showDeletePermissionsDialog, setShowDeletePermissionsDialog] = useState<boolean>(false);
   const filteredSites = filterSites(sharingSites, filterText, selectedTypes);
 
   const isSelectedAllManualAddedParticipant = () => {
@@ -159,6 +88,10 @@ export function SharingPermissionsTableContent({
     />
   );
 
+  const onOpenChangeDeletePermissionsDialog = () => {
+    setShowDeletePermissionsDialog(!showDeletePermissionsDialog);
+  };
+
   const tableHeader = (
     <thead>
       <tr className='participant-item-with-checkbox'>
@@ -166,6 +99,7 @@ export function SharingPermissionsTableContent({
         <SortableTableHeader<SharingSiteWithSource> sortKey='name' header='Participant Name' />
         <th>Participant Type</th>
         <SortableTableHeader<SharingSiteWithSource> sortKey='addedBy' header='Source' />
+        <th>Actions</th>
       </tr>
     </thead>
   );
@@ -182,10 +116,21 @@ export function SharingPermissionsTableContent({
           ) : (
             selectAllCheckbox
           )}
-          {checkedSites.size > 0 && (
+          {checkedSites.size > 0 &&
+              <button
+        className='transparent-button sharing-permission-delete-button'
+        type='button'
+        onClick={onOpenChangeDeletePermissionsDialog}
+      >
+        <FontAwesomeIcon icon={['far', 'trash-can']} className='sharing-permission-trashcan-icon' />
+        Delete Permissions
+      </button>
+}
+          {showDeletePermissionsDialog && checkedSites.size > 0 && (
             <DeletePermissionDialog
               onDeleteSharingPermission={handleDeletePermissions}
               selectedSiteList={sharingSites.filter((p) => checkedSites.has(p.id))}
+              onOpenChange={onOpenChangeDeletePermissionsDialog}
             />
           )}
           <MultiSelectDropdown
@@ -211,6 +156,8 @@ export function SharingPermissionsTableContent({
         onSelectedChange={setCheckedSites}
         tableHeader={tableHeader}
         className='shared-participants-table'
+        onDelete={handleDeletePermissions}
+        sharingSites={sharingSites}
       />
     </>
   );
