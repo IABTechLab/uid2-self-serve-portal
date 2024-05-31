@@ -103,11 +103,6 @@ export function ParticipantSearchBar({
             className='search-bar-participants'
             tableHeader={tableHeader}
           />
-          {/* <MultiSelectDropdown
-            onSelectedChange={onSelectedChange}
-            title='Sharing Test'
-            options={siteOptions}
-          /> */}
           {/* TODO: update the participant not appearing url */}
           {/* <div className='search-bar-footer'>
             <a className='outside-link' href='/'>Participant Not Appearing in Search?</a>
