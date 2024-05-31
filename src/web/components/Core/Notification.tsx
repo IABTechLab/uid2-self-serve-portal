@@ -4,12 +4,12 @@ import { ReactNode } from 'react';
 
 import './Notification.scss';
 
-type NotificationProps = {
+type NotificationProps = Readonly<{
   icon?: IconProp;
   title?: ReactNode;
   notification: ReactNode;
   className?: string;
-};
+}>;
 
 export function Notification({ icon, title, notification, className }: NotificationProps) {
   return (
