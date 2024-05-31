@@ -19,8 +19,6 @@ export function DeletePermissionDialog({
     onOpenChange();
   };
 
-  console.log(selectedSiteList);
-
   const showDeletionNotice = (participant: SharingSiteWithSource) => {
     const remainSources = participant.addedBy.filter(
       (source) => source !== MANUALLY_ADDED,

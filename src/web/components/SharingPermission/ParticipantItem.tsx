@@ -62,8 +62,6 @@ export function ParticipantItem({
     <TriStateCheckbox onClick={onClick} status={checked} disabled={checkboxDisabled} />
   );
 
-  console.log('sharingsites:', sharingSites);
-
   const onDeleteDialogChange = () => {
     setShowDeleteDialog(!showDeleteDialog);
   };
