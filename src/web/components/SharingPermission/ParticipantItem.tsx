@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { AdminSiteDTO, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
+import ActionButton from '../Core/ActionButton';
 import { Tooltip } from '../Core/Tooltip';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import { DeletePermissionDialog } from './DeletePermissionDialog';
@@ -80,18 +81,7 @@ export function ParticipantItem({
       </td>
       <ParticipantItemSimple site={site} />
       {isSharingParticipant(site) && <td>{formatSourceColumn(site.addedBy)}</td>}
-      {onDelete && (
-        <button
-          type='button'
-          className='icon-button'
-          aria-label='delete-domain-name'
-          onClick={() => {
-            setShowDeleteDialog(true);
-          }}
-        >
-          <FontAwesomeIcon icon='trash-can' />
-        </button>
-      )}
+      {onDelete && <ActionButton onClick={() => setShowDeleteDialog(true)} icon='trash-can' />}
       {showDeleteDialog && onDelete && sharingSites && (
         <DeletePermissionDialog
           onDeleteSharingPermission={onDelete}
