@@ -61,7 +61,6 @@ export function SharingPermissionsTableContent({
 
   const handleDeletePermissions = (siteIdsToDelete: number[]) => {
     onDeleteSharingPermission(siteIdsToDelete);
-    // onDeleteSharingPermission(Array.from(checkedSites));
     setCheckedSites(new Set());
   };
   const siteTypeOptions = ClientTypes.map((type) => ({
