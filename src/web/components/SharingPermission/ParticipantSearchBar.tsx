@@ -3,7 +3,6 @@ import { ChangeEvent, useCallback, useState } from 'react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType, ClientTypes } from '../../../api/services/adminServiceHelpers';
-import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 import { ParticipantsTable } from './ParticipantsTable';

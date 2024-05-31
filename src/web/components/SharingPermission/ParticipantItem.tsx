@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
@@ -79,7 +78,11 @@ export function ParticipantItem({
       </td>
       <ParticipantItemSimple site={site} />
       {isSharingParticipant(site) && <td>{formatSourceColumn(site.addedBy)}</td>}
-      {onDelete && <ActionButton onClick={() => setShowDeleteDialog(true)} icon='trash-can' />}
+      {onDelete && (
+        <td className='action-cell'>
+          <ActionButton onClick={() => setShowDeleteDialog(true)} icon='trash-can' />
+        </td>
+      )}
       {showDeleteDialog && onDelete && sharingSites && (
         <DeletePermissionDialog
           onDeleteSharingPermission={onDelete}

@@ -99,7 +99,7 @@ export function SharingPermissionsTableContent({
         <SortableTableHeader<SharingSiteWithSource> sortKey='name' header='Participant Name' />
         <th>Participant Type</th>
         <SortableTableHeader<SharingSiteWithSource> sortKey='addedBy' header='Source' />
-        <th>Actions</th>
+        <th className='action'>Actions</th>
       </tr>
     </thead>
   );
