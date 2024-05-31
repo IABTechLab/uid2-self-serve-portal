@@ -73,7 +73,7 @@ export function ApprovedParticipantItem({
       <td>{participant.crmAgreementNumber}</td>
       <td className='action'>
         <div className='action-cell'>
-          <ActionButton onClick={onOpenChangeEditParticipantDialog} icon='edit' />
+          <ActionButton onClick={onOpenChangeEditParticipantDialog} icon='pencil' />
           {showEditParticipantDialog && (
             <EditParticipantDialog
               apiRoles={apiRoles}
