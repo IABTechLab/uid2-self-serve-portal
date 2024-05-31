@@ -8,6 +8,7 @@ import {
   ClientTypes,
 } from '../../../api/services/adminServiceHelpers';
 import { useAllSitesList } from '../../services/site';
+import ActionButton from '../Core/ActionButton';
 import { Loading } from '../Core/Loading';
 import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { SortableTableHeader } from '../Core/SortableTableHeader';
@@ -117,17 +118,14 @@ export function SharingPermissionsTableContent({
             selectAllCheckbox
           )}
           {checkedSites.size > 0 && (
-            <button
-              className='transparent-button sharing-permission-delete-button'
-              type='button'
+            <ActionButton
+              className='sharing-permission-delete-button'
               onClick={onOpenChangeDeletePermissionsDialog}
+              icon={['far', 'trash-can']}
+              iconClassName='sharing-permission-trashcan-icon'
             >
-              <FontAwesomeIcon
-                icon={['far', 'trash-can']}
-                className='sharing-permission-trashcan-icon'
-              />
               Delete Permissions
-            </button>
+            </ActionButton>
           )}
           {showDeletePermissionsDialog && checkedSites.size > 0 && (
             <DeletePermissionDialog
