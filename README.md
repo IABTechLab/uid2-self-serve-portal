@@ -105,6 +105,7 @@ The portal uses [Keycloak](https://www.keycloak.org/) as the identity and access
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
 
 #### Keycloak admin console
+
 - The Keycloak admin console runs at http://localhost:18080/admin/
 - The username and password are stored in [docker-compose.yml](./docker-compose.yml)
 - If you set an email address for the admin account, you will need to use that email address to log into the Keycloak admin console
@@ -264,23 +265,30 @@ The following steps describe the minimal steps required to successfully log in t
 1. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
 1. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
 
-    ```
-    use [uid2_selfserve]
+   ```
+   use [uid2_selfserve]
 
-    declare @email as nvarchar(256) = '<Enter your email here>'
+   declare @email as nvarchar(256) = '<Enter your email here>'
 
-    update p
-    set status = 'approved'
-    from dbo.participants p
-    left join dbo.users u
-      on p.id = u.participantId
-    where u.email = @email
-    ```
+   update p
+   set status = 'approved'
+   from dbo.participants p
+   left join dbo.users u
+     on p.id = u.participantId
+   where u.email = @email
+   ```
 
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
 1. Optionally give your user access to the [Admin screens/routes](#admin-screensroutes)
 1. Return to the UI and you should be good to go!
+
+#### \* Notes for Mac OSX Development:
+
+1. For Apple Silicon machines, you must ensure that Rosetta 2 is installed and Rosetta is enabled in Docker Desktop.
+1. You will need to change the permissions on your development directories. They will not be editable by default when cloned from github
+1. If using Visual Studio Code, you may need to set `FAST_REFRESH=false` in your .env file
+1. Azure Data Studio is an adequate program for manipulating the SQL Server database
 
 ### Admin screens/routes
 
@@ -295,13 +303,13 @@ declare @email as nvarchar(256) = '<Enter your email here>'
 select * from dbo.approvers where email = @email
 
 insert into dbo.approvers (displayName, email, participantTypeId)
-values 
+values
 (@displayName, @email, 1),
 (@displayName, @email, 2),
 (@displayName, @email, 3),
 (@displayName, @email, 4)
 
-select * from dbo.approvers where email = @email 
+select * from dbo.approvers where email = @email
 ```
 
 You will then want to assign some API Permissions to your participant in the `Manage Participants` screen. This will allow you to use the full functionality of the `API Keys` screen.
@@ -310,19 +318,23 @@ You will then want to assign some API Permissions to your participant in the `Ma
 
 1. Run `uid2-admin` locally by following the README: https://github.com/IABTechLab/uid2-admin
 1. Ensure that the site IDs of your participants exist in admin. That goes for the current participant you are logged in to, as well as the participants you are interacting (e.g. sharing) with. You can check the existing IDs by looking at `sites.json` in `uid2-admin` or by going to http://localhost:8089/adm/site.html and hitting `List Sites`, given the service is running locally.
-    1. To assign a site to your participant, run the following SQL:
-        ```
-        use [uid2_selfserve]
 
-        update dbo.participants
-        set siteId = <enter a valid site id> -- e.g. 999 
-        where id = <Enter your participant id> -- should be 7 for brand new devs
+   1. To assign a site to your participant, run the following SQL:
 
-        ```
+      ```
+      use [uid2_selfserve]
+
+      update dbo.participants
+      set siteId = <enter a valid site id> -- e.g. 999
+      where id = <Enter your participant id> -- should be 7 for brand new devs
+
+      ```
+
 1. If you wish to test uid2-admin service with Okta auth enabled, ensure that you have set `SSP_OKTA_AUTH_DISABLED` to false in your `.env`, and fill in the `SSP_OKTA_CLIENT_SECRET` value. You will also need to update `is_auth_disabled` to false in your uid2-admin local-config.json, and fill in the `okta_client_secret` value.
    - You can find the keys for local testing in 1Password under "Okta localhost deployment".
    - Make sure you use the key from the uid2-self-serve-portal subsection for ssportal and the value from the uid2-admin subsection for admin.
    - You will need to restart the api (i.e. `npm run api`) after updating your `.env` file.
 
 ### Troubleshooting
+
 - Ensure your `SSP_KK_SECRET` matches the Client Secret in the Keycloak admin console, see: [Keycloak Client Secret](./KeycloakAdvancedSetup.md#keycloak-client-secret).
