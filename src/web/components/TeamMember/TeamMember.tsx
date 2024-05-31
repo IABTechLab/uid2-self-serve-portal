@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useState } from 'react';
@@ -6,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { UserDTO } from '../../../api/entities/User';
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
+import ActionButton from '../Core/ActionButton';
 import { InlineMessage } from '../Core/InlineMessage';
 import { SuccessToast } from '../Core/Toast';
 import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
@@ -112,14 +112,7 @@ function TeamMember({
                 {reinviteState === InviteState.error && 'Try again later'}
               </button>
             )}
-            <button
-              className='icon-button'
-              aria-label='edit'
-              type='button'
-              onClick={onOpenChangeTeamMemberDialog}
-            >
-              <FontAwesomeIcon icon='pencil' />
-            </button>
+            <ActionButton onClick={onOpenChangeTeamMemberDialog} icon='pencil' />
             {showTeamMemberDialog && (
               <TeamMemberDialog
                 teamMembers={existingTeamMembers}
@@ -128,14 +121,8 @@ function TeamMember({
                 onOpenChange={onOpenChangeTeamMemberDialog}
               />
             )}
-            <button
-              className='icon-button'
-              aria-label='delete'
-              type='button'
-              onClick={onOpenChangeDeleteTeamMemberDialog}
-            >
-              <FontAwesomeIcon icon='trash-can' />
-            </button>
+
+            <ActionButton onClick={onOpenChangeDeleteTeamMemberDialog} icon='trash-can' />
             {showDeleteTeamMemberDialog && (
               <TeamMemberDeleteConfirmationDialog
                 onRemoveTeamMember={handleRemoveUser}

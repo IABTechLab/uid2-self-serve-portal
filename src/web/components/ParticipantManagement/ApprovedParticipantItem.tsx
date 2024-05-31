@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
@@ -7,6 +6,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
+import ActionButton from '../Core/ActionButton';
 import EditParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
@@ -31,7 +31,7 @@ export function ApprovedParticipantItem({
   };
 
   function getParticipantTypes(
-    currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
+    currentParticipantTypes?: ApprovedParticipantProps['participant']['types'],
   ) {
     if (!currentParticipantTypes) return null;
     return currentParticipantTypes.map((pt) => (
@@ -73,13 +73,7 @@ export function ApprovedParticipantItem({
       <td>{participant.crmAgreementNumber}</td>
       <td className='action'>
         <div className='action-cell'>
-          <button
-            type='button'
-            className='transparent-button'
-            onClick={onOpenChangeEditParticipantDialog}
-          >
-            <FontAwesomeIcon icon='pencil' />
-          </button>
+          <ActionButton onClick={onOpenChangeEditParticipantDialog} icon='pencil' />
           {showEditParticipantDialog && (
             <EditParticipantDialog
               apiRoles={apiRoles}
