@@ -59,8 +59,9 @@ export function SharingPermissionsTableContent({
 
   const checkboxStatus = getSelectAllState(isSelectedAllManualAddedParticipant(), checkedSites);
 
-  const handleDeletePermissions = () => {
-    onDeleteSharingPermission(Array.from(checkedSites));
+  const handleDeletePermissions = (siteIdsToDelete: number[]) => {
+    onDeleteSharingPermission(siteIdsToDelete);
+    // onDeleteSharingPermission(Array.from(checkedSites));
     setCheckedSites(new Set());
   };
   const siteTypeOptions = ClientTypes.map((type) => ({
@@ -116,16 +117,19 @@ export function SharingPermissionsTableContent({
           ) : (
             selectAllCheckbox
           )}
-          {checkedSites.size > 0 &&
-              <button
-        className='transparent-button sharing-permission-delete-button'
-        type='button'
-        onClick={onOpenChangeDeletePermissionsDialog}
-      >
-        <FontAwesomeIcon icon={['far', 'trash-can']} className='sharing-permission-trashcan-icon' />
-        Delete Permissions
-      </button>
-}
+          {checkedSites.size > 0 && (
+            <button
+              className='transparent-button sharing-permission-delete-button'
+              type='button'
+              onClick={onOpenChangeDeletePermissionsDialog}
+            >
+              <FontAwesomeIcon
+                icon={['far', 'trash-can']}
+                className='sharing-permission-trashcan-icon'
+              />
+              Delete Permissions
+            </button>
+          )}
           {showDeletePermissionsDialog && checkedSites.size > 0 && (
             <DeletePermissionDialog
               onDeleteSharingPermission={handleDeletePermissions}

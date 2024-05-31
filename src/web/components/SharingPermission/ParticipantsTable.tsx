@@ -13,8 +13,8 @@ type ParticipantsTableProps = Readonly<{
   onSelectedChange: (selectedItems: Set<number>) => void;
   selectedParticipantIds?: Set<number>;
   className?: string;
-  onDelete: () => void;
-  sharingSites: SharingSiteWithSource[]
+  onDelete?: (siteIdsToDelete: number[]) => void;
+  sharingSites?: SharingSiteWithSource[];
 }>;
 
 function ParticipantsTableContent({
@@ -24,7 +24,7 @@ function ParticipantsTableContent({
   selectedParticipantIds = new Set(),
   className,
   onDelete,
-  sharingSites
+  sharingSites,
 }: ParticipantsTableProps) {
   const { sortData } = useSortable<SharingSiteDTO>();
   const sortedData = sortData(sites);

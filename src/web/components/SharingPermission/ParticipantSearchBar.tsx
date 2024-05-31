@@ -3,6 +3,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType, ClientTypes } from '../../../api/services/adminServiceHelpers';
+import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 import { ParticipantsTable } from './ParticipantsTable';
@@ -11,13 +12,13 @@ import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
 
-type ParticipantSearchBarProps = {
+type ParticipantSearchBarProps = Readonly<{
   sites: SharingSiteDTO[];
   selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   open: boolean;
   onToggleOpen: (open: boolean) => void;
-};
+}>;
 
 export function ParticipantSearchBar({
   sites,
@@ -31,7 +32,7 @@ export function ParticipantSearchBar({
   const filteredSites = filterSites(sites, filterText, selectedTypeIds);
   const checkboxStatus = getSelectAllState(
     isSelectedAll(filteredSites, selectedParticipantIds),
-    selectedParticipantIds
+    selectedParticipantIds,
   );
 
   const handleFilterChange = (typeIds: Set<ClientType>) => {
@@ -102,6 +103,11 @@ export function ParticipantSearchBar({
             className='search-bar-participants'
             tableHeader={tableHeader}
           />
+          {/* <MultiSelectDropdown
+            onSelectedChange={onSelectedChange}
+            title='Sharing Test'
+            options={siteOptions}
+          /> */}
           {/* TODO: update the participant not appearing url */}
           {/* <div className='search-bar-footer'>
             <a className='outside-link' href='/'>Participant Not Appearing in Search?</a>

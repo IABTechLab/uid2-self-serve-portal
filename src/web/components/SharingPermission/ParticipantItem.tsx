@@ -44,16 +44,24 @@ export function ParticipantItemSimple({ site }: ParticipantItemSimpleProps) {
 type ParticipantItemProps = ParticipantItemSimpleProps & {
   onClick: () => void;
   checked: boolean;
-  onDelete: () => void;
-  sharingSites: SharingSiteWithSource[]
+  onDelete?: (siteIdsToDelete: number[]) => void;
+  sharingSites?: SharingSiteWithSource[];
 };
 
-export function ParticipantItem({ site, onClick, checked, onDelete, sharingSites }: ParticipantItemProps) {
+export function ParticipantItem({
+  site,
+  onClick,
+  checked,
+  onDelete,
+  sharingSites,
+}: ParticipantItemProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const checkboxDisabled = isSharingParticipant(site) && !isAddedByManual(site);
   const checkbox = (
     <TriStateCheckbox onClick={onClick} status={checked} disabled={checkboxDisabled} />
   );
+
+  console.log('sharingsites:', sharingSites);
 
   const onDeleteDialogChange = () => {
     setShowDeleteDialog(!showDeleteDialog);
@@ -72,23 +80,25 @@ export function ParticipantItem({ site, onClick, checked, onDelete, sharingSites
       </td>
       <ParticipantItemSimple site={site} />
       {isSharingParticipant(site) && <td>{formatSourceColumn(site.addedBy)}</td>}
+      {onDelete && (
         <button
-            type='button'
-            className='icon-button'
-            aria-label='delete-domain-name'
-            onClick={() => {
-              setShowDeleteDialog(true);
-            }}
-          >
-            <FontAwesomeIcon icon='trash-can' />
-          </button>
-          {showDeleteDialog && (
-            <DeletePermissionDialog
-              onDeleteSharingPermission={onDelete}
-              onOpenChange={onDeleteDialogChange}
-              selectedSiteList={sharingSites.filter((p) => site.id === p.id)}
-            />
-          )}
+          type='button'
+          className='icon-button'
+          aria-label='delete-domain-name'
+          onClick={() => {
+            setShowDeleteDialog(true);
+          }}
+        >
+          <FontAwesomeIcon icon='trash-can' />
+        </button>
+      )}
+      {showDeleteDialog && onDelete && sharingSites && (
+        <DeletePermissionDialog
+          onDeleteSharingPermission={onDelete}
+          onOpenChange={onDeleteDialogChange}
+          selectedSiteList={sharingSites.filter((p) => site.id === p.id)}
+        />
+      )}
     </tr>
   );
 }
