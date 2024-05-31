@@ -17,7 +17,6 @@ import {
   AddSharingParticipants,
   CompleteRecommendations,
   DeleteSharingParticipants,
-  GetCurrentUsersParticipant,
   GetSharingList,
   UpdateSharingTypes,
 } from '../services/participant';
@@ -51,7 +50,7 @@ async function loadSharingList(): Promise<SharingListLoaderData> {
   }
 }
 const loader = makeLoader(() =>
-  defer({ sharingList: loadSharingList(), participant: GetCurrentUsersParticipant() })
+  defer({ sharingList: loadSharingList() })
 );
 
 function SharingPermissionPageContainer({ children }: Readonly<{ children: ReactNode }>) {
