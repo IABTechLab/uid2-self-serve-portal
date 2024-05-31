@@ -1,15 +1,11 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
 import '../../styles/buttons.scss';
 
-export enum ActionButtonIcon {
-  edit = 'pencil',
-  delete = 'trash-can'
-};
-
 type ActionButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
-  icon: ActionButtonIcon;
+  icon: IconProp;
   iconClassName?: string;
 };
 
@@ -18,7 +14,7 @@ function ActionButton(props: ActionButtonProps) {
   return (
     <button
       type='button'
-      className={clsx('transparent-button', className)}
+      className={clsx('transparent-button', 'action-button', className)}
       onClick={onClick}
       {...buttonProps}
     >

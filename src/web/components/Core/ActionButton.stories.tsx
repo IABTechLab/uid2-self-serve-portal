@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import ActionButton, { ActionButtonIcon }  from './ActionButton';
+import ActionButton from './ActionButton';
 
 const meta: Meta<typeof ActionButton> = {
   title: 'Shared Components/Action Button',
@@ -12,12 +12,12 @@ type Story = StoryObj<typeof ActionButton>;
 
 export const Edit: Story = {
   args: {
-    icon: ActionButtonIcon.edit,
+    icon: 'pencil',
   },
 };
 
 export const Delete: Story = {
-args: {
-    icon: ActionButtonIcon.delete,
+  args: {
+    icon: 'trash-can',
   },
 };

@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
-import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
+import ActionButton from '../Core/ActionButton';
 import { InlineMessage } from '../Core/InlineMessage';
 import { SuccessToast } from '../Core/Toast';
 import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
@@ -109,7 +109,7 @@ function TeamMember({
                 {reinviteState === InviteState.error && 'Try again later'}
               </button>
             )}
-            <ActionButton onClick={onOpenChangeTeamMemberDialog} icon={ActionButtonIcon.edit} className='action-button' />
+            <ActionButton onClick={onOpenChangeTeamMemberDialog} icon='pencil' />
             {showTeamMemberDialog && (
               <TeamMemberDialog
                 onUpdateTeamMember={handleUpdateUser}
@@ -118,7 +118,7 @@ function TeamMember({
               />
             )}
 
-            <ActionButton onClick={onOpenChangeDeleteTeamMemberDialog} icon={ActionButtonIcon.delete} className='action-button' />
+            <ActionButton onClick={onOpenChangeDeleteTeamMemberDialog} icon='trash-can' />
             {showDeleteTeamMemberDialog && (
               <TeamMemberDeleteConfirmationDialog
                 onRemoveTeamMember={handleRemoveUser}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import ActionButton, { ActionButtonIcon } from '../Core/ActionButton';
+import ActionButton from '../Core/ActionButton';
 import DisplaySecretTable from '../Core/DisplaySecretTable';
 import KeyPairDisableDialog, { OnKeyPairDisable } from './KeyPairDisableDialog';
 import KeyPairEditDialog, { OnKeyPairEdit } from './KeyPairEditDialog';
@@ -35,7 +35,7 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
       <td className='created'>{keyPair.createdString}</td>
       <td className='action'>
         <div className='action-cell'>
-          <ActionButton onClick={onOpenChangeKeyPairEditDialog} className='action-button' icon={ActionButtonIcon.edit}/>
+          <ActionButton onClick={onOpenChangeKeyPairEditDialog} icon='pencil' />
           {showKeyPairEditDialog && (
             <KeyPairEditDialog
               keyPair={keyPair}
@@ -45,7 +45,7 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
             />
           )}
 
-          <ActionButton onClick={onOpenChangeKeyPairDisableDialog} className='action-button' icon={ActionButtonIcon.delete} />
+          <ActionButton onClick={onOpenChangeKeyPairDisableDialog} icon='trash-can' />
           {showKeyPairDisableDialog && (
             <KeyPairDisableDialog
               keyPair={keyPair}
