@@ -7,7 +7,8 @@ import {
   Participant,
   ParticipantApprovalPartial,
   ParticipantCreationPartial,
-  ParticipantDTO, ParticipantStatus
+  ParticipantDTO,
+  ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
@@ -28,7 +29,9 @@ export interface UserParticipantRequest extends ParticipantRequest {
   user?: User;
 }
 
-export const getParticipantTypesByIds = async (participantTypeIds: number[]): Promise<ParticipantType[]> => {
+export const getParticipantTypesByIds = async (
+  participantTypeIds: number[]
+): Promise<ParticipantType[]> => {
   return ParticipantType.query().findByIds(participantTypeIds);
 };
 

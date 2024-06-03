@@ -9,7 +9,7 @@ import {
   SSP_OKTA_AUTH_DISABLED,
   SSP_OKTA_AUTH_SERVER_URL,
   SSP_OKTA_CLIENT_ID,
-  SSP_OKTA_CLIENT_SECRET
+  SSP_OKTA_CLIENT_SECRET,
 } from '../envars';
 import { getLoggers } from '../helpers/loggingHelpers';
 import {
@@ -21,7 +21,7 @@ import {
   KeyPairDTO,
   mapClientTypesToAdminEnums,
   SharingListResponse,
-  SiteCreationDTO
+  SiteCreationDTO,
 } from './adminServiceHelpers';
 
 let accessToken: string = '';

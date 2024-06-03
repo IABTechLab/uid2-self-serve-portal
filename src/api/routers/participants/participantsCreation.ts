@@ -27,12 +27,12 @@ import {
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
-  participantRequest: z.infer<typeof ParticipantCreationRequest>,
+  participantRequest: z.infer<typeof ParticipantCreationRequest>
 ) {
   let errorMessage = null;
   const existingParticipant = await Participant.query().findOne(
     'name',
-    participantRequest.participantName,
+    participantRequest.participantName
   );
   if (existingParticipant) {
     errorMessage = 'Duplicate participant name';
@@ -118,7 +118,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     kcAdminClient,
     participantRequest.firstName,
     participantRequest.lastName,
-    participantRequest.email,
+    participantRequest.email
   );
 
   // assign proper api access
