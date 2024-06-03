@@ -235,7 +235,12 @@ const updateParticipantParser = z.object({
 });
 
 export const updateParticipant = async (participant: Participant, req: ParticipantRequest) => {
-  const { apiRoles, participantTypes: participantTypeIds, participantName, crmAgreementNumber } = updateParticipantParser.parse(req.body);
+  const {
+    apiRoles,
+    participantTypes: participantTypeIds,
+    participantName,
+    crmAgreementNumber,
+  } = updateParticipantParser.parse(req.body);
   try {
     await Participant.transaction(async (trx) => {
       await Participant.query()
@@ -244,8 +249,8 @@ export const updateParticipant = async (participant: Participant, req: Participa
       await updateParticipantTypes(participant, participantTypeIds, trx);
       await updateParticipantApiRoles(participant, apiRoles, trx);
     });
-  const types = await getParticipantTypesByIds(participantTypeIds);
-  setSiteClientTypes({ siteId: participant.siteId, types });
+    const types = await getParticipantTypesByIds(participantTypeIds);
+    setSiteClientTypes({ siteId: participant.siteId, types });
   } catch (error) {
     const { errorLogger } = getLoggers();
     const traceId = getTraceId(req);

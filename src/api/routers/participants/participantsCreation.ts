@@ -2,39 +2,37 @@ import { Response } from 'express';
 import { z } from 'zod';
 
 import { ApiRole } from '../../entities/ApiRole';
-import {
-  Participant, ParticipantStatus
-} from '../../entities/Participant';
+import { Participant, ParticipantStatus } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
   mapClientTypesToAdminEnums,
-  SiteCreationRequest
+  SiteCreationRequest,
 } from '../../services/adminServiceHelpers';
 import {
   insertAddParticipantAuditTrail,
-  updateAuditTrailToProceed
+  updateAuditTrailToProceed,
 } from '../../services/auditTrailService';
 import {
   assignClientRoleToUser,
   createNewUser,
-  sendInviteEmail
+  sendInviteEmail,
 } from '../../services/kcUsersService';
 import { getParticipantTypesByIds, ParticipantRequest } from '../../services/participantsService';
 import { findUserByEmail } from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
-  ParticipantCreationRequest
+  ParticipantCreationRequest,
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
-  participantRequest: z.infer<typeof ParticipantCreationRequest>
+  participantRequest: z.infer<typeof ParticipantCreationRequest>,
 ) {
   let errorMessage = null;
   const existingParticipant = await Participant.query().findOne(
     'name',
-    participantRequest.participantName
+    participantRequest.participantName,
   );
   if (existingParticipant) {
     errorMessage = 'Duplicate participant name';
@@ -120,7 +118,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     kcAdminClient,
     participantRequest.firstName,
     participantRequest.lastName,
-    participantRequest.email
+    participantRequest.email,
   );
 
   // assign proper api access
