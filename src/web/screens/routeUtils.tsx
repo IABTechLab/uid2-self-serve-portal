@@ -21,15 +21,6 @@ export const makePrivateRoute = (route: PortalRoute | RouteObject): PortalRoute 
   const privateRoute: PortalRoute = {
     ...route,
     element: <PrivateRoute>{route.element}</PrivateRoute>,
-    loader: route.loader
-      ? async (args: LoaderFunctionArgs) => {
-          if (!keycloak.authenticated) {
-            const token = localStorage.getItem('authToken');
-            setAuthToken(token ?? undefined);
-          }
-          return (route.loader as LoaderFunction)(args);
-        }
-      : undefined,
   };
   return route.index
     ? privateRoute
