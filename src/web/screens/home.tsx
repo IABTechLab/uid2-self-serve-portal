@@ -4,12 +4,15 @@ import { Suspense, useContext } from 'react';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
+import { shouldRotateApiKey } from '../components/ApiKeyManagement/KeyHelper';
+import { Banner } from '../components/Core/Banner';
 import { AsyncErrorView } from '../components/Core/ErrorView';
 import { Loading } from '../components/Core/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
+import RotateApiKeysCard from '../components/Home/RotateApiKeyCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { GetSharingList } from '../services/participant';
+import { GetEmailContacts, GetParticipantApiKeys, GetSharingList } from '../services/participant';
 import { getAllSites } from '../services/site';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
@@ -50,7 +53,27 @@ async function getSharingCounts() {
     throw e;
   }
 }
-const loader = makeLoader(() => defer({ counts: getSharingCounts() }));
+
+async function getEmailContacts() {
+  const emailContacts = await GetEmailContacts();
+  if (emailContacts.length === 0) {
+    return false;
+  }
+  return true;
+}
+
+async function getApiKeysToRotate() {
+  const apiKeys = await GetParticipantApiKeys();
+  return apiKeys.filter((apiKey) => shouldRotateApiKey(apiKey) === true);
+}
+
+const loader = makeLoader(() =>
+  defer({
+    counts: getSharingCounts(),
+    hasEmailContacts: getEmailContacts(),
+    apiKeysToRotate: getApiKeysToRotate(),
+  })
+);
 
 function Home() {
   const { LoggedInUser } = useContext(CurrentUserContext);
@@ -58,19 +81,52 @@ function Home() {
 
   return (
     <>
-      <h1>Welcome back, {LoggedInUser?.profile.firstName}</h1>
+      <h1>Hello, {LoggedInUser?.profile.firstName}</h1>
+      <Suspense fallback={<Loading />}>
+        <AwaitTypesafe resolve={data.hasEmailContacts} errorElement={<AsyncErrorView />}>
+          {(hasEmailContacts) => (
+            <div>
+              {!hasEmailContacts && (
+                <Banner
+                  message='Please add your email contacts to stay up to date on all UID2 updates.'
+                  type='Info'
+                  fitContent
+                />
+              )}
+            </div>
+          )}
+        </AwaitTypesafe>
+      </Suspense>
       <div className='dashboard-cards-container'>
-        <Suspense fallback={<Loading />}>
-          <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
-            {(counts) => (
-              <SharingPermissionCard
-                sharingPermissionsCount={counts.sharingPermissionsCount}
-                bulkPermissionsCount={counts.bulkPermissionsCount}
-              />
-            )}
-          </AwaitTypesafe>
-        </Suspense>
-        <DocumentationCard />
+        <div>
+          <Suspense fallback={<Loading />}>
+            <AwaitTypesafe resolve={data.apiKeysToRotate} errorElement={<AsyncErrorView />}>
+              {(apiKeysToRotate) =>
+                apiKeysToRotate.length > 0 && (
+                  <div className='dashboard-card'>
+                    <RotateApiKeysCard apiKeysToRotate={apiKeysToRotate} />
+                  </div>
+                )
+              }
+            </AwaitTypesafe>
+          </Suspense>
+
+          <div className='dashboard-card'>
+            <Suspense fallback={<Loading />}>
+              <AwaitTypesafe resolve={data.counts} errorElement={<AsyncErrorView />}>
+                {(counts) => (
+                  <SharingPermissionCard
+                    sharingPermissionsCount={counts.sharingPermissionsCount}
+                    bulkPermissionsCount={counts.bulkPermissionsCount}
+                  />
+                )}
+              </AwaitTypesafe>
+            </Suspense>
+          </div>
+        </div>
+        <div className='dashboard-card'>
+          <DocumentationCard />
+        </div>
       </div>
     </>
   );

@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
+import ActionButton from '../Core/ActionButton';
 import DisplaySecretTable from '../Core/DisplaySecretTable';
 import KeyPairDisableDialog, { OnKeyPairDisable } from './KeyPairDisableDialog';
 import KeyPairEditDialog, { OnKeyPairEdit } from './KeyPairEditDialog';
@@ -35,14 +35,7 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
       <td className='created'>{keyPair.createdString}</td>
       <td className='action'>
         <div className='action-cell'>
-          <button
-            type='button'
-            className='icon-button'
-            title='Edit'
-            onClick={onOpenChangeKeyPairEditDialog}
-          >
-            <FontAwesomeIcon icon='pencil' />
-          </button>
+          <ActionButton onClick={onOpenChangeKeyPairEditDialog} icon='pencil' />
           {showKeyPairEditDialog && (
             <KeyPairEditDialog
               keyPair={keyPair}
@@ -51,14 +44,8 @@ function KeyPair({ keyPair, existingKeyPairs, onEdit, onDisable }: KeyPairProps)
               onOpenChange={onOpenChangeKeyPairEditDialog}
             />
           )}
-          <button
-            type='button'
-            className='icon-button'
-            title='Delete'
-            onClick={onOpenChangeKeyPairDisableDialog}
-          >
-            <FontAwesomeIcon icon='trash-can' />
-          </button>
+
+          <ActionButton onClick={onOpenChangeKeyPairDisableDialog} icon='trash-can' />
           {showKeyPairDisableDialog && (
             <KeyPairDisableDialog
               keyPair={keyPair}

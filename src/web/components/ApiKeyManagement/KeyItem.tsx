@@ -1,12 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
+import ActionButton from '../Core/ActionButton';
+import { Tooltip } from '../Core/Tooltip';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';
+import { shouldRotateApiKey } from './KeyHelper';
+
+import './KeyItem.scss';
 
 type KeyItemProps = Readonly<{
   apiKey: ApiKeyDTO;
@@ -18,6 +23,7 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
   const [showKeyDisableDialog, setShowKeyDisableDialog] = useState<boolean>(false);
   const [showKeyEditDialog, setShowKeyEditDialog] = useState<boolean>(false);
+  const [showRotateKeyWarning, setShowRotateKeyWarning] = useState<boolean>(false);
 
   const onOpenChangeKeyDisableDialog = () => {
     setShowKeyDisableDialog(!showKeyDisableDialog);
@@ -26,6 +32,10 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
   const onOpenChangeKeyEditDialog = () => {
     setShowKeyEditDialog(!showKeyEditDialog);
   };
+
+  useEffect(() => {
+    setShowRotateKeyWarning(shouldRotateApiKey(apiKey));
+  }, [apiKey]);
 
   if (apiKey.disabled) {
     return <div />;
@@ -42,14 +52,15 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
       {availableRoles.length > 0 && (
         <td className='action'>
           <div className='action-cell'>
-            <button
-              type='button'
-              className='icon-button'
-              title='Edit'
-              onClick={onOpenChangeKeyEditDialog}
-            >
-              <FontAwesomeIcon icon='pencil' />
-            </button>
+            {showRotateKeyWarning && (
+              <Tooltip
+                trigger={<FontAwesomeIcon icon='triangle-exclamation' className='warning-icon' />}
+              >
+                We recommend rotating API keys every year.
+              </Tooltip>
+            )}
+            <ActionButton onClick={onOpenChangeKeyEditDialog} icon='pencil' />
+
             {showKeyEditDialog && (
               <KeyEditDialog
                 apiKey={apiKey}
@@ -59,14 +70,8 @@ function KeyItem({ apiKey: apiKeyInitial, onEdit, onDisable, availableRoles }: K
                 onOpenChange={onOpenChangeKeyEditDialog}
               />
             )}
-            <button
-              type='button'
-              className='icon-button'
-              title='Delete'
-              onClick={onOpenChangeKeyDisableDialog}
-            >
-              <FontAwesomeIcon icon='trash-can' />
-            </button>
+
+            <ActionButton onClick={onOpenChangeKeyDisableDialog} icon='trash-can' />
             {showKeyDisableDialog && (
               <KeyDisableDialog
                 apiKey={apiKey}

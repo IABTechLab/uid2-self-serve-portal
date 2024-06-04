@@ -6,6 +6,7 @@
   "singleQuote": true,
   "jsxSingleQuote": true,
   "endOfLine": "lf",
+  "trailingComma": "es5",
   "overrides": [
     {
       "files": "*.hbs",

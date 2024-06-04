@@ -1,22 +1,26 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { UserRole } from '../../../api/entities/User';
+import { UserDTO, UserRole } from '../../../api/entities/User';
 import {
   InviteTeamMemberForm,
   UpdateTeamMemberForm,
   UserResponse,
 } from '../../services/userAccount';
+import { validateEmailRegex } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
+import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
 
 type AddTeamMemberDialogProps = {
+  teamMembers: UserDTO[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
   person?: never;
 };
 type UpdateTeamMemberDialogProps = {
+  teamMembers: UserDTO[];
   onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
   person: UserResponse;
@@ -68,8 +72,11 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             rules={{
               required: 'Please specify email.',
               pattern: {
-                value: /\S+@\S+\.\S+/,
+                value: validateEmailRegex,
                 message: 'Entered value does not match email format',
+              },
+              validate: (value: string) => {
+                return validateUniqueTeamMemberEmail(value, props.teamMembers);
               },
             }}
           />

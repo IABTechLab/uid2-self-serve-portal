@@ -1,79 +1,88 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantItem } from './ParticipantItem';
 
-export default {
+const meta: Meta<typeof ParticipantItem> = {
   title: 'Sharing Permissions/Participant Item',
   component: ParticipantItem,
-} as ComponentMeta<typeof ParticipantItem>;
-
-const Template: ComponentStory<typeof ParticipantItem> = (args) => (
-  <table>
-    <tbody>
-      <ParticipantItem {...args} />
-    </tbody>
-  </table>
-);
-
-export const Checked = Template.bind({});
-Checked.args = {
-  site: {
-    id: 1,
-    name: 'Participant 1',
-    clientTypes: ['DSP'],
-    canBeSharedWith: true,
-  },
-  onClick: () => {},
-  checked: true,
+  decorators: [
+    (Story) => (
+      <table>
+        <tbody>
+          <Story />
+        </tbody>
+      </table>
+    ),
+  ],
 };
 
-export const Unchecked = Template.bind({});
-Unchecked.args = {
-  site: {
-    id: 2,
-    name: 'Participant 2',
-    clientTypes: ['DSP'],
-    canBeSharedWith: true,
+export default meta;
+type Story = StoryObj<typeof ParticipantItem>;
+
+export const Checked: Story = {
+  args: {
+    site: {
+      id: 1,
+      name: 'Participant 1',
+      clientTypes: ['DSP'],
+      canBeSharedWith: true,
+    },
+    onClick: () => {},
+    checked: true,
   },
-  onClick: () => {},
-  checked: false,
 };
 
-export const AddedByManual = Template.bind({});
-AddedByManual.args = {
-  site: {
-    id: 2,
-    name: 'Participant 2',
-    clientTypes: ['DSP'],
-    canBeSharedWith: true,
-    addedBy: ['Manual'],
+export const Unchecked: Story = {
+  args: {
+    site: {
+      id: 2,
+      name: 'Participant 2',
+      clientTypes: ['DSP'],
+      canBeSharedWith: true,
+    },
+    onClick: () => {},
+    checked: false,
   },
-  onClick: () => {},
-  checked: false,
 };
 
-export const AddedByAuto = Template.bind({});
-AddedByAuto.args = {
-  site: {
-    id: 2,
-    name: 'Participant 2',
-    clientTypes: ['DSP', 'PUBLISHER'],
-    canBeSharedWith: true,
-    addedBy: ['DSP'],
+export const AddedByManual: Story = {
+  args: {
+    site: {
+      id: 2,
+      name: 'Participant 2',
+      clientTypes: ['DSP'],
+      canBeSharedWith: true,
+      addedBy: ['Manual'],
+    },
+    onClick: () => {},
+    checked: false,
   },
-  onClick: () => {},
-  checked: false,
 };
 
-export const AddedByAutoAndManual = Template.bind({});
-AddedByAutoAndManual.args = {
-  site: {
-    id: 2,
-    name: 'Participant 2',
-    clientTypes: ['DSP', 'PUBLISHER'],
-    addedBy: ['Manual', 'DSP', 'PUBLISHER'],
-    canBeSharedWith: true,
+export const AddedByAuto: Story = {
+  args: {
+    site: {
+      id: 2,
+      name: 'Participant 2',
+      clientTypes: ['DSP', 'PUBLISHER'],
+      canBeSharedWith: true,
+      addedBy: ['DSP'],
+    },
+    onClick: () => {},
+    checked: false,
   },
-  onClick: () => {},
-  checked: false,
+};
+
+export const AddedByAutoAndManual: Story = {
+  args: {
+    site: {
+      id: 2,
+      name: 'Participant 2',
+      clientTypes: ['DSP', 'PUBLISHER'],
+      addedBy: ['Manual', 'DSP', 'PUBLISHER'],
+      canBeSharedWith: true,
+    },
+    onClick: () => {},
+    checked: false,
+  },
 };

@@ -1,18 +1,20 @@
 import { Link } from 'react-router-dom';
 
+import { Card } from '../Core/Card';
+
 import './SharingPermissionCard.scss';
 
-type SharingPermissionCardProps = {
+type SharingPermissionCardProps = Readonly<{
   sharingPermissionsCount?: number;
   bulkPermissionsCount?: number;
-};
+}>;
 
 function SharingPermissionCard({
   sharingPermissionsCount,
   bulkPermissionsCount,
 }: SharingPermissionCardProps) {
   return (
-    <div className='sharing-permission-card'>
+    <Card>
       <h2>Your Sharing Permissions</h2>
       <span>Participants you&apos;re sharing with to decrypt your encrypted UID2s. </span>
       <div className='permissions-count-section'>
@@ -31,7 +33,7 @@ function SharingPermissionCard({
           View & Add Sharing Permissions
         </button>
       </Link>
-    </div>
+    </Card>
   );
 }
 

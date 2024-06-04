@@ -96,4 +96,5 @@ export const EmailContactsRoute: PortalRoute = {
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/emailContacts',
   loader,
+  isHidden: true,
 };

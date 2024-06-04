@@ -27,8 +27,7 @@ export const ReadyToCSTG: Story = {
     domainNames: ['example.com'],
     keyPairData: [createKeypairFake(false)],
   },
-  storyName: 'Ready to CSTG (renders empty - nothing to say!)',
-  name: 'Ready to CSTG (blank)',
+  name: 'Ready to CSTG (renders empty - nothing to say!)',
 };
 
 export const NoDomains: Story = {

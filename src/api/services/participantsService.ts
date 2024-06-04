@@ -14,7 +14,7 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
-import { getSharingList, updateSharingList } from './adminServiceClient';
+import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
@@ -29,12 +29,18 @@ export interface UserParticipantRequest extends ParticipantRequest {
   user?: User;
 }
 
+export const getParticipantTypesByIds = async (
+  participantTypeIds: number[]
+): Promise<ParticipantType[]> => {
+  return ParticipantType.query().findByIds(participantTypeIds);
+};
+
 export const sendNewParticipantEmail = async (
   newParticipant: z.infer<typeof ParticipantCreationPartial>,
   typeIds: number[],
   traceId: string
 ) => {
-  const participantTypes = await ParticipantType.query().findByIds(typeIds);
+  const participantTypes = await getParticipantTypesByIds(typeIds);
   const emailService = createEmailService();
   const requestor = newParticipant.users![0];
   const templateData = {
@@ -232,16 +238,22 @@ const updateParticipantParser = z.object({
 });
 
 export const updateParticipant = async (participant: Participant, req: ParticipantRequest) => {
-  const { apiRoles, participantTypes, participantName, crmAgreementNumber } =
-    updateParticipantParser.parse(req.body);
+  const {
+    apiRoles,
+    participantTypes: participantTypeIds,
+    participantName,
+    crmAgreementNumber,
+  } = updateParticipantParser.parse(req.body);
   try {
     await Participant.transaction(async (trx) => {
       await Participant.query()
         .where('id', participant.id)
         .update({ name: participantName, crmAgreementNumber });
-      await updateParticipantTypes(participant, participantTypes, trx);
+      await updateParticipantTypes(participant, participantTypeIds, trx);
       await updateParticipantApiRoles(participant, apiRoles, trx);
     });
+    const types = await getParticipantTypesByIds(participantTypeIds);
+    setSiteClientTypes({ siteId: participant.siteId, types });
   } catch (error) {
     const { errorLogger } = getLoggers();
     const traceId = getTraceId(req);

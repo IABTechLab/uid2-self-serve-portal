@@ -1,32 +1,33 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { Collapsible } from './Collapsible';
 
-export default {
+const meta: Meta<typeof Collapsible> = {
   title: 'Shared Components/Collapsible',
   component: Collapsible,
-} as ComponentMeta<typeof Collapsible>;
-
-const Template: ComponentStory<typeof Collapsible> = (args) => <Collapsible {...args} />;
-
-export const Open = Template.bind({});
-Open.args = {
-  title: 'Test Collapsible Title',
-  children: 'Test Collapsible Content',
-  defaultOpen: true,
 };
 
-export const Collapsed = Template.bind({});
-Collapsed.args = {
-  title: 'Test Collapsible Title',
-  children: 'Test Collapsible Content',
-  defaultOpen: false,
+export default meta;
+type Story = StoryObj<typeof Collapsible>;
+
+export const Open: Story = {
+  args: {
+    title: 'Test Collapsible Title',
+    children: 'Test Collapsible Content',
+    defaultOpen: true,
+  },
 };
 
-export const WithLabel = Template.bind({});
-WithLabel.args = {
-  title: 'Test Collapsible Title',
-  children: 'Test Collapsible Content',
-  defaultOpen: true,
-  label: 'TEST LABEL',
+export const Collapsed: Story = {
+  args: {
+    ...Open.args,
+    defaultOpen: false,
+  },
+};
+
+export const WithLabel: Story = {
+  args: {
+    ...Open.args,
+    label: 'TEST LABEL',
+  },
 };

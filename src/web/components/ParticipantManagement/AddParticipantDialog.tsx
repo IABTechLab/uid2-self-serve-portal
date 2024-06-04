@@ -11,6 +11,7 @@ import { AddParticipantForm } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
+import { validateEmailRegex } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { SuccessToast } from '../Core/Toast';
@@ -259,7 +260,13 @@ function AddParticipantDialog({
                     inputName='email'
                     label='Contact Email'
                     className='text-input'
-                    rules={{ required: 'Please specify Contact Email.' }}
+                    rules={{
+                      required: 'Please specify Contact Email.',
+                      pattern: {
+                        value: validateEmailRegex,
+                        message: 'Entered value does not match email format',
+                      },
+                    }}
                   />
                 </div>
                 <div className='user-roles right-column'>

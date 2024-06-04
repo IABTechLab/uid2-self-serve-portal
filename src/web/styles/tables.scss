@@ -51,7 +51,10 @@ table {
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
-    align-items: baseline;
+
+    .action-button {
+      padding: 5px 5px 5px 10px;
+    }
 
     svg {
       font-size: 1rem;

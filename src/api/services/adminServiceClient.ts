@@ -2,7 +2,8 @@
 import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
-import { ParticipantApprovalPartial } from '../entities/Participant';
+import { ParticipantSchema } from '../entities/Participant';
+import { ParticipantTypeSchema } from '../entities/ParticipantType';
 import {
   SSP_ADMIN_SERVICE_BASE_URL,
   SSP_OKTA_AUTH_DISABLED,
@@ -231,13 +232,20 @@ export const addSite = async (
   return response.data;
 };
 
+const ParticipantUpdatePartial = ParticipantSchema.pick({
+  siteId: true,
+  types: true,
+}).extend({
+  types: z.array(ParticipantTypeSchema.pick({ id: true })),
+});
+
 export const setSiteClientTypes = async (
-  participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial>
+  participantUpdatePartial: z.infer<typeof ParticipantUpdatePartial>
 ): Promise<void> => {
-  const adminTypes = mapClientTypesToAdminEnums(participantApprovalPartial.types).join(',');
+  const adminTypes = mapClientTypesToAdminEnums(participantUpdatePartial.types).join(',');
   const response = await adminServiceClient.post('/api/site/set-types', null, {
     params: {
-      id: participantApprovalPartial.siteId,
+      id: participantUpdatePartial.siteId,
       types: adminTypes,
     },
   });

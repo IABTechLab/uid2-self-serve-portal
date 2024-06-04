@@ -1,12 +1,17 @@
+import { Card } from '../Core/Card';
+
 import './DocumentationCard.scss';
 
 function DocumentationCard() {
   return (
-    <div className='document-card'>
+    <Card className='document-card'>
       <img src='/document.svg' alt='document' width='50px' />
       <div>
         <h2>Documentation</h2>
         <span>Check out documentation for implementation resources</span>
+        <a href='https://unifiedid.com/docs/category/uid2-portal' target='_blank' rel='noreferrer'>
+          UID2 Portal Documentation
+        </a>
         <a
           href='https://unifiedid.com/docs/overviews/overview-publishers'
           target='_blank'
@@ -36,7 +41,7 @@ function DocumentationCard() {
           Data Providers
         </a>
       </div>
-    </div>
+    </Card>
   );
 }
 
