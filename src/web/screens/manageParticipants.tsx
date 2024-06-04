@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useContext, useState } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
@@ -9,12 +9,14 @@ import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
 import {
   AddParticipant,
   AddParticipantForm,
   ApproveParticipantRequest,
   GetApprovedParticipants,
+  GetCurrentUsersParticipant,
   GetParticipantsAwaitingApproval,
   ParticipantApprovalFormDetails,
   UpdateParticipant,
@@ -38,6 +40,7 @@ const loader = makeLoader(() => {
 
 function ManageParticipants() {
   const [showAddParticipantsDialog, setShowAddParticipantsDialog] = useState<boolean>(false);
+  const { participant, setParticipant } = useContext(ParticipantContext);
 
   const data = useLoaderData<typeof loader>();
 
@@ -56,8 +59,16 @@ function ManageParticipants() {
     reloader.revalidate();
   };
 
-  const onUpdateParticipant = async (form: UpdateParticipantForm, participant: ParticipantDTO) => {
-    await UpdateParticipant(form, participant.id);
+  const onUpdateParticipant = async (
+    form: UpdateParticipantForm,
+    updatedParticipant: ParticipantDTO
+  ) => {
+    await UpdateParticipant(form, updatedParticipant.id);
+    // if updating the current user's participant, update the ParticipantContext
+    if (updatedParticipant.id === participant?.id) {
+      const p = await GetCurrentUsersParticipant();
+      setParticipant(p);
+    }
     SuccessToast('Participant updated');
     reloader.revalidate();
   };

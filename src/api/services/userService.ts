@@ -6,6 +6,7 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { UserRole } from '../entities/User';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getSite } from './adminServiceClient';
+import { getApiRoles } from './apiKeyService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
 export type DeletedUser = {
@@ -38,10 +39,12 @@ export class UserService {
     const currentSite = !currentParticipant?.siteId
       ? undefined
       : await getSite(currentParticipant?.siteId);
+    const apiRoles = await getApiRoles(currentParticipant!);
     const allParticipantTypes = await ParticipantType.query();
     const result = {
       ...currentParticipant,
       types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
+      apiRoles,
     };
     return result;
   }
