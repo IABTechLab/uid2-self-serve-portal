@@ -1,6 +1,5 @@
 import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import log from 'loglevel';
 import { useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
