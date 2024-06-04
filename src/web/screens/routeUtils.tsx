@@ -1,7 +1,5 @@
-import { LoaderFunction, LoaderFunctionArgs, RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
-import { setAuthToken } from '../axios';
-import keycloak from '../Keycloak';
 import { PrivateRoute } from './PrivateRoute';
 
 function IsPortalRoute(route: PortalRoute | RouteObject): route is PortalRoute {
