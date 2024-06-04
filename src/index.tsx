@@ -12,6 +12,7 @@ import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
 import { Routes } from './web/screens/routes';
+import { revalidateIfLoaderError } from './web/utils/erroredRouteHelper';
 import { PortalErrorBoundary } from './web/utils/PortalErrorBoundary';
 
 import './web/index.scss';
@@ -37,6 +38,7 @@ function Root() {
   const onUpdateToken = useCallback((tokens: AuthClientTokens) => {
     if (tokens.token) {
       setAuthToken(tokens.token);
+      revalidateIfLoaderError(router);
     }
   }, []);
 
