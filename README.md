@@ -283,7 +283,7 @@ The following steps describe the minimal steps required to successfully log in t
 1. Optionally give your user access to the [Admin screens/routes](#admin-screensroutes)
 1. Return to the UI and you should be good to go!
 
-#### \* Notes for Mac OSX Development:
+#### Notes for Mac OSX Development:
 
 1. For Apple Silicon machines, you must ensure that Rosetta 2 is installed and Rosetta is enabled in Docker Desktop.
 1. You will need to change the permissions on your development directories. They will not be editable by default when cloned from github

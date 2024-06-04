@@ -115,12 +115,8 @@ function SharingPermissions() {
     }
   };
 
-  const showPubSharingMessage = () => {
-    const publisher = (participant?.types || []).some((type) => type.typeName === 'Publisher');
-    const sharer = (participant?.apiRoles || []).some((role) => role.roleName === 'SHARER');
-
-    return publisher && !sharer;
-  };
+  // publisher without SHARER
+  const showPubSharingMessage = (participant?.types || []).some((type) => type.typeName === 'Publisher') && !(participant?.apiRoles || []).some((role) => role.roleName === 'SHARER');
 
   return (
     <SharingPermissionPageContainer>
@@ -142,13 +138,18 @@ function SharingPermissions() {
                     decrypt your UID2 tokens.
                     <br />
                     <br />
-                    {showPubSharingMessage() && (
-                      <span>
-                        As a publisher, you can share with others by granting permission on this
-                        page. However, to allow others to share with you, you must ask your UID2
-                        contact to get the correct permissions added to your account. Note: This
-                        only enables the sharing permission. No data is sent.
-                      </span>
+                    Note: This only enables the sharing permission. No data is sent.
+                    {showPubSharingMessage && (
+                      <>
+                        <br />
+                        <br />
+                        <span>
+                          As a publisher, you can share with others by granting permission on this
+                          page. However, to allow others to share with you, you must ask your UID2
+                          contact to get the correct permissions added to your account. Note: This
+                          only enables the sharing permission. No data is sent.
+                        </span>
+                      </>
                     )}
                   </p>
                   <ScreenContentContainer>
