@@ -11,13 +11,13 @@ import { TypeFilter } from './TypeFilter';
 
 import './ParticipantSearchBar.scss';
 
-type ParticipantSearchBarProps = {
+type ParticipantSearchBarProps = Readonly<{
   sites: SharingSiteDTO[];
   selectedParticipantIds?: Set<number>;
   onSelectedChange: (selectedItems: Set<number>) => void;
   open: boolean;
   onToggleOpen: (open: boolean) => void;
-};
+}>;
 
 export function ParticipantSearchBar({
   sites,
@@ -31,7 +31,7 @@ export function ParticipantSearchBar({
   const filteredSites = filterSites(sites, filterText, selectedTypeIds);
   const checkboxStatus = getSelectAllState(
     isSelectedAll(filteredSites, selectedParticipantIds),
-    selectedParticipantIds
+    selectedParticipantIds,
   );
 
   const handleFilterChange = (typeIds: Set<ClientType>) => {
