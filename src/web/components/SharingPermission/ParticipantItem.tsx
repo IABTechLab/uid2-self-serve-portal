@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { AdminSiteDTO, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
@@ -61,26 +61,36 @@ export function ParticipantItem({
     <TriStateCheckbox onClick={onClick} status={checked} disabled={checkboxDisabled} />
   );
 
+  const actionButtonDeletePermissions = (
+    <ActionButton
+      onClick={() => setShowDeleteDialog(true)}
+      icon='trash-can'
+      disabled={checkboxDisabled}
+    />
+  );
+
+  const tooltipNoDelete = (trigger: ReactNode) => {
+    return (
+      <Tooltip trigger={trigger}>
+        Gray indicates participants selected in bulk permissions. To update, adjust bulk permission
+        settings.
+      </Tooltip>
+    );
+  };
+
   const onDeleteDialogChange = () => {
     setShowDeleteDialog(!showDeleteDialog);
   };
   return (
     <tr className='participant-item-with-checkbox'>
-      <td>
-        {checkboxDisabled ? (
-          <Tooltip trigger={checkbox}>
-            Gray indicates participants selected in bulk permissions. To update, adjust bulk
-            permission settings.
-          </Tooltip>
-        ) : (
-          checkbox
-        )}
-      </td>
+      <td>{checkboxDisabled ? tooltipNoDelete(checkbox) : checkbox}</td>
       <ParticipantItemSimple site={site} />
       {isSharingParticipant(site) && <td>{formatSourceColumn(site.addedBy)}</td>}
       {onDelete && (
         <td className='action-cell'>
-          <ActionButton onClick={() => setShowDeleteDialog(true)} icon='trash-can' />
+          {checkboxDisabled
+            ? tooltipNoDelete(actionButtonDeletePermissions)
+            : actionButtonDeletePermissions}
         </td>
       )}
       {showDeleteDialog && onDelete && sharingSites && (
