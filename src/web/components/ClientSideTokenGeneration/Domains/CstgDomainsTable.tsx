@@ -6,9 +6,9 @@ import { PagingTool } from '../../Core/PagingTool';
 import { RowsPerPageValues } from '../../Core/PagingToolHelper';
 import { TableNoDataPlaceholder } from '../../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../../Core/TriStateCheckbox';
+import { getPagedValues, UpdateDomainNamesResponse } from '../CstgHelper';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
-import { getPagedDomains, UpdateDomainNamesResponse } from '../CstgHelper';
 import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';
@@ -48,7 +48,7 @@ export function CstgDomainsTable({
   useEffect(() => {
     if (searchedDomains.length === 0 && searchText === '') {
       setSearchedDomains(domains);
-      setPagedDomains(getPagedDomains(domains, initialPageNumber, initialRowsPerPage));
+      setPagedDomains(getPagedValues(domains, initialPageNumber, initialRowsPerPage));
     }
   }, [domains, initialPageNumber, initialRowsPerPage, searchedDomains, searchText]);
 
@@ -85,11 +85,11 @@ export function CstgDomainsTable({
     if (newDomains) {
       setSearchedDomains(newDomains);
       if (deleteDomains.every((domain) => pagedDomains.includes(domain))) {
-        setPagedDomains(getPagedDomains(newDomains, pageNumber, rowsPerPage));
+        setPagedDomains(getPagedValues(newDomains, pageNumber, rowsPerPage));
       } else {
         setPageNumber(initialPageNumber);
         setRowsPerPage(initialRowsPerPage);
-        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+        setPagedDomains(getPagedValues(newDomains, initialPageNumber, initialRowsPerPage));
       }
     }
   };
@@ -108,7 +108,7 @@ export function CstgDomainsTable({
     setSearchedDomains(newSearchDomains);
     setPageNumber(initialPageNumber);
     setRowsPerPage(initialRowsPerPage);
-    setPagedDomains(getPagedDomains(newSearchDomains, initialPageNumber, initialRowsPerPage));
+    setPagedDomains(getPagedValues(newSearchDomains, initialPageNumber, initialRowsPerPage));
   };
 
   const handleEditDomain = async (
@@ -126,7 +126,7 @@ export function CstgDomainsTable({
     const editedDomains = editedDomainsResponse?.domains;
     const isValidDomains = editedDomainsResponse?.isValidDomains;
     if (editedDomains && isValidDomains) {
-      setPagedDomains(getPagedDomains(editedDomains, pageNumber, rowsPerPage));
+      setPagedDomains(getPagedValues(editedDomains, pageNumber, rowsPerPage));
       return true;
     }
     return false;
@@ -155,7 +155,7 @@ export function CstgDomainsTable({
       if (newDomains) {
         setPageNumber(initialPageNumber);
         setRowsPerPage(initialRowsPerPage);
-        setPagedDomains(getPagedDomains(newDomains, initialPageNumber, initialRowsPerPage));
+        setPagedDomains(getPagedValues(newDomains, initialPageNumber, initialRowsPerPage));
         setSearchedDomains(newDomains);
       }
       return [];
@@ -172,7 +172,7 @@ export function CstgDomainsTable({
   ) => {
     setPageNumber(currentPageNumber);
     setRowsPerPage(currentRowsPerPage);
-    setPagedDomains(getPagedDomains(searchedDomains, currentPageNumber, currentRowsPerPage));
+    setPagedDomains(getPagedValues(searchedDomains, currentPageNumber, currentRowsPerPage));
   };
 
   return (

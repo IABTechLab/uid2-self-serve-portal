@@ -1,6 +1,10 @@
 import { parse } from 'tldts';
 
-import { isAlphaNumericWithHyphenAndDot, isJavaPackage } from '../../utils/textHelpers';
+import {
+  deduplicateStrings,
+  isAlphaNumericWithHyphenAndDot,
+  isJavaPackage,
+} from '../../utils/textHelpers';
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
 export type UpdateDomainNamesResponse = {
@@ -20,12 +24,12 @@ export const extractTopLevelDomain = (domainName: string) => {
   return domainName;
 };
 
-export const getPagedDomains = (
-  domains: string[],
+export const getPagedValues = (
+  values: string[],
   pageNumber: number,
   rowsPerPage: RowsPerPageValues
 ) => {
-  return domains.filter(
+  return values.filter(
     (_, index) =>
       index >= (pageNumber - 1) * rowsPerPage &&
       index < (pageNumber - 1) * rowsPerPage + rowsPerPage
@@ -49,10 +53,11 @@ export const getUniqueAppIds = (
   existingAppIds: string[],
   deleteExistingList: boolean
 ) => {
-  // filter out domain names that already exist in the list unless existing list is being deleted
+  const dedupedAppIds = deduplicateStrings(newAppIds);
+  // filter out app ids that already exist in the list unless existing list is being deleted
   const uniqueAppIds = deleteExistingList
-    ? newAppIds
-    : newAppIds.filter((appId) => !existingAppIds?.includes(appId));
+    ? dedupedAppIds
+    : dedupedAppIds.filter((appId) => !existingAppIds?.includes(appId));
   return uniqueAppIds;
 };
 
@@ -69,4 +74,14 @@ export const isAppStoreId = (value: string) => {
     return false;
   }
   return true;
+};
+
+export const validateAppIds = (appIds: string[]): string[] => {
+  const invalidAppIds: string[] = [];
+  appIds.forEach((appId) => {
+    if (!(isAppStoreId(appId) || isAndroidAppId(appId) || isIOSBundleId(appId))) {
+      invalidAppIds.push(appId);
+    }
+  });
+  return invalidAppIds;
 };

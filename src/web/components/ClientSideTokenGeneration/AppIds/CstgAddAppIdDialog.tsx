@@ -2,18 +2,14 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddAppIdsFormProps } from '../../../services/appIdsService';
-import {
-  deduplicateStrings,
-  formatStringsWithSeparator,
-  separateStringsList,
-} from '../../../utils/textHelpers';
+import { formatStringsWithSeparator, separateStringsList } from '../../../utils/textHelpers';
 import { Dialog } from '../../Core/Dialog';
 import { RootFormErrors } from '../../Input/FormError';
 import { MultilineTextInput } from '../../Input/MultilineTextInput';
 import { StyledCheckbox } from '../../Input/StyledCheckbox';
-import { getUniqueAppIds, isAppStoreId, isIOSBundleId, isJavaPackage } from '../CstgHelper';
+import { getUniqueAppIds, validateAppIds } from '../CstgHelper';
 
-import './CstgAddAppIdDialog.scss';
+import '../CstgAddDialog.scss';
 
 type AddAppIdDialogProps = Readonly<{
   onAddAppIds: (newAppIds: string[], deleteExistingList: boolean) => Promise<string[]>;
@@ -37,16 +33,6 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
     });
   };
 
-  const validateAppIds = (appIds: string[]): string[] => {
-    const invalidAppIds: string[] = [];
-    appIds.forEach((appId) => {
-      if (!(isAppStoreId(appId) || isJavaPackage(appId) || isIOSBundleId(appId))) {
-        invalidAppIds.push(appId);
-      }
-    });
-    return invalidAppIds;
-  };
-
   const onSubmit = async (formData: AddAppIdsFormProps) => {
     const newAppIds = getUniqueAppIds(
       separateStringsList(formData.newAppIds),
@@ -56,15 +42,13 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
     if (newAppIds.length === 0) {
       handleError('The app ids entered already exist.');
     } else {
-      // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
-      const dedupedAppIds = deduplicateStrings(newAppIds);
-      const invalidAppIds = validateAppIds(dedupedAppIds);
+      const invalidAppIds = validateAppIds(newAppIds);
       if (invalidAppIds.length > 0) {
         handleError(
           `The mobile app ids entered are invalid: ' ${formatStringsWithSeparator(invalidAppIds)}`
         );
       } else {
-        await onAddAppIds(dedupedAppIds, deleteExistingList);
+        await onAddAppIds(newAppIds, deleteExistingList);
       }
     }
   };
@@ -74,9 +58,9 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
   };
 
   return (
-    <div className='add-app-names-dialog'>
+    <div className='cstg-add-dialog'>
       <Dialog title='Add Mobile App Ids' closeButtonText='Cancel' onOpenChange={onOpenChange}>
-        <div className='app-names-form-error'>
+        <div className='cstg-form-error'>
           <RootFormErrors fieldErrors={errors} />
         </div>
         <FormProvider {...formMethods}>
@@ -90,9 +74,7 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              <div className='app-names-checkbox-text'>
-                Replace all existing app ids with new ones.
-              </div>
+              <div className='checkbox-text'>Replace all existing app ids with new ones.</div>
             </div>
             <MultilineTextInput
               inputName='newAppIds'

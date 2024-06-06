@@ -1,6 +1,6 @@
 import { Dialog } from '../../Core/Dialog';
 
-import '../Domains/CstgDeleteDomainDialog.scss';
+import '../CstgDeleteDialog.scss';
 
 type DeleteConfirmationDialogProps = Readonly<{
   appIds: string[];

@@ -1,4 +1,4 @@
-import { extractTopLevelDomain, getPagedDomains, isAppStoreId } from './CstgHelper';
+import { extractTopLevelDomain, getPagedValues, isAppStoreId } from './CstgHelper';
 
 const validDomainsList = ['test.com', 'https://test.com', 'http://test.com'];
 const longDomainsList = [
@@ -44,14 +44,14 @@ describe('test domain helper functions', () => {
     it('should return a filtered first page domain list', () => {
       const pageNumber = 1;
       const rowsPerPage = 10;
-      expect(getPagedDomains(longDomainsList, pageNumber, rowsPerPage)).toEqual(
+      expect(getPagedValues(longDomainsList, pageNumber, rowsPerPage)).toEqual(
         longDomainsList.filter((_, index) => index < pageNumber * rowsPerPage)
       );
     });
     it('should return a filtered domain list at the end less than the number of rows per page', () => {
       const pageNumber = 2;
       const rowsPerPage = 25;
-      expect(getPagedDomains(longDomainsList, pageNumber, rowsPerPage)).toEqual(
+      expect(getPagedValues(longDomainsList, pageNumber, rowsPerPage)).toEqual(
         longDomainsList.filter(
           (_, index) => index >= (pageNumber - 1) * rowsPerPage && index < pageNumber * rowsPerPage
         )
@@ -60,12 +60,12 @@ describe('test domain helper functions', () => {
     it('should return a filtered total domain list since rows per page is great than total', () => {
       const pageNumber = 1;
       const rowsPerPage = 50;
-      expect(getPagedDomains(longDomainsList, pageNumber, rowsPerPage)).toEqual(longDomainsList);
+      expect(getPagedValues(longDomainsList, pageNumber, rowsPerPage)).toEqual(longDomainsList);
     });
     it('should return an empty list', () => {
       const pageNumber = 0;
       const rowsPerPage = 10;
-      expect(getPagedDomains(longDomainsList, pageNumber, rowsPerPage)).toEqual([]);
+      expect(getPagedValues(longDomainsList, pageNumber, rowsPerPage)).toEqual([]);
     });
   });
 });

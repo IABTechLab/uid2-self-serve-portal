@@ -4,6 +4,7 @@ import { EditAppIdFormProps } from '../../../services/appIdsService';
 import { Dialog } from '../../Core/Dialog';
 import { RootFormErrors } from '../../Input/FormError';
 import { TextInput } from '../../Input/TextInput';
+import { validateAppIds } from '../CstgHelper';
 
 type EditAppIdDialogProps = Readonly<{
   appId: string;
@@ -41,12 +42,14 @@ function EditAppIdDialog({
         message: 'Mobile app id already exists.',
       });
     } else {
-      const editDomainSuccess = await onEditAppId(updatedAppId, originalAppId);
-      if (!editDomainSuccess) {
+      const isEditedAppIdValid = validateAppIds([updatedAppId]);
+      if (!isEditedAppIdValid) {
         setError('root.serverError', {
           type: '400',
-          message: 'Edited domain is an invalid root-level domain.',
+          message: 'Edited mobile app id is an invalid id type.',
         });
+      } else {
+        await onEditAppId(updatedAppId, originalAppId);
       }
     }
   };

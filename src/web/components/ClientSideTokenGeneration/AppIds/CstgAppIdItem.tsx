@@ -9,7 +9,7 @@ type CstgAppIdItemProps = Readonly<{
   appId: string;
   existingAppIds: string[];
   onClick: () => void;
-  onEditAppId: (newDomain: string, originalDomainName: string) => Promise<boolean>;
+  onEditAppId: (newAppId: string, originalAppId: string) => Promise<boolean>;
   onDelete: () => void;
   checked: boolean;
 }>;

@@ -6,7 +6,7 @@ import { PagingTool } from '../../Core/PagingTool';
 import { RowsPerPageValues } from '../../Core/PagingToolHelper';
 import { TableNoDataPlaceholder } from '../../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../../Core/TriStateCheckbox';
-import { getPagedDomains } from '../CstgHelper';
+import { getPagedValues } from '../CstgHelper';
 import CstgAddAppIdDialog from './CstgAddAppIdDialog';
 import { CstgAppIdItem } from './CstgAppIdItem';
 import CstgDeleteAppIdDialog from './CstgDeleteAppIdDialog';
@@ -41,7 +41,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
   useEffect(() => {
     if (searchedAppIds.length === 0 && searchText === '') {
       setSearchedAppIds(appIds);
-      setPagedAppIds(getPagedDomains(appIds, initialPageNumber, initialRowsPerPage));
+      setPagedAppIds(getPagedValues(appIds, initialPageNumber, initialRowsPerPage));
     }
   }, [appIds, initialPageNumber, initialRowsPerPage, searchedAppIds, searchText]);
 
@@ -78,11 +78,11 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
     if (newAppIds) {
       setSearchedAppIds(newAppIds);
       if (deleteAppIds.every((appId) => pagedAppIds.includes(appId))) {
-        setPagedAppIds(getPagedDomains(newAppIds, pageNumber, rowsPerPage));
+        setPagedAppIds(getPagedValues(newAppIds, pageNumber, rowsPerPage));
       } else {
         setPageNumber(initialPageNumber);
         setRowsPerPage(initialRowsPerPage);
-        setPagedAppIds(getPagedDomains(newAppIds, initialPageNumber, initialRowsPerPage));
+        setPagedAppIds(getPagedValues(newAppIds, initialPageNumber, initialRowsPerPage));
       }
     }
   };
@@ -101,7 +101,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
     setSearchedAppIds(newSearchAppIds);
     setPageNumber(initialPageNumber);
     setRowsPerPage(initialRowsPerPage);
-    setPagedAppIds(getPagedDomains(newSearchAppIds, initialPageNumber, initialRowsPerPage));
+    setPagedAppIds(getPagedValues(newSearchAppIds, initialPageNumber, initialRowsPerPage));
   };
 
   const handleEditAppId = async (
@@ -115,7 +115,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
     );
     const editedAppIds = editedAppIdsResponse;
     if (editedAppIds) {
-      setPagedAppIds(getPagedDomains(editedAppIds, pageNumber, rowsPerPage));
+      setPagedAppIds(getPagedValues(editedAppIds, pageNumber, rowsPerPage));
       return true;
     }
     return false;
@@ -142,7 +142,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
       setSearchText('');
       setPageNumber(initialPageNumber);
       setRowsPerPage(initialRowsPerPage);
-      setPagedAppIds(getPagedDomains(newAppIds, initialPageNumber, initialRowsPerPage));
+      setPagedAppIds(getPagedValues(newAppIds, initialPageNumber, initialRowsPerPage));
       setSearchedAppIds(newAppIds);
     }
 
@@ -158,7 +158,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
   ) => {
     setPageNumber(currentPageNumber);
     setRowsPerPage(currentRowsPerPage);
-    setPagedAppIds(getPagedDomains(searchedAppIds, currentPageNumber, currentRowsPerPage));
+    setPagedAppIds(getPagedValues(searchedAppIds, currentPageNumber, currentRowsPerPage));
   };
 
   return (

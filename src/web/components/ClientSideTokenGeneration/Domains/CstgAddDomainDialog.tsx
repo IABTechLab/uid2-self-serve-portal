@@ -13,7 +13,7 @@ import { MultilineTextInput } from '../../Input/MultilineTextInput';
 import { StyledCheckbox } from '../../Input/StyledCheckbox';
 import { extractTopLevelDomain, getUniqueDomains } from '../CstgHelper';
 
-import './CstgAddDomainDialog.scss';
+import '../CstgAddDialog.scss';
 
 type AddDomainNamesDialogProps = Readonly<{
   onAddDomains: (newDomainsFormatted: string[], deleteExistingList: boolean) => Promise<string[]>;
@@ -71,9 +71,9 @@ function CstgAddDomainDialog({
   };
 
   return (
-    <div className='add-domain-dialog'>
+    <div className='cstg-add-dialog'>
       <Dialog title='Add Domains' closeButtonText='Cancel' onOpenChange={onOpenChange}>
-        <div className='domains-form-error'>
+        <div className='cstg-form-error'>
           <RootFormErrors fieldErrors={errors} />
         </div>
         <FormProvider {...formMethods}>
