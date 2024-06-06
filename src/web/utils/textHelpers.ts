@@ -48,30 +48,30 @@ export const sortStringsAlphabetically = (strings: string[]) => {
 export const validateEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 export const isAlphaNumericWithUnderscore = (s: string) => {
-  if (s.match(/^[a-zA-Z0-9_]*$/)) {
+  if (s !== '' && s.match(/^[a-zA-Z0-9_]*$/)) {
     return true;
   }
   return false;
 };
 
 export const isAlphaNumericWithHyphenAndDot = (s: string) => {
-  if (s.match(/^[a-zA-Z0-9-.]*$/)) {
+  if (s !== '' && s.match(/^[a-zA-Z0-9-.]*$/)) {
     return true;
   }
   return false;
 };
 
 export const isAlpha = (s: string) => {
-  if (s[0].match(/^[a-zA-Z]/)) {
+  if (s !== '' && s.match(/^[a-zA-Z]/)) {
     return true;
   }
   return false;
 };
 
-export const isJavaPackage = (value: string) => {
+export const isJavaPackage = (value: string): boolean => {
   const segments = value.split('.');
   const dotCount = segments.length;
-  if (dotCount < 2) {
+  if (dotCount < 3) {
     return false;
   }
 

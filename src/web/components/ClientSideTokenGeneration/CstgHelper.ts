@@ -70,7 +70,7 @@ export const isIOSBundleId = (value: string) => {
 };
 
 export const isAppStoreId = (value: string) => {
-  if (isNaN(Number(value))) {
+  if (value === '' || isNaN(Number(value))) {
     return false;
   }
   return true;

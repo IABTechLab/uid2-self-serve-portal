@@ -74,7 +74,9 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              <div className='checkbox-text'>Replace all existing app ids with new ones.</div>
+              <div className='checkbox-text'>
+                Replace all existing mobile app ids with new ones.
+              </div>
             </div>
             <MultilineTextInput
               inputName='newAppIds'

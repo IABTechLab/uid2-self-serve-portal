@@ -146,7 +146,7 @@ function ClientSideIntegration() {
         {/* For more information,
         see{' '}
         <a
-          classId='outside-link'
+          className='outside-link'
           target='_blank'
           href='https://unifiedid.com/docs/guides/publisher-client-side'
           rel='noreferrer'
