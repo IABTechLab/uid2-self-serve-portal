@@ -4,7 +4,7 @@ import { useState } from 'react';
 import CstgDeleteAppIdDialog from './CstgDeleteAppIdDialog';
 
 const meta: Meta<typeof CstgDeleteAppIdDialog> = {
-  title: 'CSTG/App Ids/Delete Mobile App ID Dialog',
+  title: 'CSTG/Mobile App Ids/Delete Mobile App ID Dialog',
   component: CstgDeleteAppIdDialog,
 };
 export default meta;
@@ -32,7 +32,7 @@ export const Default = () => {
   );
 };
 
-export const MultipleDomains = () => {
+export const MultipleAppIds = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const appIds = ['com.test.com', '123456', 'test-123.com'];
 

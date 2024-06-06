@@ -80,7 +80,7 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
             </div>
             <MultilineTextInput
               inputName='newAppIds'
-              label='AppIds'
+              label='Mobile App Ids'
               rules={{ required: 'Please specify mobile app ids.' }}
             />
             <div className='form-footer'>

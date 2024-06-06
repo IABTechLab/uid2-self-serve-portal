@@ -4,7 +4,7 @@ import { useState } from 'react';
 import CstgEditAppIdDialog from './CstgEditAppIdDialog';
 
 const meta: Meta<typeof CstgEditAppIdDialog> = {
-  title: 'CSTG/App Ids/Edit Mobile App ID Dialog',
+  title: 'CSTG/Mobile App Ids/Edit Mobile App ID Dialog',
   component: CstgEditAppIdDialog,
 };
 export default meta;
