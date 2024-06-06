@@ -197,7 +197,7 @@ export const insertAppNamesAuditTrails = async (
     const appNamesAuditTrail: Omit<AuditTrailDTO, 'id'> = {
       userId,
       userEmail,
-      event: AuditTrailEvents.UpdateDomainNames,
+      event: AuditTrailEvents.UpdateAppNames,
       eventData: {
         siteId: participant.siteId!,
         action,
