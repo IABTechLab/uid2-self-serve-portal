@@ -72,7 +72,7 @@ import {
   getAllUserFromParticipant,
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
-import { getParticipantAppIds, setParticipantAppNames } from './participantsAppIds';
+import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
 import { createParticipant } from './participantsCreation';
 import { getParticipantDomainNames, setParticipantDomainNames } from './participantsDomainNames';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
@@ -602,7 +602,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.post('/:participantId/domainNames', setParticipantDomainNames);
 
-  participantsRouter.get('/:participantId/appNames', getParticipantAppIds);
+  participantsRouter.get('/:participantId/appNames', getParticipantAppNames);
 
   participantsRouter.post('/:participantId/appNames', setParticipantAppNames);
 

@@ -11,7 +11,7 @@ import {
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
 
-export async function getParticipantAppIds(req: ParticipantRequest, res: Response) {
+export async function getParticipantAppNames(req: ParticipantRequest, res: Response) {
   const { participant } = req;
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
