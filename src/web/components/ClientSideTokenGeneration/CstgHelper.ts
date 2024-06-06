@@ -1,10 +1,15 @@
 import { parse } from 'tldts';
 
+import { isAlphaNumericWithHyphenAndDot, isJavaPackage } from '../../utils/textHelpers';
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
 export type UpdateDomainNamesResponse = {
   domains: string[];
   isValidDomains: boolean;
+};
+
+export type UpdateAppNamesResponse = {
+  appNames: string[];
 };
 
 export const extractTopLevelDomain = (domainName: string) => {
@@ -49,4 +54,19 @@ export const getUniqueAppIds = (
     ? newAppIds
     : newAppIds.filter((appId) => !existingAppIds?.includes(appId));
   return uniqueAppIds;
+};
+
+export const isAndroidAppId = (value: string) => {
+  return isJavaPackage(value);
+};
+
+export const isIOSBundleId = (value: string) => {
+  return isAlphaNumericWithHyphenAndDot(value);
+};
+
+export const isAppStoreId = (value: string) => {
+  if (isNaN(Number(value))) {
+    return false;
+  }
+  return true;
 };

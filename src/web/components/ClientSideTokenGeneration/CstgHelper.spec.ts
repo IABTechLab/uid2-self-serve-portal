@@ -1,4 +1,4 @@
-import { extractTopLevelDomain, getPagedDomains } from './CstgHelper';
+import { extractTopLevelDomain, getPagedDomains, isAppStoreId } from './CstgHelper';
 
 const validDomainsList = ['test.com', 'https://test.com', 'http://test.com'];
 const longDomainsList = [
@@ -67,5 +67,18 @@ describe('test domain helper functions', () => {
       const rowsPerPage = 10;
       expect(getPagedDomains(longDomainsList, pageNumber, rowsPerPage)).toEqual([]);
     });
+  });
+});
+
+describe('test app id helper functions', () => {
+  it('should check if app store id is valid', () => {
+    const emptyString = '';
+    const numericString = '123456';
+    const alphabetString = 'abcdefd1234';
+    const symbolString = '@123456';
+    expect(isAppStoreId(emptyString)).toEqual(false);
+    expect(isAppStoreId(numericString)).toEqual(true);
+    expect(isAppStoreId(alphabetString)).toEqual(false);
+    expect(isAppStoreId(symbolString)).toEqual(false);
   });
 });

@@ -85,14 +85,3 @@ export const isJavaPackage = (value: string) => {
   });
   return true;
 };
-
-export const isIOSBundleId = (value: string) => {
-  return isAlphaNumericWithHyphenAndDot(value);
-};
-
-export const isAppStoreId = (value: string) => {
-  if (isNaN(Number(value))) {
-    return false;
-  }
-  return true;
-};

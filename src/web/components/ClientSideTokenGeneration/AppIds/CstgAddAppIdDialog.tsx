@@ -5,16 +5,13 @@ import { AddAppIdsFormProps } from '../../../services/appIdsService';
 import {
   deduplicateStrings,
   formatStringsWithSeparator,
-  isAppStoreId,
-  isIOSBundleId,
-  isJavaPackage,
   separateStringsList,
 } from '../../../utils/textHelpers';
 import { Dialog } from '../../Core/Dialog';
 import { RootFormErrors } from '../../Input/FormError';
 import { MultilineTextInput } from '../../Input/MultilineTextInput';
 import { StyledCheckbox } from '../../Input/StyledCheckbox';
-import { getUniqueAppIds } from '../CstgHelper';
+import { getUniqueAppIds, isAppStoreId, isIOSBundleId, isJavaPackage } from '../CstgHelper';
 
 import './CstgAddAppIdDialog.scss';
 
