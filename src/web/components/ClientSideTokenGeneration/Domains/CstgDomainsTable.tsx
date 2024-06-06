@@ -2,13 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
-import { PagingTool } from '../Core/PagingTool';
-import { RowsPerPageValues } from '../Core/PagingToolHelper';
-import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { PagingTool } from '../../Core/PagingTool';
+import { RowsPerPageValues } from '../../Core/PagingToolHelper';
+import { TableNoDataPlaceholder } from '../../Core/TableNoDataPlaceholder';
+import { TriStateCheckbox, TriStateCheckboxState } from '../../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
 import CstgDeleteDomainDialog from './CstgDeleteDomainDialog';
-import { getPagedDomains, UpdateDomainNamesResponse } from './CstgDomainHelper';
+import { getPagedDomains, UpdateDomainNamesResponse } from '../CstgHelper';
 import { CstgDomainItem } from './CstgDomainItem';
 
 import './CstgDomainsTable.scss';

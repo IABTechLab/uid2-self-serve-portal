@@ -38,3 +38,15 @@ export const getUniqueDomains = (
     : newDomains.filter((domain) => !existingDomains?.includes(domain));
   return uniqueDomains;
 };
+
+export const getUniqueAppIds = (
+  newAppIds: string[],
+  existingAppIds: string[],
+  deleteExistingList: boolean
+) => {
+  // filter out domain names that already exist in the list unless existing list is being deleted
+  const uniqueAppIds = deleteExistingList
+    ? newAppIds
+    : newAppIds.filter((appId) => !existingAppIds?.includes(appId));
+  return uniqueAppIds;
+};

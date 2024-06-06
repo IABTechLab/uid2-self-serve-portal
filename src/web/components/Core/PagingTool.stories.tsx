@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { getPagedDomains } from '../ClientSideTokenGeneration/CstgDomainHelper';
+import { getPagedDomains } from '../ClientSideTokenGeneration/CstgHelper';
 import { PagingTool } from './PagingTool';
 import { RowsPerPageValues } from './PagingToolHelper';
 

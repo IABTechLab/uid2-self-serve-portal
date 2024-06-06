@@ -1,10 +1,10 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { EditDomainFormProps } from '../../services/domainNamesService';
-import { Dialog } from '../Core/Dialog';
-import { RootFormErrors } from '../Input/FormError';
-import { TextInput } from '../Input/TextInput';
-import { extractTopLevelDomain } from './CstgDomainHelper';
+import { EditDomainFormProps } from '../../../services/domainNamesService';
+import { Dialog } from '../../Core/Dialog';
+import { RootFormErrors } from '../../Input/FormError';
+import { TextInput } from '../../Input/TextInput';
+import { extractTopLevelDomain } from '../CstgHelper';
 
 type EditDomainDialogProps = Readonly<{
   domain: string;

@@ -1,4 +1,4 @@
-import { extractTopLevelDomain, getPagedDomains } from './CstgDomainHelper';
+import { extractTopLevelDomain, getPagedDomains } from './CstgHelper';
 
 const validDomainsList = ['test.com', 'https://test.com', 'http://test.com'];
 const longDomainsList = [

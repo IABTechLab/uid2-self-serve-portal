@@ -1,17 +1,17 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { AddDomainNamesFormProps } from '../../services/domainNamesService';
+import { AddDomainNamesFormProps } from '../../../services/domainNamesService';
 import {
   deduplicateStrings,
   formatStringsWithSeparator,
   separateStringsList,
-} from '../../utils/textHelpers';
-import { Dialog } from '../Core/Dialog';
-import { RootFormErrors } from '../Input/FormError';
-import { MultilineTextInput } from '../Input/MultilineTextInput';
-import { StyledCheckbox } from '../Input/StyledCheckbox';
-import { extractTopLevelDomain, getUniqueDomains } from './CstgDomainHelper';
+} from '../../../utils/textHelpers';
+import { Dialog } from '../../Core/Dialog';
+import { RootFormErrors } from '../../Input/FormError';
+import { MultilineTextInput } from '../../Input/MultilineTextInput';
+import { StyledCheckbox } from '../../Input/StyledCheckbox';
+import { extractTopLevelDomain, getUniqueDomains } from '../CstgHelper';
 
 import './CstgAddDomainDialog.scss';
 

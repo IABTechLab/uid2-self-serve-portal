@@ -38,6 +38,7 @@ export type AdminSiteDTO = {
   client_count: number;
   visible: boolean;
   domain_names: string[];
+  app_names: string[];
 };
 
 export type SiteDTO = Omit<AdminSiteDTO, 'roles'> & { apiRoles: ApiRoleDTO[] };
@@ -200,6 +201,7 @@ export async function mapAdminSitesToSiteDTOs(adminSites: AdminSiteDTO[]): Promi
       clientTypes: adminSite.clientTypes,
       apiRoles,
       domain_names: adminSite.domain_names,
+      app_names: adminSite.app_names,
     };
   });
 }

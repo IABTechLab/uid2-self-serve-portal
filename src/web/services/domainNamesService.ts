@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
-import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
+import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { backendError } from '../utils/apiError';
 
 export type AddDomainNamesFormProps = {

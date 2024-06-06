@@ -46,3 +46,53 @@ export const sortStringsAlphabetically = (strings: string[]) => {
 };
 
 export const validateEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+export const isAlphaNumericWithUnderscore = (s: string) => {
+  if (s.match(/^[a-zA-Z0-9_]*$/)) {
+    return true;
+  }
+  return false;
+};
+
+export const isAlphaNumericWithHyphenAndDot = (s: string) => {
+  if (s.match(/^[a-zA-Z0-9-.]*$/)) {
+    return true;
+  }
+  return false;
+};
+
+export const isAlpha = (s: string) => {
+  if (s[0].match(/^[a-zA-Z]/)) {
+    return true;
+  }
+  return false;
+};
+
+export const isJavaPackage = (value: string) => {
+  const segments = value.split('.');
+  const dotCount = segments.length;
+  if (dotCount < 2) {
+    return false;
+  }
+
+  segments.forEach((s) => {
+    if (!isAlphaNumericWithUnderscore(s)) {
+      return false;
+    }
+    if (!isAlpha(s[0])) {
+      return false;
+    }
+  });
+  return true;
+};
+
+export const isIOSBundleId = (value: string) => {
+  return isAlphaNumericWithHyphenAndDot(value);
+};
+
+export const isAppStoreId = (value: string) => {
+  if (isNaN(Number(value))) {
+    return false;
+  }
+  return true;
+};

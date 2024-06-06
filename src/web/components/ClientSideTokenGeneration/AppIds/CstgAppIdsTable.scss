@@ -1,0 +1,76 @@
+.cstg-app-names-management {
+  .cstg-app-names-table {
+    width: 100%;
+
+    td {
+      padding: 15px 5px 15px 16px;
+    }
+
+    th:first-of-type,
+    td:first-of-type {
+      padding-left: 10px;
+      width: 21px;
+    }
+
+    th.action {
+      text-align: end;
+    }
+
+    .action {
+      width: 20%;
+    }
+
+    .action-cell {
+      font-size: 0.8125rem;
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .no-search-results {
+      width: 500px;
+    }
+  }
+
+  .cstg-app-names-management-icon {
+    margin-right: 8px;
+  }
+
+  .cstg-app-names-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+    &-right {
+      display: flex;
+      justify-content: right;
+    }
+
+    .app-names-search-bar-container {
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--theme-action);
+      padding: 6px 2px;
+      ::placeholder {
+        color: var(--theme-action);
+        opacity: 1;
+      }
+      margin-right: 20px;
+    }
+
+    .app-names-search-bar-icon {
+      color: var(--theme-action);
+      height: 16px;
+      margin-left: 8px;
+    }
+
+    .app-names-search-bar {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: var(--theme-action);
+      font-weight: 400;
+      font-size: 0.75rem;
+    }
+  }
+}

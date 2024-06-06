@@ -278,3 +278,13 @@ export const setSiteDomainNames = async (
   });
   return response.data;
 };
+
+export const setSiteAppNames = async (
+  siteId: number,
+  appNames: string[]
+): Promise<AdminSiteDTO> => {
+  const response = await adminServiceClient.post(`/api/site/app_names?=id=${siteId}`, {
+    app_names: appNames,
+  });
+  return response.data;
+};

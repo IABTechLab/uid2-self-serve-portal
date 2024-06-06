@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
-import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
-import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
+import { CstgAppIdsTable } from '../components/ClientSideTokenGeneration/AppIds/CstgAppIdsTable';
+import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgHelper';
+import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/Domains/CstgDomainsTable';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
+import { GetAppIds, UpdateAppIds } from '../services/appIdsService';
 import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
 import {
   AddKeyPair,
@@ -24,6 +26,7 @@ import { PortalRoute } from './routeUtils';
 function ClientSideIntegration() {
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [domainNames, setDomainNames] = useState<string[]>();
+  const [appIds, setAppIds] = useState<string[]>();
 
   const loadKeyPairs = useCallback(async () => {
     const data = await GetKeyPairs();
@@ -39,6 +42,11 @@ function ClientSideIntegration() {
     setDomainNames(currentDomainNamesSorted);
   }, []);
 
+  const loadAppIds = useCallback(async () => {
+    const currentAppIds = await GetAppIds();
+    setAppIds(currentAppIds);
+  }, []);
+
   useEffect(() => {
     loadKeyPairs();
   }, [loadKeyPairs]);
@@ -46,6 +54,10 @@ function ClientSideIntegration() {
   useEffect(() => {
     loadDomainNames();
   }, [loadDomainNames]);
+
+  useEffect(() => {
+    loadAppIds();
+  }, [loadAppIds]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name } = formData;
@@ -104,11 +116,26 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
+  const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
+    try {
+      const response = await UpdateAppIds(updatedAppIds);
+      SuccessToast(`App Ids ${action}.`);
+      return response;
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  };
 
   const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
     let updatedDomains = newDomains;
     if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
     return handleUpdateDomainNames(updatedDomains, 'added');
+  };
+
+  const onAddAppIds = async (newAppIds: string[], deleteExistingList: boolean) => {
+    let updatedAppIds = newAppIds;
+    if (appIds && !deleteExistingList) updatedAppIds = [...newAppIds, ...appIds];
+    return handleUpdateAppIds(updatedAppIds, 'added');
   };
 
   return (
@@ -119,7 +146,7 @@ function ClientSideIntegration() {
         {/* For more information,
         see{' '}
         <a
-          className='outside-link'
+          classId='outside-link'
           target='_blank'
           href='https://unifiedid.com/docs/guides/publisher-client-side'
           rel='noreferrer'
@@ -140,6 +167,11 @@ function ClientSideIntegration() {
           domains={domainNames || []}
           onAddDomains={onAddDomainNames}
           onUpdateDomains={handleUpdateDomainNames}
+        />
+        <CstgAppIdsTable
+          appIds={appIds || []}
+          onAddAppIds={onAddAppIds}
+          onUpdateAppIds={handleUpdateAppIds}
         />
       </ScreenContentContainer>
     </>
