@@ -174,7 +174,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
                     icon={['far', 'trash-can']}
                     className='cstg-app-ids-management-icon'
                   />
-                  {`Delete ${selectedAppIds.length === appIds.length ? 'All' : ''} Mobile App Id${
+                  {`Delete ${selectedAppIds.length === appIds.length ? 'All' : ''} Mobile App ID${
                     selectedAppIds?.length > 1 ? 's' : ''
                   }`}
                 </button>
