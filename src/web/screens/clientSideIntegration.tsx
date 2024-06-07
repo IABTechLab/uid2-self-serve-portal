@@ -44,7 +44,10 @@ function ClientSideIntegration() {
 
   const loadAppIds = useCallback(async () => {
     const currentAppIds = await GetAppIds();
-    setAppIds(currentAppIds);
+    const currentAppIdsSorted = currentAppIds
+      ? sortStringsAlphabetically(currentAppIds)
+      : currentAppIds;
+    setAppIds(currentAppIdsSorted);
   }, []);
 
   useEffect(() => {
@@ -118,9 +121,10 @@ function ClientSideIntegration() {
   };
   const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
     try {
-      const response = await UpdateAppIds(updatedAppIds);
+      const appIdsResponse = await UpdateAppIds(updatedAppIds);
+      setAppIds(sortStringsAlphabetically(appIdsResponse));
       SuccessToast(`Mobile app ids ${action}.`);
-      return response;
+      return appIdsResponse;
     } catch (e) {
       handleErrorToast(e);
     }

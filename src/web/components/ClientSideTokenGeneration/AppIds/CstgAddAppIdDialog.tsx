@@ -59,7 +59,7 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
 
   return (
     <div className='cstg-add-dialog'>
-      <Dialog title='Add Mobile App Ids' closeButtonText='Cancel' onOpenChange={onOpenChange}>
+      <Dialog title='Add Mobile App IDs' closeButtonText='Cancel' onOpenChange={onOpenChange}>
         <div className='cstg-form-error'>
           <RootFormErrors fieldErrors={errors} />
         </div>
@@ -80,12 +80,12 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
             </div>
             <MultilineTextInput
               inputName='newAppIds'
-              label='Mobile App Ids'
+              label='Mobile App IDs'
               rules={{ required: 'Please specify mobile app ids.' }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                {deleteExistingList ? 'Replace' : 'Add'} Mobile App Ids
+                {deleteExistingList ? 'Replace' : 'Add'} Mobile App IDs
               </button>
             </div>
           </form>

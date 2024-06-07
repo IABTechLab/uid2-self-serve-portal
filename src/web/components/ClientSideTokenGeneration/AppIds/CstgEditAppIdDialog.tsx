@@ -43,7 +43,7 @@ function EditAppIdDialog({
       });
     } else {
       const isEditedAppIdValid = validateAppIds([updatedAppId]);
-      if (!isEditedAppIdValid) {
+      if (isEditedAppIdValid.length > 0) {
         setError('root.serverError', {
           type: '400',
           message: 'Edited mobile app id is an invalid id type.',

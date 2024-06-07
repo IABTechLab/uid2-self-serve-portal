@@ -160,7 +160,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
     <div className='cstg-app-ids-management'>
       <div className='cstg-app-ids-table-header'>
         <div>
-          <h2>Mobile App Ids</h2>
+          <h2>Mobile App IDs</h2>
           {appIds?.length > 0 && (
             <div className='table-actions'>
               <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
@@ -196,14 +196,14 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
               type='text'
               className='app-ids-search-bar'
               onChange={handleSearchAppId}
-              placeholder='Search Mobile App Ids'
+              placeholder='Search Mobile App IDs'
               value={searchText}
             />
             <FontAwesomeIcon icon='search' className='app-ids-search-bar-icon' />
           </div>
           <div>
             <button className='small-button' type='button' onClick={onOpenChangeAddAppIdDialog}>
-              Add Mobile App Ids
+              Add Mobile App IDs
             </button>
             {showAddAppIdsDialog && (
               <CstgAddAppIdDialog
@@ -238,7 +238,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
         </tbody>
       </table>
       {searchText && !searchedAppIds.length && (
-        <TableNoDataPlaceholder title='No Mobile App Ids'>
+        <TableNoDataPlaceholder title='No Mobile App IDs'>
           <span>There are no mobile app ids that match this search.</span>
         </TableNoDataPlaceholder>
       )}
@@ -252,7 +252,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
       )}
 
       {!appIds.length && (
-        <TableNoDataPlaceholder title='No Mobile App Ids'>
+        <TableNoDataPlaceholder title='No Mobile App IDs'>
           <span>There are no mobile app ids.</span>
         </TableNoDataPlaceholder>
       )}
