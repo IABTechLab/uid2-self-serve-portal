@@ -4,7 +4,6 @@ import {
   formatUnixDate,
   getArticle,
   isAlphaNumericWithHyphenAndDot,
-  isJavaPackage,
   isVowel,
   separateStringsList,
   sortStringsAlphabetically,

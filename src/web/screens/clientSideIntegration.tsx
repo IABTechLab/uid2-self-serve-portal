@@ -119,7 +119,7 @@ function ClientSideIntegration() {
   const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
     try {
       const response = await UpdateAppIds(updatedAppIds);
-      SuccessToast(`App Ids ${action}.`);
+      SuccessToast(`Mobile app ids ${action}.`);
       return response;
     } catch (e) {
       handleErrorToast(e);

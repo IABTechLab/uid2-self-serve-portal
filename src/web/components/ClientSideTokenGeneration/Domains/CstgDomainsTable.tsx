@@ -189,7 +189,6 @@ export function CstgDomainsTable({
                   type='button'
                   onClick={onOpenChangeDeleteDomainDialog}
                 >
-                  {' '}
                   <FontAwesomeIcon
                     icon={['far', 'trash-can']}
                     className='cstg-domains-management-icon'

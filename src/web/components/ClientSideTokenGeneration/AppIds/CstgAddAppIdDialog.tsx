@@ -40,7 +40,7 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
       deleteExistingList
     );
     if (newAppIds.length === 0) {
-      handleError('The app ids entered already exist.');
+      handleError('The mobile app ids entered already exist.');
     } else {
       const invalidAppIds = validateAppIds(newAppIds);
       if (invalidAppIds.length > 0) {

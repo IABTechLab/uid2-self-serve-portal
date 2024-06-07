@@ -67,11 +67,10 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
   const isAppIdSelected = (appId: string) => selectedAppIds.includes(appId);
 
   const handleBulkDeleteAppIds = async (deleteAppIds: string[]) => {
-    const newAppIdsResponse = await onUpdateAppIds(
+    const newAppIds = await onUpdateAppIds(
       appIds.filter((appId) => !deleteAppIds.includes(appId)),
       'deleted'
     );
-    const newAppIds = newAppIdsResponse;
     setShowDeleteAppIdsDialog(false);
     setSelectedAppIds([]);
     setSearchText('');
@@ -133,8 +132,7 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
     newAppIdsFormatted: string[],
     deleteExistingList: boolean
   ): Promise<string[]> => {
-    const newAppIdsResponse = await onAddAppIds(newAppIdsFormatted, deleteExistingList);
-    const newAppIds = newAppIdsResponse;
+    const newAppIds = await onAddAppIds(newAppIdsFormatted, deleteExistingList);
     if (newAppIds) {
       setShowAddAppIdsDialog(false);
       setSearchedAppIds(appIds);
@@ -144,9 +142,6 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
       setRowsPerPage(initialRowsPerPage);
       setPagedAppIds(getPagedValues(newAppIds, initialPageNumber, initialRowsPerPage));
       setSearchedAppIds(newAppIds);
-    }
-
-    if (newAppIds) {
       return newAppIds;
     }
     return [];
@@ -162,8 +157,8 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
   };
 
   return (
-    <div className='cstg-app-names-management'>
-      <div className='cstg-app-names-table-header'>
+    <div className='cstg-app-ids-management'>
+      <div className='cstg-app-ids-table-header'>
         <div>
           <h2>Mobile App Ids</h2>
           {appIds?.length > 0 && (
@@ -175,10 +170,9 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
                   type='button'
                   onClick={onOpenChangeDeleteAppIdDialog}
                 >
-                  {' '}
                   <FontAwesomeIcon
                     icon={['far', 'trash-can']}
-                    className='cstg-app-names-management-icon'
+                    className='cstg-app-ids-management-icon'
                   />
                   {`Delete ${selectedAppIds.length === appIds.length ? 'All' : ''} Mobile App Id${
                     selectedAppIds?.length > 1 ? 's' : ''
@@ -196,18 +190,18 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
             </div>
           )}
         </div>
-        <div className='cstg-app-names-table-header-right'>
-          <div className='app-names-search-bar-container'>
+        <div className='cstg-app-ids-table-header-right'>
+          <div className='app-ids-search-bar-container'>
             <input
               type='text'
-              className='app-names-search-bar'
+              className='app-ids-search-bar'
               onChange={handleSearchAppId}
               placeholder='Search Mobile App Ids'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='app-names-search-bar-icon' />
+            <FontAwesomeIcon icon='search' className='app-ids-search-bar-icon' />
           </div>
-          <div className='add-appId-button'>
+          <div>
             <button className='small-button' type='button' onClick={onOpenChangeAddAppIdDialog}>
               Add Mobile App Ids
             </button>
@@ -221,11 +215,11 @@ export function CstgAppIdsTable({ appIds, onUpdateAppIds, onAddAppIds }: AppIdsT
           </div>
         </div>
       </div>
-      <table className='cstg-app-names-table'>
+      <table className='cstg-app-ids-table'>
         <thead>
           <tr>
             <th> </th>
-            <th className='appId'>Mobile App ID</th>
+            <th>Mobile App ID</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>

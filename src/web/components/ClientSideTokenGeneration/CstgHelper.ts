@@ -5,7 +5,6 @@ import {
   isAlpha,
   isAlphaNumericWithHyphenAndDot,
   isAlphaNumericWithUnderscore,
-  isJavaPackage,
 } from '../../utils/textHelpers';
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
