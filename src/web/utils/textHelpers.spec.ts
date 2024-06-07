@@ -229,23 +229,4 @@ describe('Text helper tests', () => {
     expect(isAlphaNumericWithHyphenAndDot(uppercaseString)).toEqual(true);
     expect(isAlphaNumericWithHyphenAndDot(symbolString)).toEqual(false);
   });
-
-  it('should check if string is valid Java package', () => {
-    const emptyString = '';
-    const oneDotString = 'com.test';
-    const twoDotString = 'com.test.com';
-    const threeDotString = 'com.test.com.test';
-    const segmentsStartWithLetter = 'com.test.com';
-    const segmentsStartWithNumbers = '123.test.456';
-    const alphaNumericWithUnderscore = 'ab_c.test_.com';
-    const symbolString = '@123456._.';
-    expect(isJavaPackage(emptyString)).toEqual(false);
-    expect(isJavaPackage(oneDotString)).toEqual(false);
-    expect(isJavaPackage(twoDotString)).toEqual(true);
-    expect(isJavaPackage(threeDotString)).toEqual(true);
-    expect(isJavaPackage(segmentsStartWithLetter)).toEqual(true);
-    expect(isJavaPackage(segmentsStartWithNumbers)).toEqual(false);
-    expect(isJavaPackage(alphaNumericWithUnderscore)).toEqual(true);
-    expect(isJavaPackage(symbolString)).toEqual(false);
-  });
 });

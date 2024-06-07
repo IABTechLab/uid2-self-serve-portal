@@ -1,4 +1,4 @@
-import { extractTopLevelDomain, getPagedValues, isAppStoreId } from './CstgHelper';
+import { extractTopLevelDomain, getPagedValues, isAndroidAppId, isAppStoreId } from './CstgHelper';
 
 const validDomainsList = ['test.com', 'https://test.com', 'http://test.com'];
 const longDomainsList = [
@@ -80,5 +80,24 @@ describe('test app id helper functions', () => {
     expect(isAppStoreId(numericString)).toEqual(true);
     expect(isAppStoreId(alphabetString)).toEqual(false);
     expect(isAppStoreId(symbolString)).toEqual(false);
+  });
+
+  it('should check if string is valid android app id', () => {
+    const emptyString = '';
+    const oneDotString = 'com.test';
+    const twoDotString = 'com.test.com';
+    const threeDotString = 'com.test.com.test';
+    const segmentsStartWithLetter = 'com.test.com';
+    const segmentsStartWithNumbers = '123.test.456';
+    const alphaNumericWithUnderscore = 'ab_c.test_.com';
+    const symbolString = '@123456._.';
+    expect(isAndroidAppId(emptyString)).toEqual(false);
+    expect(isAndroidAppId(oneDotString)).toEqual(false);
+    expect(isAndroidAppId(twoDotString)).toEqual(true);
+    expect(isAndroidAppId(threeDotString)).toEqual(true);
+    expect(isAndroidAppId(segmentsStartWithLetter)).toEqual(true);
+    expect(isAndroidAppId(segmentsStartWithNumbers)).toEqual(false);
+    expect(isAndroidAppId(alphaNumericWithUnderscore)).toEqual(true);
+    expect(isAndroidAppId(symbolString)).toEqual(false);
   });
 });

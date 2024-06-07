@@ -67,21 +67,3 @@ export const isAlpha = (s: string) => {
   }
   return false;
 };
-
-export const isJavaPackage = (value: string): boolean => {
-  const segments = value.split('.');
-  const dotCount = segments.length;
-  if (dotCount < 3) {
-    return false;
-  }
-
-  segments.forEach((s) => {
-    if (!isAlphaNumericWithUnderscore(s)) {
-      return false;
-    }
-    if (!isAlpha(s[0])) {
-      return false;
-    }
-  });
-  return true;
-};

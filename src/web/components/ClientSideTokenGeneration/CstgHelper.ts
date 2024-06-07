@@ -2,7 +2,9 @@ import { parse } from 'tldts';
 
 import {
   deduplicateStrings,
+  isAlpha,
   isAlphaNumericWithHyphenAndDot,
+  isAlphaNumericWithUnderscore,
   isJavaPackage,
 } from '../../utils/textHelpers';
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
@@ -61,14 +63,28 @@ export const getUniqueAppIds = (
   return uniqueAppIds;
 };
 
+// Source: https://developer.android.com/build/configure-app-module
+// id must have at least 2 dots
+// every character in between the dots must be alphanumeric
+// the first character of each segment must be a letter
 export const isAndroidAppId = (value: string) => {
-  return isJavaPackage(value);
+  const segments = value.split('.');
+  const dotCount = segments.length - 1;
+  if (dotCount < 2) {
+    return false;
+  }
+
+  return segments.every((s) => isAlphaNumericWithUnderscore(s) && isAlpha(s[0]));
 };
 
+// Source: https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleidentifier
+// "bundle ID string must contain only alphanumeric characters (A–Z, a–z, and 0–9), hyphens (-), and periods (.)"
 export const isIOSBundleId = (value: string) => {
   return isAlphaNumericWithHyphenAndDot(value);
 };
 
+// Source: https://support.google.com/admob/answer/10038409?hl=en
+// "For example, the URL of an app page is apps.apple.com/us/app/example/id000000000. The app's store ID is 000000000"
 export const isAppStoreId = (value: string) => {
   if (value === '' || isNaN(Number(value))) {
     return false;
