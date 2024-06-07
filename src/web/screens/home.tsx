@@ -23,6 +23,7 @@ import './home.scss';
 async function getSharingCounts() {
   let manualSites: number[] = [];
   let allowedTypes: ClientType[] = [];
+  let hasKeyset: boolean = true;
   const allSitesPromise = getAllSites();
   try {
     const sharingList = await GetSharingList();
@@ -30,7 +31,7 @@ async function getSharingCounts() {
     allowedTypes = sharingList.allowed_types;
   } catch (e: unknown) {
     if (e instanceof AxiosError && e.response?.data?.missingKeyset) {
-      // having no keyset is an expected state.  Don't error on this
+      hasKeyset = false;
     } else {
       log.error(e);
       throw e;
@@ -47,6 +48,7 @@ async function getSharingCounts() {
     return {
       sharingPermissionsCount: manualSites.length,
       bulkPermissionsCount: bulkSites.length,
+      hasKeyset,
     };
   } catch (e: unknown) {
     log.error(e);
@@ -118,6 +120,7 @@ function Home() {
                   <SharingPermissionCard
                     sharingPermissionsCount={counts.sharingPermissionsCount}
                     bulkPermissionsCount={counts.bulkPermissionsCount}
+                    hasKeyset={counts.hasKeyset}
                   />
                 )}
               </AwaitTypesafe>
