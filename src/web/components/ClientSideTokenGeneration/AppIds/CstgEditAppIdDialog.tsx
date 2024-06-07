@@ -4,7 +4,7 @@ import { EditAppIdFormProps } from '../../../services/appIdsService';
 import { Dialog } from '../../Core/Dialog';
 import { RootFormErrors } from '../../Input/FormError';
 import { TextInput } from '../../Input/TextInput';
-import { validateAppIds } from '../CstgHelper';
+import { validateAppId } from '../CstgHelper';
 
 type EditAppIdDialogProps = Readonly<{
   appId: string;
@@ -42,8 +42,8 @@ function EditAppIdDialog({
         message: 'Mobile app id already exists.',
       });
     } else {
-      const isEditedAppIdValid = validateAppIds([updatedAppId]);
-      if (isEditedAppIdValid.length > 0) {
+      const isEditedAppIdValid = validateAppId(updatedAppId);
+      if (!isEditedAppIdValid) {
         setError('root.serverError', {
           type: '400',
           message: 'Edited mobile app id is an invalid id type.',

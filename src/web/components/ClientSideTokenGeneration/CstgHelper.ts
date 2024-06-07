@@ -91,12 +91,6 @@ export const isAppStoreId = (value: string) => {
   return true;
 };
 
-export const validateAppIds = (appIds: string[]): string[] => {
-  const invalidAppIds: string[] = [];
-  appIds.forEach((appId) => {
-    if (!(isAppStoreId(appId) || isAndroidAppId(appId) || isIOSBundleId(appId))) {
-      invalidAppIds.push(appId);
-    }
-  });
-  return invalidAppIds;
+export const validateAppId = (appId: string): boolean => {
+  return isAppStoreId(appId) || isAndroidAppId(appId) || isIOSBundleId(appId);
 };

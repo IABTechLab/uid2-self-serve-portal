@@ -7,7 +7,7 @@ import { Dialog } from '../../Core/Dialog';
 import { RootFormErrors } from '../../Input/FormError';
 import { MultilineTextInput } from '../../Input/MultilineTextInput';
 import { StyledCheckbox } from '../../Input/StyledCheckbox';
-import { getUniqueAppIds, validateAppIds } from '../CstgHelper';
+import { getUniqueAppIds, validateAppId } from '../CstgHelper';
 
 import '../CstgAddDialog.scss';
 
@@ -42,7 +42,12 @@ function CstgAddAppIdDialog({ onAddAppIds, onOpenChange, existingAppIds }: AddAp
     if (newAppIds.length === 0) {
       handleError('The mobile app ids entered already exist.');
     } else {
-      const invalidAppIds = validateAppIds(newAppIds);
+      const invalidAppIds: string[] = [];
+      newAppIds.forEach((newAppId) => {
+        if (!validateAppId(newAppId)) {
+          invalidAppIds.push(newAppId);
+        }
+      });
       if (invalidAppIds.length > 0) {
         handleError(
           `The mobile app ids entered are invalid: ' ${formatStringsWithSeparator(invalidAppIds)}`
