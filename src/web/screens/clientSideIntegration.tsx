@@ -146,7 +146,7 @@ function ClientSideIntegration() {
     <>
       <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage client-side integration key pairs and domain names.
+        View and manage client-side integration key pairs, domain names and mobile app ids.
         {/* For more information,
         see{' '}
         <a
