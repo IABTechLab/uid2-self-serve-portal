@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import BusinessContact from './BusinessContact';
 import BusinessContactDialog from './BusinessContactDialog';
@@ -14,7 +16,7 @@ type BusinessContactsTableProps = Readonly<{
   onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
 }>;
 
-function BusinessContactsTable({
+function BusinessContactsTableContent({
   businessContacts,
   onRemoveEmailContact,
   onUpdateEmailContact,
@@ -24,19 +26,32 @@ function BusinessContactsTable({
   const onOpenChangeBusinessContactDialog = () => {
     setShowBusinessContactDialog(!showBusinessContactDialog);
   };
+
+  const { sortData } = useSortable<BusinessContactResponse>();
+  const sortedData = sortData(businessContacts);
+
   return (
     <div className='business-contacts-table-container'>
       <table className='business-contacts-table'>
         <thead>
           <tr>
-            <th className='name'>Email Group Name</th>
-            <th className='email'>Email Alias</th>
-            <th className='contactType'>Contact Type</th>
+            <SortableTableHeader<BusinessContactResponse>
+              sortKey='name'
+              header='Email Group Name'
+            />
+            <SortableTableHeader<BusinessContactResponse>
+              sortKey='emailAlias'
+              header='Email Alias'
+            />
+            <SortableTableHeader<BusinessContactResponse>
+              sortKey='contactType'
+              header='Contact Type'
+            />
             <th className='action'>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {businessContacts.map((e) => (
+          {sortedData.map((e) => (
             <BusinessContact
               key={e.id}
               contact={e}
@@ -69,4 +84,10 @@ function BusinessContactsTable({
   );
 }
 
-export default BusinessContactsTable;
+export default function BusinessContactsTable(props: BusinessContactsTableProps) {
+  return (
+    <SortableProvider>
+      <BusinessContactsTableContent {...props} />
+    </SortableProvider>
+  );
+}

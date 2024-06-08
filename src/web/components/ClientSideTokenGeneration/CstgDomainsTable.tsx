@@ -2,8 +2,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { PagingTool } from '../Core/PagingTool';
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDomainDialog from './CstgAddDomainDialog';
@@ -25,7 +27,7 @@ type CstgDomainsTableProps = Readonly<{
   ) => Promise<UpdateDomainNamesResponse | undefined>;
 }>;
 
-export function CstgDomainsTable({
+function CstgDomainsTableContent({
   domains,
   onUpdateDomains,
   onAddDomains,
@@ -45,12 +47,20 @@ export function CstgDomainsTable({
 
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
+  const { sortData } = useSortable<string>();
+
   useEffect(() => {
     if (searchedDomains.length === 0 && searchText === '') {
       setSearchedDomains(domains);
       setPagedDomains(getPagedDomains(domains, initialPageNumber, initialRowsPerPage));
     }
   }, [domains, initialPageNumber, initialRowsPerPage, searchedDomains, searchText]);
+
+  useEffect(() => {
+    setSearchedDomains(sortData(searchedDomains));
+    console.log('in searched domains');
+    console.log(sortData(searchedDomains));
+  }, [searchedDomains, sortData]);
 
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
@@ -239,7 +249,7 @@ export function CstgDomainsTable({
         <thead>
           <tr>
             <th> </th>
-            <th className='domain'>Domain</th>
+            <SortableTableHeader<string> sortKey='toString' header='Domain' />
             <th className='action'>Actions</th>
           </tr>
         </thead>
@@ -277,5 +287,13 @@ export function CstgDomainsTable({
         </TableNoDataPlaceholder>
       )}
     </div>
+  );
+}
+
+export default function CstgDomainsTable(props: CstgDomainsTableProps) {
+  return (
+    <SortableProvider>
+      <CstgDomainsTableContent {...props} />
+    </SortableProvider>
   );
 }

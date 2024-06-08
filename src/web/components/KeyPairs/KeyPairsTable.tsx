@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { AddKeyPairFormProps } from '../../services/keyPairService';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import KeyPair from './KeyPair';
 import KeyPairDialog from './KeyPairDialog';
@@ -17,7 +19,7 @@ type KeyPairTableProps = Readonly<{
   onKeyPairDisable: OnKeyPairDisable;
 }>;
 
-function KeyPairsTable({
+function KeyPairsTableContent({
   keyPairs,
   onAddKeyPair,
   onKeyPairEdit,
@@ -33,6 +35,9 @@ function KeyPairsTable({
     await onAddKeyPair(formData);
     setShowKeyPairDialog(false);
   };
+
+  const { sortData } = useSortable<KeyPairModel>();
+  const sortedKeyPairs = keyPairs ? sortData(keyPairs) : [];
 
   return (
     <div className='key-pairs'>
@@ -59,20 +64,28 @@ function KeyPairsTable({
       <table className='key-pairs-table'>
         <thead>
           <tr>
-            <th className='name'>Name</th>
-            <th className='subscription-id'>Subscription ID</th>
+            <SortableTableHeader<KeyPairModel> className='name' sortKey='name' header='Name' />
+            <SortableTableHeader<KeyPairModel>
+              className='subscription-id'
+              sortKey='subscriptionId'
+              header='Subscription ID'
+            />
             <th className='public-key'>Public Key</th>
-            <th className='created'>Created</th>
+            <SortableTableHeader<KeyPairModel>
+              className='created'
+              sortKey='created'
+              header='Created'
+            />
             <th className='action'>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {keyPairs &&
-            keyPairs.map((k) => (
+          {sortedKeyPairs &&
+            sortedKeyPairs.map((k) => (
               <KeyPair
                 key={k.publicKey}
                 keyPair={k}
-                existingKeyPairs={keyPairs}
+                existingKeyPairs={sortedKeyPairs}
                 onEdit={onKeyPairEdit}
                 onDisable={onKeyPairDisable}
               />
@@ -88,4 +101,10 @@ function KeyPairsTable({
   );
 }
 
-export default KeyPairsTable;
+export default function KeyPairsTable(props: KeyPairTableProps) {
+  return (
+    <SortableProvider>
+      <KeyPairsTableContent {...props} />
+    </SortableProvider>
+  );
+}

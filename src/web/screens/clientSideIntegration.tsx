@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
-import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/CstgDomainsTable';
+import CstgDomainsTable from '../components/ClientSideTokenGeneration/CstgDomainsTable';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';

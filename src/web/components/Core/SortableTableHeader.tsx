@@ -6,12 +6,13 @@ import { SortOrder, useSortable } from '../../contexts/SortableTableProvider';
 
 import './SortableTableHeader.scss';
 
-type SortableTableHeaderProps<TData> = {
+type SortableTableHeaderProps<TData> = Readonly<{
   className?: string;
   header: ReactNode;
   sortKey: keyof TData;
   customSortFn?: (a: TData, b: TData) => number;
-};
+  sortButtonClassName?: string;
+}>;
 
 const renderSortingIcon = (sortOrder: SortOrder) => {
   switch (sortOrder) {
@@ -29,6 +30,7 @@ export function SortableTableHeader<TData extends {}>({
   header,
   sortKey,
   customSortFn,
+  sortButtonClassName,
 }: SortableTableHeaderProps<TData>) {
   const { sortOrder, toggleSort, sortKey: currentSortKey, setCustomSortFn } = useSortable<TData>();
 
@@ -45,7 +47,11 @@ export function SortableTableHeader<TData extends {}>({
 
   return (
     <th className={clsx('sortable-table-header', className)}>
-      <button type='button' onClick={handleHeaderClick}>
+      <button
+        type='button'
+        onClick={handleHeaderClick}
+        className={clsx('sortable-table-header-button', sortButtonClassName)}
+      >
         {header}
         <FontAwesomeIcon icon={renderSortingIcon(isActive ? sortOrder : undefined)} />
       </button>

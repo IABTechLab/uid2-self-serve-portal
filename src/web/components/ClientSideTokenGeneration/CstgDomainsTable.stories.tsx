@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { CstgDomainsTable } from './CstgDomainsTable';
+import CstgDomainsTable from './CstgDomainsTable';
 
 const meta: Meta<typeof CstgDomainsTable> = {
   title: 'CSTG/Domains/Domains Table',

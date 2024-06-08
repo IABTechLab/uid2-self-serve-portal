@@ -7,7 +7,7 @@ import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Toast';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
-import { ApprovedParticipantsTable } from '../components/ParticipantManagement/ApprovedParticipantsTable';
+import ApprovedParticipantsTable from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';

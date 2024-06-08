@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserRole } from '../../../api/entities/User';
-import { ApprovedParticipantsTable } from './ApprovedParticipantsTable';
+import ApprovedParticipantsTable from './ApprovedParticipantsTable';
 
 const meta: Meta<typeof ApprovedParticipantsTable> = {
   component: ApprovedParticipantsTable,
