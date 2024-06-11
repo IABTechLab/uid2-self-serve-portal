@@ -8,6 +8,11 @@ import {
 } from '../../utils/textHelpers';
 import { RowsPerPageValues } from '../Core/PagingToolHelper';
 
+export type UpdateCstgValuesResponse = {
+  cstgValues: string[];
+  isValidCstgValues: boolean;
+};
+
 export type UpdateDomainNamesResponse = {
   domains: string[];
   isValidDomains: boolean;
@@ -16,6 +21,19 @@ export type UpdateDomainNamesResponse = {
 export type UpdateAppNamesResponse = {
   appNames: string[];
 };
+
+export type AddCstgValuesFormProps = {
+  cstgValues: string;
+};
+
+export type EditCstgValuesFormProps = {
+  cstgValue: string;
+};
+
+export enum CstgValue {
+  Domain = 'Root-Level Domain',
+  MobileAppId = 'Mobile App ID',
+}
 
 export const extractTopLevelDomain = (domainName: string) => {
   const topLevelDomain = parse(domainName).domain;

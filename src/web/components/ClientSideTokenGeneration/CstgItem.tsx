@@ -1,27 +1,30 @@
 import { useState } from 'react';
 
-import ActionButton from '../../Core/ActionButton';
-import { TriStateCheckbox } from '../../Core/TriStateCheckbox';
-import CstgDeleteAppIdDialog from './CstgDeleteAppIdDialog';
-import CstgEditAppIdDialog from './CstgEditAppIdDialog';
+import ActionButton from '../Core/ActionButton';
+import { TriStateCheckbox } from '../Core/TriStateCheckbox';
+import CstgDeleteDialog from './CstgDeleteDialog';
+import CstgEditDialog from './CstgEditDialog';
+import { CstgValue } from './CstgHelper';
 
-type CstgAppIdItemProps = Readonly<{
-  appId: string;
-  existingAppIds: string[];
+type CstgItemProps = Readonly<{
+  cstgValue: string;
+  existingCstgValues: string[];
   onClick: () => void;
-  onEditAppId: (newAppId: string, originalAppId: string) => Promise<boolean>;
+  onEdit: (newCstgValue: string, originalCstgValue: string) => Promise<boolean>;
   onDelete: () => void;
   checked: boolean;
+  cstgValueName: CstgValue;
 }>;
 
-export function CstgAppIdItem({
-  appId,
-  existingAppIds,
+export function CstgItem({
+  cstgValue,
+  existingCstgValues,
   onClick,
   onDelete,
-  onEditAppId,
+  onEdit,
   checked,
-}: CstgAppIdItemProps) {
+  cstgValueName,
+}: CstgItemProps) {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
 
@@ -37,25 +40,27 @@ export function CstgAppIdItem({
       <td>
         <TriStateCheckbox onClick={onClick} status={checked} />
       </td>
-      <td className='app-id'>{appId}</td>
+      <td className='cstg-value'>{cstgValue}</td>
       <td className='action'>
         <div className='action-cell'>
           <ActionButton onClick={onEditDialogChange} icon='pencil' />
           {showEditDialog && (
-            <CstgEditAppIdDialog
-              appId={appId}
-              existingAppIds={existingAppIds}
-              onEditAppId={onEditAppId}
+            <CstgEditDialog
+              cstgValue={cstgValue}
+              existingCstgValues={existingCstgValues}
+              onEdit={onEdit}
               onOpenChange={onEditDialogChange}
+              cstgValueName={cstgValueName}
             />
           )}
 
           <ActionButton onClick={() => setShowDeleteDialog(true)} icon='trash-can' />
           {showDeleteDialog && (
-            <CstgDeleteAppIdDialog
-              appIds={[appId]}
-              onRemoveAppIds={onDelete}
+            <CstgDeleteDialog
+              cstgValues={[cstgValue]}
+              onRemoveCstgValues={onDelete}
               onOpenChange={onDeleteDialogChange}
+              cstgValueName={cstgValueName}
             />
           )}
         </div>

@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
-import { CstgAppIdsTable } from '../components/ClientSideTokenGeneration/AppIds/CstgAppIdsTable';
-import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgHelper';
-import { CstgDomainsTable } from '../components/ClientSideTokenGeneration/Domains/CstgDomainsTable';
+import {
+  CstgValue,
+  getUniqueAppIds,
+  getUniqueDomains,
+  UpdateCstgValuesResponse,
+} from '../components/ClientSideTokenGeneration/CstgHelper';
+import { CstgTable } from '../components/ClientSideTokenGeneration/CstgTable';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
@@ -98,7 +102,7 @@ function ClientSideIntegration() {
   const handleUpdateDomainNames = async (
     updatedDomainNames: string[],
     action: string
-  ): Promise<UpdateDomainNamesResponse | undefined> => {
+  ): Promise<UpdateCstgValuesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
       let domains = response?.domains;
@@ -110,9 +114,9 @@ function ClientSideIntegration() {
         setDomainNames(sortStringsAlphabetically(domains));
         SuccessToast(`Domain names ${action}.`);
       }
-      const updatedDomainNamesResponse: UpdateDomainNamesResponse = {
-        domains,
-        isValidDomains,
+      const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
+        cstgValues: domains,
+        isValidCstgValues: isValidDomains,
       };
       return updatedDomainNamesResponse;
     } catch (e) {
@@ -121,10 +125,14 @@ function ClientSideIntegration() {
   };
   const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
     try {
-      const appIdsResponse = await UpdateAppIds(updatedAppIds);
-      setAppIds(sortStringsAlphabetically(appIdsResponse));
+      const response = await UpdateAppIds(updatedAppIds);
+      setAppIds(sortStringsAlphabetically(response));
       SuccessToast(`Mobile app ids ${action}.`);
-      return appIdsResponse;
+      const updatedAppIdsResponse: UpdateCstgValuesResponse = {
+        cstgValues: response,
+        isValidCstgValues: true,
+      };
+      return updatedAppIdsResponse;
     } catch (e) {
       handleErrorToast(e);
     }
@@ -167,15 +175,21 @@ function ClientSideIntegration() {
           onKeyPairEdit={handleUpdateKeyPair}
           onKeyPairDisable={handleDisableKeyPair}
         />
-        <CstgDomainsTable
-          domains={domainNames || []}
-          onAddDomains={onAddDomainNames}
-          onUpdateDomains={handleUpdateDomainNames}
+        <CstgTable
+          cstgValues={domainNames || []}
+          onAddCstgValues={onAddDomainNames}
+          onUpdateCstgValues={handleUpdateDomainNames}
+          cstgValueName={CstgValue.Domain}
+          addInstructions='Add one or more domains.'
+          getUniqueValues={getUniqueDomains}
         />
-        <CstgAppIdsTable
-          appIds={appIds || []}
-          onAddAppIds={onAddAppIds}
-          onUpdateAppIds={handleUpdateAppIds}
+        <CstgTable
+          cstgValues={appIds || []}
+          onAddCstgValues={onAddAppIds}
+          onUpdateCstgValues={handleUpdateAppIds}
+          cstgValueName={CstgValue.MobileAppId}
+          addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+          getUniqueValues={getUniqueAppIds}
         />
       </ScreenContentContainer>
     </>

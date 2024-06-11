@@ -1,5 +1,5 @@
-.cstg-domains-management {
-  .cstg-domains-table {
+.cstg-values-management {
+  .cstg-values-table {
     width: 100%;
 
     td {
@@ -32,11 +32,11 @@
     }
   }
 
-  .cstg-domains-management-icon {
+  .cstg-values-management-icon {
     margin-right: 8px;
   }
 
-  .cstg-domains-table-header {
+  .cstg-values-table-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -46,7 +46,7 @@
       justify-content: right;
     }
 
-    .domains-search-bar-container {
+    .cstg-values-search-bar-container {
       display: flex;
       align-items: center;
       border-bottom: 2px solid var(--theme-action);
@@ -58,13 +58,13 @@
       margin-right: 20px;
     }
 
-    .domains-search-bar-icon {
+    .cstg-values-search-bar-icon {
       color: var(--theme-action);
       height: 16px;
       margin-left: 8px;
     }
 
-    .domains-search-bar {
+    .cstg-values-search-bar {
       width: 100%;
       border: none;
       outline: none;
