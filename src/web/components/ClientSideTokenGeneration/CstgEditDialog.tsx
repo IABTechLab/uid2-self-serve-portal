@@ -3,7 +3,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
-import { CstgValueType, EditCstgValuesFormProps, extractTopLevelDomain } from './CstgHelper';
+import {
+  CstgValueType,
+  EditCstgValuesFormProps,
+  extractTopLevelDomain,
+  validateAppId,
+} from './CstgHelper';
 
 type CstgEditDialogProps = Readonly<{
   cstgValue: string;
@@ -32,9 +37,17 @@ function CstgEditDialog({
     formState: { errors },
   } = formMethods;
 
+  const showInvalidError = () => {
+    setError('root.serverError', {
+      type: '400',
+      message: `Edited value is an invalid ${cstgValueType.toLowerCase()}.`,
+    });
+  };
+
   const onSubmit = async (formData: EditCstgValuesFormProps) => {
     let updatedCstgValue = formData.cstgValue;
     const originalCstgValue = cstgValue;
+
     if (cstgValueType === CstgValueType.Domain) {
       updatedCstgValue = extractTopLevelDomain(updatedCstgValue);
     }
@@ -46,13 +59,14 @@ function CstgEditDialog({
         type: '400',
         message: `${cstgValueType} already exists.`,
       });
+    } else if (cstgValueType === CstgValueType.MobileAppId) {
+      if (!validateAppId(updatedCstgValue)) {
+        showInvalidError();
+      }
     } else {
       const editSuccess = await onEdit(updatedCstgValue, originalCstgValue);
       if (!editSuccess) {
-        setError('root.serverError', {
-          type: '400',
-          message: `Edited value is an invalid ${cstgValueType}.`,
-        });
+        showInvalidError();
       }
     }
   };
