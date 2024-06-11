@@ -181,7 +181,6 @@
     "@types/jest": "^29.5.12",
     "@types/supertest": "^2.0.16",
     "@types/uuid": "^9.0.8",
-    "@types/validator": "^13.11.10",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "babel-jest": "^29.7.0",
