@@ -1,9 +1,10 @@
 import { Meta, StoryObj } from '@storybook/react';
 
+import { CstgValueType } from './CstgHelper';
 import { CstgTable } from './CstgTable';
 
 const meta: Meta<typeof CstgTable> = {
-  title: 'CSTG/Domains/Domains Table',
+  title: 'CSTG/Cstg Values Table',
   component: CstgTable,
 };
 
@@ -17,6 +18,7 @@ export const WithDomains: Story = {
       console.log('update domains to:', cstgValues);
       return Promise.resolve({ cstgValues, isValidCstgValues: true });
     },
+    cstgValueType: CstgValueType.Domain,
   },
 };
 export const WithoutDomains: Story = {
@@ -26,6 +28,7 @@ export const WithoutDomains: Story = {
       console.log('update domains to:', cstgValues);
       return Promise.resolve({ cstgValues, isValidCstgValues: true });
     },
+    cstgValueType: CstgValueType.Domain,
   },
 };
 
@@ -36,6 +39,7 @@ export const WithMobileAppIds: Story = {
       console.log('update mobile app ids to:', cstgValues);
       return Promise.resolve({ cstgValues, isValidCstgValues: true });
     },
+    cstgValueType: CstgValueType.MobileAppId,
   },
 };
 
@@ -46,5 +50,6 @@ export const WithoutMobileAppIds: Story = {
       console.log('update mobile app ids to:', cstgValues);
       return Promise.resolve({ cstgValues, isValidCstgValues: true });
     },
+    cstgValueType: CstgValueType.MobileAppId,
   },
 };
