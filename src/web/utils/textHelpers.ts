@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export const isVowel = (letter: string): boolean =>
   ['a', 'e', 'i', 'o', 'u'].includes(letter.toLowerCase());
 
