@@ -3,14 +3,14 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Dialog } from '../Core/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
-import { CstgValue, EditCstgValuesFormProps, extractTopLevelDomain } from './CstgHelper';
+import { CstgValueType, EditCstgValuesFormProps, extractTopLevelDomain } from './CstgHelper';
 
 type CstgEditDialogProps = Readonly<{
   cstgValue: string;
   existingCstgValues: string[];
   onEdit: (newCstgValue: string, originalCstgValue: string) => Promise<boolean>;
   onOpenChange: () => void;
-  cstgValueName: CstgValue;
+  cstgValueType: CstgValueType;
 }>;
 
 function CstgEditDialog({
@@ -18,7 +18,7 @@ function CstgEditDialog({
   onEdit,
   onOpenChange,
   existingCstgValues,
-  cstgValueName,
+  cstgValueType,
 }: CstgEditDialogProps) {
   const formMethods = useForm<EditCstgValuesFormProps>({
     defaultValues: {
@@ -35,7 +35,7 @@ function CstgEditDialog({
   const onSubmit = async (formData: EditCstgValuesFormProps) => {
     let updatedCstgValue = formData.cstgValue;
     const originalCstgValue = cstgValue;
-    if (cstgValueName === CstgValue.Domain) {
+    if (cstgValueType === CstgValueType.Domain) {
       updatedCstgValue = extractTopLevelDomain(updatedCstgValue);
     }
 
@@ -44,14 +44,14 @@ function CstgEditDialog({
     } else if (existingCstgValues.includes(updatedCstgValue)) {
       setError('root.serverError', {
         type: '400',
-        message: `${cstgValueName} already exists.`,
+        message: `${cstgValueType} already exists.`,
       });
     } else {
       const editSuccess = await onEdit(updatedCstgValue, originalCstgValue);
       if (!editSuccess) {
         setError('root.serverError', {
           type: '400',
-          message: `Edited value is an invalid ${cstgValueName}.`,
+          message: `Edited value is an invalid ${cstgValueType}.`,
         });
       }
     }
@@ -59,7 +59,7 @@ function CstgEditDialog({
 
   return (
     <Dialog
-      title={`Edit ${cstgValueName}: ${cstgValue}`}
+      title={`Edit ${cstgValueType}: ${cstgValue}`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
@@ -68,14 +68,14 @@ function CstgEditDialog({
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             inputName='cstgValue'
-            label={`${cstgValueName}`}
+            label={`${cstgValueType}`}
             rules={{
-              required: `Please specify ${cstgValueName}.`,
+              required: `Please specify ${cstgValueType}.`,
             }}
           />
           <div className='form-footer'>
             <button type='submit' className='primary-button'>
-              {`Save ${cstgValueName}`}
+              {`Save ${cstgValueType}`}
             </button>
           </div>
         </form>

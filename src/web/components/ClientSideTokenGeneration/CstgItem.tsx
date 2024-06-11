@@ -4,7 +4,7 @@ import ActionButton from '../Core/ActionButton';
 import { TriStateCheckbox } from '../Core/TriStateCheckbox';
 import CstgDeleteDialog from './CstgDeleteDialog';
 import CstgEditDialog from './CstgEditDialog';
-import { CstgValue } from './CstgHelper';
+import { CstgValueType } from './CstgHelper';
 
 type CstgItemProps = Readonly<{
   cstgValue: string;
@@ -13,7 +13,7 @@ type CstgItemProps = Readonly<{
   onEdit: (newCstgValue: string, originalCstgValue: string) => Promise<boolean>;
   onDelete: () => void;
   checked: boolean;
-  cstgValueName: CstgValue;
+  cstgValueType: CstgValueType;
 }>;
 
 export function CstgItem({
@@ -23,7 +23,7 @@ export function CstgItem({
   onDelete,
   onEdit,
   checked,
-  cstgValueName,
+  cstgValueType,
 }: CstgItemProps) {
   const [showEditDialog, setShowEditDialog] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
@@ -50,7 +50,7 @@ export function CstgItem({
               existingCstgValues={existingCstgValues}
               onEdit={onEdit}
               onOpenChange={onEditDialogChange}
-              cstgValueName={cstgValueName}
+              cstgValueType={cstgValueType}
             />
           )}
 
@@ -60,7 +60,7 @@ export function CstgItem({
               cstgValues={[cstgValue]}
               onRemoveCstgValues={onDelete}
               onOpenChange={onDeleteDialogChange}
-              cstgValueName={cstgValueName}
+              cstgValueType={cstgValueType}
             />
           )}
         </div>

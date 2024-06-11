@@ -1,5 +1,5 @@
 import { Dialog } from '../Core/Dialog';
-import { CstgValue } from './CstgHelper';
+import { CstgValueType } from './CstgHelper';
 
 import './CstgDeleteDialog.scss';
 
@@ -7,14 +7,14 @@ type DeleteConfirmationDialogProps = Readonly<{
   cstgValues: string[];
   onRemoveCstgValues: () => void;
   onOpenChange: () => void;
-  cstgValueName: CstgValue;
+  cstgValueType: CstgValueType;
 }>;
 
 function DeleteConfirmationDialog({
   cstgValues,
   onRemoveCstgValues,
   onOpenChange,
-  cstgValueName,
+  cstgValueType,
 }: DeleteConfirmationDialogProps) {
   const handleRemove = () => {
     onRemoveCstgValues();
@@ -24,8 +24,8 @@ function DeleteConfirmationDialog({
     <Dialog
       title={`Are you sure you want to delete ${
         cstgValues.length > 1
-          ? `these ${cstgValueName.toLowerCase()}s`
-          : `this ${cstgValueName.toLowerCase()}`
+          ? `these ${cstgValueType.toLowerCase()}s`
+          : `this ${cstgValueType.toLowerCase()}`
       }?`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
@@ -37,7 +37,7 @@ function DeleteConfirmationDialog({
       </ul>
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
-          {`Delete ${cstgValueName}${cstgValues.length > 1 ? 's' : ''}`}
+          {`Delete ${cstgValueType}${cstgValues.length > 1 ? 's' : ''}`}
         </button>
       </div>
     </Dialog>

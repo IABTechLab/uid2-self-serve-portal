@@ -8,7 +8,7 @@ import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
 import CstgAddDialog from './CstgAddDialog';
 import CstgDeleteDialog from './CstgDeleteDialog';
-import { CstgValue, getPagedValues, UpdateCstgValuesResponse } from './CstgHelper';
+import { CstgValueType, getPagedValues, UpdateCstgValuesResponse } from './CstgHelper';
 import { CstgItem } from './CstgItem';
 
 import './CstgTable.scss';
@@ -21,9 +21,10 @@ type CstgTableProps = Readonly<{
   ) => Promise<UpdateCstgValuesResponse | undefined>;
   onAddCstgValues: (
     newCstgValuesFormatted: string[],
-    deleteExistingList: boolean
+    deleteExistingList: boolean,
+    cstgType: CstgValueType
   ) => Promise<UpdateCstgValuesResponse | undefined>;
-  cstgValueName: CstgValue;
+  cstgValueType: CstgValueType;
   getUniqueValues: (
     newCstgValues: string[],
     existingCstgValues: string[],
@@ -36,7 +37,7 @@ export function CstgTable({
   cstgValues,
   onUpdateCstgValues,
   onAddCstgValues,
-  cstgValueName,
+  cstgValueType,
   getUniqueValues,
   addInstructions,
 }: CstgTableProps) {
@@ -155,7 +156,11 @@ export function CstgTable({
     newCstgValuesFormatted: string[],
     deleteExistingList: boolean
   ): Promise<string[]> => {
-    const newCstgValuesResponse = await onAddCstgValues(newCstgValuesFormatted, deleteExistingList);
+    const newCstgValuesResponse = await onAddCstgValues(
+      newCstgValuesFormatted,
+      deleteExistingList,
+      cstgValueType
+    );
     const newCstgValues = newCstgValuesResponse?.cstgValues;
     const isValid = newCstgValuesResponse?.isValidCstgValues;
     if (isValid) {
@@ -190,7 +195,7 @@ export function CstgTable({
     <div className='cstg-values-management'>
       <div className='cstg-values-table-header'>
         <div>
-          <h2>{cstgValueName}</h2>
+          <h2>{cstgValueType}</h2>
           {cstgValues?.length > 0 && (
             <div className='table-actions'>
               <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
@@ -204,7 +209,7 @@ export function CstgTable({
                     icon={['far', 'trash-can']}
                     className='cstg-values-management-icon'
                   />
-                  {`Delete ${selectedCstgValues.length === cstgValues.length ? 'All' : ''} ${cstgValueName}${
+                  {`Delete ${selectedCstgValues.length === cstgValues.length ? 'All' : ''} ${cstgValueType}${
                     selectedCstgValues?.length > 1 ? 's' : ''
                   }`}
                 </button>
@@ -215,7 +220,7 @@ export function CstgTable({
                   onRemoveCstgValues={() => handleBulkDeleteCstgValues(selectedCstgValues)}
                   cstgValues={selectedCstgValues}
                   onOpenChange={onOpenChangeDeleteDialog}
-                  cstgValueName={cstgValueName}
+                  cstgValueType={cstgValueType}
                 />
               )}
             </div>
@@ -227,21 +232,21 @@ export function CstgTable({
               type='text'
               className='cstg-values-search-bar'
               onChange={handleSearchCstgValue}
-              placeholder={`Search ${cstgValueName}s`}
+              placeholder={`Search ${cstgValueType}s`}
               value={searchText}
             />
             <FontAwesomeIcon icon='search' className='cstg-values-search-bar-icon' />
           </div>
           <div className='add-cstg-value-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDialog}>
-              {`Add ${cstgValueName}`}
+              {`Add ${cstgValueType}`}
             </button>
             {showAddDialog && (
               <CstgAddDialog
                 onAddCstgValues={onSubmitAddDialog}
                 onOpenChange={onOpenChangeAddDialog}
                 existingCstgValues={cstgValues}
-                cstgValueName={cstgValueName}
+                cstgValueType={cstgValueType}
                 getUniqueValues={getUniqueValues}
                 addInstructions={addInstructions}
               />
@@ -253,7 +258,7 @@ export function CstgTable({
         <thead>
           <tr>
             <th> </th>
-            <th className='cstg-value'>{cstgValueName}</th>
+            <th className='cstg-value'>{cstgValueType}</th>
             <th className='action'>Actions</th>
           </tr>
         </thead>
@@ -267,14 +272,14 @@ export function CstgTable({
               onDelete={() => handleBulkDeleteCstgValues([cstgValue])}
               onEdit={handleEditCstgValue}
               checked={isCstgValueSelected(cstgValue)}
-              cstgValueName={cstgValueName}
+              cstgValueType={cstgValueType}
             />
           ))}
         </tbody>
       </table>
       {searchText && !searchedCstgValues.length && (
-        <TableNoDataPlaceholder title={`No ${cstgValueName}`}>
-          <span>{`There are no ${cstgValueName}s that match this search.`}</span>
+        <TableNoDataPlaceholder title={`No ${cstgValueType}`}>
+          <span>{`There are no ${cstgValueType}s that match this search.`}</span>
         </TableNoDataPlaceholder>
       )}
       {!!searchedCstgValues.length && (
@@ -287,8 +292,8 @@ export function CstgTable({
       )}
 
       {!cstgValues.length && (
-        <TableNoDataPlaceholder title={`No ${cstgValueName}`}>
-          <span>{`There are no ${cstgValueName}s`}</span>
+        <TableNoDataPlaceholder title={`No ${cstgValueType}`}>
+          <span>{`There are no ${cstgValueType}s`}</span>
         </TableNoDataPlaceholder>
       )}
     </div>

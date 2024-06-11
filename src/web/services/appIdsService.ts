@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+import { UpdateCstgValuesResponse } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { backendError } from '../utils/apiError';
 
 export type AddAppIdsFormProps = {

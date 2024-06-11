@@ -12,7 +12,7 @@ import { MultilineTextInput } from '../Input/MultilineTextInput';
 import { StyledCheckbox } from '../Input/StyledCheckbox';
 import {
   AddCstgValuesFormProps,
-  CstgValue,
+  CstgValueType,
   extractTopLevelDomain,
   validateAppId,
 } from './CstgHelper';
@@ -23,7 +23,7 @@ type CstgAddDialogProps = Readonly<{
   onAddCstgValues: (newValuesFormatted: string[], deleteExistingList: boolean) => Promise<string[]>;
   onOpenChange: () => void;
   existingCstgValues: string[];
-  cstgValueName: CstgValue;
+  cstgValueType: CstgValueType;
   getUniqueValues: (
     newCstgValues: string[],
     existingCstgValues: string[],
@@ -36,7 +36,7 @@ function CstgAddDialog({
   onAddCstgValues,
   onOpenChange,
   existingCstgValues,
-  cstgValueName,
+  cstgValueType,
   getUniqueValues,
   addInstructions,
 }: CstgAddDialogProps) {
@@ -62,8 +62,8 @@ function CstgAddDialog({
       deleteExistingList
     );
     if (newCstgValues.length === 0) {
-      handleError(`The ${cstgValueName}s entered already exist.`);
-    } else if (cstgValueName === CstgValue.Domain) {
+      handleError(`The ${cstgValueType}s entered already exist.`);
+    } else if (cstgValueType === CstgValueType.Domain) {
       newCstgValues.forEach((newDomain, index) => {
         newCstgValues[index] = extractTopLevelDomain(newDomain);
       });
@@ -77,7 +77,7 @@ function CstgAddDialog({
           )}`
         );
       }
-    } else if (cstgValueName === CstgValue.MobileAppId) {
+    } else if (cstgValueType === CstgValueType.MobileAppId) {
       const invalidAppIds: string[] = [];
       newCstgValues.forEach((newAppId) => {
         if (!validateAppId(newAppId)) {
@@ -100,7 +100,7 @@ function CstgAddDialog({
 
   return (
     <div className='cstg-add-dialog'>
-      <Dialog title={`Add ${cstgValueName}s`} closeButtonText='Cancel' onOpenChange={onOpenChange}>
+      <Dialog title={`Add ${cstgValueType}s`} closeButtonText='Cancel' onOpenChange={onOpenChange}>
         <div className='cstg-form-error'>
           <RootFormErrors fieldErrors={errors} />
         </div>
@@ -114,16 +114,16 @@ function CstgAddDialog({
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              <div className='checkbox-text'>{`Replace all existing ${cstgValueName.toLowerCase()}s with the new ones.`}</div>
+              <div className='checkbox-text'>{`Replace all existing ${cstgValueType.toLowerCase()}s with the new ones.`}</div>
             </div>
             <MultilineTextInput
               inputName='cstgValues'
-              label={`${cstgValueName}s`}
-              rules={{ required: `Please specify ${cstgValueName}s.` }}
+              label={`${cstgValueType}s`}
+              rules={{ required: `Please specify ${cstgValueType}s.` }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
-                {deleteExistingList ? 'Replace' : 'Add'} {`${cstgValueName}s`}
+                {deleteExistingList ? 'Replace' : 'Add'} {`${cstgValueType}s`}
               </button>
             </div>
           </form>

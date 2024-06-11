@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import {
-  CstgValue,
+  CstgValueType,
   getUniqueAppIds,
   getUniqueDomains,
   UpdateCstgValuesResponse,
@@ -56,15 +56,9 @@ function ClientSideIntegration() {
 
   useEffect(() => {
     loadKeyPairs();
-  }, [loadKeyPairs]);
-
-  useEffect(() => {
     loadDomainNames();
-  }, [loadDomainNames]);
-
-  useEffect(() => {
     loadAppIds();
-  }, [loadAppIds]);
+  }, [loadKeyPairs, loadDomainNames, loadAppIds]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name } = formData;
@@ -99,14 +93,15 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
+
   const handleUpdateDomainNames = async (
     updatedDomainNames: string[],
     action: string
   ): Promise<UpdateCstgValuesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      let domains = response?.domains;
-      const isValidDomains = response?.isValidDomains;
+      let domains = response?.cstgValues;
+      const isValidDomains = response?.isValidCstgValues;
       if (!isValidDomains) {
         const invalidDomains = separateStringsList(domains[0]);
         domains = invalidDomains;
@@ -138,16 +133,20 @@ function ClientSideIntegration() {
     }
   };
 
-  const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
-    let updatedDomains = newDomains;
-    if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
-    return handleUpdateDomainNames(updatedDomains, 'added');
-  };
-
-  const onAddAppIds = async (newAppIds: string[], deleteExistingList: boolean) => {
-    let updatedAppIds = newAppIds;
-    if (appIds && !deleteExistingList) updatedAppIds = [...newAppIds, ...appIds];
-    return handleUpdateAppIds(updatedAppIds, 'added');
+  const onAddCstgValues = async (
+    newCstgValues: string[],
+    deleteExistingList: boolean,
+    cstgType: CstgValueType
+  ) => {
+    let updatedCstgValues = newCstgValues;
+    if (cstgType === CstgValueType.MobileAppId && appIds && !deleteExistingList) {
+      updatedCstgValues = [...newCstgValues, ...appIds];
+      return handleUpdateAppIds(updatedCstgValues, 'added');
+    }
+    if (cstgType === CstgValueType.Domain && domainNames && !deleteExistingList) {
+      updatedCstgValues = [...newCstgValues, ...domainNames];
+      return handleUpdateDomainNames(updatedCstgValues, 'added');
+    }
   };
 
   return (
@@ -177,17 +176,17 @@ function ClientSideIntegration() {
         />
         <CstgTable
           cstgValues={domainNames || []}
-          onAddCstgValues={onAddDomainNames}
+          onAddCstgValues={onAddCstgValues}
           onUpdateCstgValues={handleUpdateDomainNames}
-          cstgValueName={CstgValue.Domain}
+          cstgValueType={CstgValueType.Domain}
           addInstructions='Add one or more domains.'
           getUniqueValues={getUniqueDomains}
         />
         <CstgTable
           cstgValues={appIds || []}
-          onAddCstgValues={onAddAppIds}
+          onAddCstgValues={onAddCstgValues}
           onUpdateCstgValues={handleUpdateAppIds}
-          cstgValueName={CstgValue.MobileAppId}
+          cstgValueType={CstgValueType.MobileAppId}
           addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
           getUniqueValues={getUniqueAppIds}
         />

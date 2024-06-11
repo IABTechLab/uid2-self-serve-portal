@@ -13,15 +13,6 @@ export type UpdateCstgValuesResponse = {
   isValidCstgValues: boolean;
 };
 
-export type UpdateDomainNamesResponse = {
-  domains: string[];
-  isValidDomains: boolean;
-};
-
-export type UpdateAppNamesResponse = {
-  appNames: string[];
-};
-
 export type AddCstgValuesFormProps = {
   cstgValues: string;
 };
@@ -30,7 +21,7 @@ export type EditCstgValuesFormProps = {
   cstgValue: string;
 };
 
-export enum CstgValue {
+export enum CstgValueType {
   Domain = 'Root-Level Domain',
   MobileAppId = 'Mobile App ID',
 }
