@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-import { UpdateCstgValuesResponse } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { backendError } from '../utils/apiError';
 
 export type AddAppIdsFormProps = {
@@ -16,9 +15,7 @@ export async function GetAppIds(participantId?: number) {
     const result = await axios.get<string[]>(
       `/participants/${participantId ?? 'current'}/appNames`
     );
-    if (result.status === 200) {
-      return result.data;
-    }
+    return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not get app ids');
   }

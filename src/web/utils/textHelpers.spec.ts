@@ -228,4 +228,15 @@ describe('Text helper tests', () => {
     expect(isAlphaNumericWithHyphenAndDot(uppercaseString)).toEqual(true);
     expect(isAlphaNumericWithHyphenAndDot(symbolString)).toEqual(false);
   });
+
+  it('should check if string is alphanumeric with underscore', () => {
+    const emptyString = '';
+    const lowercaseString = '_123456abcd';
+    const uppercaseString = '123456_ABCD';
+    const symbolString = '@123456__';
+    expect(isAlphaNumericWithHyphenAndDot(emptyString)).toEqual(false);
+    expect(isAlphaNumericWithHyphenAndDot(lowercaseString)).toEqual(true);
+    expect(isAlphaNumericWithHyphenAndDot(uppercaseString)).toEqual(true);
+    expect(isAlphaNumericWithHyphenAndDot(symbolString)).toEqual(false);
+  });
 });

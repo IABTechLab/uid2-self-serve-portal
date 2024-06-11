@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import {
@@ -8,6 +9,7 @@ import {
   UpdateCstgValuesResponse,
 } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { CstgTable } from '../components/ClientSideTokenGeneration/CstgTable';
+import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
@@ -23,18 +25,27 @@ import {
   UpdateKeyPairFormProps,
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
+import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { separateStringsList, sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
+const loader = makeLoader(() => {
+  const keyPairs = GetKeyPairs();
+  const domainNames = GetDomainNames();
+  const appIds = GetAppIds();
+  return defer({ keyPairs, domainNames, appIds });
+});
+
 function ClientSideIntegration() {
+  const data = useLoaderData<typeof loader>();
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [domainNames, setDomainNames] = useState<string[]>();
   const [appIds, setAppIds] = useState<string[]>();
 
   const loadKeyPairs = useCallback(async () => {
-    const data = await GetKeyPairs();
-    const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
+    const kp = await GetKeyPairs();
+    const sortedKeyPairs = kp?.sort((a, b) => a.created.getTime() - b.created.getTime());
     setKeyPairData(sortedKeyPairs);
   }, []);
 
@@ -167,29 +178,39 @@ function ClientSideIntegration() {
         . */}
       </p>
       <ScreenContentContainer>
-        <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
-        <KeyPairsTable
-          keyPairs={keyPairData}
-          onAddKeyPair={handleAddKeyPair}
-          onKeyPairEdit={handleUpdateKeyPair}
-          onKeyPairDisable={handleDisableKeyPair}
-        />
-        <CstgTable
-          cstgValues={domainNames || []}
-          onAddCstgValues={onAddCstgValues}
-          onUpdateCstgValues={handleUpdateDomainNames}
-          cstgValueType={CstgValueType.Domain}
-          addInstructions='Add one or more domains.'
-          getUniqueValues={getUniqueDomains}
-        />
-        <CstgTable
-          cstgValues={appIds || []}
-          onAddCstgValues={onAddCstgValues}
-          onUpdateCstgValues={handleUpdateAppIds}
-          cstgValueType={CstgValueType.MobileAppId}
-          addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
-          getUniqueValues={getUniqueAppIds}
-        />
+        <Suspense fallback={<Loading message='Loading client side integration data...' />}>
+          <AwaitTypesafe
+            resolve={resolveAll({
+              keyPairs: data.keyPairs,
+              domainNames: data.domainNames,
+              appIds: data.appIds,
+            })}
+          >
+            <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
+            <KeyPairsTable
+              keyPairs={keyPairData}
+              onAddKeyPair={handleAddKeyPair}
+              onKeyPairEdit={handleUpdateKeyPair}
+              onKeyPairDisable={handleDisableKeyPair}
+            />
+            <CstgTable
+              cstgValues={domainNames || []}
+              onAddCstgValues={onAddCstgValues}
+              onUpdateCstgValues={handleUpdateDomainNames}
+              cstgValueType={CstgValueType.Domain}
+              addInstructions='Add one or more domains.'
+              getUniqueValues={getUniqueDomains}
+            />
+            <CstgTable
+              cstgValues={appIds || []}
+              onAddCstgValues={onAddCstgValues}
+              onUpdateCstgValues={handleUpdateAppIds}
+              cstgValueType={CstgValueType.MobileAppId}
+              addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+              getUniqueValues={getUniqueAppIds}
+            />
+          </AwaitTypesafe>
+        </Suspense>
       </ScreenContentContainer>
     </>
   );
