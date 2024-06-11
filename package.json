@@ -40,6 +40,7 @@
     "@types/nodemailer-express-handlebars": "^4.0.5",
     "@types/react": "^18.2.54",
     "@types/react-dom": "^18.2.18",
+    "@types/validator": "^13.11.10",
     "axios": "^1.6.7",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "body-parser": "^1.20.2",
@@ -181,6 +182,7 @@
     "@types/jest": "^29.5.12",
     "@types/supertest": "^2.0.16",
     "@types/uuid": "^9.0.8",
+    "@types/validator": "^13.11.10",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "babel-jest": "^29.7.0",
@@ -222,6 +224,7 @@
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
+    "validator": "^13.12.0",
     "webpack": "^5.90.1"
   },
   "overrides": {
