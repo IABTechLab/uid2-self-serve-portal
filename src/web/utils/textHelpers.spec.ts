@@ -4,6 +4,7 @@ import {
   formatUnixDate,
   getArticle,
   isAlphaNumericWithHyphenAndDot,
+  isAlphaNumericWithUnderscore,
   isVowel,
   separateStringsList,
   sortStringsAlphabetically,
@@ -234,9 +235,9 @@ describe('Text helper tests', () => {
     const lowercaseString = '_123456abcd';
     const uppercaseString = '123456_ABCD';
     const symbolString = '@123456__';
-    expect(isAlphaNumericWithHyphenAndDot(emptyString)).toEqual(false);
-    expect(isAlphaNumericWithHyphenAndDot(lowercaseString)).toEqual(true);
-    expect(isAlphaNumericWithHyphenAndDot(uppercaseString)).toEqual(true);
-    expect(isAlphaNumericWithHyphenAndDot(symbolString)).toEqual(false);
+    expect(isAlphaNumericWithUnderscore(emptyString)).toEqual(false);
+    expect(isAlphaNumericWithUnderscore(lowercaseString)).toEqual(true);
+    expect(isAlphaNumericWithUnderscore(uppercaseString)).toEqual(true);
+    expect(isAlphaNumericWithUnderscore(symbolString)).toEqual(false);
   });
 });

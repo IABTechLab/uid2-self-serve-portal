@@ -119,7 +119,7 @@ function CstgAddDialog({
             <MultilineTextInput
               inputName='cstgValues'
               label={`${cstgValueType}s`}
-              rules={{ required: `Please specify ${cstgValueType}s.` }}
+              rules={{ required: `Please specify ${cstgValueType.toLowerCase()}s.` }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>

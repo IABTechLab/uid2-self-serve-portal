@@ -38,7 +38,7 @@ const loader = makeLoader(() => {
 });
 
 function ClientSideIntegration() {
-  const data = useLoaderData<typeof loader>();
+  // const data = useLoaderData<typeof loader>();
   const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
   const [domainNames, setDomainNames] = useState<string[]>();
   const [appIds, setAppIds] = useState<string[]>();
@@ -178,39 +178,39 @@ function ClientSideIntegration() {
         . */}
       </p>
       <ScreenContentContainer>
-        <Suspense fallback={<Loading message='Loading client side integration data...' />}>
+        {/* <Suspense fallback={<Loading message='Loading client side integration data...' />}>
           <AwaitTypesafe
             resolve={resolveAll({
               keyPairs: data.keyPairs,
               domainNames: data.domainNames,
               appIds: data.appIds,
             })}
-          >
-            <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
-            <KeyPairsTable
-              keyPairs={keyPairData}
-              onAddKeyPair={handleAddKeyPair}
-              onKeyPairEdit={handleUpdateKeyPair}
-              onKeyPairDisable={handleDisableKeyPair}
-            />
-            <CstgTable
-              cstgValues={domainNames || []}
-              onAddCstgValues={onAddCstgValues}
-              onUpdateCstgValues={handleUpdateDomainNames}
-              cstgValueType={CstgValueType.Domain}
-              addInstructions='Add one or more domains.'
-              getUniqueValues={getUniqueDomains}
-            />
-            <CstgTable
-              cstgValues={appIds || []}
-              onAddCstgValues={onAddCstgValues}
-              onUpdateCstgValues={handleUpdateAppIds}
-              cstgValueType={CstgValueType.MobileAppId}
-              addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
-              getUniqueValues={getUniqueAppIds}
-            />
-          </AwaitTypesafe>
-        </Suspense>
+          > */}
+        <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
+        <KeyPairsTable
+          keyPairs={keyPairData}
+          onAddKeyPair={handleAddKeyPair}
+          onKeyPairEdit={handleUpdateKeyPair}
+          onKeyPairDisable={handleDisableKeyPair}
+        />
+        <CstgTable
+          cstgValues={domainNames || []}
+          onAddCstgValues={onAddCstgValues}
+          onUpdateCstgValues={handleUpdateDomainNames}
+          cstgValueType={CstgValueType.Domain}
+          addInstructions='Add one or more domains.'
+          getUniqueValues={getUniqueDomains}
+        />
+        <CstgTable
+          cstgValues={appIds || []}
+          onAddCstgValues={onAddCstgValues}
+          onUpdateCstgValues={handleUpdateAppIds}
+          cstgValueType={CstgValueType.MobileAppId}
+          addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+          getUniqueValues={getUniqueAppIds}
+        />
+        {/* </AwaitTypesafe>
+        </Suspense> */}
       </ScreenContentContainer>
     </>
   );
