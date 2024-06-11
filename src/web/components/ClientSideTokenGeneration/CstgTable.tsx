@@ -25,11 +25,7 @@ type CstgTableProps = Readonly<{
     cstgType: CstgValueType
   ) => Promise<UpdateCstgValuesResponse | undefined>;
   cstgValueType: CstgValueType;
-  getUniqueValues: (
-    newCstgValues: string[],
-    existingCstgValues: string[],
-    deleteExistingList: boolean
-  ) => string[];
+
   addInstructions: string;
 }>;
 
@@ -38,7 +34,7 @@ export function CstgTable({
   onUpdateCstgValues,
   onAddCstgValues,
   cstgValueType,
-  getUniqueValues,
+
   addInstructions,
 }: CstgTableProps) {
   const initialRowsPerPage = 10;
@@ -247,7 +243,6 @@ export function CstgTable({
                 onOpenChange={onOpenChangeAddDialog}
                 existingCstgValues={cstgValues}
                 cstgValueType={cstgValueType}
-                getUniqueValues={getUniqueValues}
                 addInstructions={addInstructions}
               />
             )}

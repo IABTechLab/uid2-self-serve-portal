@@ -2,7 +2,7 @@ import { Meta } from '@storybook/react';
 import { useState } from 'react';
 
 import CstgAddDialog from './CstgAddDialog';
-import { CstgValueType, getUniqueAppIds, getUniqueDomains } from './CstgHelper';
+import { CstgValueType } from './CstgHelper';
 
 const meta: Meta<typeof CstgAddDialog> = {
   title: 'CSTG/Add Dialog',
@@ -30,7 +30,6 @@ export const AddDomains = () => {
             );
             return Promise.resolve([]);
           }}
-          getUniqueValues={getUniqueDomains}
           cstgValueType={CstgValueType.Domain}
           addInstructions='Add one or more domains.'
         />
@@ -59,7 +58,6 @@ export const AddMobileAppIds = () => {
             );
             return Promise.resolve([]);
           }}
-          getUniqueValues={getUniqueAppIds}
           cstgValueType={CstgValueType.MobileAppId}
           addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
         />

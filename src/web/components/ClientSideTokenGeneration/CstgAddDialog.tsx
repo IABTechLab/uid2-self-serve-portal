@@ -14,6 +14,7 @@ import {
   AddCstgValuesFormProps,
   CstgValueType,
   extractTopLevelDomain,
+  getUniqueCstgValues,
   validateAppId,
 } from './CstgHelper';
 
@@ -24,11 +25,7 @@ type CstgAddDialogProps = Readonly<{
   onOpenChange: () => void;
   existingCstgValues: string[];
   cstgValueType: CstgValueType;
-  getUniqueValues: (
-    newCstgValues: string[],
-    existingCstgValues: string[],
-    deleteExistingList: boolean
-  ) => string[];
+
   addInstructions: string;
 }>;
 
@@ -37,7 +34,6 @@ function CstgAddDialog({
   onOpenChange,
   existingCstgValues,
   cstgValueType,
-  getUniqueValues,
   addInstructions,
 }: CstgAddDialogProps) {
   const [deleteExistingList, setDeleteExistingList] = useState<boolean>(false);
@@ -56,7 +52,7 @@ function CstgAddDialog({
   };
 
   const onSubmit = async (formData: AddCstgValuesFormProps) => {
-    const newCstgValues = getUniqueValues(
+    const newCstgValues = getUniqueCstgValues(
       separateStringsList(formData.cstgValues),
       existingCstgValues,
       deleteExistingList

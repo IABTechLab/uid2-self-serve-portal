@@ -4,8 +4,6 @@ import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import {
   CstgValueType,
-  getUniqueAppIds,
-  getUniqueDomains,
   UpdateCstgValuesResponse,
 } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { CstgTable } from '../components/ClientSideTokenGeneration/CstgTable';
@@ -199,7 +197,6 @@ function ClientSideIntegration() {
           onUpdateCstgValues={handleUpdateDomainNames}
           cstgValueType={CstgValueType.Domain}
           addInstructions='Add one or more domains.'
-          getUniqueValues={getUniqueDomains}
         />
         <CstgTable
           cstgValues={appIds || []}
@@ -207,7 +204,6 @@ function ClientSideIntegration() {
           onUpdateCstgValues={handleUpdateAppIds}
           cstgValueType={CstgValueType.MobileAppId}
           addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
-          getUniqueValues={getUniqueAppIds}
         />
         {/* </AwaitTypesafe>
         </Suspense> */}

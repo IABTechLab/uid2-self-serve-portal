@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import CstgAddDialog from './CstgAddDialog';
-import { CstgValueType, getUniqueAppIds, getUniqueDomains } from './CstgHelper';
+import { CstgValueType } from './CstgHelper';
 
 const submitDialogDomains = async () => {
   const submitButton = screen.getByRole('button', { name: 'Add Root-Level Domains' });
@@ -28,7 +28,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        getUniqueValues={getUniqueDomains}
         addInstructions='Add one or more domains.'
       />
     );
@@ -59,7 +58,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        getUniqueValues={getUniqueDomains}
         addInstructions='Add one or more domains.'
       />
     );
@@ -94,7 +92,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        getUniqueValues={getUniqueDomains}
         addInstructions='Add one or more domains.'
       />
     );
@@ -121,7 +118,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        getUniqueValues={getUniqueDomains}
         addInstructions='Add one or more domains.'
       />
     );
@@ -146,7 +142,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        getUniqueValues={getUniqueDomains}
         addInstructions='Add one or more domains.'
       />
     );
@@ -168,7 +163,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        getUniqueValues={getUniqueAppIds}
         addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
       />
     );
@@ -199,7 +193,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        getUniqueValues={getUniqueAppIds}
         addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
       />
     );
@@ -234,7 +227,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        getUniqueValues={getUniqueAppIds}
         addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
       />
     );
@@ -261,7 +253,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        getUniqueValues={getUniqueAppIds}
         addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
       />
     );
@@ -286,7 +277,6 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        getUniqueValues={getUniqueAppIds}
         addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
       />
     );

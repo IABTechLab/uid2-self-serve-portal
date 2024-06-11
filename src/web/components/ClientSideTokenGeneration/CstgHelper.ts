@@ -46,29 +46,17 @@ export const getPagedValues = (
   );
 };
 
-export const getUniqueDomains = (
-  newDomains: string[],
-  existingDomains: string[],
+export const getUniqueCstgValues = (
+  newCstgValues: string[],
+  existingCstgValues: string[],
   deleteExistingList: boolean
 ) => {
-  // filter out domain names that already exist in the list unless existing list is being deleted
-  const uniqueDomains = deleteExistingList
-    ? newDomains
-    : newDomains.filter((domain) => !existingDomains?.includes(domain));
-  return uniqueDomains;
-};
-
-export const getUniqueAppIds = (
-  newAppIds: string[],
-  existingAppIds: string[],
-  deleteExistingList: boolean
-) => {
-  const dedupedAppIds = deduplicateStrings(newAppIds);
+  const dedupedCstgValues = deduplicateStrings(newCstgValues);
   // filter out app ids that already exist in the list unless existing list is being deleted
-  const uniqueAppIds = deleteExistingList
-    ? dedupedAppIds
-    : dedupedAppIds.filter((appId) => !existingAppIds?.includes(appId));
-  return uniqueAppIds;
+  const uniqueCstgValues = deleteExistingList
+    ? dedupedCstgValues
+    : dedupedCstgValues.filter((value) => !existingCstgValues?.includes(value));
+  return uniqueCstgValues;
 };
 
 // Source: https://developer.android.com/build/configure-app-module
