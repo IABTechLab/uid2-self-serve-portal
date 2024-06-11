@@ -6,11 +6,7 @@ import {
   UpdateTeamMemberForm,
   UserResponse,
 } from '../../services/userAccount';
-import {
-  validateEmailJoi,
-  validateEmailRegex,
-  validateEmailValidator,
-} from '../../utils/textHelpers';
+import { validateEmail } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { SelectInput } from '../Input/SelectInput';
@@ -75,18 +71,10 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             disabled={!!props.person}
             rules={{
               required: 'Please specify email.',
-              // pattern: {
-              //   value: validateEmailRegex,
-              //   message: 'Entered value does not match email format',
-              // },
-              // commented out for now to test single validate
-              // validate: (value: string) => {
-              //   return (
-              //    validateUniqueTeamMemberEmail(value, props.teamMembers)
-              //   );
-              // },
               validate: (value: string) => {
-                return validateEmailJoi(value) ? true : 'Invalid email format.';
+                if (!validateUniqueTeamMemberEmail(value, props.teamMembers))
+                  return 'Team member email already exists.';
+                return validateEmail(value) ? true : 'Invalid email format.';
               },
             }}
           />

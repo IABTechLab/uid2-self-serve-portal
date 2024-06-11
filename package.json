@@ -59,7 +59,6 @@
     "inter-ui": "^3.19.3",
     "inversify": "^6.0.2",
     "inversify-express-utils": "^6.4.6",
-    "joi": "^17.13.1",
     "keycloak-js": "^24.0.1",
     "knex": "^2.5.1",
     "loglevel": "^1.9.1",

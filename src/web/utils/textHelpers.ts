@@ -1,6 +1,3 @@
-import Joi from 'joi';
-import validator from 'validator';
-
 export const isVowel = (letter: string): boolean =>
   ['a', 'e', 'i', 'o', 'u'].includes(letter.toLowerCase());
 
@@ -48,13 +45,6 @@ export const sortStringsAlphabetically = (strings: string[]) => {
   });
 };
 
-export const validateEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-
-export const validateEmailJoi = (value: string) => {
-  const schema = Joi.string().email({ tlds: { allow: false } });
-  return schema.validate(value);
-};
-
-export const validateEmailValidator = (value: string) => {
+export const validateEmail = (value: string) => {
   return validator.isEmail(value);
 };
