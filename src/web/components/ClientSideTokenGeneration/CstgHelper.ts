@@ -52,7 +52,7 @@ export const getUniqueCstgValues = (
   deleteExistingList: boolean
 ) => {
   const dedupedCstgValues = deduplicateStrings(newCstgValues);
-  // filter out app ids that already exist in the list unless existing list is being deleted
+  // filter out values that already exist in the list unless existing list is being deleted
   const uniqueCstgValues = deleteExistingList
     ? dedupedCstgValues
     : dedupedCstgValues.filter((value) => !existingCstgValues?.includes(value));
