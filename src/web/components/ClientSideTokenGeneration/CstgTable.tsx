@@ -53,8 +53,7 @@ export function CstgTable({
     cstgValues.length && cstgValues.every((d) => selectedCstgValues.includes(d));
 
   useEffect(() => {
-    if (searchedCstgValues.length === 0 && searchText === '') {
-      setSearchedCstgValues(cstgValues);
+    if (searchText === '') {
       setPagedCstgValues(getPagedValues(cstgValues, initialPageNumber, initialRowsPerPage));
     }
   }, [cstgValues, initialPageNumber, initialRowsPerPage, searchedCstgValues, searchText]);

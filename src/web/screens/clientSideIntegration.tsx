@@ -36,15 +36,12 @@ async function getKeyPairs() {
 
 async function getDomainNames() {
   const currentDomainNames = await GetDomainNames();
-  const sortedStrings = currentDomainNames
-    ? sortStringsAlphabetically(currentDomainNames)
-    : currentDomainNames;
-  return sortedStrings;
+  return currentDomainNames ? sortStringsAlphabetically(currentDomainNames) : [];
 }
 
 async function getAppIds() {
   const currentAppIds = await GetAppIds();
-  return currentAppIds ? sortStringsAlphabetically(currentAppIds) : currentAppIds;
+  return currentAppIds ? sortStringsAlphabetically(currentAppIds) : [];
 }
 
 const loader = makeLoader(() => {
@@ -143,10 +140,10 @@ function ClientSideIntegration() {
     if (!deleteExistingList) {
       updatedCstgValues = [...newCstgValues, ...existingCstgValues];
     }
-    if (cstgType === CstgValueType.MobileAppId && !deleteExistingList) {
+    if (cstgType === CstgValueType.MobileAppId) {
       return handleUpdateAppIds(updatedCstgValues, 'added');
     }
-    if (cstgType === CstgValueType.Domain && !deleteExistingList) {
+    if (cstgType === CstgValueType.Domain) {
       return handleUpdateDomainNames(updatedCstgValues, 'added');
     }
   };
