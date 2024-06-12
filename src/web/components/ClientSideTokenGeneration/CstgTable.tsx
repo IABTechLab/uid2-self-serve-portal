@@ -22,10 +22,10 @@ type CstgTableProps = Readonly<{
   onAddCstgValues: (
     newCstgValuesFormatted: string[],
     deleteExistingList: boolean,
-    cstgType: CstgValueType
+    cstgType: CstgValueType,
+    existingCstgValues: string[]
   ) => Promise<UpdateCstgValuesResponse | undefined>;
   cstgValueType: CstgValueType;
-
   addInstructions: string;
 }>;
 
@@ -34,9 +34,10 @@ export function CstgTable({
   onUpdateCstgValues,
   onAddCstgValues,
   cstgValueType,
-
   addInstructions,
 }: CstgTableProps) {
+  console.log(cstgValues);
+
   const initialRowsPerPage = 10;
   const initialPageNumber = 1;
 
@@ -46,6 +47,8 @@ export function CstgTable({
   const [searchedCstgValues, setSearchedCstgValues] = useState<string[]>(cstgValues);
   const [pagedCstgValues, setPagedCstgValues] = useState<string[]>(cstgValues);
   const [searchText, setSearchText] = useState('');
+
+  console.log('p', pagedCstgValues);
 
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
@@ -155,7 +158,8 @@ export function CstgTable({
     const newCstgValuesResponse = await onAddCstgValues(
       newCstgValuesFormatted,
       deleteExistingList,
-      cstgValueType
+      cstgValueType,
+      cstgValues
     );
     const newCstgValues = newCstgValuesResponse?.cstgValues;
     const isValid = newCstgValuesResponse?.isValidCstgValues;

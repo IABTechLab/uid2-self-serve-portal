@@ -35,21 +35,25 @@ async function getKeyPairs() {
 }
 
 async function getDomainNames() {
+  console.log('in get domain names');
   const currentDomainNames = await GetDomainNames();
-  return currentDomainNames ? sortStringsAlphabetically(currentDomainNames) : currentDomainNames;
-  // setDomainNames(currentDomainNamesSorted);
+  const sortedStrings = currentDomainNames
+    ? sortStringsAlphabetically(currentDomainNames)
+    : currentDomainNames;
+  return sortedStrings;
 }
 
 async function getAppIds() {
   const currentAppIds = await GetAppIds();
   return currentAppIds ? sortStringsAlphabetically(currentAppIds) : currentAppIds;
-  // setAppIds(currentAppIdsSorted);
 }
 
 const loader = makeLoader(() => {
   const keyPairs = getKeyPairs();
   const domainNames = getDomainNames();
   const appIds = getAppIds();
+  console.log('in make loader');
+  console.log(domainNames);
   return defer({ keyPairs, domainNames, appIds });
 });
 
@@ -57,24 +61,14 @@ function ClientSideIntegration() {
   const data = useLoaderData<typeof loader>();
 
   const reloader = useRevalidator();
-  // const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
-  // const [domainNames, setDomainNames] = useState<string[]>();
-  // const [appIds, setAppIds] = useState<string[]>();
-
-  // useEffect(() => {
-  //   loadKeyPairs();
-  //   loadDomainNames();
-  //   loadAppIds();
-  // }, [loadKeyPairs, loadDomainNames, loadAppIds]);
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name } = formData;
     try {
       const response = await AddKeyPair({ name });
       if (response.status === 201) {
-        SuccessToast('Key pair added.');
-        // loadKeyPairs();
         reloader.revalidate();
+        SuccessToast('Key pair added.');
       }
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -85,9 +79,8 @@ function ClientSideIntegration() {
     const { name, subscriptionId, disabled = false } = formData;
     try {
       await UpdateKeyPair({ name, subscriptionId, disabled });
-      SuccessToast('Key Pair updated.');
-      // loadKeyPairs();
       reloader.revalidate();
+      SuccessToast('Key Pair updated.');
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -96,9 +89,8 @@ function ClientSideIntegration() {
   const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
     try {
       await DisableKeyPair(keyPair);
-      SuccessToast('Key pair deleted.');
-      // loadKeyPairs();
       reloader.revalidate();
+      SuccessToast('Key pair deleted.');
     } catch (e) {
       handleErrorToast(e);
     }
@@ -116,11 +108,11 @@ function ClientSideIntegration() {
         const invalidDomains = separateStringsList(domains[0]);
         domains = invalidDomains;
       } else {
-        // setDomainNames(sortStringsAlphabetically(domains));
+        reloader.revalidate();
         SuccessToast(`Domain names ${action}.`);
       }
       const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
-        cstgValues: domains,
+        cstgValues: sortStringsAlphabetically(domains),
         isValidCstgValues: isValidDomains,
       };
       return updatedDomainNamesResponse;
@@ -130,11 +122,12 @@ function ClientSideIntegration() {
   };
   const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
     try {
-      const response = await UpdateAppIds(updatedAppIds);
-      // setAppIds(sortStringsAlphabetically(response));
+      const appIds = await UpdateAppIds(updatedAppIds);
+      reloader.revalidate();
       SuccessToast(`Mobile app ids ${action}.`);
+
       const updatedAppIdsResponse: UpdateCstgValuesResponse = {
-        cstgValues: response,
+        cstgValues: sortStringsAlphabetically(appIds),
         isValidCstgValues: true,
       };
       return updatedAppIdsResponse;
@@ -146,15 +139,17 @@ function ClientSideIntegration() {
   const onAddCstgValues = async (
     newCstgValues: string[],
     deleteExistingList: boolean,
-    cstgType: CstgValueType
+    cstgType: CstgValueType,
+    existingCstgValues: string[]
   ) => {
-    const updatedCstgValues = newCstgValues;
+    let updatedCstgValues = newCstgValues;
+    if (!deleteExistingList) {
+      updatedCstgValues = [...newCstgValues, ...existingCstgValues];
+    }
     if (cstgType === CstgValueType.MobileAppId && !deleteExistingList) {
-      // updatedCstgValues = [...newCstgValues, ...appIds];
       return handleUpdateAppIds(updatedCstgValues, 'added');
     }
     if (cstgType === CstgValueType.Domain && !deleteExistingList) {
-      // pdatedCstgValues = [...newCstgValues, ...domainNames];
       return handleUpdateDomainNames(updatedCstgValues, 'added');
     }
   };
@@ -225,4 +220,5 @@ export const ClientSideIntegrationRoute: PortalRoute = {
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/clientSideIntegration',
+  loader,
 };

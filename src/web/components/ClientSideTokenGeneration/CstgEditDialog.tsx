@@ -59,15 +59,16 @@ function CstgEditDialog({
         type: '400',
         message: `${cstgValueType} already exists.`,
       });
-    } else if (cstgValueType === CstgValueType.MobileAppId) {
+    }
+    if (cstgValueType === CstgValueType.MobileAppId) {
       if (!validateAppId(updatedCstgValue)) {
         showInvalidError();
+        return;
       }
-    } else {
-      const editSuccess = await onEdit(updatedCstgValue, originalCstgValue);
-      if (!editSuccess) {
-        showInvalidError();
-      }
+    }
+    const editSuccess = await onEdit(updatedCstgValue, originalCstgValue);
+    if (!editSuccess) {
+      showInvalidError();
     }
   };
 
