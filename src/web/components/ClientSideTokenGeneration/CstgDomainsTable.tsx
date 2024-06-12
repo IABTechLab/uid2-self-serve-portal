@@ -48,6 +48,9 @@ function CstgDomainsTableContent({
   const isSelectedAll = domains.length && domains.every((d) => selectedDomains.includes(d));
 
   const { sortData } = useSortable<string>();
+  const sortedData = sortData(domains);
+
+  console.log(sortedData);
 
   useEffect(() => {
     if (searchedDomains.length === 0 && searchText === '') {
@@ -55,12 +58,6 @@ function CstgDomainsTableContent({
       setPagedDomains(getPagedDomains(domains, initialPageNumber, initialRowsPerPage));
     }
   }, [domains, initialPageNumber, initialRowsPerPage, searchedDomains, searchText]);
-
-  useEffect(() => {
-    setSearchedDomains(sortData(searchedDomains));
-    console.log('in searched domains');
-    console.log(sortData(searchedDomains));
-  }, [searchedDomains, sortData]);
 
   const getCheckboxStatus = () => {
     if (isSelectedAll) {
