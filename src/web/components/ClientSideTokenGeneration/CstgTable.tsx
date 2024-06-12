@@ -36,8 +36,6 @@ export function CstgTable({
   cstgValueType,
   addInstructions,
 }: CstgTableProps) {
-  console.log(cstgValues);
-
   const initialRowsPerPage = 10;
   const initialPageNumber = 1;
 
@@ -47,8 +45,6 @@ export function CstgTable({
   const [searchedCstgValues, setSearchedCstgValues] = useState<string[]>(cstgValues);
   const [pagedCstgValues, setPagedCstgValues] = useState<string[]>(cstgValues);
   const [searchText, setSearchText] = useState('');
-
-  console.log('p', pagedCstgValues);
 
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);

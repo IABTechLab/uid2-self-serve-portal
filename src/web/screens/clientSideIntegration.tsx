@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
@@ -35,7 +35,6 @@ async function getKeyPairs() {
 }
 
 async function getDomainNames() {
-  console.log('in get domain names');
   const currentDomainNames = await GetDomainNames();
   const sortedStrings = currentDomainNames
     ? sortStringsAlphabetically(currentDomainNames)
@@ -52,8 +51,6 @@ const loader = makeLoader(() => {
   const keyPairs = getKeyPairs();
   const domainNames = getDomainNames();
   const appIds = getAppIds();
-  console.log('in make loader');
-  console.log(domainNames);
   return defer({ keyPairs, domainNames, appIds });
 });
 
