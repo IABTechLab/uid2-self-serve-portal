@@ -6,6 +6,7 @@ import {
   isVowel,
   separateStringsList,
   sortStringsAlphabetically,
+  validateEmail,
 } from './textHelpers';
 
 describe('Text helper tests', () => {
@@ -214,6 +215,45 @@ describe('Text helper tests', () => {
         '|',
         '}',
       ]);
+    });
+  });
+
+  describe('check validate email', () => {
+    const validTestEmails = [
+      'email@example.com',
+      'firstname.lastname@example.com',
+      'email@subdomain.example.com',
+      'firstname+lastname@example.com',
+      'CAPITAL.TEST@EXAMPLE.com',
+      'numbers012345test@example.com',
+      '123numbersatbeginning@example.com',
+      'email-with-hyphen@example.com',
+      'validspecialcharacters!$#%&’*+-=/?^_{}|~@example.com',
+      'plus+sign@example.com',
+      '"quoted spaces"@example.com',
+      'hei@やる.ca',
+      'ÀÁÂÃÇüéâäàåçêëèïîìÄÅÉôöòûùÿÖÜ@example.com',
+      'ÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞß@example.com',
+      'þ÷×æÆ¢£¥₧ƒ@example.com',
+    ];
+    it.each(validTestEmails)('should return the email is valid', (email) => {
+      expect(validateEmail(email)).toEqual(true);
+    });
+
+    const invalidTestEmails = [
+      'toomany@@@@@example.com',
+      'test',
+      '123',
+      'TEST',
+      'test@non valid gmail.com',
+      'email@123.123.123.123',
+      'test@under_score.com',
+      'test@-hyphen.com',
+      'test@example...com',
+      'test@example',
+    ];
+    it.each(invalidTestEmails)('should return the email is invalid', (email) => {
+      expect(validateEmail(email)).toEqual(false);
     });
   });
 });
