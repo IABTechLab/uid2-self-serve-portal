@@ -21,22 +21,24 @@ function SharingPermissionCard({
       <h2>Your Sharing Permissions</h2>
       <span>Participants you&apos;re sharing with to decrypt your encrypted UID2s. </span>
       {hasKeyset ? (
-        <div className='permissions-count-section'>
-          <div>
-            <div className='permissions-count'>{sharingPermissionsCount}</div>
-            <span>MANUAL PERMISSIONS</span>
-          </div>
-          <div className='divider' />
-          <div>
-            <div className='permissions-count'>{bulkPermissionsCount}</div>
-            <span>AUTOMATIC PERMISSIONS</span>
+        <>
+          <div className='permissions-count-section'>
+            <div>
+              <div className='permissions-count'>{sharingPermissionsCount}</div>
+              <span>MANUAL PERMISSIONS</span>
+            </div>
+            <div className='divider' />
+            <div>
+              <div className='permissions-count'>{bulkPermissionsCount}</div>
+              <span>AUTOMATIC PERMISSIONS</span>
+            </div>
           </div>
           <Link to='/dashboard/sharing'>
             <button className='primary-button small-button' type='button'>
               View & Add Sharing Permissions
             </button>
           </Link>
-        </div>
+        </>
       ) : (
         <div className='no-sharing-permissions-banner'>
           <Banner
