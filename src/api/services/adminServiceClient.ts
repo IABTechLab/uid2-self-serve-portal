@@ -183,16 +183,31 @@ export const getVisibleSiteList = async (): Promise<AdminSiteDTO[]> => {
 
 export const getKeyPairsList = async (
   siteId: number,
+  traceId: string,
   showDisabled?: boolean
 ): Promise<KeyPairDTO[]> => {
-  const response = await adminServiceClient.get<KeyPairDTO[]>(
-    `/api/v2/sites/${siteId}/client-side-keypairs`
-  );
-  const allKeyPairs = response.data;
-  if (!showDisabled) {
-    return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+  try {
+    const response = await adminServiceClient.get<KeyPairDTO[]>(
+      `/api/v2/sites/${siteId}/client-side-keypairs`
+    );
+    const allKeyPairs = response.data;
+    if (!showDisabled) {
+      return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+    }
+    return allKeyPairs;
+  } catch (e: unknown) {
+    if (
+      e instanceof AxiosError &&
+      e?.response?.status === 404 &&
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      e?.response?.data.message.includes('No keypairs available for site ID')
+    ) {
+      return [];
+    }
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`${e}`, traceId);
+    throw e;
   }
-  return allKeyPairs;
 };
 
 export const addKeyPair = async (siteId: number, name: string): Promise<KeyPairDTO> => {
