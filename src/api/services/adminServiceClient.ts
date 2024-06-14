@@ -196,13 +196,11 @@ export const getKeyPairsList = async (
     }
     return allKeyPairs;
   } catch (e: unknown) {
-    if (
-      e instanceof AxiosError &&
-      e?.response?.status === 404 &&
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      e?.response?.data.message.includes('No keypairs available for site ID')
-    ) {
-      return [];
+    if (e instanceof AxiosError && e?.response?.status === 404) {
+      const message: unknown = e?.response?.data.message;
+      if (typeof message === 'string' && message.includes('No keypairs available for site ID')) {
+        return [];
+      }
     }
     const { errorLogger } = getLoggers();
     errorLogger.error(`${e}`, traceId);
