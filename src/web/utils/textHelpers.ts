@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export const isVowel = (letter: string): boolean =>
   ['a', 'e', 'i', 'o', 'u'].includes(letter.toLowerCase());
 
@@ -45,8 +47,6 @@ export const sortStringsAlphabetically = (strings: string[]) => {
   });
 };
 
-export const validateEmailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-
 export const isAlphaNumericWithUnderscore = (s: string) => {
   if (s !== '' && s.match(/^[a-zA-Z0-9_]*$/)) {
     return true;
@@ -66,4 +66,8 @@ export const isAlpha = (s: string) => {
     return true;
   }
   return false;
+};
+
+export const validateEmail = (value: string) => {
+  return validator.isEmail(value);
 };
