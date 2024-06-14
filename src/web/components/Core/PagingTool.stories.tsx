@@ -1,7 +1,7 @@
 import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { getPagedDomains } from '../ClientSideTokenGeneration/CstgDomainHelper';
+import { getPagedValues } from '../ClientSideTokenGeneration/CstgHelper';
 import { PagingTool } from './PagingTool';
 import { RowsPerPageValues } from './PagingToolHelper';
 
@@ -45,13 +45,13 @@ const totalDomains = [
 ];
 
 export const Default = () => {
-  const [pagedDomains, setPagedDomains] = useState<string[]>(getPagedDomains(totalDomains, 1, 10));
+  const [pagedDomains, setPagedDomains] = useState<string[]>(getPagedValues(totalDomains, 1, 10));
 
   const onChangeDisplayedRows = (
     currentPageNumber: number,
     currentRowsPerPage: RowsPerPageValues
   ) => {
-    setPagedDomains(getPagedDomains(totalDomains, currentPageNumber, currentRowsPerPage));
+    setPagedDomains(getPagedValues(totalDomains, currentPageNumber, currentRowsPerPage));
   };
 
   return (
