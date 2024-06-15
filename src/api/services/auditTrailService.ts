@@ -185,6 +185,36 @@ export const insertDomainNamesAuditTrails = async (
   }
 };
 
+export const insertAppNamesAuditTrails = async (
+  participant: Participant,
+  userId: number,
+  userEmail: string,
+  action: AuditAction,
+  appNames: string[],
+  traceId: string
+) => {
+  try {
+    const appNamesAuditTrail: Omit<AuditTrailDTO, 'id'> = {
+      userId,
+      userEmail,
+      event: AuditTrailEvents.UpdateAppNames,
+      eventData: {
+        siteId: participant.siteId!,
+        action,
+        participantId: participant.id,
+        appNames,
+      },
+      succeeded: false,
+    };
+
+    return await AuditTrail.query().insert(appNamesAuditTrail);
+  } catch (error) {
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`Audit trails inserted failed: ${error}`, traceId);
+    throw error;
+  }
+};
+
 export const insertApproveAccountAuditTrail = async (
   participant: Participant,
   user: User,

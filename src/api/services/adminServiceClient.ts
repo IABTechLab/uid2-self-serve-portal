@@ -183,16 +183,29 @@ export const getVisibleSiteList = async (): Promise<AdminSiteDTO[]> => {
 
 export const getKeyPairsList = async (
   siteId: number,
+  traceId: string,
   showDisabled?: boolean
 ): Promise<KeyPairDTO[]> => {
-  const response = await adminServiceClient.get<KeyPairDTO[]>(
-    `/api/v2/sites/${siteId}/client-side-keypairs`
-  );
-  const allKeyPairs = response.data;
-  if (!showDisabled) {
-    return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+  try {
+    const response = await adminServiceClient.get<KeyPairDTO[]>(
+      `/api/v2/sites/${siteId}/client-side-keypairs`
+    );
+    const allKeyPairs = response.data;
+    if (!showDisabled) {
+      return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+    }
+    return allKeyPairs;
+  } catch (e: unknown) {
+    if (e instanceof AxiosError && e?.response?.status === 404) {
+      const message: unknown = e?.response?.data.message;
+      if (typeof message === 'string' && message.includes('No keypairs available for site ID')) {
+        return [];
+      }
+    }
+    const { errorLogger } = getLoggers();
+    errorLogger.error(`${e}`, traceId);
+    throw e;
   }
-  return allKeyPairs;
 };
 
 export const addKeyPair = async (siteId: number, name: string): Promise<KeyPairDTO> => {
@@ -275,6 +288,16 @@ export const setSiteDomainNames = async (
 ): Promise<AdminSiteDTO> => {
   const response = await adminServiceClient.post(`/api/site/domain_names?=id=${siteId}`, {
     domain_names: domainNames,
+  });
+  return response.data;
+};
+
+export const setSiteAppNames = async (
+  siteId: number,
+  appNames: string[]
+): Promise<AdminSiteDTO> => {
+  const response = await adminServiceClient.post(`/api/site/app_names?=id=${siteId}`, {
+    app_names: appNames,
   });
   return response.data;
 };

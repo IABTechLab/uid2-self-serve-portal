@@ -28,6 +28,7 @@ const response: SiteDTO[] = [
     client_count: 1,
     visible: true,
     domain_names: [],
+    app_names: [],
   },
   {
     id: 4,
@@ -38,6 +39,7 @@ const response: SiteDTO[] = [
     client_count: 1,
     visible: false,
     domain_names: [],
+    app_names: [],
   },
 ];
 

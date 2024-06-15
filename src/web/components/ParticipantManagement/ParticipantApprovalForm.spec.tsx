@@ -16,6 +16,7 @@ const createResult = (text: string, indices: [number, number][]) => {
       client_count: 1,
       visible: false,
       domain_names: [],
+      app_names: [],
     },
     matches: [
       {

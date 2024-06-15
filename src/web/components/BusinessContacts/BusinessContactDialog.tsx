@@ -2,7 +2,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
-import { validateEmailRegex } from '../../utils/textHelpers';
+import { validateEmail } from '../../utils/textHelpers';
 import { Dialog } from '../Core/Dialog';
 import FormSubmitButton from '../Core/FormSubmitButton';
 import { SelectInput } from '../Input/SelectInput';
@@ -47,9 +47,8 @@ function BusinessContactDialog({
             label='Email Alias'
             rules={{
               required: 'Please specify email alias.',
-              pattern: {
-                value: validateEmailRegex,
-                message: 'Entered value does not match email format',
+              validate: (value: string) => {
+                return validateEmail(value) ? true : 'Invalid email format.';
               },
             }}
           />

@@ -72,6 +72,7 @@ import {
   getAllUserFromParticipant,
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
+import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
 import { createParticipant } from './participantsCreation';
 import { getParticipantDomainNames, setParticipantDomainNames } from './participantsDomainNames';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
@@ -600,6 +601,10 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/domainNames', getParticipantDomainNames);
 
   participantsRouter.post('/:participantId/domainNames', setParticipantDomainNames);
+
+  participantsRouter.get('/:participantId/appNames', getParticipantAppNames);
+
+  participantsRouter.post('/:participantId/appNames', setParticipantAppNames);
 
   const removeSharingRelationParser = z.object({
     sharingSitesToRemove: z.array(z.number()),

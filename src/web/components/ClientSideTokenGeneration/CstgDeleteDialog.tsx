@@ -1,38 +1,43 @@
 import { Dialog } from '../Core/Dialog';
+import { CstgValueType } from './CstgHelper';
 
-import './CstgDeleteDomainDialog.scss';
+import './CstgDeleteDialog.scss';
 
 type DeleteConfirmationDialogProps = Readonly<{
-  domains: string[];
-  onRemoveDomains: () => void;
+  cstgValues: string[];
+  onRemoveCstgValues: () => void;
   onOpenChange: () => void;
+  cstgValueType: CstgValueType;
 }>;
 
 function DeleteConfirmationDialog({
-  domains,
-  onRemoveDomains,
+  cstgValues,
+  onRemoveCstgValues,
   onOpenChange,
+  cstgValueType,
 }: DeleteConfirmationDialogProps) {
   const handleRemove = () => {
-    onRemoveDomains();
+    onRemoveCstgValues();
   };
 
   return (
     <Dialog
       title={`Are you sure you want to delete ${
-        domains.length > 1 ? 'these domains' : 'this domain'
+        cstgValues.length > 1
+          ? `these ${cstgValueType.toLowerCase()}s`
+          : `this ${cstgValueType.toLowerCase()}`
       }?`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
       <ul className='dot-list'>
-        {domains.map((domain) => (
-          <li key={domain}>{domain}</li>
+        {cstgValues.map((cstgValue) => (
+          <li key={cstgValue}>{cstgValue}</li>
         ))}
       </ul>
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
-          {`Delete Domain${domains.length > 1 ? 's' : ''}`}
+          {`Delete ${cstgValueType}${cstgValues.length > 1 ? 's' : ''}`}
         </button>
       </div>
     </Dialog>

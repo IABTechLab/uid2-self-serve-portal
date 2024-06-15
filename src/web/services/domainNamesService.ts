@@ -1,6 +1,6 @@
 import axios, { AxiosError } from 'axios';
 
-import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
+import { UpdateCstgValuesResponse } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { backendError } from '../utils/apiError';
 
 export type AddDomainNamesFormProps = {
@@ -27,7 +27,7 @@ export async function GetDomainNames(participantId?: number) {
 export async function UpdateDomainNames(
   domainNames: string[],
   participantId?: number
-): Promise<UpdateDomainNamesResponse> {
+): Promise<UpdateCstgValuesResponse> {
   try {
     const result = await axios.post<string[]>(
       `/participants/${participantId ?? 'current'}/domainNames`,
@@ -35,7 +35,7 @@ export async function UpdateDomainNames(
         domainNames,
       }
     );
-    return { domains: result.data, isValidDomains: true };
+    return { cstgValues: result.data, isValidCstgValues: true };
   } catch (e: unknown) {
     if (
       e instanceof AxiosError &&
@@ -45,8 +45,8 @@ export async function UpdateDomainNames(
     ) {
       return {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-        domains: [e?.response?.data.message.replace('Invalid Domain Names:', '')],
-        isValidDomains: false,
+        cstgValues: [e?.response?.data.message.replace('Invalid Domain Names:', '')],
+        isValidCstgValues: false,
       };
     }
 

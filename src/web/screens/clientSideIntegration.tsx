@@ -1,12 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense } from 'react';
+import { useRevalidator } from 'react-router-dom';
+import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
-import { UpdateDomainNamesResponse } from '../components/ClientSideTokenGeneration/CstgDomainHelper';
-import CstgDomainsTable from '../components/ClientSideTokenGeneration/CstgDomainsTable';
+import {
+  CstgValueType,
+  UpdateCstgValuesResponse,
+} from '../components/ClientSideTokenGeneration/CstgHelper';
+import { CstgTable } from '../components/ClientSideTokenGeneration/CstgTable';
+import { Loading } from '../components/Core/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Toast';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
+import { GetAppIds, UpdateAppIds } from '../services/appIdsService';
 import { GetDomainNames, UpdateDomainNames } from '../services/domainNamesService';
 import {
   AddKeyPair,
@@ -17,43 +24,45 @@ import {
   UpdateKeyPairFormProps,
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
+import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { separateStringsList, sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
+async function getKeyPairs() {
+  const keyPairs = await GetKeyPairs();
+  return keyPairs?.sort((a, b) => a.created.getTime() - b.created.getTime());
+}
+
+async function getDomainNames() {
+  const currentDomainNames = await GetDomainNames();
+  return currentDomainNames ? sortStringsAlphabetically(currentDomainNames) : [];
+}
+
+async function getAppIds() {
+  const currentAppIds = await GetAppIds();
+  return currentAppIds ? sortStringsAlphabetically(currentAppIds) : [];
+}
+
+const loader = makeLoader(() => {
+  const keyPairs = getKeyPairs();
+  const domainNames = getDomainNames();
+  const appIds = getAppIds();
+  return defer({ keyPairs, domainNames, appIds });
+});
+
 function ClientSideIntegration() {
-  const [keyPairData, setKeyPairData] = useState<KeyPairModel[]>();
-  const [domainNames, setDomainNames] = useState<string[]>();
+  const data = useLoaderData<typeof loader>();
 
-  const loadKeyPairs = useCallback(async () => {
-    const data = await GetKeyPairs();
-    const sortedKeyPairs = data?.sort((a, b) => a.created.getTime() - b.created.getTime());
-    setKeyPairData(sortedKeyPairs);
-  }, []);
-
-  const loadDomainNames = useCallback(async () => {
-    const currentDomainNames = await GetDomainNames();
-    const currentDomainNamesSorted = currentDomainNames
-      ? sortStringsAlphabetically(currentDomainNames)
-      : currentDomainNames;
-    setDomainNames(currentDomainNamesSorted);
-  }, []);
-
-  useEffect(() => {
-    loadKeyPairs();
-  }, [loadKeyPairs]);
-
-  useEffect(() => {
-    loadDomainNames();
-  }, [loadDomainNames]);
+  const reloader = useRevalidator();
 
   const handleAddKeyPair = async (formData: AddKeyPairFormProps) => {
     const { name } = formData;
     try {
       const response = await AddKeyPair({ name });
       if (response.status === 201) {
+        reloader.revalidate();
         SuccessToast('Key pair added.');
-        loadKeyPairs();
       }
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -64,8 +73,8 @@ function ClientSideIntegration() {
     const { name, subscriptionId, disabled = false } = formData;
     try {
       await UpdateKeyPair({ name, subscriptionId, disabled });
+      reloader.revalidate();
       SuccessToast('Key Pair updated.');
-      loadKeyPairs();
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -74,48 +83,76 @@ function ClientSideIntegration() {
   const handleDisableKeyPair = async (keyPair: KeyPairModel) => {
     try {
       await DisableKeyPair(keyPair);
+      reloader.revalidate();
       SuccessToast('Key pair deleted.');
-      loadKeyPairs();
     } catch (e) {
       handleErrorToast(e);
     }
   };
+
   const handleUpdateDomainNames = async (
     updatedDomainNames: string[],
     action: string
-  ): Promise<UpdateDomainNamesResponse | undefined> => {
+  ): Promise<UpdateCstgValuesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames);
-      let domains = response?.domains;
-      const isValidDomains = response?.isValidDomains;
+      let domains = response?.cstgValues;
+      const isValidDomains = response?.isValidCstgValues;
       if (!isValidDomains) {
         const invalidDomains = separateStringsList(domains[0]);
         domains = invalidDomains;
       } else {
-        setDomainNames(sortStringsAlphabetically(domains));
+        reloader.revalidate();
         SuccessToast(`Domain names ${action}.`);
       }
-      const updatedDomainNamesResponse: UpdateDomainNamesResponse = {
-        domains,
-        isValidDomains,
+      const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
+        cstgValues: sortStringsAlphabetically(domains),
+        isValidCstgValues: isValidDomains,
       };
       return updatedDomainNamesResponse;
     } catch (e) {
       handleErrorToast(e);
     }
   };
+  const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
+    try {
+      const appIds = await UpdateAppIds(updatedAppIds);
+      reloader.revalidate();
+      SuccessToast(`Mobile app ids ${action}.`);
 
-  const onAddDomainNames = async (newDomains: string[], deleteExistingList: boolean) => {
-    let updatedDomains = newDomains;
-    if (domainNames && !deleteExistingList) updatedDomains = [...newDomains, ...domainNames];
-    return handleUpdateDomainNames(updatedDomains, 'added');
+      const updatedAppIdsResponse: UpdateCstgValuesResponse = {
+        cstgValues: sortStringsAlphabetically(appIds),
+        isValidCstgValues: true,
+      };
+      return updatedAppIdsResponse;
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  };
+
+  const onAddCstgValues = async (
+    newCstgValues: string[],
+    deleteExistingList: boolean,
+    cstgType: CstgValueType,
+    existingCstgValues: string[]
+  ) => {
+    let updatedCstgValues = newCstgValues;
+    if (!deleteExistingList) {
+      updatedCstgValues = [...newCstgValues, ...existingCstgValues];
+    }
+    if (cstgType === CstgValueType.MobileAppId) {
+      return handleUpdateAppIds(updatedCstgValues, 'added');
+    }
+    if (cstgType === CstgValueType.Domain) {
+      return handleUpdateDomainNames(updatedCstgValues, 'added');
+    }
   };
 
   return (
     <>
       <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage client-side integration key pairs and domain names.
+        View and manage client-side integration key pairs, domain names and mobile app ids.
         {/* For more information,
         see{' '}
         <a
@@ -129,18 +166,44 @@ function ClientSideIntegration() {
         . */}
       </p>
       <ScreenContentContainer>
-        <ClientSideCompletion domainNames={domainNames} keyPairData={keyPairData} />
-        <KeyPairsTable
-          keyPairs={keyPairData}
-          onAddKeyPair={handleAddKeyPair}
-          onKeyPairEdit={handleUpdateKeyPair}
-          onKeyPairDisable={handleDisableKeyPair}
-        />
-        <CstgDomainsTable
-          domains={domainNames || []}
-          onAddDomains={onAddDomainNames}
-          onUpdateDomains={handleUpdateDomainNames}
-        />
+        <Suspense fallback={<Loading message='Loading client side integration data...' />}>
+          <AwaitTypesafe
+            resolve={resolveAll({
+              keyPairs: data.keyPairs,
+              domainNames: data.domainNames,
+              appIds: data.appIds,
+            })}
+          >
+            {(loadedData) => (
+              <>
+                <ClientSideCompletion
+                  domainNames={loadedData.domainNames}
+                  keyPairData={loadedData.keyPairs}
+                />
+                <KeyPairsTable
+                  keyPairs={loadedData.keyPairs}
+                  onAddKeyPair={handleAddKeyPair}
+                  onKeyPairEdit={handleUpdateKeyPair}
+                  onKeyPairDisable={handleDisableKeyPair}
+                />
+                <CstgTable
+                  cstgValues={loadedData.domainNames || []}
+                  onAddCstgValues={onAddCstgValues}
+                  onUpdateCstgValues={handleUpdateDomainNames}
+                  cstgValueType={CstgValueType.Domain}
+                  addInstructions='Add one or more domains.'
+                />
+                <CstgTable
+                  cstgValues={loadedData.appIds || []}
+                  onAddCstgValues={onAddCstgValues}
+                  onUpdateCstgValues={handleUpdateAppIds}
+                  cstgValueType={CstgValueType.MobileAppId}
+                  addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+                />
+              </>
+            )}
+          </AwaitTypesafe>
+        </Suspense>
       </ScreenContentContainer>
     </>
   );
@@ -151,4 +214,5 @@ export const ClientSideIntegrationRoute: PortalRoute = {
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
   path: '/dashboard/clientSideIntegration',
+  loader,
 };
