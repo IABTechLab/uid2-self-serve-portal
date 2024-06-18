@@ -1,4 +1,4 @@
-import { withFaroRouterInstrumentation } from '@grafana/faro-react';
+import { faro, FaroErrorBoundary, withFaroRouterInstrumentation } from '@grafana/faro-react';
 import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useCallback } from 'react';
@@ -25,11 +25,20 @@ const router = withFaroRouterInstrumentation(
     {
       path: '/',
       element: (
-        <PortalErrorBoundary>
+        // <PortalErrorBoundary>
+        <FaroErrorBoundary
+          onError={(error) => faro.api.pushError(new Error('oh no'))}
+          beforeCapture={(error) => faro.api.pushError(new Error('oh no'))}
+          // fallback={(error, resetBoundary) => {
+          //   // return (error, resetBoundary);
+          //   console.log(error, resetBoundary);
+          // }}
+        >
           <CurrentUserProvider>
             <App />
           </CurrentUserProvider>
-        </PortalErrorBoundary>
+        </FaroErrorBoundary>
+        // </PortalErrorBoundary>
       ),
       children: Routes,
     },

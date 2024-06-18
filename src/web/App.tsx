@@ -1,3 +1,4 @@
+import { FaroErrorBoundary } from '@grafana/faro-react';
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -39,7 +40,8 @@ export function App() {
 
   return (
     <StrictMode>
-      <PortalErrorBoundary>
+      {/* <PortalErrorBoundary> */}
+      <FaroErrorBoundary onError={(error) => console.info(error)}>
         <ParticipantProvider>
           <div className='app' ref={rootRef}>
             {LoggedInUser && <UpdatesTour />}
@@ -54,7 +56,8 @@ export function App() {
             <ToastContainerWrapper />
           </div>
         </ParticipantProvider>
-      </PortalErrorBoundary>
+      </FaroErrorBoundary>
+      {/* </PortalErrorBoundary> */}
     </StrictMode>
   );
 }

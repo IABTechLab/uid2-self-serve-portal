@@ -1,3 +1,4 @@
+import { faro, FaroErrorBoundary } from '@grafana/faro-react';
 import { AxiosError } from 'axios';
 import { ReactNode, Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
@@ -49,9 +50,7 @@ async function loadSharingList(): Promise<SharingListLoaderData> {
     throw e;
   }
 }
-const loader = makeLoader(() =>
-  defer({ sharingList: loadSharingList() })
-);
+const loader = makeLoader(() => defer({ sharingList: loadSharingList() }));
 
 function SharingPermissionPageContainer({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -116,7 +115,9 @@ function SharingPermissions() {
   };
 
   // publisher without SHARER
-  const showPubSharingMessage = (participant?.types || []).some((type) => type.typeName === 'Publisher') && !(participant?.apiRoles || []).some((role) => role.roleName === 'SHARER');
+  const showPubSharingMessage =
+    (participant?.types || []).some((type) => type.typeName === 'Publisher') &&
+    !(participant?.apiRoles || []).some((role) => role.roleName === 'SHARER');
 
   return (
     <SharingPermissionPageContainer>
@@ -189,7 +190,15 @@ function SharingPermissions() {
 export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
-  errorElement: <RouteErrorBoundary />,
+  errorElement: (
+    <FaroErrorBoundary
+      onError={(e) => {
+        console.info('error: ', e);
+        faro.api.pushError(new Error('oh no'));
+        faro.api.pushEvent('/dashboard/sharing');
+      }}
+    />
+  ),
   path: '/dashboard/sharing',
   loader,
 };
