@@ -21,9 +21,8 @@ export async function GetKeyPairs(participantId?: number) {
     const result = await axios.get<KeyPairDTO[]>(
       `/participants/${participantId ?? 'current'}/keyPairs`
     );
-    if (result.status === 200) {
-      return result.data.map(mapKeyPairDTOToModel);
-    }
+
+    return result.data.map(mapKeyPairDTOToModel);
   } catch (e: unknown) {
     throw backendError(e, 'Could not get key pairs');
   }
