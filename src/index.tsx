@@ -1,3 +1,4 @@
+import { withFaroRouterInstrumentation } from '@grafana/faro-react';
 import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useCallback } from 'react';
@@ -19,19 +20,21 @@ import './web/index.scss';
 
 configureLogging();
 initializeFaro();
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: (
-      <PortalErrorBoundary>
-        <CurrentUserProvider>
-          <App />
-        </CurrentUserProvider>
-      </PortalErrorBoundary>
-    ),
-    children: Routes,
-  },
-]);
+const router = withFaroRouterInstrumentation(
+  createBrowserRouter([
+    {
+      path: '/',
+      element: (
+        <PortalErrorBoundary>
+          <CurrentUserProvider>
+            <App />
+          </CurrentUserProvider>
+        </PortalErrorBoundary>
+      ),
+      children: Routes,
+    },
+  ])
+);
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 function Root() {

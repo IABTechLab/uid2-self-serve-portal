@@ -25,7 +25,7 @@ const configMaps: { [index: string]: ClientConfig } = {
     environment: 'prod',
   },
   localhost: {
-    faroUrl: '',
+    faroUrl: hostedFaroUrl,
     environment: 'dev',
   },
 };
