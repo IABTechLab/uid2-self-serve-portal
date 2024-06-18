@@ -13,7 +13,7 @@ import { KeyPairModel } from './KeyPairModel';
 import './KeyPairsTable.scss';
 
 type KeyPairTableProps = Readonly<{
-  keyPairs: KeyPairModel[] | undefined;
+  keyPairs: KeyPairModel[];
   onAddKeyPair: (form: AddKeyPairFormProps) => Promise<void>;
   onKeyPairEdit: OnKeyPairEdit;
   onKeyPairDisable: OnKeyPairDisable;
@@ -37,7 +37,7 @@ function KeyPairsTableContent({
   };
 
   const { sortData } = useSortable<KeyPairModel>();
-  const sortedKeyPairs = keyPairs ? sortData(keyPairs) : [];
+  const sortedKeyPairs = sortData(keyPairs);
 
   return (
     <div className='key-pairs'>
@@ -80,16 +80,15 @@ function KeyPairsTableContent({
           </tr>
         </thead>
         <tbody>
-          {sortedKeyPairs &&
-            sortedKeyPairs.map((k) => (
-              <KeyPair
-                key={k.publicKey}
-                keyPair={k}
-                existingKeyPairs={sortedKeyPairs}
-                onEdit={onKeyPairEdit}
-                onDisable={onKeyPairDisable}
-              />
-            ))}
+          {sortedKeyPairs.map((k) => (
+            <KeyPair
+              key={k.publicKey}
+              keyPair={k}
+              existingKeyPairs={sortedKeyPairs}
+              onEdit={onKeyPairEdit}
+              onDisable={onKeyPairDisable}
+            />
+          ))}
         </tbody>
       </table>
       {!keyPairs?.length && (
