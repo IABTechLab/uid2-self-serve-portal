@@ -1,10 +1,13 @@
 import { useState } from 'react';
 
+import { UserDTO } from '../../../api/entities/User';
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import {
   InviteTeamMemberForm,
   UpdateTeamMemberForm,
   UserResponse,
 } from '../../services/userAccount';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
@@ -18,7 +21,7 @@ type TeamMembersTableProps = Readonly<{
   resendInvite: (id: number) => Promise<void>;
 }>;
 
-function TeamMembersTable({
+function TeamMembersTableContent({
   teamMembers,
   onAddTeamMember,
   resendInvite,
@@ -31,19 +34,22 @@ function TeamMembersTable({
     setShowTeamMemberDialog(!showTeamMemberDialog);
   };
 
+  const { sortData } = useSortable<UserDTO>();
+  const sortedTeamMembers = sortData(teamMembers);
+
   return (
     <div className='portal-team'>
       <table className='portal-team-table'>
         <thead>
           <tr>
-            <th className='name'>Name</th>
-            <th className='email'>Email</th>
-            <th className='jobFunction'>Job Function</th>
+            <SortableTableHeader<UserResponse> sortKey='firstName' header='Name' />
+            <SortableTableHeader<UserResponse> sortKey='email' header='Email' />
+            <SortableTableHeader<UserResponse> sortKey='role' header='Job Function' />
             <th className='action'>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {teamMembers.map((t) => (
+          {sortedTeamMembers.map((t) => (
             <TeamMember
               existingTeamMembers={teamMembers}
               key={t.email}
@@ -71,4 +77,10 @@ function TeamMembersTable({
   );
 }
 
-export default TeamMembersTable;
+export default function TeamMembersTable(props: TeamMembersTableProps) {
+  return (
+    <SortableProvider>
+      <TeamMembersTableContent {...props} />
+    </SortableProvider>
+  );
+}

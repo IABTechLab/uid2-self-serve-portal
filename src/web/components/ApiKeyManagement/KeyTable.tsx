@@ -1,5 +1,7 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { Tooltip } from '../Core/Tooltip';
 import { OnApiKeyDisable } from './KeyDisableDialog';
@@ -19,19 +21,23 @@ function NoKeys() {
   );
 }
 
-type KeyTableProps = {
+type KeyTableProps = Readonly<{
   apiKeys: ApiKeyDTO[];
   onKeyEdit: OnApiKeyEdit;
   onKeyDisable: OnApiKeyDisable;
   availableRoles: ApiRoleDTO[];
-};
-function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTableProps) {
+}>;
+
+function KeyTableContent({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTableProps) {
+  const { sortData } = useSortable<ApiKeyDTO>();
+  const sortedApiKeys = sortData(apiKeys);
+
   return (
     <div>
       <table className='api-key-table'>
         <thead>
           <tr>
-            <th>Name</th>
+            <SortableTableHeader<ApiKeyDTO> sortKey='name' header='Name' />
             <th>
               <div className='key-id-header'>
                 <div>Key ID</div>
@@ -42,12 +48,12 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
               </div>
             </th>
             <th>Permissions</th>
-            <th>Created</th>
+            <SortableTableHeader<ApiKeyDTO> sortKey='created' header='Created' />
             {availableRoles.length > 0 && <th className='action'>Actions</th>}
           </tr>
         </thead>
         <tbody>
-          {apiKeys.map((key: ApiKeyDTO) => (
+          {sortedApiKeys.map((key: ApiKeyDTO) => (
             <KeyItem
               key={key.key_id}
               apiKey={key}
@@ -63,4 +69,10 @@ function KeyTable({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTable
   );
 }
 
-export default KeyTable;
+export default function KeyTable(props: KeyTableProps) {
+  return (
+    <SortableProvider>
+      <KeyTableContent {...props} />
+    </SortableProvider>
+  );
+}

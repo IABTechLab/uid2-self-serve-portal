@@ -1,9 +1,10 @@
 .sortable-table-header {
+  border: none;
   svg {
     margin-left: 5px;
   }
 
-  button {
+  .sortable-table-header-button {
     border: none;
     padding: 0;
     margin: 0;

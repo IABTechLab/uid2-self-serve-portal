@@ -1,7 +1,9 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
+import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { UpdateParticipantForm } from '../../services/participant';
+import { SortableTableHeader } from '../Core/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
@@ -25,30 +27,36 @@ function NoParticipants() {
   );
 }
 
-export function ApprovedParticipantsTable({
+function ApprovedParticipantsTableContent({
   participants,
   apiRoles,
   participantTypes,
   onUpdateParticipant,
 }: ApprovedParticipantsTableProps) {
+  const { sortData } = useSortable<ParticipantDTO>();
+  const sortedParticipants = sortData(participants);
+
   return (
     <div className='approved-participant-container'>
       <h2>All Participants</h2>
       <table className='approved-participants-table'>
         <thead>
           <tr>
-            <th>Participant Name</th>
+            <SortableTableHeader<ParticipantDTO> sortKey='name' header='Name' />
             <th>Participant Type</th>
-            <th>Approver</th>
-            <th>Date Approved</th>
+            <SortableTableHeader<ParticipantDTO> sortKey='approver' header='Approver' />
+            <SortableTableHeader<ParticipantDTO> sortKey='dateApproved' header='Date Approved' />
             <th>API Permissions</th>
-            <th>Salesforce Agreement Number</th>
+            <SortableTableHeader<ParticipantDTO>
+              sortKey='crmAgreementNumber'
+              header='Salesforce Agreement Number'
+            />
             <th className='action'>Action</th>
           </tr>
         </thead>
 
         <tbody>
-          {participants.map((participant) => (
+          {sortedParticipants.map((participant) => (
             <ApprovedParticipantItem
               key={participant.id}
               participant={participant}
@@ -61,5 +69,13 @@ export function ApprovedParticipantsTable({
       </table>
       {!participants.length && <NoParticipants />}
     </div>
+  );
+}
+
+export default function ApprovedParticipantsTable(props: ApprovedParticipantsTableProps) {
+  return (
+    <SortableProvider>
+      <ApprovedParticipantsTableContent {...props} />
+    </SortableProvider>
   );
 }

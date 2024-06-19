@@ -31,7 +31,7 @@ import { PortalRoute } from './routeUtils';
 
 async function getKeyPairs() {
   const keyPairs = await GetKeyPairs();
-  return keyPairs?.sort((a, b) => a.created.getTime() - b.created.getTime());
+  return keyPairs.sort((a, b) => a.created.getTime() - b.created.getTime());
 }
 
 async function getDomainNames() {
