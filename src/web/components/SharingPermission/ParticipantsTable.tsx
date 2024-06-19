@@ -27,7 +27,7 @@ function ParticipantsTableContent({
   sharingSites,
 }: ParticipantsTableProps) {
   const { sortData } = useSortable<SharingSiteDTO>();
-  const sortedData = sortData(sites);
+  const sortedSites = sortData(sites);
 
   const handleCheckChange = (site: SharingSiteDTO) => {
     const newCheckedItems = new Set(selectedParticipantIds);
@@ -44,7 +44,7 @@ function ParticipantsTableContent({
     <table className={clsx('participant-table', className)} data-testid='participant-table'>
       {tableHeader}
       <tbody>
-        {sortedData.map((participant) => (
+        {sortedSites.map((participant) => (
           <ParticipantItem
             key={participant.id}
             site={participant}

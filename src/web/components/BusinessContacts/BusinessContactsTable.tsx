@@ -28,7 +28,7 @@ function BusinessContactsTableContent({
   };
 
   const { sortData } = useSortable<BusinessContactResponse>();
-  const sortedData = sortData(businessContacts);
+  const sortedBusinessContacts = sortData(businessContacts);
 
   return (
     <div className='business-contacts-table-container'>
@@ -51,7 +51,7 @@ function BusinessContactsTableContent({
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((e) => (
+          {sortedBusinessContacts.map((e) => (
             <BusinessContact
               key={e.id}
               contact={e}

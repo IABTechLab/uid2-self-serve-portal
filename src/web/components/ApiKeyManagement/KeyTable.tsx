@@ -30,7 +30,7 @@ type KeyTableProps = Readonly<{
 
 function KeyTableContent({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: KeyTableProps) {
   const { sortData } = useSortable<ApiKeyDTO>();
-  const sortedData = sortData(apiKeys);
+  const sortedApiKeys = sortData(apiKeys);
 
   return (
     <div>
@@ -53,7 +53,7 @@ function KeyTableContent({ apiKeys, onKeyEdit, onKeyDisable, availableRoles }: K
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((key: ApiKeyDTO) => (
+          {sortedApiKeys.map((key: ApiKeyDTO) => (
             <KeyItem
               key={key.key_id}
               apiKey={key}
