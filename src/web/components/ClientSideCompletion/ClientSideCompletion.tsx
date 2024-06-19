@@ -8,11 +8,17 @@ import './ClientSideCompletion.scss';
 type ClientSideCompletionProps = Readonly<{
   keyPairData: KeyPairModel[] | undefined;
   domainNames: string[] | undefined;
+  appIds: string[] | undefined;
 }>;
-export function ClientSideCompletion({ keyPairData, domainNames }: ClientSideCompletionProps) {
+export function ClientSideCompletion({
+  keyPairData,
+  domainNames,
+  appIds,
+}: ClientSideCompletionProps) {
   const hasKeyPairData = !!keyPairData?.filter((kp) => !kp.disabled).length;
   const hasDomainNames = !!domainNames?.length;
-  if (hasKeyPairData && hasDomainNames) return null;
+  const hasAppIds = !!appIds?.length;
+  if (hasKeyPairData && (hasDomainNames || hasAppIds)) return null;
   return (
     <Card className='client-side-completion'>
       <h2>
@@ -21,7 +27,7 @@ export function ClientSideCompletion({ keyPairData, domainNames }: ClientSideCom
       <div>Before you can use client-side integration, you must complete the following:</div>
       <ul>
         {!hasKeyPairData && <li>Add at least one key pair.</li>}
-        {!hasDomainNames && <li>Provide at least one root-level domain name.</li>}
+        <li>Provide at least one root-level domain name or mobile app ID.</li>
       </ul>
     </Card>
   );

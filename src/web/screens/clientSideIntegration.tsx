@@ -178,6 +178,7 @@ function ClientSideIntegration() {
               <>
                 <ClientSideCompletion
                   domainNames={loadedData.domainNames}
+                  appIds={loadedData.appIds}
                   keyPairData={loadedData.keyPairs}
                 />
                 <KeyPairsTable
