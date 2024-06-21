@@ -1,6 +1,6 @@
 import Joyride, { Actions, CallBackProps } from 'react-joyride';
 
-import { markTourAsSeen, ShouldShowTour, TourSteps } from './tourStorage';
+import { GetTourSteps, markTourAsSeen } from './tourStorage';
 
 function callback(data: CallBackProps) {
   const doNotShowAgainActions: Actions[] = ['close', 'skip', 'stop', 'reset'];
@@ -8,7 +8,8 @@ function callback(data: CallBackProps) {
 }
 
 export function UpdatesTour() {
-  const showTour = ShouldShowTour();
+  const tourSteps = GetTourSteps();
+  const showTour = tourSteps.length > 0;
   const actionButtonStyle = {
     backgroundColor: '#cdf200', // --theme-button
     color: '#030a40', // --theme-button-text
@@ -21,7 +22,7 @@ export function UpdatesTour() {
     <div>
       {showTour && (
         <Joyride
-          steps={TourSteps}
+          steps={tourSteps}
           callback={callback}
           continuous
           showSkipButton
