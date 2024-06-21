@@ -1,6 +1,6 @@
 import Joyride, { Actions, CallBackProps } from 'react-joyride';
 
-import { GetTourSteps, markTourAsSeen, ShouldShowTour } from './tourStorage';
+import { GetTourSteps, markTourAsSeen } from './tourStorage';
 
 function callback(data: CallBackProps) {
   const doNotShowAgainActions: Actions[] = ['close', 'skip', 'stop', 'reset'];
