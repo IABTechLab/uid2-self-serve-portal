@@ -4,13 +4,20 @@ import config from '../../../../package.json';
 
 const { version } = config;
 
-export const TourSteps: React.ComponentProps<typeof Joyride>['steps'] = [
+type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][number] & {
+  version?: string;
+};
+// Temporary solution: all tour steps without a version are treated as relevant to the current version.
+// Update the version after release to avoid showing it again. We can automate this in the release pipeline.
+const tourSteps: VersionedTourStep[] = [
   {
     target: `.profile-dropdown-button`,
     content: `We've moved some menu items to your profile dropdown.`,
     disableBeacon: true,
+    version: '0.36.0',
   },
 ];
+
 type TourData = {
   seenForVersions: string[];
 };
@@ -35,13 +42,14 @@ function saveTourData(data: TourData) {
   localStorage.setItem(tourStorageKey, JSON.stringify(data));
 }
 
-export function ShouldShowTour() {
-  const tourData = getTourData();
-  return !tourData.seenForVersions.includes(version);
-}
-
 export function markTourAsSeen() {
   const tourData = getTourData();
   if (!tourData.seenForVersions.includes(version)) tourData.seenForVersions.push(version);
   saveTourData(tourData);
+}
+
+export function GetTourSteps(): VersionedTourStep[] {
+  return tourSteps.filter(
+    (step) => !getTourData().seenForVersions.includes(step.version ?? version)
+  );
 }
