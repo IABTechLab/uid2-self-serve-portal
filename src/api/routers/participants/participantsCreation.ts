@@ -110,7 +110,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
   });
 
   // Get newly created user
-  const newUser = (await User.query().findOne('email', participantRequest.email)) as User;
+  const newUser = await User.query().findOne('email', participantRequest.email);
 
   // create keyCloak user
   const kcAdminClient = await getKcAdminClient();
@@ -122,7 +122,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
   );
 
   // assign proper api access
-  assignClientRoleToUser(kcAdminClient, newUser.email, 'api-participant-member');
+  assignClientRoleToUser(kcAdminClient, newUser!.email, 'api-participant-member');
 
   // send email
   await sendInviteEmail(kcAdminClient, newKcUser);

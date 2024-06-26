@@ -39,7 +39,7 @@ describe('Business Contact Service Tests', () => {
       });
     });
 
-    it('should deny access when business contact not longs to participant', async () => {
+    it('should deny access when business contact does not belong to participant', async () => {
       mockUser();
       mockParticipant();
       mockBusinessContact({ participantId: 2 });
@@ -51,7 +51,7 @@ describe('Business Contact Service Tests', () => {
       expect(res.body[0].message).toBe('You do not have permission to that business contact.');
     });
 
-    it('should throw error when business contact not exists', async () => {
+    it('should throw error when business contact does not exist', async () => {
       mockUser();
       mockParticipant();
       mockBusinessContact(null);

@@ -23,8 +23,7 @@ describe('Participant Service Tests', () => {
       mockUser();
       const req: Request = request(api).get('/api/participants/1/');
       const res = await withToken(req);
-
-      expect(res.statusCode).not.toBe(403);
+      expect(res.statusCode).toBe(200);
     });
 
     it('should deny access to an authenticated user without permission', async () => {
@@ -37,7 +36,7 @@ describe('Participant Service Tests', () => {
       expect(res.body[0].message).toBe('You do not have permission to that participant.');
     });
 
-    it('should throw error when participant not exists', async () => {
+    it('should throw error when participant does not exist', async () => {
       mockParticipant(null);
       mockUser();
       const req: Request = request(api).get('/api/participants/10000/');

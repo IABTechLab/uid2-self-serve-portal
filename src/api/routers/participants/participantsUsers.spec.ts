@@ -41,7 +41,7 @@ describe('#getParticipantUsers', () => {
     } as ParticipantRequest;
     await getParticipantUsers(participantRequest, res);
 
-    expect(json).toBeCalled();
+    expect(json).toHaveBeenCalled();
 
     const receivedUsers = json.mock.calls[0][0] as User[];
 
@@ -68,7 +68,7 @@ describe('#getParticipantUsers', () => {
     } as ParticipantRequest;
     await getParticipantUsers(participantRequest, res);
 
-    expect(json).toBeCalled();
+    expect(json).toHaveBeenCalled();
 
     const receivedUsers = json.mock.calls[0][0] as User[];
 
