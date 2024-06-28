@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
+import { getLoggers } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 
 export type UserWithIsApprover = User & { isApprover: boolean };

@@ -1,7 +1,7 @@
 import request, { Request } from 'supertest';
 
 import { sendInviteEmail } from '../services/kcUsersService';
-import { mockParticipant, mockUser, mockUserOnce, mockUserWithNoParticipant } from './queryMocks';
+import { mockParticipant, mockUser } from './queryMocks';
 import useTestServer, { api } from './utils';
 
 jest.mock('../keycloakAdminClient', () => ({
