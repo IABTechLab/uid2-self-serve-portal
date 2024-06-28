@@ -290,7 +290,8 @@ export function createParticipantsRouter() {
       }
 
       const adminApiKeys = await getApiKeysBySite(participant.siteId);
-      const apiKeys = await mapAdminApiKeysToApiKeyDTOs(adminApiKeys);
+      const enabledAdminApiKeys = adminApiKeys.filter((x) => !x.disabled);
+      const apiKeys = await mapAdminApiKeysToApiKeyDTOs(enabledAdminApiKeys);
 
       return res.status(200).json(apiKeys);
     }

@@ -93,7 +93,7 @@ function ApiKeyManagement() {
             {(loadedData) => (
               <>
                 <KeyTable
-                  apiKeys={loadedData.apiKeys.filter((key) => !key.disabled)}
+                  apiKeys={loadedData.apiKeys}
                   onKeyEdit={onKeyEdit}
                   onKeyDisable={onKeyDisable}
                   availableRoles={loadedData.apiRoles}
