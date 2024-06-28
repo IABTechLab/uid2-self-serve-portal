@@ -43,11 +43,15 @@ export class Participant extends BaseModel {
       },
     },
     users: {
-      relation: Model.HasManyRelation,
+      relation: Model.ManyToManyRelation,
       modelClass: 'User',
       join: {
         from: 'participants.id',
-        to: 'users.participantId',
+        through: {
+          from: 'usersToParticipants.participantId',
+          to: 'usersToParticipants.userId',
+        },
+        to: 'users.id',
       },
     },
     businessContacts: {

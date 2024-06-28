@@ -39,35 +39,63 @@ type PartialUserOrNull = Partial<User> | null;
 export const mockUser = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => {
   const users = Array.isArray(user) ? user : [user];
   const spy = jest.spyOn(User, 'query');
+  const testUserId = 1;
+  const testParticipantId = 2;
   users.forEach((u) =>
     spy.mockReturnValue(
       QueryBuilder.forClass(User).resolve(
         u === null
           ? undefined
           : {
-              id: 1,
+              id: testUserId,
               email: 'test_user@example.com',
               name: 'Test User',
-              participantId: 1,
+              $relatedQuery: () =>
+                QueryBuilder.forClass(Participant).resolve({
+                  id: testParticipantId,
+                  name: 'Test Participant',
+                }),
               ...u,
             }
       )
     )
   );
 };
+
+export const mockUserWithNoParticipant = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => {
+  const users = Array.isArray(user) ? user : [user];
+  const spy = jest.spyOn(User, 'query');
+  const testUserId = 1;
+  users.forEach((u) =>
+    spy.mockReturnValue(
+      QueryBuilder.forClass(User).resolve(
+        u === null
+          ? undefined
+          : {
+              id: testUserId,
+              email: 'test_user@example.com',
+              name: 'Test User',
+              $relatedQuery: () => QueryBuilder.forClass(Participant).resolve(undefined),
+              ...u,
+            }
+      )
+    )
+  );
+};
+
 export const mockUserOnce = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => {
   const users = Array.isArray(user) ? user : [user];
   const spy = jest.spyOn(User, 'query');
+  const testUserId = 1;
   users.forEach((u) =>
     spy.mockReturnValueOnce(
       QueryBuilder.forClass(User).resolve(
         u === null
           ? undefined
           : {
-              id: 1,
+              id: testUserId,
               email: 'test_user@example.com',
               name: 'Test User',
-              participantId: 1,
               ...u,
             }
       )

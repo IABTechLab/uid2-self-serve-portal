@@ -33,7 +33,6 @@ export const WithTeamMembers: Story = {
         lastName: 'test',
         role: UserRole.DA,
         acceptedTerms: true,
-        participantId: 1,
       },
       {
         id: 2,
@@ -42,7 +41,6 @@ export const WithTeamMembers: Story = {
         lastName: 'user 2',
         role: UserRole.Engineering,
         acceptedTerms: false,
-        participantId: 1,
       },
     ],
   },

@@ -319,7 +319,9 @@ const enrichCurrentParticipant = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-  const participant = await Participant.query().findById(user.participantId!);
+  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+  const participant = await user.$relatedQuery('participant').first().castTo<Participant>();
+
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }
@@ -332,6 +334,7 @@ export const checkParticipantId = async (
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Remove support for 'current' in UID2-2822
   if (req.params.participantId === 'current') {
     return enrichCurrentParticipant(req, res, next);
   }

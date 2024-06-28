@@ -32,10 +32,14 @@ export class User extends BaseModel {
 
   static readonly relationMappings = {
     participant: {
-      relation: Model.BelongsToOneRelation,
+      relation: Model.ManyToManyRelation,
       modelClass: 'Participant',
       join: {
-        from: 'users.participantId',
+        from: 'users.id',
+        through: {
+          from: 'usersToParticipants.userId',
+          to: 'usersToParticipants.participantId',
+        },
         to: 'participants.id',
       },
     },
@@ -46,7 +50,6 @@ export class User extends BaseModel {
   declare lastName: string;
   declare phone?: string;
   declare role: UserRole;
-  declare participantId?: number | null;
   declare acceptedTerms: boolean;
 }
 

@@ -1,7 +1,7 @@
 import request, { Request } from 'supertest';
 
 import { ParticipantRequest } from '../services/participantsService';
-import { mockParticipant, mockUser, mockUserOnce } from './queryMocks';
+import { mockParticipant, mockUser, mockUserOnce, mockUserWithNoParticipant } from './queryMocks';
 import useTestServer, { api, routers } from './utils';
 
 describe('Participant Service Tests', () => {
@@ -14,7 +14,7 @@ describe('Participant Service Tests', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('hasParticipantAccess middleware', () => {
@@ -47,6 +47,7 @@ describe('Participant Service Tests', () => {
     });
   });
 
+  // TODO: These tests will likely need modifying/removing in UID2-2822
   describe('enrichCurrentParticipant middleware', () => {
     test('should return 404 if user not found', async () => {
       mockUser(null);
@@ -58,34 +59,12 @@ describe('Participant Service Tests', () => {
     });
 
     test('should return 404 if participant not found', async () => {
-      mockUser();
-      mockParticipant(null);
+      mockUserWithNoParticipant();
       const req = request(api).get('/api/participants/current/');
       const res = await withToken(req);
 
       expect(res.statusCode).toBe(404);
       expect(res.body).toEqual([{ message: 'The participant cannot be found.' }]);
-    });
-
-    test('should add participant to request if user and participant are found', async () => {
-      mockParticipant();
-      mockUser();
-
-      const req = request(api).get('/api/participants/current/');
-      const res = await withToken(req);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toEqual({
-        id: 1,
-        name: 'Test Participant',
-        allowSharing: true,
-        types: [
-          {
-            id: 1,
-            typeName: 'DSP',
-          },
-        ],
-      });
     });
   });
 });

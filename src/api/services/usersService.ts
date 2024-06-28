@@ -20,10 +20,15 @@ export const enrichUserWithIsApprover = async (user: User) => {
   };
 };
 
-export const createUserInPortal = async (user: Omit<UserDTO, 'id' | 'acceptedTerms'>) => {
+export const createUserInPortal = async (
+  user: Omit<UserDTO, 'id' | 'acceptedTerms'>,
+  participantId: number
+) => {
   const existingUser = await findUserByEmail(user.email);
   if (existingUser) return existingUser;
-  return User.query().insert(user);
+  const newUser = await User.query().insert(user);
+  // Update the user <-> participant mapping
+  await newUser.$relatedQuery('participant').relate(participantId);
 };
 
 export const isUserBelongsToParticipant = async (
@@ -32,11 +37,8 @@ export const isUserBelongsToParticipant = async (
   traceId: string
 ) => {
   const user = await User.query()
-    .where('email', email)
-    .andWhere('deleted', 0)
-    .andWhere('participantId', participantId)
-    .first();
-
+    .findOne({ email, deleted: 0 })
+    .whereExists(User.relatedQuery('participant').where('participant.id', participantId));
   if (!user) {
     const { errorLogger } = getLoggers();
     errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`, traceId);
@@ -76,19 +78,9 @@ export const enrichWithUserFromParams = async (
   next: NextFunction
 ) => {
   const { userId } = userIdParser.parse(req.params);
-  const traceId = getTraceId(req);
   const user = await User.query().findById(userId);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
-  }
-  if (
-    !(await isUserBelongsToParticipant(
-      req.auth?.payload?.email as string,
-      user.participantId!,
-      traceId
-    ))
-  ) {
-    return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }
 
   req.user = user;
@@ -96,5 +88,5 @@ export const enrichWithUserFromParams = async (
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
-  return participant!.$relatedQuery('users').castTo<User[]>();
+  return participant.$relatedQuery('users').castTo<User[]>();
 };

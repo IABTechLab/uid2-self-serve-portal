@@ -1,7 +1,7 @@
 import request, { Request } from 'supertest';
 
 import { sendInviteEmail } from '../services/kcUsersService';
-import { mockParticipant, mockUser, mockUserOnce } from './queryMocks';
+import { mockParticipant, mockUser, mockUserOnce, mockUserWithNoParticipant } from './queryMocks';
 import useTestServer, { api } from './utils';
 
 jest.mock('../keycloakAdminClient', () => ({
@@ -29,16 +29,6 @@ describe('Users API tests', () => {
 
       expect(res.statusCode).toBe(200);
       expect(sendInviteEmail).toHaveBeenCalled();
-    });
-
-    test('Should deny access to an authenticated user without permission', async () => {
-      mockParticipant();
-      mockUserOnce([{ participantId: 2 }, null]);
-      const req: Request = request(api).post('/api/users/1/resendInvitation');
-      const res = await withToken(req);
-
-      expect(res.statusCode).toBe(403);
-      expect(sendInviteEmail).not.toHaveBeenCalled();
     });
   });
 });

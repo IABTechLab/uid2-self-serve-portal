@@ -18,7 +18,7 @@ describe('Business Contact Service Tests', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('hasBusinessContactAccess middleware', () => {

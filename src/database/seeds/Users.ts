@@ -15,7 +15,7 @@ const sampleParticipant = {
   completedRecommendations: false,
   crmAgreementNumber: '12345678',
 };
-const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
+const sampleData: Optional<UserType, 'id'>[] = [
   {
     email: 'test@example.com',
     firstName: 'Test',
@@ -27,11 +27,31 @@ const sampleData: Optional<UserType, 'id' | 'participantId'>[] = [
 ];
 
 export async function seed(knex: Knex): Promise<void> {
-  // Deletes ALL existing entries
+  const existingUsers = await knex('users').whereIn(
+    'email',
+    sampleData.map((d) => d.email)
+  );
+  const existingParticipants = await knex('participants').where((p) =>
+    p.whereLike('name', sampleParticipant.name)
+  );
+
+  // Remove seed data from related tables
+  await knex('usersToParticipants')
+    .whereIn(
+      'userId',
+      existingUsers.map((user) => user.id)
+    )
+    .del();
+  await knex('usersToParticipants')
+    .whereIn(
+      'participantId',
+      existingParticipants.map((participant) => participant.id)
+    )
+    .del();
   await knex('users')
     .whereIn(
-      'email',
-      sampleData.map((d) => d.email)
+      'id',
+      existingUsers.map((user) => user.id)
     )
     .del();
   await knex('participants')
@@ -43,5 +63,14 @@ export async function seed(knex: Knex): Promise<void> {
     'MAPPER',
     'SHARER',
   ]);
-  await knex('users').insert(sampleData.map((user) => ({ ...user, participantId })));
+  await knex('users').insert(sampleData);
+
+  // Insert user <-> participant mapping
+  const newUsers = await knex('users').whereIn(
+    'email',
+    sampleData.map((d) => d.email)
+  );
+  await knex('usersToParticipants').insert(
+    newUsers.map((user: UserType) => ({ userId: user.id, participantId }))
+  );
 }

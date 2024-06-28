@@ -71,9 +71,12 @@ export async function createUser({
     lastName,
     role,
     acceptedTerms,
-    participantId,
   };
 
   const user = await User.query().insert(data);
+  if (participantId) {
+    await user.$relatedQuery('participant').relate(participantId);
+  }
+
   return user;
 }
