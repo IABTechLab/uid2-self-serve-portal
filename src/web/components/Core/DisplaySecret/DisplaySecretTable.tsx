@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import CopyKeyButton, { Secret } from './CopySecretButton';
-import Popover from './Popover';
+import CopyKeyButton, { Secret } from '../Buttons/CopySecretButton';
+import Popover from '../Popups/Popover';
 
 import './DisplaySecretTable.scss';
 

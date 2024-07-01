@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Card } from '../Core/Card';
+import { Card } from '../Core/Card/Card';
 import { KeyPairModel } from '../KeyPairs/KeyPairModel';
 
 import './ClientSideCompletion.scss';

@@ -6,7 +6,7 @@ import { mockBackendError } from '../../testHelpers/dataMocks';
 import * as keycloakMocks from '../../testHelpers/keycloakMocks';
 import { TestContextProvider } from '../../testHelpers/testContextProvider';
 import { App } from '../App';
-import * as Header from '../components/Core/PortalHeader';
+import * as Header from '../components/Core/Headers/PortalHeader';
 import { CurrentUserProvider } from '../contexts/CurrentUserProvider';
 import { PortalErrorBoundary } from './PortalErrorBoundary';
 

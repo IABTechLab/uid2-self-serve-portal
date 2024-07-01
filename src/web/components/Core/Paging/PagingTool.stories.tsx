@@ -1,11 +1,11 @@
 import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { getPagedValues } from '../ClientSideTokenGeneration/CstgHelper';
+import { getPagedValues } from '../../ClientSideTokenGeneration/CstgHelper';
 import { PagingTool } from './PagingTool';
 import { RowsPerPageValues } from './PagingToolHelper';
 
-import '../ClientSideTokenGeneration/CstgDomainsTable.scss';
+import '../../ClientSideTokenGeneration/CstgTable.scss';
 
 const meta: Meta<typeof PagingTool> = {
   component: PagingTool,

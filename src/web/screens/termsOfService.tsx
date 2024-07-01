@@ -1,4 +1,4 @@
-import { TermsAndConditions } from '../components/Core/TermsAndConditions';
+import { TermsAndConditions } from '../components/Core/TermsAndConditions/TermsAndConditions';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 

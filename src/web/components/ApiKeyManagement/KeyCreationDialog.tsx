@@ -5,11 +5,11 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
 import { sortApiRoles } from '../../utils/apiRoles';
-import { Secret } from '../Core/CopySecretButton';
-import { Dialog } from '../Core/Dialog';
-import DisplaySecret from '../Core/DisplaySecret';
-import FormSubmitButton from '../Core/FormSubmitButton';
-import { InfoToast } from '../Core/Toast';
+import { Secret } from '../Core/Buttons/CopySecretButton';
+import { Dialog } from '../Core/Popups/Dialog';
+import DisplaySecret from '../Core/DisplaySecret/DisplaySecret';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
+import { InfoToast } from '../Core/Popups/Toast';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 

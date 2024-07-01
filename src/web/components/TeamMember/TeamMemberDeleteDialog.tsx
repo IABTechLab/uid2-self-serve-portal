@@ -1,5 +1,5 @@
 import { UserResponse } from '../../services/userAccount';
-import { Dialog } from '../Core/Dialog';
+import { Dialog } from '../Core/Popups/Dialog';
 
 type TeamMemberDeleteConfirmationDialogProps = Readonly<{
   person: UserResponse;

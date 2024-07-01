@@ -9,7 +9,7 @@ import {
   getShowingRowsText,
   RowsPerPageValues,
 } from './PagingToolHelper';
-import { SelectDropdown, SelectOption } from './SelectDropdown';
+import { SelectDropdown, SelectOption } from '../Dropdown/SelectDropdown';
 
 import './PagingTool.scss';
 

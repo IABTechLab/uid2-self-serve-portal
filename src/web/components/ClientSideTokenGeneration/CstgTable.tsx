@@ -2,10 +2,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { useEffect, useState } from 'react';
 
-import { PagingTool } from '../Core/PagingTool';
-import { RowsPerPageValues } from '../Core/PagingToolHelper';
-import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { PagingTool } from '../Core/Paging/PagingTool';
+import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
+import { TableNoDataPlaceholder } from '../Core/Views/TableNoDataPlaceholder';
+import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
 import CstgAddDialog from './CstgAddDialog';
 import CstgDeleteDialog from './CstgDeleteDialog';
 import { CstgValueType, getPagedValues, UpdateCstgValuesResponse } from './CstgHelper';

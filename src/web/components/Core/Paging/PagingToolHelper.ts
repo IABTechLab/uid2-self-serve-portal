@@ -1,4 +1,4 @@
-import { SelectOption } from './SelectDropdown';
+import { SelectOption } from '../Dropdown/SelectDropdown';
 
 const rowsPerPageValues = [10, 25, 50, 100, 250] as const;
 

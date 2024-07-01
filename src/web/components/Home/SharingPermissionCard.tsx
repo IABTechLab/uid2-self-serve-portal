@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
-import { Banner } from '../Core/Banner';
-import { Card } from '../Core/Card';
+import { Banner } from '../Core/Banner/Banner';
+import { Card } from '../Core/Card/Card';
 
 import './SharingPermissionCard.scss';
 

@@ -7,7 +7,11 @@ export type ToastProps = { title: ToastStatus; message: string };
 
 type ToastStatus = 'Success' | 'Error' | 'Info' | 'Warning';
 
-function GetIcon({ status }: { status: ToastStatus }) {
+type GetIconProps = Readonly<{
+  status: ToastStatus;
+}>;
+
+function GetIcon({ status }: GetIconProps) {
   switch (status) {
     case 'Success':
       return <FontAwesomeIcon icon='circle-check' />;

@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 import { ReactNode } from 'react';
 
-import { SortOrder, useSortable } from '../../contexts/SortableTableProvider';
+import { SortOrder, useSortable } from '../../../contexts/SortableTableProvider';
 
 import './SortableTableHeader.scss';
 

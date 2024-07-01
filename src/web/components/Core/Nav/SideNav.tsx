@@ -5,8 +5,8 @@ import {
 } from '@radix-ui/react-navigation-menu';
 import { NavLink } from 'react-router-dom';
 
-import config from '../../../../package.json';
-import { PortalRoute } from '../../screens/routeUtils';
+import config from '../../../../../package.json';
+import { PortalRoute } from '../../../screens/routeUtils';
 
 import './SideNav.scss';
 
@@ -24,10 +24,10 @@ function MenuItem({
     </NavigationMenuItem>
   );
 }
-export type SideNavProps = {
+export type SideNavProps = Readonly<{
   standardMenu: PortalRoute[];
   adminMenu: PortalRoute[];
-};
+}>;
 export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>

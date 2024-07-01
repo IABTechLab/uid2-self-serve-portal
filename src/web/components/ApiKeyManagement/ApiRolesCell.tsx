@@ -1,6 +1,6 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { sortApiRoles } from '../../utils/apiRoles';
-import { Tooltip } from '../Core/Tooltip';
+import { Tooltip } from '../Core/Popups/Tooltip';
 
 import './ApiRolesCell.scss';
 

@@ -1,8 +1,8 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
-import { Dialog } from '../Core/Dialog';
-import FormSubmitButton from '../Core/FormSubmitButton';
+import { Dialog } from '../Core/Popups/Dialog';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 
 export type OnApiKeyDisable = (apiKey: ApiKeyDTO) => void;

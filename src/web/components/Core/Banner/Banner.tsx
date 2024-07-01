@@ -2,13 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
 import './Banner.scss';
-import './Messages.scss';
+import '../Messages/Messages.scss';
 
-export type BannerProps = {
+export type BannerProps = Readonly<{
   message: string;
   type: 'Info' | 'Warning' | 'Error' | 'Success';
   fitContent?: boolean;
-};
+}>;
 
 export function Banner({ message, type, fitContent }: BannerProps) {
   const getIcon = () => {

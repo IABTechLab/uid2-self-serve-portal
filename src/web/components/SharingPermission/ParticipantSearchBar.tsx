@@ -3,7 +3,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType, ClientTypes } from '../../../api/services/adminServiceHelpers';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
 import { SearchBarContainer, SearchBarInput, SearchBarResults } from '../Search/SearchBar';
 import { ParticipantsTable } from './ParticipantsTable';
 import { filterSites, getSelectAllState, isSelectedAll } from './ParticipantTableHelper';
@@ -31,7 +31,7 @@ export function ParticipantSearchBar({
   const filteredSites = filterSites(sites, filterText, selectedTypeIds);
   const checkboxStatus = getSelectAllState(
     isSelectedAll(filteredSites, selectedParticipantIds),
-    selectedParticipantIds,
+    selectedParticipantIds
   );
 
   const handleFilterChange = (typeIds: Set<ClientType>) => {

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import '../../styles/forms.scss';
+import '../../../styles/forms.scss';
 
 type FormSubmitButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
   containerClass?: string;

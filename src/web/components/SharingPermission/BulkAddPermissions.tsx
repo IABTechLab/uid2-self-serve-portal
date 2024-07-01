@@ -4,9 +4,9 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { useAvailableSiteList } from '../../services/site';
-import { Banner } from '../Core/Banner';
-import { Collapsible } from '../Core/Collapsible';
-import { Loading } from '../Core/Loading';
+import { Banner } from '../Core/Banner/Banner';
+import { Collapsible } from '../Core/Dropdown/Collapsible';
+import { Loading } from '../Core/Loading/Loading';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import {
   BulkAddPermissionsForm,

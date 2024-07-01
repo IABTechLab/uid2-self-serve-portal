@@ -4,14 +4,14 @@ import { ReactNode } from 'react';
 
 import './Popover.scss';
 
-export type PopoverProps = {
+export type PopoverProps = Readonly<{
   triggerButton?: JSX.Element;
   children: ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   modal?: boolean;
   className?: string;
-};
+}>;
 
 export default function Popover({
   triggerButton,

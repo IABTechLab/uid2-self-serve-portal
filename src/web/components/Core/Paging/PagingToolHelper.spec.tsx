@@ -4,7 +4,7 @@ import {
   getShowingRowsText,
   RowsPerPageValues,
 } from './PagingToolHelper';
-import { SelectOption } from './SelectDropdown';
+import { SelectOption } from '../Dropdown/SelectDropdown';
 
 const rowsPerPageOptions: SelectOption<number>[] = [
   { name: '10', id: 10 },

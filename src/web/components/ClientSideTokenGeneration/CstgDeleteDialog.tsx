@@ -1,4 +1,4 @@
-import { Dialog } from '../Core/Dialog';
+import { Dialog } from '../Core/Popups/Dialog';
 import { CstgValueType } from './CstgHelper';
 
 import './CstgDeleteDialog.scss';

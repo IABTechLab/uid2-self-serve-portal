@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { SuccessToast } from './Toast';
+import { SuccessToast } from '../Popups/Toast';
 
 import './CopySecretButton.scss';
 

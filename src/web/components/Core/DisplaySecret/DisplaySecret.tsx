@@ -1,8 +1,12 @@
-import CopyKeyButton, { Secret } from './CopySecretButton';
+import CopyKeyButton, { Secret } from '../Buttons/CopySecretButton';
 
 import './DisplaySecret.scss';
 
-function DisplaySecret({ secret }: { secret: Secret }) {
+type DisplaySecretProps = Readonly<{
+  secret: Secret;
+}>;
+
+function DisplaySecret({ secret }: DisplaySecretProps) {
   return (
     <div className='display-secret'>
       <p>{secret.value}</p>

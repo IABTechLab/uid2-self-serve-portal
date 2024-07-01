@@ -5,9 +5,9 @@ import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { shouldRotateApiKey } from '../components/ApiKeyManagement/KeyHelper';
-import { Banner } from '../components/Core/Banner';
-import { AsyncErrorView } from '../components/Core/ErrorView';
-import { Loading } from '../components/Core/Loading';
+import { Banner } from '../components/Core/Banner/Banner';
+import { AsyncErrorView } from '../components/Core/Views/ErrorView';
+import { Loading } from '../components/Core/Loading/Loading';
 import DocumentationCard from '../components/Home/DocumentationCard';
 import RotateApiKeysCard from '../components/Home/RotateApiKeyCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';

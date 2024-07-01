@@ -8,7 +8,7 @@ import {
   formatStringsWithSeparator,
   formatUnixDate,
 } from '../../utils/textHelpers';
-import { Card } from '../Core/Card';
+import { Card } from '../Core/Card/Card';
 
 import './RotateApiKeyCard.scss';
 

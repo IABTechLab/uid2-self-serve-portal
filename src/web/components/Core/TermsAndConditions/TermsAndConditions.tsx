@@ -2,9 +2,10 @@ import { PropsWithChildren, UIEvent, UIEventHandler, useCallback, useState } fro
 
 import './TermsAndConditions.scss';
 
-type TermsAndConditionsProps = {
+type TermsAndConditionsProps = Readonly<{
   onScroll?: UIEventHandler<HTMLDivElement>;
-};
+}>;
+
 export function TermsAndConditions({ onScroll }: TermsAndConditionsProps) {
   return (
     <div className='terms-container' onScroll={onScroll}>

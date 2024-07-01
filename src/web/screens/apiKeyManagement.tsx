@@ -6,9 +6,9 @@ import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog'
 import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog';
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
-import { Loading } from '../components/Core/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
-import { SuccessToast } from '../components/Core/Toast';
+import { Loading } from '../components/Core/Loading/Loading';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
+import { SuccessToast } from '../components/Core/Popups/Toast';
 import {
   CreateApiKey,
   CreateApiKeyFormDTO,

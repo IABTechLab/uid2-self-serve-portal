@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { AddKeyPairFormProps } from '../../services/keyPairService';
-import { SortableTableHeader } from '../Core/SortableTableHeader';
-import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
+import { SortableTableHeader } from '../Core/Headers/SortableTableHeader';
+import { TableNoDataPlaceholder } from '../Core/Views/TableNoDataPlaceholder';
 import KeyPair from './KeyPair';
 import KeyPairDialog from './KeyPairDialog';
 import { OnKeyPairDisable } from './KeyPairDisableDialog';

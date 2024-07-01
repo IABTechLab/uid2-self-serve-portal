@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { EnvironmentVariable, GetEnvironmentVariables } from '../../services/environmentVariables';
-import { ApiError } from '../../utils/apiError';
-import { useAsyncThrowError } from '../../utils/errorHandler';
+import {
+  EnvironmentVariable,
+  GetEnvironmentVariables,
+} from '../../../services/environmentVariables';
+import { ApiError } from '../../../utils/apiError';
+import { useAsyncThrowError } from '../../../utils/errorHandler';
 import { Banner } from './Banner';
 
 function EnvironmentBanner() {

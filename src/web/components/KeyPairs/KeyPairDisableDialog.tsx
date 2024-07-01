@@ -1,7 +1,7 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Dialog } from '../Core/Dialog';
-import FormSubmitButton from '../Core/FormSubmitButton';
+import { Dialog } from '../Core/Popups/Dialog';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { TextInput } from '../Input/TextInput';
 import { KeyPairModel } from './KeyPairModel';
 

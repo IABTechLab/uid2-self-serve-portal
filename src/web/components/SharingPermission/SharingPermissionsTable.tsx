@@ -8,12 +8,12 @@ import {
   ClientTypes,
 } from '../../../api/services/adminServiceHelpers';
 import { useAllSitesList } from '../../services/site';
-import ActionButton from '../Core/ActionButton';
-import { Loading } from '../Core/Loading';
-import { MultiSelectDropdown } from '../Core/MultiSelectDropdown';
-import { SortableTableHeader } from '../Core/SortableTableHeader';
-import { Tooltip } from '../Core/Tooltip';
-import { TriStateCheckbox, TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import ActionButton from '../Core/Buttons/ActionButton';
+import { MultiSelectDropdown } from '../Core/Dropdown/MultiSelectDropdown';
+import { SortableTableHeader } from '../Core/Headers/SortableTableHeader';
+import { Loading } from '../Core/Loading/Loading';
+import { Tooltip } from '../Core/Popups/Tooltip';
+import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
 import { DeletePermissionDialog } from './DeletePermissionDialog';
 import { ParticipantsTable } from './ParticipantsTable';
 import {

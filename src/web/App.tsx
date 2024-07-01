@@ -2,10 +2,10 @@ import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { EnvironmentBanner } from './components/Core/EnvironmentBanner';
-import { Loading } from './components/Core/Loading';
-import { PortalHeader } from './components/Core/PortalHeader';
-import { ToastContainerWrapper } from './components/Core/Toast';
+import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
+import { Loading } from './components/Core/Loading/Loading';
+import { PortalHeader } from './components/Core/Headers/PortalHeader';
+import { ToastContainerWrapper } from './components/Core/Popups/Toast';
 import { UpdatesTour } from './components/SiteTour/UpdatesTour';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';

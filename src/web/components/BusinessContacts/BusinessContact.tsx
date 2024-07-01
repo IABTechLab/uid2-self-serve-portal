@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
-import ActionButton from '../Core/ActionButton';
-import { Dialog } from '../Core/Dialog';
-import { InlineMessage } from '../Core/InlineMessage';
+import ActionButton from '../Core/Buttons/ActionButton';
+import { Dialog } from '../Core/Popups/Dialog';
+import { InlineMessage } from '../Core/Messages/InlineMessage';
 import BusinessContactDialog from './BusinessContactDialog';
 
 type DeleteBusinessContactDialogProps = Readonly<{

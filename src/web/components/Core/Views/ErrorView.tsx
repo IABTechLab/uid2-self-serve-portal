@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { useAsyncError } from 'react-router-dom';
 
-import { ApiError, getErrorHash } from '../../utils/apiError';
-import { analyticsIdentifier, extractMessageFromAxiosError } from '../../utils/errorHelpers';
+import { ApiError, getErrorHash } from '../../../utils/apiError';
+import { analyticsIdentifier, extractMessageFromAxiosError } from '../../../utils/errorHelpers';
 
-type ErrorViewProps = {
+type ErrorViewProps = Readonly<{
   message?: string;
   errorId?: string;
   errorHash?: string;
-};
+}>;
 
 export function ErrorView({ message, errorId, errorHash }: ErrorViewProps) {
   return (

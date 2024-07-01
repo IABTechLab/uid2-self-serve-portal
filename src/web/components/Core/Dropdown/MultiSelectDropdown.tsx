@@ -3,7 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
 import { useCallback, useMemo, useState } from 'react';
 
-import { formatStringsWithSeparator } from '../../utils/textHelpers';
+import { formatStringsWithSeparator } from '../../../utils/textHelpers';
 
 import './MultiSelectDropdown.scss';
 
