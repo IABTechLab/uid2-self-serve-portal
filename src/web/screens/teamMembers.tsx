@@ -3,8 +3,8 @@ import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { Loading } from '../components/Core/Loading/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { SuccessToast } from '../components/Core/Popups/Toast';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';

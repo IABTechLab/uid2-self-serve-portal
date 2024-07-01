@@ -1,8 +1,8 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { AddKeyPairFormProps } from '../../services/keyPairService';
-import { Dialog } from '../Core/Popups/Dialog';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
+import { Dialog } from '../Core/Popups/Dialog';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueKeyPairName } from './KeyPairHelper';
 import { KeyPairModel } from './KeyPairModel';

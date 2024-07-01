@@ -1,10 +1,10 @@
+import { SelectOption } from '../Dropdown/SelectDropdown';
 import {
   getPageNumberOptions,
   getRowsPerPageOptions,
   getShowingRowsText,
   RowsPerPageValues,
 } from './PagingToolHelper';
-import { SelectOption } from '../Dropdown/SelectDropdown';
 
 const rowsPerPageOptions: SelectOption<number>[] = [
   { name: '10', id: 10 },

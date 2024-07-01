@@ -4,8 +4,8 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { ParticipantRequestDTO } from '../../../api/routers/participants/participantsRouter';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
-import { Dialog } from '../Core/Popups/Dialog';
 import { InlineMessage } from '../Core/Messages/InlineMessage';
+import { Dialog } from '../Core/Popups/Dialog';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantManagementItem.scss';

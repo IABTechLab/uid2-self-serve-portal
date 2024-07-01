@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { Tooltip } from '../components/Core/Popups/Tooltip';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';

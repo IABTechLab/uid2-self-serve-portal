@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
+import { SelectDropdown, SelectOption } from '../Dropdown/SelectDropdown';
 import {
   canDecreasePageNumber,
   canIncreasePageNumber,
@@ -9,7 +10,6 @@ import {
   getShowingRowsText,
   RowsPerPageValues,
 } from './PagingToolHelper';
-import { SelectDropdown, SelectOption } from '../Dropdown/SelectDropdown';
 
 import './PagingTool.scss';
 

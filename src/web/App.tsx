@@ -3,8 +3,8 @@ import { StrictMode, useCallback, useContext, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
-import { Loading } from './components/Core/Loading/Loading';
 import { PortalHeader } from './components/Core/Headers/PortalHeader';
+import { Loading } from './components/Core/Loading/Loading';
 import { ToastContainerWrapper } from './components/Core/Popups/Toast';
 import { UpdatesTour } from './components/SiteTour/UpdatesTour';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';

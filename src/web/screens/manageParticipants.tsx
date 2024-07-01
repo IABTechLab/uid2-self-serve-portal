@@ -4,8 +4,8 @@ import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { SuccessToast, WarningToast } from '../components/Core/Popups/Toast';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import ApprovedParticipantsTable from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';

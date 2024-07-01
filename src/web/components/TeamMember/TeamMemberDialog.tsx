@@ -7,8 +7,8 @@ import {
   UserResponse,
 } from '../../services/userAccount';
 import { validateEmail } from '../../utils/textHelpers';
-import { Dialog } from '../Core/Popups/Dialog';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
+import { Dialog } from '../Core/Popups/Dialog';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
