@@ -80,10 +80,10 @@ function ApiKeyManagement() {
         <a
           target='_blank'
           className='outside-link'
-          href='https://unifiedid.com/docs/getting-started/gs-permissions'
+          href='https://unifiedid.com/docs/portal/api-keys'
           rel='noreferrer'
         >
-          API permissions
+          managing and rotating API keys
         </a>
         .
       </p>

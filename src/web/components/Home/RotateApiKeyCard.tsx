@@ -37,7 +37,7 @@ function RotateApiKeyCard({ apiKeysToRotate }: RotateApiKeysCardProps) {
 
       <Link to={ApiKeyManagementRoute.path}>
         <button className='primary-button small-button' type='button'>
-          Rotate API Key{apiKeysToRotate.length > 1 && 's'}
+          View API Key{apiKeysToRotate.length > 1 && 's'}
         </button>
       </Link>
     </Card>
