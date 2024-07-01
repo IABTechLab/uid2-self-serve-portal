@@ -10,10 +10,15 @@ import { KeyPairDTO } from '../../services/adminServiceHelpers';
 import { ParticipantRequest } from '../../services/participantsService';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
 
-const oneKeyPair: KeyPairDTO[] = [
+const noKeyPairsSiteId = 10;
+const singleKeyPairSiteId = 11;
+const multipleKeyPairsSiteId = 12;
+const disabledKeyPairSiteId = 13;
+
+const singleKeyPair: KeyPairDTO[] = [
   {
     name: faker.company.buzzNoun(),
-    siteId: 11,
+    siteId: singleKeyPairSiteId,
     subscriptionId: faker.string.alphanumeric(8),
     publicKey: faker.string.alphanumeric(140),
     created: faker.number.int(50000000),
@@ -24,7 +29,7 @@ const oneKeyPair: KeyPairDTO[] = [
 const multipleKeyPairs: KeyPairDTO[] = [
   {
     name: faker.company.buzzNoun(),
-    siteId: 12,
+    siteId: multipleKeyPairsSiteId,
     subscriptionId: faker.string.alphanumeric(8),
     publicKey: faker.string.alphanumeric(140),
     created: faker.number.int(50000000),
@@ -32,7 +37,18 @@ const multipleKeyPairs: KeyPairDTO[] = [
   },
   {
     name: faker.company.buzzNoun(),
-    siteId: 12,
+    siteId: multipleKeyPairsSiteId,
+    subscriptionId: faker.string.alphanumeric(8),
+    publicKey: faker.string.alphanumeric(140),
+    created: faker.number.int(50000000),
+    disabled: false,
+  },
+];
+
+const disabledKeyPair: KeyPairDTO[] = [
+  {
+    name: faker.company.buzzNoun(),
+    siteId: disabledKeyPairSiteId,
     subscriptionId: faker.string.alphanumeric(8),
     publicKey: faker.string.alphanumeric(140),
     created: faker.number.int(50000000),
@@ -41,15 +57,30 @@ const multipleKeyPairs: KeyPairDTO[] = [
 ];
 
 const handlers = [
-  http.get(`${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/10/client-side-keypairs`, () => {
-    return HttpResponse.json([]);
-  }),
-  http.get(`${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/11/client-side-keypairs`, () => {
-    return HttpResponse.json(oneKeyPair);
-  }),
-  http.get(`${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/12/client-side-keypairs`, () => {
-    return HttpResponse.json(multipleKeyPairs);
-  }),
+  http.get(
+    `${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/${noKeyPairsSiteId}/client-side-keypairs`,
+    () => {
+      return HttpResponse.json([]);
+    }
+  ),
+  http.get(
+    `${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/${singleKeyPairSiteId}/client-side-keypairs`,
+    () => {
+      return HttpResponse.json(singleKeyPair);
+    }
+  ),
+  http.get(
+    `${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/${multipleKeyPairsSiteId}/client-side-keypairs`,
+    () => {
+      return HttpResponse.json(multipleKeyPairs);
+    }
+  ),
+  http.get(
+    `${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/${disabledKeyPairSiteId}/client-side-keypairs`,
+    () => {
+      return HttpResponse.json(disabledKeyPair);
+    }
+  ),
 ];
 
 const server = setupServer(...handlers);
@@ -81,10 +112,11 @@ describe('#getParticipantKeyPairs', () => {
   });
 
   test.each([
-    [10, []],
-    [11, oneKeyPair],
-    [12, multipleKeyPairs],
-  ])('returns 200 %# keypairs on site id %p', async (siteId: number, keys: KeyPairDTO[]) => {
+    [noKeyPairsSiteId, []],
+    [disabledKeyPairSiteId, []],
+    [singleKeyPairSiteId, singleKeyPair],
+    [multipleKeyPairsSiteId, multipleKeyPairs],
+  ])('should return enabled keypairs on site id %p', async (siteId: number, keys: KeyPairDTO[]) => {
     const participantObject = Participant.fromJson({
       name: 'test',
       id: 5,
@@ -103,10 +135,11 @@ describe('#getParticipantKeyPairs', () => {
     res.json = jest.fn();
     res.send = jest.fn();
     res.status = jest.fn(() => res);
+    const enabledKeys = keys.filter((key) => !key.disabled);
 
     await getParticipantKeyPairs(participantRequest, res);
 
     expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith(keys);
+    expect(res.json).toHaveBeenLastCalledWith(enabledKeys);
   });
 });
