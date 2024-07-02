@@ -6,7 +6,7 @@ import { UserDTO } from '../../../api/entities/User';
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
-import { InlineMessage } from '../Core/Messages/InlineMessage';
+import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
 import { SuccessToast } from '../Core/Popups/Toast';
 import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
 import TeamMemberDialog from './TeamMemberDialog';

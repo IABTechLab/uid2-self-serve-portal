@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Dialog } from '../Core/Popups/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { TextInput } from '../Input/TextInput';
 import {

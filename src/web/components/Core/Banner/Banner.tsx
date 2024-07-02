@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
 import './Banner.scss';
-import '../Messages/Messages.scss';
 
 export type BannerProps = Readonly<{
   message: string;

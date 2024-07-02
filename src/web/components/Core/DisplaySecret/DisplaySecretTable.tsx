@@ -1,32 +1,15 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import CopyKeyButton, { Secret } from '../Buttons/CopySecretButton';
-import Popover from '../Popups/Popover';
+import CopyKeyButton, { Secret } from './CopySecretButton';
+import { ViewSecretButton } from './ViewSecretButton';
 
 import './DisplaySecretTable.scss';
 
 const MAX_SHOWN_VALUE_LENGTH = 20;
 
-function ViewSecretButton({ secret }: { secret: Secret }) {
-  return (
-    <Popover
-      triggerButton={
-        <button
-          className='icon-button view-button'
-          aria-label={secret.valueName}
-          type='button'
-          title={`View ${secret.valueName}`}
-        >
-          <FontAwesomeIcon icon='eye' />
-        </button>
-      }
-    >
-      <p>{secret.value}</p>
-    </Popover>
-  );
-}
+type DisplaySecretTableProps = Readonly<{
+  secret: Secret;
+}>;
 
-function DisplaySecretTable({ secret }: { secret: Secret }) {
+function DisplaySecretTable({ secret }: DisplaySecretTableProps) {
   const secretText =
     secret.value.length > MAX_SHOWN_VALUE_LENGTH
       ? `${secret.value.substring(0, MAX_SHOWN_VALUE_LENGTH / 2)}......${secret.value.substring(

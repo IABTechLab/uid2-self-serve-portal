@@ -7,7 +7,7 @@ import { ClientType } from '../../api/services/adminServiceHelpers';
 import { shouldRotateApiKey } from '../components/ApiKeyManagement/KeyHelper';
 import { Banner } from '../components/Core/Banner/Banner';
 import { Loading } from '../components/Core/Loading/Loading';
-import { AsyncErrorView } from '../components/Core/Views/ErrorView';
+import { AsyncErrorView } from '../components/Core/ErrorView/ErrorView';
 import DocumentationCard from '../components/Home/DocumentationCard';
 import RotateApiKeysCard from '../components/Home/RotateApiKeyCard';
 import SharingPermissionCard from '../components/Home/SharingPermissionCard';

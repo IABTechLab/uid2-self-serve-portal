@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
-import { SelectDropdown, SelectOption } from '../Dropdown/SelectDropdown';
+import { SelectDropdown, SelectOption } from '../../Input/SelectDropdown';
 import {
   canDecreasePageNumber,
   canIncreasePageNumber,

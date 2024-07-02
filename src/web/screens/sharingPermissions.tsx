@@ -5,7 +5,7 @@ import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { Banner } from '../components/Core/Banner/Banner';
-import { Collapsible } from '../components/Core/Dropdown/Collapsible';
+import { Collapsible } from '../components/Core/Collapsible/Collapsible';
 import { Loading } from '../components/Core/Loading/Loading';
 import { SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';

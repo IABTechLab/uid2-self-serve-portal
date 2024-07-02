@@ -1,4 +1,4 @@
-import { SelectOption } from '../Dropdown/SelectDropdown';
+import { SelectOption } from '../../Input/SelectDropdown';
 import {
   getPageNumberOptions,
   getRowsPerPageOptions,

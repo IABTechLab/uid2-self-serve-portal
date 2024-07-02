@@ -5,7 +5,7 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { formatUnixDate } from '../../utils/textHelpers';
 import ActionButton from '../Core/Buttons/ActionButton';
-import { Tooltip } from '../Core/Popups/Tooltip';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import ApiRolesCell from './ApiRolesCell';
 import KeyDisableDialog, { OnApiKeyDisable } from './KeyDisableDialog';
 import KeyEditDialog, { OnApiKeyEdit } from './KeyEditDialog';

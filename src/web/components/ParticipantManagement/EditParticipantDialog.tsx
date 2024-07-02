@@ -6,7 +6,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UpdateParticipantForm } from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
-import { Dialog } from '../Core/Popups/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';

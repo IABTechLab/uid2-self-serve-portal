@@ -4,7 +4,7 @@ import { ContactType } from '../../../api/entities/BusinessContact';
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
-import { Dialog } from '../Core/Popups/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 

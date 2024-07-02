@@ -9,7 +9,11 @@ export type Secret = Readonly<{
   valueName: string;
 }>;
 
-function CopyKeyButton({ secret }: { secret: Secret }) {
+type CopyKeyButtonProps = Readonly<{
+  secret: Secret;
+}>;
+
+function CopyKeyButton({ secret }: CopyKeyButtonProps) {
   const copyKey = (): void => {
     SuccessToast(`${secret.valueName} copied to clipboard.`);
     navigator.clipboard.writeText(secret.value);

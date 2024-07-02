@@ -2,10 +2,10 @@ import { useKeycloak } from '@react-keycloak/web';
 import { useContext, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { SideNav } from '../components/Core/Nav/SideNav';
-import { Dialog } from '../components/Core/Popups/Dialog';
-import { SnailTrail } from '../components/Core/SnailTrail/SnailTrail';
-import { TermsAndConditionsForm } from '../components/Core/TermsAndConditions/TermsAndConditions';
+import { Dialog } from '../components/Core/Dialog/Dialog';
+import { SideNav } from '../components/Navigation/SideNav';
+import { SnailTrail } from '../components/SnailTrail/SnailTrail';
+import { TermsAndConditionsForm } from '../components/TermsAndConditions/TermsAndConditions';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { SetTermsAccepted } from '../services/userAccount';

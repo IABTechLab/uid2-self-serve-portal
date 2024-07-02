@@ -13,7 +13,7 @@ import { sortApiRoles } from '../../utils/apiRoles';
 import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
-import { Dialog } from '../Core/Popups/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { SuccessToast } from '../Core/Popups/Toast';
 import { RootFormErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';

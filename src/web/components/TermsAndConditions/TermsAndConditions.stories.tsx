@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 
-import { Dialog } from '../Popups/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { TermsAndConditions, TermsAndConditionsForm } from './TermsAndConditions';
 
 const meta: Meta<typeof TermsAndConditionsForm> = {

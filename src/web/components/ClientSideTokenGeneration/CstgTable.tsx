@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
-import { TableNoDataPlaceholder } from '../Core/Views/TableNoDataPlaceholder';
+import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
 import CstgAddDialog from './CstgAddDialog';
 import CstgDeleteDialog from './CstgDeleteDialog';

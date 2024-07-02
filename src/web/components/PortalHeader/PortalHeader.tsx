@@ -13,9 +13,9 @@ import MD5 from 'crypto-js/md5';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { EmailContactsRoute } from '../../../screens/emailContacts';
-import { ParticipantInformationRoute } from '../../../screens/participantInformation';
-import { TeamMembersRoute } from '../../../screens/teamMembers';
+import { EmailContactsRoute } from '../../screens/emailContacts';
+import { ParticipantInformationRoute } from '../../screens/participantInformation';
+import { TeamMembersRoute } from '../../screens/teamMembers';
 
 import './PortalHeader.scss';
 

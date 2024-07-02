@@ -1,4 +1,4 @@
-import CopyKeyButton, { Secret } from '../Buttons/CopySecretButton';
+import CopyKeyButton, { Secret } from './CopySecretButton';
 
 import './DisplaySecret.scss';
 

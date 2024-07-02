@@ -3,7 +3,7 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import { useCallback, useEffect } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
-import { Tooltip } from '../Core/Popups/Tooltip';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 

@@ -3,8 +3,8 @@ import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { UpdateParticipantForm } from '../../services/participant';
-import { SortableTableHeader } from '../Core/Headers/SortableTableHeader';
-import { TableNoDataPlaceholder } from '../Core/Views/TableNoDataPlaceholder';
+import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
+import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
 
 import './ParticipantManagementTable.scss';

@@ -3,7 +3,7 @@ import { ReactNode, useState } from 'react';
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { AdminSiteDTO, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import ActionButton from '../Core/Buttons/ActionButton';
-import { Tooltip } from '../Core/Popups/Tooltip';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { TriStateCheckbox } from '../Input/TriStateCheckbox';
 import { DeletePermissionDialog } from './DeletePermissionDialog';
 import {

@@ -1,7 +1,7 @@
 import { SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import { formatStringsWithSeparator } from '../../utils/textHelpers';
-import { Dialog } from '../Core/Popups/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { MANUALLY_ADDED } from './ParticipantTableHelper';
 
 type DeletePermissionDialogProps = Readonly<{

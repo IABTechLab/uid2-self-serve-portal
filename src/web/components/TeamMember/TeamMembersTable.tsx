@@ -7,7 +7,7 @@ import {
   UpdateTeamMemberForm,
   UserResponse,
 } from '../../services/userAccount';
-import { SortableTableHeader } from '../Core/Headers/SortableTableHeader';
+import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 

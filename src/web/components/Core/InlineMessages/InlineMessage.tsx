@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 import './InlineMessage.scss';
-import './Messages.scss';
+import '../Banner/Banner.scss';
 
-export type InlineMessageProps = {
+export type InlineMessageProps = Readonly<{
   message: ReactNode;
   type: 'Info' | 'Warning' | 'Error' | 'Success';
-};
+}>;
 
 export function InlineMessage({ message, type }: InlineMessageProps) {
   return (
