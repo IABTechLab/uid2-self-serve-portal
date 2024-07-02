@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { SelectDropdown } from './SelectDropdown';
 
 const meta: Meta<typeof SelectDropdown> = {
-  title: 'Shared Components/Select Dropdown',
+  title: 'Shared Components/Inputs/Select Dropdown',
   component: SelectDropdown,
 };
 

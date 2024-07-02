@@ -5,12 +5,12 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserRole } from '../../../api/entities/User';
 import { CreateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
-import { TermsAndConditionsForm } from '../TermsAndConditions/TermsAndConditions';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { SelectInput } from '../Input/SelectInput';
 import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
+import { TermsAndConditionsForm } from '../TermsAndConditions/TermsAndConditions';
 
 import './createAccountForm.scss';
 import '../../styles/forms.scss';
