@@ -148,7 +148,7 @@ function KeyCreationDialog({
 
   return (
     <div className='key-creation-dialog'>
-      <Dialog onOpenChange={onOpenChange} hideCloseButtons>
+      <Dialog onOpenChange={onOpenChange}>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}
