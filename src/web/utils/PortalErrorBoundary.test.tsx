@@ -23,16 +23,16 @@ describe('Error boundary', () => {
       .mockImplementation(() => keycloakMocks.mockAuthenticatedKeycloak());
   });
 
-  test('does not show error boundary when there are no errors', async () => {
+  test('does not show error boundary when there are no errors', () => {
     render(
       <TestContextProvider>
         <App />
       </TestContextProvider>
     );
-    expect(await screen.findByText('Not logged in')).toBeInTheDocument();
+    expect(screen.getByText('Not logged in')).toBeInTheDocument();
   });
 
-  test('shows error boundary for uncaught js exceptions', async () => {
+  test('shows error boundary for uncaught js exceptions', () => {
     const portalSpy = jest.spyOn(Header, 'PortalHeader').mockImplementation(() => {
       throw new Error('mock error');
     });
@@ -42,7 +42,7 @@ describe('Error boundary', () => {
       </TestContextProvider>
     );
     expect(
-      await screen.findByText('There was an unexpected error. Please try again.')
+      screen.getByText('There was an unexpected error. Please try again.')
     ).toBeInTheDocument();
     portalSpy.mockRestore();
   });

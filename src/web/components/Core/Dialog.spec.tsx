@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import * as stories from './Dialog.stories';
 
@@ -29,11 +30,12 @@ describe('Dialog', () => {
     expect(screen.queryByRole('button', { name: 'Close Icon' })).not.toBeInTheDocument();
   });
 
-  it('open dialog with external button', () => {
+  it('open dialog with external button', async () => {
+    const user = userEvent.setup();
     render(<stories.WithOpenAndOnOpenChange />);
-    const openButton = screen.getByText('Open Dialog');
+    const openButton = screen.getByRole('button', { name: 'Open Dialog' });
 
-    fireEvent.click(openButton);
+    await user.click(openButton);
     expect(screen.getByText('Dialog Title')).toBeInTheDocument();
     expect(screen.getByText('Dialog content goes here')).toBeInTheDocument();
   });

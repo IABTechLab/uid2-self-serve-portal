@@ -1,5 +1,6 @@
 import { composeStories } from '@storybook/react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import * as stories from './BulkAddPermissions.stories';
 
@@ -16,32 +17,35 @@ describe('BulkAddPermissions', () => {
     render(<Publisher />);
     expect(screen.getByRole('button', { name: 'View Participants' })).toBeInTheDocument();
   });
-  it('Hides "View Participants" button when no checkboxes selected', () => {
+  it('Hides "View Participants" button when no checkboxes selected', async () => {
+    const user = userEvent.setup();
     render(<Publisher />);
     const dspCheckbox = screen.getByTestId('dsp');
 
     // uncheck DSP
-    fireEvent.click(dspCheckbox);
+    await user.click(dspCheckbox);
 
     expect(screen.queryByRole('button', { name: 'View Participants' })).not.toBeInTheDocument();
   });
-  it('Displays DSP participants when clicking "View Participants" as a Publisher', () => {
+  it('Displays DSP participants when clicking "View Participants" as a Publisher', async () => {
+    const user = userEvent.setup();
     render(<Publisher />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'View Participants' }));
+    await user.click(screen.getByRole('button', { name: 'View Participants' }));
     const participantsTable = screen.getByRole('table');
 
     expect(within(participantsTable).getAllByText('DSP')[0]).toBeInTheDocument();
   });
-  it('Shows warning when removing a shared type', () => {
+  it('Shows warning when removing a shared type', async () => {
+    const user = userEvent.setup();
     render(<HasSharedWithPublisher />);
 
     // Expand collapsible
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     const publisherCheckbox = screen.getByTestId('publisher');
 
     // uncheck Publisher
-    fireEvent.click(publisherCheckbox);
+    await user.click(publisherCheckbox);
 
     expect(
       screen.getByText(
@@ -49,11 +53,12 @@ describe('BulkAddPermissions', () => {
       )
     ).toBeInTheDocument();
   });
-  it('Publisher checkbox is checked when participant has shared with Publisher', () => {
+  it('Publisher checkbox is checked when participant has shared with Publisher', async () => {
+    const user = userEvent.setup();
     render(<HasSharedWithPublisher />);
 
     // Expand collapsible
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     const publisherCheckbox = screen.getByTestId('publisher');
 
     expect(publisherCheckbox).toHaveAttribute('data-state', 'checked');
