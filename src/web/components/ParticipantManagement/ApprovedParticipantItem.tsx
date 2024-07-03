@@ -6,7 +6,7 @@ import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
-import ActionButton from '../Core/ActionButton';
+import ActionButton from '../Core/Buttons/ActionButton';
 import EditParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
@@ -31,7 +31,7 @@ export function ApprovedParticipantItem({
   };
 
   function getParticipantTypes(
-    currentParticipantTypes?: ApprovedParticipantProps['participant']['types'],
+    currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
   ) {
     if (!currentParticipantTypes) return null;
     return currentParticipantTypes.map((pt) => (

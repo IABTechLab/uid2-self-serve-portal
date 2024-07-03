@@ -3,8 +3,8 @@ import { useContext, useMemo, useState } from 'react';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { useAvailableSiteList } from '../../services/site';
-import { Dialog } from '../Core/Dialog';
-import { Loading } from '../Core/Loading';
+import { Dialog } from '../Core/Dialog/Dialog';
+import { Loading } from '../Core/Loading/Loading';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 import './SearchAndAddParticipants.scss';

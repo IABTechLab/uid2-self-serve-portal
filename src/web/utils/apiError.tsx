@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 
-import { ErrorToast } from '../components/Core/Toast';
+import { ErrorToast } from '../components/Core/Popups/Toast';
 /*
  * Backend errors may return an `errorHash` that can help correlate the logs
  * with the user reported issues.

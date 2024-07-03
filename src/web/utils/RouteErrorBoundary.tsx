@@ -1,7 +1,7 @@
 import { useRouteError } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ErrorView } from '../components/Core/ErrorView';
+import { ErrorView } from '../components/Core/ErrorView/ErrorView';
 
 interface RouteError {
   errorHash?: string;

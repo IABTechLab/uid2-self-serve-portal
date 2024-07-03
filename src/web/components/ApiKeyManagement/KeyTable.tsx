@@ -1,9 +1,9 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
-import { SortableTableHeader } from '../Core/SortableTableHeader';
-import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
-import { Tooltip } from '../Core/Tooltip';
+import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
+import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { OnApiKeyDisable } from './KeyDisableDialog';
 import { OnApiKeyEdit } from './KeyEditDialog';
 import KeyItem from './KeyItem';
