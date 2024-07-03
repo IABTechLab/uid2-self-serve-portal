@@ -22,13 +22,13 @@
     padding: 6px 2px;
     justify-content: space-between;
     ::placeholder {
-      color: var(--theme-action);
+      color: var(--theme-search-text);
       opacity: 1;
     }
   }
 
   .sharing-permission-search-bar-icon {
-    color: var(--theme-action);
+    color: var(--theme-search-text);
     height: 16px;
     margin-left: 8px;
   }
@@ -48,6 +48,7 @@
     font-weight: 400;
     font-size: 0.75rem;
     line-height: 0.9375rem;
+    background: none;
   }
 
   .shared-participants-table {

@@ -13,6 +13,10 @@
     margin-top: 0.5rem;
   }
 
+  .input-container:disabled {
+    color: var(--theme-disabled-input);
+  }
+
   .multi-line-input-container {
     height: 150px;
     box-sizing: border-box;

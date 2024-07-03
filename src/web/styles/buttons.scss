@@ -41,11 +41,11 @@ button {
 .transparent-button {
   border: none;
   background: none;
-  color: var(--theme-action);
+  color: var(--theme-transparent-button);
 }
 
 .transparent-button:disabled {
-  color: var(--theme-disabled-button-text);
+  color: var(--theme-disabled-icon);
 }
 
 .transparent-button.small-button {
@@ -64,6 +64,6 @@ button {
 
 .icon-button:disabled {
   svg {
-    color: var(--theme-disabled-button-text);
+    color: var(--theme-disabled-icon);
   }
 }

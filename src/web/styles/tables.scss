@@ -15,7 +15,7 @@ table {
     background-color: var(--theme-background-table-header);
     //border-radius: 5px;
     // border-color: var(--theme-background-table-header-border);
-    color: black;
+    color: var(--theme-table-header-text);
   }
   th:first-of-type,
   td:first-of-type {
@@ -36,8 +36,8 @@ table {
   }
   tbody {
     tr:nth-of-type(2n) {
-      background-color: var(--theme-background-row);
-      color: var(--theme-color-row);
+      background-color: var(--theme-background-sidepanel);
+      //color: var(--theme-color-row);
     }
   }
 

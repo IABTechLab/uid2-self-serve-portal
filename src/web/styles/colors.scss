@@ -14,10 +14,19 @@ $color-dirty-sock: #f2f2f3;
 $color-lemon: #cdf200;
 $color-winter-green: #035959;
 $color-ttd-blue: #0459fd;
+$color-info-toast: #b7c2ea;
+$color-error-toast: #facec5;
+$color-success-toast: #c0d5d5;
+$color-warning-toast: #fefcd3;
 
 // Off-piste colours
+$color-black-lightest: color.adjust($color-black, $lightness: 15%);
 $color-black-lighter: color.adjust($color-black, $lightness: 11%);
 $color-black-light: color.adjust($color-black, $lightness: 6%);
 $color-gray-darker: color.adjust($color-gray, $saturation: 30%);
 $color-gray-dark: color.adjust($color-gray, $saturation: 20%);
-$color-ttd-blue-lighter: color.adjust($color-ttd-blue, $lightness: 10%);
+$color-ttd-blue-lighter: color.adjust($color-ttd-blue, $lightness: 0%);
+$color-info-toast-darker: color.adjust($color-info-toast, $saturation: 50%);
+$color-error-toast-darker: color.adjust($color-error-toast, $saturation: 50%);
+$color-success-toast-darker: black;
+$color-warning-toast-darker: color.adjust($color-warning-toast, $saturation: 50%);
