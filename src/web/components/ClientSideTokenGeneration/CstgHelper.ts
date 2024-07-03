@@ -6,7 +6,7 @@ import {
   isAlphaNumericWithHyphenAndDot,
   isAlphaNumericWithUnderscore,
 } from '../../utils/textHelpers';
-import { RowsPerPageValues } from '../Core/PagingToolHelper';
+import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 
 export type UpdateCstgValuesResponse = {
   cstgValues: string[];

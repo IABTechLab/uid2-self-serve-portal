@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
-import FormSubmitButton from '../Core/FormSubmitButton';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 
 const { WithValidation } = composeStories(stories);
 

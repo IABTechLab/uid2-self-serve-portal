@@ -10,7 +10,7 @@ import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';
-import FormSubmitButton from '../Core/FormSubmitButton';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Input } from '../Input/Input';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';

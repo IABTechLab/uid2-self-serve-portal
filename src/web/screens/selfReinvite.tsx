@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Banner } from '../components/Core/Banner';
-import FormSubmitButton from '../components/Core/FormSubmitButton';
+import { Banner } from '../components/Core/Banner/Banner';
+import FormSubmitButton from '../components/Core/Buttons/FormSubmitButton';
 import { TextInput } from '../components/Input/TextInput';
 import { SelfResendInvitation, SelfResendInvitationForm } from '../services/userAccount';
 import { handleErrorToast } from '../utils/apiError';

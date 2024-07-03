@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import ActionButton from '../Core/ActionButton';
-import { TriStateCheckbox } from '../Core/TriStateCheckbox';
+import ActionButton from '../Core/Buttons/ActionButton';
+import { TriStateCheckbox } from '../Input/TriStateCheckbox';
 import CstgDeleteDialog from './CstgDeleteDialog';
 import CstgEditDialog from './CstgEditDialog';
 import { CstgValueType } from './CstgHelper';

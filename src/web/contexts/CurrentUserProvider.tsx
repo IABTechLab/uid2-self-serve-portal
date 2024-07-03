@@ -2,7 +2,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Loading } from '../components/Core/Loading';
+import { Loading } from '../components/Core/Loading/Loading';
 import { GetLoggedInUserAccount, UserAccount } from '../services/userAccount';
 import { useAsyncThrowError } from '../utils/errorHandler';
 
