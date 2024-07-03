@@ -6,6 +6,7 @@ button {
   padding: 10px 20px;
   outline: none;
   cursor: pointer;
+  color: var(--theme-button-text);
 
   &.text-button {
     border: none;
@@ -17,7 +18,7 @@ button {
 
 .primary-button {
   background-color: var(--theme-button);
-  color: var(--theme-button-text);
+  color: var(--theme-primary-button-text);
   border: none;
 }
 
