@@ -22,22 +22,29 @@ const meta: Meta<typeof ClientSideCompletion> = {
 export default meta;
 type Story = StoryObj<typeof ClientSideCompletion>;
 
-export const ReadyToCSTG: Story = {
+export const KeyPairAndDomainNames: Story = {
   args: {
     domainNames: ['example.com'],
     keyPairData: [createKeypairFake(false)],
   },
-  name: 'Ready to CSTG (renders empty - nothing to say!)',
+  name: 'Key Pair and Domain Names (renders empty - nothing to say!)',
 };
 
-export const NoDomains: Story = {
+export const KeyPairAndAppIds: Story = {
   args: {
-    domainNames: [],
+    appIds: ['123456789'],
+    keyPairData: [createKeypairFake(false)],
+  },
+  name: 'Key Pair and App IDs (renders empty - nothing to say!)',
+};
+
+export const KeyPairOnly: Story = {
+  args: {
     keyPairData: [createKeypairFake(false)],
   },
 };
 
-export const KeypairButItsDisabled: Story = {
+export const DomainNameAndDisabledKeypair: Story = {
   args: {
     domainNames: ['example.com'],
     keyPairData: [createKeypairFake(true)],

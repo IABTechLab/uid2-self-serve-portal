@@ -16,9 +16,10 @@ export function ClientSideCompletion({
   appIds,
 }: ClientSideCompletionProps) {
   const hasKeyPairData = !!keyPairData?.filter((kp) => !kp.disabled).length;
-  const hasDomainNames = !!domainNames?.length;
-  const hasAppIds = !!appIds?.length;
-  if (hasKeyPairData && (hasDomainNames || hasAppIds)) return null;
+  const hasDomainNamesOrAppIds = domainNames?.length ?? appIds?.length;
+
+  if (hasKeyPairData && hasDomainNamesOrAppIds) return null;
+
   return (
     <Card className='client-side-completion'>
       <h2>
@@ -27,7 +28,9 @@ export function ClientSideCompletion({
       <div>Before you can use client-side integration, you must complete the following:</div>
       <ul>
         {!hasKeyPairData && <li>Add at least one key pair.</li>}
-        <li>Provide at least one root-level domain name or mobile app ID.</li>
+        {!hasDomainNamesOrAppIds && (
+          <li>Provide at least one root-level domain name or mobile app ID.</li>
+        )}
       </ul>
     </Card>
   );

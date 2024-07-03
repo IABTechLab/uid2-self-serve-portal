@@ -103,7 +103,7 @@ function ClientSideIntegration() {
         domains = invalidDomains;
       } else {
         reloader.revalidate();
-        SuccessToast(`Domain names ${action}.`);
+        SuccessToast(`Root-Level Domains ${action}.`);
       }
       const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(domains),
@@ -118,7 +118,7 @@ function ClientSideIntegration() {
     try {
       const appIds = await UpdateAppIds(updatedAppIds);
       reloader.revalidate();
-      SuccessToast(`Mobile app ids ${action}.`);
+      SuccessToast(`Mobile App IDs ${action}.`);
 
       const updatedAppIdsResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(appIds),
