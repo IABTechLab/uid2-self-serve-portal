@@ -39,7 +39,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
   const { handleSubmit } = formMethods;
   return (
     <>
-      <h1>Add API Key</h1>
+      <h1 className='dialog-title'>Add API Key</h1>
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <TextInput
@@ -148,7 +148,7 @@ function KeyCreationDialog({
 
   return (
     <div className='key-creation-dialog'>
-      <Dialog onOpenChange={onOpenChange} hideCloseButtons>
+      <Dialog onOpenChange={onOpenChange}>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}
