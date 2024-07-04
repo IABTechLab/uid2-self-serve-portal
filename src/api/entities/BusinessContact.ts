@@ -17,11 +17,7 @@ export class BusinessContact extends BaseModel {
       relation: Model.BelongsToOneRelation,
       modelClass: 'Participant',
       join: {
-        from: 'users.id',
-        through: {
-          from: 'usersToParticipants.userId',
-          to: 'usersToParticipants.participantId',
-        },
+        from: 'businessContacts.participantId',
         to: 'participants.id',
       },
     },
