@@ -13,8 +13,6 @@ table {
   }
   th {
     background-color: var(--theme-background-table-header);
-    //border-radius: 5px;
-    // border-color: var(--theme-background-table-header-border);
     color: var(--theme-table-header-text);
   }
   th:first-of-type,
@@ -37,7 +35,6 @@ table {
   tbody {
     tr:nth-of-type(2n) {
       background-color: var(--theme-background-sidepanel);
-      //color: var(--theme-color-row);
     }
   }
 

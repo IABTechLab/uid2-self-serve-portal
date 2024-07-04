@@ -25,7 +25,6 @@ $color-black-lighter: color.adjust($color-black, $lightness: 11%);
 $color-black-light: color.adjust($color-black, $lightness: 6%);
 $color-gray-darker: color.adjust($color-gray, $saturation: 30%);
 $color-gray-dark: color.adjust($color-gray, $saturation: 20%);
-$color-ttd-blue-lighter: color.adjust($color-ttd-blue, $lightness: 0%);
 $color-info-toast-darker: color.adjust($color-info-toast, $saturation: 50%);
 $color-error-toast-darker: color.adjust($color-error-toast, $saturation: 50%);
 $color-success-toast-darker: black;
