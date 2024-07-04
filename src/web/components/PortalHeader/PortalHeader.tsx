@@ -90,7 +90,7 @@ export function PortalHeader({
           })}
           <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
             <div className='theme-switch'>
-              <label htmlFor='dark-mode'>Dark mode</label>
+              <label htmlFor='dark-mode'>Dark Mode</label>
               <Switch.Root
                 name='dark-mode'
                 checked={darkToggleState}
