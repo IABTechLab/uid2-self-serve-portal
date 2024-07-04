@@ -13,7 +13,7 @@ describe('RadioInput', () => {
     render(<WithValidation />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     await user.click(submitButton);
-    const errorMessage = await screen.findByRole('alert');
+    const errorMessage = screen.getByRole('alert');
     expect(errorMessage).toHaveTextContent('This field is required');
 
     await userEvent.click(screen.getByRole('radio', { name: 'Option 2' }));

@@ -10,14 +10,14 @@ test('has icon rendered', async () => {
   render(<WithIcon />);
 });
 
-test('has title rendered', async () => {
+test('has title rendered', () => {
   render(<WithTitle />);
-  const title = await screen.findByTestId('notification-title');
+  const title = screen.getByTestId('notification-title');
   expect(title.textContent).toContain('An title');
 });
 
-test('has notification', async () => {
+test('has notification', () => {
   render(<WithoutIconAndTitle />);
-  const notification = await screen.findByTestId('notification');
+  const notification = screen.getByTestId('notification');
   expect(notification.textContent).toContain('notification');
 });

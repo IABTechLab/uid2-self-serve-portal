@@ -5,9 +5,9 @@ import * as stories from './Banner.stories';
 
 const { Info } = composeStories(stories);
 
-test('has icon and message rendered', async () => {
+test('has icon and message rendered', () => {
   render(<Info />);
-  const title = await screen.findByTestId('banner-message');
+  const title = screen.getByTestId('banner-message');
   expect(title.textContent).toContain(Info.args?.message);
   expect(screen.getByTestId('banner-icon')).toBeInTheDocument();
 });
