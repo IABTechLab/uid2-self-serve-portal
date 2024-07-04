@@ -56,6 +56,7 @@
   --theme-transparent-button: #0459fd;
   --theme-disabled-input: #878787;
   --theme-dialog-close-button: #0459fd;
+  --theme-documentation-card: #0459fd;
 }
 
 .app.darkmode {
@@ -71,7 +72,7 @@
   --theme-button-text: white;
   --theme-disabled-button-text: black;
   --theme-disabled-icon: #{$color-gray};
-  --theme-divider: #{$color-ttd-blue-lighter};
+  --theme-divider: white;
   --theme-background-table-header: #{$color-black-lightest};
   --theme-background-table-header-border: white;
   --theme-input-border: white;
@@ -92,4 +93,5 @@
   --theme-disabled-input: white;
   --theme-dialog-close-button: white;
   --theme-select-mouseover: #{$color-black-lighter};
+  --theme-documentation-card: #7f7f7f;
 }

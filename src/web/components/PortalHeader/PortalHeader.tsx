@@ -53,7 +53,11 @@ export function PortalHeader({
     <header className='portal-header'>
       <div className='title'>
         <Link data-testid='title-link' to='/'>
-          <img src='/uid2-logo.svg' alt='UID2 logo' className='uid2-logo' />
+          <img
+            src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
+            alt='UID2 logo'
+            className='uid2-logo'
+          />
         </Link>
       </div>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
