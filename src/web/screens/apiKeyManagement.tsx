@@ -6,9 +6,9 @@ import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog'
 import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog';
 import { OnApiKeyEdit } from '../components/ApiKeyManagement/KeyEditDialog';
 import KeyTable from '../components/ApiKeyManagement/KeyTable';
-import { Loading } from '../components/Core/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
-import { SuccessToast } from '../components/Core/Toast';
+import { Loading } from '../components/Core/Loading/Loading';
+import { SuccessToast } from '../components/Core/Popups/Toast';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import {
   CreateApiKey,
   CreateApiKeyFormDTO,
@@ -80,10 +80,10 @@ function ApiKeyManagement() {
         <a
           target='_blank'
           className='outside-link'
-          href='https://unifiedid.com/docs/getting-started/gs-permissions'
+          href='https://unifiedid.com/docs/portal/api-keys'
           rel='noreferrer'
         >
-          API permissions
+          managing and rotating API keys
         </a>
         .
       </p>
@@ -93,7 +93,7 @@ function ApiKeyManagement() {
             {(loadedData) => (
               <>
                 <KeyTable
-                  apiKeys={loadedData.apiKeys.filter((key) => !key.disabled)}
+                  apiKeys={loadedData.apiKeys}
                   onKeyEdit={onKeyEdit}
                   onKeyDisable={onKeyDisable}
                   availableRoles={loadedData.apiRoles}

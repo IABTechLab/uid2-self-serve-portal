@@ -1,7 +1,7 @@
 import { Meta, StoryFn, StoryObj } from '@storybook/react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import FormSubmitButton from '../Core/FormSubmitButton';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { MultilineTextInput } from './MultilineTextInput';
 
 const meta: Meta<typeof MultilineTextInput> = {

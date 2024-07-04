@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ParticipantDTO, ParticipantStatus } from '../../api/entities/Participant';
-import { Loading } from '../components/Core/Loading';
+import { Loading } from '../components/Core/Loading/Loading';
 import { GetCurrentUsersParticipant } from '../services/participant';
 import { ApiError } from '../utils/apiError';
 import { useAsyncThrowError } from '../utils/errorHandler';

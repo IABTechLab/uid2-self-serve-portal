@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
-import { SortableTableHeader } from '../Core/SortableTableHeader';
-import { TableNoDataPlaceholder } from '../Core/TableNoDataPlaceholder';
+import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
+import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import BusinessContact from './BusinessContact';
 import BusinessContactDialog from './BusinessContactDialog';
 

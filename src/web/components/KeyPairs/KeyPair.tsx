@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import ActionButton from '../Core/ActionButton';
-import DisplaySecretTable from '../Core/DisplaySecretTable';
+import ActionButton from '../Core/Buttons/ActionButton';
+import DisplaySecretTable from '../Core/DisplaySecret/DisplaySecretTable';
 import KeyPairDisableDialog, { OnKeyPairDisable } from './KeyPairDisableDialog';
 import KeyPairEditDialog, { OnKeyPairEdit } from './KeyPairEditDialog';
 import { KeyPairModel } from './KeyPairModel';

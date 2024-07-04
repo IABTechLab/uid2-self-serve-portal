@@ -6,7 +6,7 @@ import {
   formatStringsWithSeparator,
   separateStringsList,
 } from '../../utils/textHelpers';
-import { Dialog } from '../Core/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { RootFormErrors } from '../Input/FormError';
 import { MultilineTextInput } from '../Input/MultilineTextInput';
 import { StyledCheckbox } from '../Input/StyledCheckbox';

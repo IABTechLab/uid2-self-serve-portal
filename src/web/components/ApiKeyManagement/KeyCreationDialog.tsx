@@ -5,11 +5,11 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeySecretsDTO } from '../../../api/services/apiKeyService';
 import { CreateApiKeyFormDTO } from '../../services/apiKeyService';
 import { sortApiRoles } from '../../utils/apiRoles';
-import { Secret } from '../Core/CopySecretButton';
-import { Dialog } from '../Core/Dialog';
-import DisplaySecret from '../Core/DisplaySecret';
-import FormSubmitButton from '../Core/FormSubmitButton';
-import { InfoToast } from '../Core/Toast';
+import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
+import { Dialog } from '../Core/Dialog/Dialog';
+import { Secret } from '../Core/DisplaySecret/CopySecretButton';
+import DisplaySecret from '../Core/DisplaySecret/DisplaySecret';
+import { InfoToast } from '../Core/Popups/Toast';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 
@@ -39,7 +39,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
   const { handleSubmit } = formMethods;
   return (
     <>
-      <h1>Add API Key</h1>
+      <h1 className='dialog-title'>Add API Key</h1>
       <FormProvider {...formMethods}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <TextInput
@@ -148,7 +148,7 @@ function KeyCreationDialog({
 
   return (
     <div className='key-creation-dialog'>
-      <Dialog onOpenChange={onOpenChange} hideCloseButtons>
+      <Dialog onOpenChange={onOpenChange}>
         {!keySecrets ? (
           <CreateApiKeyForm
             onFormSubmit={onFormSubmit}

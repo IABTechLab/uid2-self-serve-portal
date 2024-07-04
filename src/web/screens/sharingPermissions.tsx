@@ -4,11 +4,11 @@ import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
-import { Banner } from '../components/Core/Banner';
-import { Collapsible } from '../components/Core/Collapsible';
-import { Loading } from '../components/Core/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
-import { SuccessToast } from '../components/Core/Toast';
+import { Banner } from '../components/Core/Banner/Banner';
+import { Collapsible } from '../components/Core/Collapsible/Collapsible';
+import { Loading } from '../components/Core/Loading/Loading';
+import { SuccessToast } from '../components/Core/Popups/Toast';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { BulkAddPermissions } from '../components/SharingPermission/BulkAddPermissions';
 import { SearchAndAddParticipants } from '../components/SharingPermission/SearchAndAddParticipants';
 import { SharingPermissionsTable } from '../components/SharingPermission/SharingPermissionsTable';
@@ -49,9 +49,7 @@ async function loadSharingList(): Promise<SharingListLoaderData> {
     throw e;
   }
 }
-const loader = makeLoader(() =>
-  defer({ sharingList: loadSharingList() })
-);
+const loader = makeLoader(() => defer({ sharingList: loadSharingList() }));
 
 function SharingPermissionPageContainer({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -116,7 +114,9 @@ function SharingPermissions() {
   };
 
   // publisher without SHARER
-  const showPubSharingMessage = (participant?.types || []).some((type) => type.typeName === 'Publisher') && !(participant?.apiRoles || []).some((role) => role.roleName === 'SHARER');
+  const showPubSharingMessage =
+    (participant?.types || []).some((type) => type.typeName === 'Publisher') &&
+    !(participant?.apiRoles || []).some((role) => role.roleName === 'SHARER');
 
   return (
     <SharingPermissionPageContainer>
