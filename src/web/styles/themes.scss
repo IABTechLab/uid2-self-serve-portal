@@ -80,11 +80,12 @@
   --theme-api-roles-box: black;
   --theme-background-row: #d9d9d9;
   --theme-color-row: black;
-  --theme-action: #{$color-ttd-blue-lighter};
+  --theme-action: #7085d4;
   --theme-search-text: white;
   --theme-table-header-text: white;
   --theme-footer-divider: #{$color-gray};
-  --theme-radio-background: #{$color-ttd-blue};
+  --theme-radio-background: #7085d4;
+  --theme-transparent-button: #7085d4;
   --theme-info-background: #{$color-info-toast-darker};
   --theme-error-background: #{$color-error-toast-darker};
   --theme-success-background: #{$color-success-toast-darker};
@@ -93,5 +94,5 @@
   --theme-disabled-input: white;
   --theme-dialog-close-button: white;
   --theme-select-mouseover: #{$color-black-lighter};
-  --theme-documentation-card: #7f7f7f;
+  --theme-documentation-card: #7085d4;
 }
