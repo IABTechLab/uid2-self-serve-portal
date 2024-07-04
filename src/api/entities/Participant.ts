@@ -48,8 +48,8 @@ export class Participant extends BaseModel {
       join: {
         from: 'participants.id',
         through: {
-          from: 'usersToParticipants.participantId',
-          to: 'usersToParticipants.userId',
+          from: 'usersToParticipantRoles.participantId',
+          to: 'usersToParticipantRoles.userId',
         },
         to: 'users.id',
       },

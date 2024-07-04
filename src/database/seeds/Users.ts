@@ -36,13 +36,13 @@ export async function seed(knex: Knex): Promise<void> {
   );
 
   // Remove seed data from related tables
-  await knex('usersToParticipants')
+  await knex('usersToParticipantRoles')
     .whereIn(
       'userId',
       existingUsers.map((user) => user.id)
     )
     .del();
-  await knex('usersToParticipants')
+  await knex('usersToParticipantRoles')
     .whereIn(
       'participantId',
       existingParticipants.map((participant) => participant.id)
@@ -70,7 +70,7 @@ export async function seed(knex: Knex): Promise<void> {
     'email',
     sampleData.map((d) => d.email)
   );
-  await knex('usersToParticipants').insert(
+  await knex('usersToParticipantRoles').insert(
     newUsers.map((user: UserType) => ({ userId: user.id, participantId }))
   );
 }
