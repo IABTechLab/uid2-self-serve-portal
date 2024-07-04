@@ -16,6 +16,7 @@
   --theme-table-border: #d9d9d9;
   --theme-border: #dcdee1;
   --theme-button-text: #030a40;
+  --theme-banner-text: #030a40;
   --theme-primary-button-text: #030a40;
   --theme-button: #cdf200;
   --theme-button-border: #cdf200;
@@ -90,4 +91,5 @@
   --theme-table-action-button: white;
   --theme-disabled-input: white;
   --theme-dialog-close-button: white;
+  --theme-select-mouseover: #{$color-black-lighter};
 }
