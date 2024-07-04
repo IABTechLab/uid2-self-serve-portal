@@ -3,9 +3,9 @@ import { useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
-import { Loading } from '../components/Core/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
-import { SuccessToast } from '../components/Core/Toast';
+import { Loading } from '../components/Core/Loading/Loading';
+import { SuccessToast } from '../components/Core/Popups/Toast';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import {
   AddEmailContact,
   BusinessContactForm,

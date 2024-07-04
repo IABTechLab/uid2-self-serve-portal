@@ -8,9 +8,9 @@ import {
   UpdateCstgValuesResponse,
 } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { CstgTable } from '../components/ClientSideTokenGeneration/CstgTable';
-import { Loading } from '../components/Core/Loading';
-import { ScreenContentContainer } from '../components/Core/ScreenContentContainer';
-import { SuccessToast } from '../components/Core/Toast';
+import { Loading } from '../components/Core/Loading/Loading';
+import { SuccessToast } from '../components/Core/Popups/Toast';
+import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { KeyPairModel } from '../components/KeyPairs/KeyPairModel';
 import KeyPairsTable from '../components/KeyPairs/KeyPairsTable';
 import { GetAppIds, UpdateAppIds } from '../services/appIdsService';
@@ -103,7 +103,7 @@ function ClientSideIntegration() {
         domains = invalidDomains;
       } else {
         reloader.revalidate();
-        SuccessToast(`Domain names ${action}.`);
+        SuccessToast(`Root-Level Domains ${action}.`);
       }
       const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(domains),
@@ -118,7 +118,7 @@ function ClientSideIntegration() {
     try {
       const appIds = await UpdateAppIds(updatedAppIds);
       reloader.revalidate();
-      SuccessToast(`Mobile app ids ${action}.`);
+      SuccessToast(`Mobile App IDs ${action}.`);
 
       const updatedAppIdsResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(appIds),

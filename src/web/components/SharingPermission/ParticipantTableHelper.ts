@@ -2,7 +2,7 @@ import { CheckedState } from '@radix-ui/react-checkbox';
 
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
-import { TriStateCheckboxState } from '../Core/TriStateCheckbox';
+import { TriStateCheckboxState } from '../Input/TriStateCheckbox';
 
 export const MANUALLY_ADDED = 'Manual';
 

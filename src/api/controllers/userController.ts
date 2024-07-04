@@ -112,7 +112,7 @@ export class UserController {
     const logger = this.loggerService.getLogger(req);
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
-    const user = await queryUsersByEmail(kcAdminClient, req.user?.email || '');
+    const user = await queryUsersByEmail(kcAdminClient, req.user?.email ?? '');
 
     const resultLength = user?.length ?? 0;
     if (resultLength < 1) {
@@ -148,7 +148,7 @@ export class UserController {
       deleted: true,
     };
     await Promise.all([
-      deleteUserByEmail(kcAdminClient!, user?.email!),
+      deleteUserByEmail(kcAdminClient, user?.email!),
       user!.$query().patch(data),
     ]);
 

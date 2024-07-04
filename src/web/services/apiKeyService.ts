@@ -56,6 +56,6 @@ export async function DisableApiKey(apiKey: ApiKeyDTO, participantId?: number) {
       data: { keyId: apiKey.key_id },
     });
   } catch (e: unknown) {
-    throw backendError(e, 'Could not disable API Key');
+    throw backendError(e, 'Could not delete API Key');
   }
 }

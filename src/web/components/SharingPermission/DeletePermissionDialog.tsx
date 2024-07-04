@@ -1,7 +1,7 @@
 import { SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import { formatStringsWithSeparator } from '../../utils/textHelpers';
-import { Dialog } from '../Core/Dialog';
+import { Dialog } from '../Core/Dialog/Dialog';
 import { MANUALLY_ADDED } from './ParticipantTableHelper';
 
 type DeletePermissionDialogProps = Readonly<{
@@ -21,7 +21,7 @@ export function DeletePermissionDialog({
 
   const showDeletionNotice = (participant: SharingSiteWithSource) => {
     const remainSources = participant.addedBy.filter(
-      (source) => source !== MANUALLY_ADDED,
+      (source) => source !== MANUALLY_ADDED
     ) as ClientType[];
     const remainSourceDescriptions = remainSources.map((x) => ClientTypeDescriptions[x]);
     if (remainSourceDescriptions.length) {

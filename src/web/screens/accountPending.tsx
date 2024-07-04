@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
-import { Notification } from '../components/Core/Notification';
+import { Notification } from '../components/Core/Popups/Notification';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { PortalRoute } from './routeUtils';
 

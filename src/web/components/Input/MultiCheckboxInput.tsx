@@ -3,7 +3,7 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import { useCallback, useEffect } from 'react';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
-import { Tooltip } from '../Core/Tooltip';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
@@ -11,7 +11,7 @@ import './MultiCheckboxInput.scss';
 
 export function MultiCheckboxInput<
   TFieldValues extends FieldValues,
-  TPath extends FieldPath<TFieldValues>
+  TPath extends FieldPath<TFieldValues>,
 >({
   inputName,
   label,

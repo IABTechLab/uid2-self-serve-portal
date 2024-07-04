@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { CreateAccountForm } from '../components/Account/CreateAccountForm';
-import { Card } from '../components/Core/Card';
-import { Loading } from '../components/Core/Loading';
+import { Card } from '../components/Core/Card/Card';
+import { Loading } from '../components/Core/Loading/Loading';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { CreateParticipant, CreateParticipantForm } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';

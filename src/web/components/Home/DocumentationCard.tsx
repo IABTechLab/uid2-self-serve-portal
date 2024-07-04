@@ -1,4 +1,4 @@
-import { Card } from '../Core/Card';
+import { Card } from '../Core/Card/Card';
 
 import './DocumentationCard.scss';
 
