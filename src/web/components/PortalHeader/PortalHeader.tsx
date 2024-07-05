@@ -10,9 +10,10 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 // import * as Switch from '@radix-ui/react-switch';
 import MD5 from 'crypto-js/md5';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
@@ -32,6 +33,7 @@ export function PortalHeader({
   // setDarkMode = undefined,
   logout,
 }: Readonly<PortalHeaderProps>) {
+  const { LoggedInUser } = useContext(CurrentUserContext);
   const emailMd5 = email ? MD5(email).toString() : null;
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
@@ -70,20 +72,22 @@ export function PortalHeader({
               )}
             </Avatar>
           </div>
-          <DropdownMenuSeparator className='separator' />
-          {routes.map((route) => {
-            return (
-              <DropdownMenuItem
-                key={route.path}
-                className='dropdown-menu-item'
-                onClick={handleSelect}
-              >
-                <Link to={route.path} className='link'>
-                  {route.description}
-                </Link>
-              </DropdownMenuItem>
-            );
-          })}
+          {LoggedInUser?.user && <DropdownMenuSeparator className='separator' />}
+          {LoggedInUser?.user &&
+            routes.map((route) => {
+              return (
+                <DropdownMenuItem
+                  key={route.path}
+                  className='dropdown-menu-item'
+                  onClick={handleSelect}
+                >
+                  <Link to={route.path} className='link'>
+                    {route.description}
+                  </Link>
+                </DropdownMenuItem>
+              );
+            })}
+
           {/* <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
             <div className='theme-switch'>
               <label htmlFor='dark-mode'>Dark mode</label>
