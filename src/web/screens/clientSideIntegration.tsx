@@ -197,7 +197,7 @@ function ClientSideIntegration() {
                   onAddCstgValues={onAddCstgValues}
                   onUpdateCstgValues={handleUpdateAppIds}
                   cstgValueType={CstgValueType.MobileAppId}
-                  addInstructions='Register the Android App ID, iOS/tvOS Bundle ID, and iOS App Store ID for your apps.'
+                  addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID, and iOS App Store ID.'
                 />
               </>
             )}
