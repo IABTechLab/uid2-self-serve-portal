@@ -152,18 +152,16 @@ function ClientSideIntegration() {
     <>
       <h1>Client-Side Integration</h1>
       <p className='heading-details'>
-        View and manage client-side integration key pairs, domain names and mobile app ids.
-        {/* For more information,
-        see{' '}
+        View and manage client-side integration key pairs, domain names, and mobile app IDs. For
+        more information, see{' '}
         <a
           className='outside-link'
           target='_blank'
-          href='https://unifiedid.com/docs/guides/publisher-client-side'
+          href='https://unifiedid.com/docs/portal/client-side-integration'
           rel='noreferrer'
         >
-          Client-Side Integration Guide for JavaScript
-        </a>
-        . */}
+          Client-Side Integration
+        </a>.
       </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading client side integration data...' />}>
@@ -199,7 +197,7 @@ function ClientSideIntegration() {
                   onAddCstgValues={onAddCstgValues}
                   onUpdateCstgValues={handleUpdateAppIds}
                   cstgValueType={CstgValueType.MobileAppId}
-                  addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+                  addInstructions='Register the Android App ID, iOS/tvOS Bundle ID, and iOS App Store ID for your apps.'
                 />
               </>
             )}

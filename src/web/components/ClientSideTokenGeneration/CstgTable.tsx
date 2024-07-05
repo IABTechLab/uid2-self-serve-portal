@@ -49,8 +49,7 @@ export function CstgTable({
   const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
 
-  const isSelectedAll =
-    cstgValues.length && cstgValues.every((d) => selectedCstgValues.includes(d));
+  const isSelectedAll = selectedCstgValues.length === cstgValues.length;
 
   useEffect(() => {
     if (searchText === '') {
@@ -186,12 +185,17 @@ export function CstgTable({
     setPagedCstgValues(getPagedValues(searchedCstgValues, currentPageNumber, currentRowsPerPage));
   };
 
+  const deletingMultipleItemsMessage = `Delete ${cstgValueType}${selectedCstgValues.length > 1 ? 's' : ''}`;
+  const deleteMessage = isSelectedAll
+    ? `Delete All ${cstgValueType}s`
+    : deletingMultipleItemsMessage;
+
   return (
     <div className='cstg-values-management'>
       <div className='cstg-values-table-header'>
         <div>
-          <h2>{cstgValueType}</h2>
-          {cstgValues?.length > 0 && (
+          <h2>{cstgValueType}s</h2>
+          {cstgValues.length > 0 && (
             <div className='table-actions'>
               <TriStateCheckbox onClick={handleCheckboxChange} status={checkboxStatus} />
               {checkboxStatus && (
@@ -204,9 +208,7 @@ export function CstgTable({
                     icon={['far', 'trash-can']}
                     className='cstg-values-management-icon'
                   />
-                  {`Delete ${selectedCstgValues.length === cstgValues.length ? 'All' : ''} ${cstgValueType}${
-                    selectedCstgValues?.length > 1 ? 's' : ''
-                  }`}
+                  {deleteMessage}
                 </button>
               )}
 
@@ -234,7 +236,7 @@ export function CstgTable({
           </div>
           <div className='add-cstg-value-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDialog}>
-              {`Add ${cstgValueType}`}
+              {`Add ${cstgValueType}s`}
             </button>
             {showAddDialog && (
               <CstgAddDialog

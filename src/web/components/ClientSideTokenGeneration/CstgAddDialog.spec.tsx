@@ -147,10 +147,10 @@ describe('CstgAddDialog', () => {
     );
     await submitDialogDomains();
 
-    expect(screen.getByText('Please specify root-level domains.')).toBeInTheDocument();
+    expect(screen.getByText('Please specify Root-Level Domains.')).toBeInTheDocument();
   });
 
-  it('should be able to click save if user types in correct single mobile app id', async () => {
+  it('should be able to click save if user types in correct single mobile app ID', async () => {
     const user = userEvent.setup();
 
     const onAddMobileAppIdsMock = jest.fn(() => {
@@ -180,7 +180,7 @@ describe('CstgAddDialog', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  it('should be able to save if user types in multiple correct mobile app ids as comma separated list', async () => {
+  it('should be able to save if user types in multiple correct mobile app IDs as comma separated list', async () => {
     const user = userEvent.setup();
 
     const onAddMobileAppIdsMock = jest.fn(() => {
@@ -214,7 +214,7 @@ describe('CstgAddDialog', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
-  it('should render error when user types single incorrect mobile app id', async () => {
+  it('should render error when user types single incorrect mobile app ID', async () => {
     const user = userEvent.setup();
 
     const onAddMobileAppIdsMock = jest.fn(() => {
@@ -236,11 +236,11 @@ describe('CstgAddDialog', () => {
     await submitDialogMobileAppIds();
 
     expect(
-      screen.getByText('The mobile app ids entered are invalid', { exact: false })
+      screen.getByText('The mobile app IDs entered are invalid', { exact: false })
     ).toBeInTheDocument();
   });
 
-  it('should render error if user types in at least one incorrect mobile app id in a list', async () => {
+  it('should render error if user types in at least one incorrect mobile app ID in a list', async () => {
     const user = userEvent.setup();
 
     const onAddMobileAppIdsMock = jest.fn(() => {
@@ -262,11 +262,11 @@ describe('CstgAddDialog', () => {
     await submitDialogMobileAppIds();
 
     expect(
-      screen.getByText('The mobile app ids entered are invalid', { exact: false })
+      screen.getByText('The mobile app IDs entered are invalid', { exact: false })
     ).toBeInTheDocument();
   });
 
-  it('should render error if user submits empty text box for mobile app ids', async () => {
+  it('should render error if user submits empty text box for mobile app IDs', async () => {
     const onAddMobileAppIdsMock = jest.fn(() => {
       return Promise.resolve([]);
     });
@@ -282,6 +282,6 @@ describe('CstgAddDialog', () => {
     );
     await submitDialogMobileAppIds();
 
-    expect(screen.getByText('Please specify mobile app ids.')).toBeInTheDocument();
+    expect(screen.getByText('Please specify Mobile App IDs.')).toBeInTheDocument();
   });
 });
