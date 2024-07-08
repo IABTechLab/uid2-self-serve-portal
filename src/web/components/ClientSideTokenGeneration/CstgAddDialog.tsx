@@ -25,7 +25,6 @@ type CstgAddDialogProps = Readonly<{
   onOpenChange: () => void;
   existingCstgValues: string[];
   cstgValueType: CstgValueType;
-
   addInstructions: string;
 }>;
 
@@ -82,7 +81,7 @@ function CstgAddDialog({
       });
       if (invalidAppIds.length > 0) {
         handleError(
-          `The mobile app ids entered are invalid: ' ${formatStringsWithSeparator(invalidAppIds)}`
+          `The mobile app IDs entered are invalid: ${formatStringsWithSeparator(invalidAppIds)}`
         );
       } else {
         await onAddCstgValues(newCstgValues, deleteExistingList);
@@ -110,12 +109,12 @@ function CstgAddDialog({
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              <div className='checkbox-text'>{`Replace all existing ${cstgValueType.toLowerCase()}s with the new ones.`}</div>
+              <div className='checkbox-text'>{`Replace all existing ${cstgValueType}s with the new ones.`}</div>
             </div>
             <MultilineTextInput
               inputName='cstgValues'
               label={`${cstgValueType}s`}
-              rules={{ required: `Please specify ${cstgValueType.toLowerCase()}s.` }}
+              rules={{ required: `Please specify ${cstgValueType}s.` }}
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>

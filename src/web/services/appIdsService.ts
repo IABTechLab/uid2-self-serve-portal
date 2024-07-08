@@ -17,7 +17,7 @@ export async function GetAppIds(participantId?: number) {
     );
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not get app ids');
+    throw backendError(e, 'Could not get mobile app IDs');
   }
 }
 
@@ -31,6 +31,6 @@ export async function UpdateAppIds(appNames: string[], participantId?: number): 
     );
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not set app ids');
+    throw backendError(e, 'Could not set mobile app IDs');
   }
 }
