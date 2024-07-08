@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 
 export type UserWithIsApprover = User & { isApprover: boolean };
@@ -78,9 +78,26 @@ export const enrichWithUserFromParams = async (
   next: NextFunction
 ) => {
   const { userId } = userIdParser.parse(req.params);
+  const traceId = getTraceId(req);
   const user = await User.query().findById(userId);
+  const participant = await user?.$relatedQuery('participant').first().castTo<Participant>();
+  
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
+  }
+
+  if (!participant) {
+    return res.status(404).send([{ message: 'The participant for that user cannot be found.' }]);
+  }
+
+  if (
+    !(await isUserBelongsToParticipant(
+      req.auth?.payload?.email as string,
+      participant.id,
+      traceId
+    ))
+  ) {
+    return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }
 
   req.user = user;
