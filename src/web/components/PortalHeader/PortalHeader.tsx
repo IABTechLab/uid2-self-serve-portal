@@ -72,21 +72,24 @@ export function PortalHeader({
               )}
             </Avatar>
           </div>
-          {LoggedInUser?.user && <DropdownMenuSeparator className='separator' />}
-          {LoggedInUser?.user &&
-            routes.map((route) => {
-              return (
-                <DropdownMenuItem
-                  key={route.path}
-                  className='dropdown-menu-item'
-                  onClick={handleSelect}
-                >
-                  <Link to={route.path} className='link'>
-                    {route.description}
-                  </Link>
-                </DropdownMenuItem>
-              );
-            })}
+          {LoggedInUser?.user && (
+            <>
+              <DropdownMenuSeparator className='separator' />
+              {routes.map((route) => {
+                return (
+                  <DropdownMenuItem
+                    key={route.path}
+                    className='dropdown-menu-item'
+                    onClick={handleSelect}
+                  >
+                    <Link to={route.path} className='link'>
+                      {route.description}
+                    </Link>
+                  </DropdownMenuItem>
+                );
+              })}
+            </>
+          )}
 
           {/* <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
             <div className='theme-switch'>
