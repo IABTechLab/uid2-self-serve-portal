@@ -80,20 +80,23 @@ export const enrichWithUserFromParams = async (
   const { userId } = userIdParser.parse(req.params);
   const traceId = getTraceId(req);
   const user = await User.query().findById(userId);
-  const participant = await user?.$relatedQuery('participant').first().castTo<Participant>();
-  
+
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
 
-  if (!participant) {
+  await user.populateParticipantIds();
+  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+  const currentParticipantId = user.participantIds?.[0];
+
+  if (!currentParticipantId) {
     return res.status(404).send([{ message: 'The participant for that user cannot be found.' }]);
   }
 
   if (
     !(await isUserBelongsToParticipant(
       req.auth?.payload?.email as string,
-      participant.id,
+      currentParticipantId,
       traceId
     ))
   ) {
@@ -105,5 +108,5 @@ export const enrichWithUserFromParams = async (
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
-  return participant.$relatedQuery('users').castTo<User[]>();
+  return participant.$relatedQuery('users').where('deleted', 0).castTo<User[]>();
 };

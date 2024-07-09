@@ -319,8 +319,10 @@ const enrichCurrentParticipant = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
+  await user.populateParticipantIds();
   // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-  const participant = await user.$relatedQuery('participant').first().castTo<Participant>();
+  const currentParticipantId = user.participantIds?.[0] ?? 0;
+  const participant = await Participant.query().findById(currentParticipantId);
 
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);

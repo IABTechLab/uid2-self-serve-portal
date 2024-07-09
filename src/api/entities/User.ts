@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
+import type { Participant } from './Participant';
 
 export interface IUser {}
 export enum UserRole {
@@ -44,12 +45,19 @@ export class User extends BaseModel {
       },
     },
   };
+
+  async populateParticipantIds() {
+    const participants = await this.$relatedQuery('participant').castTo<Participant[]>();
+    this.participantIds = participants.map((participant) => participant.id);
+  }
+
   declare id: number;
   declare email: string;
   declare firstName: string;
   declare lastName: string;
   declare phone?: string;
   declare role: UserRole;
+  declare participantIds?: number[];
   declare acceptedTerms: boolean;
 }
 

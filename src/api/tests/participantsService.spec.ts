@@ -1,7 +1,7 @@
 import request, { Request } from 'supertest';
 
 import { ParticipantRequest } from '../services/participantsService';
-import { mockParticipant, mockUser, mockUserOnce, mockUserWithNoParticipant } from './queryMocks';
+import { mockParticipant, mockUser, mockUserOnce } from './queryMocks';
 import useTestServer, { api, routers } from './utils';
 
 describe('Participant Service Tests', () => {
@@ -47,7 +47,6 @@ describe('Participant Service Tests', () => {
     });
   });
 
-  // TODO: These tests will likely need modifying/removing in UID2-2822
   describe('enrichCurrentParticipant middleware', () => {
     test('should return 404 if user not found', async () => {
       mockUser(null);
@@ -59,7 +58,8 @@ describe('Participant Service Tests', () => {
     });
 
     test('should return 404 if participant not found', async () => {
-      mockUserWithNoParticipant();
+      mockUser();
+      mockParticipant(null);
       const req = request(api).get('/api/participants/current/');
       const res = await withToken(req);
 

@@ -33,11 +33,10 @@ export class UserService {
   }
 
   public async getCurrentParticipant(req: UserRequest) {
+    await req.user?.populateParticipantIds();
     // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-    const currentParticipant = await req.user
-      ?.$relatedQuery('participant')
-      .first()
-      .castTo<Participant>();
+    const currentParticipantId = req.user?.participantIds?.[0] ?? 0;
+    const currentParticipant = await Participant.query().findById(currentParticipantId);
 
     const currentSite = !currentParticipant?.siteId
       ? undefined
