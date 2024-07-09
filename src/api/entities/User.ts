@@ -61,7 +61,6 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   phone: z.string().optional(),
-  participantId: z.number().optional().nullable(),
   role: z.nativeEnum(UserRole).optional(),
   acceptedTerms: z.boolean(),
 });
