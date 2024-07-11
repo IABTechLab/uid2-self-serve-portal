@@ -20,6 +20,7 @@ export interface RenderedErrorProps {
   message?: string;
   stack?: string;
   componentStack?: string | null;
+  darkMode?: boolean;
 }
 
 export interface ErrorBoundaryPropType {

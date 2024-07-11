@@ -17,6 +17,7 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-webpack5-compiler-babel',
     '@storybook/addon-docs',
+    '@storybook-dark-mode',
     {
       name: '@storybook/addon-styling-webpack',
       options: {
@@ -36,7 +37,7 @@ const config: StorybookConfig = {
       },
     },
   ],
-  staticDirs: ['../public']
+  staticDirs: ['../public'],
 };
 
 export default config;

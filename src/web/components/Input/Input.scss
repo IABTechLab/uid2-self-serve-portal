@@ -11,6 +11,9 @@
     border-radius: 5px;
     padding: 0.5rem;
     margin-top: 0.5rem;
+    background-color: black;
+    color: var(--theme-secondary);
+    background-color: var(--theme-background-dialog);
   }
 
   .input-container:disabled {

@@ -8,12 +8,13 @@ type ErrorViewProps = Readonly<{
   message?: string;
   errorId?: string;
   errorHash?: string;
+  darkMode?: boolean;
 }>;
 
-export function ErrorView({ message, errorId, errorHash }: ErrorViewProps) {
+export function ErrorView({ message, errorId, errorHash, darkMode }: ErrorViewProps) {
   return (
     <div className='error-content'>
-      <img alt='Error icon' src='/uid2-logo.png' />
+      <img alt='Error icon' src={darkMode ? '/uid2-logo-darkmode.png' : '/uid2-logo.png'} />
       <div>There was an unexpected error. Please try again.</div>
       <div>If the problem persists, contact Support and provide the following information:</div>
       {!!message && <div>Error message: {message}</div>}
