@@ -42,7 +42,7 @@ export function App() {
       <PortalErrorBoundary>
         <ParticipantProvider>
           <div className='app' ref={rootRef}>
-            {LoggedInUser && <UpdatesTour />}
+            {LoggedInUser?.user && <UpdatesTour />}
             <PortalHeader
               email={LoggedInUser?.profile?.email}
               fullName={fullName}

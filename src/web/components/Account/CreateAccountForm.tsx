@@ -47,7 +47,6 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
   const watchAccept = watch('agreeToTerms');
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(handleSubmitAndReportErrors)}>
         <RootFormErrors fieldErrors={errors}>

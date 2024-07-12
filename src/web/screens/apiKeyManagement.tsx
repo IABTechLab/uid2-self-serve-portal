@@ -84,8 +84,7 @@ function ApiKeyManagement() {
           rel='noreferrer'
         >
           managing and rotating API keys
-        </a>
-        .
+        </a>.
       </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading />}>

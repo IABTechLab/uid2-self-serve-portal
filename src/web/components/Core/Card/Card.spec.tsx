@@ -5,15 +5,15 @@ import * as stories from './Card.stories';
 
 const { WithDescription, WithTitle, NoHeader } = composeStories(stories);
 
-test('has title', async () => {
+test('has title', () => {
   render(<WithTitle />);
-  const title = await screen.findByTestId('card-title');
+  const title = screen.getByTestId('card-title');
   expect(title.textContent).toContain('Card Title');
 });
 
-test('has description', async () => {
+test('has description', () => {
   render(<WithDescription />);
-  const description = await screen.findByTestId('card-description');
+  const description = screen.getByTestId('card-description');
   expect(description.textContent).toContain('Here is the description');
 });
 
