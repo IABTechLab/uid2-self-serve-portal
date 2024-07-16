@@ -1,5 +1,31 @@
-.error-content {
-  align-self: flex-start;
-  text-align: center;
-  padding: 4.5rem 6.5rem;
+.app {
+  .error-content {
+    align-self: flex-start;
+    text-align: center;
+    padding: 4.5rem 6.5rem;
+
+    .uid2-logo {
+      display: block;
+    }
+
+    .uid2-logo-darkmode {
+      display: none;
+    }
+  }
+}
+
+.app.darkmode {
+  .error-content {
+    align-self: flex-start;
+    text-align: center;
+    padding: 4.5rem 6.5rem;
+
+    .uid2-logo {
+      display: none;
+    }
+
+    .uid2-logo-darkmode {
+      display: block;
+    }
+  }
 }
