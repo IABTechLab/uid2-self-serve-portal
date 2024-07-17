@@ -16,4 +16,9 @@
     max-height: 100px;
     overflow: auto;
   }
+
+  .cstg-add-input {
+    background-color: var(--theme-background-header);
+    color: var(--theme-secondary);
+  }
 }

@@ -115,6 +115,7 @@ function CstgAddDialog({
               inputName='cstgValues'
               label={`${cstgValueType}s`}
               rules={{ required: `Please specify ${cstgValueType}s.` }}
+              className='cstg-add-input'
             />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
