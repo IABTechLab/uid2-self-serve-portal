@@ -79,6 +79,8 @@
     color: var(--theme-secondary);
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
 
     .theme-toggle {
       width: 42px;
@@ -86,6 +88,7 @@
       background-color: gray;
       border-radius: 9999px;
       margin-left: 10px;
+      cursor: pointer;
     }
 
     .theme-toggle[data-state='checked'] {

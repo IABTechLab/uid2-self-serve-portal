@@ -35,6 +35,12 @@
     margin-top: 1rem;
   }
 
+  .dialog-cancel-button {
+    border: none;
+    background: none;
+    color: var(--theme-dialog-close-button);
+  }
+
   .icon-button:focus {
     box-shadow: 0 0 0 2px var(--theme-box-shadow);
   }
@@ -69,7 +75,7 @@
   width: 100%;
   box-sizing: border-box;
   max-width: 606px;
-  background-color: var(--theme-background-content);
+  background-color: var(--theme-background-dialog);
   border-radius: 5px;
   box-shadow: 0 4px 14px var(--theme-box-shadow);
   max-height: 85vh;

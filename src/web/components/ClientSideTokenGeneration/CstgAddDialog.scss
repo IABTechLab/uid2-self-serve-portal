@@ -3,6 +3,9 @@
     display: flex;
     padding-top: 20px;
     vertical-align: middle;
+    color: var(--theme-secondary);
+    border-color: white;
+    border-radius: 5px;
 
     .checkbox-text {
       padding-top: 2px;
@@ -12,5 +15,10 @@
   .cstg-form-error {
     max-height: 100px;
     overflow: auto;
+  }
+
+  .cstg-add-input {
+    background-color: var(--theme-background-header);
+    color: var(--theme-secondary);
   }
 }

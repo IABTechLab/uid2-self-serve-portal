@@ -8,11 +8,16 @@
   --theme-background-header: #fff;
   --theme-background-sidepanel: #f2f2f3;
   --theme-background-content: #fff;
+  --theme-background-dialog: #fff;
   --theme-background-table-header: #f2f2f3;
+  --theme-background-table-header-border: #f2f2f3;
   --theme-background-row: #f2f2f3b2;
+  --theme-color-row: black;
   --theme-table-border: #d9d9d9;
   --theme-border: #dcdee1;
   --theme-button-text: #030a40;
+  --theme-banner-text: #030a40;
+  --theme-primary-button-text: #030a40;
   --theme-button: #cdf200;
   --theme-button-border: #cdf200;
   --theme-action: #0459fd;
@@ -36,6 +41,7 @@
   --theme-search-bar-background: rgb(112 133 212 / 15%);
   --theme-scrollbar: #c0d6ff;
   --theme-disabled-button-text: #878787;
+  --theme-disabled-icon: #878787;
   --theme-disabled-button: #d9d9d9;
   --theme-label: rgb(120 204 0 / 40%);
   --theme-divider: #030a40;
@@ -45,14 +51,51 @@
   --theme-table-action-button: #0300a5;
   --theme-display-box: #c0d6ff60;
   --theme-api-roles-cell: #e9f896;
+  --theme-search-text: #0459fd;
+  --theme-table-header-text: black;
+  --theme-transparent-button: #0459fd;
+  --theme-disabled-input: #878787;
+  --theme-dialog-close-button: #0459fd;
+  --theme-documentation-card: #0459fd;
 }
 
 .app.darkmode {
   --theme-primary: #{$color-gray};
-  --theme-secondary: #{$color-brighter-lime};
+  --theme-secondary: white;
   --theme-highlight: #{$color-lemon};
   --theme-background-header: #{$color-black-lighter};
-  --theme-background-sidepanel: #{$color-black-light};
-  --theme-background-content: #{$color-black};
-  --theme-border: #dcdee1; // unsure
+  --theme-background-sidepanel: #{$color-black-lighter};
+  --theme-background-content: #{$color-black-light};
+  --theme-background-dialog: #{$color-black-lightest};
+  --theme-border: #{$color-gray};
+  --theme-title: white;
+  --theme-button-text: white;
+  --theme-disabled-button-text: black;
+  --theme-disabled-icon: #{$color-black-lightest};
+  --theme-divider: white;
+  --theme-background-table-header: #{$color-black-lightest};
+  --theme-background-table-header-border: white;
+  --theme-input-border: white;
+  --theme-api-roles-cell: #{$color-brighter-lime};
+  --theme-api-roles-box: black;
+  --theme-background-row: #d9d9d9;
+  --theme-color-row: black;
+  --theme-action: #7085d4;
+  --theme-search-text: white;
+  --theme-table-header-text: white;
+  --theme-footer-divider: #{$color-gray};
+  --theme-radio-background: #7085d4;
+  --theme-transparent-button: #7085d4;
+  --theme-info-background: #{$color-info-toast-darker};
+  --theme-error-background: #{$color-error-toast-darker};
+  --theme-success-background: #{$color-success-toast-darker};
+  --theme-warning-background: #{$color-warning-toast-darker};
+  --theme-table-action-button: white;
+  --theme-disabled-input: white;
+  --theme-dialog-close-button: white;
+  --theme-select-mouseover: #{$color-black-lighter};
+  --theme-documentation-card: #7085d4;
+  --theme-search-highlight: #7085d4;
+  --theme-info: #abb7e6;
+  --theme-backdrop: rgb(0 0 0 / 80%);
 }

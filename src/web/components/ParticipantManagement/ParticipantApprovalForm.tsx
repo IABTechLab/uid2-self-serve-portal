@@ -46,9 +46,9 @@ const getSpans = (matches: [number, number][], totalLength: number) => {
   return [...spans, finalSpan];
 };
 
-type HighlightedResultProps = {
+type HighlightedResultProps = Readonly<{
   result: Fuse.FuseResult<SiteDTO>;
-};
+}>;
 export function HighlightedResult({ result }: HighlightedResultProps) {
   const text = `${result.item.name} (Site ID ${result.item.id})`;
   if (!result.matches || result.matches.length < 1) return <span>{text}</span>;
@@ -64,12 +64,12 @@ export function HighlightedResult({ result }: HighlightedResultProps) {
   );
 }
 
-type ParticipantApprovalFormProps = {
+type ParticipantApprovalFormProps = Readonly<{
   onApprove: (formData: ParticipantApprovalFormDetails) => Promise<void>;
   participant: ParticipantRequestDTO;
   participantTypes: ParticipantTypeDTO[];
   apiRoles: ApiRoleDTO[];
-};
+}>;
 function ParticipantApprovalForm({
   onApprove,
   participant,

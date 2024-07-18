@@ -67,7 +67,7 @@ function CreateApiKeyForm({ onFormSubmit, availableRoles, closeDialog }: CreateA
       <div className='button-container'>
         <button
           type='button'
-          className='transparent-button'
+          className='dialog-cancel-button'
           onClick={() => {
             closeDialog();
           }}

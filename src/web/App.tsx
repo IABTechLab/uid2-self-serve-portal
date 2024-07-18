@@ -24,12 +24,12 @@ export function App() {
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);
-  /*
+
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) rootRef.current!.classList.add('darkmode');
     else rootRef.current!.classList.remove('darkmode');
   };
-  */
+
   if (!initialized) return <Loading />;
   const fullName =
     LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
@@ -46,7 +46,7 @@ export function App() {
             <PortalHeader
               email={LoggedInUser?.profile?.email}
               fullName={fullName}
-              // setDarkMode={setDarkMode}
+              setDarkMode={setDarkMode}
               logout={logout}
             />
             {isLocalDev && <EnvironmentBanner />}

@@ -22,13 +22,13 @@
     padding: 6px 2px;
     justify-content: space-between;
     ::placeholder {
-      color: var(--theme-action);
+      color: var(--theme-search-text);
       opacity: 1;
     }
   }
 
   .sharing-permission-search-bar-icon {
-    color: var(--theme-action);
+    color: var(--theme-search-text);
     height: 16px;
     margin-left: 8px;
   }
@@ -44,10 +44,11 @@
     width: 100%;
     border: none;
     outline: none;
-    color: var(--theme-action);
+    color: var(--theme-search-text);
     font-weight: 400;
     font-size: 0.75rem;
     line-height: 0.9375rem;
+    background: none;
   }
 
   .shared-participants-table {
@@ -84,7 +85,7 @@
   }
 
   .sharing-permission-delete-button {
-    color: var(--theme-radio-background);
+    color: var(--theme-table-action-button);
     padding: 0;
   }
 
