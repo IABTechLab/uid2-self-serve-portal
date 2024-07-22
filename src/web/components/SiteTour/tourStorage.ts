@@ -4,8 +4,8 @@ import config from '../../../../package.json';
 
 const { version } = config;
 
-type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][number] & {
-  version?: string;
+export type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][number] & {
+  version: string;
 };
 // Temporary solution: all tour steps without a version are treated as relevant to the current version.
 // Update the version after release to avoid showing it again. We can automate this in the release pipeline.
@@ -21,7 +21,7 @@ const tourSteps: VersionedTourStep[] = [
 type TourData = {
   seenForVersions: string[];
 };
-const tourStorageKey = 'tour-data';
+export const tourStorageKey = 'tour-data';
 
 function isValidTourData(data: unknown | TourData): data is TourData {
   return (
@@ -48,8 +48,24 @@ export function markTourAsSeen() {
   saveTourData(tourData);
 }
 
-export function GetTourSteps(): VersionedTourStep[] {
-  return tourSteps.filter(
-    (step) => !getTourData().seenForVersions.includes(step.version ?? version)
-  );
+export const compareVersions = (a: string, b: string): number => {
+  const parsedA = a.split('.').map((v) => parseInt(v, 10));
+  const parsedB = b.split('.').map((v) => parseInt(v, 10));
+  for (let versionPart = 0; versionPart < parsedA.length; versionPart++) {
+    if (parsedA[versionPart] !== parsedB[versionPart])
+      return parsedA[versionPart] - parsedB[versionPart];
+  }
+  return 0;
+};
+
+export function GetTourSteps(steps = tourSteps): VersionedTourStep[] {
+  // search seen steps for the highest version number
+  const storedVersions = getTourData().seenForVersions;
+  // Sort in reverse order - highest first
+  storedVersions.sort((first, second) => compareVersions(second, first));
+  const highestSeenVersion = storedVersions.length > 0 ? storedVersions[0] : '0.0.0';
+  return steps.filter((step) => {
+    const stepVersionIsHigher = compareVersions(step?.version, highestSeenVersion) > 0;
+    return stepVersionIsHigher;
+  });
 }
