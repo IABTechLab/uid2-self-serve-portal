@@ -4,8 +4,8 @@ import config from '../../../../package.json';
 
 const { version } = config;
 
-type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][number] & {
-  version?: string;
+export type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][number] & {
+  version: string;
 };
 // Temporary solution: all tour steps without a version are treated as relevant to the current version.
 // Update the version after release to avoid showing it again. We can automate this in the release pipeline.
@@ -21,7 +21,7 @@ const tourSteps: VersionedTourStep[] = [
 type TourData = {
   seenForVersions: string[];
 };
-const tourStorageKey = 'tour-data';
+export const tourStorageKey = 'tour-data';
 
 function isValidTourData(data: unknown | TourData): data is TourData {
   return (
@@ -48,46 +48,24 @@ export function markTourAsSeen() {
   saveTourData(tourData);
 }
 
-const compareVersions = (a: string | undefined, b: string): string => {
-  const defaultVersion = '0.0.0';
-
-  if (!a) {
-    return defaultVersion;
+export const compareVersions = (a: string, b: string): number => {
+  const parsedA = a.split('.').map((v) => parseInt(v, 10));
+  const parsedB = b.split('.').map((v) => parseInt(v, 10));
+  for (let versionPart = 0; versionPart < parsedA.length; versionPart++) {
+    if (parsedA[versionPart] !== parsedB[versionPart])
+      return parsedA[versionPart] - parsedB[versionPart];
   }
-
-  const parsedA: string[] = a.split('.');
-  const parsedB: string[] = b.split('.');
-
-  if (Number(parsedA[0]) > Number(parsedB[0])) {
-    return a;
-  }
-  if (Number(parsedB[0]) > Number(parsedA[0])) {
-    return b;
-  }
-  if (Number(parsedA[1]) > Number(parsedB[1])) {
-    return a;
-  }
-  if (Number(parsedB[1]) > Number(parsedA[1])) {
-    return b;
-  }
-  if (Number(parsedA[2]) > Number(parsedB[2])) {
-    return a;
-  }
-  if (Number(parsedB[2]) > Number(parsedA[2])) {
-    return b;
-  }
-  return defaultVersion;
+  return 0;
 };
 
-export function GetTourSteps(): VersionedTourStep[] {
+export function GetTourSteps(steps = tourSteps): VersionedTourStep[] {
   // search seen steps for the highest version number
   const storedVersions = getTourData().seenForVersions;
-  let highestStoredVersion = '0.0.0';
-  storedVersions.forEach((v) => {
-    highestStoredVersion = compareVersions(highestStoredVersion, v);
-  });
-  // return steps with versions higher than the highest seen version
-  return tourSteps.filter((step) => {
-    return compareVersions(step?.version, highestStoredVersion) === step?.version;
+  // Sort in reverse order - highest first
+  storedVersions.sort((first, second) => compareVersions(second, first));
+  const highestSeenVersion = storedVersions.length > 0 ? storedVersions[0] : '0.0.0';
+  return steps.filter((step) => {
+    const stepVersionIsHigher = compareVersions(step?.version, highestSeenVersion) > 0;
+    return stepVersionIsHigher;
   });
 }
