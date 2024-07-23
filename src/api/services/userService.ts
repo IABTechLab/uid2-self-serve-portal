@@ -7,10 +7,8 @@ import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
-  enrichUserWithIsApprover,
-  findUserByEmail,
-  findUserWithParticipantsByEmail,
-  UserRequest,
+  enrichUserWithIsApprover, findUserWithParticipantsByEmail,
+  UserRequest
 } from './usersService';
 
 export type DeletedUser = {
