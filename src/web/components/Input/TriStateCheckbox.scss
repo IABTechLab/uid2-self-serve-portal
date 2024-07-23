@@ -22,6 +22,7 @@
   }
 
   button[data-disabled] {
-    background-color: var(--theme-disabled-button);
+    background-color: var(--theme-disabled-icon);
+    border: 1px solid var(--theme-disabled-icon);
   }
 }

@@ -8,11 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
-// import * as Switch from '@radix-ui/react-switch';
+import * as Switch from '@radix-ui/react-switch';
 import MD5 from 'crypto-js/md5';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
@@ -22,16 +23,17 @@ import './PortalHeader.scss';
 export type PortalHeaderProps = {
   email: string | undefined;
   fullName: string | undefined;
-  // setDarkMode?: (darkMode: boolean) => void;
+  setDarkMode?: (darkMode: boolean) => void;
   logout: () => void;
 };
 
 export function PortalHeader({
   email,
   fullName,
-  // setDarkMode = undefined,
+  setDarkMode = undefined,
   logout,
 }: Readonly<PortalHeaderProps>) {
+  const { LoggedInUser } = useContext(CurrentUserContext);
   const emailMd5 = email ? MD5(email).toString() : null;
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
@@ -40,7 +42,7 @@ export function PortalHeader({
   const handleSelect = () => {
     setMenuOpen(false);
   };
-  /*
+
   const [darkToggleState, setDarkToggleState] = useState(false);
   const onThemeToggle = () => {
     setDarkToggleState(!darkToggleState);
@@ -48,12 +50,16 @@ export function PortalHeader({
   useEffect(() => {
     setDarkMode?.(darkToggleState);
   }, [darkToggleState, setDarkMode]);
-  */
+
   return (
     <header className='portal-header'>
       <div className='title'>
         <Link data-testid='title-link' to='/'>
-          <img src='/uid2-logo.svg' alt='UID2 logo' className='uid2-logo' />
+          <img
+            src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
+            alt='UID2 logo'
+            className='uid2-logo'
+          />
         </Link>
       </div>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
@@ -70,23 +76,28 @@ export function PortalHeader({
               )}
             </Avatar>
           </div>
-          <DropdownMenuSeparator className='separator' />
-          {routes.map((route) => {
-            return (
-              <DropdownMenuItem
-                key={route.path}
-                className='dropdown-menu-item'
-                onClick={handleSelect}
-              >
-                <Link to={route.path} className='link'>
-                  {route.description}
-                </Link>
-              </DropdownMenuItem>
-            );
-          })}
-          {/* <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+          {LoggedInUser?.user && (
+            <>
+              <DropdownMenuSeparator className='separator' />
+              {routes.map((route) => {
+                return (
+                  <DropdownMenuItem
+                    key={route.path}
+                    className='dropdown-menu-item'
+                    onClick={handleSelect}
+                  >
+                    <Link to={route.path} className='link'>
+                      {route.description}
+                    </Link>
+                  </DropdownMenuItem>
+                );
+              })}
+            </>
+          )}
+
+          <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
             <div className='theme-switch'>
-              <label htmlFor='dark-mode'>Dark mode</label>
+              <label htmlFor='dark-mode'>Dark Mode</label>
               <Switch.Root
                 name='dark-mode'
                 checked={darkToggleState}
@@ -97,7 +108,7 @@ export function PortalHeader({
               </Switch.Root>
             </div>
           </DropdownMenuItem>
-          */}
+
           <DropdownMenuSeparator className='separator' />
           <DropdownMenuItem className='dropdown-menu-item' onClick={logout}>
             Log out

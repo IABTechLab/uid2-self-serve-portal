@@ -13,14 +13,14 @@ describe('Input', () => {
     expect(screen.getByLabelText('InputLabel')).toBeInTheDocument();
   });
 
-  it('displays validation error message', async () => {
+  it('displays validation error message', () => {
     render(
       <Input inputName='input' label='InputLabel' error={{ message: 'Some message' } as FieldError}>
         <input id='input' />
       </Input>
     );
 
-    const errorMessage = await screen.findByRole('alert');
+    const errorMessage = screen.getByRole('alert');
     expect(errorMessage).toHaveTextContent('Some message');
   });
 });

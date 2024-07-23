@@ -1,4 +1,4 @@
-@use "sass:color";
+@use 'sass:color';
 
 /* 
 Color definitions - this is our database of named brand colors, it's not for giving colors meaning within the UI. 
@@ -13,9 +13,19 @@ $color-gray: #dcdee1;
 $color-dirty-sock: #f2f2f3;
 $color-lemon: #cdf200;
 $color-winter-green: #035959;
+$color-ttd-blue: #0459fd;
+$color-info-toast: #b7c2ea;
+$color-error-toast: #facec5;
+$color-success-toast: #c0d5d5;
+$color-warning-toast: #fefcd3;
 
 // Off-piste colours
+$color-black-lightest: color.adjust($color-black, $lightness: 15%);
 $color-black-lighter: color.adjust($color-black, $lightness: 11%);
 $color-black-light: color.adjust($color-black, $lightness: 6%);
 $color-gray-darker: color.adjust($color-gray, $saturation: 30%);
 $color-gray-dark: color.adjust($color-gray, $saturation: 20%);
+$color-info-toast-darker: #415ec8;
+$color-error-toast-darker: #ee5839;
+$color-success-toast-darker: #659797;
+$color-warning-toast-darker: #e5b606;

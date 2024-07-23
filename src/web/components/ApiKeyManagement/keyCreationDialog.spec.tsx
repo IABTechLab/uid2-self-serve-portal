@@ -107,7 +107,7 @@ describe('Key creation dialog', () => {
 
     await enterApiName('key_name');
 
-    await apiRoles.map(async (apiRole) => {
+    apiRoles.map(async (apiRole) => {
       await clickApiRole(apiRole);
     });
 
@@ -130,7 +130,7 @@ describe('Key creation dialog', () => {
     await clickApiRole(apiRoles[0]);
     await submitForm();
 
-    expect(await screen.findByText('ABCD')).toBeInTheDocument();
+    expect(screen.getByText('ABCD')).toBeInTheDocument();
     expect(screen.getByText('1234')).toBeInTheDocument();
   });
 

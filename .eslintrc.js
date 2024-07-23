@@ -48,6 +48,7 @@ module.exports = {
     'no-trailing-spaces': 'warn',
     'key-spacing': 'error',
     'max-len': 'off',
+    'no-plusplus': 'off',
     '@typescript-eslint/no-unsafe-assignment': 'error',
     '@typescript-eslint/no-unsafe-call': 'error',
     '@typescript-eslint/no-unsafe-argument': 'error',
