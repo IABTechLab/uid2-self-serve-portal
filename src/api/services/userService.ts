@@ -1,13 +1,17 @@
 import { injectable } from 'inversify';
 import { z } from 'zod';
 
-import { Participant } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserRole } from '../entities/User';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
-import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
+import {
+  enrichUserWithIsApprover,
+  findUserByEmail,
+  findUserWithParticipantsByEmail,
+  UserRequest,
+} from './usersService';
 
 export type DeletedUser = {
   email: string;
@@ -27,17 +31,14 @@ export const SelfResendInvitationParser = z.object({ email: z.string() });
 export class UserService {
   public async getCurrentUser(req: UserRequest) {
     const userEmail = req.auth?.payload?.email as string;
-    const user = await findUserByEmail(userEmail);
+    const user = await findUserWithParticipantsByEmail(userEmail);
     const userWithIsApprover = await enrichUserWithIsApprover(user!);
     return userWithIsApprover;
   }
 
   public async getCurrentParticipant(req: UserRequest) {
-    await req.user?.populateParticipantIds();
     // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-    const currentParticipantId = req.user?.participantIds?.[0] ?? 0;
-    const currentParticipant = await Participant.query().findById(currentParticipantId);
-
+    const currentParticipant = req.user?.participants?.[0];
     const currentSite = !currentParticipant?.siteId
       ? undefined
       : await getSite(currentParticipant?.siteId);

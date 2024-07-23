@@ -75,7 +75,7 @@ export async function createUser({
 
   const user = await User.query().insert(data);
   if (participantId) {
-    await user.$relatedQuery('participant').relate(participantId);
+    await user.$relatedQuery('participants').relate(participantId);
   }
 
   return user;

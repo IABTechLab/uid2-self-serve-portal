@@ -59,9 +59,8 @@ export class UserController {
 
   @httpPut('/current/acceptTerms')
   public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    await req.user?.populateParticipantIds();
     // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-    const currentParticipantId = req.user?.participantIds?.[0] ?? 0;
+    const currentParticipantId = req.user?.participants?.[0].id ?? 0;
     const participant = await Participant.query().findById(currentParticipantId);
 
     if (!participant || participant.status !== ParticipantStatus.Approved) {

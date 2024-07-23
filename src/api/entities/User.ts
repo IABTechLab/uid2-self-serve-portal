@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import Objection, { Model } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
@@ -32,7 +32,7 @@ export class User extends BaseModel {
   }
 
   static readonly relationMappings = {
-    participant: {
+    participants: {
       relation: Model.ManyToManyRelation,
       modelClass: 'Participant',
       join: {
@@ -46,19 +46,24 @@ export class User extends BaseModel {
     },
   };
 
-  async populateParticipantIds() {
-    const participants = await this.$relatedQuery('participant').castTo<Participant[]>();
-    this.participantIds = participants.map((participant) => participant.id);
-  }
-
   declare id: number;
   declare email: string;
   declare firstName: string;
   declare lastName: string;
   declare phone?: string;
   declare role: UserRole;
-  declare participantIds?: number[];
+  declare participants?: Participant[];
   declare acceptedTerms: boolean;
+
+  static readonly modifiers = {
+    withParticipants<TResult>(query: Objection.QueryBuilder<User, TResult>) {
+      const myQuery = query.withGraphFetched('participants') as Objection.QueryBuilder<
+        User,
+        TResult & { participants: Participant[] }
+      >;
+      return myQuery;
+    },
+  };
 }
 
 export type UserDTO = ModelObjectOpt<User>;

@@ -19,7 +19,7 @@ import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
+import { findUserWithParticipantsByEmail, isUserBelongsToParticipant } from './usersService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -292,6 +292,7 @@ const idParser = z.object({
   participantId: z.coerce.number(),
 });
 
+// TODO: move this middleware to a separate file
 const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);
   const traceId = getTraceId(req);
@@ -309,20 +310,19 @@ const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next
   return next();
 };
 
+// TODO: move this middleware to a separate file
 const enrichCurrentParticipant = async (
   req: ParticipantRequest,
   res: Response,
   next: NextFunction
 ) => {
   const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserByEmail(userEmail);
+  const user = await findUserWithParticipantsByEmail(userEmail);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-  await user.populateParticipantIds();
   // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-  const currentParticipantId = user.participantIds?.[0] ?? 0;
-  const participant = await Participant.query().findById(currentParticipantId);
+  const participant = user.participants?.[0];
 
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
@@ -331,6 +331,7 @@ const enrichCurrentParticipant = async (
   return next();
 };
 
+// TODO: move this middleware to a separate file
 export const checkParticipantId = async (
   req: ParticipantRequest,
   res: Response,

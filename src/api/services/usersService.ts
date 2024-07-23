@@ -12,6 +12,11 @@ export const findUserByEmail = async (email: string) => {
   return User.query().findOne('email', email).where('deleted', 0);
 };
 
+// Should this remain a separate function to the above?
+export const findUserWithParticipantsByEmail = async (email: string) => {
+  return User.query().findOne('email', email).where('deleted', 0).modify('withParticipants');
+};
+
 export const enrichUserWithIsApprover = async (user: User) => {
   const userIsApprover = await isUserAnApprover(user.email);
   return {
@@ -28,22 +33,31 @@ export const createUserInPortal = async (
   if (existingUser) return existingUser;
   const newUser = await User.query().insert(user);
   // Update the user <-> participant mapping
-  await newUser.$relatedQuery('participant').relate(participantId);
+  await newUser.$relatedQuery('participants').relate(participantId);
 };
 
+// TODO: move this middleware to a separate file
 export const isUserBelongsToParticipant = async (
   email: string,
   participantId: number,
   traceId: string
 ) => {
-  const user = await User.query()
+  const { errorLogger } = getLoggers();
+  const userWithParticipants = await User.query()
     .findOne({ email, deleted: 0 })
-    .whereExists(User.relatedQuery('participant').where('participant.id', participantId));
-  if (!user) {
-    const { errorLogger } = getLoggers();
-    errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`, traceId);
+    .modify('withParticipants');
+
+  if (!userWithParticipants) {
+    errorLogger.error(`User with email ${email} not found`, traceId);
+    return false;
   }
-  return !!user;
+  for (const participant of userWithParticipants.participants!) {
+    if (participant.id === participantId) {
+      return true;
+    }
+  }
+  errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`, traceId);
+  return false;
 };
 
 export interface UserRequest extends Request {
@@ -62,9 +76,10 @@ const userIdParser = z.object({
   userId: z.coerce.number(),
 });
 
+// TODO: move this middleware to a separate file
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserByEmail(userEmail);
+  const user = await findUserWithParticipantsByEmail(userEmail);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
@@ -72,6 +87,7 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   return next();
 };
 
+// TODO: move this middleware to a separate file
 export const enrichWithUserFromParams = async (
   req: UserRequest,
   res: Response,
@@ -79,24 +95,21 @@ export const enrichWithUserFromParams = async (
 ) => {
   const { userId } = userIdParser.parse(req.params);
   const traceId = getTraceId(req);
-  const user = await User.query().findById(userId);
+  const user = await User.query().findById(userId).modify('withParticipants');
 
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-
-  await user.populateParticipantIds();
-  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-  const currentParticipantId = user.participantIds?.[0];
-
-  if (!currentParticipantId) {
+  if (user.participants?.length === 0) {
     return res.status(404).send([{ message: 'The participant for that user cannot be found.' }]);
   }
 
+  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+  const firstParticipant = user.participants?.[0] as Participant;
   if (
     !(await isUserBelongsToParticipant(
       req.auth?.payload?.email as string,
-      currentParticipantId,
+      firstParticipant.id,
       traceId
     ))
   ) {
