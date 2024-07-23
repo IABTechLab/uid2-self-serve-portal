@@ -9,11 +9,6 @@ import { isUserAnApprover } from './approversService';
 export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query().findOne('email', email).where('deleted', 0);
-};
-
-// Should this remain a separate function to the above?
-export const findUserWithParticipantsByEmail = async (email: string) => {
   return User.query().findOne('email', email).where('deleted', 0).modify('withParticipants');
 };
 
@@ -80,7 +75,7 @@ const userIdParser = z.object({
 // TODO: move this middleware to a separate file
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserWithParticipantsByEmail(userEmail);
+  const user = await findUserByEmail(userEmail);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }

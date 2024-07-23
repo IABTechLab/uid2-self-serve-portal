@@ -6,10 +6,7 @@ import { UserRole } from '../entities/User';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
-import {
-  enrichUserWithIsApprover, findUserWithParticipantsByEmail,
-  UserRequest
-} from './usersService';
+import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
 export type DeletedUser = {
   email: string;
@@ -29,7 +26,7 @@ export const SelfResendInvitationParser = z.object({ email: z.string() });
 export class UserService {
   public async getCurrentUser(req: UserRequest) {
     const userEmail = req.auth?.payload?.email as string;
-    const user = await findUserWithParticipantsByEmail(userEmail);
+    const user = await findUserByEmail(userEmail);
     const userWithIsApprover = await enrichUserWithIsApprover(user!);
     return userWithIsApprover;
   }

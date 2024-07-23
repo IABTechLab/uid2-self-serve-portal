@@ -19,7 +19,7 @@ import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { findUserWithParticipantsByEmail, isUserBelongsToParticipant } from './usersService';
+import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -317,7 +317,7 @@ const enrichCurrentParticipant = async (
   next: NextFunction
 ) => {
   const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserWithParticipantsByEmail(userEmail);
+  const user = await findUserByEmail(userEmail);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
