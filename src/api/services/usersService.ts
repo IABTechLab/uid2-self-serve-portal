@@ -25,6 +25,7 @@ export const enrichUserWithIsApprover = async (user: User) => {
   };
 };
 
+// TODO: Update this method so that if an existing user is invited, it will still add the new participant + mapping.
 export const createUserInPortal = async (
   user: Omit<UserDTO, 'id' | 'acceptedTerms'>,
   participantId: number
