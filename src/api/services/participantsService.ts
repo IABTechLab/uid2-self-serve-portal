@@ -292,6 +292,7 @@ const idParser = z.object({
   participantId: z.coerce.number(),
 });
 
+// TODO: move this middleware to a separate file
 const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
   const { participantId } = idParser.parse(req.params);
   const traceId = getTraceId(req);
@@ -309,6 +310,7 @@ const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next
   return next();
 };
 
+// TODO: move this middleware to a separate file
 const enrichCurrentParticipant = async (
   req: ParticipantRequest,
   res: Response,
@@ -319,7 +321,9 @@ const enrichCurrentParticipant = async (
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
-  const participant = await Participant.query().findById(user.participantId!);
+  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+  const participant = user.participants?.[0];
+
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }
@@ -327,11 +331,13 @@ const enrichCurrentParticipant = async (
   return next();
 };
 
+// TODO: move this middleware to a separate file
 export const checkParticipantId = async (
   req: ParticipantRequest,
   res: Response,
   next: NextFunction
 ) => {
+  // TODO: Remove support for 'current' in UID2-2822
   if (req.params.participantId === 'current') {
     return enrichCurrentParticipant(req, res, next);
   }

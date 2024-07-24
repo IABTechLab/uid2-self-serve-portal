@@ -241,13 +241,15 @@ export function createParticipantsRouter() {
         }
         const kcAdminClient = await getKcAdminClient();
         const user = await createNewUser(kcAdminClient, firstName, lastName, email);
-        await createUserInPortal({
-          email,
-          role,
-          participantId: participant!.id,
-          firstName,
-          lastName,
-        });
+        await createUserInPortal(
+          {
+            email,
+            role,
+            firstName,
+            lastName,
+          },
+          participant!.id
+        );
         await sendInviteEmail(kcAdminClient, user);
         return res.sendStatus(201);
       } catch (err) {

@@ -53,7 +53,6 @@ export const WithTeamMember = () => {
             lastName: 'test',
             role: UserRole.DA,
             acceptedTerms: true,
-            participantId: 1,
           }}
           teamMembers={[]}
         />

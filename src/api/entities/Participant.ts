@@ -5,7 +5,7 @@ import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { User, UserCreationPartial, UserDTO, UserSchema } from './User';
+import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -43,11 +43,15 @@ export class Participant extends BaseModel {
       },
     },
     users: {
-      relation: Model.HasManyRelation,
+      relation: Model.ManyToManyRelation,
       modelClass: 'User',
       join: {
         from: 'participants.id',
-        to: 'users.participantId',
+        through: {
+          from: 'usersToParticipantRoles.participantId',
+          to: 'usersToParticipantRoles.userId',
+        },
+        to: 'users.id',
       },
     },
     businessContacts: {

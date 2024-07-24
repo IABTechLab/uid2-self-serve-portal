@@ -59,13 +59,12 @@ export class UserController {
 
   @httpPut('/current/acceptTerms')
   public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    if (!req.user?.participantId) {
-      res.status(403).json({
-        message: 'Unauthorized. You do not have the necessary permissions.',
-        errorHash: req.headers.traceId,
-      });
-    }
-    const participant = await Participant.query().findById(req.user!.participantId!);
+    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+    const currentParticipantId = req.user?.participants?.[0].id;
+    const participant = currentParticipantId
+      ? await Participant.query().findById(currentParticipantId)
+      : undefined;
+
     if (!participant || participant.status !== ParticipantStatus.Approved) {
       res.status(403).json({
         message: 'Unauthorized. You do not have the necessary permissions.',
@@ -147,10 +146,7 @@ export class UserController {
       participantId: null,
       deleted: true,
     };
-    await Promise.all([
-      deleteUserByEmail(kcAdminClient, user?.email!),
-      user!.$query().patch(data),
-    ]);
+    await Promise.all([deleteUserByEmail(kcAdminClient, user?.email!), user!.$query().patch(data)]);
 
     res.sendStatus(200);
   }

@@ -12,12 +12,12 @@ export class BusinessContact extends BaseModel {
   static get tableName() {
     return 'businessContacts';
   }
-  static relationMappings = {
+  static readonly relationMappings = {
     participant: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'Participant',
       join: {
-        from: 'users.participantId',
+        from: 'businessContacts.participantId',
         to: 'participants.id',
       },
     },

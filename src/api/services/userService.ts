@@ -1,7 +1,6 @@
 import { injectable } from 'inversify';
 import { z } from 'zod';
 
-import { Participant } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserRole } from '../entities/User';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
@@ -33,9 +32,8 @@ export class UserService {
   }
 
   public async getCurrentParticipant(req: UserRequest) {
-    const currentParticipant = await Participant.query().findOne({
-      id: req.user!.participantId,
-    });
+    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+    const currentParticipant = req.user?.participants?.[0];
     const currentSite = !currentParticipant?.siteId
       ? undefined
       : await getSite(currentParticipant?.siteId);

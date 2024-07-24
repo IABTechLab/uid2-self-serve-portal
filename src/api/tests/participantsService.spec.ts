@@ -1,90 +1,112 @@
-import request, { Request } from 'supertest';
+import { NextFunction, Response } from 'express';
+import { Knex } from 'knex';
 
-import { ParticipantRequest } from '../services/participantsService';
-import { mockParticipant, mockUser, mockUserOnce } from './queryMocks';
-import useTestServer, { api, routers } from './utils';
+import { TestConfigure } from '../../database/TestSelfServeDatabase';
+import {
+  createParticipant,
+  createResponseObject,
+  createUser,
+} from '../../testHelpers/apiTestHelpers';
+import { checkParticipantId, ParticipantRequest } from '../services/participantsService';
+
+const createParticipantRequest = (
+  email: string,
+  participantId: string | number
+): ParticipantRequest => {
+  return {
+    auth: {
+      payload: {
+        email,
+      },
+    },
+    params: {
+      participantId,
+    },
+  } as unknown as ParticipantRequest;
+};
 
 describe('Participant Service Tests', () => {
-  const withToken = useTestServer();
+  let knex: Knex;
+  let next: NextFunction;
+  let res: Response;
 
-  beforeAll(() => {
-    routers!.participantsRouter.router.get('/:participantId/', (req: ParticipantRequest, res) => {
-      res.status(200).json(req.participant);
-    });
+  beforeEach(async () => {
+    knex = await TestConfigure();
+    next = jest.fn();
+    ({ res } = createResponseObject());
   });
+  // TODO: move these middleware tests to a middleware spec file
+  describe('checkParticipantId middleware', () => {
+    describe('when participantId is specified', () => {
+      it('should call next if participantId is valid and user has access', async () => {
+        const relatedParticipant = await createParticipant(knex, {});
+        const relatedUser = await createUser({ participantId: relatedParticipant.id });
+        const participantRequest = createParticipantRequest(
+          relatedUser.email,
+          relatedParticipant.id
+        );
 
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
+        await checkParticipantId(participantRequest, res, next);
 
-  describe('hasParticipantAccess middleware', () => {
-    it('should allow access to an authenticated user with permission', async () => {
-      mockParticipant();
-      mockUser();
-      const req: Request = request(api).get('/api/participants/1/');
-      const res = await withToken(req);
-      expect(res.statusCode).toBe(200);
+        expect(res.status).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+      });
+
+      it('should return 404 if participant is not found', async () => {
+        const relatedParticipant = await createParticipant(knex, {});
+        const relatedUser = await createUser({ participantId: relatedParticipant.id });
+        const nonExistentParticipantId = 2;
+        const participantRequest = createParticipantRequest(
+          relatedUser.email,
+          nonExistentParticipantId
+        );
+
+        await checkParticipantId(participantRequest, res, next);
+
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith([{ message: 'The participant cannot be found.' }]);
+      });
+
+      it('should return 403 if user does not have access to participant', async () => {
+        const firstParticipant = await createParticipant(knex, {});
+        const secondParticipant = await createParticipant(knex, {});
+        const relatedUser = await createUser({ participantId: secondParticipant.id });
+        const participantRequest = createParticipantRequest(relatedUser.email, firstParticipant.id);
+
+        await checkParticipantId(participantRequest, res, next);
+
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.send).toHaveBeenCalledWith([
+          { message: 'You do not have permission to that participant.' },
+        ]);
+      });
     });
+    // TODO: these will change in UID2-2822
+    describe(`when participantId is 'current'`, () => {
+      it('should call next if user has a valid participant', async () => {
+        const relatedParticipant = await createParticipant(knex, {});
+        const relatedUser = await createUser({ participantId: relatedParticipant.id });
+        const participantRequest = createParticipantRequest(relatedUser.email, 'current');
 
-    it('should deny access to an authenticated user without permission', async () => {
-      mockParticipant();
-      mockUserOnce([{}, null]);
-      const req: Request = request(api).get('/api/participants/1/');
-      const res = await withToken(req);
+        await checkParticipantId(participantRequest, res, next);
 
-      expect(res.statusCode).toBe(403);
-      expect(res.body[0].message).toBe('You do not have permission to that participant.');
-    });
+        expect(res.status).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+      });
+      it('should return 404 is user is not found', async () => {
+        const participantRequest = createParticipantRequest('doesNotMatter@example.com', 'current');
 
-    it('should throw error when participant does not exist', async () => {
-      mockParticipant(null);
-      mockUser();
-      const req: Request = request(api).get('/api/participants/10000/');
-      const res = await withToken(req);
+        await checkParticipantId(participantRequest, res, next);
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith([{ message: 'The user cannot be found.' }]);
+      });
+      it('should return 404 is participant is not found', async () => {
+        const relatedUser = await createUser({});
+        const participantRequest = createParticipantRequest(relatedUser.email, 'current');
 
-      expect(res.statusCode).toBe(404);
-      expect(res.body[0].message).toBe('The participant cannot be found.');
-    });
-  });
-
-  describe('enrichCurrentParticipant middleware', () => {
-    test('should return 404 if user not found', async () => {
-      mockUser(null);
-      const req: Request = request(api).get('/api/participants/current/');
-      const res = await withToken(req);
-
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toEqual([{ message: 'The user cannot be found.' }]);
-    });
-
-    test('should return 404 if participant not found', async () => {
-      mockUser();
-      mockParticipant(null);
-      const req = request(api).get('/api/participants/current/');
-      const res = await withToken(req);
-
-      expect(res.statusCode).toBe(404);
-      expect(res.body).toEqual([{ message: 'The participant cannot be found.' }]);
-    });
-
-    test('should add participant to request if user and participant are found', async () => {
-      mockParticipant();
-      mockUser();
-
-      const req = request(api).get('/api/participants/current/');
-      const res = await withToken(req);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toEqual({
-        id: 1,
-        name: 'Test Participant',
-        allowSharing: true,
-        types: [
-          {
-            id: 1,
-            typeName: 'DSP',
-          },
-        ],
+        await checkParticipantId(participantRequest, res, next);
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith([{ message: 'The participant cannot be found.' }]);
       });
     });
   });
