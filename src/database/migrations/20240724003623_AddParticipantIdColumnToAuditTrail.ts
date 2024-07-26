@@ -5,7 +5,6 @@ export async function up(knex: Knex): Promise<void> {
     table.integer('participantId').references('participants.id');
   });
 
-  // const auditTrailsCount = (await knex('auditTrails').count({ count: '*' }))[0].count;
   const auditTrails = await knex('auditTrails').count({ count: '*' }).first();
   const auditTrailsCount = parseInt(auditTrails?.count as string, 10);
   if (auditTrailsCount > 0) {
