@@ -36,6 +36,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     defaultValues: props.person as InviteTeamMemberForm,
   });
   const { handleSubmit } = formMethods;
+  const editMode = !!props.person;
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
@@ -49,7 +50,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
 
   return (
     <Dialog
-      title={`${props.person ? 'Edit' : 'Add'} Team Member`}
+      title={`${editMode ? 'Edit' : 'Add'} Team Member`}
       closeButtonText='Cancel'
       onOpenChange={props.onOpenChange}
     >
@@ -68,11 +69,11 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
           <TextInput
             inputName='email'
             label='Email'
-            disabled={!!props.person}
+            disabled={editMode}
             rules={{
               required: 'Please specify email.',
               validate: (value: string) => {
-                if (!validateUniqueTeamMemberEmail(value, props.teamMembers))
+                if (!editMode && !validateUniqueTeamMemberEmail(value, props.teamMembers))
                   return 'Team member email already exists.';
                 return validateEmail(value) ? true : 'Invalid email format.';
               },

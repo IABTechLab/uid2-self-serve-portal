@@ -1,13 +1,13 @@
 import { Response } from 'express';
 import { z } from 'zod';
 
-import { AuditAction } from '../../entities/AuditTrail';
+import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
-import { getSite, setSiteAppNames } from '../../services/adminServiceClient';
+import { getSite, setSiteDomainNames } from '../../services/adminServiceClient';
 import {
-  insertAppNamesAuditTrails,
-  updateAuditTrailToProceed,
+  InsertAuditTrailDTO,
+  performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
 
@@ -24,22 +24,29 @@ const appNamesParser = z.object({ appNames: z.array(z.string()) });
 
 export async function setParticipantAppNames(req: UserParticipantRequest, res: Response) {
   const { participant, user } = req;
+  const { appNames } = appNamesParser.parse(req.body);
+  const traceId = getTraceId(req);
+
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
-  const { appNames } = appNamesParser.parse(req.body);
-  const traceId = getTraceId(req);
-  const auditTrail = await insertAppNamesAuditTrails(
-    participant,
-    user!.id,
-    user!.email,
-    AuditAction.Update,
-    appNames,
-    traceId
+  const auditTrailInsertObject: InsertAuditTrailDTO = {
+    userId: user!.id,
+    userEmail: user!.email,
+    participantId: participant.id,
+    event: AuditTrailEvents.UpdateAppNames,
+    eventData: {
+      action: AuditAction.Update,
+      siteId: participant.siteId,
+      appNames,
+    },
+  };
+
+  const updatedSite = await performAsyncOperationWithAuditTrail(
+    auditTrailInsertObject,
+    traceId,
+    async () => setSiteDomainNames(participant.siteId!, appNames)
   );
 
-  const updatedSite = await setSiteAppNames(participant.siteId, appNames);
-
-  await updateAuditTrailToProceed(auditTrail.id);
   return res.status(200).json(updatedSite.app_names);
 }

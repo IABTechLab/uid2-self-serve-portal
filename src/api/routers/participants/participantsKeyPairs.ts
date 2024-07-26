@@ -12,6 +12,6 @@ export async function getParticipantKeyPairs(req: ParticipantRequest, res: Respo
   }
   const siteId = participant?.siteId;
   const traceId = getTraceId(req);
-  const allKeyPairs = await getKeyPairsList(siteId!, traceId);
+  const allKeyPairs = await getKeyPairsList(siteId, traceId);
   return res.status(200).json(allKeyPairs);
 }

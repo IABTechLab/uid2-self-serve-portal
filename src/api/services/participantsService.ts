@@ -3,6 +3,7 @@ import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
 import { ApiRole } from '../entities/ApiRole';
+import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
@@ -13,10 +14,11 @@ import {
 import { ParticipantType } from '../entities/ParticipantType';
 import { User } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
-import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
+import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
+import { InsertAuditTrailDTO, performAsyncOperationWithAuditTrail } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
@@ -237,14 +239,30 @@ const updateParticipantParser = z.object({
   crmAgreementNumber: z.string().nullable(),
 });
 
-export const updateParticipant = async (participant: Participant, req: ParticipantRequest) => {
+export const updateParticipant = async (participant: Participant, req: UserParticipantRequest) => {
   const {
     apiRoles,
     participantTypes: participantTypeIds,
     participantName,
     crmAgreementNumber,
   } = updateParticipantParser.parse(req.body);
-  try {
+  const { user } = req;
+  const traceId = getTraceId(req);
+
+  const auditTrailInsertObject: InsertAuditTrailDTO = {
+    userId: user!.id,
+    userEmail: user!.email,
+    event: AuditTrailEvents.ManageParticipant,
+    eventData: {
+      action: AuditAction.Update,
+      apiRoles,
+      participantName,
+      participantTypes: participantTypeIds,
+      crmAgreementNumber,
+    },
+  };
+
+  await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
     await Participant.transaction(async (trx) => {
       await Participant.query()
         .where('id', participant.id)
@@ -254,12 +272,7 @@ export const updateParticipant = async (participant: Participant, req: Participa
     });
     const types = await getParticipantTypesByIds(participantTypeIds);
     setSiteClientTypes({ siteId: participant.siteId, types });
-  } catch (error) {
-    const { errorLogger } = getLoggers();
-    const traceId = getTraceId(req);
-    errorLogger.error(`Participant information could not be updated: ${error}`, traceId);
-    throw error;
-  }
+  });
 };
 
 export const UpdateSharingTypes = async (

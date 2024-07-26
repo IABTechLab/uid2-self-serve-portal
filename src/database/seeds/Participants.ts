@@ -104,13 +104,17 @@ export async function seed(knex: Knex): Promise<void> {
   // Deletes existing entries for sampleData
 
   const sampleParticipantNames = sampleData.map((d) => d.name);
+  const sampleParticipantIds = await knex('participants')
+    .whereIn('name', sampleParticipantNames)
+    .pluck('id');
 
-  await knex('users')
-    .join('participants', 'users.participantId', '=', 'participants.id')
-    .whereIn('participants.name', sampleParticipantNames)
-    .del();
-
+  await knex('auditTrails')
+    .whereIn('participantId', sampleParticipantIds)
+    .update('participantId', null);
+  await knex('usersToParticipantRoles').whereIn('participantId', sampleParticipantIds).del();
+  await knex('users').whereIn('participantId', sampleParticipantIds).del();
   await knex('participants').whereIn('name', sampleParticipantNames).del();
+
   // Inserts seed entries
   const promises = sampleData.map((sample) =>
     CreateParticipant(knex, sample, sample.type, sample.apiRoleNames)

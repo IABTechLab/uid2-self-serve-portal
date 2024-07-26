@@ -6,6 +6,7 @@ import { ModelObjectOpt } from './ModelObjectOpt';
 import type { Participant } from './Participant';
 
 export interface IUser {}
+// TODO rename this property to differentiate from user/participant roles
 export enum UserRole {
   BusinessDevelopment = 'Business Development',
   DA = 'Data / Analytics',
@@ -51,7 +52,7 @@ export class User extends BaseModel {
   declare firstName: string;
   declare lastName: string;
   declare phone?: string;
-  declare role: UserRole;
+  declare role: UserRole; // TODO rename this to differentiate from user/participant roles
   declare participants?: Participant[];
   declare acceptedTerms: boolean;
 
