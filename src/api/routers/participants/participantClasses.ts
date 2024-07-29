@@ -13,7 +13,7 @@ export const ParticipantCreationRequest = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
-  role: z.string().optional(),
+  jobFunction: z.string().optional(),
   crmAgreementNumber: z.string(),
 });
 

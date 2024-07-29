@@ -2,7 +2,7 @@ import { injectable } from 'inversify';
 import { z } from 'zod';
 
 import { ParticipantType } from '../entities/ParticipantType';
-import { UserRole } from '../entities/User';
+import { JobFunction } from '../entities/User';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
@@ -17,7 +17,7 @@ export type DeletedUser = {
 export const UpdateUserParser = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  role: z.nativeEnum(UserRole),
+  jobFunction: z.nativeEnum(JobFunction),
 });
 
 export const SelfResendInvitationParser = z.object({ email: z.string() });

@@ -16,7 +16,7 @@ export type InviteTeamMemberForm = {
   firstName: string;
   lastName: string;
   email: string;
-  role: string;
+  jobFunction: string;
 };
 
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;

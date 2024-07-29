@@ -61,7 +61,7 @@ export type AddParticipantEventData = {
   lastName: string;
   participantName: string;
   participantTypes: number[];
-  role: string;
+  jobFunction: string;
   siteId?: number;
   crmAgreementNumber: string;
 };

@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { UserRole } from '../../../api/entities/User';
+import { JobFunction } from '../../../api/entities/User';
 import EditParticipantDialog from './EditParticipantDialog';
 
 const meta: Meta<typeof EditParticipantDialog> = {
@@ -45,7 +45,7 @@ const participant = {
       email: 'test5@example.com',
       firstName: 'First Test User 5',
       lastName: 'Last Test User 5',
-      role: UserRole.Marketing,
+      jobFunction: JobFunction.Marketing,
       acceptedTerms: false,
     },
   ],

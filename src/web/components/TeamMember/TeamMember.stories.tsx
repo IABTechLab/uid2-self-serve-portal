@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { UserRole } from '../../../api/entities/User';
+import { JobFunction } from '../../../api/entities/User';
 import TeamMember from './TeamMember';
 
 const meta: Meta<typeof TeamMember> = {
@@ -29,7 +29,7 @@ export const WithAcceptedTerm: Story = {
       email: 'test@user.com',
       firstName: 'test',
       lastName: 'test',
-      role: UserRole.DA,
+      jobFunction: JobFunction.DA,
       acceptedTerms: true,
     },
     resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),
@@ -46,7 +46,7 @@ export const PendingMember: Story = {
       email: 'test@user.com',
       firstName: 'test',
       lastName: 'user 2',
-      role: UserRole.Engineering,
+      jobFunction: JobFunction.Engineering,
       acceptedTerms: false,
     },
     resendInvite: (id) => Promise.resolve(console.log(`Resend invite to userId: ${id}`)),

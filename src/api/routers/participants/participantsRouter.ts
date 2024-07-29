@@ -11,7 +11,7 @@ import {
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { UserDTO, UserRole } from '../../entities/User';
+import { JobFunction, UserDTO } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
@@ -84,7 +84,7 @@ export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
   'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
 > & {
-  requestingUser: Pick<UserDTO, 'email'> & Partial<Pick<UserDTO, 'role'>> & { fullName: string };
+  requestingUser: Pick<UserDTO, 'email'> & Partial<Pick<UserDTO, 'jobFunction'>> & { fullName: string };
 };
 
 export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
@@ -101,7 +101,7 @@ function mapParticipantToApprovalRequest(participant: Participant): ParticipantR
     status: participant.status,
     requestingUser: {
       email: firstUser ? firstUser.email : '',
-      role: firstUser?.role,
+      jobFunction: firstUser?.jobFunction,
       fullName: firstUser
         ? firstUser?.fullName()
         : 'There is no user attached to this participant.',
@@ -226,7 +226,7 @@ export function createParticipantsRouter() {
     firstName: z.string(),
     lastName: z.string(),
     email: z.string(),
-    role: z.nativeEnum(UserRole),
+    jobFunction: z.nativeEnum(JobFunction),
   });
 
   participantsRouter.post(
@@ -234,7 +234,7 @@ export function createParticipantsRouter() {
     async (req: ParticipantRequest, res: Response) => {
       try {
         const { participant } = req;
-        const { firstName, lastName, email, role } = invitationParser.parse(req.body);
+        const { firstName, lastName, email, jobFunction } = invitationParser.parse(req.body);
         const existingUser = await findUserByEmail(email);
         if (existingUser) {
           return res.status(400).send('Error inviting user');
@@ -244,7 +244,7 @@ export function createParticipantsRouter() {
         await createUserInPortal(
           {
             email,
-            role,
+            jobFunction,
             firstName,
             lastName,
           },

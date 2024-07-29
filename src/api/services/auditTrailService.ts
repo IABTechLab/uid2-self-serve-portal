@@ -261,7 +261,7 @@ export const insertAddParticipantAuditTrail = async (
     firstName: data.users[0].firstName,
     lastName: data.users[0].lastName,
     participantTypes: data.types.map((type) => type.id),
-    role: data.users[0].role!,
+    jobFunction: data.users[0].jobFunction!,
     crmAgreementNumber: data.crmAgreementNumber,
   };
 

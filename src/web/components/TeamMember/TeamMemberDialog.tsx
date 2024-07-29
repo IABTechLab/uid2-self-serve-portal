@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { UserDTO, UserRole } from '../../../api/entities/User';
+import { JobFunction, UserDTO } from '../../../api/entities/User';
 import {
   InviteTeamMemberForm,
   UpdateTeamMemberForm,
@@ -39,8 +39,8 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
-      const { firstName, lastName, role } = formData;
-      await props.onUpdateTeamMember({ firstName, lastName, role });
+      const { firstName, lastName, jobFunction } = formData;
+      await props.onUpdateTeamMember({ firstName, lastName, jobFunction });
     } else {
       await props.onAddTeamMember(formData);
     }
@@ -79,12 +79,12 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             }}
           />
           <SelectInput
-            inputName='role'
+            inputName='jobFunction'
             label='Job Function'
             rules={{ required: 'Please specify your job function.' }}
-            options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-              optionLabel: UserRole[key],
-              value: UserRole[key],
+            options={(Object.keys(JobFunction) as Array<keyof typeof JobFunction>).map((key) => ({
+              optionLabel: JobFunction[key],
+              value: JobFunction[key],
             }))}
           />
           <FormSubmitButton>Save Team Member</FormSubmitButton>

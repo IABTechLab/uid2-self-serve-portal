@@ -20,7 +20,7 @@ export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationParti
 export type CreateParticipantForm = {
   companyName: string;
   companyType: number[];
-  role: string;
+  jobFunction: string;
   canSign: boolean;
   signeeEmail: string;
   agreeToTerms: boolean;
@@ -43,7 +43,7 @@ export async function CreateParticipant(formData: CreateParticipantForm, user: K
   const users = [
     {
       email: user.email!,
-      role: formData.role,
+      jobFunction: formData.jobFunction,
       firstName: user.firstName,
       lastName: user.lastName,
       acceptedTerms: formData.agreeToTerms,
@@ -178,7 +178,7 @@ export type AddParticipantForm = {
   siteId?: number;
   siteIdType: number;
   siteName?: string;
-  role: string;
+  jobFunction: string;
   crmAgreementNumber: string;
 };
 

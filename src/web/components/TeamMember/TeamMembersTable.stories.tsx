@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 
-import { UserRole } from '../../../api/entities/User';
+import { JobFunction } from '../../../api/entities/User';
 import TeamMembersTable from './TeamMembersTable';
 
 const meta: Meta<typeof TeamMembersTable> = {
@@ -31,7 +31,7 @@ export const WithTeamMembers: Story = {
         email: 'test@user.com',
         firstName: 'test',
         lastName: 'test',
-        role: UserRole.DA,
+        jobFunction: JobFunction.DA,
         acceptedTerms: true,
       },
       {
@@ -39,7 +39,7 @@ export const WithTeamMembers: Story = {
         email: 'test@user.com',
         firstName: 'test',
         lastName: 'user 2',
-        role: UserRole.Engineering,
+        jobFunction: JobFunction.Engineering,
         acceptedTerms: false,
       },
     ],

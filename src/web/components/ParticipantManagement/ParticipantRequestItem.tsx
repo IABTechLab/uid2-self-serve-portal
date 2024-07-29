@@ -64,7 +64,9 @@ export function ParticipantRequestItem({
         <div className='participant-item-email'>{participant.requestingUser.email}</div>
       </td>
       <td>
-        <div className='participant-item-job-function'>{participant.requestingUser.role}</div>
+        <div className='participant-item-job-function'>
+          {participant.requestingUser.jobFunction}
+        </div>
       </td>
       <td className='action'>
         <div className='action-cell'>
