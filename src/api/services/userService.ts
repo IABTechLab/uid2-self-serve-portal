@@ -53,6 +53,7 @@ export class UserService {
     return result;
   }
 
+  // TODO: Allow for a participant to be specified, so they aren't removed from all of their participants in UID2-3852
   public async deleteUser(req: UserRequest) {
     const { user } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
@@ -65,6 +66,7 @@ export class UserService {
     }
     const data: DeletedUser = {
       email: `${user?.email}-removed-${uuid()}`,
+      // TODO: Remove participantId in UID2-3821
       participantId: null,
       deleted: true,
     };
