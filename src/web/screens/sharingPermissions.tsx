@@ -1,3 +1,4 @@
+import { faro, FaroErrorBoundary } from '@grafana/faro-react';
 import { AxiosError } from 'axios';
 import { ReactNode, Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
@@ -189,7 +190,15 @@ function SharingPermissions() {
 export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
-  errorElement: <RouteErrorBoundary />,
+  errorElement: (
+    <FaroErrorBoundary
+      onError={(e) => {
+        console.info('error: ', e);
+        faro.api.pushError(new Error('oh no'));
+        faro.api.pushEvent('/dashboard/sharing');
+      }}
+    />
+  ),
   path: '/dashboard/sharing',
   loader,
 };
