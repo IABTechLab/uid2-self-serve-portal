@@ -3,7 +3,7 @@ import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
-import { User, JobFunction } from '../../api/entities/User';
+import { JobFunction, User } from '../../api/entities/User';
 import { CreateParticipant } from './Participants';
 
 type UserType = ModelObject<User>;
