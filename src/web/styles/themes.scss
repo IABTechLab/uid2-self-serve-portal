@@ -55,7 +55,8 @@
   --theme-search-text: #0459fd;
   --theme-table-header-text: black;
   --theme-transparent-button: #0459fd;
-  --theme-disabled-input: #adadad;
+  --theme-disabled-input: gray;
+  --theme-disabled-input-background: #efefef;
   --theme-dialog-close-button: #0459fd;
   --theme-documentation-card: #0459fd;
 }
@@ -93,7 +94,8 @@
   --theme-success-background: #{$color-success-toast-darker};
   --theme-warning-background: #{$color-warning-toast-darker};
   --theme-table-action-button: white;
-  --theme-disabled-input: #6e6e6e;
+  --theme-disabled-input: #{$color-black-lightest};
+  --theme-disabled-input-background: gray;
   --theme-dialog-close-button: white;
   --theme-select-mouseover: #{$color-black-lighter};
   --theme-documentation-card: #7085d4;
