@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { JobFunction } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import { CreateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
@@ -71,10 +71,12 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
           inputName='jobFunction'
           label='Job Function'
           rules={{ required: 'Please specify your job function.' }}
-          options={(Object.keys(JobFunction) as Array<keyof typeof JobFunction>).map((key) => ({
-            optionLabel: JobFunction[key],
-            value: JobFunction[key],
-          }))}
+          options={(Object.keys(UserJobFunction) as Array<keyof typeof UserJobFunction>).map(
+            (key) => ({
+              optionLabel: UserJobFunction[key],
+              value: UserJobFunction[key],
+            })
+          )}
         />
         <div className='terms-section'>
           <FormStyledCheckbox

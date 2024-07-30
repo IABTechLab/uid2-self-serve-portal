@@ -6,7 +6,7 @@ import { ModelObjectOpt } from './ModelObjectOpt';
 import type { Participant } from './Participant';
 
 export interface IUser {}
-export enum JobFunction {
+export enum UserJobFunction {
   BusinessDevelopment = 'Business Development',
   DA = 'Data / Analytics',
   Marketing = 'Marketing',
@@ -51,7 +51,7 @@ export class User extends BaseModel {
   declare firstName: string;
   declare lastName: string;
   declare phone?: string;
-  declare jobFunction: JobFunction;
+  declare jobFunction: UserJobFunction;
   declare participants?: Participant[];
   declare acceptedTerms: boolean;
 
@@ -74,7 +74,7 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   phone: z.string().optional(),
-  jobFunction: z.nativeEnum(JobFunction).optional(),
+  jobFunction: z.nativeEnum(UserJobFunction).optional(),
   acceptedTerms: z.boolean(),
 });
 

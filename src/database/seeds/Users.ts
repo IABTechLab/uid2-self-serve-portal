@@ -3,7 +3,7 @@ import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
-import { JobFunction, User } from '../../api/entities/User';
+import { User, UserJobFunction } from '../../api/entities/User';
 import { CreateParticipant } from './Participants';
 
 type UserType = ModelObject<User>;
@@ -21,7 +21,7 @@ const sampleData: Optional<UserType, 'id'>[] = [
     firstName: 'Test',
     lastName: 'User',
     phone: '+61298765432',
-    jobFunction: JobFunction.DA,
+    jobFunction: UserJobFunction.DA,
     acceptedTerms: false,
   },
 ];

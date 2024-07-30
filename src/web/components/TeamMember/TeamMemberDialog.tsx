@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { JobFunction, UserDTO } from '../../../api/entities/User';
+import { UserDTO, UserJobFunction } from '../../../api/entities/User';
 import {
   InviteTeamMemberForm,
   UpdateTeamMemberForm,
@@ -82,10 +82,12 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             inputName='jobFunction'
             label='Job Function'
             rules={{ required: 'Please specify your job function.' }}
-            options={(Object.keys(JobFunction) as Array<keyof typeof JobFunction>).map((key) => ({
-              optionLabel: JobFunction[key],
-              value: JobFunction[key],
-            }))}
+            options={(Object.keys(UserJobFunction) as Array<keyof typeof UserJobFunction>).map(
+              (key) => ({
+                optionLabel: UserJobFunction[key],
+                value: UserJobFunction[key],
+              })
+            )}
           />
           <FormSubmitButton>Save Team Member</FormSubmitButton>
         </form>

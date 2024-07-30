@@ -11,7 +11,7 @@ import {
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { JobFunction, UserDTO } from '../../entities/User';
+import { UserDTO, UserJobFunction } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
@@ -84,7 +84,8 @@ export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
   'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
 > & {
-  requestingUser: Pick<UserDTO, 'email'> & Partial<Pick<UserDTO, 'jobFunction'>> & { fullName: string };
+  requestingUser: Pick<UserDTO, 'email'> &
+    Partial<Pick<UserDTO, 'jobFunction'>> & { fullName: string };
 };
 
 export const ClientTypeEnum = z.enum(['DSP', 'ADVERTISER', 'DATA_PROVIDER', 'PUBLISHER']);
@@ -226,7 +227,7 @@ export function createParticipantsRouter() {
     firstName: z.string(),
     lastName: z.string(),
     email: z.string(),
-    jobFunction: z.nativeEnum(JobFunction),
+    jobFunction: z.nativeEnum(UserJobFunction),
   });
 
   participantsRouter.post(

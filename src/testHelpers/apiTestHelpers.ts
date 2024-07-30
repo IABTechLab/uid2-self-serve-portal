@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { Knex } from 'knex';
 
 import { Participant, ParticipantStatus } from '../api/entities/Participant';
-import { JobFunction, User } from '../api/entities/User';
+import { User, UserJobFunction } from '../api/entities/User';
 import { CreateParticipant } from '../database/seeds/Participants';
 
 export function createResponseObject() {
@@ -54,14 +54,14 @@ export async function createUser({
   email = faker.internet.email(),
   firstName = faker.person.firstName(),
   lastName = faker.person.lastName(),
-  jobFunction = JobFunction.DA,
+  jobFunction = UserJobFunction.DA,
   acceptedTerms = true,
   participantId,
 }: {
   email?: string;
   firstName?: string;
   lastName?: string;
-  jobFunction?: JobFunction;
+  jobFunction?: UserJobFunction;
   acceptedTerms?: boolean;
   participantId?: number;
 }) {
