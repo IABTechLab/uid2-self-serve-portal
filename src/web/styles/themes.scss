@@ -57,6 +57,7 @@
   --theme-transparent-button: #0459fd;
   --theme-disabled-input: gray;
   --theme-disabled-input-background: #efefef;
+  --theme-disabled-input-border: #dadada;
   --theme-dialog-close-button: #0459fd;
   --theme-documentation-card: #0459fd;
 }
@@ -96,6 +97,7 @@
   --theme-table-action-button: white;
   --theme-disabled-input: #{$color-black-lightest};
   --theme-disabled-input-background: gray;
+  --theme-disabled-input-border: #9a9a9a;
   --theme-dialog-close-button: white;
   --theme-select-mouseover: #{$color-black-lighter};
   --theme-documentation-card: #7085d4;
