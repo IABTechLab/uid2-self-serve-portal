@@ -41,8 +41,9 @@
   --theme-search-bar-background: rgb(112 133 212 / 15%);
   --theme-scrollbar: #c0d6ff;
   --theme-disabled-button-text: #878787;
-  --theme-disabled-icon: #878787;
+  --theme-disabled-icon: #d9d9d9;
   --theme-disabled-button: #d9d9d9;
+  --theme-disabled-border: #b8b8b8;
   --theme-label: rgb(120 204 0 / 40%);
   --theme-divider: #030a40;
   --theme-footer-divider: #0300a5;
@@ -54,7 +55,9 @@
   --theme-search-text: #0459fd;
   --theme-table-header-text: black;
   --theme-transparent-button: #0459fd;
-  --theme-disabled-input: #878787;
+  --theme-disabled-input: gray;
+  --theme-disabled-input-background: #efefef;
+  --theme-disabled-input-border: #dadada;
   --theme-dialog-close-button: #0459fd;
   --theme-documentation-card: #0459fd;
 }
@@ -72,6 +75,7 @@
   --theme-button-text: white;
   --theme-disabled-button-text: black;
   --theme-disabled-icon: #{$color-black-lightest};
+  --theme-disabled-border: #{$color-black-lightest};
   --theme-divider: white;
   --theme-background-table-header: #{$color-black-lightest};
   --theme-background-table-header-border: white;
@@ -91,7 +95,9 @@
   --theme-success-background: #{$color-success-toast-darker};
   --theme-warning-background: #{$color-warning-toast-darker};
   --theme-table-action-button: white;
-  --theme-disabled-input: white;
+  --theme-disabled-input: #{$color-black-lightest};
+  --theme-disabled-input-background: gray;
+  --theme-disabled-input-border: #9a9a9a;
   --theme-dialog-close-button: white;
   --theme-select-mouseover: #{$color-black-lighter};
   --theme-documentation-card: #7085d4;
