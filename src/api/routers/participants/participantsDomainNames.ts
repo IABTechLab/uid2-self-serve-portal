@@ -6,7 +6,7 @@ import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getSite, setSiteDomainNames } from '../../services/adminServiceClient';
 import {
-  InsertAuditTrailDTO, performAsyncOperationWithAuditTrail
+  constructAuditTrailObject, performAsyncOperationWithAuditTrail
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
 
@@ -30,17 +30,11 @@ export async function setParticipantDomainNames(req: UserParticipantRequest, res
     return siteIdNotSetError(req, res);
   }
 
-  const auditTrailInsertObject: InsertAuditTrailDTO = {
-    userId: user!.id,
-    userEmail: user!.email,
-    participantId: participant.id,
-    event: AuditTrailEvents.UpdateDomainNames,
-    eventData: {
-      action: AuditAction.Update,
-      siteId: participant.siteId,
-      domainNames,
-    },
-  };
+  const auditTrailInsertObject = constructAuditTrailObject(user!, AuditTrailEvents.UpdateDomainNames, {
+    action: AuditAction.Update,
+    siteId: participant.siteId,
+    domainNames,
+  });
 
   const updatedSite = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,

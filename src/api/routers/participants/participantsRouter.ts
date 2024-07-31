@@ -38,7 +38,7 @@ import {
   validateApiRoles,
 } from '../../services/apiKeyService';
 import {
-  InsertAuditTrailDTO,
+  constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import {
@@ -174,19 +174,18 @@ export function createParticipantsRouter() {
         dateApproved: new Date(),
       };
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        event: AuditTrailEvents.ApproveAccount,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ApproveAccount,
+        {
           oldName: participant?.name,
           siteId: data.siteId!,
           newName: data.name,
           oldTypeIds: participant?.types!.map((type) => type.id),
           newTypeIds: data.types.map((type) => type.id),
           apiRoles: data.apiRoles.map((role) => role.id),
-        },
-      };
+        }
+      );
 
       const users = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,
@@ -258,19 +257,17 @@ export function createParticipantsRouter() {
           return res.status(400).send('Error inviting user');
         }
         const kcAdminClient = await getKcAdminClient();
-        const auditTrailInsertObject: InsertAuditTrailDTO = {
-          userId: user!.id,
-          userEmail: user!.email,
-          participantId: participant?.id,
-          event: AuditTrailEvents.ManageTeamMembers,
-          eventData: {
+        const auditTrailInsertObject = constructAuditTrailObject(
+          user!,
+          AuditTrailEvents.ManageTeamMembers,
+          {
             action: AuditAction.Add,
             firstName,
             lastName,
             email,
             role,
-          },
-        };
+          }
+        );
 
         await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
           const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
@@ -380,12 +377,10 @@ export function createParticipantsRouter() {
       }
 
       const traceId = getTraceId(req);
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.ManageApiKey,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ManageApiKey,
+        {
           action: AuditAction.Update,
           siteId: participant.siteId,
           keyId: editedKey.key_id,
@@ -393,8 +388,8 @@ export function createParticipantsRouter() {
           newKeyName: newName,
           apiRoles: editedKey.roles.map((role) => role.roleName),
           newApiRoles,
-        },
-      };
+        }
+      );
 
       await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
         const participantRoles = await getApiRoles(participant);
@@ -443,19 +438,17 @@ export function createParticipantsRouter() {
       }
 
       const traceId = getTraceId(req);
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.ManageApiKey,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ManageApiKey,
+        {
           action: AuditAction.Delete,
           siteId: participant.siteId,
           keyName: apiKey.name,
           apiRoles: apiKey.roles.map((role) => role.roleName),
           keyId: apiKey.key_id,
-        },
-      };
+        }
+      );
 
       await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
         disableApiKey(apiKey.contact)
@@ -492,18 +485,16 @@ export function createParticipantsRouter() {
         return res.status(400).send('Invalid API Permissions');
       }
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.ManageApiKey,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ManageApiKey,
+        {
           action: AuditAction.Add,
           siteId: participant.siteId,
           keyName,
           apiRoles,
-        },
-      };
+        }
+      );
 
       const key = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,
@@ -531,17 +522,15 @@ export function createParticipantsRouter() {
         return siteIdNotSetError(req, res);
       }
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.UpdateSharingPermissions,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.UpdateSharingPermissions,
+        {
           action: AuditAction.Add,
           sharingPermissions: newParticipantSites,
           siteId: participant.siteId,
-        },
-      };
+        }
+      );
 
       const sharingParticipants = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,
@@ -575,18 +564,16 @@ export function createParticipantsRouter() {
       }
 
       const disabled = false;
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.ManageKeyPair,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ManageKeyPair,
+        {
           action: AuditAction.Add,
           siteId: participant.siteId,
           name,
           disabled,
-        },
-      };
+        }
+      );
 
       const keyPairs = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,
@@ -609,18 +596,16 @@ export function createParticipantsRouter() {
         return siteIdNotSetError(req, res);
       }
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.ManageKeyPair,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ManageKeyPair,
+        {
           action: AuditAction.Update,
           siteId: participant.siteId,
           name,
           disabled,
-        },
-      };
+        }
+      );
 
       const updatedKeyPair = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,
@@ -647,18 +632,16 @@ export function createParticipantsRouter() {
       const disabledKeyPairName = `${name}-disabled-${disabledDate}`;
       const disabled = true;
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.ManageKeyPair,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.ManageKeyPair,
+        {
           action: AuditAction.Delete,
           siteId: participant.siteId,
           name,
           disabled,
-        },
-      };
+        }
+      );
 
       await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
         updateKeyPair(subscriptionId, disabledKeyPairName, disabled)
@@ -693,17 +676,15 @@ export function createParticipantsRouter() {
         return siteIdNotSetError(req, res);
       }
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.UpdateSharingPermissions,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.UpdateSharingPermissions,
+        {
           action: AuditAction.Delete,
           sharingPermissions: sharingSitesToRemove,
           siteId: participant.siteId,
-        },
-      };
+        }
+      );
 
       const sharingParticipants = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,
@@ -729,16 +710,14 @@ export function createParticipantsRouter() {
         return siteIdNotSetError(req, res);
       }
 
-      const auditTrailInsertObject: InsertAuditTrailDTO = {
-        userId: user!.id,
-        userEmail: user!.email,
-        participantId: participant.id,
-        event: AuditTrailEvents.UpdateSharingTypes,
-        eventData: {
+      const auditTrailInsertObject = constructAuditTrailObject(
+        user!,
+        AuditTrailEvents.UpdateSharingTypes,
+        {
           siteId: participant.siteId,
           allowedTypes: types,
-        },
-      };
+        }
+      );
 
       const sharingParticipants = await performAsyncOperationWithAuditTrail(
         auditTrailInsertObject,

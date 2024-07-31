@@ -10,7 +10,10 @@ import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
-import { InsertAuditTrailDTO, performAsyncOperationWithAuditTrail } from './auditTrailService';
+import {
+  constructAuditTrailObject,
+  performAsyncOperationWithAuditTrail,
+} from './auditTrailService';
 import { deleteUserByEmail, updateUserProfile } from './kcUsersService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
@@ -71,18 +74,17 @@ export class UserService {
       deleted: true,
     };
 
-    const auditTrailInsertObject: InsertAuditTrailDTO = {
-      userId: requestingUser!.id,
-      userEmail: requestingUser!.email,
-      participantId: currentParticipant?.id,
-      event: AuditTrailEvents.ManageTeamMembers,
-      eventData: {
+    const auditTrailInsertObject = constructAuditTrailObject(
+      requestingUser!,
+      AuditTrailEvents.ManageTeamMembers,
+      {
         action: AuditAction.Delete,
         firstName: user?.firstName,
         lastName: user?.lastName,
         role: user?.role,
-      },
-    };
+      }
+    );
+
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
       const kcAdminClient = await getKcAdminClient();
       await Promise.all([
@@ -96,22 +98,18 @@ export class UserService {
     const { user } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
     const data = UpdateUserParser.parse(req.body);
-    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-    const currentParticipant = user?.participants?.[0];
     const traceId = getTraceId(req);
 
-    const auditTrailInsertObject: InsertAuditTrailDTO = {
-      userId: requestingUser!.id,
-      userEmail: requestingUser!.email,
-      participantId: currentParticipant?.id,
-      event: AuditTrailEvents.ManageTeamMembers,
-      eventData: {
+    const auditTrailInsertObject = constructAuditTrailObject(
+      requestingUser!,
+      AuditTrailEvents.ManageTeamMembers,
+      {
         action: AuditAction.Update,
         firstName: user?.firstName,
         lastName: user?.lastName,
         role: user?.role,
-      },
-    };
+      }
+    );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
       const kcAdminClient = await getKcAdminClient();

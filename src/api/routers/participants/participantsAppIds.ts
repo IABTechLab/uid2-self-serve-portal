@@ -4,9 +4,9 @@ import { z } from 'zod';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
-import { getSite, setSiteDomainNames } from '../../services/adminServiceClient';
+import { getSite, setSiteAppNames } from '../../services/adminServiceClient';
 import {
-  InsertAuditTrailDTO,
+  constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
@@ -30,22 +30,16 @@ export async function setParticipantAppNames(req: UserParticipantRequest, res: R
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
-  const auditTrailInsertObject: InsertAuditTrailDTO = {
-    userId: user!.id,
-    userEmail: user!.email,
-    participantId: participant.id,
-    event: AuditTrailEvents.UpdateAppNames,
-    eventData: {
-      action: AuditAction.Update,
-      siteId: participant.siteId,
-      appNames,
-    },
-  };
+  const auditTrailInsertObject = constructAuditTrailObject(user!, AuditTrailEvents.UpdateAppNames, {
+    action: AuditAction.Update,
+    siteId: participant.siteId,
+    appNames,
+  });
 
   const updatedSite = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,
     traceId,
-    async () => setSiteDomainNames(participant.siteId!, appNames)
+    async () => setSiteAppNames(participant.siteId!, appNames)
   );
 
   return res.status(200).json(updatedSite.app_names);

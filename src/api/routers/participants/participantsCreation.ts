@@ -13,7 +13,7 @@ import {
   SiteCreationRequest,
 } from '../../services/adminServiceHelpers';
 import {
-  InsertAuditTrailDTO,
+  constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import {
@@ -106,11 +106,10 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     dateApproved: new Date(),
   });
 
-  const auditTrailInsertObject: InsertAuditTrailDTO = {
-    userId: requestingUser!.id,
-    userEmail: requestingUser!.email,
-    event: AuditTrailEvents.ManageParticipant,
-    eventData: {
+  const auditTrailInsertObject = constructAuditTrailObject(
+    requestingUser!,
+    AuditTrailEvents.ManageParticipant,
+    {
       action: AuditAction.Add,
       siteId: participantData.siteId!,
       apiRoles: participantData.apiRoles.map((role) => role.id),
@@ -121,8 +120,8 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
       participantTypes: participantData.types.map((type) => type.id),
       role: participantData.users[0].role!,
       crmAgreementNumber: participantData.crmAgreementNumber,
-    },
-  };
+    }
+  );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
     // create participant, user, and role/type mappings

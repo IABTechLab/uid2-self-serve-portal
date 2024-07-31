@@ -18,7 +18,10 @@ import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
 import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
-import { InsertAuditTrailDTO, performAsyncOperationWithAuditTrail } from './auditTrailService';
+import {
+  constructAuditTrailObject,
+  performAsyncOperationWithAuditTrail,
+} from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import { findUserByEmail, isUserBelongsToParticipant } from './usersService';
@@ -249,18 +252,17 @@ export const updateParticipant = async (participant: Participant, req: UserParti
   const { user } = req;
   const traceId = getTraceId(req);
 
-  const auditTrailInsertObject: InsertAuditTrailDTO = {
-    userId: user!.id,
-    userEmail: user!.email,
-    event: AuditTrailEvents.ManageParticipant,
-    eventData: {
+  const auditTrailInsertObject = constructAuditTrailObject(
+    user!,
+    AuditTrailEvents.ManageParticipant,
+    {
       action: AuditAction.Update,
       apiRoles,
       participantName,
       participantTypes: participantTypeIds,
       crmAgreementNumber,
-    },
-  };
+    }
+  );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
     await Participant.transaction(async (trx) => {
