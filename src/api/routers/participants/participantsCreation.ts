@@ -118,7 +118,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
       firstName: participantData.users[0].firstName,
       lastName: participantData.users[0].lastName,
       participantTypes: participantData.types.map((type) => type.id),
-      role: participantData.users[0].role!,
+      jobFunction: participantData.users[0].jobFunction,
       crmAgreementNumber: participantData.crmAgreementNumber,
     }
   );

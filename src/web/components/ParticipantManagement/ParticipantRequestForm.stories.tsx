@@ -2,7 +2,7 @@
 import { Meta, StoryFn, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { UserRole } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { TestSiteListProvider } from '../../services/site';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
@@ -66,7 +66,7 @@ export const ParticipantApprovalMatchingSite: Story = {
       requestingUser: {
         email: 'test@example.com',
         fullName: 'Test User',
-        role: UserRole.MediaBuyer,
+        jobFunction: UserJobFunction.MediaBuyer,
       },
     },
     participantTypes: [
@@ -101,7 +101,7 @@ export const ParticipantApprovalSiteSearch: Story = {
       requestingUser: {
         email: 'test@example.com',
         fullName: 'Test User',
-        role: UserRole.MediaBuyer,
+        jobFunction: UserJobFunction.MediaBuyer,
       },
     },
     participantTypes: [

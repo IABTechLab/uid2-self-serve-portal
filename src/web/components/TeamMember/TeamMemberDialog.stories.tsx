@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { UserRole } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import TeamMemberDialog from './TeamMemberDialog';
 
 const meta: Meta<typeof TeamMemberDialog> = {
@@ -51,7 +51,7 @@ export const WithTeamMember = () => {
             email: 'test@user.com',
             firstName: 'test',
             lastName: 'test',
-            role: UserRole.DA,
+            jobFunction: UserJobFunction.DA,
             acceptedTerms: true,
           }}
           teamMembers={[]}

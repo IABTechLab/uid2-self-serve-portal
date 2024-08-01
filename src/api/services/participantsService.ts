@@ -53,7 +53,7 @@ export const sendNewParticipantEmail = async (
     participantType: participantTypes.map((pt) => pt.typeName).join(', '),
     requestor: `${requestor.firstName} ${requestor.lastName}`,
     requestorEmail: requestor.email,
-    jobFunction: requestor.role,
+    jobFunction: requestor.jobFunction,
   };
 
   const approvers = await findApproversByType(typeIds);

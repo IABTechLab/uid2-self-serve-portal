@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { UserRole } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
 import { AddParticipantForm } from '../../services/participant';
 import { useSiteList } from '../../services/site';
@@ -268,13 +268,15 @@ function AddParticipantDialog({
                     }}
                   />
                 </div>
-                <div className='user-roles right-column'>
+                <div className='user-job-function right-column'>
                   <SelectInput
-                    inputName='role'
+                    inputName='jobFunction'
                     label='Job Function'
-                    options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-                      optionLabel: UserRole[key],
-                      value: UserRole[key],
+                    options={(
+                      Object.keys(UserJobFunction) as Array<keyof typeof UserJobFunction>
+                    ).map((key) => ({
+                      optionLabel: UserJobFunction[key],
+                      value: UserJobFunction[key],
                     }))}
                   />
                 </div>

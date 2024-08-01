@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { UserRole } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import { CreateParticipantForm } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { FormError, RootFormErrors, setGlobalErrors } from '../Input/FormError';
@@ -12,8 +12,8 @@ import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { TermsAndConditionsForm } from '../TermsAndConditions/TermsAndConditions';
 
-import './createAccountForm.scss';
 import '../../styles/forms.scss';
+import './createAccountForm.scss';
 
 export type CreateAccountFormProps = Readonly<{
   resolvedParticipantTypes: ParticipantTypeDTO[];
@@ -68,13 +68,15 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
           rules={{ required: 'Please specify Participant type.' }}
         />
         <SelectInput
-          inputName='role'
+          inputName='jobFunction'
           label='Job Function'
           rules={{ required: 'Please specify your job function.' }}
-          options={(Object.keys(UserRole) as Array<keyof typeof UserRole>).map((key) => ({
-            optionLabel: UserRole[key],
-            value: UserRole[key],
-          }))}
+          options={(Object.keys(UserJobFunction) as Array<keyof typeof UserJobFunction>).map(
+            (key) => ({
+              optionLabel: UserJobFunction[key],
+              value: UserJobFunction[key],
+            })
+          )}
         />
         <div className='terms-section'>
           <FormStyledCheckbox

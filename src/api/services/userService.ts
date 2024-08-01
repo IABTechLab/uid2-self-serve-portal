@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { ParticipantType } from '../entities/ParticipantType';
-import { UserRole } from '../entities/User';
+import { UserJobFunction } from '../entities/User';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
@@ -26,7 +26,7 @@ export type DeletedUser = {
 export const UpdateUserParser = z.object({
   firstName: z.string(),
   lastName: z.string(),
-  role: z.nativeEnum(UserRole),
+  jobFunction: z.nativeEnum(UserJobFunction),
 });
 
 export const SelfResendInvitationParser = z.object({ email: z.string() });
@@ -74,9 +74,10 @@ export class UserService {
       AuditTrailEvents.ManageTeamMembers,
       {
         action: AuditAction.Delete,
+        email: user?.email,
         firstName: user?.firstName,
         lastName: user?.lastName,
-        role: user?.role,
+        jobFunction: user?.jobFunction,
       }
     );
 
@@ -100,9 +101,10 @@ export class UserService {
       AuditTrailEvents.ManageTeamMembers,
       {
         action: AuditAction.Update,
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        role: user?.role,
+        email: user!.email, // So we know which user is being updated, in case their name changes
+        firstName: data.firstName,
+        lastName: data.lastName,
+        jobFunction: data.jobFunction,
       }
     );
 

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { UserRole } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import { ParticipantRequestsTable } from './ParticipantRequestsTable';
 
 const meta: Meta<typeof ParticipantRequestsTable> = {
@@ -24,7 +24,7 @@ export const ParticipantRequests: Story = {
         requestingUser: {
           email: 'test1@example.com',
           fullName: 'Test User  1',
-          role: UserRole.Engineering,
+          jobFunction: UserJobFunction.Engineering,
         },
       },
       {
@@ -38,7 +38,7 @@ export const ParticipantRequests: Story = {
         requestingUser: {
           email: 'test2@example.com',
           fullName: 'Test User 2',
-          role: UserRole.BusinessDevelopment,
+          jobFunction: UserJobFunction.BusinessDevelopment,
         },
       },
       {
@@ -53,7 +53,7 @@ export const ParticipantRequests: Story = {
         requestingUser: {
           email: 'test3@example.com',
           fullName: 'Test User 3',
-          role: UserRole.Marketing,
+          jobFunction: UserJobFunction.Marketing,
         },
       },
       {
@@ -69,7 +69,7 @@ export const ParticipantRequests: Story = {
         requestingUser: {
           email: 'test4@example.com',
           fullName: 'Test User 4',
-          role: UserRole.MediaBuyer,
+          jobFunction: UserJobFunction.MediaBuyer,
         },
       },
     ],

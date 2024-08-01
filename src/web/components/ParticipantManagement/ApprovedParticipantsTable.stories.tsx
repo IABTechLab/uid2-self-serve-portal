@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { ParticipantStatus } from '../../../api/entities/Participant';
-import { UserRole } from '../../../api/entities/User';
+import { UserJobFunction } from '../../../api/entities/User';
 import ApprovedParticipantsTable from './ApprovedParticipantsTable';
 
 const meta: Meta<typeof ApprovedParticipantsTable> = {
@@ -28,7 +28,7 @@ export const AllParticipants: Story = {
           email: 'tes2@example.com',
           firstName: 'Approver 2 First Name +',
           lastName: 'Approver 2 Last Name',
-          role: UserRole.Marketing,
+          jobFunction: UserJobFunction.Marketing,
           acceptedTerms: false,
         },
         dateApproved: new Date(),
@@ -39,7 +39,7 @@ export const AllParticipants: Story = {
             email: 'tes2@example.com',
             firstName: 'First Test User 2',
             lastName: 'Last Test User 2',
-            role: UserRole.Marketing,
+            jobFunction: UserJobFunction.Marketing,
             acceptedTerms: false,
           },
         ],
@@ -60,7 +60,7 @@ export const AllParticipants: Story = {
           email: 'tes3@example.com',
           firstName: 'Approver 3 First Name +',
           lastName: 'Approver 3 Last Name',
-          role: UserRole.Marketing,
+          jobFunction: UserJobFunction.Marketing,
           acceptedTerms: false,
         },
         dateApproved: new Date(),
@@ -71,7 +71,7 @@ export const AllParticipants: Story = {
             email: 'test3@example.com',
             firstName: 'First Test User 3',
             lastName: 'Last Test User 3',
-            role: UserRole.Marketing,
+            jobFunction: UserJobFunction.Marketing,
             acceptedTerms: false,
           },
         ],
@@ -96,7 +96,7 @@ export const AllParticipants: Story = {
           email: 'tes4@example.com',
           firstName: 'Approver 4 First Name +',
           lastName: 'Approver 4 Last Name',
-          role: UserRole.Marketing,
+          jobFunction: UserJobFunction.Marketing,
           acceptedTerms: false,
         },
         dateApproved: new Date(),
@@ -107,7 +107,7 @@ export const AllParticipants: Story = {
             email: 'test4@example.com',
             firstName: 'First Test User 4',
             lastName: 'Last Test User 4',
-            role: UserRole.Marketing,
+            jobFunction: UserJobFunction.Marketing,
             acceptedTerms: false,
           },
         ],
@@ -136,7 +136,7 @@ export const AllParticipants: Story = {
             email: 'test5@example.com',
             firstName: 'First Test User 5',
             lastName: 'Last Test User 5',
-            role: UserRole.Marketing,
+            jobFunction: UserJobFunction.Marketing,
             acceptedTerms: false,
           },
         ],

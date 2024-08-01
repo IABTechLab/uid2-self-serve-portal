@@ -92,7 +92,7 @@ function TeamMember({
         </div>
       </td>
       <td>{person.email}</td>
-      <td>{person.role}</td>
+      <td>{person.jobFunction}</td>
       <td className='action'>
         <div className='action-cell'>
           {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}

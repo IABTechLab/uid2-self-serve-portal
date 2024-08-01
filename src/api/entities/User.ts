@@ -6,8 +6,7 @@ import { ModelObjectOpt } from './ModelObjectOpt';
 import type { Participant } from './Participant';
 
 export interface IUser {}
-// TODO rename this property to differentiate from user/participant roles
-export enum UserRole {
+export enum UserJobFunction {
   BusinessDevelopment = 'Business Development',
   DA = 'Data / Analytics',
   Marketing = 'Marketing',
@@ -52,7 +51,7 @@ export class User extends BaseModel {
   declare firstName: string;
   declare lastName: string;
   declare phone?: string;
-  declare role: UserRole; // TODO rename this to differentiate from user/participant roles
+  declare jobFunction: UserJobFunction;
   declare participants?: Participant[];
   declare acceptedTerms: boolean;
 
@@ -75,7 +74,7 @@ export const UserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   phone: z.string().optional(),
-  role: z.nativeEnum(UserRole).optional(),
+  jobFunction: z.nativeEnum(UserJobFunction).optional(),
   acceptedTerms: z.boolean(),
 });
 
@@ -84,6 +83,6 @@ export const UserCreationPartial = UserSchema.pick({
   firstName: true,
   lastName: true,
   phone: true,
-  role: true,
+  jobFunction: true,
   acceptedTerms: true,
 });

@@ -191,7 +191,11 @@ function ParticipantApprovalForm({
               />
             </Input>
             <Input inputName='readonly-requestor-job' label='Job Function'>
-              <input className='input-container' disabled value={participant.requestingUser.role} />
+              <input
+                className='input-container'
+                disabled
+                value={participant.requestingUser.jobFunction}
+              />
             </Input>
             <FormSubmitButton>Approve Participant</FormSubmitButton>
           </form>
