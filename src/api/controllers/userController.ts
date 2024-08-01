@@ -128,17 +128,14 @@ export class UserController {
 
   @httpDelete('/:userId')
   public async deleteUser(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    try {
-      await this.userService.deleteUser(req);
-      res.sendStatus(200);
-    } catch (error: unknown) {
-      if (
-        error instanceof Error &&
-        error.message === 'You do not have permission to delete yourself.'
-      ) {
-        res.status(403).send([{ message: error.message }]);
-      }
+    const { user } = req;
+
+    if (req.auth?.payload?.email === user?.email) {
+      res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
     }
+
+    await this.userService.deleteUser(req);
+    res.sendStatus(200);
   }
 
   @httpPatch('/:userId')

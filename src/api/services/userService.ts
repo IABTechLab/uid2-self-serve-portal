@@ -60,13 +60,8 @@ export class UserService {
   public async deleteUser(req: UserRequest) {
     const { user } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
-    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
-    const currentParticipant = user?.participants?.[0];
     const traceId = getTraceId(req);
 
-    if (requestingUser?.email === user?.email) {
-      throw new Error('You do not have permission to delete yourself.');
-    }
     const data: DeletedUser = {
       email: `${user?.email}-removed-${uuid()}`,
       // TODO: Remove participantId in UID2-3821
