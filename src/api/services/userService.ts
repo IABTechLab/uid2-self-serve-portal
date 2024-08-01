@@ -101,7 +101,7 @@ export class UserService {
       AuditTrailEvents.ManageTeamMembers,
       {
         action: AuditAction.Update,
-        email: user!.email, // So we can which user is being updated
+        email: user!.email, // So we know which user is being updated, in case their name changes
         firstName: data.firstName,
         lastName: data.lastName,
         jobFunction: data.jobFunction,

@@ -252,7 +252,7 @@ export function createParticipantsRouter() {
         const { participant, user } = req;
         const { firstName, lastName, email, jobFunction } = invitationParser.parse(req.body);
         const traceId = getTraceId(req);
-        // TODO: support user belonging to multiple participants by not 400ing here if the user already exists.
+        // TODO: UID2-3878 - support user belonging to multiple participants by not 400ing here if the user already exists.
         const existingUser = await findUserByEmail(email);
         if (existingUser) {
           return res.status(400).send('Error inviting user');
