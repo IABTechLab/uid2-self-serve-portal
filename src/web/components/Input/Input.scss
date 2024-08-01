@@ -18,6 +18,8 @@
 
   .input-container:disabled {
     color: var(--theme-disabled-input);
+    background-color: var(--theme-disabled-input-background);
+    border: 1px solid var(--theme-disabled-input-border);
   }
 
   .multi-line-input-container {

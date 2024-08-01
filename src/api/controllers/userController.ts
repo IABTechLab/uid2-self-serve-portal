@@ -10,7 +10,6 @@ import {
   request,
   response,
 } from 'inversify-express-utils';
-import { v4 as uuid } from 'uuid';
 
 import { TYPES } from '../constant/types';
 import { Participant, ParticipantStatus } from '../entities/Participant';
@@ -18,18 +17,11 @@ import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignClientRoleToUser,
-  deleteUserByEmail,
   queryUsersByEmail,
   sendInviteEmail,
-  updateUserProfile,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
-import {
-  DeletedUser,
-  SelfResendInvitationParser,
-  UpdateUserParser,
-  UserService,
-} from '../services/userService';
+import { SelfResendInvitationParser, UserService } from '../services/userService';
 import { SelfResendInviteRequest, UserRequest } from '../services/usersService';
 
 @controller('/users')
@@ -137,32 +129,18 @@ export class UserController {
   @httpDelete('/:userId')
   public async deleteUser(@request() req: UserRequest, @response() res: Response): Promise<void> {
     const { user } = req;
+
     if (req.auth?.payload?.email === user?.email) {
       res.status(403).send([{ message: 'You do not have permission to delete yourself.' }]);
     }
-    const kcAdminClient = await getKcAdminClient();
-    const data: DeletedUser = {
-      email: `${user?.email}-removed-${uuid()}`,
-      participantId: null,
-      deleted: true,
-    };
-    await Promise.all([deleteUserByEmail(kcAdminClient, user?.email!), user!.$query().patch(data)]);
 
+    await this.userService.deleteUser(req);
     res.sendStatus(200);
   }
 
   @httpPatch('/:userId')
   public async updateUser(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    const { user } = req;
-    const data = UpdateUserParser.parse(req.body);
-    const kcAdminClient = await getKcAdminClient();
-    await Promise.all([
-      updateUserProfile(kcAdminClient, user?.email!, {
-        firstName: data.firstName,
-        lastName: data.lastName,
-      }),
-      user!.$query().patch(data),
-    ]);
+    await this.userService.updateUser(req);
     res.sendStatus(200);
   }
 }

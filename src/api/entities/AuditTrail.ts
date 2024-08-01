@@ -1,6 +1,5 @@
 import { Model } from 'objection';
 
-import { ClientType } from '../services/adminServiceHelpers';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 
@@ -16,94 +15,17 @@ export enum AuditTrailEvents {
   ApproveAccount = 'ApproveAccount',
   ManageKeyPair = 'ManageKeyPair',
   ManageApiKey = 'ManageApiKey',
-  AddParticipant = 'AddParticipant',
+  ManageParticipant = 'ManageParticipant',
   UpdateDomainNames = 'UpdateDomainNames',
   UpdateAppNames = 'UpdateAppNames',
+  ManageTeamMembers = 'ManageTeamMembers',
 }
-
-export type AuditTrailEventData =
-  | UpdateSharingPermissionEventData
-  | ApproveAccountEventData
-  | UpdateSharingTypesEventData
-  | ManageKeyPairEventData
-  | ManageApiKeyEventData
-  | AddParticipantEventData
-  | UpdateDomainNamesEventData
-  | UpdateAppNamesEventData;
-
-export type UpdateSharingPermissionEventData = {
-  siteId: number;
-  action: AuditAction;
-  sharingPermissions: number[];
-  participantId: number;
-};
-
-export type UpdateSharingTypesEventData = {
-  siteId: number;
-  allowedTypes: ClientType[];
-  participantId: number;
-};
-
-export type ApproveAccountEventData = {
-  siteId: number;
-  oldName?: string;
-  newName?: string;
-  oldTypeIds?: number[];
-  newTypeIds?: number[];
-  apiRoles?: number[];
-  participantId: number;
-};
-
-export type AddParticipantEventData = {
-  apiRoles: number[];
-  email: string;
-  firstName: string;
-  lastName: string;
-  participantName: string;
-  participantTypes: number[];
-  jobFunction: string;
-  siteId?: number;
-  crmAgreementNumber: string;
-};
-
-export type ManageKeyPairEventData = {
-  siteId: number;
-  name: string;
-  disabled: boolean;
-  action: AuditAction;
-  participantId: number;
-};
-
-export type ManageApiKeyEventData = {
-  siteId: number;
-  action: AuditAction;
-  keyName: string;
-  apiRoles: string[];
-  participantId: number;
-  keyId?: string;
-  newKeyName?: string;
-  newApiRoles?: string[];
-};
-
-export type UpdateDomainNamesEventData = {
-  siteId: number;
-  action: AuditAction;
-  participantId: number;
-  domainNames: string[];
-};
-
-export type UpdateAppNamesEventData = {
-  siteId: number;
-  action: AuditAction;
-  participantId: number;
-  appNames: string[];
-};
 
 export class AuditTrail extends BaseModel {
   static get tableName() {
     return 'auditTrails';
   }
-  static relationMappings = {
+  static readonly relationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
       modelClass: 'User',
@@ -123,7 +45,8 @@ export class AuditTrail extends BaseModel {
   declare userEmail: string;
   declare succeeded: boolean;
   declare event: AuditTrailEvents;
-  declare eventData: AuditTrailEventData;
+  declare eventData: unknown;
+  declare participantId?: number;
 }
 
 export type AuditTrailDTO = ModelObjectOpt<AuditTrail>;

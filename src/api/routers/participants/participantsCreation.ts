@@ -2,8 +2,10 @@ import { Response } from 'express';
 import { z } from 'zod';
 
 import { ApiRole } from '../../entities/ApiRole';
+import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { Participant, ParticipantStatus } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
+import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
@@ -11,8 +13,8 @@ import {
   SiteCreationRequest,
 } from '../../services/adminServiceHelpers';
 import {
-  insertAddParticipantAuditTrail,
-  updateAuditTrailToProceed,
+  constructAuditTrailObject,
+  performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import {
   assignClientRoleToUser,
@@ -61,6 +63,8 @@ export async function validateParticipantCreationRequest(
 
 export async function createParticipant(req: ParticipantRequest, res: Response) {
   const participantRequest = ParticipantCreationRequest.parse(req.body);
+  const traceId = getTraceId(req);
+
   const validationError = await validateParticipantCreationRequest(participantRequest);
   if (validationError) {
     return res.status(400).send(validationError);
@@ -102,31 +106,47 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     dateApproved: new Date(),
   });
 
-  const auditTrail = await insertAddParticipantAuditTrail(requestingUser!.email, participantData);
-
-  // create participant, user, and role/type mappings
-  await Participant.query().insertGraphAndFetch([participantData], {
-    relate: true,
-  });
-
-  // Get newly created user
-  const newUser = await User.query().findOne('email', participantRequest.email);
-
-  // create keyCloak user
-  const kcAdminClient = await getKcAdminClient();
-  const newKcUser = await createNewUser(
-    kcAdminClient,
-    participantRequest.firstName,
-    participantRequest.lastName,
-    participantRequest.email
+  const auditTrailInsertObject = constructAuditTrailObject(
+    requestingUser!,
+    AuditTrailEvents.ManageParticipant,
+    {
+      action: AuditAction.Add,
+      siteId: participantData.siteId!,
+      apiRoles: participantData.apiRoles.map((role) => role.id),
+      participantName: participantData.name,
+      email: participantData.users[0].email,
+      firstName: participantData.users[0].firstName,
+      lastName: participantData.users[0].lastName,
+      participantTypes: participantData.types.map((type) => type.id),
+      jobFunction: participantData.users[0].jobFunction!,
+      crmAgreementNumber: participantData.crmAgreementNumber,
+    }
   );
 
-  // assign proper api access
-  assignClientRoleToUser(kcAdminClient, newUser!.email, 'api-participant-member');
+  await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
+    // create participant, user, and role/type mappings
+    await Participant.query().insertGraphAndFetch([participantData], {
+      relate: true,
+    });
 
-  // send email
-  await sendInviteEmail(kcAdminClient, newKcUser);
-  await updateAuditTrailToProceed(auditTrail.id);
+    // Get newly created user
+    const newUser = await User.query().findOne('email', participantRequest.email);
+
+    // create keyCloak user
+    const kcAdminClient = await getKcAdminClient();
+    const newKcUser = await createNewUser(
+      kcAdminClient,
+      participantRequest.firstName,
+      participantRequest.lastName,
+      participantRequest.email
+    );
+
+    // assign proper api access
+    assignClientRoleToUser(kcAdminClient, newUser!.email, 'api-participant-member');
+
+    // send email
+    await sendInviteEmail(kcAdminClient, newKcUser);
+  });
 
   return res.sendStatus(200);
 }
