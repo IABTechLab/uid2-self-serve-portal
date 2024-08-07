@@ -4,10 +4,7 @@ import { z } from 'zod';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
-import {
-  ParticipantCreationFromRequestPartial,
-  ParticipantDTO,
-} from '../../api/entities/Participant';
+import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ParticipantRequestDTO } from '../../api/routers/participants/participantsRouter';
 import {
@@ -19,7 +16,7 @@ import {
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
-export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationFromRequestPartial>;
+export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
 export type CreateParticipantForm = {
   companyName: string;
   companyType: number[];

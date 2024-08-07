@@ -6,7 +6,6 @@ import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
 import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
-import { UserToParticipantRole } from './UserToParticipantRole';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -109,17 +108,11 @@ export const ParticipantSchema = z.object({
   crmAgreementNumber: z.string().nullable(),
 });
 
-export const ParticipantCreationFromRequestPartial = ParticipantSchema.pick({
-  name: true,
-}).extend({
-  types: z.array(ParticipantTypeSchema.pick({ id: true })),
-  users: z.array(UserCreationPartial).optional(),
-});
-
 export const ParticipantCreationPartial = ParticipantSchema.pick({
   name: true,
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
+  users: z.array(UserCreationPartial).optional(),
 });
 
 export const ParticipantApprovalPartial = ParticipantSchema.pick({

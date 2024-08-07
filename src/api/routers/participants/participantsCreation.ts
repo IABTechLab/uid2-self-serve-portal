@@ -5,7 +5,7 @@ import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import {
   Participant,
-  ParticipantCreationFromRequestPartial,
+  ParticipantCreationPartial,
   ParticipantStatus,
 } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
@@ -184,7 +184,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
 export const createParticipantFromRequest = async (req: ParticipantRequest, res: Response) => {
   try {
     const traceId = getTraceId(req);
-    const parsedRequest = ParticipantCreationFromRequestPartial.parse(req.body);
+    const parsedRequest = ParticipantCreationPartial.parse(req.body);
     const { users, ...rest } = parsedRequest;
     const participantData = {
       ...rest,
