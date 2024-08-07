@@ -4,6 +4,11 @@ import { Knex } from 'knex';
 
 import { Participant, ParticipantStatus } from '../api/entities/Participant';
 import { User, UserJobFunction } from '../api/entities/User';
+import { ADMIN_USER_ROLE_ID } from '../api/entities/UserRole';
+import {
+  TestUserToParticipantRoleDTO,
+  UserToParticipantRole,
+} from '../api/entities/UserToParticipantRole';
 import { CreateParticipant } from '../database/seeds/Participants';
 
 export function createResponseObject() {
@@ -56,14 +61,14 @@ export async function createUser({
   lastName = faker.person.lastName(),
   jobFunction = UserJobFunction.DA,
   acceptedTerms = true,
-  participantId,
+  participantToRoles,
 }: {
   email?: string;
   firstName?: string;
   lastName?: string;
   jobFunction?: UserJobFunction;
   acceptedTerms?: boolean;
-  participantId?: number;
+  participantToRoles?: TestUserToParticipantRoleDTO[];
 }) {
   const data = {
     email,
@@ -74,8 +79,13 @@ export async function createUser({
   };
 
   const user = await User.query().insert(data);
-  if (participantId) {
-    await user.$relatedQuery('participants').relate(participantId);
+  const userToParticipantRolesData = participantToRoles?.map((item) => ({
+    ...item,
+    userId: user.id,
+    userRoleId: item.userRoleId ?? ADMIN_USER_ROLE_ID,
+  }));
+  if (userToParticipantRolesData) {
+    await UserToParticipantRole.query().insert(userToParticipantRolesData);
   }
 
   return user;

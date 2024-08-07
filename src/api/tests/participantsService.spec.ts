@@ -40,7 +40,9 @@ describe('Participant Service Tests', () => {
     describe('when participantId is specified', () => {
       it('should call next if participantId is valid and user has access', async () => {
         const relatedParticipant = await createParticipant(knex, {});
-        const relatedUser = await createUser({ participantId: relatedParticipant.id });
+        const relatedUser = await createUser({
+          participantToRoles: [{ participantId: relatedParticipant.id }],
+        });
         const participantRequest = createParticipantRequest(
           relatedUser.email,
           relatedParticipant.id
@@ -54,7 +56,9 @@ describe('Participant Service Tests', () => {
 
       it('should return 404 if participant is not found', async () => {
         const relatedParticipant = await createParticipant(knex, {});
-        const relatedUser = await createUser({ participantId: relatedParticipant.id });
+        const relatedUser = await createUser({
+          participantToRoles: [{ participantId: relatedParticipant.id }],
+        });
         const nonExistentParticipantId = 2;
         const participantRequest = createParticipantRequest(
           relatedUser.email,
@@ -70,7 +74,13 @@ describe('Participant Service Tests', () => {
       it('should return 403 if user does not have access to participant', async () => {
         const firstParticipant = await createParticipant(knex, {});
         const secondParticipant = await createParticipant(knex, {});
-        const relatedUser = await createUser({ participantId: secondParticipant.id });
+        const relatedUser = await createUser({
+          participantToRoles: [
+            {
+              participantId: secondParticipant.id,
+            },
+          ],
+        });
         const participantRequest = createParticipantRequest(relatedUser.email, firstParticipant.id);
 
         await checkParticipantId(participantRequest, res, next);
@@ -85,7 +95,13 @@ describe('Participant Service Tests', () => {
     describe(`when participantId is 'current'`, () => {
       it('should call next if user has a valid participant', async () => {
         const relatedParticipant = await createParticipant(knex, {});
-        const relatedUser = await createUser({ participantId: relatedParticipant.id });
+        const relatedUser = await createUser({
+          participantToRoles: [
+            {
+              participantId: relatedParticipant.id,
+            },
+          ],
+        });
         const participantRequest = createParticipantRequest(relatedUser.email, 'current');
 
         await checkParticipantId(participantRequest, res, next);

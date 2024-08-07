@@ -6,6 +6,7 @@ import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
 import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
+import { UserToParticipantRole } from './UserToParticipantRole';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -70,6 +71,16 @@ export class Participant extends BaseModel {
         to: 'users.id',
       },
     },
+    // TODO remove unused comments
+    // Add something to do with UserToParticipantRole so that we can populate the mapping easily
+    // participantToUserRoles: {
+    //   relation: Model.HasManyRelation,
+    //   modelClass: 'UserToParticipantRole',
+    //   join: {
+    //     from: 'participants.id',
+    //     to: 'usersToParticipantRoles.participantId',
+    //   },
+    // },
   };
   declare id: number;
   declare name: string;
@@ -84,6 +95,7 @@ export class Participant extends BaseModel {
   declare approver?: UserDTO;
   declare dateApproved?: Date;
   declare crmAgreementNumber: string | null;
+  // declare participantToUserRoles?: UserToParticipantRole[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -113,6 +125,13 @@ export const ParticipantCreationPartial = ParticipantSchema.pick({
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   users: z.array(UserCreationPartial).optional(),
+});
+
+// TODO rename this
+export const ParticipantCreationPartial2 = ParticipantSchema.pick({
+  name: true,
+}).extend({
+  types: z.array(ParticipantTypeSchema.pick({ id: true })),
 });
 
 export const ParticipantApprovalPartial = ParticipantSchema.pick({

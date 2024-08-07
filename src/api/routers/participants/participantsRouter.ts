@@ -8,10 +8,11 @@ import {
   Participant,
   ParticipantApprovalPartial,
   ParticipantCreationPartial,
+  ParticipantCreationPartial2,
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { UserDTO, UserJobFunction } from '../../entities/User';
+import { User, UserCreationPartial, UserDTO, UserJobFunction } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
@@ -56,7 +57,7 @@ import {
   sendNewParticipantEmail,
   sendParticipantApprovedEmail,
   updateParticipant,
-  updateParticipantAndTypesAndRoles,
+  updateParticipantAndTypesAndApiRoles,
   UpdateSharingTypes,
   UserParticipantRequest,
 } from '../../services/participantsService';
@@ -66,10 +67,11 @@ import {
   enrichCurrentUser,
   findUserByEmail,
   getAllUserFromParticipant,
+  insertUserParticipantRoleMapping,
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
-import { createParticipant } from './participantsCreation';
+import { createParticipant, createParticipantFromRequest } from './participantsCreation';
 import { getParticipantDomainNames, setParticipantDomainNames } from './participantsDomainNames';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
 import { getParticipantUsers } from './participantsUsers';
@@ -134,31 +136,7 @@ export function createParticipantsRouter() {
     return res.status(200).json(result);
   });
 
-  participantsRouter.post('/', async (req, res) => {
-    try {
-      const traceId = getTraceId(req);
-      const data = {
-        ...ParticipantCreationPartial.parse(req.body),
-        status: ParticipantStatus.AwaitingApproval,
-      };
-      // insertGraphAndFetch will implicitly create a transaction
-      const newParticipant = await Participant.query().insertGraphAndFetch([data], {
-        relate: true,
-      });
-
-      sendNewParticipantEmail(
-        data,
-        data.types.map((t) => t.id),
-        traceId
-      );
-      return res.status(201).json(newParticipant);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        return res.status(400).send(err.issues);
-      }
-      return res.status(400).send([{ message: 'Unable to create participant' }]);
-    }
-  });
+  participantsRouter.post('/', createParticipantFromRequest);
 
   participantsRouter.use('/:participantId', enrichCurrentUser);
 
@@ -203,7 +181,7 @@ export function createParticipantsRouter() {
             )
           );
 
-          await updateParticipantAndTypesAndRoles(participant!, data);
+          await updateParticipantAndTypesAndApiRoles(participant!, data);
           await sendParticipantApprovedEmail(emailRecipient, traceId);
 
           return usersFromParticipant;

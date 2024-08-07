@@ -3,8 +3,15 @@ import { z } from 'zod';
 
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
-import { Participant, ParticipantStatus } from '../../entities/Participant';
+import {
+  Participant,
+  ParticipantCreationPartial,
+  ParticipantCreationPartial2,
+  ParticipantStatus,
+} from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
+import { ADMIN_USER_ROLE_ID } from '../../entities/UserRole';
+import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
@@ -21,7 +28,11 @@ import {
   createNewUser,
   sendInviteEmail,
 } from '../../services/kcUsersService';
-import { getParticipantTypesByIds, ParticipantRequest } from '../../services/participantsService';
+import {
+  getParticipantTypesByIds,
+  ParticipantRequest,
+  sendNewParticipantEmail,
+} from '../../services/participantsService';
 import { findUserByEmail } from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
@@ -61,6 +72,30 @@ export async function validateParticipantCreationRequest(
   return errorMessage;
 }
 
+const createUserAndAssociatedParticipant = async (
+  parsedUser: z.infer<typeof UserCreationPartial>,
+  participantData: z.infer<typeof ParticipantCreationAndApprovalPartial>
+) => {
+  await User.transaction(async (trx) => {
+    // create user
+    const newPortalUser = await User.query(trx).insertAndFetch(parsedUser);
+
+    // create participant
+    const newParticipant = await Participant.query(trx)
+      .insertGraphAndFetch([participantData], {
+        relate: true,
+      })
+      .first();
+
+    // update user/participant/role mapping
+    await UserToParticipantRole.query(trx).insert({
+      userId: newPortalUser.id,
+      participantId: newParticipant?.id!,
+      userRoleId: ADMIN_USER_ROLE_ID,
+    });
+  });
+};
+
 export async function createParticipant(req: ParticipantRequest, res: Response) {
   const participantRequest = ParticipantCreationRequest.parse(req.body);
   const traceId = getTraceId(req);
@@ -94,16 +129,12 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     setSiteClientTypes({ siteId: participantRequest.siteId, types });
   }
 
-  const participantData = ParticipantCreationAndApprovalPartial.parse({
+  const parsedParticipantRequest = ParticipantCreationAndApprovalPartial.parse({
     name: participantRequest.participantName,
     types,
     apiRoles,
-    status: ParticipantStatus.Approved,
     siteId: participantRequest.siteId ?? site?.id,
-    users: [user],
     crmAgreementNumber: participantRequest.crmAgreementNumber,
-    approverId: requestingUser?.id,
-    dateApproved: new Date(),
   });
 
   const auditTrailInsertObject = constructAuditTrailObject(
@@ -111,26 +142,26 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     AuditTrailEvents.ManageParticipant,
     {
       action: AuditAction.Add,
-      siteId: participantData.siteId!,
-      apiRoles: participantData.apiRoles.map((role) => role.id),
-      participantName: participantData.name,
-      email: participantData.users[0].email,
-      firstName: participantData.users[0].firstName,
-      lastName: participantData.users[0].lastName,
-      participantTypes: participantData.types.map((type) => type.id),
-      jobFunction: participantData.users[0].jobFunction,
-      crmAgreementNumber: participantData.crmAgreementNumber,
+      siteId: parsedParticipantRequest.siteId!,
+      apiRoles: parsedParticipantRequest.apiRoles.map((role) => role.id),
+      participantName: parsedParticipantRequest.name,
+      participantTypes: parsedParticipantRequest.types.map((type) => type.id),
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      jobFunction: user.jobFunction,
+      crmAgreementNumber: parsedParticipantRequest.crmAgreementNumber,
     }
   );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-    // create participant, user, and role/type mappings
-    await Participant.query().insertGraphAndFetch([participantData], {
-      relate: true,
-    });
-
-    // Get newly created user
-    const newUser = await User.query().findOne('email', participantRequest.email);
+    const participantData = {
+      ...parsedParticipantRequest,
+      status: ParticipantStatus.Approved,
+      approverId: requestingUser?.id,
+      dateApproved: new Date(),
+    };
+    await createUserAndAssociatedParticipant(user, participantData);
 
     // create keyCloak user
     const kcAdminClient = await getKcAdminClient();
@@ -142,7 +173,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     );
 
     // assign proper api access
-    assignClientRoleToUser(kcAdminClient, newUser!.email, 'api-participant-member');
+    assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member');
 
     // send email
     await sendInviteEmail(kcAdminClient, newKcUser);
@@ -150,3 +181,51 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
 
   return res.sendStatus(200);
 }
+
+export const createParticipantFromRequest = async (req: ParticipantRequest, res: Response) => {
+  try {
+    const traceId = getTraceId(req);
+    const parsedRequest = ParticipantCreationPartial.parse(req.body);
+    const { users, ...rest } = parsedRequest;
+    const participantData = {
+      ...rest,
+      status: ParticipantStatus.AwaitingApproval,
+    };
+    const user = {
+      ...users![0],
+      acceptedTerms: false,
+    };
+
+    const participant = await User.transaction(async (trx) => {
+      // create user
+      const newPortalUser = await User.query(trx).insertAndFetch(user);
+
+      // create participant
+      const newParticipant = await Participant.query(trx)
+        .insertGraphAndFetch([participantData], {
+          relate: true,
+        })
+        .first();
+
+      // update user/participant/role mapping
+      await UserToParticipantRole.query(trx).insert({
+        userId: newPortalUser.id,
+        participantId: newParticipant?.id!,
+        userRoleId: ADMIN_USER_ROLE_ID,
+      });
+      return newParticipant;
+    });
+
+    sendNewParticipantEmail(
+      parsedRequest,
+      parsedRequest.types.map((t) => t.id),
+      traceId
+    );
+    return res.status(201).json(participant);
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).send(err.issues);
+    }
+    return res.status(400).send([{ message: 'Unable to create participant' }]);
+  }
+};

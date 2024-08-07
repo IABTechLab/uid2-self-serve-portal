@@ -3,14 +3,26 @@ import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
+import { ADMIN_USER_ROLE_ID } from '../entities/UserRole';
+import { UserToParticipantRole, UserToParticipantRoleDTO } from '../entities/UserToParticipantRole';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 
 export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query().findOne('email', email).where('deleted', 0).modify('withParticipants');
+  return User.query()
+    .findOne('email', email)
+    .where('deleted', 0)
+    .modify('withParticipants')
+    .withGraphFetched('userToParticipantRoles');
 };
+
+// TODO remove unused comments
+
+// export const findUserByEmail = async (email: string) => {
+//   return User.query().findOne('email', email).where('deleted', 0).modify('withParticipants');
+// };
 
 export const enrichUserWithIsApprover = async (user: User) => {
   const userIsApprover = await isUserAnApprover(user.email);
@@ -20,6 +32,12 @@ export const enrichUserWithIsApprover = async (user: User) => {
   };
 };
 
+export const insertUserParticipantRoleMapping = (
+  userToParticipantRole: UserToParticipantRoleDTO
+) => {
+  return UserToParticipantRole.query().insert(userToParticipantRole);
+};
+
 // TODO: Update this method so that if an existing user is invited, it will still add the new participant + mapping.
 export const createUserInPortal = async (
   user: Omit<UserDTO, 'id' | 'acceptedTerms'>,
@@ -27,9 +45,15 @@ export const createUserInPortal = async (
 ) => {
   const existingUser = await findUserByEmail(user.email);
   if (existingUser) return existingUser;
-  const newUser = await User.query().insert(user);
-  // Update the user <-> participant mapping
-  await newUser.$relatedQuery('participants').relate(participantId);
+  await User.transaction(async (trx) => {
+    const newUser = await User.query(trx).insert(user);
+    // Update the user/participant/role mapping
+    await UserToParticipantRole.query(trx).insert({
+      userId: newUser?.id,
+      participantId,
+      userRoleId: ADMIN_USER_ROLE_ID,
+    });
+  });
 };
 
 // TODO: move this middleware to a separate file
@@ -76,6 +100,10 @@ const userIdParser = z.object({
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const userEmail = req.auth?.payload?.email as string;
   const user = await findUserByEmail(userEmail);
+  // const user = await findUserByEmail(userEmail);
+  console.log('');
+  console.log(user);
+  // console.log(user?.userRolesToParticipant?.[0].userRoleId);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }

@@ -31,10 +31,14 @@ describe('#getParticipantUsers', () => {
     const { res, json } = createResponseObject();
 
     const relatedParticipant = await createParticipant(knex, {});
-    const relatedUser = await createUser({ participantId: relatedParticipant.id });
+    const relatedUser = await createUser({
+      participantToRoles: [{ participantId: relatedParticipant.id }],
+    });
 
     const unrelatedParticipant = await createParticipant(knex, {});
-    const unrelatedUser = await createUser({ participantId: unrelatedParticipant.id });
+    const unrelatedUser = await createUser({
+      participantToRoles: [{ participantId: unrelatedParticipant.id }],
+    });
 
     const participantRequest = {
       participant: relatedParticipant,
@@ -56,12 +60,12 @@ describe('#getParticipantUsers', () => {
 
     const relatedParticipant = await createParticipant(knex, {});
     const relatedUsers = [
-      await createUser({ participantId: relatedParticipant.id }),
-      await createUser({ participantId: relatedParticipant.id }),
+      await createUser({ participantToRoles: [{ participantId: relatedParticipant.id }] }),
+      await createUser({ participantToRoles: [{ participantId: relatedParticipant.id }] }),
     ];
 
     const unrelatedParticipant = await createParticipant(knex, {});
-    await createUser({ participantId: unrelatedParticipant.id });
+    await createUser({ participantToRoles: [{ participantId: unrelatedParticipant.id }] });
 
     const participantRequest = {
       participant: relatedParticipant,

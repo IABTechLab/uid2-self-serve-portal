@@ -37,7 +37,9 @@ describe('User Service Tests', () => {
   describe('enrichWithUserFromParams middleware', () => {
     it('should call next if user request is valid', async () => {
       const relatedParticipant = await createParticipant(knex, {});
-      const relatedUser = await createUser({ participantId: relatedParticipant.id });
+      const relatedUser = await createUser({
+        participantToRoles: [{ participantId: relatedParticipant.id }],
+      });
       const userRequest = createUserRequest(relatedUser.email, relatedUser.id);
 
       await enrichWithUserFromParams(userRequest, res, next);
@@ -48,7 +50,9 @@ describe('User Service Tests', () => {
 
     it('should return 404 if user is not found', async () => {
       const relatedParticipant = await createParticipant(knex, {});
-      const relatedUser = await createUser({ participantId: relatedParticipant.id });
+      const relatedUser = await createUser({
+        participantToRoles: [{ participantId: relatedParticipant.id }],
+      });
       const nonExistentUserId = 2;
       const userRequest = createUserRequest(relatedUser.email, nonExistentUserId);
 
@@ -71,8 +75,12 @@ describe('User Service Tests', () => {
     it('should return 403 if user does not have access to participant', async () => {
       const firstParticipant = await createParticipant(knex, {});
       const secondParticipant = await createParticipant(knex, {});
-      const firstUser = await createUser({ participantId: firstParticipant.id });
-      const secondUser = await createUser({ participantId: secondParticipant.id });
+      const firstUser = await createUser({
+        participantToRoles: [{ participantId: firstParticipant.id }],
+      });
+      const secondUser = await createUser({
+        participantToRoles: [{ participantId: secondParticipant.id }],
+      });
       const userRequest = createUserRequest(secondUser.email, firstUser.id);
 
       await enrichWithUserFromParams(userRequest, res, next);
