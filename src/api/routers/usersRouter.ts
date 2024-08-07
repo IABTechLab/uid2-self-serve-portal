@@ -1,9 +1,9 @@
 import express from 'express';
 
 import { UserController } from '../controllers/userController';
+import { enrichCurrentUser, enrichWithUserFromParams } from '../middleware/usersMiddleware';
 import { LoggerService } from '../services/loggerService';
 import { UserService } from '../services/userService';
-import { enrichCurrentUser, enrichWithUserFromParams } from '../services/usersService';
 
 const createUsersRouter = () => {
   const usersRouter = express.Router();

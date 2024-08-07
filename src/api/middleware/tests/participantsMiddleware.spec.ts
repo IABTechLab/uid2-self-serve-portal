@@ -1,13 +1,14 @@
 import { NextFunction, Response } from 'express';
 import { Knex } from 'knex';
 
-import { TestConfigure } from '../../database/TestSelfServeDatabase';
+import { TestConfigure } from '../../../database/TestSelfServeDatabase';
 import {
   createParticipant,
   createResponseObject,
   createUser,
-} from '../../testHelpers/apiTestHelpers';
-import { checkParticipantId, ParticipantRequest } from '../services/participantsService';
+} from '../../../testHelpers/apiTestHelpers';
+import { ParticipantRequest } from '../../services/participantsService';
+import { checkParticipantId } from '../participantsMiddleware';
 
 const createParticipantRequest = (
   email: string,
@@ -35,7 +36,6 @@ describe('Participant Service Tests', () => {
     next = jest.fn();
     ({ res } = createResponseObject());
   });
-  // TODO: move these middleware tests to a middleware spec file
   describe('checkParticipantId middleware', () => {
     describe('when participantId is specified', () => {
       it('should call next if participantId is valid and user has access', async () => {
