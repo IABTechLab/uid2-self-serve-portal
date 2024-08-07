@@ -2,14 +2,16 @@ import { faker } from '@faker-js/faker';
 import { Response } from 'express';
 import { Knex } from 'knex';
 
+import { ModelObjectOpt } from '../api/entities/ModelObjectOpt';
 import { Participant, ParticipantStatus } from '../api/entities/Participant';
 import { User, UserJobFunction } from '../api/entities/User';
 import { ADMIN_USER_ROLE_ID } from '../api/entities/UserRole';
-import {
-  TestUserToParticipantRoleDTO,
-  UserToParticipantRole,
-} from '../api/entities/UserToParticipantRole';
+import { UserToParticipantRole } from '../api/entities/UserToParticipantRole';
 import { CreateParticipant } from '../database/seeds/Participants';
+
+type ParticipantToUserRoleDTO = Partial<
+  Pick<ModelObjectOpt<UserToParticipantRole>, 'participantId' | 'userRoleId'>
+>;
 
 export function createResponseObject() {
   const res = {} as unknown as Response;
@@ -68,7 +70,7 @@ export async function createUser({
   lastName?: string;
   jobFunction?: UserJobFunction;
   acceptedTerms?: boolean;
-  participantToRoles?: TestUserToParticipantRoleDTO[];
+  participantToRoles?: ParticipantToUserRoleDTO[];
 }) {
   const data = {
     email,

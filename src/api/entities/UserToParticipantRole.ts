@@ -1,7 +1,4 @@
 import { Model } from 'objection';
-import { z } from 'zod';
-
-import { ModelObjectOpt } from './ModelObjectOpt';
 
 export class UserToParticipantRole extends Model {
   static get tableName() {
@@ -40,24 +37,3 @@ export class UserToParticipantRole extends Model {
   declare participantId: number;
   declare userRoleId: number;
 }
-
-export const UserToParticipantRoleSchema = z.object({
-  userId: z.number(),
-  participantId: z.number(),
-  userRoleId: z.number(),
-});
-
-export const UserToParticipantRoleCreationPartial = UserToParticipantRoleSchema.pick({
-  userRoleId: true,
-});
-
-export const UserToParticipantRoleCreationPartialTest = UserToParticipantRoleSchema.pick({
-  userRoleId: true,
-  participantId: true,
-});
-
-export type UserToParticipantRoleDTO = ModelObjectOpt<UserToParticipantRole>;
-
-export type TestUserToParticipantRoleDTO = Partial<
-  Pick<ModelObjectOpt<UserToParticipantRole>, 'participantId' | 'userRoleId'>
->;
