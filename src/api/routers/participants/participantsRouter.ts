@@ -16,6 +16,8 @@ import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
+import { checkParticipantId } from '../../middleware/participantsMiddleware';
+import { enrichCurrentUser } from '../../middleware/usersMiddleware';
 import {
   addKeyPair,
   createApiKey,
@@ -48,7 +50,6 @@ import {
 } from '../../services/kcUsersService';
 import {
   addSharingParticipants,
-  checkParticipantId,
   deleteSharingParticipants,
   getParticipantsApproved,
   getParticipantsAwaitingApproval,
@@ -63,7 +64,6 @@ import {
 import { getSignedParticipants } from '../../services/signedParticipantsService';
 import {
   createUserInPortal,
-  enrichCurrentUser,
   findUserByEmail,
   getAllUserFromParticipant,
 } from '../../services/usersService';
