@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
 import { ADMIN_USER_ROLE_ID } from '../entities/UserRole';
-import { UserToParticipantRole, UserToParticipantRoleDTO } from '../entities/UserToParticipantRole';
+import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { isUserAnApprover } from './approversService';
 
@@ -18,24 +18,12 @@ export const findUserByEmail = async (email: string) => {
     .withGraphFetched('userToParticipantRoles');
 };
 
-// TODO remove unused comments
-
-// export const findUserByEmail = async (email: string) => {
-//   return User.query().findOne('email', email).where('deleted', 0).modify('withParticipants');
-// };
-
 export const enrichUserWithIsApprover = async (user: User) => {
   const userIsApprover = await isUserAnApprover(user.email);
   return {
     ...user,
     isApprover: userIsApprover,
   };
-};
-
-export const insertUserParticipantRoleMapping = (
-  userToParticipantRole: UserToParticipantRoleDTO
-) => {
-  return UserToParticipantRole.query().insert(userToParticipantRole);
 };
 
 // TODO: Update this method so that if an existing user is invited, it will still add the new participant + mapping.
@@ -100,10 +88,6 @@ const userIdParser = z.object({
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const userEmail = req.auth?.payload?.email as string;
   const user = await findUserByEmail(userEmail);
-  // const user = await findUserByEmail(userEmail);
-  console.log('');
-  console.log(user);
-  // console.log(user?.userRolesToParticipant?.[0].userRoleId);
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }

@@ -61,9 +61,3 @@ export type UserToParticipantRoleDTO = ModelObjectOpt<UserToParticipantRole>;
 export type TestUserToParticipantRoleDTO = Partial<
   Pick<ModelObjectOpt<UserToParticipantRole>, 'participantId' | 'userRoleId'>
 >;
-
-// TODO remove unused comment
-// export type UserToParticipantRoleCreationDTO = Omit<
-//   ModelObjectOpt<UserToParticipantRole>,
-//   'userId'
-// >;

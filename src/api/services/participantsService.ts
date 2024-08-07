@@ -7,7 +7,7 @@ import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
-  ParticipantCreationPartial,
+  ParticipantCreationFromRequestPartial,
   ParticipantDTO,
   ParticipantStatus,
 } from '../entities/Participant';
@@ -41,7 +41,7 @@ export const getParticipantTypesByIds = async (
 };
 
 export const sendNewParticipantEmail = async (
-  newParticipant: z.infer<typeof ParticipantCreationPartial>,
+  newParticipant: z.infer<typeof ParticipantCreationFromRequestPartial>,
   typeIds: number[],
   traceId: string
 ) => {

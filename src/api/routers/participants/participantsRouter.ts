@@ -7,12 +7,10 @@ import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
-  ParticipantCreationPartial,
-  ParticipantCreationPartial2,
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { User, UserCreationPartial, UserDTO, UserJobFunction } from '../../entities/User';
+import { UserDTO, UserJobFunction } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
@@ -54,7 +52,6 @@ import {
   getParticipantsApproved,
   getParticipantsAwaitingApproval,
   ParticipantRequest,
-  sendNewParticipantEmail,
   sendParticipantApprovedEmail,
   updateParticipant,
   updateParticipantAndTypesAndApiRoles,
@@ -67,7 +64,6 @@ import {
   enrichCurrentUser,
   findUserByEmail,
   getAllUserFromParticipant,
-  insertUserParticipantRoleMapping,
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
