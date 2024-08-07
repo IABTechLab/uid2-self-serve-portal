@@ -1,13 +1,14 @@
 import { NextFunction, Response } from 'express';
 import { Knex } from 'knex';
 
-import { TestConfigure } from '../../database/TestSelfServeDatabase';
+import { TestConfigure } from '../../../database/TestSelfServeDatabase';
 import {
   createParticipant,
   createResponseObject,
   createUser,
-} from '../../testHelpers/apiTestHelpers';
-import { enrichWithUserFromParams, UserRequest } from '../services/usersService';
+} from '../../../testHelpers/apiTestHelpers';
+import { UserRequest } from '../../services/usersService';
+import { enrichWithUserFromParams } from '../usersMiddleware';
 
 const createUserRequest = (email: string, userId: string | number): UserRequest => {
   return {
@@ -33,7 +34,6 @@ describe('User Service Tests', () => {
     ({ res } = createResponseObject());
   });
 
-  // TODO: move the middleware tests to a middleware spec file
   describe('enrichWithUserFromParams middleware', () => {
     it('should call next if user request is valid', async () => {
       const relatedParticipant = await createParticipant(knex, {});
