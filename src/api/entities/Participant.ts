@@ -6,7 +6,6 @@ import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
 import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
-import { UserRole } from './UserRole';
 import { UserToParticipantRole } from './UserToParticipantRole';
 
 export enum ParticipantStatus {
