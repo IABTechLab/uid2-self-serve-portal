@@ -23,6 +23,10 @@ const getAllApproverUserIds = async (knex: Knex) => {
 export async function up(knex: Knex): Promise<void> {
   const approverUserIds = await getAllApproverUserIds(knex);
 
+  if (approverUserIds.length === 0) {
+    return;
+  }
+
   // Find the lowest participantId for each userId
   const usersToParticipants: UserToParticipant[] = await knex('usersToParticipantRoles')
     .select('userId')
@@ -45,6 +49,10 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   const approverUserIds = await getAllApproverUserIds(knex);
+
+  if (approverUserIds.length === 0) {
+    return;
+  }
 
   await knex('usersToParticipantRoles')
     .whereIn('userId', approverUserIds)
