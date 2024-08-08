@@ -45,6 +45,7 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
   const approverUserIds = await getAllApproverUserIds(knex);
+
   await knex('usersToParticipantRoles')
     .whereIn('userId', approverUserIds)
     .where('userRoleId', '=', UID2_SUPPORT_USER_ROLE_ID)
