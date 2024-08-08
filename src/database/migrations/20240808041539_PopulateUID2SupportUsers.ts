@@ -10,14 +10,18 @@ type UserToParticipant = Omit<UserToParticipantRole, 'userRoleId'>;
 
 const UID2_SUPPORT_USER_ROLE_ID = 3;
 
-export async function up(knex: Knex): Promise<void> {
+const getAllApproverUserIds = async (knex: Knex) => {
   // Find all approvers
   const approvers = await knex('approvers').distinct('email');
   const approverEmails = approvers.map((approver) => approver.email);
 
   // Retrieve their user IDs
   const approverUsers = await knex('users').whereIn('email', approverEmails);
-  const approverUserIds = approverUsers.map((user) => user.id);
+  return approverUsers.map((user) => user.id);
+};
+
+export async function up(knex: Knex): Promise<void> {
+  const approverUserIds = await getAllApproverUserIds(knex);
 
   // Find the lowest participantId for each userId
   const usersToParticipants: UserToParticipant[] = await knex('usersToParticipantRoles')
@@ -40,5 +44,9 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  await knex('usersToParticipantRoles').where('userRoleId', '=', UID2_SUPPORT_USER_ROLE_ID).del();
+  const approverUserIds = await getAllApproverUserIds(knex);
+  await knex('usersToParticipantRoles')
+    .whereIn('userId', approverUserIds)
+    .where('userRoleId', '=', UID2_SUPPORT_USER_ROLE_ID)
+    .del();
 }
