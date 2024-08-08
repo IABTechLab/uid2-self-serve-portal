@@ -6,6 +6,8 @@ import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
 import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
+import { UserRole } from './UserRole';
+import { UserToParticipantRole } from './UserToParticipantRole';
 
 export enum ParticipantStatus {
   AwaitingSigning = 'awaitingSigning',
@@ -70,6 +72,14 @@ export class Participant extends BaseModel {
         to: 'users.id',
       },
     },
+    participantToUserRoles: {
+      relation: Model.HasManyRelation,
+      modelClass: 'UserToParticipantRole',
+      join: {
+        from: 'participants.id',
+        to: 'usersToParticipantRoles.participantId',
+      },
+    },
   };
   declare id: number;
   declare name: string;
@@ -84,6 +94,8 @@ export class Participant extends BaseModel {
   declare approver?: UserDTO;
   declare dateApproved?: Date;
   declare crmAgreementNumber: string | null;
+  declare currentUserRoleIds?: number[];
+  declare participantToUserRoles?: UserToParticipantRole[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?

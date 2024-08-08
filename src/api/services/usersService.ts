@@ -21,11 +21,27 @@ export interface SelfResendInviteRequest extends Request {
 export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query()
+  const user = await User.query()
     .findOne('email', email)
     .where('deleted', 0)
-    .modify('withParticipants')
-    .withGraphFetched('userToParticipantRoles');
+    .modify('withParticipants');
+
+  // Extract user role IDs for each participant
+  if (user?.participants) {
+    user.participants = user.participants.map((participant) => {
+      const { participantToUserRoles, ...rest } = participant;
+
+      const currentUserRoleIds = participantToUserRoles
+        ?.filter((mapping) => mapping.userId === user.id)
+        .map((role) => role.userRoleId);
+
+      return Participant.fromJson({
+        ...rest,
+        currentUserRoleIds,
+      });
+    });
+  }
+  return user;
 };
 
 export const enrichUserWithIsApprover = async (user: User) => {

@@ -67,10 +67,9 @@ export class User extends BaseModel {
 
   static readonly modifiers = {
     withParticipants<TResult>(query: Objection.QueryBuilder<User, TResult>) {
-      const myQuery = query.withGraphFetched('participants') as Objection.QueryBuilder<
-        User,
-        TResult & { participants: Participant[] }
-      >;
+      const myQuery = query.withGraphFetched(
+        '[participants.participantToUserRoles]'
+      ) as Objection.QueryBuilder<User, TResult & { participants: Participant[] }>;
       return myQuery;
     },
   };
