@@ -6,36 +6,36 @@ import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import {
   Participant,
   ParticipantCreationPartial,
-  ParticipantStatus,
+  ParticipantStatus
 } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
-import { ADMIN_USER_ROLE_ID } from '../../entities/UserRole';
+import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
   mapClientTypesToAdminEnums,
-  SiteCreationRequest,
+  SiteCreationRequest
 } from '../../services/adminServiceHelpers';
 import {
   constructAuditTrailObject,
-  performAsyncOperationWithAuditTrail,
+  performAsyncOperationWithAuditTrail
 } from '../../services/auditTrailService';
 import {
   assignClientRoleToUser,
   createNewUser,
-  sendInviteEmail,
+  sendInviteEmail
 } from '../../services/kcUsersService';
 import {
   getParticipantTypesByIds,
   ParticipantRequest,
-  sendNewParticipantEmail,
+  sendNewParticipantEmail
 } from '../../services/participantsService';
 import { findUserByEmail } from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
-  ParticipantCreationRequest,
+  ParticipantCreationRequest
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
@@ -90,7 +90,7 @@ const createUserAndAssociatedParticipant = async (
     await UserToParticipantRole.query(trx).insert({
       userId: newPortalUser.id,
       participantId: newParticipant?.id!,
-      userRoleId: ADMIN_USER_ROLE_ID,
+      userRoleId: UserRoleId.Admin,
     });
   });
 };
@@ -210,7 +210,7 @@ export const createParticipantFromRequest = async (req: ParticipantRequest, res:
       await UserToParticipantRole.query(trx).insert({
         userId: newPortalUser.id,
         participantId: newParticipant?.id!,
-        userRoleId: ADMIN_USER_ROLE_ID,
+        userRoleId: UserRoleId.Admin,
       });
       return newParticipant;
     });

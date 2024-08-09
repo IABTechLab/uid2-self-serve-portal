@@ -7,6 +7,7 @@ import {
   createResponseObject,
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
+import { UserRoleId } from '../../entities/UserRole';
 import { ParticipantRequest } from '../../services/participantsService';
 import { checkParticipantId } from '../participantsMiddleware';
 
@@ -38,7 +39,7 @@ describe('Participant Service Tests', () => {
   });
   describe('checkParticipantId middleware', () => {
     describe('when participantId is specified', () => {
-      it('should call next if participantId is valid and user has access', async () => {
+      it('should call next if participantId is valid and user belongs to participant', async () => {
         const relatedParticipant = await createParticipant(knex, {});
         const relatedUser = await createUser({
           participantToRoles: [{ participantId: relatedParticipant.id }],
@@ -46,6 +47,24 @@ describe('Participant Service Tests', () => {
         const participantRequest = createParticipantRequest(
           relatedUser.email,
           relatedParticipant.id
+        );
+
+        await checkParticipantId(participantRequest, res, next);
+
+        expect(res.status).not.toHaveBeenCalled();
+        expect(next).toHaveBeenCalled();
+      });
+      it('should call next if user is UID2 support, even if user does not belong to participant', async () => {
+        const firstParticipant = await createParticipant(knex, {});
+        const secondParticipant = await createParticipant(knex, {});
+        const uid2SupportUser = await createUser({
+          participantToRoles: [
+            { participantId: firstParticipant.id, userRoleId: UserRoleId.UID2Support },
+          ],
+        });
+        const participantRequest = createParticipantRequest(
+          uid2SupportUser.email,
+          secondParticipant.id
         );
 
         await checkParticipantId(participantRequest, res, next);

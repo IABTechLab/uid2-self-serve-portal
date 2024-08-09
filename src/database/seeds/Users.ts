@@ -4,7 +4,7 @@ import { Optional } from 'utility-types';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
 import { User, UserJobFunction } from '../../api/entities/User';
-import { ADMIN_USER_ROLE_ID } from '../../api/entities/UserRole';
+import { UserRoleId } from '../../api/entities/UserRole';
 import { CreateParticipant } from './Participants';
 
 type UserType = ModelObject<User>;
@@ -81,7 +81,7 @@ export async function seed(knex: Knex): Promise<void> {
     newUsers.map((user: UserType) => ({
       userId: user.id,
       participantId,
-      userRoleId: ADMIN_USER_ROLE_ID,
+      userRoleId: UserRoleId.Admin,
     }))
   );
 }

@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { ADMIN_USER_ROLE_ID } from '../entities/UserRole';
+import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { isUserAnApprover } from './approversService';
 
@@ -65,7 +65,7 @@ export const createUserInPortal = async (
     await UserToParticipantRole.query(trx).insert({
       userId: newUser?.id,
       participantId,
-      userRoleId: ADMIN_USER_ROLE_ID,
+      userRoleId: UserRoleId.Admin,
     });
   });
 };

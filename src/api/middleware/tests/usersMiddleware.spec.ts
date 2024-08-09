@@ -7,6 +7,7 @@ import {
   createResponseObject,
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
+import { UserRoleId } from '../../entities/UserRole';
 import { UserRequest } from '../../services/usersService';
 import { enrichWithUserFromParams } from '../usersMiddleware';
 
@@ -35,12 +36,30 @@ describe('User Service Tests', () => {
   });
 
   describe('enrichWithUserFromParams middleware', () => {
-    it('should call next if user request is valid', async () => {
+    it('should call next if user belongs to participant', async () => {
       const relatedParticipant = await createParticipant(knex, {});
       const relatedUser = await createUser({
         participantToRoles: [{ participantId: relatedParticipant.id }],
       });
       const userRequest = createUserRequest(relatedUser.email, relatedUser.id);
+
+      await enrichWithUserFromParams(userRequest, res, next);
+
+      expect(res.status).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+    });
+    it('should call next if user is UID2 support, even if user does not belong to participant', async () => {
+      const firstParticipant = await createParticipant(knex, {});
+      const secondParticipant = await createParticipant(knex, {});
+      const uid2SupportUser = await createUser({
+        participantToRoles: [
+          { participantId: firstParticipant.id, userRoleId: UserRoleId.UID2Support },
+        ],
+      });
+      const secondUser = await createUser({
+        participantToRoles: [{ participantId: secondParticipant.id }],
+      });
+      const userRequest = createUserRequest(uid2SupportUser.email, secondUser.id);
 
       await enrichWithUserFromParams(userRequest, res, next);
 
