@@ -2,6 +2,8 @@ import { Request } from 'express';
 
 import { Participant } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
+import { ADMIN_USER_ROLE_ID } from '../entities/UserRole';
+import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { isUserAnApprover } from './approversService';
 
 export interface UserRequest extends Request {
@@ -19,7 +21,27 @@ export interface SelfResendInviteRequest extends Request {
 export type UserWithIsApprover = User & { isApprover: boolean };
 
 export const findUserByEmail = async (email: string) => {
-  return User.query().findOne('email', email).where('deleted', 0).modify('withParticipants');
+  const user = await User.query()
+    .findOne('email', email)
+    .where('deleted', 0)
+    .modify('withParticipants');
+
+  // Extract user role IDs for each participant
+  if (user?.participants) {
+    user.participants = user.participants.map((participant) => {
+      const { participantToUserRoles, ...rest } = participant;
+
+      const currentUserRoleIds = participantToUserRoles
+        ?.filter((mapping) => mapping.userId === user.id)
+        .map((role) => role.userRoleId);
+
+      return Participant.fromJson({
+        ...rest,
+        currentUserRoleIds,
+      });
+    });
+  }
+  return user;
 };
 
 export const enrichUserWithIsApprover = async (user: User) => {
@@ -37,9 +59,15 @@ export const createUserInPortal = async (
 ) => {
   const existingUser = await findUserByEmail(user.email);
   if (existingUser) return existingUser;
-  const newUser = await User.query().insert(user);
-  // Update the user <-> participant mapping
-  await newUser.$relatedQuery('participants').relate(participantId);
+  await User.transaction(async (trx) => {
+    const newUser = await User.query(trx).insert(user);
+    // Update the user/participant/role mapping
+    await UserToParticipantRole.query(trx).insert({
+      userId: newUser?.id,
+      participantId,
+      userRoleId: ADMIN_USER_ROLE_ID,
+    });
+  });
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {

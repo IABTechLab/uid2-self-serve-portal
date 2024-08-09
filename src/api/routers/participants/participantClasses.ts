@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 import { ParticipantSchema } from '../../entities/Participant';
 import { ParticipantTypeSchema } from '../../entities/ParticipantType';
-import { UserCreationPartial } from '../../entities/User';
 
 export const ParticipantCreationRequest = z.object({
   participantName: z.string(),
@@ -22,13 +21,9 @@ export const ParticipantCreationAndApprovalPartial = ParticipantSchema.pick({
   name: true,
   types: true,
   apiRoles: true,
-  status: true,
-  approverId: true,
-  dateApproved: true,
+  crmAgreementNumber: true,
 }).extend({
   siteId: z.number().optional(),
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
-  users: z.array(UserCreationPartial),
-  crmAgreementNumber: z.string(),
 });

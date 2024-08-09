@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import type { Participant } from './Participant';
+import { UserToParticipantRole } from './UserToParticipantRole';
 
 export interface IUser {}
 export enum UserJobFunction {
@@ -44,6 +45,14 @@ export class User extends BaseModel {
         to: 'participants.id',
       },
     },
+    userToParticipantRoles: {
+      relation: Model.HasManyRelation,
+      modelClass: 'UserToParticipantRole',
+      join: {
+        from: 'users.id',
+        to: 'usersToParticipantRoles.userId',
+      },
+    },
   };
 
   declare id: number;
@@ -54,13 +63,13 @@ export class User extends BaseModel {
   declare jobFunction: UserJobFunction;
   declare participants?: Participant[];
   declare acceptedTerms: boolean;
+  declare userToParticipantRoles?: UserToParticipantRole[];
 
   static readonly modifiers = {
     withParticipants<TResult>(query: Objection.QueryBuilder<User, TResult>) {
-      const myQuery = query.withGraphFetched('participants') as Objection.QueryBuilder<
-        User,
-        TResult & { participants: Participant[] }
-      >;
+      const myQuery = query.withGraphFetched(
+        '[participants.participantToUserRoles]'
+      ) as Objection.QueryBuilder<User, TResult & { participants: Participant[] }>;
       return myQuery;
     },
   };
@@ -86,3 +95,5 @@ export const UserCreationPartial = UserSchema.pick({
   jobFunction: true,
   acceptedTerms: true,
 });
+
+export type UserCreationDTO = Omit<ModelObjectOpt<UserDTO>, 'id'>;

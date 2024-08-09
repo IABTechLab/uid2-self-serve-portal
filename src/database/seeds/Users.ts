@@ -4,6 +4,7 @@ import { Optional } from 'utility-types';
 
 import { ParticipantStatus } from '../../api/entities/Participant';
 import { User, UserJobFunction } from '../../api/entities/User';
+import { ADMIN_USER_ROLE_ID } from '../../api/entities/UserRole';
 import { CreateParticipant } from './Participants';
 
 type UserType = ModelObject<User>;
@@ -48,6 +49,12 @@ export async function seed(knex: Knex): Promise<void> {
       existingParticipants.map((participant) => participant.id)
     )
     .del();
+  await knex('auditTrails')
+    .whereIn(
+      'participantId',
+      existingParticipants.map((participant) => participant.id)
+    )
+    .update('participantId', null);
   await knex('users')
     .whereIn(
       'id',
@@ -71,6 +78,10 @@ export async function seed(knex: Knex): Promise<void> {
     sampleData.map((d) => d.email)
   );
   await knex('usersToParticipantRoles').insert(
-    newUsers.map((user: UserType) => ({ userId: user.id, participantId }))
+    newUsers.map((user: UserType) => ({
+      userId: user.id,
+      participantId,
+      userRoleId: ADMIN_USER_ROLE_ID,
+    }))
   );
 }

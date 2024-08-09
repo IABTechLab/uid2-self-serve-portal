@@ -163,7 +163,7 @@ export const updateParticipantApiRolesWithTransaction = async (
   }
 };
 
-export const updateParticipantAndTypesAndRoles = async (
+export const updateParticipantAndTypesAndApiRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
     status: ParticipantStatus;
