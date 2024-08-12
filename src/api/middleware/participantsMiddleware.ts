@@ -5,7 +5,7 @@ import { Participant } from '../entities/Participant';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
-import { isUserBelongsToParticipant, userHasUid2SupportRole } from './usersMiddleware';
+import { isUid2Support, isUserBelongsToParticipant } from './usersMiddleware';
 
 const idParser = z.object({
   participantId: z.coerce.number(),
@@ -19,14 +19,14 @@ const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }
 
-  const currentUserEmail = req.auth?.payload?.email as string;
-  const currentUserIsUid2Support = await userHasUid2SupportRole(currentUserEmail);
+  const userEmail = req.auth?.payload?.email as string;
+  const isUserUid2Support = await isUid2Support(userEmail);
 
-  const userHasAccessToParticipant =
-    currentUserIsUid2Support ||
-    (await isUserBelongsToParticipant(currentUserEmail, participantId, traceId));
+  const canUserAccessParticipant =
+    isUserUid2Support ||
+    (await isUserBelongsToParticipant(userEmail, participantId, traceId));
 
-  if (!userHasAccessToParticipant) {
+  if (!canUserAccessParticipant) {
     return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
   }
 
