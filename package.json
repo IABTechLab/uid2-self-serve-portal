@@ -101,7 +101,7 @@
     "api": "run-p check-env-file api-watch",
     "check-env-file": "npx ts-node src/checkEnvFile.ts",
     "api-watch": "nodemon -e \".ts\" --exec npm run babel-node-api",
-    "babel-node-api": "babel-node -r dotenv/config -x \".ts\" ./src/api/api.ts",
+    "babel-node-api": "npx kill-port 6540 && babel-node -r dotenv/config -x \".ts\" ./src/api/api.ts",
     "build-api": "npx tsc --build ./tsconfig-api.json",
     "test-api": "npx jest --testTimeout=5000 --forceExit --runInBand --config=./src/api/jest.config.ts",
     "storybook": "storybook dev -p 6006",
