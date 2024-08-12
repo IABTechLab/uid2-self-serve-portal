@@ -5,7 +5,7 @@ import { Knex } from 'knex';
 import { ModelObjectOpt } from '../api/entities/ModelObjectOpt';
 import { Participant, ParticipantStatus } from '../api/entities/Participant';
 import { User, UserJobFunction } from '../api/entities/User';
-import { ADMIN_USER_ROLE_ID } from '../api/entities/UserRole';
+import { UserRoleId } from '../api/entities/UserRole';
 import { UserToParticipantRole } from '../api/entities/UserToParticipantRole';
 import { CreateParticipant } from '../database/seeds/Participants';
 
@@ -84,7 +84,7 @@ export async function createUser({
   const userToParticipantRolesData = participantToRoles?.map((item) => ({
     ...item,
     userId: user.id,
-    userRoleId: item.userRoleId ?? ADMIN_USER_ROLE_ID,
+    userRoleId: item.userRoleId ?? UserRoleId.Admin,
   }));
   if (userToParticipantRolesData) {
     await UserToParticipantRole.query().insert(userToParticipantRolesData);

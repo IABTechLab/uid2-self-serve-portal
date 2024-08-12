@@ -3,20 +3,31 @@ import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
+import { UserRoleId } from '../entities/UserRole';
+import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { findUserByEmail, UserRequest } from '../services/usersService';
+
+export const isUid2Support = async (userEmail: string) => {
+  const user = await findUserByEmail(userEmail);
+  const userWithUid2SupportRole = await UserToParticipantRole.query()
+    .where('userId', '=', user!.id)
+    .andWhere('userRoleId', '=', UserRoleId.UID2Support)
+    .first();
+  return !!userWithUid2SupportRole;
+};
 
 export const isUserBelongsToParticipant = async (
   email: string,
   participantId: number,
   traceId: string
 ) => {
-  const { errorLogger } = getLoggers();
   const userWithParticipants = await User.query()
     .findOne({ email, deleted: 0 })
     .modify('withParticipants');
 
   if (!userWithParticipants) {
+    const { errorLogger } = getLoggers();
     errorLogger.error(`User with email ${email} not found`, traceId);
     return false;
   }
@@ -25,7 +36,6 @@ export const isUserBelongsToParticipant = async (
       return true;
     }
   }
-  errorLogger.error(`Denied access to participant ID ${participantId} by user ${email}`, traceId);
   return false;
 };
 
@@ -59,15 +69,17 @@ export const enrichWithUserFromParams = async (
     return res.status(404).send([{ message: 'The participant for that user cannot be found.' }]);
   }
 
+  const requestingUserEmail = req.auth?.payload?.email as string;
+  const isRequestingUserUid2Support = await isUid2Support(requestingUserEmail);
+
   // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
   const firstParticipant = user.participants?.[0] as Participant;
-  if (
-    !(await isUserBelongsToParticipant(
-      req.auth?.payload?.email as string,
-      firstParticipant.id,
-      traceId
-    ))
-  ) {
+
+  const canRequestingUserAccessParticipant =
+    isRequestingUserUid2Support ||
+    (await isUserBelongsToParticipant(requestingUserEmail, firstParticipant.id, traceId));
+
+  if (!canRequestingUserAccessParticipant) {
     return res.status(403).send([{ message: 'You do not have permission to that user account.' }]);
   }
 

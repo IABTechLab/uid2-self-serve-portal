@@ -1,5 +1,11 @@
 import { BaseModel } from './BaseModel';
 
+export enum UserRoleId {
+  Admin = 1,
+  Operations = 2,
+  UID2Support = 3,
+}
+
 export class UserRole extends BaseModel {
   static get tableName() {
     return 'userRoles';
@@ -7,5 +13,3 @@ export class UserRole extends BaseModel {
   declare id: number;
   declare roleName: string;
 }
-
-export const ADMIN_USER_ROLE_ID = 1;
