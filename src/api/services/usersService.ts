@@ -20,15 +20,9 @@ export interface SelfResendInviteRequest extends Request {
 
 export type UserWithIsApprover = User & { isApprover: boolean };
 
-export const findUserByEmail = async (email: string) => {
-  const user = await User.query()
-    .findOne('email', email)
-    .where('deleted', 0)
-    .modify('withParticipants');
-
-  // Extract user role IDs for each participant
-  if (user?.participants) {
-    user.participants = user.participants.map((participant) => {
+const simplifyUserParticipantRoles = (user: User) => {
+  return (
+    user.participants?.map((participant) => {
       const { participantToUserRoles, ...rest } = participant;
 
       const currentUserRoleIds = participantToUserRoles
@@ -39,8 +33,39 @@ export const findUserByEmail = async (email: string) => {
         ...rest,
         currentUserRoleIds,
       });
-    });
+    }) || []
+  );
+};
+
+const deduplicateParticipants = (participants: Participant[]) => {
+  const seenIds = new Set<number>();
+  return participants.filter((participant) => {
+    if (seenIds.has(participant.id)) {
+      return false;
+    }
+    seenIds.add(participant.id);
+    return true;
+  });
+};
+
+const simplifyUserParticipants = (user: User) => {
+  if (!user?.participants) {
+    return;
   }
+  const simplifiedParticipants = simplifyUserParticipantRoles(user);
+  return deduplicateParticipants(simplifiedParticipants);
+};
+
+export const findUserByEmail = async (email: string) => {
+  const user = await User.query()
+    .findOne('email', email)
+    .where('deleted', 0)
+    .modify('withParticipants');
+
+  if (user?.participants) {
+    user.participants = simplifyUserParticipants(user);
+  }
+
   return user;
 };
 
@@ -71,5 +96,9 @@ export const createUserInPortal = async (
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
-  return participant.$relatedQuery('users').where('deleted', 0).castTo<User[]>();
+  const participantUserIds = (
+    await UserToParticipantRole.query().where('participantId', '=', participant.id)
+  ).map((userToParticipantRole) => userToParticipantRole.userId);
+
+  return User.query().whereIn('id', participantUserIds).where('deleted', 0);
 };

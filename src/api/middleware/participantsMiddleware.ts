@@ -23,8 +23,7 @@ const hasParticipantAccess = async (req: ParticipantRequest, res: Response, next
   const isUserUid2Support = await isUid2Support(userEmail);
 
   const canUserAccessParticipant =
-    isUserUid2Support ||
-    (await isUserBelongsToParticipant(userEmail, participantId, traceId));
+    isUserUid2Support || (await isUserBelongsToParticipant(userEmail, participantId, traceId));
 
   if (!canUserAccessParticipant) {
     return res.status(403).send([{ message: 'You do not have permission to that participant.' }]);
