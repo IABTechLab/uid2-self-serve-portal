@@ -16,7 +16,7 @@ export function ClientSideCompletion({
   appIds,
 }: ClientSideCompletionProps) {
   const hasKeyPairData = !!keyPairData?.filter((kp) => !kp.disabled).length;
-  const hasDomainNamesOrAppIds = domainNames?.length ?? appIds?.length;
+  const hasDomainNamesOrAppIds = (domainNames?.length ?? 0) > 0 || (appIds?.length ?? 0) > 0;
 
   if (hasKeyPairData && hasDomainNamesOrAppIds) return null;
 
