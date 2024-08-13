@@ -38,6 +38,24 @@ export const KeyPairAndAppIds: Story = {
   name: 'Key Pair and App IDs (renders empty - nothing to say!)',
 };
 
+export const KeyPairAndAppIdsWithEmptyDomainNames: Story = {
+  args: {
+    keyPairData: [createKeypairFake(false)],
+    appIds: ['123456789'],
+    domainNames: [],
+  },
+  name: 'Key Pair and App IDs with empty Domain Names (renders empty - nothing to say!)',
+};
+
+export const KeyPairAndDomainNamesWithEmptyAppIds: Story = {
+  args: {
+    keyPairData: [createKeypairFake(false)],
+    appIds: [],
+    domainNames: ['example.com'],
+  },
+  name: 'Key Pair and Domain Names with empty App IDs (renders empty - nothing to say!)',
+};
+
 export const KeyPairOnly: Story = {
   args: {
     keyPairData: [createKeypairFake(false)],
