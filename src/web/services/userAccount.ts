@@ -76,7 +76,7 @@ export async function SelfResendInvitation(formData: SelfResendInvitationForm): 
 export async function GetAllUsersOfParticipant(participantId?: number) {
   try {
     const result = await axios.get<UserResponse[]>(
-      `/participants/${participantId}/users`,
+      `/participants/${participantId ?? 'current'}/users`,
       {
         validateStatus: (status) => [200, 404].includes(status),
       }
