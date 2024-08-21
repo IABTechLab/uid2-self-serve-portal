@@ -2,7 +2,7 @@ import { AuthClientTokens } from '@react-keycloak/core';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
 import { App } from './web/App';
 import { setAuthToken } from './web/axios';
@@ -11,6 +11,7 @@ import { initializeFaro } from './web/initializeFaro';
 import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
+import { HomeRedirector } from './web/screens/homeRedirector';
 import { Routes } from './web/screens/routes';
 import { revalidateIfLoaderError } from './web/utils/erroredRouteHelper';
 import { PortalErrorBoundary } from './web/utils/PortalErrorBoundary';
@@ -22,6 +23,9 @@ initializeFaro();
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <HomeRedirector />,
+  },
+  {
     element: (
       <PortalErrorBoundary>
         <CurrentUserProvider>

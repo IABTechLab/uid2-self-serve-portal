@@ -44,6 +44,6 @@ export const ParticipantInformationRoute: PortalRoute = {
   description: 'Participant Information',
   element: <ParticipantInformation />,
   errorElement: <RouteErrorBoundary />,
-  path: '/dashboard/info',
+  path: '/participant/:participantId/info',
   isHidden: true,
 };

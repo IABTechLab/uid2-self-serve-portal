@@ -1,6 +1,6 @@
 import { Suspense, useState } from 'react';
 import { useRevalidator } from 'react-router-dom';
-import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
+import { defer, useLoaderData } from 'react-router-typesafe';
 
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
 import { OnApiKeyDisable } from '../components/ApiKeyManagement/KeyDisableDialog';
@@ -22,13 +22,14 @@ import {
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
+import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
-const loader = makeLoader(() => {
+const loader = makeParticipantLoader((participantId) => {
   return defer({
-    apiKeys: GetParticipantApiKeys(),
-    apiRoles: GetParticipantApiRoles(),
+    apiKeys: GetParticipantApiKeys(participantId),
+    apiRoles: GetParticipantApiRoles(participantId),
   });
 });
 
@@ -125,7 +126,7 @@ function ApiKeyManagement() {
 }
 
 export const ApiKeyManagementRoute: PortalRoute = {
-  path: '/dashboard/apiKeys',
+  path: '/participant/:participantId/apiKeys',
   description: 'API Keys',
   element: <ApiKeyManagement />,
   errorElement: <RouteErrorBoundary />,

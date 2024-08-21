@@ -150,7 +150,7 @@ function ManageParticipants() {
 }
 
 export const ManageParticipantsRoute: PortalRoute = {
-  path: '/dashboard/manageParticipants',
+  path: '/participant/:participantId/manageParticipants',
   description: 'Manage Participants',
   element: <ManageParticipants />,
   errorElement: <RouteErrorBoundary />,

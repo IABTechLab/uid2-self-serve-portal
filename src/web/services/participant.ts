@@ -119,10 +119,7 @@ export async function GetSignedParticipants() {
 
 export async function GetParticipantApiKeys(participantId?: number) {
   try {
-    const result = await axios.get<ApiKeyDTO[]>(
-      `/participants/${participantId ?? 'current'}/apiKeys`
-    );
-
+    const result = await axios.get<ApiKeyDTO[]>(`/participants/${participantId}/apiKeys`);
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not get participant API Keys');
@@ -131,10 +128,9 @@ export async function GetParticipantApiKeys(participantId?: number) {
 
 export async function GetParticipantApiKey(keyId: string, participantId?: number) {
   try {
-    const result = await axios.get<ApiKeyDTO>(
-      `/participants/${participantId ?? 'current'}/apiKey`,
-      { params: { keyId } }
-    );
+    const result = await axios.get<ApiKeyDTO>(`/participants/${participantId}/apiKey`, {
+      params: { keyId },
+    });
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not get API Key');
@@ -143,9 +139,7 @@ export async function GetParticipantApiKey(keyId: string, participantId?: number
 
 export async function GetParticipantApiRoles(participantId?: number) {
   try {
-    const result = await axios.get<ApiRoleDTO[]>(
-      `/participants/${participantId ?? 'current'}/apiRoles`
-    );
+    const result = await axios.get<ApiRoleDTO[]>(`/participants/${participantId}/apiRoles`);
 
     return result.data;
   } catch (e: unknown) {
@@ -207,7 +201,7 @@ export async function CompleteRecommendations(participantId: number): Promise<Pa
 
 export async function GetSharingList(participantId?: number): Promise<SharingListResponse> {
   const result = await axios.get<SharingListResponse>(
-    `/participants/${participantId ?? 'current'}/sharingPermission`
+    `/participants/${participantId}/sharingPermission`
   );
   return result.data;
 }
@@ -273,10 +267,7 @@ export type BusinessContactForm = {
 
 export async function AddEmailContact(formData: BusinessContactForm, participantId?: number) {
   try {
-    return await axios.post(
-      `/participants/${participantId ?? 'current'}/businessContacts`,
-      formData
-    );
+    return await axios.post(`/participants/${participantId}/businessContacts`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not add email contact');
   }
@@ -285,7 +276,7 @@ export async function AddEmailContact(formData: BusinessContactForm, participant
 export async function GetEmailContacts(participantId?: number) {
   try {
     const result = await axios.get<BusinessContactResponse[]>(
-      `/participants/${participantId ?? 'current'}/businessContacts`
+      `/participants/${participantId}/businessContacts`
     );
     return result.data;
   } catch (e: unknown) {
@@ -295,9 +286,7 @@ export async function GetEmailContacts(participantId?: number) {
 
 export async function RemoveEmailContact(contactId: number, participantId?: number) {
   try {
-    return await axios.delete(
-      `/participants/${participantId ?? 'current'}/businessContacts/${contactId}`
-    );
+    return await axios.delete(`/participants/${participantId}/businessContacts/${contactId}`);
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete email contact');
   }
@@ -310,7 +299,7 @@ export async function UpdateEmailContact(
 ) {
   try {
     return await axios.put(
-      `/participants/${participantId ?? 'current'}/businessContacts/${contactId}`,
+      `/participants/${participantId}/businessContacts/${contactId}`,
       formData
     );
   } catch (e: unknown) {

@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import { useRevalidator } from 'react-router-dom';
-import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
+import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
 import {
   CstgValueType,
-  UpdateCstgValuesResponse,
+  UpdateCstgValuesResponse
 } from '../components/ClientSideTokenGeneration/CstgHelper';
 import { CstgTable } from '../components/ClientSideTokenGeneration/CstgTable';
 import { Loading } from '../components/Core/Loading/Loading';
@@ -21,33 +21,34 @@ import {
   DisableKeyPair,
   GetKeyPairs,
   UpdateKeyPair,
-  UpdateKeyPairFormProps,
+  UpdateKeyPairFormProps
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
+import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { separateStringsList, sortStringsAlphabetically } from '../utils/textHelpers';
 import { PortalRoute } from './routeUtils';
 
-async function getKeyPairs() {
-  const keyPairs = await GetKeyPairs();
+async function getKeyPairs(participantId: number) {
+  const keyPairs = await GetKeyPairs(participantId);
   return keyPairs.sort((a, b) => a.created.getTime() - b.created.getTime());
 }
 
-async function getDomainNames() {
-  const currentDomainNames = await GetDomainNames();
+async function getDomainNames(participantId: number) {
+  const currentDomainNames = await GetDomainNames(participantId);
   return currentDomainNames ? sortStringsAlphabetically(currentDomainNames) : [];
 }
 
-async function getAppIds() {
-  const currentAppIds = await GetAppIds();
+async function getAppIds(participantId: number) {
+  const currentAppIds = await GetAppIds(participantId);
   return currentAppIds ? sortStringsAlphabetically(currentAppIds) : [];
 }
 
-const loader = makeLoader(() => {
-  const keyPairs = getKeyPairs();
-  const domainNames = getDomainNames();
-  const appIds = getAppIds();
+const loader = makeParticipantLoader((participantId) => {
+  const keyPairs = getKeyPairs(participantId);
+  const domainNames = getDomainNames(participantId);
+  const appIds = getAppIds(participantId);
   return defer({ keyPairs, domainNames, appIds });
 });
 
@@ -161,7 +162,8 @@ function ClientSideIntegration() {
           rel='noreferrer'
         >
           Client-Side Integration
-        </a>.
+        </a>
+        .
       </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading client side integration data...' />}>
@@ -212,6 +214,6 @@ export const ClientSideIntegrationRoute: PortalRoute = {
   description: 'Client-Side Integration',
   element: <ClientSideIntegration />,
   errorElement: <RouteErrorBoundary />,
-  path: '/dashboard/clientSideIntegration',
+  path: '/participant/:participantId/clientSideIntegration',
   loader,
 };

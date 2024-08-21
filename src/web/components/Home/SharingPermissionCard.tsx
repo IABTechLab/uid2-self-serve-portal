@@ -33,7 +33,7 @@ function SharingPermissionCard({
               <span>AUTOMATIC PERMISSIONS</span>
             </div>
           </div>
-          <Link to='/dashboard/sharing'>
+          <Link to='../sharing' relative='path'>
             <button className='primary-button small-button' type='button'>
               View & Add Sharing Permissions
             </button>

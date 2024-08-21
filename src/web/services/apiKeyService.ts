@@ -33,7 +33,7 @@ export async function CreateApiKey(
 ): Promise<ApiKeySecretsDTO> {
   try {
     const result = await axios.post<ApiKeySecretsDTO>(
-      `/participants/${participantId ?? 'current'}/apiKey`,
+      `/participants/${participantId}/apiKey`,
       form
     );
     return result.data;
@@ -44,7 +44,7 @@ export async function CreateApiKey(
 
 export async function EditApiKey(form: EditApiKeyFormDTO, participantId?: number) {
   try {
-    await axios.put(`/participants/${participantId ?? 'current'}/apiKey`, form);
+    await axios.put(`/participants/${participantId}/apiKey`, form);
   } catch (e: unknown) {
     throw backendError(e, 'Could not edit API Key');
   }
@@ -52,7 +52,7 @@ export async function EditApiKey(form: EditApiKeyFormDTO, participantId?: number
 
 export async function DisableApiKey(apiKey: ApiKeyDTO, participantId?: number) {
   try {
-    await axios.delete(`/participants/${participantId ?? 'current'}/apiKey`, {
+    await axios.delete(`/participants/${participantId}/apiKey`, {
       data: { keyId: apiKey.key_id },
     });
   } catch (e: unknown) {

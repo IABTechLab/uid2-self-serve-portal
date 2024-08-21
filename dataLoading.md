@@ -17,7 +17,7 @@ Look at [home.tsx](src/web/screens/home.tsx) for an example showing:
 
 ## Using the pattern
 
-1. Create a loader using `makeLoader` from `react-router-typesafe`.
+1. Create a loader using `makeLoader` from `react-router-typesafe`, or `makeParticipantLoader` if the calls you are making require a participantId parameter.
    - The loader should set up needed promises and return an object with Promises stored on descriptively-named keys, wrapped in a call to `defer` from `react-router-typesafe`. Don't await the promises in the loader!
    - If you need to await a promise to get an intermediate value, either use a separate async function that returns a promise (e.g. `getSharingCounts` in [home.tsx](src/web/screens/home.tsx)) (preferred) or `.then(...)` (OK for simple/short continuations).
 2. Call the hook from your screen-level component: `const data = useLoaderData<typeof loader>();`
@@ -31,12 +31,12 @@ Look at [home.tsx](src/web/screens/home.tsx) for an example showing:
    - Normally, a loader error means the screen won't render - the nearest error boundary will be used.
    - See [home.tsx](src/web/screens/home.tsx) for an example of allowing part of the page to work even if some of the loader promises fail.
 6. (Optional) Use the `revalidator` to trigger reloading the data when you change it: `const reloader = useRevalidator();` at the top of your component, and `reloader.revalidate();` after you've saved changes.
-   - Don't forget to await your save, otherwise the revalidator might reload data before your action has saved it!\
+   - Don't forget to await your save, otherwise the revalidator might reload data before your action has saved it!
    - React Router can work out when to revalidate without being told, but that relies on us using the React Router form methods. We might be able to get this to work with React Hook Form but haven't looked into it yet.
 
 ## Common issues
 
 1. Make sure you're importing `defer`, `makeLoader`, and `useLoaderData` from `react-router-typesafe`, NOT `react-router-dom`. This will hopefully change if/when `react-router-dom` adds typesafe loader support.
-2. Make sure you're using `makeLoader` to create your loader function.
+2. Make sure you're using `makeLoader` or `makeParticipantLoader` to create your loader function.
 3. Make sure your AsyncTypesafe child function returns a single React child. If you have multiple top-level components to return, wrap them in a fragment: `<><div /><div /></>`.
 4. You shouldn't need to provide explicit types anywhere. As long as you provide the right generic parameter to the `useLoaderData` hook, everything (including the type of the arrow function inside the AsyncTypesafe component) should be inferred.
