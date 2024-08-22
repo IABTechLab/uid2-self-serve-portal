@@ -11,7 +11,6 @@ import { initializeFaro } from './web/initializeFaro';
 import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
-import { HomeRedirector } from './web/screens/homeRedirector';
 import { Routes } from './web/screens/routes';
 import { revalidateIfLoaderError } from './web/utils/erroredRouteHelper';
 import { PortalErrorBoundary } from './web/utils/PortalErrorBoundary';
@@ -21,10 +20,6 @@ import './web/index.scss';
 configureLogging();
 initializeFaro();
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <HomeRedirector />,
-  },
   {
     element: (
       <PortalErrorBoundary>
