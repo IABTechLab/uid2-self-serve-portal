@@ -3,10 +3,11 @@ import {
   NavigationMenuItem,
   NavigationMenuList,
 } from '@radix-ui/react-navigation-menu';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 
 import config from '../../../../package.json';
 import { PortalRoute } from '../../screens/routeUtils';
+import { getPathWithParticipant } from '../../utils/urlHelpers';
 
 import './SideNav.scss';
 
@@ -16,14 +17,21 @@ function MenuItem({
   linkClass,
   isHidden,
 }: Pick<PortalRoute, 'path' | 'description' | 'isHidden'> & { linkClass?: string }) {
+  const { participantId } = useParams();
+  const pathWithParticipant = getPathWithParticipant(path, participantId);
+
   return (
-    <NavigationMenuItem key={path} className={`side-nav-item ${isHidden ? 'hidden' : ''}`}>
-      <NavLink to={path} className={linkClass}>
+    <NavigationMenuItem
+      key={pathWithParticipant}
+      className={`side-nav-item ${isHidden ? 'hidden' : ''}`}
+    >
+      <NavLink to={pathWithParticipant} className={linkClass}>
         {description}
       </NavLink>
     </NavigationMenuItem>
   );
 }
+
 export type SideNavProps = Readonly<{
   standardMenu: PortalRoute[];
   adminMenu: PortalRoute[];

@@ -9,7 +9,7 @@ function TermsOfService() {
 }
 
 export const TermsOfServiceRoute: PortalRoute = {
-  path: '/termsOfService',
+  path: 'participant/:participantId/termsOfService',
   element: <TermsOfService />,
   errorElement: <RouteErrorBoundary />,
   description: 'Terms of Service',

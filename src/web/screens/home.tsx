@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import log from 'loglevel';
 import { Suspense, useContext } from 'react';
-import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
+import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType } from '../../api/services/adminServiceHelpers';
 import { shouldRotateApiKey } from '../components/ApiKeyManagement/KeyHelper';
@@ -15,18 +15,19 @@ import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetEmailContacts, GetParticipantApiKeys, GetSharingList } from '../services/participant';
 import { getAllSites } from '../services/site';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
 
-async function getSharingCounts() {
+async function getSharingCounts(participantId: number) {
   let manualSites: number[] = [];
   let allowedTypes: ClientType[] = [];
   let hasKeyset: boolean = true;
   const allSitesPromise = getAllSites();
   try {
-    const sharingList = await GetSharingList();
+    const sharingList = await GetSharingList(participantId);
     manualSites = sharingList.allowed_sites;
     allowedTypes = sharingList.allowed_types;
   } catch (e: unknown) {
@@ -56,24 +57,24 @@ async function getSharingCounts() {
   }
 }
 
-async function getEmailContacts() {
-  const emailContacts = await GetEmailContacts();
+async function getEmailContacts(participantId: number) {
+  const emailContacts = await GetEmailContacts(participantId);
   if (emailContacts.length === 0) {
     return false;
   }
   return true;
 }
 
-async function getApiKeysToRotate() {
-  const apiKeys = await GetParticipantApiKeys();
+async function getApiKeysToRotate(participantId: number) {
+  const apiKeys = await GetParticipantApiKeys(participantId);
   return apiKeys.filter((apiKey) => shouldRotateApiKey(apiKey) === true);
 }
 
-const loader = makeLoader(() =>
+const loader = makeParticipantLoader((participantId) =>
   defer({
-    counts: getSharingCounts(),
-    hasEmailContacts: getEmailContacts(),
-    apiKeysToRotate: getApiKeysToRotate(),
+    counts: getSharingCounts(participantId),
+    hasEmailContacts: getEmailContacts(participantId),
+    apiKeysToRotate: getApiKeysToRotate(participantId),
   })
 );
 
@@ -136,7 +137,7 @@ function Home() {
 }
 
 export const HomeRoute: PortalRoute = {
-  path: '/',
+  path: '/participant/:participantId/home',
   description: 'Home',
   element: <Home />,
   errorElement: <RouteErrorBoundary />,

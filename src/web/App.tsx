@@ -10,6 +10,7 @@ import { UpdatesTour } from './components/SiteTour/UpdatesTour';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
+import { HomeRedirector } from './screens/homeRedirector';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -41,6 +42,7 @@ export function App() {
     <StrictMode>
       <PortalErrorBoundary>
         <ParticipantProvider>
+          <HomeRedirector />
           <div className='app' ref={rootRef}>
             {LoggedInUser?.user && <UpdatesTour />}
             <PortalHeader

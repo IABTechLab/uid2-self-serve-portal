@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { ReactNode, Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
-import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
+import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { Banner } from '../components/Core/Banner/Banner';
@@ -22,6 +22,7 @@ import {
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -34,9 +35,9 @@ type SharingListLoaderData =
       sharedSiteIds: SharingListResponse['allowed_sites'];
       sharedTypes: SharingListResponse['allowed_types'];
     };
-async function loadSharingList(): Promise<SharingListLoaderData> {
+async function loadSharingList(participantId: number): Promise<SharingListLoaderData> {
   try {
-    const response = await GetSharingList();
+    const response = await GetSharingList(participantId);
     return {
       hasKeyset: true,
       sharedSiteIds: response.allowed_sites,
@@ -49,7 +50,10 @@ async function loadSharingList(): Promise<SharingListLoaderData> {
     throw e;
   }
 }
-const loader = makeLoader(() => defer({ sharingList: loadSharingList() }));
+
+const loader = makeParticipantLoader((participantId) =>
+  defer({ sharingList: loadSharingList(participantId) })
+);
 
 function SharingPermissionPageContainer({ children }: Readonly<{ children: ReactNode }>) {
   return (
@@ -190,6 +194,6 @@ export const SharingPermissionsRoute: PortalRoute = {
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   errorElement: <RouteErrorBoundary />,
-  path: '/dashboard/sharing',
+  path: '/participant/:participantId/sharing',
   loader,
 };

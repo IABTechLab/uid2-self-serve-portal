@@ -19,7 +19,7 @@ test('when the drop is clicked, a gravatar is displayed', async () => {
 test('when an invalid email address is provided, a home link is still displayed', async () => {
   render(<InvalidEmailAddress />);
   const link = screen.getByRole('link');
-  expect(link).toHaveAttribute('href', '/');
+  expect(link).toHaveAttribute('href', expect.stringContaining('/home'));
 });
 
 test('when no email is provided, the dropdown text shows that there is no logged in user', async () => {

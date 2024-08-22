@@ -11,12 +11,13 @@ import {
 import * as Switch from '@radix-ui/react-switch';
 import MD5 from 'crypto-js/md5';
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
+import { getPathWithParticipant } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
 
@@ -33,6 +34,7 @@ export function PortalHeader({
   setDarkMode = undefined,
   logout,
 }: Readonly<PortalHeaderProps>) {
+  const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
   const emailMd5 = email ? MD5(email).toString() : null;
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
@@ -54,7 +56,7 @@ export function PortalHeader({
   return (
     <header className='portal-header'>
       <div className='title'>
-        <Link data-testid='title-link' to='/'>
+        <Link data-testid='title-link' to={`/participant/${participantId}/home`}>
           <img
             src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
             alt='UID2 logo'
@@ -82,11 +84,11 @@ export function PortalHeader({
               {routes.map((route) => {
                 return (
                   <DropdownMenuItem
-                    key={route.path}
+                    key={getPathWithParticipant(route.path, participantId)}
                     className='dropdown-menu-item'
                     onClick={handleSelect}
                   >
-                    <Link to={route.path} className='link'>
+                    <Link to={getPathWithParticipant(route.path, participantId)} className='link'>
                       {route.description}
                     </Link>
                   </DropdownMenuItem>

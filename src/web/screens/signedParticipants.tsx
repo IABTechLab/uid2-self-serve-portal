@@ -37,7 +37,7 @@ export function SignedParticipants() {
 }
 
 export const SignedParticipantsRoute: PortalRoute = {
-  path: '/dashboard/signedParticipants',
+  path: '/signedParticipants',
   description: 'Signed Participants',
   element: <SignedParticipants />,
   errorElement: <RouteErrorBoundary />,

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { useRevalidator } from 'react-router-dom';
-import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
+import { defer, useLoaderData } from 'react-router-typesafe';
 
 import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
 import { Loading } from '../components/Core/Loading/Loading';
@@ -11,17 +11,18 @@ import {
   BusinessContactForm,
   GetEmailContacts,
   RemoveEmailContact,
-  UpdateEmailContact,
+  UpdateEmailContact
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './emailContacts.scss';
 
-const loader = makeLoader(() => {
-  const emailContacts = GetEmailContacts();
+const loader = makeParticipantLoader((participantId) => {
+  const emailContacts = GetEmailContacts(participantId);
   return defer({ emailContacts });
 });
 
@@ -94,7 +95,7 @@ export const EmailContactsRoute: PortalRoute = {
   description: 'Email Contacts',
   element: <BusinessContacts />,
   errorElement: <RouteErrorBoundary />,
-  path: '/dashboard/emailContacts',
+  path: '/participant/:participantId/emailContacts',
   loader,
   isHidden: true,
 };

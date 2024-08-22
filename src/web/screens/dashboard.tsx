@@ -1,10 +1,9 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { useContext, useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { Dialog } from '../components/Core/Dialog/Dialog';
 import { SideNav } from '../components/Navigation/SideNav';
-import { SnailTrail } from '../components/SnailTrail/SnailTrail';
 import { TermsAndConditionsForm } from '../components/TermsAndConditions/TermsAndConditions';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
@@ -43,16 +42,12 @@ export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes
 const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
-  const location = useLocation();
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const [showMustAccept, setShowMustAccept] = useState(false);
   const { keycloak } = useKeycloak();
   const navigate = useNavigate();
   const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
-  const visibleMenu = standardMenu.concat(adminMenu);
-  const currentLocationDescription = visibleMenu.filter((m) => m.path === location.pathname)[0]
-    .description;
 
   const handleAccept = async () => {
     await SetTermsAccepted();
@@ -73,7 +68,6 @@ function Dashboard() {
     <div className='app-panel'>
       <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />
       <div className='dashboard-content'>
-        <SnailTrail location={currentLocationDescription} />
         {!LoggedInUser?.user?.acceptedTerms ? (
           <Dialog className='terms-conditions-dialog'>
             <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
@@ -93,7 +87,7 @@ function Dashboard() {
   );
 }
 export const DashboardRoute: PortalRoute = {
-  path: '/',
+  path: '',
   description: 'Dashboard',
   element: <Dashboard />,
   errorElement: <RouteErrorBoundary />,
