@@ -15,7 +15,7 @@ import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
-import { checkParticipantId } from '../../middleware/participantsMiddleware';
+import { hasParticipantAccess } from '../../middleware/participantsMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
 import {
   addKeyPair,
@@ -210,7 +210,13 @@ export function createParticipantsRouter() {
 
   participantsRouter.put('/', createParticipant);
 
-  participantsRouter.use('/:participantId', checkParticipantId);
+  participantsRouter.use('/:participantId', hasParticipantAccess);
+
+  participantsRouter.get('/:participantId', async (req: ParticipantRequest, res: Response) => {
+    const { participant } = req;
+
+    return res.status(200).json(participant);
+  });
 
   const invitationParser = z.object({
     firstName: z.string(),

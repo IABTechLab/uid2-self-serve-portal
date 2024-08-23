@@ -41,7 +41,7 @@ export class UserService {
   }
 
   public async getCurrentParticipant(req: UserRequest) {
-    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-3989
     const currentParticipant = req.user?.participants?.[0];
     const currentSite = !currentParticipant?.siteId
       ? undefined

@@ -16,8 +16,8 @@ import {
   AddParticipantForm,
   ApproveParticipantRequest,
   GetApprovedParticipants,
-  GetCurrentUsersParticipant,
   GetParticipantsAwaitingApproval,
+  GetUsersDefaultParticipant,
   ParticipantApprovalFormDetails,
   UpdateParticipant,
   UpdateParticipantForm,
@@ -66,7 +66,7 @@ function ManageParticipants() {
     await UpdateParticipant(form, updatedParticipant.id);
     // if updating the current user's participant, update the ParticipantContext
     if (updatedParticipant.id === participant?.id) {
-      const p = await GetCurrentUsersParticipant();
+      const p = await GetUsersDefaultParticipant();
       setParticipant(p);
     }
     SuccessToast('Participant updated');

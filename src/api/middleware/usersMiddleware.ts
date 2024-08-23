@@ -72,7 +72,7 @@ export const enrichWithUserFromParams = async (
   const requestingUserEmail = req.auth?.payload?.email as string;
   const isRequestingUserUid2Support = await isUid2Support(requestingUserEmail);
 
-  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-2822
+  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-3989
   const firstParticipant = user.participants?.[0] as Participant;
 
   const canRequestingUserAccessParticipant =
