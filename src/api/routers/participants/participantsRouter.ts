@@ -15,7 +15,7 @@ import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
-import { hasParticipantAccess } from '../../middleware/participantsMiddleware';
+import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
 import {
   addKeyPair,
@@ -210,7 +210,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.put('/', createParticipant);
 
-  participantsRouter.use('/:participantId', hasParticipantAccess);
+  participantsRouter.use('/:participantId', verifyAndEnrichParticipant);
 
   participantsRouter.get('/:participantId', async (req: ParticipantRequest, res: Response) => {
     const { participant } = req;
