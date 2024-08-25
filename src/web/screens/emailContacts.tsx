@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
@@ -6,12 +6,13 @@ import BusinessContactsTable from '../components/BusinessContacts/BusinessContac
 import { Loading } from '../components/Core/Loading/Loading';
 import { SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddEmailContact,
   BusinessContactForm,
   GetEmailContacts,
   RemoveEmailContact,
-  UpdateEmailContact
+  UpdateEmailContact,
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
@@ -28,11 +29,12 @@ const loader = makeParticipantLoader((participantId) => {
 
 export function BusinessContacts() {
   const data = useLoaderData<typeof loader>();
+  const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
 
   const handleRemoveEmailContact = async (contactId: number) => {
     try {
-      const response = await RemoveEmailContact(contactId);
+      const response = await RemoveEmailContact(contactId, participant!.id);
       if (response.status === 200) {
         SuccessToast('Email contact removed.');
       }
@@ -44,7 +46,7 @@ export function BusinessContacts() {
 
   const handleUpdateEmailContact = async (contactId: number, formData: BusinessContactForm) => {
     try {
-      const response = await UpdateEmailContact(contactId, formData);
+      const response = await UpdateEmailContact(contactId, formData, participant!.id);
       if (response.status === 200) {
         SuccessToast('Email contact updated.');
       }
@@ -56,7 +58,7 @@ export function BusinessContacts() {
 
   const handleAddEmailContact = async (formData: BusinessContactForm) => {
     try {
-      const response = await AddEmailContact(formData);
+      const response = await AddEmailContact(formData, participant!.id);
       if (response.status === 201) {
         SuccessToast('Email contact added.');
       }

@@ -16,6 +16,6 @@ export const makeParticipantLoader = <T extends ReturnType<typeof defer>>(
 ) => {
   return makeLoader((args: LoaderFunctionArgs) => {
     const participantId = parseParticipantId(args.params.participantId);
-    return loaderFn(participantId, args);
+    return loaderFn(participantId!, args);
   });
 };

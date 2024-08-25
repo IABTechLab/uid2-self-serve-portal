@@ -73,10 +73,10 @@ export async function SelfResendInvitation(formData: SelfResendInvitationForm): 
   }
 }
 
-export async function GetAllUsersOfParticipant(participantId?: number) {
+export async function GetAllUsersOfParticipant(participantId: number) {
   try {
     const result = await axios.get<UserResponse[]>(
-      `/participants/${participantId ?? 'current'}/users`,
+      `/participants/${participantId}/users`,
       {
         validateStatus: (status) => [200, 404].includes(status),
       }
@@ -87,6 +87,7 @@ export async function GetAllUsersOfParticipant(participantId?: number) {
   }
 }
 
+// TODO: make this only remove the user from the given participant in UID2-3852
 export async function RemoveUser(id: number) {
   try {
     return await axios.delete(`/users/${id}`);

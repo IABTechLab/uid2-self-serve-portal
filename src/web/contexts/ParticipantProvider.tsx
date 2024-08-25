@@ -1,11 +1,12 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { ParticipantDTO, ParticipantStatus } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
-import { GetCurrentUsersParticipant } from '../services/participant';
+import { GetSelectedParticipant, GetUsersDefaultParticipant } from '../services/participant';
 import { ApiError } from '../utils/apiError';
 import { useAsyncThrowError } from '../utils/errorHandler';
+import { parseParticipantId } from '../utils/urlHelpers';
 import { CurrentUserContext } from './CurrentUserProvider';
 
 type ParticipantWithSetter = {
@@ -25,6 +26,8 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const throwError = useAsyncThrowError();
   const user = LoggedInUser?.user || null;
+  const { participantId } = useParams();
+  const parsedParticipantId = parseParticipantId(participantId);
 
   useEffect(() => {
     if (
@@ -41,7 +44,9 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       try {
         if (user) {
-          const p = await GetCurrentUsersParticipant();
+          const p = parsedParticipantId
+            ? await GetSelectedParticipant(parsedParticipantId)
+            : await GetUsersDefaultParticipant();
           setParticipant(p);
         }
       } catch (e: unknown) {
@@ -51,7 +56,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
       }
     };
     if (!participant) loadParticipant();
-  }, [user, participant, throwError]);
+  }, [user, participant, throwError, parsedParticipantId]);
 
   const participantContext = useMemo(
     () => ({

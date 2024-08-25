@@ -24,7 +24,7 @@ const createUserRequest = (email: string, userId: string | number): UserRequest 
   } as unknown as UserRequest;
 };
 
-describe('User Service Tests', () => {
+describe('User Middleware Tests', () => {
   let knex: Knex;
   let next: NextFunction;
   let res: Response;

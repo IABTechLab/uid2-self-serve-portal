@@ -1,10 +1,10 @@
 export const parseParticipantId = (participantId: string | undefined) => {
   if (!participantId) {
-    throw new Error('Participant ID is not defined');
+    return undefined;
   }
   const result = parseInt(participantId, 10);
   if (isNaN(result)) {
-    throw new Error('Participant ID is not a valid number');
+    return undefined;
   }
   return result;
 };

@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Suspense, useContext, useState } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
@@ -9,6 +9,7 @@ import KeyTable from '../components/ApiKeyManagement/KeyTable';
 import { Loading } from '../components/Core/Loading/Loading';
 import { SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
+import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   CreateApiKey,
   CreateApiKeyFormDTO,
@@ -36,12 +37,13 @@ const loader = makeParticipantLoader((participantId) => {
 function ApiKeyManagement() {
   const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
   const data = useLoaderData<typeof loader>();
+  const { participant } = useContext(ParticipantContext);
 
   const reloader = useRevalidator();
 
-  const onKeyCreation = async (form: CreateApiKeyFormDTO, participantId?: number) => {
+  const onKeyCreation = async (form: CreateApiKeyFormDTO) => {
     try {
-      const keySecret = await CreateApiKey(form, participantId);
+      const keySecret = await CreateApiKey(form, participant!.id);
       reloader.revalidate();
       return keySecret;
     } catch (e) {
@@ -51,8 +53,8 @@ function ApiKeyManagement() {
 
   const onKeyEdit: OnApiKeyEdit = async (form, setApiKey) => {
     try {
-      await EditApiKey(form);
-      setApiKey(await GetParticipantApiKey(form.keyId));
+      await EditApiKey(form, participant!.id);
+      setApiKey(await GetParticipantApiKey(form.keyId, participant!.id));
       SuccessToast('Your key has been updated');
     } catch (e) {
       handleErrorToast(e);
@@ -61,7 +63,7 @@ function ApiKeyManagement() {
 
   const onKeyDisable: OnApiKeyDisable = async (apiKey) => {
     try {
-      await DisableApiKey(apiKey);
+      await DisableApiKey(apiKey, participant!.id);
       reloader.revalidate();
       SuccessToast('Your key has been deleted.');
     } catch (e) {
@@ -85,7 +87,8 @@ function ApiKeyManagement() {
           rel='noreferrer'
         >
           managing and rotating API keys
-        </a>.
+        </a>
+        .
       </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading />}>
