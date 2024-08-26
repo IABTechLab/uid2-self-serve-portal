@@ -58,7 +58,7 @@ function TeamMember({
     setInviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id);
-      SuccessToast('Invitation sent');
+      SuccessToast('Invitation sent.');
       setInviteState(InviteState.sent);
     } catch (e) {
       setErrorInfo(e as Error);

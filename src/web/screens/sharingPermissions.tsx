@@ -75,9 +75,9 @@ function SharingPermissions() {
       SuccessToast(
         `${
           selectedTypes.length === 1
-            ? '1 Participant type'
-            : `${selectedTypes.length} Participant types`
-        } saved to your Sharing Permissions`
+            ? '1 participant type'
+            : `${selectedTypes.length} participant types`
+        } saved to your sharing permissions.`
       );
       if (!participant?.completedRecommendations) {
         const updatedParticipant = await CompleteRecommendations(participant!.id);
@@ -94,8 +94,8 @@ function SharingPermissions() {
       await AddSharingParticipants(participant!.id, selectedSiteIds);
       SuccessToast(
         `${
-          selectedSiteIds.length === 1 ? '1 Participant' : `${selectedSiteIds.length} Participants`
-        } added to your Sharing Permissions`
+          selectedSiteIds.length === 1 ? '1 participant' : `${selectedSiteIds.length} participants`
+        } added to your sharing permissions.`
       );
       reloader.revalidate();
     } catch (e) {
@@ -109,7 +109,7 @@ function SharingPermissions() {
       SuccessToast(
         `${siteIdsToDelete.length} sharing ${
           siteIdsToDelete.length > 1 ? 'permissions' : 'permission'
-        } deleted`
+        } deleted.`
       );
       reloader.revalidate();
     } catch (e) {
@@ -139,7 +139,16 @@ function SharingPermissions() {
                 <>
                   <p className='heading-details'>
                     Adding a sharing permission allows the participant you’re sharing with to
-                    decrypt your UID2 tokens.
+                    decrypt your UID2 tokens. For more information, see{' '}
+                    <a
+                      className='outside-link'
+                      target='_blank'
+                      href='https://unifiedid.com/docs/portal/sharing-permissions'
+                      rel='noreferrer'
+                    >
+                      Sharing Permissions
+                    </a>
+                    .
                     <br />
                     <br />
                     Note: This only enables the sharing permission. No data is sent.
@@ -150,8 +159,7 @@ function SharingPermissions() {
                         <span>
                           As a publisher, you can share with others by granting permission on this
                           page. However, to allow others to share with you, you must ask your UID2
-                          contact to get the correct permissions added to your account. Note: This
-                          only enables the sharing permission. No data is sent.
+                          contact to get the correct permissions added to your account.
                         </span>
                       </>
                     )}

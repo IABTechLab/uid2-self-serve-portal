@@ -84,7 +84,7 @@ function AddParticipantDialog({
     async (formData: AddParticipantForm) => {
       const response = await onAddParticipant(formData);
       if (response.status === 200) {
-        SuccessToast('Participant Added.');
+        SuccessToast('Participant added.');
       }
       onOpenChange();
     },

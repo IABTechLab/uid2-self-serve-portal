@@ -76,7 +76,7 @@ function ClientSideIntegration() {
     try {
       await UpdateKeyPair({ name, subscriptionId, disabled }, participant!.id!);
       reloader.revalidate();
-      SuccessToast('Key Pair updated.');
+      SuccessToast('Key pair updated.');
     } catch (e: unknown) {
       handleErrorToast(e);
     }
@@ -105,7 +105,7 @@ function ClientSideIntegration() {
         domains = invalidDomains;
       } else {
         reloader.revalidate();
-        SuccessToast(`Root-Level Domains ${action}.`);
+        SuccessToast(`Root-level domains ${action}.`);
       }
       const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(domains),
@@ -120,7 +120,7 @@ function ClientSideIntegration() {
     try {
       const appIds = await UpdateAppIds(updatedAppIds, participant!.id);
       reloader.revalidate();
-      SuccessToast(`Mobile App IDs ${action}.`);
+      SuccessToast(`Mobile app IDs ${action}.`);
 
       const updatedAppIdsResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(appIds),
@@ -200,7 +200,7 @@ function ClientSideIntegration() {
                   onAddCstgValues={onAddCstgValues}
                   onUpdateCstgValues={handleUpdateAppIds}
                   cstgValueType={CstgValueType.MobileAppId}
-                  addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID, and iOS App Store ID.'
+                  addInstructions='Add any mobile app IDs that apply: Android App IDs and/or iOS/tvOS Bundle IDs with corresponding iOS App Store IDs.'
                 />
               </>
             )}

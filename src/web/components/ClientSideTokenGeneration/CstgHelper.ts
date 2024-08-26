@@ -26,6 +26,17 @@ export enum CstgValueType {
   MobileAppId = 'Mobile App ID',
 }
 
+export const formatCstgValueType = (valueType: CstgValueType) => {
+  switch (valueType) {
+    case CstgValueType.Domain:
+      return 'root-level domain';
+    case CstgValueType.MobileAppId:
+      return 'mobile app ID';
+    default:
+      return valueType;
+  }
+};
+
 export const extractTopLevelDomain = (domainName: string) => {
   const topLevelDomain = parse(domainName).domain;
   if (topLevelDomain && topLevelDomain !== domainName) {

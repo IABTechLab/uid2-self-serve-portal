@@ -147,7 +147,7 @@ describe('CstgAddDialog', () => {
     );
     await submitDialogDomains();
 
-    expect(screen.getByText('Please specify Root-Level Domains.')).toBeInTheDocument();
+    expect(screen.getByText('Please specify root-level domains.')).toBeInTheDocument();
   });
 
   it('should be able to click save if user types in correct single mobile app ID', async () => {
@@ -282,6 +282,6 @@ describe('CstgAddDialog', () => {
     );
     await submitDialogMobileAppIds();
 
-    expect(screen.getByText('Please specify Mobile App IDs.')).toBeInTheDocument();
+    expect(screen.getByText('Please specify mobile app IDs.')).toBeInTheDocument();
   });
 });
