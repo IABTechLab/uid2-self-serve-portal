@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar } from '@radix-ui/react-avatar';
 import {
   DropdownMenu,
   DropdownMenuArrow,
@@ -9,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
 import * as Switch from '@radix-ui/react-switch';
-import MD5 from 'crypto-js/md5';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -36,7 +34,6 @@ export function PortalHeader({
 }: Readonly<PortalHeaderProps>) {
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const emailMd5 = email ? MD5(email).toString() : null;
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
   const [menuOpen, setMenuOpen] = useState(false);
