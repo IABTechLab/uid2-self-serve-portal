@@ -15,7 +15,7 @@ import {
   RemoveUser,
   ResendInvite,
   UpdateTeamMemberForm,
-  UpdateUser
+  UpdateUser,
 } from '../services/userAccount';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
@@ -48,7 +48,7 @@ function TeamMembers() {
 
   const handleRemoveTeamMember = async (userId: number) => {
     try {
-      const response = await RemoveUser(userId);
+      const response = await RemoveUser(userId, participant!.id);
       if (response.status === 200) {
         SuccessToast('Team member removed.');
       }
@@ -60,7 +60,7 @@ function TeamMembers() {
 
   const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
     try {
-      const response = await UpdateUser(userId, formData);
+      const response = await UpdateUser(userId, formData, participant!.id);
       if (response.status === 200) {
         SuccessToast('Team member updated.');
       }

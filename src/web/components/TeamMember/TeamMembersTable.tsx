@@ -18,7 +18,7 @@ type TeamMembersTableProps = Readonly<{
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
-  resendInvite: (id: number) => Promise<void>;
+  resendInvite: (id: number, participantId: number) => Promise<void>;
 }>;
 
 function TeamMembersTableContent({

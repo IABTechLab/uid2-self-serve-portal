@@ -90,11 +90,6 @@ export class UserController {
     res.sendStatus(200);
   }
 
-  @httpGet('/:userId')
-  public async getUserById(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    res.status(200).json(req.user);
-  }
-
   @httpPost('/:userId/resendInvitation')
   public async resendInvitation(
     @request() req: UserRequest,

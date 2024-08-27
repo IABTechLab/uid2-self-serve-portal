@@ -3,7 +3,7 @@ import { KeycloakProfile } from 'keycloak-js';
 import log from 'loglevel';
 import { z } from 'zod';
 
-import { User, UserCreationPartial, UserDTO } from '../../api/entities/User';
+import { UserCreationPartial, UserDTO } from '../../api/entities/User';
 import { UserWithIsApprover } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
@@ -23,16 +23,6 @@ export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
 export type UserResponse = UserDTO;
-export async function GetUserAccountById(id: string) {
-  try {
-    const result = await axios.get<User>(`/users/${id}`, {
-      validateStatus: (status) => [200, 404].includes(status),
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not get user account');
-  }
-}
 
 export async function GetLoggedInUserAccount(): Promise<UserWithIsApprover | null> {
   try {
@@ -46,9 +36,9 @@ export async function GetLoggedInUserAccount(): Promise<UserWithIsApprover | nul
   }
 }
 
-export async function ResendInvite(id: number): Promise<void> {
+export async function ResendInvite(id: number, participantId: number): Promise<void> {
   try {
-    return await axios.post(`/users/${id}/resendInvitation`);
+    return await axios.post(`/participants/${participantId}/users/${id}/resendInvitation`);
   } catch (e: unknown) {
     const error = backendError(e, 'Unable to resend invitation');
     log.error(error);
@@ -75,12 +65,9 @@ export async function SelfResendInvitation(formData: SelfResendInvitationForm): 
 
 export async function GetAllUsersOfParticipant(participantId: number) {
   try {
-    const result = await axios.get<UserResponse[]>(
-      `/participants/${participantId}/users`,
-      {
-        validateStatus: (status) => [200, 404].includes(status),
-      }
-    );
+    const result = await axios.get<UserResponse[]>(`/participants/${participantId}/users`, {
+      validateStatus: (status) => [200, 404].includes(status),
+    });
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load users');
@@ -88,17 +75,21 @@ export async function GetAllUsersOfParticipant(participantId: number) {
 }
 
 // TODO: make this only remove the user from the given participant in UID2-3852
-export async function RemoveUser(id: number) {
+export async function RemoveUser(id: number, participantId: number) {
   try {
-    return await axios.delete(`/users/${id}`);
+    return await axios.delete(`/participants/${participantId}/users/${id}`);
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete user');
   }
 }
 
-export async function UpdateUser(id: number, formData: UpdateTeamMemberForm) {
+export async function UpdateUser(
+  id: number,
+  formData: UpdateTeamMemberForm,
+  participantId: number
+) {
   try {
-    return await axios.patch(`/users/${id}`, formData);
+    return await axios.patch(`/participants/${participantId}/users/${id}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update user');
   }

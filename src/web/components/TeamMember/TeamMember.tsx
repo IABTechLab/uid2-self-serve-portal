@@ -1,8 +1,9 @@
 import clsx from 'clsx';
 import log from 'loglevel';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
@@ -14,7 +15,7 @@ import TeamMemberDialog from './TeamMemberDialog';
 type TeamMemberProps = Readonly<{
   existingTeamMembers: UserDTO[];
   person: UserResponse;
-  resendInvite: (id: number) => Promise<void>;
+  resendInvite: (id: number, participantId: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
 }>;
@@ -36,7 +37,7 @@ function TeamMember({
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
   const [showDeleteTeamMemberDialog, setShowDeleteTeamMemberDialog] = useState<boolean>();
-
+  const { participant } = useContext(ParticipantContext);
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
@@ -57,7 +58,7 @@ function TeamMember({
 
     setInviteState(InviteState.inProgress);
     try {
-      await resendInvite(person.id);
+      await resendInvite(person.id, participant!.id);
       SuccessToast('Invitation sent');
       setInviteState(InviteState.sent);
     } catch (e) {
@@ -65,7 +66,7 @@ function TeamMember({
       setInviteState(InviteState.error);
       handleErrorToast(e);
     }
-  }, [person.id, reinviteState, resendInvite]);
+  }, [participant, person.id, reinviteState, resendInvite]);
 
   const handleRemoveUser = async () => {
     try {
