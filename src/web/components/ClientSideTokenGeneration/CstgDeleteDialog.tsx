@@ -1,5 +1,5 @@
 import { Dialog } from '../Core/Dialog/Dialog';
-import { CstgValueType } from './CstgHelper';
+import { CstgValueType, formatCstgValueType } from './CstgHelper';
 
 import './CstgDeleteDialog.scss';
 
@@ -19,13 +19,14 @@ function DeleteConfirmationDialog({
   const handleRemove = () => {
     onRemoveCstgValues();
   };
+  const formattedCstgValueType = formatCstgValueType(cstgValueType);
 
   return (
     <Dialog
       title={`Are you sure you want to delete ${
         cstgValues.length > 1
-          ? `these ${cstgValueType.toLowerCase()}s`
-          : `this ${cstgValueType.toLowerCase()}`
+          ? `these ${formattedCstgValueType}s`
+          : `this ${formattedCstgValueType}`
       }?`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'

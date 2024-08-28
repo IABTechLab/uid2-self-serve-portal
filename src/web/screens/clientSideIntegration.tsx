@@ -93,8 +93,7 @@ function ClientSideIntegration() {
   };
 
   const handleUpdateDomainNames = async (
-    updatedDomainNames: string[],
-    action: string
+    updatedDomainNames: string[]
   ): Promise<UpdateCstgValuesResponse | undefined> => {
     try {
       const response = await UpdateDomainNames(updatedDomainNames, participant!.id);
@@ -105,7 +104,7 @@ function ClientSideIntegration() {
         domains = invalidDomains;
       } else {
         reloader.revalidate();
-        SuccessToast(`Root-level domains ${action}.`);
+        SuccessToast(`Root-level domains saved.`);
       }
       const updatedDomainNamesResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(domains),
@@ -116,11 +115,11 @@ function ClientSideIntegration() {
       handleErrorToast(e);
     }
   };
-  const handleUpdateAppIds = async (updatedAppIds: string[], action: string) => {
+  const handleUpdateAppIds = async (updatedAppIds: string[]) => {
     try {
       const appIds = await UpdateAppIds(updatedAppIds, participant!.id);
       reloader.revalidate();
-      SuccessToast(`Mobile app IDs ${action}.`);
+      SuccessToast(`Mobile app IDs saved.`);
 
       const updatedAppIdsResponse: UpdateCstgValuesResponse = {
         cstgValues: sortStringsAlphabetically(appIds),
@@ -143,10 +142,10 @@ function ClientSideIntegration() {
       updatedCstgValues = [...newCstgValues, ...existingCstgValues];
     }
     if (cstgType === CstgValueType.MobileAppId) {
-      return handleUpdateAppIds(updatedCstgValues, 'added');
+      return handleUpdateAppIds(updatedCstgValues);
     }
     if (cstgType === CstgValueType.Domain) {
-      return handleUpdateDomainNames(updatedCstgValues, 'added');
+      return handleUpdateDomainNames(updatedCstgValues);
     }
   };
 

@@ -7,6 +7,7 @@ import {
   CstgValueType,
   EditCstgValuesFormProps,
   extractTopLevelDomain,
+  formatCstgValueType,
   validateAppId,
 } from './CstgHelper';
 
@@ -37,10 +38,12 @@ function CstgEditDialog({
     formState: { errors },
   } = formMethods;
 
+  const formattedCstgValueType = formatCstgValueType(cstgValueType);
+
   const showInvalidError = () => {
     setError('root.serverError', {
       type: '400',
-      message: `Edited value is an invalid ${cstgValueType.toLowerCase()}.`,
+      message: `The ${formattedCstgValueType} is invalid.`,
     });
   };
 
@@ -57,7 +60,7 @@ function CstgEditDialog({
     } else if (existingCstgValues.includes(updatedCstgValue)) {
       setError('root.serverError', {
         type: '400',
-        message: `${cstgValueType} already exists.`,
+        message: `The ${formattedCstgValueType} already exists.`,
       });
     }
     if (cstgValueType === CstgValueType.MobileAppId) {
@@ -85,7 +88,7 @@ function CstgEditDialog({
             inputName='cstgValue'
             label={`${cstgValueType}`}
             rules={{
-              required: `Please specify ${cstgValueType}.`,
+              required: `Please specify a ${formattedCstgValueType}.`,
             }}
           />
           <div className='form-footer'>

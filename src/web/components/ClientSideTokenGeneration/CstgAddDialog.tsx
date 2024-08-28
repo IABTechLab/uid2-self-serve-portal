@@ -38,6 +38,7 @@ function CstgAddDialog({
 }: CstgAddDialogProps) {
   const [deleteExistingList, setDeleteExistingList] = useState<boolean>(false);
   const formMethods = useForm<AddCstgValuesFormProps>();
+  const formattedCstgValueType = formatCstgValueType(cstgValueType);
   const {
     handleSubmit,
     setError,
@@ -58,7 +59,7 @@ function CstgAddDialog({
       deleteExistingList
     );
     if (newCstgValues.length === 0) {
-      handleError(`The ${formatCstgValueType(cstgValueType)}s entered already exist.`);
+      handleError(`The ${formattedCstgValueType}s entered already exist.`);
     } else if (cstgValueType === CstgValueType.Domain) {
       newCstgValues.forEach((newDomain, index) => {
         newCstgValues[index] = extractTopLevelDomain(newDomain);
@@ -110,12 +111,12 @@ function CstgAddDialog({
                 onClick={onClickCheckbox}
                 checked={deleteExistingList}
               />
-              <div className='checkbox-text'>{`Replace all existing ${formatCstgValueType(cstgValueType)}s with the new ones.`}</div>
+              <div className='checkbox-text'>{`Replace all existing ${formattedCstgValueType}s with the new ones.`}</div>
             </div>
             <MultilineTextInput
               inputName='cstgValues'
               label={`${cstgValueType}s`}
-              rules={{ required: `Please specify ${formatCstgValueType(cstgValueType)}s.` }}
+              rules={{ required: `Please specify ${formattedCstgValueType}s.` }}
               className='cstg-add-input'
             />
             <div className='form-footer'>
