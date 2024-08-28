@@ -15,6 +15,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
 import { deleteUserByEmail, updateUserProfile } from './kcUsersService';
+import { UserParticipantRequest } from './participantsService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
 export type DeletedUser = {
@@ -57,8 +58,8 @@ export class UserService {
   }
 
   // TODO: Allow for a participant to be specified, so they aren't removed from all of their participants in UID2-3852
-  public async deleteUser(req: UserRequest) {
-    const { user } = req;
+  public async deleteUser(req: UserParticipantRequest) {
+    const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
     const traceId = getTraceId(req);
 
@@ -78,7 +79,8 @@ export class UserService {
         firstName: user?.firstName,
         lastName: user?.lastName,
         jobFunction: user?.jobFunction,
-      }
+      },
+      participant!.id
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
@@ -90,8 +92,8 @@ export class UserService {
     });
   }
 
-  public async updateUser(req: UserRequest) {
-    const { user } = req;
+  public async updateUser(req: UserParticipantRequest) {
+    const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
     const data = UpdateUserParser.parse(req.body);
     const traceId = getTraceId(req);
@@ -105,7 +107,8 @@ export class UserService {
         firstName: data.firstName,
         lastName: data.lastName,
         jobFunction: data.jobFunction,
-      }
+      },
+      participant!.id
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {

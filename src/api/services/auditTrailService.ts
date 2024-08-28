@@ -7,14 +7,13 @@ export type InsertAuditTrailDTO = Omit<AuditTrailDTO, 'id' | 'succeeded'>;
 export const constructAuditTrailObject = (
   user: User,
   event: AuditTrailEvents,
-  eventData: unknown
+  eventData: unknown,
+  participantId: number | null = null
 ): InsertAuditTrailDTO => {
-  // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-3989
-  const currentParticipant = user.participants?.[0];
   return {
     userId: user.id,
     userEmail: user.email,
-    participantId: currentParticipant?.id,
+    participantId,
     event,
     eventData,
   };

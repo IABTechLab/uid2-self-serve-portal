@@ -46,7 +46,7 @@ export class AuditTrail extends BaseModel {
   declare succeeded: boolean;
   declare event: AuditTrailEvents;
   declare eventData: unknown;
-  declare participantId?: number;
+  declare participantId?: number | null;
 }
 
 export type AuditTrailDTO = ModelObjectOpt<AuditTrail>;

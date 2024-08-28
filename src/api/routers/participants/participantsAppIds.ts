@@ -30,11 +30,16 @@ export async function setParticipantAppNames(req: UserParticipantRequest, res: R
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
-  const auditTrailInsertObject = constructAuditTrailObject(user!, AuditTrailEvents.UpdateAppNames, {
-    action: AuditAction.Update,
-    siteId: participant.siteId,
-    appNames,
-  });
+  const auditTrailInsertObject = constructAuditTrailObject(
+    user!,
+    AuditTrailEvents.UpdateAppNames,
+    {
+      action: AuditAction.Update,
+      siteId: participant.siteId,
+      appNames,
+    },
+    participant.id
+  );
 
   const updatedSite = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,
