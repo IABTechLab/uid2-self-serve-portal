@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { UserController } from '../controllers/userController';
-import { enrichCurrentUser, enrichWithUserFromParams } from '../middleware/usersMiddleware';
+import { enrichCurrentUser } from '../middleware/usersMiddleware';
 import { LoggerService } from '../services/loggerService';
 import { UserService } from '../services/userService';
 
@@ -20,14 +20,6 @@ const createUsersRouter = () => {
     '/selfResendInvitation',
     userController.selfResendInvitation.bind(userController)
   );
-  usersRouter.use('/:userId', enrichWithUserFromParams);
-  usersRouter.get('/:userId', userController.getUserById.bind(userController));
-  usersRouter.post(
-    '/:userId/resendInvitation',
-    userController.resendInvitation.bind(userController)
-  );
-  usersRouter.delete('/:userId', userController.deleteUser.bind(userController));
-  usersRouter.patch('/:userId', userController.updateUser.bind(userController));
 
   return usersRouter;
 };

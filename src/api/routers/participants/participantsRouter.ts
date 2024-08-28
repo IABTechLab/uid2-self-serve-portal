@@ -66,6 +66,7 @@ import {
   getAllUserFromParticipant,
 } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
+import { createParticipantUsersRouter } from '../participantUsersRouter';
 import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
 import { createParticipant, createParticipantFromRequest } from './participantsCreation';
 import { getParticipantDomainNames, setParticipantDomainNames } from './participantsDomainNames';
@@ -724,6 +725,9 @@ export function createParticipantsRouter() {
   );
 
   participantsRouter.get('/:participantId/users', getParticipantUsers);
+
+  const participantUsersRouter = createParticipantUsersRouter();
+  participantsRouter.use('/:participantId/users', participantUsersRouter);
 
   const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
