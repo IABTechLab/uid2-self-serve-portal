@@ -7,21 +7,27 @@ import {
   createResponseObject,
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
+import { Participant } from '../../entities/Participant';
 import { UserRoleId } from '../../entities/UserRole';
-import { UserRequest } from '../../services/usersService';
+import { UserParticipantRequest } from '../../services/participantsService';
 import { verifyAndEnrichUser } from '../usersMiddleware';
 
-const createUserRequest = (email: string, userId: string | number): UserRequest => {
+const createUserParticipantRequest = (
+  requestingUserEmail: string,
+  requestingParticipant: Participant,
+  targetUserId: number
+): UserParticipantRequest => {
   return {
     auth: {
       payload: {
-        email,
+        email: requestingUserEmail,
       },
     },
+    participant: requestingParticipant,
     params: {
-      userId,
+      userId: targetUserId,
     },
-  } as unknown as UserRequest;
+  } as unknown as UserParticipantRequest;
 };
 
 describe('User Middleware Tests', () => {
@@ -35,76 +41,113 @@ describe('User Middleware Tests', () => {
     ({ res } = createResponseObject());
   });
 
-  it('should call next if user belongs to participant', async () => {
-    const relatedParticipant = await createParticipant(knex, {});
-    const relatedUser = await createUser({
-      participantToRoles: [{ participantId: relatedParticipant.id }],
+  it('should call next if requesting user belongs to participant', async () => {
+    const participant = await createParticipant(knex, {});
+    const user = await createUser({
+      participantToRoles: [{ participantId: participant.id }],
     });
-    const userRequest = createUserRequest(relatedUser.email, relatedUser.id);
+    const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
 
-    await verifyAndEnrichUser(userRequest, res, next);
+    await verifyAndEnrichUser(userParticipantRequest, res, next);
 
     expect(res.status).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
-  it('should call next if user is UID2 support, even if user does not belong to participant', async () => {
-    const firstParticipant = await createParticipant(knex, {});
-    const secondParticipant = await createParticipant(knex, {});
+  it('should call next if requesting user is UID2 support, even if requesting user does not belong to participant', async () => {
+    const requestorParticipant = await createParticipant(knex, {});
+    const targetParticipant = await createParticipant(knex, {});
     const uid2SupportUser = await createUser({
       participantToRoles: [
-        { participantId: firstParticipant.id, userRoleId: UserRoleId.UID2Support },
+        { participantId: requestorParticipant.id, userRoleId: UserRoleId.UID2Support },
       ],
     });
-    const secondUser = await createUser({
-      participantToRoles: [{ participantId: secondParticipant.id }],
+    const targetUser = await createUser({
+      participantToRoles: [{ participantId: targetParticipant.id }],
     });
-    const userRequest = createUserRequest(uid2SupportUser.email, secondUser.id);
+    const userParticipantRequest = createUserParticipantRequest(
+      uid2SupportUser.email,
+      targetParticipant,
+      targetUser.id
+    );
 
-    await verifyAndEnrichUser(userRequest, res, next);
+    await verifyAndEnrichUser(userParticipantRequest, res, next);
 
     expect(res.status).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
   it('should return 404 if user is not found', async () => {
-    const relatedParticipant = await createParticipant(knex, {});
-    const relatedUser = await createUser({
-      participantToRoles: [{ participantId: relatedParticipant.id }],
+    const requestorParticipant = await createParticipant(knex, {});
+    const requestingUser = await createUser({
+      participantToRoles: [{ participantId: requestorParticipant.id }],
     });
     const nonExistentUserId = 2;
-    const userRequest = createUserRequest(relatedUser.email, nonExistentUserId);
+    const userParticipantRequest = createUserParticipantRequest(
+      requestingUser.email,
+      requestorParticipant,
+      nonExistentUserId
+    );
 
-    await verifyAndEnrichUser(userRequest, res, next);
+    await verifyAndEnrichUser(userParticipantRequest, res, next);
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith([{ message: 'The user cannot be found.' }]);
   });
   it('should return 404 if participant is not found', async () => {
-    const relatedUser = await createUser({});
-    const userRequest = createUserRequest(relatedUser.email, relatedUser.id);
+    const requestingUser = await createUser({});
+    const unrelatedParticipant = await createParticipant(knex, {});
+    const userParticipantRequest = createUserParticipantRequest(
+      requestingUser.email,
+      unrelatedParticipant,
+      requestingUser.id
+    );
 
-    await verifyAndEnrichUser(userRequest, res, next);
+    await verifyAndEnrichUser(userParticipantRequest, res, next);
 
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith([
       { message: 'The participant for that user cannot be found.' },
     ]);
   });
-  it('should return 403 if user does not have access to participant', async () => {
-    const firstParticipant = await createParticipant(knex, {});
-    const secondParticipant = await createParticipant(knex, {});
-    const firstUser = await createUser({
-      participantToRoles: [{ participantId: firstParticipant.id }],
+  it('should return 403 if requesting user does not have access to participant', async () => {
+    const requestorParticipant = await createParticipant(knex, {});
+    const requestingUser = await createUser({
+      participantToRoles: [{ participantId: requestorParticipant.id }],
     });
-    const secondUser = await createUser({
-      participantToRoles: [{ participantId: secondParticipant.id }],
+    const anotherParticipant = await createParticipant(knex, {});
+    const anotherUser = await createUser({
+      participantToRoles: [{ participantId: anotherParticipant.id }],
     });
-    const userRequest = createUserRequest(secondUser.email, firstUser.id);
+    const userParticipantRequest = createUserParticipantRequest(
+      requestingUser.email,
+      anotherParticipant,
+      anotherUser.id
+    );
 
-    await verifyAndEnrichUser(userRequest, res, next);
+    await verifyAndEnrichUser(userParticipantRequest, res, next);
 
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.send).toHaveBeenCalledWith([
       { message: 'You do not have permission to that user account.' },
     ]);
+  });
+  it('should return 404 if user does not belong to participant', async () => {
+    const requestorParticipant = await createParticipant(knex, {});
+    const requestingUser = await createUser({
+      participantToRoles: [{ participantId: requestorParticipant.id }],
+    });
+    const anotherParticipant = await createParticipant(knex, {});
+    const anotherUser = await createUser({
+      participantToRoles: [{ participantId: anotherParticipant.id }],
+    });
+    const userParticipantRequest = createUserParticipantRequest(
+      requestingUser.email,
+      requestorParticipant,
+      anotherUser.id
+    );
+
+    await verifyAndEnrichUser(userParticipantRequest, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith([{ message: 'The user cannot be found.' }]);
   });
 });
