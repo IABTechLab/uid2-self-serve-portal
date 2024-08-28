@@ -40,8 +40,7 @@ export class UserService {
     return userWithIsApprover;
   }
 
-  public async getCurrentParticipant(req: UserRequest) {
-    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-3989
+  public async getDefaultParticipant(req: UserRequest) {
     const currentParticipant = req.user?.participants?.[0];
     const currentSite = !currentParticipant?.siteId
       ? undefined

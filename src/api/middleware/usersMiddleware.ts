@@ -53,11 +53,7 @@ const userIdParser = z.object({
   userId: z.coerce.number(),
 });
 
-export const enrichWithUserFromParams = async (
-  req: UserRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const verifyAndEnrichUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const { userId } = userIdParser.parse(req.params);
   const traceId = getTraceId(req);
   const user = await User.query().findById(userId).modify('withParticipants');

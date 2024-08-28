@@ -37,6 +37,7 @@ describe('Participant Middleware Tests', () => {
     next = jest.fn();
     ({ res } = createResponseObject());
   });
+
   it('should call next if participantId is valid and user belongs to participant', async () => {
     const relatedParticipant = await createParticipant(knex, {});
     const relatedUser = await createUser({
@@ -67,7 +68,6 @@ describe('Participant Middleware Tests', () => {
     expect(res.status).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
-
   it('should return 404 if participant is not found', async () => {
     const relatedParticipant = await createParticipant(knex, {});
     const relatedUser = await createUser({
@@ -84,7 +84,6 @@ describe('Participant Middleware Tests', () => {
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith([{ message: 'The participant cannot be found.' }]);
   });
-
   it('should return 403 if user does not have access to participant', async () => {
     const firstParticipant = await createParticipant(knex, {});
     const secondParticipant = await createParticipant(knex, {});

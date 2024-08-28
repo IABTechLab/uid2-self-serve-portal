@@ -41,11 +41,11 @@ export class UserController {
   }
 
   @httpGet('/current/participant')
-  public async getCurrentParticipant(
+  public async getDefaultParticipant(
     @request() req: UserRequest,
     @response() res: Response
   ): Promise<void> {
-    const result = await this.userService.getCurrentParticipant(req);
+    const result = await this.userService.getDefaultParticipant(req);
     res.json(result);
   }
 

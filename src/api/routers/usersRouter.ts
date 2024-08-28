@@ -14,7 +14,7 @@ const createUsersRouter = () => {
   usersRouter.put('/current/acceptTerms', userController.acceptTerms.bind(userController));
   usersRouter.get(
     '/current/participant',
-    userController.getCurrentParticipant.bind(userController)
+    userController.getDefaultParticipant.bind(userController)
   );
   usersRouter.post(
     '/selfResendInvitation',
