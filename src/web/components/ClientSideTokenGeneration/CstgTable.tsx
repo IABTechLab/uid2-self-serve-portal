@@ -195,6 +195,8 @@ export function CstgTable({
     ? `Delete All ${cstgValueType}s`
     : deletingMultipleItemsMessage;
 
+  const formattedCstgValueType = formatCstgValueType(cstgValueType);
+
   return (
     <div className='cstg-values-management'>
       <div className='cstg-values-table-header'>
@@ -234,7 +236,7 @@ export function CstgTable({
               type='text'
               className='cstg-values-search-bar'
               onChange={handleSearchCstgValue}
-              placeholder={`Search ${formatCstgValueType(cstgValueType)}s`}
+              placeholder={`Search ${formattedCstgValueType}s`}
               value={searchText}
             />
             <FontAwesomeIcon icon='search' className='cstg-values-search-bar-icon' />
@@ -280,7 +282,7 @@ export function CstgTable({
       </table>
       {cstgValues.length !== 0 && searchText && !searchedCstgValues.length && (
         <TableNoDataPlaceholder title={`No ${cstgValueType}s`}>
-          <span>{`There are no ${formatCstgValueType(cstgValueType)}s that match this search.`}</span>
+          <span>{`There are no ${formattedCstgValueType}s that match this search.`}</span>
         </TableNoDataPlaceholder>
       )}
       {!!searchedCstgValues.length && (
@@ -294,7 +296,7 @@ export function CstgTable({
 
       {!cstgValues.length && (
         <TableNoDataPlaceholder title={`No ${cstgValueType}s`}>
-          <span>{`There are no ${formatCstgValueType(cstgValueType)}s.`}</span>
+          <span>{`There are no ${formattedCstgValueType}s.`}</span>
         </TableNoDataPlaceholder>
       )}
     </div>
