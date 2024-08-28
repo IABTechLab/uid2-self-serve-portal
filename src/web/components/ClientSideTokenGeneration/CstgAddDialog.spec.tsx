@@ -28,7 +28,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        addInstructions='Add one or more domains.'
+        addInstructions=''
       />
     );
 
@@ -58,7 +58,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        addInstructions='Add one or more domains.'
+        addInstructions=''
       />
     );
 
@@ -92,7 +92,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        addInstructions='Add one or more domains.'
+        addInstructions=''
       />
     );
 
@@ -118,7 +118,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        addInstructions='Add one or more domains.'
+        addInstructions=''
       />
     );
 
@@ -142,7 +142,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.Domain}
-        addInstructions='Add one or more domains.'
+        addInstructions=''
       />
     );
     await submitDialogDomains();
@@ -163,7 +163,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+        addInstructions=''
       />
     );
 
@@ -193,7 +193,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+        addInstructions=''
       />
     );
 
@@ -227,7 +227,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+        addInstructions=''
       />
     );
 
@@ -253,7 +253,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+        addInstructions=''
       />
     );
 
@@ -277,7 +277,7 @@ describe('CstgAddDialog', () => {
         onOpenChange={() => {}}
         existingCstgValues={[]}
         cstgValueType={CstgValueType.MobileAppId}
-        addInstructions='Please register the Android App ID, iOS/tvOS Bundle ID and iOS App Store ID.'
+        addInstructions=''
       />
     );
     await submitDialogMobileAppIds();
