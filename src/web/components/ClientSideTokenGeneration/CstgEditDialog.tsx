@@ -43,7 +43,7 @@ function CstgEditDialog({
   const showInvalidError = () => {
     setError('root.serverError', {
       type: '400',
-      message: `Edited value is an invalid ${formattedCstgValueType}.`,
+      message: `The ${formattedCstgValueType} is invalid.`,
     });
   };
 
