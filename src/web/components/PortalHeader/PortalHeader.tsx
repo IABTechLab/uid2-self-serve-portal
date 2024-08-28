@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Avatar } from '@radix-ui/react-avatar';
 import {
   DropdownMenu,
   DropdownMenuArrow,
@@ -9,7 +8,6 @@ import {
   DropdownMenuTrigger,
 } from '@radix-ui/react-dropdown-menu';
 import * as Switch from '@radix-ui/react-switch';
-import MD5 from 'crypto-js/md5';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -36,7 +34,6 @@ export function PortalHeader({
 }: Readonly<PortalHeaderProps>) {
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const emailMd5 = email ? MD5(email).toString() : null;
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -71,16 +68,8 @@ export function PortalHeader({
         </DropdownMenuTrigger>
         <DropdownMenuContent className='profile-dropdown-content' align='end'>
           <DropdownMenuArrow className='profile-dropdown-arrow' />
-          <div className='portal-avatar-container'>
-            <Avatar className='portal-avatar' asChild>
-              {!!email && (
-                <img src={`//www.gravatar.com/avatar/${emailMd5}.jpg`} alt='Profile avatar' />
-              )}
-            </Avatar>
-          </div>
           {LoggedInUser?.user && (
             <>
-              <DropdownMenuSeparator className='separator' />
               {routes.map((route) => {
                 return (
                   <DropdownMenuItem
@@ -113,7 +102,7 @@ export function PortalHeader({
 
           <DropdownMenuSeparator className='separator' />
           <DropdownMenuItem className='dropdown-menu-item' onClick={logout}>
-            Log out
+            Log Out
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
