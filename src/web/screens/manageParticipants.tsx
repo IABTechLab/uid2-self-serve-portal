@@ -69,7 +69,7 @@ function ManageParticipants() {
       const p = await GetUsersDefaultParticipant();
       setParticipant(p);
     }
-    SuccessToast('Participant updated');
+    SuccessToast('Participant updated.');
     reloader.revalidate();
   };
 

@@ -8,7 +8,12 @@ import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
 import CstgAddDialog from './CstgAddDialog';
 import CstgDeleteDialog from './CstgDeleteDialog';
-import { CstgValueType, getPagedValues, UpdateCstgValuesResponse } from './CstgHelper';
+import {
+  CstgValueType,
+  formatCstgValueType,
+  getPagedValues,
+  UpdateCstgValuesResponse,
+} from './CstgHelper';
 import { CstgItem } from './CstgItem';
 
 import './CstgTable.scss';
@@ -229,7 +234,7 @@ export function CstgTable({
               type='text'
               className='cstg-values-search-bar'
               onChange={handleSearchCstgValue}
-              placeholder={`Search ${cstgValueType}s`}
+              placeholder={`Search ${formatCstgValueType(cstgValueType)}s`}
               value={searchText}
             />
             <FontAwesomeIcon icon='search' className='cstg-values-search-bar-icon' />
@@ -273,9 +278,9 @@ export function CstgTable({
           ))}
         </tbody>
       </table>
-      {searchText && !searchedCstgValues.length && (
-        <TableNoDataPlaceholder title={`No ${cstgValueType}`}>
-          <span>{`There are no ${cstgValueType}s that match this search.`}</span>
+      {cstgValues.length !== 0 && searchText && !searchedCstgValues.length && (
+        <TableNoDataPlaceholder title={`No ${cstgValueType}s`}>
+          <span>{`There are no ${formatCstgValueType(cstgValueType)}s that match this search.`}</span>
         </TableNoDataPlaceholder>
       )}
       {!!searchedCstgValues.length && (
@@ -288,8 +293,8 @@ export function CstgTable({
       )}
 
       {!cstgValues.length && (
-        <TableNoDataPlaceholder title={`No ${cstgValueType}`}>
-          <span>{`There are no ${cstgValueType}s`}</span>
+        <TableNoDataPlaceholder title={`No ${cstgValueType}s`}>
+          <span>{`There are no ${formatCstgValueType(cstgValueType)}s.`}</span>
         </TableNoDataPlaceholder>
       )}
     </div>
