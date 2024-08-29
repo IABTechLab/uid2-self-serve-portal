@@ -44,10 +44,8 @@ const canUserAccessParticipant = async (
   participantId: number,
   traceId: string
 ) => {
-  const isRequestingUserUid2Support = await isUid2Support(requestingUserEmail);
-
   return (
-    isRequestingUserUid2Support ||
+    (await isUid2Support(requestingUserEmail)) ||
     (await isUserBelongsToParticipant(requestingUserEmail, participantId, traceId))
   );
 };
