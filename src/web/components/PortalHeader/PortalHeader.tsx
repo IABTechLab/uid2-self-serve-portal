@@ -68,7 +68,7 @@ export function PortalHeader({
         </DropdownMenuTrigger>
         <DropdownMenuContent className='profile-dropdown-content' align='end'>
           <DropdownMenuArrow className='profile-dropdown-arrow' />
-          {LoggedInUser?.user && (
+          {LoggedInUser?.user?.acceptedTerms && (
             <>
               {routes.map((route) => {
                 return (
