@@ -42,9 +42,13 @@ export function App() {
     <StrictMode>
       <PortalErrorBoundary>
         <ParticipantProvider>
-          <HomeRedirector />
           <div className='app' ref={rootRef}>
-            {LoggedInUser?.user && <UpdatesTour />}
+            {LoggedInUser?.user?.acceptedTerms && (
+              <>
+                <HomeRedirector />
+                <UpdatesTour />
+              </>
+            )}
             <PortalHeader
               email={LoggedInUser?.profile?.email}
               fullName={fullName}
