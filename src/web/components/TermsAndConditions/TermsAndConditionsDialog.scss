@@ -1,0 +1,10 @@
+.terms-conditions-dialog {
+  box-sizing: border-box;
+  height: 100%;
+  max-width: 910px;
+
+  .accept-error {
+    color: var(--theme-error);
+    margin-top: 12px;
+  }
+}
