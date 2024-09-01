@@ -12,7 +12,7 @@ import {
 } from 'inversify-express-utils';
 
 import { TYPES } from '../constant/types';
-import { Participant, ParticipantStatus } from '../entities/Participant';
+import { ParticipantStatus } from '../entities/Participant';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
@@ -51,13 +51,12 @@ export class UserController {
 
   @httpPut('/current/acceptTerms')
   public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    // TODO: This just gets the user's first participant, but it will need to get the currently selected participant as part of UID2-3989
-    const currentParticipantId = req.user?.participants?.[0].id;
-    const participant = currentParticipantId
-      ? await Participant.query().findById(currentParticipantId)
-      : undefined;
+    const doesUserHaveAnApprovedParticipant =
+      req.user?.participants?.some(
+        (participant) => participant.status === ParticipantStatus.Approved
+      ) ?? false;
 
-    if (!participant || participant.status !== ParticipantStatus.Approved) {
+    if (!doesUserHaveAnApprovedParticipant) {
       res.status(403).json({
         message: 'Unauthorized. You do not have the necessary permissions.',
         errorHash: req.headers.traceId,

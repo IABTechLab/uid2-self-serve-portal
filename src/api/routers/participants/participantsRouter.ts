@@ -160,7 +160,8 @@ export function createParticipantsRouter() {
           oldTypeIds: participant?.types!.map((type) => type.id),
           newTypeIds: data.types.map((type) => type.id),
           apiRoles: data.apiRoles.map((role) => role.id),
-        }
+        },
+        participant!.id
       );
 
       const users = await performAsyncOperationWithAuditTrail(
@@ -248,7 +249,8 @@ export function createParticipantsRouter() {
             lastName,
             email,
             jobFunction,
-          }
+          },
+          participant!.id
         );
 
         await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
@@ -370,7 +372,8 @@ export function createParticipantsRouter() {
           newKeyName: newName,
           apiRoles: editedKey.roles.map((role) => role.roleName),
           newApiRoles,
-        }
+        },
+        participant!.id
       );
 
       await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
@@ -429,7 +432,8 @@ export function createParticipantsRouter() {
           keyName: apiKey.name,
           apiRoles: apiKey.roles.map((role) => role.roleName),
           keyId: apiKey.key_id,
-        }
+        },
+        participant!.id
       );
 
       await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
@@ -475,7 +479,8 @@ export function createParticipantsRouter() {
           siteId: participant.siteId,
           keyName,
           apiRoles,
-        }
+        },
+        participant!.id
       );
 
       const key = await performAsyncOperationWithAuditTrail(
@@ -511,7 +516,8 @@ export function createParticipantsRouter() {
           action: AuditAction.Add,
           sharingPermissions: newParticipantSites,
           siteId: participant.siteId,
-        }
+        },
+        participant!.id
       );
 
       const sharingParticipants = await performAsyncOperationWithAuditTrail(
@@ -554,7 +560,8 @@ export function createParticipantsRouter() {
           siteId: participant.siteId,
           name,
           disabled,
-        }
+        },
+        participant!.id
       );
 
       const keyPairs = await performAsyncOperationWithAuditTrail(
@@ -586,7 +593,8 @@ export function createParticipantsRouter() {
           siteId: participant.siteId,
           name,
           disabled,
-        }
+        },
+        participant!.id
       );
 
       const updatedKeyPair = await performAsyncOperationWithAuditTrail(
@@ -622,7 +630,8 @@ export function createParticipantsRouter() {
           siteId: participant.siteId,
           name,
           disabled,
-        }
+        },
+        participant!.id
       );
 
       await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
@@ -665,7 +674,8 @@ export function createParticipantsRouter() {
           action: AuditAction.Delete,
           sharingPermissions: sharingSitesToRemove,
           siteId: participant.siteId,
-        }
+        },
+        participant!.id
       );
 
       const sharingParticipants = await performAsyncOperationWithAuditTrail(
@@ -698,7 +708,8 @@ export function createParticipantsRouter() {
         {
           siteId: participant.siteId,
           allowedTypes: types,
-        }
+        },
+        participant!.id
       );
 
       const sharingParticipants = await performAsyncOperationWithAuditTrail(
