@@ -6,7 +6,7 @@ import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import {
   Participant,
   ParticipantCreationPartial,
-  ParticipantStatus
+  ParticipantStatus,
 } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
@@ -16,26 +16,26 @@ import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
   mapClientTypesToAdminEnums,
-  SiteCreationRequest
+  SiteCreationRequest,
 } from '../../services/adminServiceHelpers';
 import {
   constructAuditTrailObject,
-  performAsyncOperationWithAuditTrail
+  performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import {
   assignClientRoleToUser,
   createNewUser,
-  sendInviteEmail
+  sendInviteEmailToNewUser,
 } from '../../services/kcUsersService';
 import {
   getParticipantTypesByIds,
   ParticipantRequest,
-  sendNewParticipantEmail
+  sendNewParticipantEmail,
 } from '../../services/participantsService';
 import { findUserByEmail } from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
-  ParticipantCreationRequest
+  ParticipantCreationRequest,
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
@@ -95,23 +95,13 @@ const createUserAndAssociatedParticipant = async (
   });
 };
 
-export async function createParticipant(req: ParticipantRequest, res: Response) {
-  const participantRequest = ParticipantCreationRequest.parse(req.body);
-  const traceId = getTraceId(req);
-
-  const validationError = await validateParticipantCreationRequest(participantRequest);
-  if (validationError) {
-    return res.status(400).send(validationError);
-  }
-
-  const requestingUser = await findUserByEmail(req.auth?.payload?.email as string);
-  const user = UserCreationPartial.parse({
-    ...req.body,
-    acceptedTerms: false,
-  });
-
+async function createParticipant(
+  email: string,
+  participantRequest: z.infer<typeof ParticipantCreationRequest>,
+  user: z.infer<typeof UserCreationPartial>,
+  traceId: string
+) {
   const types = await getParticipantTypesByIds(participantRequest.participantTypes);
-  const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
 
   let site;
   if (!participantRequest.siteId) {
@@ -127,7 +117,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     // existing site.  Update client types
     setSiteClientTypes({ siteId: participantRequest.siteId, types });
   }
-
+  const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
   const parsedParticipantRequest = ParticipantCreationAndApprovalPartial.parse({
     name: participantRequest.participantName,
     types,
@@ -136,6 +126,7 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     crmAgreementNumber: participantRequest.crmAgreementNumber,
   });
 
+  const requestingUser = await findUserByEmail(email);
   const auditTrailInsertObject = constructAuditTrailObject(
     requestingUser!,
     AuditTrailEvents.ManageParticipant,
@@ -175,8 +166,24 @@ export async function createParticipant(req: ParticipantRequest, res: Response) 
     assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member');
 
     // send email
-    await sendInviteEmail(kcAdminClient, newKcUser);
+    await sendInviteEmailToNewUser(kcAdminClient, newKcUser);
   });
+}
+
+export async function handleCreateParticipant(req: ParticipantRequest, res: Response) {
+  const participantRequest = ParticipantCreationRequest.parse(req.body);
+  const traceId = getTraceId(req);
+
+  const validationError = await validateParticipantCreationRequest(participantRequest);
+  if (validationError) {
+    return res.status(400).send(validationError);
+  }
+  const user = UserCreationPartial.parse({
+    ...req.body,
+    acceptedTerms: false,
+  });
+  const email = req.auth?.payload?.email as string;
+  await createParticipant(email, participantRequest, user, traceId);
 
   return res.sendStatus(200);
 }

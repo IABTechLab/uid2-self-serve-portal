@@ -30,7 +30,7 @@ export const createNewUser = async (
 };
 
 const logoutUrl = new URL('logout', SSP_WEB_BASE_URL).href;
-export const sendInviteEmail = async (
+export const sendInviteEmailToNewUser = async (
   kcAdminClient: KeycloakAdminClient,
   user: UserRepresentation
 ) => {
