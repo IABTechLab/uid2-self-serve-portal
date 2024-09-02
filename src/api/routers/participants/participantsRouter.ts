@@ -42,7 +42,9 @@ import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail
 } from '../../services/auditTrailService';
-import { assignClientRoleToUser } from '../../services/kcUsersService';
+import {
+  assignApiParticipantMemberRole
+} from '../../services/kcUsersService';
 import {
   addSharingParticipants,
   deleteSharingParticipants,
@@ -167,7 +169,7 @@ export function createParticipantsRouter() {
           await setSiteClientTypes(data);
           await Promise.all(
             usersFromParticipant.map((currentUser) =>
-              assignClientRoleToUser(kcAdminClient, currentUser.email, 'api-participant-member')
+              assignApiParticipantMemberRole(kcAdminClient, currentUser.email)
             )
           );
 

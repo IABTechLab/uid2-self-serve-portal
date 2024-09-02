@@ -8,7 +8,7 @@ import {
   httpPost,
   httpPut,
   request,
-  response,
+  response
 } from 'inversify-express-utils';
 
 import { TYPES } from '../constant/types';
@@ -16,9 +16,8 @@ import { ParticipantStatus } from '../entities/Participant';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
-  assignClientRoleToUser,
-  queryUsersByEmail,
-  sendInviteEmailToNewUser,
+  assignApiParticipantMemberRole, queryUsersByEmail,
+  sendInviteEmailToNewUser
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
 import { SelfResendInvitationParser, UserService } from '../services/userService';
@@ -66,7 +65,7 @@ export class UserController {
     const kcAdminClient = await getKcAdminClient();
     const promises = [
       req.user!.$query().patch({ acceptedTerms: true }),
-      assignClientRoleToUser(kcAdminClient, req.user?.email!, 'api-participant-member'),
+      assignApiParticipantMemberRole(kcAdminClient, req.user?.email!),
     ];
     await Promise.all(promises);
     res.sendStatus(200);

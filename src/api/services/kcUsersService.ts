@@ -11,6 +11,14 @@ export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, emai
   });
 };
 
+export const doesUserExistInKeycloak = async (
+  kcAdminClient: KeycloakAdminClient,
+  email: string
+) => {
+  const existingKcUser = await queryUsersByEmail(kcAdminClient, email);
+  return existingKcUser.length > 0;
+};
+
 export const createNewUser = async (
   kcAdminClient: KeycloakAdminClient,
   firstName: string,
@@ -76,7 +84,7 @@ export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, user
   });
 };
 
-export const assignClientRoleToUser = async (
+const assignClientRoleToUser = async (
   kcAdminClient: KeycloakAdminClient,
   userEmail: string,
   roleName: string
@@ -100,4 +108,13 @@ export const assignClientRoleToUser = async (
       },
     ],
   });
+};
+
+export const API_PARTICIPANT_MEMBER = 'api-participant-member';
+
+export const assignApiParticipantMemberRole = async (
+  kcAdminClient: KeycloakAdminClient,
+  userEmail: string
+) => {
+  await assignClientRoleToUser(kcAdminClient, userEmail, API_PARTICIPANT_MEMBER);
 };

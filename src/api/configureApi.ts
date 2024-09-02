@@ -36,6 +36,7 @@ import makeMetricsApiMiddleware from './middleware/metrics';
 import { createParticipantsRouter } from './routers/participants/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
+import { API_PARTICIPANT_MEMBER } from './services/kcUsersService';
 import { LoggerService } from './services/loggerService';
 import { UserService } from './services/userService';
 
@@ -134,7 +135,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     bypassHandlerForPaths(
       claimCheck((claim: Claim) => {
         const roles = claim.resource_access?.self_serve_portal_apis?.roles || [];
-        return roles.includes('api-participant-member');
+        return roles.includes(API_PARTICIPANT_MEMBER);
       }),
       ...BYPASS_CLAIM_PATHS,
       ...BYPASS_AUTH_PATHS

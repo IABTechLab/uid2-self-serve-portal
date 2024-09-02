@@ -23,7 +23,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import {
-  assignClientRoleToUser,
+  assignApiParticipantMemberRole,
   createNewUser,
   sendInviteEmailToNewUser,
 } from '../../services/kcUsersService';
@@ -163,7 +163,7 @@ async function createParticipant(
     );
 
     // assign proper api access
-    assignClientRoleToUser(kcAdminClient, user.email, 'api-participant-member');
+    await assignApiParticipantMemberRole(kcAdminClient, user.email);
 
     // send email
     await sendInviteEmailToNewUser(kcAdminClient, newKcUser);
