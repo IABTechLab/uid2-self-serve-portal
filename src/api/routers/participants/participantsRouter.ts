@@ -8,9 +8,9 @@ import {
   Participant,
   ParticipantApprovalPartial,
   ParticipantDTO,
-  ParticipantStatus,
+  ParticipantStatus
 } from '../../entities/Participant';
-import { UserDTO, UserJobFunction } from '../../entities/User';
+import { UserDTO } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
@@ -26,27 +26,23 @@ import {
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
-  updateKeyPair,
+  updateKeyPair
 } from '../../services/adminServiceClient';
 import {
   mapAdminApiKeysToApiKeyDTOs,
-  ParticipantApprovalResponse,
+  ParticipantApprovalResponse
 } from '../../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
   getApiKey,
   getApiRoles,
-  validateApiRoles,
+  validateApiRoles
 } from '../../services/apiKeyService';
 import {
   constructAuditTrailObject,
-  performAsyncOperationWithAuditTrail,
+  performAsyncOperationWithAuditTrail
 } from '../../services/auditTrailService';
-import {
-  assignClientRoleToUser,
-  createNewUser,
-  sendInviteEmailToNewUser,
-} from '../../services/kcUsersService';
+import { assignClientRoleToUser } from '../../services/kcUsersService';
 import {
   addSharingParticipants,
   deleteSharingParticipants,
@@ -57,14 +53,10 @@ import {
   updateParticipant,
   updateParticipantAndTypesAndApiRoles,
   UpdateSharingTypes,
-  UserParticipantRequest,
+  UserParticipantRequest
 } from '../../services/participantsService';
 import { getSignedParticipants } from '../../services/signedParticipantsService';
-import {
-  createUserInPortal,
-  findUserByEmail,
-  getAllUserFromParticipant,
-} from '../../services/usersService';
+import { getAllUserFromParticipant } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { createParticipantUsersRouter } from '../participantUsersRouter';
 import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
