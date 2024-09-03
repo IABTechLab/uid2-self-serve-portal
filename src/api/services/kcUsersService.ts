@@ -118,4 +118,3 @@ export const assignApiParticipantMemberRole = async (
 ) => {
   await assignClientRoleToUser(kcAdminClient, userEmail, API_PARTICIPANT_MEMBER_ROLE_NAME);
 };
-};
