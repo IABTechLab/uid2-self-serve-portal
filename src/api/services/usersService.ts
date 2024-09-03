@@ -130,7 +130,7 @@ export const sendInviteEmailToExistingUser = (
   emailService.sendEmail(emailArgs, traceId);
 };
 
-export const addExistingUserToParticipant = async (
+export const addAndInviteUserToParticipant = async (
   existingUser: UserDTO,
   participant: ParticipantDTO,
   traceId: string
@@ -162,7 +162,7 @@ export const inviteUserToParticipant = async (
 ) => {
   const existingUser = await findUserByEmail(userPartial.email);
   if (existingUser) {
-    await addExistingUserToParticipant(existingUser, participant, traceId);
+    await addAndInviteUserToParticipant(existingUser, participant, traceId);
   } else {
     const { firstName, lastName, email } = userPartial;
     await createAndInviteKeycloakUser(firstName, lastName, email);
