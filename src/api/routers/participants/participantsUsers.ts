@@ -37,8 +37,9 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
         firstName: userPartial.firstName,
         lastName: userPartial.lastName,
         email: userPartial.email,
-        jonFunction: userPartial.jobFunction,
-      }
+        jobFunction: userPartial.jobFunction,
+      },
+      participant!.id
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
