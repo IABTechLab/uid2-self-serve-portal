@@ -88,19 +88,17 @@ export const enrichUserWithIsApprover = async (user: User) => {
 };
 
 export const createUserInPortal = async (user: UserPartialDTO, participantId: number) => {
-  const existingUser = await findUserByEmail(user.email);
-  if (existingUser) return existingUser;
-  const userResult = await User.transaction(async (trx) => {
-    const newUser = await User.query(trx).insert(user);
+  const newUser = await User.transaction(async (trx) => {
+    const createdUser = await User.query(trx).insert(user);
     // Update the user/participant/role mapping
     await UserToParticipantRole.query(trx).insert({
-      userId: newUser?.id,
+      userId: createdUser?.id,
       participantId,
       userRoleId: UserRoleId.Admin,
     });
-    return newUser;
+    return createdUser;
   });
-  return userResult;
+  return newUser;
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
