@@ -1,10 +1,18 @@
 import { Request } from 'express';
 
-import { Participant } from '../entities/Participant';
+import { Participant, ParticipantDTO } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
 import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
+import { SSP_WEB_BASE_URL } from '../envars';
+import { getKcAdminClient } from '../keycloakAdminClient';
 import { isUserAnApprover } from './approversService';
+import { createEmailService } from './emailService';
+import { EmailArgs } from './emailTypes';
+import {
+  assignApiParticipantMemberRole, createNewUser,
+  sendInviteEmailToNewUser
+} from './kcUsersService';
 
 export interface UserRequest extends Request {
   user?: User;
@@ -19,6 +27,8 @@ export interface SelfResendInviteRequest extends Request {
 }
 
 export type UserWithIsApprover = User & { isApprover: boolean };
+
+export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
 
 const simplifyUserParticipantRoles = (user: User) => {
   return (
@@ -77,14 +87,10 @@ export const enrichUserWithIsApprover = async (user: User) => {
   };
 };
 
-// TODO: Update this method so that if an existing user is invited, it will still add the new participant + mapping.
-export const createUserInPortal = async (
-  user: Omit<UserDTO, 'id' | 'acceptedTerms'>,
-  participantId: number
-) => {
+export const createUserInPortal = async (user: UserPartialDTO, participantId: number) => {
   const existingUser = await findUserByEmail(user.email);
   if (existingUser) return existingUser;
-  await User.transaction(async (trx) => {
+  const userResult = await User.transaction(async (trx) => {
     const newUser = await User.query(trx).insert(user);
     // Update the user/participant/role mapping
     await UserToParticipantRole.query(trx).insert({
@@ -92,7 +98,9 @@ export const createUserInPortal = async (
       participantId,
       userRoleId: UserRoleId.Admin,
     });
+    return newUser;
   });
+  return userResult;
 };
 
 export const getAllUserFromParticipant = async (participant: Participant) => {
@@ -101,4 +109,63 @@ export const getAllUserFromParticipant = async (participant: Participant) => {
   ).map((userToParticipantRole) => userToParticipantRole.userId);
 
   return User.query().whereIn('id', participantUserIds).where('deleted', 0);
+};
+
+export const sendInviteEmailToExistingUser = (
+  participantName: string,
+  existingUser: UserDTO,
+  traceId: string
+) => {
+  const emailService = createEmailService();
+  const emailArgs: EmailArgs = {
+    subject: `You've been invited to join ${participantName} in the UID2 Portal`,
+    templateData: {
+      participantName,
+      firstName: existingUser.firstName,
+      link: SSP_WEB_BASE_URL,
+    },
+    template: 'inviteExistingUserToParticipant',
+    to: existingUser.email,
+  };
+  emailService.sendEmail(emailArgs, traceId);
+};
+
+export const addExistingUserToParticipant = async (
+  existingUser: UserDTO,
+  participant: ParticipantDTO,
+  traceId: string
+) => {
+  await UserToParticipantRole.query().insert({
+    userId: existingUser.id,
+    participantId: participant.id,
+    userRoleId: UserRoleId.Admin,
+  });
+  sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
+};
+
+export const createAndInviteKeycloakUser = async (
+  firstName: string,
+  lastName: string,
+  email: string
+) => {
+  const kcAdminClient = await getKcAdminClient();
+  const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
+  await assignApiParticipantMemberRole(kcAdminClient, email);
+
+  await sendInviteEmailToNewUser(kcAdminClient, newUser);
+};
+
+export const inviteUserToParticipant = async (
+  userPartial: UserPartialDTO,
+  participant: ParticipantDTO,
+  traceId: string
+) => {
+  const existingUser = await findUserByEmail(userPartial.email);
+  if (existingUser) {
+    await addExistingUserToParticipant(existingUser, participant, traceId);
+  } else {
+    const { firstName, lastName, email } = userPartial;
+    await createAndInviteKeycloakUser(firstName, lastName, email);
+    await createUserInPortal(userPartial, participant!.id);
+  }
 };

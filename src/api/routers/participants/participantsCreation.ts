@@ -6,7 +6,7 @@ import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import {
   Participant,
   ParticipantCreationPartial,
-  ParticipantStatus,
+  ParticipantStatus
 } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
@@ -16,68 +16,61 @@ import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
   mapClientTypesToAdminEnums,
-  SiteCreationRequest,
+  SiteCreationRequest
 } from '../../services/adminServiceHelpers';
 import {
   constructAuditTrailObject,
-  performAsyncOperationWithAuditTrail,
+  performAsyncOperationWithAuditTrail
 } from '../../services/auditTrailService';
 import {
-  assignApiParticipantMemberRole,
-  createNewUser,
-  sendInviteEmailToNewUser,
+  doesUserExistInKeycloak
 } from '../../services/kcUsersService';
 import {
   getParticipantTypesByIds,
   ParticipantRequest,
-  sendNewParticipantEmail,
+  sendNewParticipantEmail
 } from '../../services/participantsService';
-import { findUserByEmail } from '../../services/usersService';
+import {
+  createAndInviteKeycloakUser,
+  findUserByEmail,
+  sendInviteEmailToExistingUser
+} from '../../services/usersService';
 import {
   ParticipantCreationAndApprovalPartial,
-  ParticipantCreationRequest,
+  ParticipantCreationRequest
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
   participantRequest: z.infer<typeof ParticipantCreationRequest>
 ) {
-  let errorMessage = null;
   const existingParticipant = await Participant.query().findOne(
     'name',
     participantRequest.participantName
   );
   if (existingParticipant) {
-    errorMessage = 'Duplicate participant name';
+    return 'Duplicate participant name';
   }
-  const existingUser = await findUserByEmail(participantRequest.email);
-  if (existingUser) {
-    errorMessage = 'Duplicate requesting user';
-  }
-  const kcAdminClient = await getKcAdminClient();
-  const existingKcUser = await kcAdminClient.users.find({ email: participantRequest.email });
-  if (existingKcUser.length > 0) {
-    errorMessage = 'Requesting user already exists in Keycloak';
-  }
-
   if (!participantRequest.siteId) {
     // check for duplicate site in admin
     const { siteName } = participantRequest;
     // this is inefficient but we'd need a new endpoint in admin to search by name
     const sites = await getSiteList();
     if (sites.filter((site) => site.name === siteName).length > 0) {
-      errorMessage = 'Requested site name already exists';
+      return 'Requested site name already exists';
     }
   }
-  return errorMessage;
+  return null;
 }
 
-const createUserAndAssociatedParticipant = async (
+const createParticipantWithUser = async (
   parsedUser: z.infer<typeof UserCreationPartial>,
   participantData: z.infer<typeof ParticipantCreationAndApprovalPartial>
-) => {
-  await User.transaction(async (trx) => {
-    // create user
-    const newPortalUser = await User.query(trx).insertAndFetch(parsedUser);
+): Promise<Participant | undefined> => {
+  const participant = await User.transaction(async (trx) => {
+    let user = await findUserByEmail(parsedUser.email);
+    if (!user) {
+      user = await User.query(trx).insertAndFetch(parsedUser);
+    }
 
     // create participant
     const newParticipant = await Participant.query(trx)
@@ -88,15 +81,17 @@ const createUserAndAssociatedParticipant = async (
 
     // update user/participant/role mapping
     await UserToParticipantRole.query(trx).insert({
-      userId: newPortalUser.id,
+      userId: user.id,
       participantId: newParticipant?.id!,
       userRoleId: UserRoleId.Admin,
     });
+    return newParticipant;
   });
+  return participant;
 };
 
 async function createParticipant(
-  email: string,
+  requestorEmail: string,
   participantRequest: z.infer<typeof ParticipantCreationRequest>,
   user: z.infer<typeof UserCreationPartial>,
   traceId: string
@@ -126,7 +121,7 @@ async function createParticipant(
     crmAgreementNumber: participantRequest.crmAgreementNumber,
   });
 
-  const requestingUser = await findUserByEmail(email);
+  const requestingUser = await findUserByEmail(requestorEmail);
   const auditTrailInsertObject = constructAuditTrailObject(
     requestingUser!,
     AuditTrailEvents.ManageParticipant,
@@ -151,22 +146,17 @@ async function createParticipant(
       approverId: requestingUser?.id,
       dateApproved: new Date(),
     };
-    await createUserAndAssociatedParticipant(user, participantData);
 
-    // create keyCloak user
+    const newParticipant = await createParticipantWithUser(user, participantData);
+
     const kcAdminClient = await getKcAdminClient();
-    const newKcUser = await createNewUser(
-      kcAdminClient,
-      participantRequest.firstName,
-      participantRequest.lastName,
-      participantRequest.email
-    );
-
-    // assign proper api access
-    await assignApiParticipantMemberRole(kcAdminClient, user.email);
-
-    // send email
-    await sendInviteEmailToNewUser(kcAdminClient, newKcUser);
+    const isExistingKcUser = await doesUserExistInKeycloak(kcAdminClient, user.email);
+    if (!isExistingKcUser) {
+      await createAndInviteKeycloakUser(user.firstName, user.lastName, user.email);
+    } else {
+      const existingPortalUser = await findUserByEmail(user.email);
+      sendInviteEmailToExistingUser(newParticipant!.name, existingPortalUser!, traceId);
+    }
   });
 }
 
@@ -178,12 +168,12 @@ export async function handleCreateParticipant(req: ParticipantRequest, res: Resp
   if (validationError) {
     return res.status(400).send(validationError);
   }
-  const user = UserCreationPartial.parse({
+  const userRequest = UserCreationPartial.parse({
     ...req.body,
     acceptedTerms: false,
   });
-  const email = req.auth?.payload?.email as string;
-  await createParticipant(email, participantRequest, user, traceId);
+  const requestorEmail = req.auth?.payload?.email as string;
+  await createParticipant(requestorEmail, participantRequest, userRequest, traceId);
 
   return res.sendStatus(200);
 }

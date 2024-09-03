@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style type="text/css">
+      body {
+        padding: 70px;
+        text-align: center;
+        font-family: 'Inter', sans-serif;
+        font-size: 18px;
+        color: #000000;
+        background-color: #fff;
+      }
+      .logo {
+        height: 30px;
+      }
+      .content {
+        margin-top: 50px;
+        width: 500px;
+        display: inline-block;
+        color: #030a40;
+      }
+      .button {
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 18px;
+        padding: 11px 42px;
+        background-color: #cdf200;
+        color: #030a40 !important;
+        text-decoration: none;
+      }
+      .content-text {
+        text-align: left;
+        font-size: 18px;
+      }
+      .footer {
+        margin: 50px 0 20px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <a href="{{baseUrl}}"><img src="{{baseUrl}}/uid2-logo.png" alt="UID2 logo" class="logo" /></a>
+    </div>
+
+    <div class="content">
+      <p class="content-text">
+        Hi {{firstName}},<br /><br />
+        You've been invited to join {{participantName}} in the UID2 Portal.<br /><br />
+        To get started, simply log in using the button below.
+      </p>
+      <div class="footer">
+        <a href="{{link}}" class="button">Log In</a>
+      </div>
+    </div>
+  </body>
+</html>
