@@ -86,21 +86,6 @@ export const enrichUserWithIsApprover = async (user: User) => {
     isApprover: userIsApprover,
   };
 };
-
-export const createUserInPortal = async (user: UserPartialDTO, participantId: number) => {
-  const newUser = await User.transaction(async (trx) => {
-    const createdUser = await User.query(trx).insert(user);
-    // Update the user/participant/role mapping
-    await UserToParticipantRole.query(trx).insert({
-      userId: createdUser?.id,
-      participantId,
-      userRoleId: UserRoleId.Admin,
-    });
-    return createdUser;
-  });
-  return newUser;
-};
-
 export const getAllUserFromParticipant = async (participant: Participant) => {
   const participantUserIds = (
     await UserToParticipantRole.query().where('participantId', '=', participant.id)
@@ -128,7 +113,19 @@ export const sendInviteEmailToExistingUser = (
   emailService.sendEmail(emailArgs, traceId);
 };
 
-export const addAndInviteUserToParticipant = async (
+export const createAndInviteKeycloakUser = async (
+  firstName: string,
+  lastName: string,
+  email: string
+) => {
+  const kcAdminClient = await getKcAdminClient();
+  const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
+  await assignApiParticipantMemberRole(kcAdminClient, email);
+
+  await sendInviteEmailToNewUser(kcAdminClient, newUser);
+};
+
+const addAndInviteUserToParticipant = async (
   existingUser: UserDTO,
   participant: ParticipantDTO,
   traceId: string
@@ -141,16 +138,18 @@ export const addAndInviteUserToParticipant = async (
   sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
 };
 
-export const createAndInviteKeycloakUser = async (
-  firstName: string,
-  lastName: string,
-  email: string
-) => {
-  const kcAdminClient = await getKcAdminClient();
-  const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
-  await assignApiParticipantMemberRole(kcAdminClient, email);
-
-  await sendInviteEmailToNewUser(kcAdminClient, newUser);
+const createUserInPortal = async (user: UserPartialDTO, participantId: number) => {
+  const newUser = await User.transaction(async (trx) => {
+    const createdUser = await User.query(trx).insert(user);
+    // Update the user/participant/role mapping
+    await UserToParticipantRole.query(trx).insert({
+      userId: createdUser?.id,
+      participantId,
+      userRoleId: UserRoleId.Admin,
+    });
+    return createdUser;
+  });
+  return newUser;
 };
 
 export const inviteUserToParticipant = async (
