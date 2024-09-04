@@ -23,7 +23,6 @@ const userInvitationSchema = z.object({
   email: z.string(),
   jobFunction: z.nativeEnum(UserJobFunction),
 });
-
 export async function handleInviteUserToParticipant(req: UserParticipantRequest, res: Response) {
   try {
     const { participant, user } = req;

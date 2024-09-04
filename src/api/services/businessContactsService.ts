@@ -9,17 +9,16 @@ export interface BusinessContactRequest extends Request {
   businessContact?: BusinessContact;
 }
 
-const contactIdParser = z.object({
+const contactIdSchema = z.object({
   contactId: z.string(),
 });
-
 export const hasBusinessContactAccess = async (
   req: BusinessContactRequest,
   res: Response,
   next: NextFunction
 ) => {
   const { participant } = req;
-  const { contactId } = contactIdParser.parse(req.params);
+  const { contactId } = contactIdSchema.parse(req.params);
   const businessContact = await BusinessContact.query().findById(contactId);
 
   if (!businessContact) {

@@ -20,11 +20,10 @@ export async function getParticipantAppNames(req: ParticipantRequest, res: Respo
   return res.status(200).json(participantSite.app_names ?? []);
 }
 
-const appNamesParser = z.object({ appNames: z.array(z.string()) });
-
+const appNamesSchema = z.object({ appNames: z.array(z.string()) });
 export async function setParticipantAppNames(req: UserParticipantRequest, res: Response) {
   const { participant, user } = req;
-  const { appNames } = appNamesParser.parse(req.body);
+  const { appNames } = appNamesSchema.parse(req.body);
   const traceId = getTraceId(req);
 
   if (!participant?.siteId) {

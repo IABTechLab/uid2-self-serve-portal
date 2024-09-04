@@ -6,12 +6,12 @@ import { getTraceId } from '../helpers/loggingHelpers';
 import { ParticipantRequest } from '../services/participantsService';
 import { isUid2Support, isUserBelongsToParticipant } from './usersMiddleware';
 
-const idParser = z.object({
+const participantIdSchema = z.object({
   participantId: z.coerce.number(),
 });
 
 const enrichParticipant = async (req: ParticipantRequest, res: Response, next: NextFunction) => {
-  const { participantId } = idParser.parse(req.params);
+  const { participantId } = participantIdSchema.parse(req.params);
   const participant = await Participant.query().findById(participantId).withGraphFetched('types');
   if (!participant) {
     return res.status(404).send([{ message: 'The participant cannot be found.' }]);
@@ -21,7 +21,7 @@ const enrichParticipant = async (req: ParticipantRequest, res: Response, next: N
 };
 
 const verifyUserAccessToParticipant = async (req: ParticipantRequest, res: Response) => {
-  const { participantId } = idParser.parse(req.params);
+  const { participantId } = participantIdSchema.parse(req.params);
   const traceId = getTraceId(req);
   const userEmail = req.auth?.payload?.email as string;
   const isUserUid2Support = await isUid2Support(userEmail);

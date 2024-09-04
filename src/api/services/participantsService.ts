@@ -234,20 +234,19 @@ export const updateParticipantTypes = async (
   }
 };
 
-const updateParticipantParser = z.object({
+const updateParticipantSchema = z.object({
   apiRoles: z.array(z.number()),
   participantTypes: z.array(z.number()),
   participantName: z.string(),
   crmAgreementNumber: z.string().nullable(),
 });
-
 export const updateParticipant = async (participant: Participant, req: UserParticipantRequest) => {
   const {
     apiRoles,
     participantTypes: participantTypeIds,
     participantName,
     crmAgreementNumber,
-  } = updateParticipantParser.parse(req.body);
+  } = updateParticipantSchema.parse(req.body);
   const { user } = req;
   const traceId = getTraceId(req);
 
