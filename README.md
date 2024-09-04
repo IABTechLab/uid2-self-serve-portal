@@ -191,7 +191,7 @@ Installs the dependencies for the project. You will need to run this before runn
 
 ### [`./run_portal.ps1`](./run_portal.ps1)
 
-The quickest way to get the portal running locally via a single PowerShell script. This will run the admin service as well as the portal docker, API and web-application.
+The quickest way to get the portal running locally via a single PowerShell script. This will run the admin service as well as the portal docker, API and web-application. This script assumes that `uid2-admin` and `uid2-self-serve-portal` have the same parent folder.
 
 ### `npm run dev`
 
