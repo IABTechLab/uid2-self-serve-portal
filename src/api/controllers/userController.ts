@@ -16,9 +16,9 @@ import { ParticipantStatus } from '../entities/Participant';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
-  assignClientRoleToUser,
+  assignApiParticipantMemberRole,
   queryUsersByEmail,
-  sendInviteEmail,
+  sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
 import { SelfResendInvitationParser, UserService } from '../services/userService';
@@ -66,7 +66,7 @@ export class UserController {
     const kcAdminClient = await getKcAdminClient();
     const promises = [
       req.user!.$query().patch({ acceptedTerms: true }),
-      assignClientRoleToUser(kcAdminClient, req.user?.email!, 'api-participant-member'),
+      assignApiParticipantMemberRole(kcAdminClient, req.user?.email!),
     ];
     await Promise.all(promises);
     res.sendStatus(200);
@@ -85,7 +85,7 @@ export class UserController {
       res.sendStatus(200);
     }
     logger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`);
-    await sendInviteEmail(kcAdminClient, user[0]);
+    await sendInviteEmailToNewUser(kcAdminClient, user[0]);
     res.sendStatus(200);
   }
 
@@ -116,7 +116,7 @@ export class UserController {
     }
 
     logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
-    await sendInviteEmail(kcAdminClient, user[0]);
+    await sendInviteEmailToNewUser(kcAdminClient, user[0]);
     res.sendStatus(200);
   }
 

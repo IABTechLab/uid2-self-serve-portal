@@ -4,11 +4,21 @@ import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRep
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
+export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
+
 export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
   return kcAdminClient.users.find({
     email,
     extract: true,
   });
+};
+
+export const doesUserExistInKeycloak = async (
+  kcAdminClient: KeycloakAdminClient,
+  email: string
+) => {
+  const existingKcUser = await queryUsersByEmail(kcAdminClient, email);
+  return existingKcUser.length > 0;
 };
 
 export const createNewUser = async (
@@ -30,7 +40,7 @@ export const createNewUser = async (
 };
 
 const logoutUrl = new URL('logout', SSP_WEB_BASE_URL).href;
-export const sendInviteEmail = async (
+export const sendInviteEmailToNewUser = async (
   kcAdminClient: KeycloakAdminClient,
   user: UserRepresentation
 ) => {
@@ -76,7 +86,7 @@ export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, user
   });
 };
 
-export const assignClientRoleToUser = async (
+const assignClientRoleToUser = async (
   kcAdminClient: KeycloakAdminClient,
   userEmail: string,
   roleName: string
@@ -100,4 +110,11 @@ export const assignClientRoleToUser = async (
       },
     ],
   });
+};
+
+export const assignApiParticipantMemberRole = async (
+  kcAdminClient: KeycloakAdminClient,
+  userEmail: string
+) => {
+  await assignClientRoleToUser(kcAdminClient, userEmail, API_PARTICIPANT_MEMBER_ROLE_NAME);
 };

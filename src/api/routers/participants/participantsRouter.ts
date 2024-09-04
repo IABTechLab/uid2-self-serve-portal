@@ -10,7 +10,7 @@ import {
   ParticipantDTO,
   ParticipantStatus,
 } from '../../entities/Participant';
-import { UserDTO, UserJobFunction } from '../../entities/User';
+import { UserDTO } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
@@ -42,11 +42,7 @@ import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
-import {
-  assignClientRoleToUser,
-  createNewUser,
-  sendInviteEmail,
-} from '../../services/kcUsersService';
+import { assignApiParticipantMemberRole } from '../../services/kcUsersService';
 import {
   addSharingParticipants,
   deleteSharingParticipants,
@@ -60,18 +56,14 @@ import {
   UserParticipantRequest,
 } from '../../services/participantsService';
 import { getSignedParticipants } from '../../services/signedParticipantsService';
-import {
-  createUserInPortal,
-  findUserByEmail,
-  getAllUserFromParticipant,
-} from '../../services/usersService';
+import { getAllUserFromParticipant } from '../../services/usersService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { createParticipantUsersRouter } from '../participantUsersRouter';
 import { getParticipantAppNames, setParticipantAppNames } from './participantsAppIds';
-import { createParticipant, createParticipantFromRequest } from './participantsCreation';
+import { createParticipantFromRequest, handleCreateParticipant } from './participantsCreation';
 import { getParticipantDomainNames, setParticipantDomainNames } from './participantsDomainNames';
 import { getParticipantKeyPairs } from './participantsKeyPairs';
-import { getParticipantUsers } from './participantsUsers';
+import { getParticipantUsers, handleInviteUserToParticipant } from './participantsUsers';
 
 export type AvailableParticipantDTO = Required<Pick<ParticipantDTO, 'name' | 'siteId' | 'types'>>;
 
@@ -175,7 +167,7 @@ export function createParticipantsRouter() {
           await setSiteClientTypes(data);
           await Promise.all(
             usersFromParticipant.map((currentUser) =>
-              assignClientRoleToUser(kcAdminClient, currentUser.email, 'api-participant-member')
+              assignApiParticipantMemberRole(kcAdminClient, currentUser.email)
             )
           );
 
@@ -210,7 +202,7 @@ export function createParticipantsRouter() {
     }
   );
 
-  participantsRouter.put('/', createParticipant);
+  participantsRouter.put('/', handleCreateParticipant);
 
   participantsRouter.use('/:participantId', verifyAndEnrichParticipant);
 
@@ -220,62 +212,7 @@ export function createParticipantsRouter() {
     return res.status(200).json(participant);
   });
 
-  const invitationParser = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
-    email: z.string(),
-    jobFunction: z.nativeEnum(UserJobFunction),
-  });
-
-  participantsRouter.post(
-    '/:participantId/invite',
-    async (req: UserParticipantRequest, res: Response) => {
-      try {
-        const { participant, user } = req;
-        const { firstName, lastName, email, jobFunction } = invitationParser.parse(req.body);
-        const traceId = getTraceId(req);
-        // TODO: UID2-3878 - support user belonging to multiple participants by not 400ing here if the user already exists.
-        const existingUser = await findUserByEmail(email);
-        if (existingUser) {
-          return res.status(400).send('Error inviting user');
-        }
-        const kcAdminClient = await getKcAdminClient();
-        const auditTrailInsertObject = constructAuditTrailObject(
-          user!,
-          AuditTrailEvents.ManageTeamMembers,
-          {
-            action: AuditAction.Add,
-            firstName,
-            lastName,
-            email,
-            jobFunction,
-          },
-          participant!.id
-        );
-
-        await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-          const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
-          await createUserInPortal(
-            {
-              email,
-              jobFunction,
-              firstName,
-              lastName,
-            },
-            participant!.id
-          );
-          await sendInviteEmail(kcAdminClient, newUser);
-        });
-
-        return res.sendStatus(201);
-      } catch (err) {
-        if (err instanceof z.ZodError) {
-          return res.status(400).send(err.issues);
-        }
-        throw err;
-      }
-    }
-  );
+  participantsRouter.post('/:participantId/invite', handleInviteUserToParticipant);
 
   participantsRouter.get(
     '/:participantId/sharingPermission',
