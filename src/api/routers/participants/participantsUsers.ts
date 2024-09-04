@@ -17,7 +17,7 @@ export async function getParticipantUsers(req: ParticipantRequest, res: Response
   return res.status(200).json(users);
 }
 
-export const UserInvitationParser = z.object({
+const userInvitationSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
@@ -27,7 +27,7 @@ export const UserInvitationParser = z.object({
 export async function handleInviteUserToParticipant(req: UserParticipantRequest, res: Response) {
   try {
     const { participant, user } = req;
-    const userPartial = UserInvitationParser.parse(req.body);
+    const userPartial = userInvitationSchema.parse(req.body);
     const traceId = getTraceId(req);
     const auditTrailInsertObject = constructAuditTrailObject(
       user!,
