@@ -1,10 +1,10 @@
 import { injectable } from 'inversify';
-import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserJobFunction } from '../entities/User';
+import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
@@ -14,7 +14,7 @@ import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
-import { deleteUserByEmail, updateUserProfile } from './kcUsersService';
+import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
 import { UserParticipantRequest } from './participantsService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
@@ -56,18 +56,10 @@ export class UserService {
     return result;
   }
 
-  // TODO: Allow for a participant to be specified, so they aren't removed from all of their participants in UID2-3852
   public async deleteUser(req: UserParticipantRequest) {
     const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
     const traceId = getTraceId(req);
-
-    const data: DeletedUser = {
-      email: `${user?.email}-removed-${uuid()}`,
-      // TODO: Remove participantId in UID2-3821
-      participantId: null,
-      deleted: true,
-    };
 
     const auditTrailInsertObject = constructAuditTrailObject(
       requestingUser!,
@@ -83,11 +75,16 @@ export class UserService {
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-      const kcAdminClient = await getKcAdminClient();
-      await Promise.all([
-        deleteUserByEmail(kcAdminClient, user?.email!),
-        user!.$query().patch(data),
-      ]);
+      await UserToParticipantRole.query()
+        .where('userId', '=', user!.id)
+        .andWhere('participantId', '=', participant!.id)
+        .del();
+
+      const participantsOfUser = await UserToParticipantRole.query().where('userId', '=', user!.id);
+      if (participantsOfUser.length === 0) {
+        const kcAdminClient = await getKcAdminClient();
+        await removeApiParticipantMemberRole(kcAdminClient, user!.email);
+      }
     });
   }
 

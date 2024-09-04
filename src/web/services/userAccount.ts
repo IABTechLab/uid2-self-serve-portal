@@ -74,7 +74,6 @@ export async function GetAllUsersOfParticipant(participantId: number) {
   }
 }
 
-// TODO: make this only remove the user from the given participant in UID2-3852
 export async function RemoveUser(id: number, participantId: number) {
   try {
     return await axios.delete(`/participants/${participantId}/users/${id}`);

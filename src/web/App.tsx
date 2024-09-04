@@ -12,6 +12,7 @@ import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantProvider } from './contexts/ParticipantProvider';
 import { HomeRedirector } from './screens/homeRedirector';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
+import { useParticipantCheck } from './utils/useParticipantCheck';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
@@ -31,7 +32,11 @@ export function App() {
     else rootRef.current!.classList.remove('darkmode');
   };
 
+  const participantError = useParticipantCheck();
+  if (participantError) return participantError;
+
   if (!initialized) return <Loading />;
+
   const fullName =
     LoggedInUser?.profile.firstName || LoggedInUser?.profile.lastName
       ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`

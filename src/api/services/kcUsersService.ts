@@ -73,19 +73,6 @@ export const updateUserProfile = async (
   );
 };
 
-export const deleteUserByEmail = async (kcAdminClient: KeycloakAdminClient, userEmail: string) => {
-  const userLists = await queryUsersByEmail(kcAdminClient, userEmail);
-  const resultLength = userLists.length ?? 0;
-  // If user not exists in keycloak, it is fine to just delete the record from db
-  if (resultLength < 1) return;
-  if (resultLength > 1)
-    throw Error(`Multiple results received when loading user entry for ${userEmail}`);
-
-  await kcAdminClient.users.del({
-    id: userLists[0].id!,
-  });
-};
-
 const assignClientRoleToUser = async (
   kcAdminClient: KeycloakAdminClient,
   userEmail: string,
@@ -117,4 +104,28 @@ export const assignApiParticipantMemberRole = async (
   userEmail: string
 ) => {
   await assignClientRoleToUser(kcAdminClient, userEmail, API_PARTICIPANT_MEMBER_ROLE_NAME);
+};
+
+export const removeApiParticipantMemberRole = async (
+  kcAdminClient: KeycloakAdminClient,
+  userEmail: string
+) => {
+  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  if (users.length !== 1) throw Error(`Unable to remove role from ${userEmail}`);
+
+  const apiParticipantMemberRole = await kcAdminClient.clients.findRole({
+    id: SSP_KK_API_CLIENT_ID,
+    roleName: API_PARTICIPANT_MEMBER_ROLE_NAME,
+  });
+
+  await kcAdminClient.users.delClientRoleMappings({
+    id: users[0].id!,
+    clientUniqueId: SSP_KK_API_CLIENT_ID,
+    roles: [
+      {
+        id: apiParticipantMemberRole.id!,
+        name: apiParticipantMemberRole.name!,
+      },
+    ],
+  });
 };
