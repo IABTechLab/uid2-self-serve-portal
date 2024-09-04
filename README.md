@@ -189,6 +189,10 @@ In the project directory, you can run:
 
 Installs the dependencies for the project. You will need to run this before running any of the following commands.
 
+### [`./run_portal.ps1`](./run_portal.ps1)
+
+The quickest way to get the portal running locally via a single PowerShell script. This will run the admin service as well as the portal docker, API and web-application.
+
 ### `npm run dev`
 
 Starts both the API and the React front-end side-by-side. This is probably the best way to get up and running in dev mode.
