@@ -8,7 +8,7 @@ import {
   Participant,
   ParticipantApprovalPartial,
   ParticipantDTO,
-  ParticipantStatus
+  ParticipantStatus,
 } from '../../entities/Participant';
 import { UserDTO } from '../../entities/User';
 import { siteIdNotSetError } from '../../helpers/errorHelpers';
@@ -26,25 +26,23 @@ import {
   renameApiKey,
   setSiteClientTypes,
   updateApiKeyRoles,
-  updateKeyPair
+  updateKeyPair,
 } from '../../services/adminServiceClient';
 import {
   mapAdminApiKeysToApiKeyDTOs,
-  ParticipantApprovalResponse
+  ParticipantApprovalResponse,
 } from '../../services/adminServiceHelpers';
 import {
   createdApiKeyToApiKeySecrets,
   getApiKey,
   getApiRoles,
-  validateApiRoles
+  validateApiRoles,
 } from '../../services/apiKeyService';
 import {
   constructAuditTrailObject,
-  performAsyncOperationWithAuditTrail
+  performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
-import {
-  assignApiParticipantMemberRole
-} from '../../services/kcUsersService';
+import { assignApiParticipantMemberRole } from '../../services/kcUsersService';
 import {
   addSharingParticipants,
   deleteSharingParticipants,
@@ -55,7 +53,7 @@ import {
   updateParticipant,
   updateParticipantAndTypesAndApiRoles,
   UpdateSharingTypes,
-  UserParticipantRequest
+  UserParticipantRequest,
 } from '../../services/participantsService';
 import { getSignedParticipants } from '../../services/signedParticipantsService';
 import { getAllUserFromParticipant } from '../../services/usersService';
