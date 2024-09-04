@@ -8,7 +8,7 @@ import {
   httpPost,
   httpPut,
   request,
-  response
+  response,
 } from 'inversify-express-utils';
 
 import { TYPES } from '../constant/types';
@@ -16,8 +16,9 @@ import { ParticipantStatus } from '../entities/Participant';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
-  assignApiParticipantMemberRole, queryUsersByEmail,
-  sendInviteEmailToNewUser
+  assignApiParticipantMemberRole,
+  queryUsersByEmail,
+  sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
 import { SelfResendInvitationParser, UserService } from '../services/userService';
