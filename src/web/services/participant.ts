@@ -174,9 +174,6 @@ export type UpdateParticipantForm = {
 };
 
 export type AddParticipantForm = {
-  contactFirstName: string;
-  contactLastName: string;
-  contactEmail: string;
   participantName: string;
   apiRoles: number[];
   participantTypes: number[];
@@ -185,6 +182,9 @@ export type AddParticipantForm = {
   siteName?: string;
   jobFunction: string;
   crmAgreementNumber: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 };
 
 export async function AddParticipant(formData: AddParticipantForm) {
