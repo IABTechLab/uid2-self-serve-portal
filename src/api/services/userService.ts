@@ -56,7 +56,7 @@ export class UserService {
     return result;
   }
 
-  public async deleteUser(req: UserParticipantRequest) {
+  public async removeUser(req: UserParticipantRequest) {
     const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
     const traceId = getTraceId(req);

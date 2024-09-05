@@ -14,7 +14,7 @@ const createParticipantUsersRouter = () => {
     '/:userId/resendInvitation',
     userController.resendInvitation.bind(userController)
   );
-  participantUsersRouter.delete('/:userId', userController.deleteUser.bind(userController));
+  participantUsersRouter.delete('/:userId', userController.removeUser.bind(userController));
   participantUsersRouter.patch('/:userId', userController.updateUser.bind(userController));
 
   return participantUsersRouter;

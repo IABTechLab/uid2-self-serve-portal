@@ -9,8 +9,8 @@ import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
 import { SuccessToast } from '../Core/Popups/Toast';
-import TeamMemberDeleteConfirmationDialog from './TeamMemberDeleteDialog';
 import TeamMemberDialog from './TeamMemberDialog';
+import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
 type TeamMemberProps = Readonly<{
   existingTeamMembers: UserDTO[];
@@ -36,7 +36,7 @@ function TeamMember({
   const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
-  const [showDeleteTeamMemberDialog, setShowDeleteTeamMemberDialog] = useState<boolean>();
+  const [showTeamMemberRemoveDialog, setShowTeamMemberRemoveDialog] = useState<boolean>();
   const { participant } = useContext(ParticipantContext);
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
@@ -46,8 +46,8 @@ function TeamMember({
     setShowTeamMemberDialog(!showTeamMemberDialog);
   };
 
-  const onOpenChangeDeleteTeamMemberDialog = () => {
-    setShowDeleteTeamMemberDialog(!showDeleteTeamMemberDialog);
+  const onOpenChangeTeamMemberRemoveDialog = () => {
+    setShowTeamMemberRemoveDialog(!showTeamMemberRemoveDialog);
   };
 
   const onResendInvite = useCallback(async () => {
@@ -123,12 +123,12 @@ function TeamMember({
               />
             )}
 
-            <ActionButton onClick={onOpenChangeDeleteTeamMemberDialog} icon='trash-can' />
-            {showDeleteTeamMemberDialog && (
-              <TeamMemberDeleteConfirmationDialog
+            <ActionButton onClick={onOpenChangeTeamMemberRemoveDialog} icon='trash-can' />
+            {showTeamMemberRemoveDialog && (
+              <TeamMemberRemoveConfirmationDialog
                 onRemoveTeamMember={handleRemoveUser}
                 person={person}
-                onOpenChange={onOpenChangeDeleteTeamMemberDialog}
+                onOpenChange={onOpenChangeTeamMemberRemoveDialog}
               />
             )}
           </div>

@@ -46,7 +46,7 @@ export const WithTeamMembers: Story = {
   },
 };
 
-export const WithDeleteError: Story = {
+export const WithError: Story = {
   args: {
     ...WithTeamMembers.args,
     onRemoveTeamMember: (id) => Promise.reject(console.log(`Failed to remove userId: ${id}`)),
