@@ -4,28 +4,12 @@ import { Knex } from 'knex';
 import { TestConfigure } from '../../../database/TestSelfServeDatabase';
 import {
   createParticipant,
+  createParticipantRequest,
   createResponseObject,
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
 import { UserRoleId } from '../../entities/UserRole';
-import { ParticipantRequest } from '../../services/participantsService';
 import { verifyAndEnrichParticipant } from '../participantsMiddleware';
-
-const createParticipantRequest = (
-  email: string,
-  participantId: string | number
-): ParticipantRequest => {
-  return {
-    auth: {
-      payload: {
-        email,
-      },
-    },
-    params: {
-      participantId,
-    },
-  } as unknown as ParticipantRequest;
-};
 
 describe('Participant Middleware Tests', () => {
   let knex: Knex;
