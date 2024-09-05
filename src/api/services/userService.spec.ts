@@ -74,7 +74,6 @@ describe('User Service Tests', () => {
         const user = await createUser({
           participantToRoles: [{ participantId: participant.id }],
         });
-
         const request = createUserParticipantRequest(user.email, participant, user.id);
         await verifyAndEnrichUser(request, res, next);
 
@@ -89,7 +88,6 @@ describe('User Service Tests', () => {
         const user = await createUser({
           participantToRoles: [{ participantId: participant.id }],
         });
-
         const request = createUserParticipantRequest(user.email, participant, user.id);
         await verifyAndEnrichUser(request, res, next);
 
