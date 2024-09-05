@@ -18,12 +18,6 @@ import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersServ
 import { UserParticipantRequest } from './participantsService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
-export type DeletedUser = {
-  email: string;
-  participantId: number | null;
-  deleted: boolean;
-};
-
 export const UpdateUserParser = z.object({
   firstName: z.string(),
   lastName: z.string(),
