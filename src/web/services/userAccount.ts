@@ -78,7 +78,7 @@ export async function RemoveUser(id: number, participantId: number) {
   try {
     return await axios.delete(`/participants/${participantId}/users/${id}`);
   } catch (e: unknown) {
-    throw backendError(e, 'Could not delete user');
+    throw backendError(e, 'Could not remove user');
   }
 }
 
