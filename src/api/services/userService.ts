@@ -70,11 +70,11 @@ export class UserService {
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
       await UserToParticipantRole.query()
-        .where('userId', '=', user!.id)
-        .andWhere('participantId', '=', participant!.id)
+        .where('userId', user!.id)
+        .andWhere('participantId', participant!.id)
         .del();
 
-      const participantsOfUser = await UserToParticipantRole.query().where('userId', '=', user!.id);
+      const participantsOfUser = await UserToParticipantRole.query().where('userId', user!.id);
       if (participantsOfUser.length === 0) {
         const kcAdminClient = await getKcAdminClient();
         await removeApiParticipantMemberRole(kcAdminClient, user!.email);
