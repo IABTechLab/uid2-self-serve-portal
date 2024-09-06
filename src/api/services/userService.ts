@@ -18,13 +18,13 @@ import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersServ
 import { UserParticipantRequest } from './participantsService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
-export const UpdateUserParser = z.object({
+const updateUserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   jobFunction: z.nativeEnum(UserJobFunction),
 });
 
-export const SelfResendInvitationParser = z.object({ email: z.string() });
+export const SelfResendInvitationSchema = z.object({ email: z.string() });
 
 @injectable()
 export class UserService {
@@ -85,7 +85,7 @@ export class UserService {
   public async updateUser(req: UserParticipantRequest) {
     const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
-    const data = UpdateUserParser.parse(req.body);
+    const data = updateUserSchema.parse(req.body);
     const traceId = getTraceId(req);
 
     const auditTrailInsertObject = constructAuditTrailObject(

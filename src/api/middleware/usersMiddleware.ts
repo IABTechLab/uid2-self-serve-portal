@@ -60,16 +60,15 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   return next();
 };
 
-const userIdParser = z.object({
+const userIdSchema = z.object({
   userId: z.coerce.number(),
 });
-
 export const verifyAndEnrichUser = async (
   req: UserParticipantRequest,
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = userIdParser.parse(req.params);
+  const { userId } = userIdSchema.parse(req.params);
   const { participant } = req;
   const traceId = getTraceId(req);
   const targetUser = await User.query().findById(userId).modify('withParticipants');
