@@ -252,7 +252,7 @@ export function createParticipantsRouter() {
     }
   );
 
-  const apiKeyIdParser = z.object({
+  const apiKeyIdSchema = z.object({
     keyId: z.string(),
   });
   participantsRouter.get(
@@ -263,7 +263,7 @@ export function createParticipantsRouter() {
         return siteIdNotSetError(req, res);
       }
 
-      const { keyId } = apiKeyIdParser.parse(req.query);
+      const { keyId } = apiKeyIdSchema.parse(req.query);
       if (!keyId) {
         return res.status(400).send('Key id is not set');
       }
@@ -277,7 +277,7 @@ export function createParticipantsRouter() {
     }
   );
 
-  const apiKeyEditInputParser = z.object({
+  const apiKeyEditInputSchema = z.object({
     keyId: z.string(),
     newName: z.string(),
     newApiRoles: z.array(z.string()),
@@ -290,7 +290,7 @@ export function createParticipantsRouter() {
         return siteIdNotSetError(req, res);
       }
 
-      const { keyId, newName, newApiRoles } = apiKeyEditInputParser.parse(req.body);
+      const { keyId, newName, newApiRoles } = apiKeyEditInputSchema.parse(req.body);
 
       const editedKey = await getApiKey(participant.siteId, keyId);
       if (!editedKey) {
@@ -342,14 +342,14 @@ export function createParticipantsRouter() {
     }
   );
 
-  const apiKeyDeleteInputParser = z.object({
+  const apiKeyDeleteInputSchema = z.object({
     keyId: z.string(),
   });
   participantsRouter.delete(
     '/:participantId/apiKey',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { keyId } = apiKeyDeleteInputParser.parse(req.body);
+      const { keyId } = apiKeyDeleteInputSchema.parse(req.body);
 
       if (!participant?.siteId) {
         return siteIdNotSetError(req, res);
@@ -392,13 +392,12 @@ export function createParticipantsRouter() {
     }
   );
 
-  const apiKeyCreateInputParser = z.object({ name: z.string(), roles: z.array(z.string()) });
-
+  const apiKeyCreateInputSchema = z.object({ name: z.string(), roles: z.array(z.string()) });
   participantsRouter.post(
     '/:participantId/apiKey',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { name: keyName, roles: apiRoles } = apiKeyCreateInputParser.parse(req.body);
+      const { name: keyName, roles: apiRoles } = apiKeyCreateInputSchema.parse(req.body);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {
@@ -432,14 +431,14 @@ export function createParticipantsRouter() {
     }
   );
 
-  const sharingRelationParser = z.object({
+  const sharingRelationSchema = z.object({
     newParticipantSites: z.array(z.number()),
   });
   participantsRouter.post(
     '/:participantId/sharingPermission/add',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { newParticipantSites } = sharingRelationParser.parse(req.body);
+      const { newParticipantSites } = sharingRelationSchema.parse(req.body);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {
@@ -467,21 +466,19 @@ export function createParticipantsRouter() {
     }
   );
 
-  const keyPairParser = z.object({
+  const keyPairSchema = z.object({
     name: z.string(),
     disabled: z.boolean(),
     subscriptionId: z.string(),
   });
-
-  const addKeyPairParser = z.object({
+  const addKeyPairSchema = z.object({
     name: z.string(),
   });
-
   participantsRouter.post(
     '/:participantId/keyPair/add',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { name } = addKeyPairParser.parse(req.body);
+      const { name } = addKeyPairSchema.parse(req.body);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {
@@ -515,7 +512,7 @@ export function createParticipantsRouter() {
     '/:participantId/keyPair/update',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { name, subscriptionId, disabled } = keyPairParser.parse(req.body);
+      const { name, subscriptionId, disabled } = keyPairSchema.parse(req.body);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {
@@ -548,7 +545,7 @@ export function createParticipantsRouter() {
     '/:participantId/keyPair',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { name, subscriptionId } = keyPairParser.parse(req.body.keyPair);
+      const { name, subscriptionId } = keyPairSchema.parse(req.body.keyPair);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {
@@ -589,15 +586,14 @@ export function createParticipantsRouter() {
 
   participantsRouter.post('/:participantId/appNames', setParticipantAppNames);
 
-  const removeSharingRelationParser = z.object({
+  const removeSharingRelationSchema = z.object({
     sharingSitesToRemove: z.array(z.number()),
   });
-
   participantsRouter.post(
     '/:participantId/sharingPermission/delete',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { sharingSitesToRemove } = removeSharingRelationParser.parse(req.body);
+      const { sharingSitesToRemove } = removeSharingRelationSchema.parse(req.body);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {
@@ -625,14 +621,14 @@ export function createParticipantsRouter() {
     }
   );
 
-  const sharingTypesParser = z.object({
+  const sharingTypesSchema = z.object({
     types: z.array(ClientTypeEnum),
   });
   participantsRouter.post(
     '/:participantId/sharingPermission/shareWithTypes',
     async (req: UserParticipantRequest, res: Response) => {
       const { participant, user } = req;
-      const { types } = sharingTypesParser.parse(req.body);
+      const { types } = sharingTypesSchema.parse(req.body);
       const traceId = getTraceId(req);
 
       if (!participant?.siteId) {

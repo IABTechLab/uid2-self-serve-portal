@@ -21,7 +21,7 @@ import {
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
-import { SelfResendInvitationParser, UserService } from '../services/userService';
+import { SelfResendInvitationSchema, UserService } from '../services/userService';
 import { SelfResendInviteRequest, UserRequest } from '../services/usersService';
 
 @controller('/users')
@@ -77,7 +77,7 @@ export class UserController {
     @request() req: SelfResendInviteRequest,
     @response() res: Response
   ): Promise<void> {
-    const { email } = SelfResendInvitationParser.parse(req.body);
+    const { email } = SelfResendInvitationSchema.parse(req.body);
     const logger = this.loggerService.getLogger(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, email);

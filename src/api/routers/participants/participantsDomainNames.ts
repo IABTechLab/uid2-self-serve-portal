@@ -20,11 +20,10 @@ export async function getParticipantDomainNames(req: ParticipantRequest, res: Re
   return res.status(200).json(participantSite.domain_names ?? []);
 }
 
-const domainNamesParser = z.object({ domainNames: z.array(z.string()) });
-
+const domainNamesSchema = z.object({ domainNames: z.array(z.string()) });
 export async function setParticipantDomainNames(req: UserParticipantRequest, res: Response) {
   const { participant, user } = req;
-  const { domainNames } = domainNamesParser.parse(req.body);
+  const { domainNames } = domainNamesSchema.parse(req.body);
   const traceId = getTraceId(req);
 
   if (!participant?.siteId) {
