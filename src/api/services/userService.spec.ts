@@ -31,7 +31,7 @@ describe('User Service Tests', () => {
 
   describe('User removal', () => {
     describe('User still belongs to a participant', () => {
-      it('removes the user from the correct participant', async () => {
+      it('removes the user from the correct participant and keycloak rules are unchanged', async () => {
         const targetParticipant = await createParticipant(knex, {});
         const anotherParticipant = await createParticipant(knex, {});
         const user = await createUser({
@@ -49,27 +49,12 @@ describe('User Service Tests', () => {
         const userParticipantIds = await getParticipantIdsOfUser(user.email);
         expect(userParticipantIds).not.toContain(targetParticipant.id);
         expect(userParticipantIds).toContain(anotherParticipant.id);
-      });
-    });
-    it('user keycloak roles are unchanged', async () => {
-      const targetParticipant = await createParticipant(knex, {});
-      const anotherParticipant = await createParticipant(knex, {});
-      const user = await createUser({
-        participantToRoles: [
-          { participantId: targetParticipant.id },
-          { participantId: anotherParticipant.id },
-        ],
-      });
-      const request = createUserParticipantRequest(user.email, targetParticipant, user.id);
-      await verifyAndEnrichUser(request, res, next);
 
-      const userService = new UserService();
-      await userService.removeUser(request);
-
-      expect(kcUsersService.removeApiParticipantMemberRole).not.toHaveBeenCalled();
+        expect(kcUsersService.removeApiParticipantMemberRole).not.toHaveBeenCalled();
+      });
     });
     describe('User is removed from their only participant', () => {
-      it('removes the user from their only participant', async () => {
+      it('removes the user from their only participant and removes the keycloak role', async () => {
         const participant = await createParticipant(knex, {});
         const user = await createUser({
           participantToRoles: [{ participantId: participant.id }],
@@ -82,17 +67,6 @@ describe('User Service Tests', () => {
 
         const userParticipantIds = await getParticipantIdsOfUser(user.email);
         expect(userParticipantIds).not.toContain(participant.id);
-      });
-      it('removes the Keycloak role when the user has no participants left', async () => {
-        const participant = await createParticipant(knex, {});
-        const user = await createUser({
-          participantToRoles: [{ participantId: participant.id }],
-        });
-        const request = createUserParticipantRequest(user.email, participant, user.id);
-        await verifyAndEnrichUser(request, res, next);
-
-        const userService = new UserService();
-        await userService.removeUser(request);
 
         expect(kcUsersService.removeApiParticipantMemberRole).toHaveBeenCalledWith(
           expect.anything(),
