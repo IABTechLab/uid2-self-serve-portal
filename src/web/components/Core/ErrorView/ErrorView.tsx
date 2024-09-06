@@ -4,6 +4,8 @@ import { useAsyncError } from 'react-router-dom';
 import { ApiError, getErrorHash } from '../../../utils/apiError';
 import { analyticsIdentifier, extractMessageFromAxiosError } from '../../../utils/errorHelpers';
 
+import './ErrorView.scss';
+
 type ErrorViewProps = Readonly<{
   message?: string;
   errorId?: string;

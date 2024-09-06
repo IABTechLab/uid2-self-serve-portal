@@ -3,8 +3,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { ApiError } from './apiError';
 
-import './errorHandler.scss';
-
 interface ErrorState {
   errorId: string;
   errorHash?: string;

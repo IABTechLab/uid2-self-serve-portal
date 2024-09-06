@@ -1,14 +1,14 @@
 .error-content {
-  align-self: flex-start;
+  align-self: center;
   text-align: center;
   padding: 4.5rem 6.5rem;
-}
-.error-content .uid2-logo {
-  display: inline-block;
-}
 
-.error-content .uid2-logo-darkmode {
-  display: none;
+  .uid2-logo {
+    display: inline-block;
+  }
+  .uid2-logo-darkmode {
+    display: none;
+  }
 }
 
 .app.darkmode .error-content {
