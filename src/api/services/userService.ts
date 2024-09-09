@@ -37,10 +37,11 @@ export class UserService {
 
   public async getDefaultParticipant(req: UserRequest) {
     const currentParticipant = req.user?.participants?.[0];
-    const currentSite = !currentParticipant?.siteId
+    if (!currentParticipant) return undefined;
+    const currentSite = !currentParticipant.siteId
       ? undefined
-      : await getSite(currentParticipant?.siteId);
-    const apiRoles = await getApiRoles(currentParticipant!);
+      : await getSite(currentParticipant.siteId);
+    const apiRoles = await getApiRoles(currentParticipant);
     const allParticipantTypes = await ParticipantType.query();
     const result = {
       ...currentParticipant,

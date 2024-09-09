@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { ParticipantStatus } from '../../api/entities/Participant';
 import { GetUsersDefaultParticipant } from '../services/participant';
 
 export function HomeRedirector() {
@@ -10,7 +11,9 @@ export function HomeRedirector() {
   useEffect(() => {
     const loadParticipant = async () => {
       const currentParticipant = await GetUsersDefaultParticipant();
-      navigate(`/participant/${currentParticipant.id}/home`);
+      if (currentParticipant.status === ParticipantStatus.Approved) {
+        navigate(`/participant/${currentParticipant.id}/home`);
+      }
     };
     if (!participantId) {
       loadParticipant();

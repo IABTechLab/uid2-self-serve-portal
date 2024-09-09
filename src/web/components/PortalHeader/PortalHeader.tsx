@@ -34,10 +34,12 @@ export function PortalHeader({
 }: Readonly<PortalHeaderProps>) {
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
+
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
+  const showUserNavigationAndSettings =
+    LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
 
   const [menuOpen, setMenuOpen] = useState(false);
-
   const handleSelect = () => {
     setMenuOpen(false);
   };
@@ -46,6 +48,7 @@ export function PortalHeader({
   const onThemeToggle = () => {
     setDarkToggleState(!darkToggleState);
   };
+
   useEffect(() => {
     setDarkMode?.(darkToggleState);
   }, [darkToggleState, setDarkMode]);
@@ -68,7 +71,7 @@ export function PortalHeader({
         </DropdownMenuTrigger>
         <DropdownMenuContent className='profile-dropdown-content' align='end'>
           <DropdownMenuArrow className='profile-dropdown-arrow' />
-          {LoggedInUser?.user?.acceptedTerms && (
+          {showUserNavigationAndSettings && (
             <>
               {routes.map((route) => {
                 return (
@@ -83,24 +86,22 @@ export function PortalHeader({
                   </DropdownMenuItem>
                 );
               })}
+              <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+                <div className='theme-switch'>
+                  <label htmlFor='dark-mode'>Dark Mode</label>
+                  <Switch.Root
+                    name='dark-mode'
+                    checked={darkToggleState}
+                    onCheckedChange={onThemeToggle}
+                    className='theme-toggle clickable-item'
+                  >
+                    <Switch.Thumb className='thumb' />
+                  </Switch.Root>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className='separator' />
             </>
           )}
-
-          <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
-            <div className='theme-switch'>
-              <label htmlFor='dark-mode'>Dark Mode</label>
-              <Switch.Root
-                name='dark-mode'
-                checked={darkToggleState}
-                onCheckedChange={onThemeToggle}
-                className='theme-toggle clickable-item'
-              >
-                <Switch.Thumb className='thumb' />
-              </Switch.Root>
-            </div>
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator className='separator' />
           <DropdownMenuItem className='dropdown-menu-item' onClick={logout}>
             Log Out
           </DropdownMenuItem>
