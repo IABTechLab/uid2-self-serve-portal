@@ -1,10 +1,9 @@
 import { useContext } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import { SideNav } from '../components/Navigation/SideNav';
 import { TermsAndConditionsDialog } from '../components/TermsAndConditions/TermsAndConditionsDialog';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
 import { ClientSideIntegrationRoute } from './clientSideIntegration';
