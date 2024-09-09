@@ -39,7 +39,7 @@ export const isUserBelongsToParticipant = async (
   return false;
 };
 
-const canUserAccessParticipant = async (
+export const canUserAccessParticipant = async (
   requestingUserEmail: string,
   participantId: number,
   traceId: string
