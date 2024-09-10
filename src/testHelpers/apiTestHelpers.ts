@@ -7,6 +7,8 @@ import { Participant, ParticipantStatus } from '../api/entities/Participant';
 import { User, UserJobFunction } from '../api/entities/User';
 import { UserRoleId } from '../api/entities/UserRole';
 import { UserToParticipantRole } from '../api/entities/UserToParticipantRole';
+import { ParticipantRequest, UserParticipantRequest } from '../api/services/participantsService';
+import { findUserByEmail } from '../api/services/usersService';
 import { CreateParticipant } from '../database/seeds/Participants';
 
 type ParticipantToUserRoleDTO = Partial<
@@ -23,6 +25,40 @@ export function createResponseObject() {
   res.status = status;
   return { res, json, send, status };
 }
+
+export const createParticipantRequest = (
+  email: string,
+  participantId: string | number
+): ParticipantRequest => {
+  return {
+    auth: {
+      payload: {
+        email,
+      },
+    },
+    params: {
+      participantId,
+    },
+  } as unknown as ParticipantRequest;
+};
+
+export const createUserParticipantRequest = (
+  requestingUserEmail: string,
+  requestingParticipant: Participant,
+  targetUserId: number
+): UserParticipantRequest => {
+  return {
+    auth: {
+      payload: {
+        email: requestingUserEmail,
+      },
+    },
+    participant: requestingParticipant,
+    params: {
+      userId: targetUserId,
+    },
+  } as unknown as UserParticipantRequest;
+};
 
 export async function createParticipant(
   knex: Knex,
@@ -81,14 +117,20 @@ export async function createUser({
   };
 
   const user = await User.query().insert(data);
-  const userToParticipantRolesData = participantToRoles?.map((item) => ({
-    ...item,
-    userId: user.id,
-    userRoleId: item.userRoleId ?? UserRoleId.Admin,
-  }));
-  if (userToParticipantRolesData) {
-    await UserToParticipantRole.query().insert(userToParticipantRolesData);
-  }
+
+  participantToRoles?.map(async (item) => {
+    const myData = {
+      ...item,
+      userId: user.id,
+      userRoleId: item.userRoleId ?? UserRoleId.Admin,
+    };
+    await UserToParticipantRole.query().insert(myData);
+  });
 
   return user;
+}
+
+export async function getParticipantIdsOfUser(userEmail: string) {
+  const user = await findUserByEmail(userEmail);
+  return user?.participants?.map((participant) => participant.id);
 }
