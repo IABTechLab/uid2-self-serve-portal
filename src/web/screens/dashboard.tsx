@@ -1,10 +1,9 @@
-import { useContext, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import { SideNav } from '../components/Navigation/SideNav';
 import { TermsAndConditionsDialog } from '../components/TermsAndConditions/TermsAndConditionsDialog';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
 import { ClientSideIntegrationRoute } from './clientSideIntegration';
@@ -39,16 +38,9 @@ export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes
 const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
-  const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const navigate = useNavigate();
   const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
 
-  useEffect(() => {
-    if (!participant) {
-      navigate('/account/create');
-    }
-  }, [participant, navigate]);
   return (
     <div className='app-panel'>
       <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />

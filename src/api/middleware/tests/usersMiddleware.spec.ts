@@ -6,29 +6,10 @@ import {
   createParticipant,
   createResponseObject,
   createUser,
+  createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
-import { Participant } from '../../entities/Participant';
 import { UserRoleId } from '../../entities/UserRole';
-import { UserParticipantRequest } from '../../services/participantsService';
 import { verifyAndEnrichUser } from '../usersMiddleware';
-
-const createUserParticipantRequest = (
-  requestingUserEmail: string,
-  requestingParticipant: Participant,
-  targetUserId: number
-): UserParticipantRequest => {
-  return {
-    auth: {
-      payload: {
-        email: requestingUserEmail,
-      },
-    },
-    participant: requestingParticipant,
-    params: {
-      userId: targetUserId,
-    },
-  } as unknown as UserParticipantRequest;
-};
 
 describe('User Middleware Tests', () => {
   let knex: Knex;

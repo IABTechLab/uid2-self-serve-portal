@@ -11,8 +11,8 @@ import { findUserByEmail, UserRequest } from '../services/usersService';
 export const isUid2Support = async (userEmail: string) => {
   const user = await findUserByEmail(userEmail);
   const userWithUid2SupportRole = await UserToParticipantRole.query()
-    .where('userId', '=', user!.id)
-    .andWhere('userRoleId', '=', UserRoleId.UID2Support)
+    .where('userId', user!.id)
+    .andWhere('userRoleId', UserRoleId.UID2Support)
     .first();
   return !!userWithUid2SupportRole;
 };

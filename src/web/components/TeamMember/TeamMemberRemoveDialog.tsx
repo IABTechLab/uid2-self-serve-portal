@@ -1,17 +1,17 @@
 import { UserResponse } from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog/Dialog';
 
-type TeamMemberDeleteConfirmationDialogProps = Readonly<{
+type TeamMemberRemoveConfirmationDialogProps = Readonly<{
   person: UserResponse;
   onRemoveTeamMember: () => Promise<void>;
   onOpenChange: () => void;
 }>;
 
-function TeamMemberDeleteConfirmationDialog({
+function TeamMemberRemoveConfirmationDialog({
   person,
   onRemoveTeamMember,
   onOpenChange,
-}: TeamMemberDeleteConfirmationDialogProps) {
+}: TeamMemberRemoveConfirmationDialogProps) {
   const handleRemove = async () => {
     await onRemoveTeamMember();
     onOpenChange();
@@ -19,7 +19,7 @@ function TeamMemberDeleteConfirmationDialog({
 
   return (
     <Dialog
-      title='Are you sure you want to delete this team member?'
+      title='Are you sure you want to remove this team member?'
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
@@ -30,11 +30,11 @@ function TeamMemberDeleteConfirmationDialog({
       </ul>
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleRemove}>
-          Delete Team Member
+          Remove Team Member
         </button>
       </div>
     </Dialog>
   );
 }
 
-export default TeamMemberDeleteConfirmationDialog;
+export default TeamMemberRemoveConfirmationDialog;
