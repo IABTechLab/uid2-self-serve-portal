@@ -84,7 +84,7 @@ describe('Participant Middleware Tests', () => {
 
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.send).toHaveBeenCalledWith([
-      { message: 'You do not have permission to that participant.' },
+      { message: 'You do not have access to that participant.' },
     ]);
   });
 });
