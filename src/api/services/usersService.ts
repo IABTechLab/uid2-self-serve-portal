@@ -10,8 +10,9 @@ import { isUserAnApprover } from './approversService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import {
-  assignApiParticipantMemberRole, createNewUser,
-  sendInviteEmailToNewUser
+  assignApiParticipantMemberRole,
+  createNewUser,
+  sendInviteEmailToNewUser,
 } from './kcUsersService';
 
 export interface UserRequest extends Request {
@@ -101,7 +102,7 @@ export const sendInviteEmailToExistingUser = (
 ) => {
   const emailService = createEmailService();
   const emailArgs: EmailArgs = {
-    subject: `You've been invited to join ${participantName} in the UID2 Portal`,
+    subject: `You have been invited to join ${participantName} in the UID2 Portal`,
     templateData: {
       participantName,
       firstName: existingUser.firstName,
