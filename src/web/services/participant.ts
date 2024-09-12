@@ -148,7 +148,11 @@ export async function GetParticipantApiRoles(participantId: number) {
 }
 
 export async function InviteTeamMember(formData: InviteTeamMemberForm, participantId: number) {
-  return axios.post(`/participants/${participantId}/invite`, formData);
+  try {
+    return await axios.post(`/participants/${participantId}/invite`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not invite team member.');
+  }
 }
 
 export async function GetSelectedParticipant(participantId: number) {
