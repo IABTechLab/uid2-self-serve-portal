@@ -16,6 +16,11 @@ services:
     environment:
       ACCEPT_EULA: 'yes'
       MSSQL_SA_PASSWORD: 'D3velopmentP0'
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P D3velopmentP0 -Q 'SELECT 1'"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
   keycloak:
     container_name: uid2_selfserve_keycloak
     image: quay.io/keycloak/keycloak:24.0.0
@@ -32,7 +37,8 @@ services:
       - 18080:8080
       - 19990:9990
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     command:
       - start-dev
       - --import-realm
