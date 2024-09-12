@@ -14,9 +14,12 @@ type Options = {
 };
 
 const captureAllRoutes = ({ urlPatternMaker }: Options, app: express.Express, logger: Logger) => {
-  const allRoutes = listEndpoints(app).filter((route) => route.path !== '/*' && route.path !== '*');
+  const allRoutes = listEndpoints(app);
+  const filteredRoutes = allRoutes.filter(
+    (route) => route.path !== '/*' && route.path !== '*' && !route.path.includes(' ')
+  );
 
-  return allRoutes.map((route) => {
+  return filteredRoutes.map((route) => {
     const path = route.path.endsWith('/') ? route.path.replace(/\/$/, '') : route.path;
 
     logger.log('debug', `Route found: ${route.path} - ${JSON.stringify(route)}`);
