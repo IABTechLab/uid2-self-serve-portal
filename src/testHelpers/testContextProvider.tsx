@@ -1,7 +1,7 @@
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
 import { PropsWithChildren } from 'react';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import { ParticipantDTO } from '../api/entities/Participant';
 import { UserWithIsApprover } from '../api/services/usersService';
@@ -20,7 +20,9 @@ export const createUserContextValue = (user: UserWithIsApprover): UserContextWit
   loadUser: async () => {},
 });
 
-export const createParticipantContextValue = (participant: ParticipantDTO): ParticipantWithSetter => ({
+export const createParticipantContextValue = (
+  participant: ParticipantDTO
+): ParticipantWithSetter => ({
   participant,
   setParticipant: () => {},
 });
