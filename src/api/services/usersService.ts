@@ -27,7 +27,7 @@ export interface SelfResendInviteRequest extends Request {
   email?: string;
 }
 
-export type UserWithIsApprover = User & { isApprover: boolean };
+export type UserWithIsApprover = UserDTO & { isApprover: boolean };
 
 export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
 

@@ -9,7 +9,7 @@ import { useAsyncThrowError } from '../utils/errorHandler';
 import { parseParticipantId } from '../utils/urlHelpers';
 import { CurrentUserContext } from './CurrentUserProvider';
 
-type ParticipantWithSetter = {
+export type ParticipantWithSetter = {
   participant: ParticipantDTO | null;
   setParticipant: (participant: ParticipantDTO) => void;
 };
