@@ -1,7 +1,7 @@
 FROM quay.io/keycloak/keycloak:24.0.0
 
 ENV KC_TRANSACTION_XA_ENABLED 'false'
-
+ENV KC_LOG_LEVEL DEBUG
 
 COPY keycloak/realm/realm-export.json /opt/keycloak/data/import/realm-export.json
 COPY keycloak/themes /opt/keycloak/themes
