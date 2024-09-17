@@ -33,5 +33,4 @@ export const createMockParticipant = (): ParticipantDTO => ({
   allowSharing: true,
   completedRecommendations: faker.datatype.boolean(),
   crmAgreementNumber: '12345678',
-  users: [createMockUser([])],
 });
