@@ -39,6 +39,9 @@ export class UserService {
         userWithIsApprover.participants = allParticipants;
       }
     }
+    userWithIsApprover.participants = userWithIsApprover?.participants?.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
     return userWithIsApprover;
   }
 

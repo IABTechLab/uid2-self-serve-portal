@@ -19,10 +19,9 @@ export function ParticipantSwitcher() {
       id: value.id,
       name: value.name,
     })) ?? [];
-  const sortedParticipantOptions = participantOptions.sort((a, b) => a.name.localeCompare(b.name));
-  const currentParticipantOption = sortedParticipantOptions.filter(
-    (x) => x.id === participant!.id
-  )[0];
+  const currentParticipantOption = participantOptions.find(
+    (option) => option.id === participant?.id
+  );
 
   const handleOnSelectedChange = (selectedParticipantId: SelectOption<number>) => {
     const newPath = getPathWithParticipant(location.pathname, selectedParticipantId.id);
@@ -42,11 +41,11 @@ export function ParticipantSwitcher() {
       {showDropdown ? (
         <SelectDropdown
           initialValue={currentParticipantOption}
-          options={sortedParticipantOptions}
+          options={participantOptions}
           onSelectedChange={handleOnSelectedChange}
         />
       ) : (
-        <div className='participant-name'>{participant!.name}</div>
+        participant && <div className='participant-name'>{participant.name}</div>
       )}
     </div>
   );
