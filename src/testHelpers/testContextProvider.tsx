@@ -3,14 +3,57 @@ import Keycloak from 'keycloak-js';
 import { PropsWithChildren } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
+import { ParticipantDTO } from '../api/entities/Participant';
+import { UserWithIsApprover } from '../api/services/usersService';
+import { CurrentUserContext, UserContextWithSetter } from '../web/contexts/CurrentUserProvider';
+import { ParticipantContext, ParticipantWithSetter } from '../web/contexts/ParticipantProvider';
+
 export const createTestKeycloakInstance = () => {
   return new Keycloak();
 };
 
-export function TestContextProvider({ children }: PropsWithChildren) {
+export const createUserContextValue = (user: UserWithIsApprover): UserContextWithSetter => ({
+  LoggedInUser: {
+    profile: {},
+    user,
+  },
+  loadUser: async () => {},
+});
+
+export const createParticipantContextValue = (
+  participant: ParticipantDTO
+): ParticipantWithSetter => ({
+  participant,
+  setParticipant: () => {},
+});
+
+const defaultUserContext: UserContextWithSetter = {
+  LoggedInUser: null,
+  loadUser: async () => {},
+};
+
+const defaultParticipantContext: ParticipantWithSetter = {
+  participant: null,
+  setParticipant: () => {},
+};
+
+interface TestContextProviderProps extends PropsWithChildren {
+  participantContextValue?: ParticipantWithSetter;
+  userContextValue?: UserContextWithSetter;
+}
+
+export function TestContextProvider({
+  children,
+  participantContextValue,
+  userContextValue,
+}: TestContextProviderProps) {
   return (
     <ReactKeycloakProvider authClient={createTestKeycloakInstance()}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <ParticipantContext.Provider value={participantContextValue ?? defaultParticipantContext}>
+        <CurrentUserContext.Provider value={userContextValue ?? defaultUserContext}>
+          <BrowserRouter>{children}</BrowserRouter>
+        </CurrentUserContext.Provider>
+      </ParticipantContext.Provider>
     </ReactKeycloakProvider>
   );
 }

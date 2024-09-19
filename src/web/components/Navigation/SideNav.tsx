@@ -8,6 +8,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import config from '../../../../package.json';
 import { PortalRoute } from '../../screens/routeUtils';
 import { getPathWithParticipant } from '../../utils/urlHelpers';
+import { ParticipantSwitcher } from './ParticipantSwitcher';
 
 import './SideNav.scss';
 
@@ -40,6 +41,8 @@ export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>
       <NavigationMenuList className='main-nav'>
+        <ParticipantSwitcher />
+        <div className='side-nav-divider' />
         {standardMenu
           .filter((m) => (m.location ?? 'default') === 'default')
           .map((m) => MenuItem(m))}

@@ -25,7 +25,7 @@ export const extractLocationFromPath = (path: string) => {
   return match ? match[1] : path.replace(/^\/?:?participantId\/?/, '');
 };
 
-export function getPathWithParticipant(path: string, participantId: string | undefined) {
+export function getPathWithParticipant(path: string, participantId: string | number | undefined) {
   const location = extractLocationFromPath(path);
   return `/participant/${participantId}/${location}`;
 }

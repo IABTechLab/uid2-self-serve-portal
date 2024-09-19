@@ -8,6 +8,7 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
+import { isUid2Support } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -15,7 +16,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
-import { UserParticipantRequest } from './participantsService';
+import { getParticipantsApproved, UserParticipantRequest } from './participantsService';
 import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
@@ -32,6 +33,15 @@ export class UserService {
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
     const userWithIsApprover = await enrichUserWithIsApprover(user!);
+    if (userWithIsApprover) {
+      if (await isUid2Support(userEmail)) {
+        const allParticipants = await getParticipantsApproved();
+        userWithIsApprover.participants = allParticipants;
+      }
+    }
+    userWithIsApprover.participants = userWithIsApprover?.participants?.sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
     return userWithIsApprover;
   }
 

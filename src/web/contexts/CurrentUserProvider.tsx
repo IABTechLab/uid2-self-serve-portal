@@ -6,7 +6,7 @@ import { Loading } from '../components/Core/Loading/Loading';
 import { GetLoggedInUserAccount, UserAccount } from '../services/userAccount';
 import { useAsyncThrowError } from '../utils/errorHandler';
 
-type UserContextWithSetter = {
+export type UserContextWithSetter = {
   LoggedInUser: UserAccount | null;
   loadUser: () => Promise<void>;
 };

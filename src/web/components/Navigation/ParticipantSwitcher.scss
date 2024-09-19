@@ -1,0 +1,23 @@
+.participant-switcher {
+  .select-dropdown-content {
+    width: 200px;
+  }
+  .select-dropdown {
+    & > button {
+      border: none;
+      padding: 0 0 20px 0;
+      color: var(--theme-primary);
+    }
+  }
+
+  .select-dropdown-checkbox-item {
+    justify-content: flex-start;
+    padding-left: 10px;
+    height: 40px;
+  }
+
+  .participant-name {
+    padding: 0 0 14px 0;
+    font-weight: 600;
+  }
+}
