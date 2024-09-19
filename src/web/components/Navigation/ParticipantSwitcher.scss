@@ -13,7 +13,16 @@
   .select-dropdown-checkbox-item {
     justify-content: flex-start;
     padding-left: 10px;
-    height: 40px;
+    height: 100%;
+    min-height: 40px;
+  }
+
+  .select-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 190px;
+    justify-content: space-between;
   }
 
   .participant-name {
