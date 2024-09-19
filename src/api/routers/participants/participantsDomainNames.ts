@@ -11,7 +11,7 @@ import {
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
 
-export async function getParticipantDomainNames(req: ParticipantRequest, res: Response) {
+export async function handleGetParticipantDomainNames(req: ParticipantRequest, res: Response) {
   const { participant } = req;
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
@@ -21,7 +21,7 @@ export async function getParticipantDomainNames(req: ParticipantRequest, res: Re
 }
 
 const domainNamesSchema = z.object({ domainNames: z.array(z.string()) });
-export async function setParticipantDomainNames(req: UserParticipantRequest, res: Response) {
+export async function handleSetParticipantDomainNames(req: UserParticipantRequest, res: Response) {
   const { participant, user } = req;
   const { domainNames } = domainNamesSchema.parse(req.body);
   const traceId = getTraceId(req);

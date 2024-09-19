@@ -8,7 +8,7 @@ import { Participant, ParticipantStatus } from '../../entities/Participant';
 import { SSP_ADMIN_SERVICE_BASE_URL } from '../../envars';
 import { KeyPairDTO } from '../../services/adminServiceHelpers';
 import { ParticipantRequest } from '../../services/participantsService';
-import { getParticipantKeyPairs } from './participantsKeyPairs';
+import { handleGetParticipantKeyPairs } from './participantsKeyPairs';
 
 const noKeyPairsSiteId = 10;
 const singleKeyPairSiteId = 11;
@@ -85,7 +85,7 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
-describe('#getParticipantKeyPairs', () => {
+describe('Get participant key pairs', () => {
   beforeAll(() => server.listen());
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
@@ -106,7 +106,7 @@ describe('#getParticipantKeyPairs', () => {
 
     const { res } = createResponseObject();
 
-    await getParticipantKeyPairs(participantRequest, res);
+    await handleGetParticipantKeyPairs(participantRequest, res);
 
     expect(res.status).toHaveBeenLastCalledWith(400);
   });
@@ -137,7 +137,7 @@ describe('#getParticipantKeyPairs', () => {
     res.status = jest.fn(() => res);
     const enabledKeys = keys.filter((key) => !key.disabled);
 
-    await getParticipantKeyPairs(participantRequest, res);
+    await handleGetParticipantKeyPairs(participantRequest, res);
 
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith(enabledKeys);
