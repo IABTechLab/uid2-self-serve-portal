@@ -12,7 +12,7 @@ import {
   ParticipantStatus,
 } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
-import { User } from '../entities/User';
+import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
@@ -32,6 +32,14 @@ export interface ParticipantRequest extends Request {
 export interface UserParticipantRequest extends ParticipantRequest {
   user?: User;
 }
+
+export type ParticipantRequestDTO = Pick<
+  ParticipantDTO,
+  'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
+> & {
+  requestingUser: Pick<UserDTO, 'email'> &
+    Partial<Pick<UserDTO, 'jobFunction'>> & { fullName: string };
+};
 
 export const getParticipantTypesByIds = async (
   participantTypeIds: number[]
@@ -63,6 +71,28 @@ export const sendNewParticipantEmail = async (
     to: approvers.map((a) => ({ name: a.displayName, email: a.email })),
   };
   emailService.sendEmail(emailArgs, traceId);
+};
+
+export const mapParticipantToApprovalRequest = (
+  participant: Participant
+): ParticipantRequestDTO => {
+  // There should usually only be one user at this point - but if there are multiple, the first one is preferred.
+  const firstUser = participant.users?.sort((a, b) => a.id - b.id)[0];
+  return {
+    id: participant.id,
+    name: participant.name,
+    siteId: participant.siteId,
+    types: participant.types,
+    apiRoles: participant.apiRoles,
+    status: participant.status,
+    requestingUser: {
+      email: firstUser ? firstUser.email : '',
+      jobFunction: firstUser?.jobFunction,
+      fullName: firstUser
+        ? firstUser?.fullName()
+        : 'There is no user attached to this participant.',
+    },
+  };
 };
 
 export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {

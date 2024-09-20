@@ -176,7 +176,10 @@ export async function handleCreateParticipant(req: ParticipantRequest, res: Resp
   return res.sendStatus(200);
 }
 
-export const createParticipantFromRequest = async (req: ParticipantRequest, res: Response) => {
+export const handleCreateParticipantFromRequest = async (
+  req: ParticipantRequest,
+  res: Response
+) => {
   try {
     const traceId = getTraceId(req);
     const parsedRequest = ParticipantCreationPartial.parse(req.body);

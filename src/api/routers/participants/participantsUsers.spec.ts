@@ -6,7 +6,7 @@ import {
 } from '../../../testHelpers/apiTestHelpers';
 import { User } from '../../entities/User';
 import { ParticipantRequest } from '../../services/participantsService';
-import { getParticipantUsers } from './participantsUsers';
+import { handleGetParticipantUsers } from './participantsUsers';
 
 describe('#getParticipantUsers', () => {
   test('return empty list when no users', async () => {
@@ -20,7 +20,7 @@ describe('#getParticipantUsers', () => {
 
     const { res } = createResponseObject();
 
-    await getParticipantUsers(participantRequest, res);
+    await handleGetParticipantUsers(participantRequest, res);
 
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith([]);
@@ -43,7 +43,7 @@ describe('#getParticipantUsers', () => {
     const participantRequest = {
       participant: relatedParticipant,
     } as ParticipantRequest;
-    await getParticipantUsers(participantRequest, res);
+    await handleGetParticipantUsers(participantRequest, res);
 
     expect(json).toHaveBeenCalled();
 
@@ -70,7 +70,7 @@ describe('#getParticipantUsers', () => {
     const participantRequest = {
       participant: relatedParticipant,
     } as ParticipantRequest;
-    await getParticipantUsers(participantRequest, res);
+    await handleGetParticipantUsers(participantRequest, res);
 
     expect(json).toHaveBeenCalled();
 

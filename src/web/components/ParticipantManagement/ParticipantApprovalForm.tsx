@@ -5,8 +5,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/routers/participants/participantsRouter';
 import { SiteDTO } from '../../../api/services/adminServiceHelpers';
+import { ParticipantRequestDTO } from '../../../api/services/participantsService';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { useSiteList } from '../../services/site';
 import { sortApiRoles } from '../../utils/apiRoles';

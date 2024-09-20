@@ -11,7 +11,7 @@ import {
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
 import { getAllUserFromParticipant, inviteUserToParticipant } from '../../services/usersService';
 
-export async function getParticipantUsers(req: ParticipantRequest, res: Response) {
+export async function handleGetParticipantUsers(req: ParticipantRequest, res: Response) {
   const { participant } = req;
   const users = await getAllUserFromParticipant(participant!);
   return res.status(200).json(users);
