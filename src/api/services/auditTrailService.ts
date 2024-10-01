@@ -1,4 +1,5 @@
 import { AuditTrail, AuditTrailDTO, AuditTrailEvents } from '../entities/AuditTrail';
+import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
 
@@ -34,4 +35,9 @@ export const performAsyncOperationWithAuditTrail = async <T>(
     errorLogger.error(`${auditTrail.event} failed with error: ${error}`, traceId);
     throw error;
   }
+};
+
+export const GetParticipantAuditTrail = async (participant: Participant) => {
+  const auditTrail = await AuditTrail.query().where('participantId', participant.id);
+  return auditTrail;
 };

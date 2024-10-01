@@ -1,0 +1,28 @@
+.audit-log-table-container {
+  .audit-log-table {
+    .name {
+      width: 25%;
+    }
+
+    .email {
+      width: 25%;
+    }
+
+    .contactType {
+      width: 25%;
+    }
+
+    font-size: 0.875rem;
+    width: 100%;
+
+    thead {
+      font-weight: 700;
+      border: none;
+    }
+
+    td {
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+}
