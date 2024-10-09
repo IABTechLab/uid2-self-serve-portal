@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react';
 import { SharingSiteDTO, SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
 import { AdminSiteDTO, ClientTypeDescriptions } from '../../../api/services/adminServiceHelpers';
 import ActionButton from '../Core/Buttons/ActionButton';
+import { LabelRow } from '../Core/Labels/LabelRow';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { TriStateCheckbox } from '../Input/TriStateCheckbox';
 import { DeletePermissionDialog } from './DeletePermissionDialog';
@@ -16,11 +17,8 @@ import './ParticipantItem.scss';
 
 function getParticipantTypes(siteTypes?: AdminSiteDTO['clientTypes']) {
   if (!siteTypes) return null;
-  return siteTypes.map((pt) => (
-    <div className='participant-type-label' key={pt}>
-      {ClientTypeDescriptions[pt]}
-    </div>
-  ));
+  const labelNames = siteTypes.map((pt) => ClientTypeDescriptions[pt]);
+  return <LabelRow labelNames={labelNames} />;
 }
 
 type ParticipantItemSimpleProps = Readonly<{
