@@ -1,24 +1,9 @@
 .participant-management-item {
   line-height: 2;
 
-  .participant-item-type-label {
-    background: var(--theme-label-background);
-    border-radius: 3px;
-    padding: 4px 8px;
-    margin-right: 8px;
-    color: black;
-  }
-
   .participant-item-logo {
     width: 50px;
     margin-right: 16px;
-  }
-
-  .participant-item-types {
-    display: flex;
-    align-items: center;
-    font-size: 0.75rem;
-    line-height: 1.15;
   }
 
   .participant-item-name-cell {
