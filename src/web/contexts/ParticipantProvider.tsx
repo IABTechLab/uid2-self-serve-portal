@@ -29,15 +29,15 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  // useEffect(() => {
-  //   if (
-  //     participant &&
-  //     participant.status !== ParticipantStatus.Approved &&
-  //     location.pathname !== '/account/pending'
-  //   ) {
-  //     navigate('/account/pending');
-  //   }
-  // }, [location.pathname, navigate, participant]);
+  useEffect(() => {
+    if (
+      participant &&
+      participant.status !== ParticipantStatus.Approved &&
+      location.pathname !== '/account/pending'
+    ) {
+      navigate('/account/pending');
+    }
+  }, [location.pathname, navigate, participant]);
 
   useEffect(() => {
     const loadParticipant = async () => {
