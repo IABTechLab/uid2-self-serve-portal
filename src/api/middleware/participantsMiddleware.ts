@@ -20,7 +20,7 @@ export const verifyAndEnrichParticipant = async (
 
   const participant = await Participant.query().findById(participantId).withGraphFetched('types');
   if (!participant) {
-    return res.status(200).send([{ message: 'The participant cannot be found.' }]);
+    return res.status(404).send([{ message: 'The participant cannot be found.' }]);
   }
 
   if (!(await canUserAccessParticipant(userEmail, participantId, traceId))) {
