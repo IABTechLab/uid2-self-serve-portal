@@ -29,15 +29,15 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  useEffect(() => {
-    if (
-      participant &&
-      participant.status !== ParticipantStatus.Approved &&
-      location.pathname !== '/account/pending'
-    ) {
-      navigate('/account/pending');
-    }
-  }, [location.pathname, navigate, participant]);
+  // useEffect(() => {
+  //   if (
+  //     participant &&
+  //     participant.status !== ParticipantStatus.Approved &&
+  //     location.pathname !== '/account/pending'
+  //   ) {
+  //     navigate('/account/pending');
+  //   }
+  // }, [location.pathname, navigate, participant]);
 
   useEffect(() => {
     const loadParticipant = async () => {
@@ -47,7 +47,9 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
           const p = parsedParticipantId
             ? await GetSelectedParticipant(parsedParticipantId)
             : await GetUsersDefaultParticipant();
-          setParticipant(p);
+          if (p.id) {
+            setParticipant(p);
+          }
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);

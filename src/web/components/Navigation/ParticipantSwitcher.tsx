@@ -8,7 +8,11 @@ import { SelectDropdown, SelectOption } from '../Input/SelectDropdown';
 
 import './ParticipantSwitcher.scss';
 
-export function ParticipantSwitcher() {
+type ParticipantSwitcherProps = {
+  initialSelectedParticipantId?: number;
+};
+
+export function ParticipantSwitcher({ initialSelectedParticipantId }: ParticipantSwitcherProps) {
   const { participant, setParticipant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();

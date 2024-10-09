@@ -1,0 +1,20 @@
+.no-participant-access-switcher {
+  align-items: center;
+  text-align: center;
+  display: grid;
+  justify-content: center;
+  padding: 4.5rem 6.5rem;
+
+  .instructions {
+    font-size: 1.25rem;
+  }
+
+  .no-access {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .switcher {
+    width: 100px;
+  }
+}

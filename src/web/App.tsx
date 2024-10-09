@@ -10,9 +10,10 @@ import { PortalHeader } from './components/PortalHeader/PortalHeader';
 import { UpdatesTour } from './components/SiteTour/UpdatesTour';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
-import { ParticipantProvider } from './contexts/ParticipantProvider';
+import { ParticipantContext, ParticipantProvider } from './contexts/ParticipantProvider';
 import { HomeRedirector } from './screens/homeRedirector';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
+import { NoParticipantAccessView } from './components/Navigation/NoParticipantAccessView';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
@@ -21,10 +22,14 @@ configureFontAwesomeLibrary();
 
 function AppContent() {
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const { participant } = useContext(ParticipantContext);
   const isLocalDev = process.env.NODE_ENV === 'development';
 
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;
+  }
+  if (!participant || !participant.id) {
+    return <NoParticipantAccessView />;
   }
 
   return (
