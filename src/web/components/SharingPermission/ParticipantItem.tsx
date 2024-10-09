@@ -31,7 +31,6 @@ export function ParticipantItemSimple({ site }: ParticipantItemSimpleProps) {
   return (
     <>
       <td className='participant-name-cell'>
-        {/* <img src={logo} alt={site.name} className='participant-logo' /> */}
         <label className='checkbox-label'>{site.name}</label>
       </td>
       <td>
