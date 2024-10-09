@@ -51,8 +51,13 @@ export function App() {
   }, [keycloak]);
 
   const setDarkMode = (darkMode: boolean) => {
-    if (darkMode) rootRef.current!.classList.add('darkmode');
-    else rootRef.current!.classList.remove('darkmode');
+    if (darkMode) {
+      rootRef.current!.classList.add('darkmode');
+      localStorage.setItem('isDarkMode', 'true');
+    } else {
+      rootRef.current!.classList.remove('darkmode');
+      localStorage.setItem('isDarkMode', 'false');
+    }
   };
 
   const fullName =
