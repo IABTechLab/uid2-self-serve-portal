@@ -8,9 +8,9 @@ import { SelectDropdown, SelectOption } from '../Input/SelectDropdown';
 
 import './ParticipantSwitcher.scss';
 
-type ParticipantSwitcherProps = {
+type ParticipantSwitcherProps = Readonly<{
   blankInitialValue?: boolean;
-};
+}>;
 
 export function ParticipantSwitcher({ blankInitialValue }: ParticipantSwitcherProps) {
   const { participant, setParticipant } = useContext(ParticipantContext);

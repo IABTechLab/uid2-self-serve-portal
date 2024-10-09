@@ -6,6 +6,7 @@ import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
 import { ErrorView } from './components/Core/ErrorView/ErrorView';
 import { Loading } from './components/Core/Loading/Loading';
 import { ToastContainerWrapper } from './components/Core/Popups/Toast';
+import { NoParticipantAccessView } from './components/Navigation/NoParticipantAccessView';
 import { PortalHeader } from './components/PortalHeader/PortalHeader';
 import { UpdatesTour } from './components/SiteTour/UpdatesTour';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
@@ -13,7 +14,6 @@ import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { ParticipantContext, ParticipantProvider } from './contexts/ParticipantProvider';
 import { HomeRedirector } from './screens/homeRedirector';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
-import { NoParticipantAccessView } from './components/Navigation/NoParticipantAccessView';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
