@@ -5,3 +5,21 @@ export function sortApiRoles(apiRoles: ApiRoleDTO[]) {
 
   return apiRoles;
 }
+
+export function getRoleNamesByIds(ids: number[]) {
+  const names: string[] = ids.map((item) => {
+    switch (item) {
+      case 1:
+        return 'Mapper';
+      case 2:
+        return 'Generator';
+      case 3:
+        return 'ID Reader';
+      case 4:
+        return 'Sharer';
+      default:
+        return 'Invalid';
+    }
+  });
+  return names;
+}

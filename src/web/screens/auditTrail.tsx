@@ -8,7 +8,7 @@ import { Loading } from '../components/Core/Loading/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { GetAuditLogs } from '../services/auditTrailService';
+import { GetAuditLogs } from '../services/auditTrail';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Meta, StoryObj } from '@storybook/react';
 
 import { AuditTrailEvents } from '../../../api/entities/AuditTrail';
@@ -26,7 +27,8 @@ export const WithLogRows: Story = {
         userEmail: 'test@testing.com',
         succeeded: true,
         event: AuditTrailEvents.ApproveAccount,
-        eventData: '{"siteId":1001,"apiRoles":[]}',
+        eventData: '{"action":"add","siteId":1001,"apiRoles":[1, 4]}',
+        updated_at: new Date('2024-07-01 21:59:45.9266667'),
       },
       {
         id: 2,
@@ -35,6 +37,7 @@ export const WithLogRows: Story = {
         succeeded: false,
         event: AuditTrailEvents.UpdateAppNames,
         eventData: '{"action":"update","siteId":999,"appNames":["234213423"]}',
+        updated_at: new Date('2024-08-23 20:53:52.1933333'),
       },
     ],
   },

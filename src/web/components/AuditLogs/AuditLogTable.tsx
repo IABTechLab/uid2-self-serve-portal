@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { AuditTrail, AuditTrailDTO } from '../../../api/entities/AuditTrail';
+import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
@@ -27,9 +27,9 @@ function AuditLogTable({ auditTrail }: AuditLogTableProps) {
           <tr>
             <th>ID</th>
             <SortableTableHeader<AuditTrailDTO> sortKey='userEmail' header='User' />
-            <th>Event</th>
-            <th>Date</th>
-            {/* <SortableTableHeader<AuditTrailDTO> sortKey='date' header='Date' /> */}
+            <SortableTableHeader<AuditTrailDTO> sortKey='event' header='Event' />
+            <th>Event Data</th>
+            <SortableTableHeader<AuditTrailDTO> sortKey='updated_at' header='Date' />
             <th>Succeeded</th>
           </tr>
         </thead>

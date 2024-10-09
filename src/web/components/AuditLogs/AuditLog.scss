@@ -23,6 +23,19 @@
     td {
       padding-top: 15px;
       padding-bottom: 15px;
+
+      &.succeeded {
+        display: flex;
+        justify-content: center;
+      }
+
+      .icon_x {
+        color: red;
+      }
+
+      .icon_check {
+        color: green;
+      }
     }
   }
 }
