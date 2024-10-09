@@ -19,8 +19,13 @@ export function ParticipantSwitcher() {
       id: value.id,
       name: value.name,
     })) ?? [];
+
+  const lastSelectedParticipantId = localStorage.getItem('lastSelectedParticipantId');
+  const currentParticipantOptionId = lastSelectedParticipantId
+    ? parseInt(lastSelectedParticipantId, 10)
+    : participant?.id;
   const currentParticipantOption = participantOptions.find(
-    (option) => option.id === participant?.id
+    (option) => option.id === currentParticipantOptionId
   );
 
   const handleOnSelectedChange = (selectedParticipantId: SelectOption<number>) => {
@@ -31,6 +36,7 @@ export function ParticipantSwitcher() {
     );
     if (selectedParticipant) {
       setParticipant(selectedParticipant);
+      localStorage.setItem('lastSelectedParticipantId', selectedParticipant.id.toString());
     }
   };
 
