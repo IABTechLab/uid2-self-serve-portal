@@ -11,17 +11,17 @@ type ApiRolesProps = {
   showRoleTooltip?: boolean;
 };
 function ApiRolesCell({ apiRoles, showRoleTooltip = false }: ApiRolesProps) {
-  const sortedRoles = sortApiRoles(apiRoles);
+  const sortedApiRoles = sortApiRoles(apiRoles);
 
   return (
     <div className='api-roles-cell'>
       <div className='label-row'>
-        {sortedRoles.map((role) => (
-          <div key={role.externalName}>
+        {sortedApiRoles.map((apiRole) => (
+          <div key={apiRole.externalName}>
             {showRoleTooltip ? (
-              <Tooltip trigger={<Label text={role.externalName} />}>{role.roleName}</Tooltip>
+              <Tooltip trigger={<Label text={apiRole.externalName} />}>{apiRole.roleName}</Tooltip>
             ) : (
-              <Label text={role.externalName} />
+              <Label text={apiRole.externalName} />
             )}
           </div>
         ))}
