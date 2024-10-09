@@ -113,28 +113,6 @@ export function CreateAccountForm({ resolvedParticipantTypes, onSubmit }: Create
             Privacy Policies
           </a>
         </div>
-        {/* Contract Sign will be introduced in phase 2 */}
-        {/* <RadioInput
-            inputName='canSign'
-            label='Do you have the ability to sign a contract for UID Integration'
-            options={[
-              { optionLabel: 'Yes', value: true },
-              { optionLabel: 'No', value: false },
-            ]}
-            aria-invalid={errors.canSign ? 'true' : 'false'}
-            control={control}
-          />
-          {typeof watchCanSign == 'boolean' && (
-            <div className='form-message-container'>
-              {watchCanSign
-                ? 'Great! Once you Request Access you will be presented the UID contract and terms.'
-                : 'Before we can grant access to your company, we will need a signed contract and agreement to our terms.\nDo you have an email address for who can sign the UID Contract?'}
-            </div>
-          )} */}
-
-        {/* {watchCanSign === false && (
-                <TextInput inputName='signeeEmail' label='Email for Contract Signee' />
-              )} */}
         <div className='form-footer'>
           <button type='submit' className='primary-button' disabled={!watchAccept}>
             Request Account
