@@ -50,11 +50,10 @@
       display: flex;
       align-items: center;
       .pending-label {
-        background: var(--theme-label);
-        font-size: 0.625rem;
-        border-radius: 3px;
-        padding: 3px 8px;
         margin-left: 10px;
+        .label {
+          background-color: var(--theme-label);
+        }
       }
     }
   }

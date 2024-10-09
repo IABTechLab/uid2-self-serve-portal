@@ -1,12 +1,9 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { sortApiRoles } from '../../utils/apiRoles';
+import { Label } from '../Core/Labels/Label';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 
 import './ApiRolesCell.scss';
-
-function ApiRoleBox({ apiRole }: { apiRole: ApiRoleDTO }) {
-  return <div className='api-role-box'>{apiRole.externalName}</div>;
-}
 
 type ApiRolesProps = {
   apiRoles: ApiRoleDTO[];
@@ -15,13 +12,13 @@ type ApiRolesProps = {
 function ApiRolesCell({ apiRoles, showRoleTooltip = false }: ApiRolesProps) {
   return (
     <div className='api-roles-cell'>
-      <div className='api-role-boxes'>
+      <div className='label-row'>
         {sortApiRoles(apiRoles).map((role) => (
           <div key={role.externalName}>
             {showRoleTooltip ? (
-              <Tooltip trigger={<ApiRoleBox apiRole={role} />}>{role.roleName}</Tooltip>
+              <Tooltip trigger={<Label text={role.externalName} />}>{role.roleName}</Tooltip>
             ) : (
-              <ApiRoleBox apiRole={role} />
+              <Label text={role.externalName} />
             )}
           </div>
         ))}
