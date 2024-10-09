@@ -44,7 +44,8 @@ export function PortalHeader({
     setMenuOpen(false);
   };
 
-  const [darkToggleState, setDarkToggleState] = useState(false);
+  const lastDarkState = localStorage.getItem('isDarkMode') === 'true';
+  const [darkToggleState, setDarkToggleState] = useState(lastDarkState);
   const onThemeToggle = () => {
     setDarkToggleState(!darkToggleState);
   };
