@@ -4,6 +4,7 @@ import { Label } from '../Core/Labels/Label';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 
 import './ApiRolesCell.scss';
+import '../Core/Labels/LabelRow.scss';
 
 type ApiRolesProps = {
   apiRoles: ApiRoleDTO[];
