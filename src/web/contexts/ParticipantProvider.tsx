@@ -47,7 +47,9 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
           const p = parsedParticipantId
             ? await GetSelectedParticipant(parsedParticipantId)
             : await GetUsersDefaultParticipant();
-          setParticipant(p);
+          if (p.id) {
+            setParticipant(p);
+          }
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
