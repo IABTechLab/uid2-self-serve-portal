@@ -20,7 +20,7 @@ export const ParticipantContext = createContext<ParticipantWithSetter>({
 
 function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   useEffect(() => {
     const loadParticipant = async () => {
-      setLoading(true);
+      setIsLoading(true);
       try {
         if (user) {
           const p = myParticipantId
@@ -57,7 +57,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
     if (!participant || myParticipantId !== participant.id) loadParticipant();
@@ -72,7 +72,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   );
   return (
     <ParticipantContext.Provider value={participantContext}>
-      {loading ? <Loading /> : children}
+      {isLoading ? <Loading /> : children}
     </ParticipantContext.Provider>
   );
 }
