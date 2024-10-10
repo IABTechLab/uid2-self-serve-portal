@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
@@ -14,7 +14,6 @@ export function ParticipantSwitcher() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const [participantOption, setParticipantOption] = useState<SelectOption<number>>();
 
   const participantOptions: SelectOption<number>[] =
     LoggedInUser?.user?.participants?.map((value) => ({
@@ -25,7 +24,6 @@ export function ParticipantSwitcher() {
   const currentParticipantOption = participantOptions.find(
     (option) => option.id === participant?.id
   );
-  console.log('cpo: ', currentParticipantOption);
 
   const handleOnSelectedChange = (selectedParticipantId: SelectOption<number>) => {
     const newPath = getPathWithParticipant(location.pathname, selectedParticipantId.id);
@@ -41,6 +39,7 @@ export function ParticipantSwitcher() {
           initialValue={currentParticipantOption}
           options={participantOptions}
           onSelectedChange={handleOnSelectedChange}
+          updatedValue={currentParticipantOption}
         />
       ) : (
         participant && <div className='participant-name'>{participant.name}</div>

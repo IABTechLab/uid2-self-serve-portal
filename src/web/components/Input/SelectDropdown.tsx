@@ -33,7 +33,6 @@ export function SelectDropdown<TValue>({
 }: SelectDropdownProps<TValue>) {
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
-  console.log('in select dropdown');
 
   const onOptionToggle = useCallback(
     (id: TValue) => {
@@ -48,7 +47,7 @@ export function SelectDropdown<TValue>({
   );
 
   useEffect(() => {
-    if (initialValue) {
+    if (initialValue && !selectedItem) {
       setSelectedItem(options.find((option) => option.id === initialValue.id));
     }
   }, [initialValue, selectedItem, options]);
