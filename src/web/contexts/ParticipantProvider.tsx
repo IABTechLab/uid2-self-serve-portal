@@ -18,14 +18,14 @@ export const ParticipantContext = createContext<ParticipantWithSetter>({
   setParticipant: () => {},
 });
 
-function ParticipantProvider({ children }: { children: ReactNode }) {
+function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
-  const [loading, setIsLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
   const throwError = useAsyncThrowError();
-  const user = LoggedInUser?.user || null;
+  const user = LoggedInUser?.user ?? null;
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
   const lastSelectedParticipant = localStorage.getItem('lastSelectedParticipantId');
@@ -45,7 +45,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const loadParticipant = async () => {
-      setIsLoading(true);
+      setLoading(true);
       try {
         if (user) {
           const p = myParticipantId
@@ -57,7 +57,7 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
     if (!participant || myParticipantId !== participant.id) loadParticipant();
