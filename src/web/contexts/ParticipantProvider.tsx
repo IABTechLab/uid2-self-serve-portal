@@ -20,7 +20,7 @@ export const ParticipantContext = createContext<ParticipantWithSetter>({
 
 function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,21 +47,21 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
     const loadParticipant = async () => {
       try {
         if (user) {
-          setIsLoading(true);
+          //setIsLoading(true);
           const p = myParticipantId
             ? await GetSelectedParticipant(myParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
           localStorage.setItem('lastSelectedParticipantId', p.id.toString());
-          setIsLoading(false);
+          //setIsLoading(false);
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
       } finally {
-        setIsLoading(false);
+        //setIsLoading(false);
       }
     };
-    if (myParticipantId !== participant?.id) loadParticipant();
+    if (!participant || myParticipantId !== participant?.id) loadParticipant();
   }, [user, participant, throwError, myParticipantId]);
 
   const participantContext = useMemo(
