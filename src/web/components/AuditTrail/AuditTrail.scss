@@ -1,0 +1,73 @@
+.audit-trail-table-container {
+  .audit-log-table {
+    font-size: 0.875rem;
+    width: 100%;
+
+    thead {
+      font-weight: 700;
+      border: none;
+    }
+
+    td {
+      padding-top: 15px;
+      padding-bottom: 15px;
+
+      &.succeeded {
+        width: 5%;
+        text-align: center;
+      }
+
+      &.event-data {
+        width: 50%;
+      }
+
+      .icon_x {
+        color: red;
+      }
+
+      .icon_check {
+        color: green;
+      }
+    }
+  }
+
+  .audit-trail-table-header {
+    display: flex;
+    justify-content: end;
+    align-items: baseline;
+    padding-bottom: 6px;
+
+    &-right {
+      display: flex;
+      justify-content: right;
+    }
+
+    .audit-trail-search-bar-container {
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid var(--theme-action);
+      padding: 6px 2px;
+      ::placeholder {
+        color: var(--theme-search-text);
+        opacity: 1;
+      }
+      margin-right: 20px;
+    }
+
+    .audit-trail-search-bar-icon {
+      color: var(--theme-search-text);
+      height: 16px;
+      margin-left: 8px;
+    }
+
+    .audit-trail-search-bar {
+      width: 100%;
+      border: none;
+      outline: none;
+      color: var(--theme-search-text);
+      font-weight: 400;
+      font-size: 0.75rem;
+      background: none;
+    }
+  }
+}
