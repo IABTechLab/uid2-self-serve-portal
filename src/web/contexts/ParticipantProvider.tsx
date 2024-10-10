@@ -28,15 +28,10 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const user = LoggedInUser?.user || null;
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
-  // console.log(location);
-  // console.log(parsedParticipantId);
   const lastSelectedParticipant = localStorage.getItem('lastSelectedParticipantId');
   const parsedLastSelectedParticipant = parseInt(lastSelectedParticipant ?? '', 10);
-  console.log(parsedLastSelectedParticipant);
 
   const myParticipantId = parsedParticipantId ?? parsedLastSelectedParticipant;
-
-  console.log(myParticipantId);
 
   useEffect(() => {
     if (
