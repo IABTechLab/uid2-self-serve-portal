@@ -45,14 +45,15 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   useEffect(() => {
     const loadParticipant = async () => {
-      setIsLoading(true);
       try {
         if (user) {
+          setIsLoading(true);
           const p = myParticipantId
             ? await GetSelectedParticipant(myParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
           localStorage.setItem('lastSelectedParticipantId', p.id.toString());
+          setIsLoading(false);
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
@@ -60,7 +61,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
         setIsLoading(false);
       }
     };
-    if (!participant || myParticipantId !== participant.id) loadParticipant();
+    if (myParticipantId !== participant?.id) loadParticipant();
   }, [user, participant, throwError, myParticipantId]);
 
   const participantContext = useMemo(
