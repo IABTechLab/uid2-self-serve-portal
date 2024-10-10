@@ -28,6 +28,15 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
   const user = LoggedInUser?.user || null;
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
+  // console.log(location);
+  // console.log(parsedParticipantId);
+  const lastSelectedParticipant = localStorage.getItem('lastSelectedParticipantId');
+  const parsedLastSelectedParticipant = parseInt(lastSelectedParticipant ?? '', 10);
+  console.log(parsedLastSelectedParticipant);
+
+  const myParticipantId = parsedParticipantId ?? parsedLastSelectedParticipant;
+
+  console.log(myParticipantId);
 
   useEffect(() => {
     if (
@@ -44,10 +53,11 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       try {
         if (user) {
-          const p = parsedParticipantId
-            ? await GetSelectedParticipant(parsedParticipantId)
+          const p = myParticipantId
+            ? await GetSelectedParticipant(myParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
+          localStorage.setItem('lastSelectedParticipantId', p.id.toString());
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
@@ -55,8 +65,8 @@ function ParticipantProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     };
-    if (!participant) loadParticipant();
-  }, [user, participant, throwError, parsedParticipantId]);
+    if (!participant || myParticipantId !== participant.id) loadParticipant();
+  }, [user, participant, throwError, myParticipantId]);
 
   const participantContext = useMemo(
     () => ({

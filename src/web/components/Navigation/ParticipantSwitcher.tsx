@@ -20,24 +20,28 @@ export function ParticipantSwitcher() {
       name: value.name,
     })) ?? [];
 
-  const lastSelectedParticipantId = localStorage.getItem('lastSelectedParticipantId');
-  const currentParticipantOptionId = lastSelectedParticipantId
-    ? parseInt(lastSelectedParticipantId, 10)
-    : participant?.id;
+  // const lastSelectedParticipantId = localStorage.getItem('lastSelectedParticipantId');
+  // const currentParticipantOptionId = lastSelectedParticipantId
+  //   ? parseInt(lastSelectedParticipantId, 10)
+  //   : participant?.id;
+  // const currentParticipantOption = participantOptions.find(
+  //   (option) => option.id === currentParticipantOptionId
+  // );
+
   const currentParticipantOption = participantOptions.find(
-    (option) => option.id === currentParticipantOptionId
+    (option) => option.id === participant?.id
   );
 
   const handleOnSelectedChange = (selectedParticipantId: SelectOption<number>) => {
     const newPath = getPathWithParticipant(location.pathname, selectedParticipantId.id);
     navigate(newPath);
-    const selectedParticipant = LoggedInUser?.user?.participants?.find(
-      (p) => p.id === selectedParticipantId.id
-    );
-    if (selectedParticipant) {
-      setParticipant(selectedParticipant);
-      localStorage.setItem('lastSelectedParticipantId', selectedParticipant.id.toString());
-    }
+    // const selectedParticipant = LoggedInUser?.user?.participants?.find(
+    //   (p) => p.id === selectedParticipantId.id
+    // );
+    // if (selectedParticipant) {
+    //   setParticipant(selectedParticipant);
+    //   localStorage.setItem('lastSelectedParticipantId', selectedParticipant.id.toString());
+    // }
   };
 
   const showDropdown = (LoggedInUser?.user?.participants?.length ?? 0) > 1;
