@@ -10,7 +10,6 @@ import './ParticipantSwitcher.scss';
 
 export function ParticipantSwitcher() {
   const { participant } = useContext(ParticipantContext);
-  console.log(participant);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const location = useLocation();
