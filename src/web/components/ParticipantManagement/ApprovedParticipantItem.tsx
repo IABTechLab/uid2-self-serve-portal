@@ -7,6 +7,7 @@ import { UserDTO } from '../../../api/entities/User';
 import { UpdateParticipantForm } from '../../services/participant';
 import ApiRolesCell from '../ApiKeyManagement/ApiRolesCell';
 import ActionButton from '../Core/Buttons/ActionButton';
+import { LabelRow } from '../Core/Labels/LabelRow';
 import EditParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
@@ -30,17 +31,6 @@ export function ApprovedParticipantItem({
     setShowEditParticipantDialog(!showEditParticipantDialog);
   };
 
-  function getParticipantTypes(
-    currentParticipantTypes?: ApprovedParticipantProps['participant']['types']
-  ) {
-    if (!currentParticipantTypes) return null;
-    return currentParticipantTypes.map((pt) => (
-      <div className='participant-item-type-label' key={pt.typeName}>
-        {pt.typeName}
-      </div>
-    ));
-  }
-
   function getApproverDateString(dateApproved: Date | undefined) {
     let dateString: string = '';
     if (dateApproved) {
@@ -59,7 +49,7 @@ export function ApprovedParticipantItem({
     <tr className='participant-management-item'>
       <td>{participant.name}</td>
       <td>
-        <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
+        <LabelRow labelNames={participant.types?.map((t) => t.typeName) ?? []} />
       </td>
       <td>
         <div className='approver-name'>{getApprover(participant.approver)}</div>

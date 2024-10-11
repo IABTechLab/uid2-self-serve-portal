@@ -2,10 +2,11 @@ import { useState } from 'react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { ParticipantRequestDTO } from '../../../api/routers/participants/participantsRouter';
+import { ParticipantRequestDTO } from '../../../api/services/participantsService';
 import { ParticipantApprovalFormDetails } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
+import { LabelRow } from '../Core/Labels/LabelRow';
 import ParticipantApprovalForm from './ParticipantApprovalForm';
 
 import './ParticipantManagementItem.scss';
@@ -26,17 +27,6 @@ export function ParticipantRequestItem({
   const [hasError, setHasError] = useState<boolean>(false);
   const [showApproveParticipantDialog, setShowApproveParticipantDialog] = useState(false);
 
-  function getParticipantTypes(
-    currentParticipantTypes?: ParticipantRequestProps['participantRequest']['types']
-  ) {
-    if (!currentParticipantTypes) return null;
-    return currentParticipantTypes.map((pt) => (
-      <div className='participant-item-type-label' key={pt.typeName}>
-        {pt.typeName}
-      </div>
-    ));
-  }
-
   const handleApprove = async (formData: ParticipantApprovalFormDetails) => {
     try {
       await onApprove(participant.id, formData);
@@ -55,7 +45,7 @@ export function ParticipantRequestItem({
         <div className='participant-name'>{participant.name}</div>
       </td>
       <td>
-        <div className='participant-item-types'>{getParticipantTypes(participant.types)}</div>
+        <LabelRow labelNames={participant.types?.map((t) => t.typeName) ?? []} />
       </td>
       <td>
         <div className='participant-item-name'>{participant.requestingUser.fullName}</div>

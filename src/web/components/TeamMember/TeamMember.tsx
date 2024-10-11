@@ -8,6 +8,7 @@ import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
+import { Label } from '../Core/Labels/Label';
 import { SuccessToast } from '../Core/Popups/Toast';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
@@ -89,7 +90,11 @@ function TeamMember({
       <td>
         <div className='name-cell'>
           {`${person.firstName} ${person.lastName}`}
-          {person.acceptedTerms || <div className='pending-label'>Pending</div>}
+          {person.acceptedTerms || (
+            <div className='pending-label'>
+              <Label text='Pending' />
+            </div>
+          )}
         </div>
       </td>
       <td>{person.email}</td>

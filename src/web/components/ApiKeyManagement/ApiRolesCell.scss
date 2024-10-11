@@ -1,21 +1,5 @@
 .api-roles-cell {
-  display: flex;
-  .api-role-boxes {
-    display: flex;
-    font-size: 0.75rem;
-    line-height: 1.15;
-
-    > div {
-      background: var(--theme-api-roles-cell);
-      border-radius: 3px;
-      padding: 4px 8px;
-      margin-right: 8px;
-    }
-
-    .api-role-box {
-      display: flex;
-      gap: 5px;
-      color: var(--theme-api-roles-box);
-    }
+  .label {
+    background-color: var(--theme-api-roles-cell);
   }
 }
