@@ -7,7 +7,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import AuditLog from './AuditTrail';
+import AuditLog from './AuditLog';
 
 import './AuditTrail.scss';
 
@@ -105,7 +105,7 @@ function AuditLogTable({ auditTrail }: AuditLogTableProps) {
 
       {!auditTrail.length && (
         <TableNoDataPlaceholder
-          icon={<img src='/email-icon.svg' alt='email-icon' />}
+          icon={<img src='/document.svg' alt='email-icon' />}
           title='No audit logs for this participant'
         >
           <span>There are no audit logs.</span>

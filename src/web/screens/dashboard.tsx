@@ -6,7 +6,7 @@ import { TermsAndConditionsDialog } from '../components/TermsAndConditions/Terms
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
-import { AuditTrailRoute } from './auditTrail';
+import { AuditTrailRoute } from './auditTrailScreen';
 import { ClientSideIntegrationRoute } from './clientSideIntegration';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
