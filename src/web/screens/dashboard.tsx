@@ -6,7 +6,7 @@ import { TermsAndConditionsDialog } from '../components/TermsAndConditions/Terms
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
-import { AuditLogsRoute } from './auditTrail';
+import { AuditTrailRoute } from './auditTrail';
 import { ClientSideIntegrationRoute } from './clientSideIntegration';
 import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
@@ -30,7 +30,7 @@ export const StandardRoutes: PortalRoute[] = [
   TermsOfServiceRoute,
   ApiKeyManagementRoute,
   ClientSideIntegrationRoute,
-  AuditLogsRoute,
+  AuditTrailRoute,
 ];
 
 export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];

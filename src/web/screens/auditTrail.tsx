@@ -15,7 +15,7 @@ const loader = makeParticipantLoader((participantId) => {
   return defer({ auditTrail });
 });
 
-function AuditLogs() {
+function AuditTrail() {
   const data = useLoaderData<typeof loader>();
 
   return (
@@ -32,10 +32,11 @@ function AuditLogs() {
   );
 }
 
-export const AuditLogsRoute: PortalRoute = {
-  description: 'Audit Logs',
-  element: <AuditLogs />,
+export const AuditTrailRoute: PortalRoute = {
+  description: 'Audit Trail',
+  element: <AuditTrail />,
   errorElement: <RouteErrorBoundary />,
-  path: '/participant/:participantId/auditLogs',
+  path: '/participant/:participantId/auditTrail',
   loader,
+  isHidden: true,
 };

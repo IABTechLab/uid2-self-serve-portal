@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
+import { AuditTrailRoute } from '../../screens/auditTrail';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
@@ -36,6 +37,9 @@ export function PortalHeader({
   const { LoggedInUser } = useContext(CurrentUserContext);
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
+  if (LoggedInUser?.user?.isApprover) {
+    routes.push(AuditTrailRoute);
+  }
   const showUserNavigationAndSettings =
     LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
 
