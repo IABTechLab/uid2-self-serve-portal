@@ -73,7 +73,7 @@ function AuditLogTable({ auditTrail }: AuditLogTableProps) {
               type='text'
               className='audit-trail-search-bar'
               onChange={handleSearch}
-              placeholder='Search Audit Trail'
+              placeholder='Search audit trail'
               value={searchText}
             />
             <FontAwesomeIcon icon='search' className='audit-trail-search-bar-icon' />
@@ -115,7 +115,7 @@ function AuditLogTable({ auditTrail }: AuditLogTableProps) {
   );
 }
 
-export default function BusinessContactsTable(props: AuditLogTableProps) {
+export default function AuditTrailTable(props: AuditLogTableProps) {
   return (
     <SortableProvider>
       <AuditLogTable {...props} />

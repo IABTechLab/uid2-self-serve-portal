@@ -14,7 +14,7 @@ export function getRoleNamesByIds(ids: number[]) {
       case 2:
         return 'Generator';
       case 3:
-        return 'ID Reader';
+        return 'Bidder';
       case 4:
         return 'Sharer';
       default:

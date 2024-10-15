@@ -22,9 +22,9 @@ export const getPrettyAuditDetails = (eventType: AuditTrailEvents, eventData: un
     let val = data[key];
     // make data more human-readable
     if (key.toLowerCase().indexOf('apiroles') > -1) {
-      const roleData = val as string[];
+      const apiRoleData = val as string[];
       // some audit records use ids rather than names for the roles
-      if (roleData.length > 0 && !isNaN(Number(roleData[0]))) {
+      if (apiRoleData.length > 0 && !isNaN(Number(apiRoleData[0]))) {
         val = getRoleNamesByIds(val as number[]);
       }
     } else if (key.toLowerCase().indexOf('participanttypes') > -1) {

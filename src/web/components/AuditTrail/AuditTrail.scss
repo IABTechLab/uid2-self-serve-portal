@@ -9,8 +9,7 @@
     }
 
     td {
-      padding-top: 15px;
-      padding-bottom: 15px;
+      padding: 15px 20px 15px;
 
       &.succeeded {
         width: 5%;
@@ -35,7 +34,7 @@
     display: flex;
     justify-content: end;
     align-items: baseline;
-    padding-bottom: 6px;
+    padding-bottom: 10px;
 
     &-right {
       display: flex;
@@ -51,7 +50,6 @@
         color: var(--theme-search-text);
         opacity: 1;
       }
-      margin-right: 20px;
     }
 
     .audit-trail-search-bar-icon {
