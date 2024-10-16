@@ -8,7 +8,13 @@ import { SelectDropdown, SelectOption } from '../Input/SelectDropdown';
 
 import './ParticipantSwitcher.scss';
 
-export function ParticipantSwitcher() {
+type ParticipantSwitcherProps = Readonly<{
+  noInitialValue?: boolean;
+}>;
+
+export function ParticipantSwitcher({
+  noInitialValue,
+}: ParticipantSwitcherProps) {
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
@@ -35,7 +41,7 @@ export function ParticipantSwitcher() {
     <div className='participant-switcher'>
       {showDropdown ? (
         <SelectDropdown
-          initialValue={currentParticipantOption}
+          initialValue={noInitialValue ? undefined : currentParticipantOption}
           options={participantOptions}
           onSelectedChange={handleOnSelectedChange}
         />
