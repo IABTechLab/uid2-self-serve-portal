@@ -52,9 +52,6 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           const p = currentParticipantId
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
-          // if (p.id) {
-          //   setParticipant(p);
-          // }
           setParticipant(p);
           localStorage.setItem('lastSelectedParticipantId', p.id.toString());
         }
