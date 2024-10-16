@@ -28,7 +28,7 @@ function AppContent() {
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;
   }
-  if (LoggedInUser && (!participant || !participant.id)) {
+  if (LoggedInUser && !participant) {
     return <NoParticipantAccessView />;
   }
 
