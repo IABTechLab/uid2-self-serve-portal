@@ -38,7 +38,6 @@ export function ParticipantSwitcher() {
           initialValue={currentParticipantOption}
           options={participantOptions}
           onSelectedChange={handleOnSelectedChange}
-          updatedValue={currentParticipantOption}
         />
       ) : (
         participant && <div className='participant-name'>{participant.name}</div>

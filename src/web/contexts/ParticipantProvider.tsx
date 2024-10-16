@@ -46,6 +46,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   useEffect(() => {
     const loadParticipant = async () => {
+      setIsLoading(true);
       try {
         if (user) {
           const p = currentParticipantId
