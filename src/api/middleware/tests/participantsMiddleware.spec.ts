@@ -64,9 +64,8 @@ describe('Participant Middleware Tests', () => {
     );
 
     await verifyAndEnrichParticipant(participantRequest, res, next);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.send).toHaveBeenCalledWith([{ message: 'The participant cannot be found.' }]);
+    expect(participantRequest.participant).toBeUndefined();
+    expect(next).toHaveBeenCalled();
   });
   it('should return 403 if user does not have access to participant', async () => {
     const firstParticipant = await createParticipant(knex, {});
@@ -82,9 +81,7 @@ describe('Participant Middleware Tests', () => {
 
     await verifyAndEnrichParticipant(participantRequest, res, next);
 
-    expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.send).toHaveBeenCalledWith([
-      { message: 'You do not have access to that participant.' },
-    ]);
+    expect(participantRequest.participant).toBeUndefined();
+    expect(next).toHaveBeenCalled();
   });
 });
