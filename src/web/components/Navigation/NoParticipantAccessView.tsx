@@ -10,7 +10,7 @@ export function NoParticipantAccessView() {
         Use the dropdown below to navigate to a participant you have access to.
       </p>
       <div className='switcher'>
-        <ParticipantSwitcher blankInitialValue />
+        <ParticipantSwitcher noInitialValue />
       </div>
     </div>
   );
