@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { ErrorView } from './ErrorView';
 
-import '../../../utils/errorHandler.scss';
+import './ErrorView.scss';
 
 const meta: Meta<typeof ErrorView> = {
   component: ErrorView,

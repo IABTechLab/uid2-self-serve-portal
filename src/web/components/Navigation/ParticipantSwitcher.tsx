@@ -13,7 +13,7 @@ type ParticipantSwitcherProps = Readonly<{
 }>;
 
 export function ParticipantSwitcher({ blankInitialValue }: ParticipantSwitcherProps) {
-  const { participant, setParticipant } = useContext(ParticipantContext);
+  const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,24 +24,13 @@ export function ParticipantSwitcher({ blankInitialValue }: ParticipantSwitcherPr
       name: value.name,
     })) ?? [];
 
-  const lastSelectedParticipantId = localStorage.getItem('lastSelectedParticipantId');
-  const currentParticipantOptionId = lastSelectedParticipantId
-    ? parseInt(lastSelectedParticipantId, 10)
-    : participant?.id;
   const currentParticipantOption = participantOptions.find(
-    (option) => option.id === currentParticipantOptionId
+    (option) => option.id === participant?.id
   );
 
   const handleOnSelectedChange = (selectedParticipantId: SelectOption<number>) => {
     const newPath = getPathWithParticipant(location.pathname, selectedParticipantId.id);
     navigate(newPath);
-    const selectedParticipant = LoggedInUser?.user?.participants?.find(
-      (p) => p.id === selectedParticipantId.id
-    );
-    if (selectedParticipant) {
-      setParticipant(selectedParticipant);
-      localStorage.setItem('lastSelectedParticipantId', selectedParticipant.id.toString());
-    }
   };
 
   const showDropdown = (LoggedInUser?.user?.participants?.length ?? 0) > 1;
@@ -53,6 +42,7 @@ export function ParticipantSwitcher({ blankInitialValue }: ParticipantSwitcherPr
           initialValue={blankInitialValue ? undefined : currentParticipantOption}
           options={participantOptions}
           onSelectedChange={handleOnSelectedChange}
+          updatedValue={currentParticipantOption}
         />
       ) : (
         participant && <div className='participant-name'>{participant.name}</div>
