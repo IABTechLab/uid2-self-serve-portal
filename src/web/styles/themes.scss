@@ -1,6 +1,6 @@
 @import 'colors';
 
-.app {
+#root {
   --theme-primary: black;
   --theme-secondary: black;
   --theme-title: #030a40;
@@ -62,7 +62,7 @@
   --theme-documentation-card: #0459fd;
 }
 
-.app.darkmode {
+#root.darkmode {
   --theme-primary: #{$color-gray};
   --theme-secondary: white;
   --theme-highlight: #{$color-lemon};
