@@ -47,6 +47,8 @@ export class AuditTrail extends BaseModel {
   declare event: AuditTrailEvents;
   declare eventData: unknown;
   declare participantId?: number | null;
+  // eslint-disable-next-line camelcase
+  declare updated_at: Date;
 }
 
 export type AuditTrailDTO = ModelObjectOpt<AuditTrail>;
