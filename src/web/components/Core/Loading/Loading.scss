@@ -1,4 +1,7 @@
 .loading-component {
+  background-color: var(--theme-background-content);
+  color: var(--theme-secondary);
+  height: 100vh;
   span {
     padding-left: 12px;
   }
