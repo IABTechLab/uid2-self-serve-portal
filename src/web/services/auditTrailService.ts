@@ -6,7 +6,7 @@ import { backendError } from '../utils/apiError';
 import { getRoleNamesByIds } from '../utils/apiRoles';
 import { camelCaseToSpaced } from '../utils/textHelpers';
 
-export const GetAuditLogs = async (participantId: number) => {
+export const GetAuditTrail = async (participantId: number) => {
   try {
     const result = await axios.get<AuditTrailDTO[]>(`/participants/${participantId}/auditTrail`);
     return result.data;

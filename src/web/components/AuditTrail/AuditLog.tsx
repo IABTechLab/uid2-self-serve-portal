@@ -5,11 +5,11 @@ import { getPrettyAuditDetails } from '../../services/auditTrailService';
 
 import './AuditTrail.scss';
 
-type AuditLogProps = Readonly<{
+type AuditTrailProps = Readonly<{
   log: AuditTrailDTO;
 }>;
 
-function AuditLog({ log }: AuditLogProps) {
+function AuditLog({ log }: AuditTrailProps) {
   const formattedEventData = getPrettyAuditDetails(log.eventData);
 
   const eventDate = new Date(log.updated_at).toLocaleString();

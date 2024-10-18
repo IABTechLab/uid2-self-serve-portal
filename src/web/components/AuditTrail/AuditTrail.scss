@@ -18,6 +18,8 @@
 
       &.event-data {
         width: 50%;
+        max-width: 500px;
+        word-wrap: break-word;
       }
 
       .icon_x {

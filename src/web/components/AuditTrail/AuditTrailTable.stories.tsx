@@ -2,15 +2,15 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { AuditTrailEvents } from '../../../api/entities/AuditTrail';
-import AuditLogTable from './AuditTrailTable';
+import AuditTrailTable from './AuditTrailTable';
 
-const meta: Meta<typeof AuditLogTable> = {
-  title: 'Audit Logs/Audit Logs Table',
-  component: AuditLogTable,
+const meta: Meta<typeof AuditTrailTable> = {
+  title: 'Audit Trail/Audit Trail Table',
+  component: AuditTrailTable,
 };
 
 export default meta;
-type Story = StoryObj<typeof AuditLogTable>;
+type Story = StoryObj<typeof AuditTrailTable>;
 
 export const WithoutLogRows: Story = {
   args: {

@@ -11,12 +11,12 @@ import AuditLog from './AuditLog';
 
 import './AuditTrail.scss';
 
-type AuditLogTableProps = Readonly<{
+type AuditTrailTableProps = Readonly<{
   auditTrail: AuditTrailDTO[];
 }>;
 
-function AuditLogTable({ auditTrail }: AuditLogTableProps) {
-  const initialRowsPerPage = 25;
+function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
+  const initialRowsPerPage = 10;
 
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -97,13 +97,7 @@ function AuditLogTable({ auditTrail }: AuditLogTableProps) {
           ))}
         </tbody>
       </table>
-      <PagingTool
-        numberTotalRows={searchedAuditRows.length}
-        initialPageNumber={pageNumber}
-        onChangeRows={onChangeDisplayedAuditRows}
-      />
-
-      {!auditTrail.length && (
+      {!searchedAuditRows.length && (
         <TableNoDataPlaceholder
           icon={<img src='/document.svg' alt='email-icon' />}
           title='No audit logs for this participant'
@@ -111,14 +105,21 @@ function AuditLogTable({ auditTrail }: AuditLogTableProps) {
           <span>There are no audit logs.</span>
         </TableNoDataPlaceholder>
       )}
+      {searchedAuditRows.length > rowsPerPage && (
+        <PagingTool
+          numberTotalRows={searchedAuditRows.length}
+          initialPageNumber={pageNumber}
+          onChangeRows={onChangeDisplayedAuditRows}
+        />
+      )}
     </div>
   );
 }
 
-export default function AuditTrailTable(props: AuditLogTableProps) {
+export default function AuditTrailTable(props: AuditTrailTableProps) {
   return (
     <SortableProvider>
-      <AuditLogTable {...props} />
+      <AuditTrailTableComponent {...props} />
     </SortableProvider>
   );
 }
