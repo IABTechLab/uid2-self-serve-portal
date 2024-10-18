@@ -26,6 +26,7 @@ import {
   handleGetApprovedParticipants,
   handleGetParticipantsAwaitingApproval,
 } from './participantsApproval';
+import { handleAuditTrail } from './participantsAuditTrail';
 import {
   handleCreateParticipant,
   handleCreateParticipantFromRequest,
@@ -132,6 +133,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/:participantId/appNames', handleGetParticipantAppNames);
   participantsRouter.post('/:participantId/appNames', handleSetParticipantAppNames);
+  participantsRouter.get('/:participantId/auditTrail', handleAuditTrail);
 
   participantsRouter.get('/:participantId/users', handleGetParticipantUsers);
   const participantUsersRouter = createParticipantUsersRouter();

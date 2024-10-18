@@ -71,3 +71,8 @@ export const isAlpha = (s: string) => {
 export const validateEmail = (value: string) => {
   return validator.isEmail(value);
 };
+
+// for instance: camelCase => Camel Case
+export const camelCaseToSpaced = (value: string) => {
+  return `${value[0].toUpperCase() + value.substring(1).replace(/([a-z])([A-Z])/g, '$1 $2')}`;
+};

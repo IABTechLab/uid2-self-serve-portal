@@ -120,6 +120,27 @@ export const mapClientTypesToAdminEnums = (
   });
 };
 
+export const mapClientTypeIdsToAdminEnums = (types: number[]): string[] => {
+  return types.map((type) => {
+    let adminEnum = 'UNKNOWN';
+    switch (type) {
+      case 1:
+        adminEnum = 'DSP';
+        break;
+      case 2:
+        adminEnum = 'ADVERTISER';
+        break;
+      case 3:
+        adminEnum = 'DATA_PROVIDER';
+        break;
+      case 4:
+        adminEnum = 'PUBLISHER';
+        break;
+    }
+    return adminEnum;
+  });
+};
+
 export type ApiKeyDTO = {
   key_id: string;
   name: string;
