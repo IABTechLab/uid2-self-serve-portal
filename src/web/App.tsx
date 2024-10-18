@@ -1,6 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext, useRef } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
 import { ErrorView } from './components/Core/ErrorView/ErrorView';
@@ -24,11 +24,12 @@ function AppContent() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
   const isLocalDev = process.env.NODE_ENV === 'development';
+  const location = useLocation();
 
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;
   }
-  if (LoggedInUser && !participant) {
+  if (location.pathname !== '/account/create' && LoggedInUser && !participant) {
     return <NoParticipantAccessView />;
   }
 
