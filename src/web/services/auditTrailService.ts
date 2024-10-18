@@ -4,6 +4,7 @@ import { AuditTrailDTO, AuditTrailEvents } from '../../api/entities/AuditTrail';
 import { mapClientTypeIdsToAdminEnums } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { getRoleNamesByIds } from '../utils/apiRoles';
+import { camelCaseToSpaced } from '../utils/textHelpers';
 
 export const GetAuditLogs = async (participantId: number) => {
   try {
@@ -14,30 +15,26 @@ export const GetAuditLogs = async (participantId: number) => {
   }
 };
 
-export const getPrettyAuditDetails = (eventType: AuditTrailEvents, eventData: unknown) => {
+export const getPrettyAuditDetails = (eventData: unknown) => {
   const data = eventData as Record<string, unknown>;
   const outputArray = [];
-  // eslint-disable-next-line guard-for-in
-  for (const key in data) {
+  for (const key of Object.keys(data)) {
     let val = data[key];
     // make data more human-readable
-    if (key.toLowerCase().indexOf('apiroles') > -1) {
+    if (key.toLowerCase().includes('apiroles')) {
       const apiRoleData = val as string[];
       // some audit records use ids rather than names for the roles
       if (apiRoleData.length > 0 && !isNaN(Number(apiRoleData[0]))) {
         val = getRoleNamesByIds(val as number[]);
       }
-    } else if (key.toLowerCase().indexOf('participanttypes') > -1) {
+    } else if (key.toLowerCase().includes('participanttypes')) {
       const typeData = val as string[];
       // some audit records use ids rather than names for the types
       if (typeData.length > 0 && !isNaN(Number(typeData[0]))) {
         val = mapClientTypeIdsToAdminEnums(val as number[]);
       }
     }
-    // convert key from camelCase
-    outputArray.push(
-      `${key[0].toUpperCase() + key.substring(1).replace(/([a-z])([A-Z])/g, '$1 $2')}: ${val}`
-    );
+    outputArray.push(`${camelCaseToSpaced(key)}: ${val}`);
   }
   const outputString = outputArray.join(' | ');
   return outputString;

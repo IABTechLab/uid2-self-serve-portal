@@ -10,7 +10,7 @@ type AuditLogProps = Readonly<{
 }>;
 
 function AuditLog({ log }: AuditLogProps) {
-  const formattedEventData = getPrettyAuditDetails(log.event, log.eventData);
+  const formattedEventData = getPrettyAuditDetails(log.eventData);
 
   const eventDate = new Date(log.updated_at).toLocaleString();
 
