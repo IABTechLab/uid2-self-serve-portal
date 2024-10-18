@@ -144,14 +144,12 @@
         <div id="kc-info" class="${properties.kcSignUpClass!}">
             <div id="kc-info-wrapper" class="${properties.kcInfoAreaWrapperClass!}">
                 <#nested "info">
-
             </div>
         </div>   
     </#if>
     <br />
     <a id="report-vulnerability" href='https://www.thetradedesk.com/us/trust/report-a-vulnerability' target='_blank'>Report a Vulnerability</a>
     </div>
-    
   </div>
 </body>
 </html>
