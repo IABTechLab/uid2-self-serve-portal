@@ -321,8 +321,8 @@ div.kc-logo-text {
   background-color: var(--pf-c-button--disabled--BackgroundColor);
 }
 
-#report-vulnerability {
-  color: gray;
+.report-vulnerability {
+  color: gray !important;
 }
 
 /* End Recovery codes */
