@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AuditTrailDTO, AuditTrailEvents } from '../../api/entities/AuditTrail';
+import { AuditTrailDTO } from '../../api/entities/AuditTrail';
 import { mapClientTypeIdsToAdminEnums } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { getRoleNamesByIds } from '../utils/apiRoles';
