@@ -53,7 +53,9 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
-          localStorage.setItem('lastSelectedParticipantId', p.id.toString());
+          if (p.status === ParticipantStatus.Approved) {
+            localStorage.setItem('lastSelectedParticipantId', p.id.toString());
+          }
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
