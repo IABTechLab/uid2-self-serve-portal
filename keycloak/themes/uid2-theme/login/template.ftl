@@ -147,6 +147,8 @@
             </div>
         </div>
     </#if>
+    <br />
+    <a class="report-vulnerability" href='https://www.thetradedesk.com/us/trust/report-a-vulnerability' target='_blank'>Report a Vulnerability</a>
     </div>
   </div>
 </body>
