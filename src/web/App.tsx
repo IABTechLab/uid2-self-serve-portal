@@ -1,5 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
-import { StrictMode, useCallback, useContext, useRef } from 'react';
+import { StrictMode, useCallback, useContext } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { ParticipantStatus } from '../api/entities/Participant';
@@ -49,7 +49,6 @@ function AppContent() {
 
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const rootRef = useRef<HTMLDivElement>(null);
   const { keycloak, initialized } = useKeycloak();
   const logout = useCallback(() => {
     keycloak?.logout();
@@ -57,10 +56,10 @@ export function App() {
 
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) {
-      rootRef.current!.classList.add('darkmode');
+      document.getElementById('root')?.classList.add('darkmode');
       localStorage.setItem('isDarkMode', 'true');
     } else {
-      rootRef.current!.classList.remove('darkmode');
+      document.getElementById('root')?.classList.remove('darkmode');
       localStorage.setItem('isDarkMode', 'false');
     }
   };
@@ -75,7 +74,7 @@ export function App() {
     <StrictMode>
       <PortalErrorBoundary>
         <ParticipantProvider>
-          <div className='app' ref={rootRef}>
+          <div className='app'>
             <PortalHeader
               email={LoggedInUser?.profile?.email}
               fullName={fullName}
