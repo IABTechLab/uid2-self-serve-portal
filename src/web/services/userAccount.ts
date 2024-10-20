@@ -4,7 +4,10 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { UserCreationPartial, UserDTO } from '../../api/entities/User';
-import { UserWithIsApprover } from '../../api/services/usersService';
+import {
+  UserWithCurrentParticipantRoleNames,
+  UserWithIsApprover,
+} from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
@@ -22,7 +25,7 @@ export type InviteTeamMemberForm = {
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
-export type UserResponse = UserDTO;
+export type UserResponse = UserWithCurrentParticipantRoleNames;
 
 export async function GetLoggedInUserAccount(): Promise<UserWithIsApprover | null> {
   try {
