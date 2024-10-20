@@ -9,11 +9,14 @@ import {
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
-import { getAllUserFromParticipant, inviteUserToParticipant } from '../../services/usersService';
+import {
+  getAllUsersFromParticipantWithRoles,
+  inviteUserToParticipant,
+} from '../../services/usersService';
 
 export async function handleGetParticipantUsers(req: ParticipantRequest, res: Response) {
   const { participant } = req;
-  const users = await getAllUserFromParticipant(participant!);
+  const users = await getAllUsersFromParticipantWithRoles(participant!);
   return res.status(200).json(users);
 }
 

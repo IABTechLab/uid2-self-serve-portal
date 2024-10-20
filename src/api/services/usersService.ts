@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 import { Participant, ParticipantDTO } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { UserRoleId } from '../entities/UserRole';
+import { UserRole, UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getKcAdminClient } from '../keycloakAdminClient';
@@ -28,6 +28,9 @@ export interface SelfResendInviteRequest extends Request {
 }
 
 export type UserWithIsApprover = UserDTO & { isApprover: boolean };
+export type UserWithCurrentParticipantRoleNames = UserDTO & {
+  currentParticipantUserRoleNames?: string[];
+};
 
 export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
 
@@ -87,9 +90,39 @@ export const enrichUserWithIsApprover = async (user: User) => {
     isApprover: userIsApprover,
   };
 };
-export const getAllUserFromParticipant = async (participant: Participant) => {
+
+const usersWithCurrentParticipantUserRoleNames = async (users: User[], participantId: number) => {
+  const userRoles = await UserRole.query();
+  return users.map((user) => {
+    const { userToParticipantRoles, ...rest } = user;
+    return {
+      ...rest,
+      currentParticipantUserRoleNames: user?.userToParticipantRoles
+        ?.filter((x) => x.participantId === participantId)
+        .map((y) => {
+          const role = userRoles.find((r) => r.id === y.userRoleId);
+          return role ? role.roleName : null;
+        }),
+    };
+  });
+};
+
+export const getAllUsersFromParticipantWithRoles = async (participant: Participant) => {
   const participantUserIds = (
-    await UserToParticipantRole.query().where('participantId', '=', participant.id)
+    await UserToParticipantRole.query().where('participantId', participant.id)
+  ).map((userToParticipantRole) => userToParticipantRole.userId);
+
+  const usersWithParticipants = await User.query()
+    .whereIn('id', participantUserIds)
+    .where('deleted', 0)
+    .withGraphFetched('userToParticipantRoles');
+
+  return usersWithCurrentParticipantUserRoleNames(usersWithParticipants, participant.id);
+};
+
+export const getAllUsersFromParticipant = async (participant: Participant) => {
+  const participantUserIds = (
+    await UserToParticipantRole.query().where('participantId', participant.id)
   ).map((userToParticipantRole) => userToParticipantRole.userId);
 
   return User.query().whereIn('id', participantUserIds).where('deleted', 0);

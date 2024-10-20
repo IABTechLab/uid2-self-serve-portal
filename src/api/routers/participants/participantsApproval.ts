@@ -21,7 +21,7 @@ import {
   updateParticipantAndTypesAndApiRoles,
   UserParticipantRequest,
 } from '../../services/participantsService';
-import { getAllUserFromParticipant } from '../../services/usersService';
+import { getAllUsersFromParticipant } from '../../services/usersService';
 
 export const handleGetParticipantsAwaitingApproval = async (
   req: ParticipantRequest,
@@ -70,7 +70,7 @@ export const handleApproveParticipant = async (req: UserParticipantRequest, res:
     traceId,
     async () => {
       const kcAdminClient = await getKcAdminClient();
-      const usersFromParticipant = await getAllUserFromParticipant(participant!);
+      const usersFromParticipant = await getAllUsersFromParticipant(participant!);
       // if there are no users, send email to the approver
       const emailRecipient = usersFromParticipant.length > 0 ? usersFromParticipant : [user!];
       await setSiteClientTypes(data);
