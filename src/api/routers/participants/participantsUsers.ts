@@ -6,12 +6,12 @@ import { UserJobFunction } from '../../entities/User';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import {
   constructAuditTrailObject,
-  performAsyncOperationWithAuditTrail
+  performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
 import {
   getAllUsersFromParticipantWithRoles,
-  inviteUserToParticipant
+  inviteUserToParticipant,
 } from '../../services/usersService';
 
 export async function handleGetParticipantUsers(req: ParticipantRequest, res: Response) {
