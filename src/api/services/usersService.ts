@@ -91,7 +91,7 @@ export const enrichUserWithIsApprover = async (user: User) => {
   };
 };
 
-const usersWithCurrentParticipantUserRoleNames = async (users: User[], participantId: number) => {
+const mapUsersWithParticipantRoles = async (users: User[], participantId: number) => {
   const userRoles = await UserRole.query();
   return users.map((user) => {
     const { userToParticipantRoles, ...rest } = user;
@@ -117,7 +117,7 @@ export const getAllUsersFromParticipantWithRoles = async (participant: Participa
     .where('deleted', 0)
     .withGraphFetched('userToParticipantRoles');
 
-  return usersWithCurrentParticipantUserRoleNames(usersWithParticipants, participant.id);
+  return mapUsersWithParticipantRoles(usersWithParticipants, participant.id);
 };
 
 export const getAllUsersFromParticipant = async (participant: Participant) => {
