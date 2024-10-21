@@ -9,6 +9,7 @@ import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
 import { Label } from '../Core/Labels/Label';
+import { LabelRow } from '../Core/Labels/LabelRow';
 import { SuccessToast } from '../Core/Popups/Toast';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
@@ -99,6 +100,9 @@ function TeamMember({
       </td>
       <td>{person.email}</td>
       <td>{person.jobFunction}</td>
+      <td>
+        <LabelRow labelNames={person.currentParticipantUserRoleNames ?? []} />
+      </td>
       <td className='action'>
         <div className='action-cell'>
           {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
