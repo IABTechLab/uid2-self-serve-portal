@@ -13,9 +13,7 @@ export type EditDomainFormProps = {
 
 export async function GetDomainNames(participantId: number) {
   try {
-    const result = await axios.get<string[]>(
-      `/participants/${participantId}/domainNames`
-    );
+    const result = await axios.get<string[]>(`/participants/${participantId}/domainNames`);
     if (result.status === 200) {
       return result.data;
     }
@@ -29,12 +27,9 @@ export async function UpdateDomainNames(
   participantId: number
 ): Promise<UpdateCstgValuesResponse> {
   try {
-    const result = await axios.post<string[]>(
-      `/participants/${participantId}/domainNames`,
-      {
-        domainNames,
-      }
-    );
+    const result = await axios.post<string[]>(`/participants/${participantId}/domainNames`, {
+      domainNames,
+    });
     return { cstgValues: result.data, isValidCstgValues: true };
   } catch (e: unknown) {
     if (
