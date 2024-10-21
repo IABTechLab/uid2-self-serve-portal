@@ -1,6 +1,6 @@
 @import 'colors';
 
-.app {
+#root {
   --theme-primary: black;
   --theme-secondary: black;
   --theme-title: #030a40;
@@ -38,20 +38,20 @@
   --theme-success-icon: #035959;
   --theme-warning: #ffdb1d;
   --theme-label-background: #c0d6ff;
+  --theme-label-pending-background: rgb(120 204 0 / 40%);
+  --theme-api-roles-cell: #e9f896;
   --theme-search-bar-background: rgb(112 133 212 / 15%);
   --theme-scrollbar: #c0d6ff;
   --theme-disabled-button-text: #878787;
   --theme-disabled-icon: #d9d9d9;
   --theme-disabled-button: #d9d9d9;
   --theme-disabled-border: #b8b8b8;
-  --theme-label: rgb(120 204 0 / 40%);
   --theme-divider: #030a40;
   --theme-footer-divider: #0300a5;
   --theme-disabled-checkbox: #f2f2f3;
   --theme-account-pending-label: #e9f896;
   --theme-table-action-button: #0300a5;
   --theme-display-box: #c0d6ff60;
-  --theme-api-roles-cell: #e9f896;
   --theme-search-text: #0459fd;
   --theme-table-header-text: black;
   --theme-transparent-button: #0459fd;
@@ -62,7 +62,7 @@
   --theme-documentation-card: #0459fd;
 }
 
-.app.darkmode {
+#root.darkmode {
   --theme-primary: #{$color-gray};
   --theme-secondary: white;
   --theme-highlight: #{$color-lemon};
@@ -81,7 +81,7 @@
   --theme-background-table-header-border: white;
   --theme-input-border: white;
   --theme-api-roles-cell: #{$color-brighter-lime};
-  --theme-api-roles-box: black;
+  --theme-label-text: black;
   --theme-background-row: #d9d9d9;
   --theme-color-row: black;
   --theme-action: #7085d4;
