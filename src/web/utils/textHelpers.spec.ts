@@ -1,4 +1,5 @@
 import {
+  camelCaseToSpaced,
   deduplicateStrings,
   formatStringsWithSeparator,
   formatUnixDate,
@@ -278,6 +279,17 @@ describe('Text helper tests', () => {
     ];
     it.each(invalidTestEmails)('should return the email is invalid', (email) => {
       expect(validateEmail(email)).toEqual(false);
+    });
+  });
+  describe('check camelCaseToSpaced', () => {
+    const tests = [
+      { initial: 'camelCase', final: 'Camel Case' },
+      { initial: 'camelcase', final: 'Camelcase' },
+      { initial: 'camel Case', final: 'Camel Case' },
+      { initial: 'camel case', final: 'Camel case' },
+    ];
+    it.each(tests)('should correctly convert camelCase to spaced and capitalized', (wordPair) => {
+      expect(camelCaseToSpaced(wordPair.initial)).toEqual(wordPair.final);
     });
   });
 });
