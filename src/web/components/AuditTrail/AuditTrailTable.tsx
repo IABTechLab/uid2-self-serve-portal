@@ -7,7 +7,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import AuditLog from './AuditLog';
+import AuditTrailRow from './AuditTrailRow';
 
 import './AuditTrail.scss';
 
@@ -93,7 +93,7 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
         </thead>
         <tbody>
           {pagedRows.map((log) => (
-            <AuditLog key={log.id} log={log} />
+            <AuditTrailRow key={log.id} log={log} />
           ))}
         </tbody>
       </table>

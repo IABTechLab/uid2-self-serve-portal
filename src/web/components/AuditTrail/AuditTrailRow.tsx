@@ -9,7 +9,7 @@ type AuditTrailProps = Readonly<{
   log: AuditTrailDTO;
 }>;
 
-function AuditLog({ log }: AuditTrailProps) {
+function AuditTrailRow({ log }: AuditTrailProps) {
   const formattedEventData = getPrettyAuditDetails(log.eventData);
 
   const eventDate = new Date(log.updated_at).toLocaleString();
@@ -31,4 +31,4 @@ function AuditLog({ log }: AuditTrailProps) {
   );
 }
 
-export default AuditLog;
+export default AuditTrailRow;
