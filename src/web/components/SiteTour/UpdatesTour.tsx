@@ -1,5 +1,7 @@
+import { useContext } from 'react';
 import Joyride, { Actions, CallBackProps } from 'react-joyride';
 
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { GetTourSteps, markTourAsSeen } from './tourStorage';
 
 function callback(data: CallBackProps) {
@@ -8,7 +10,8 @@ function callback(data: CallBackProps) {
 }
 
 export function UpdatesTour() {
-  const tourSteps = GetTourSteps();
+  const { LoggedInUser } = useContext(CurrentUserContext);
+  const tourSteps = GetTourSteps(LoggedInUser);
   const showTour = tourSteps.length > 0;
   const actionButtonStyle = {
     backgroundColor: '#cdf200', // --theme-button

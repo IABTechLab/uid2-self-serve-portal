@@ -1,6 +1,7 @@
 import Joyride from 'react-joyride';
 
 import config from '../../../../package.json';
+import { UserAccount } from '../../services/userAccount';
 
 const { version } = config;
 
@@ -15,6 +16,18 @@ const tourSteps: VersionedTourStep[] = [
     content: `We've moved some menu items to your profile dropdown.`,
     disableBeacon: true,
     version: '0.36.0',
+  },
+  {
+    target: `.participant-switcher`,
+    content: `You can now switch between participants that you have access to, and view or complete actions for the selected participant.`,
+    disableBeacon: true,
+    version: '0.48.0',
+  },
+  {
+    target: `.profile-dropdown-button`,
+    content: `Within this menu, we've added a new item, Audit Trail, so that you can view details of all past actions for the selected participant.`,
+    disableBeacon: true,
+    version: '0.48.0',
   },
 ];
 
@@ -42,6 +55,15 @@ function saveTourData(data: TourData) {
   localStorage.setItem(tourStorageKey, JSON.stringify(data));
 }
 
+function shouldRemoveParticipantSwitcherStep(step: VersionedTourStep, loggedInUser: UserAccount) {
+  if (step?.target === `.participant-switcher`) {
+    if ((loggedInUser?.user?.participants?.length ?? 0) <= 1) {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function markTourAsSeen() {
   const tourData = getTourData();
   if (!tourData.seenForVersions.includes(version)) tourData.seenForVersions.push(version);
@@ -58,13 +80,17 @@ export const compareVersions = (a: string, b: string): number => {
   return 0;
 };
 
-export function GetTourSteps(steps = tourSteps): VersionedTourStep[] {
+export function GetTourSteps(
+  loggedInUser: UserAccount | null,
+  steps = tourSteps
+): VersionedTourStep[] {
   // search seen steps for the highest version number
   const storedVersions = getTourData().seenForVersions;
   // Sort in reverse order - highest first
   storedVersions.sort((first, second) => compareVersions(second, first));
   const highestSeenVersion = storedVersions.length > 0 ? storedVersions[0] : '0.0.0';
   return steps.filter((step) => {
+    if (loggedInUser && shouldRemoveParticipantSwitcherStep(step, loggedInUser)) return;
     const stepVersionIsHigher = compareVersions(step?.version, highestSeenVersion) > 0;
     return stepVersionIsHigher;
   });
