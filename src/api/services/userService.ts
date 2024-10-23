@@ -26,7 +26,7 @@ const updateUserSchema = z.object({
   jobFunction: z.nativeEnum(UserJobFunction),
 });
 
-const updateUserRoleIdSchema = z.object({
+export const UpdateUserRoleIdSchema = z.object({
   userRoleId: z.nativeEnum(UserRoleId),
 });
 
@@ -102,7 +102,7 @@ export class UserService {
     const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
     const userData = updateUserSchema.parse(req.body);
-    const userRoleData = updateUserRoleIdSchema.parse(req.body);
+    const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
     const traceId = getTraceId(req);
 
     const auditTrailInsertObject = constructAuditTrailObject(

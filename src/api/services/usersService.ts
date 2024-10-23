@@ -162,24 +162,29 @@ export const createAndInviteKeycloakUser = async (
 const addAndInviteUserToParticipant = async (
   existingUser: UserDTO,
   participant: ParticipantDTO,
+  userRoleId: number,
   traceId: string
 ) => {
   await UserToParticipantRole.query().insert({
     userId: existingUser.id,
     participantId: participant.id,
-    userRoleId: UserRoleId.Admin,
+    userRoleId,
   });
   sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
 };
 
-const createUserInPortal = async (user: UserPartialDTO, participantId: number) => {
+const createUserInPortal = async (
+  user: UserPartialDTO,
+  participantId: number,
+  userRoleId: number
+) => {
   const newUser = await User.transaction(async (trx) => {
     const createdUser = await User.query(trx).insert(user);
     // Update the user/participant/role mapping
     await UserToParticipantRole.query(trx).insert({
       userId: createdUser?.id,
       participantId,
-      userRoleId: UserRoleId.Admin,
+      userRoleId,
     });
     return createdUser;
   });
@@ -189,14 +194,15 @@ const createUserInPortal = async (user: UserPartialDTO, participantId: number) =
 export const inviteUserToParticipant = async (
   userPartial: UserPartialDTO,
   participant: ParticipantDTO,
+  userRoleId: number,
   traceId: string
 ) => {
   const existingUser = await findUserByEmail(userPartial.email);
   if (existingUser) {
-    await addAndInviteUserToParticipant(existingUser, participant, traceId);
+    await addAndInviteUserToParticipant(existingUser, participant, userRoleId, traceId);
   } else {
     const { firstName, lastName, email } = userPartial;
     await createAndInviteKeycloakUser(firstName, lastName, email);
-    await createUserInPortal(userPartial, participant!.id);
+    await createUserInPortal(userPartial, participant!.id, userRoleId);
   }
 };
