@@ -55,9 +55,13 @@ function saveTourData(data: TourData) {
   localStorage.setItem(tourStorageKey, JSON.stringify(data));
 }
 
-function shouldRemoveParticipantSwitcherStep(step: VersionedTourStep, loggedInUser: UserAccount) {
+function shouldRemoveCurrentStep(step: VersionedTourStep, loggedInUser: UserAccount) {
   if (step?.target === `.participant-switcher`) {
     if ((loggedInUser?.user?.participants?.length ?? 0) <= 1) {
+      return true;
+    }
+  } else if (step?.target === `.profile-dropdown-button` && step?.version === '0.48.0') {
+    if (!loggedInUser.user?.isApprover) {
       return true;
     }
   }
@@ -90,7 +94,7 @@ export function GetTourSteps(
   storedVersions.sort((first, second) => compareVersions(second, first));
   const highestSeenVersion = storedVersions.length > 0 ? storedVersions[0] : '0.0.0';
   return steps.filter((step) => {
-    if (loggedInUser && shouldRemoveParticipantSwitcherStep(step, loggedInUser)) return;
+    if (loggedInUser && shouldRemoveCurrentStep(step, loggedInUser)) return;
     const stepVersionIsHigher = compareVersions(step?.version, highestSeenVersion) > 0;
     return stepVersionIsHigher;
   });
