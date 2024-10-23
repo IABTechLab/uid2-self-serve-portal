@@ -126,6 +126,7 @@ export class UserController {
 
     if (req.auth?.payload?.email === user?.email) {
       res.status(403).send([{ message: 'You do not have permission to remove yourself.' }]);
+      return;
     }
 
     await this.userService.removeUser(req);
