@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 import { Participant, ParticipantDTO } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { UserRole, UserRoleId } from '../entities/UserRole';
+import { UserRole, UserRoleDTO, UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getKcAdminClient } from '../keycloakAdminClient';
@@ -29,7 +29,7 @@ export interface SelfResendInviteRequest extends Request {
 
 export type UserWithIsApprover = UserDTO & { isApprover: boolean };
 export type UserWithCurrentParticipantRoleNames = UserDTO & {
-  currentParticipantUserRoleNames?: string[];
+  currentParticipantUserRoles?: UserRoleDTO[];
 };
 
 export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
@@ -97,11 +97,11 @@ const mapUsersWithParticipantRoles = async (users: User[], participantId: number
     const { userToParticipantRoles, ...rest } = user;
     return {
       ...rest,
-      currentParticipantUserRoleNames: user?.userToParticipantRoles
+      currentParticipantUserRoles: user?.userToParticipantRoles
         ?.filter((x) => x.participantId === participantId)
         .map((y) => {
           const role = userRoles.find((r) => r.id === y.userRoleId);
-          return role ? role.roleName : null;
+          return role ?? null;
         }),
     };
   });

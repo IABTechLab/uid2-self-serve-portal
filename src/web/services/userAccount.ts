@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { UserCreationPartial } from '../../api/entities/User';
 import {
   UserWithCurrentParticipantRoleNames,
-  UserWithIsApprover
+  UserWithIsApprover,
 } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
@@ -20,6 +20,7 @@ export type InviteTeamMemberForm = {
   lastName: string;
   email: string;
   jobFunction: string;
+  userRoleId?: number;
 };
 
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
