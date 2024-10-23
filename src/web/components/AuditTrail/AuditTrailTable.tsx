@@ -97,10 +97,18 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
           ))}
         </tbody>
       </table>
-      {!searchedAuditRows.length && (
+      {auditTrail.length > 0 && searchText && searchedAuditRows.length === 0 && (
         <TableNoDataPlaceholder
           icon={<img src='/document.svg' alt='email-icon' />}
-          title='No audit logs for this participant'
+          title='No Audit Logs'
+        >
+          <span>There are no audit logs that match this search.</span>
+        </TableNoDataPlaceholder>
+      )}
+      {!auditTrail.length && (
+        <TableNoDataPlaceholder
+          icon={<img src='/document.svg' alt='email-icon' />}
+          title='No Audit Logs'
         >
           <span>There are no audit logs.</span>
         </TableNoDataPlaceholder>
