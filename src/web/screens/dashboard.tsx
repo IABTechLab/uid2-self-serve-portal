@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { SideNav } from '../components/Navigation/SideNav';
@@ -19,7 +19,6 @@ import { TeamMembersRoute } from './teamMembers';
 import { TermsOfServiceRoute } from './termsOfService';
 
 import './dashboard.scss';
-import { isUid2Support } from '../../api/middleware/usersMiddleware';
 
 export const StandardRoutes: PortalRoute[] = [
   HomeRoute,
@@ -34,29 +33,21 @@ export const StandardRoutes: PortalRoute[] = [
   AuditTrailRoute,
 ];
 
-export const Uid2SupportRoutes: PortalRoute[] = [ManageParticipantsRoute];
+export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
 
-export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...Uid2SupportRoutes];
+export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
 
 const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-
-  const [uid2SupportMenu, setUid2SupportMenu] = useState<PortalRoute[]>([]);
-
-  useEffect(() => {
-    const isUid2Support2 = async () => {
-      const isUid2Support2 = LoggedInUser?.user && (await isUid2Support(LoggedInUser?.user?.email));
-      //return isUid2Support2 ? Uid2SupportRoutes.filter((r) => r.description) : [];
-      if (isUid2Support2) setUid2SupportMenu(Uid2SupportRoutes.filter((r) => r.description));
-    };
-    isUid2Support2();
-  });
+  const adminMenu = LoggedInUser?.user?.isUid2Support
+    ? AdminRoutes.filter((r) => r.description)
+    : [];
 
   return (
     <div className='app-panel'>
-      <SideNav standardMenu={standardMenu} uid2SupportMenu={uid2SupportMenu} />
+      <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />
       <div className='dashboard-content'>
         {!LoggedInUser?.user?.acceptedTerms ? <TermsAndConditionsDialog /> : <Outlet />}
       </div>

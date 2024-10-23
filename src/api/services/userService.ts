@@ -17,7 +17,7 @@ import {
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
 import { getParticipantsApproved, UserParticipantRequest } from './participantsService';
-import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
+import { enrichUserWithUid2Support, findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
   firstName: z.string(),
@@ -32,17 +32,17 @@ export class UserService {
   public async getCurrentUser(req: UserRequest) {
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
-    const userWithIsApprover = await enrichUserWithIsApprover(user!);
-    if (userWithIsApprover) {
+    const userWithUid2Support = await enrichUserWithUid2Support(user!);
+    if (userWithUid2Support) {
       if (await isUid2Support(userEmail)) {
         const allParticipants = await getParticipantsApproved();
-        userWithIsApprover.participants = allParticipants;
+        userWithUid2Support.participants = allParticipants;
       }
     }
-    userWithIsApprover.participants = userWithIsApprover?.participants?.sort((a, b) =>
+    userWithUid2Support.participants = userWithUid2Support?.participants?.sort((a, b) =>
       a.name.localeCompare(b.name)
     );
-    return userWithIsApprover;
+    return userWithUid2Support;
   }
 
   public async getDefaultParticipant(req: UserRequest) {
@@ -59,6 +59,13 @@ export class UserService {
       apiRoles,
     };
     return result;
+  }
+
+  public async getIsUid2Support(req: UserRequest) {
+    const { user } = req;
+    if (!user) return undefined;
+
+    return isUid2Support(user.email);
   }
 
   public async removeUser(req: UserParticipantRequest) {

@@ -6,13 +6,13 @@ import { z } from 'zod';
 import { UserCreationPartial } from '../../api/entities/User';
 import {
   UserWithCurrentParticipantRoleNames,
-  UserWithIsApprover
+  UserWithIsUid2Support,
 } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
-  user: UserWithIsApprover | null;
+  user: UserWithIsUid2Support | null;
 };
 
 export type InviteTeamMemberForm = {
@@ -27,9 +27,9 @@ export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 export type UserPayload = z.infer<typeof UserCreationPartial>;
 export type UserResponse = UserWithCurrentParticipantRoleNames;
 
-export async function GetLoggedInUserAccount(): Promise<UserWithIsApprover | null> {
+export async function GetLoggedInUserAccount(): Promise<UserWithIsUid2Support | null> {
   try {
-    const result = await axios.get<UserWithIsApprover>(`/users/current`, {
+    const result = await axios.get<UserWithIsUid2Support>(`/users/current`, {
       validateStatus: (status) => [200, 404].includes(status),
     });
     if (result.status === 200) return result.data;

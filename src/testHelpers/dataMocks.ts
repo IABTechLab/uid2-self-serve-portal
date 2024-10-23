@@ -2,9 +2,9 @@ import { faker } from '@faker-js/faker';
 
 import { Participant, ParticipantDTO, ParticipantStatus } from '../api/entities/Participant';
 import { UserJobFunction } from '../api/entities/User';
-import { UserWithIsApprover } from '../api/services/usersService';
+import { UserWithIsUid2Support } from '../api/services/usersService';
 
-export const createMockUser = (participants: Participant[]): UserWithIsApprover => {
+export const createMockUser = (participants: Participant[]): UserWithIsUid2Support => {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
   const generatedEmail = faker.internet.email({
@@ -19,7 +19,7 @@ export const createMockUser = (participants: Participant[]): UserWithIsApprover 
     email: generatedEmail,
     jobFunction: faker.helpers.arrayElement(Object.values(UserJobFunction)),
     acceptedTerms: true,
-    isApprover: faker.datatype.boolean(),
+    isUid2Support: faker.datatype.boolean(),
     participants,
   };
 
