@@ -114,7 +114,7 @@ export class UserService {
         firstName: userData.firstName,
         lastName: userData.lastName,
         jobFunction: userData.jobFunction,
-        userRoleIds: userRoleData.userRoleId,
+        userRoleId: userRoleData.userRoleId,
       },
       participant!.id
     );

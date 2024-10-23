@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 import { Participant, ParticipantDTO } from '../entities/Participant';
 import { User, UserDTO } from '../entities/User';
-import { UserRole, UserRoleDTO, UserRoleId } from '../entities/UserRole';
+import { UserRole, UserRoleDTO } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getKcAdminClient } from '../keycloakAdminClient';
