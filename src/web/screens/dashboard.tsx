@@ -47,7 +47,7 @@ function Dashboard() {
 
   return (
     <div className='app-panel'>
-      <SideNav standardMenu={standardMenu} adminMenu={uid2SupportMenu} />
+      <SideNav standardMenu={standardMenu} uid2SupportMenu={uid2SupportMenu} />
       <div className='dashboard-content'>
         {!LoggedInUser?.user?.acceptedTerms ? <TermsAndConditionsDialog /> : <Outlet />}
       </div>
