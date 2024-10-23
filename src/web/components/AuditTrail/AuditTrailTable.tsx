@@ -105,7 +105,7 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
           <span>There are no audit logs.</span>
         </TableNoDataPlaceholder>
       )}
-      {searchedAuditRows.length > rowsPerPage && (
+      {!!searchedAuditRows.length && (
         <PagingTool
           numberTotalRows={searchedAuditRows.length}
           initialPageNumber={pageNumber}
