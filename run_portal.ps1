@@ -3,6 +3,9 @@ Push-Location -Path "../uid2-admin" -ErrorAction Stop
 
 # Run admin docker & application
 try {
+    Write-Host "Stopping uid2-admin application..."
+    Get-Process -Name "java" | Stop-Process -Force
+
     Write-Host "Running docker compose for uid2-admin..."
     docker compose up -d
     if ($LASTEXITCODE -ne 0) {
@@ -10,7 +13,7 @@ try {
         exit 1
     }
 
-    Write-Host "Running admin application..."
+    Write-Host "Running uid2-admin application..."
     Start-Process "mvn" -ArgumentList "clean compile exec:java", "-Dvertx-config-path=conf/local-config.json", "-Dvertx.logger-delegate-factory-class-name=io.vertx.core.logging.SLF4JLogDelegateFactory", "-Dlogback.configurationFile=conf/logback.xml" -WindowStyle Hidden
 } catch {
     Write-Error ("An error occurred: " + $_.Exception.Message)
