@@ -61,13 +61,6 @@ export class UserService {
     return result;
   }
 
-  public async getIsUid2Support(req: UserRequest) {
-    const { user } = req;
-    if (!user) return undefined;
-
-    return isUid2Support(user.email);
-  }
-
   public async removeUser(req: UserParticipantRequest) {
     const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
