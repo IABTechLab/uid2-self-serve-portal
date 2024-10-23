@@ -49,15 +49,6 @@ export class UserController {
     res.json(result);
   }
 
-  @httpGet('/current/isUid2Support')
-  public async getUid2Support(
-    @request() req: UserRequest,
-    @response() res: Response
-  ): Promise<void> {
-    const result = await this.userService.getDefaultParticipant(req);
-    res.json(result);
-  }
-
   @httpPut('/current/acceptTerms')
   public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
     const doesUserHaveAnApprovedParticipant =
