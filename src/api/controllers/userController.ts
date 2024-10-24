@@ -13,6 +13,7 @@ import {
 
 import { TYPES } from '../constant/types';
 import { ParticipantStatus } from '../entities/Participant';
+import { UserRoleId } from '../entities/UserRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
@@ -21,7 +22,11 @@ import {
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
-import { SelfResendInvitationSchema, UserService } from '../services/userService';
+import {
+  SelfResendInvitationSchema,
+  UpdateUserRoleIdSchema,
+  UserService,
+} from '../services/userService';
 import { SelfResendInviteRequest, UserRequest } from '../services/usersService';
 
 @controller('/users')
@@ -126,6 +131,7 @@ export class UserController {
 
     if (req.auth?.payload?.email === user?.email) {
       res.status(403).send([{ message: 'You do not have permission to remove yourself.' }]);
+      return;
     }
 
     await this.userService.removeUser(req);
@@ -134,6 +140,16 @@ export class UserController {
 
   @httpPatch('/:userId')
   public async updateUser(@request() req: UserRequest, @response() res: Response): Promise<void> {
+    const { user } = req;
+    const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
+    if (req.auth?.payload?.email === user?.email && userRoleData.userRoleId !== UserRoleId.Admin) {
+      res
+        .status(403)
+        .send([
+          { message: 'You do not have permission to unassign the Admin role from yourself.' },
+        ]);
+      return;
+    }
     await this.userService.updateUser(req);
     res.sendStatus(200);
   }

@@ -20,6 +20,7 @@ export type InviteTeamMemberForm = {
   lastName: string;
   email: string;
   jobFunction: string;
+  userRoleId?: number;
 };
 
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;

@@ -9,6 +9,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { ParticipantRequest, UserParticipantRequest } from '../../services/participantsService';
+import { UpdateUserRoleIdSchema } from '../../services/userService';
 import {
   getAllUsersFromParticipantWithRoles,
   inviteUserToParticipant,
@@ -30,6 +31,7 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
   try {
     const { participant, user } = req;
     const userPartial = userInvitationSchema.parse(req.body);
+    const userRoleIdData = UpdateUserRoleIdSchema.parse(req.body);
     const traceId = getTraceId(req);
     const auditTrailInsertObject = constructAuditTrailObject(
       user!,
@@ -40,12 +42,13 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
         lastName: userPartial.lastName,
         email: userPartial.email,
         jobFunction: userPartial.jobFunction,
+        userRoleId: userRoleIdData.userRoleId,
       },
       participant!.id
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-      await inviteUserToParticipant(userPartial, participant!, traceId);
+      await inviteUserToParticipant(userPartial, participant!, userRoleIdData.userRoleId, traceId);
     });
 
     return res.sendStatus(201);
