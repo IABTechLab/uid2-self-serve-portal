@@ -9,7 +9,7 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { isUid2Support } from '../middleware/usersMiddleware';
+import { enrichUserWithUid2Support, isUid2Support } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -18,7 +18,7 @@ import {
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
 import { getParticipantsApproved, UserParticipantRequest } from './participantsService';
-import { enrichUserWithUid2Support, findUserByEmail, UserRequest } from './usersService';
+import { findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
   firstName: z.string(),

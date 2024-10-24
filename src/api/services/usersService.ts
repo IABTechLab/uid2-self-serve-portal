@@ -6,7 +6,6 @@ import { UserRole, UserRoleDTO } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { isUid2Support } from '../middleware/usersMiddleware';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
 import {
@@ -27,7 +26,7 @@ export interface SelfResendInviteRequest extends Request {
   email?: string;
 }
 
-export type UserWithIsUid2Support = UserDTO & { isUid2Support: boolean };
+export type UserWithIsUid2Support = UserDTO & { isUid2Support2: boolean };
 export type UserWithCurrentParticipantRoleNames = UserDTO & {
   currentParticipantUserRoles?: UserRoleDTO[];
 };
@@ -81,14 +80,6 @@ export const findUserByEmail = async (email: string) => {
   }
 
   return user;
-};
-
-export const enrichUserWithUid2Support = async (user: User) => {
-  const userIsUid2Support = await isUid2Support(user.email);
-  return {
-    ...user,
-    isUid2Support: userIsUid2Support,
-  };
 };
 
 const mapUsersWithParticipantRoles = async (users: User[], participantId: number) => {

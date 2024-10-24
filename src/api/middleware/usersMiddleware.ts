@@ -60,6 +60,14 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   return next();
 };
 
+export const enrichUserWithUid2Support = async (user: User) => {
+  const userIsUid2Support = await isUid2Support(user.email);
+  return {
+    ...user,
+    isUid2Support: userIsUid2Support,
+  };
+};
+
 const userIdSchema = z.object({
   userId: z.coerce.number(),
 });
