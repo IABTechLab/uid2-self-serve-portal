@@ -9,7 +9,7 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { enrichUserWithUid2Support, isUid2Support } from '../middleware/usersMiddleware';
+import { enrichUserWithUid2Support } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -38,11 +38,9 @@ export class UserService {
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
     const userWithUid2Support = await enrichUserWithUid2Support(user!);
-    if (userWithUid2Support) {
-      if (await isUid2Support(userEmail)) {
-        const allParticipants = await getParticipantsApproved();
-        userWithUid2Support.participants = allParticipants;
-      }
+    if (userWithUid2Support.isUid2Support) {
+      const allParticipants = await getParticipantsApproved();
+      userWithUid2Support.participants = allParticipants;
     }
     userWithUid2Support.participants = userWithUid2Support?.participants?.sort((a, b) =>
       a.name.localeCompare(b.name)
