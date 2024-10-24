@@ -121,23 +121,27 @@ export class UserService {
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
       const kcAdminClient = await getKcAdminClient();
-      await UserToParticipantRole.query()
-        .where('participantId', participant!.id)
-        .where('userId', user!.id)
-        .whereNot('userRoleId', UserRoleId.UID2Support)
-        .del();
-      await Promise.all([
-        updateUserProfile(kcAdminClient, user?.email!, {
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-        }),
-        user!.$query().patch(userData),
-        await UserToParticipantRole.query().insert({
-          userId: user!.id,
-          participantId: participant?.id!,
-          userRoleId: userRoleData.userRoleId,
-        }),
-      ]);
+
+      await UserToParticipantRole.transaction(async (trx) => {
+        await UserToParticipantRole.query(trx)
+          .where('participantId', participant!.id)
+          .where('userId', user!.id)
+          .whereNot('userRoleId', UserRoleId.UID2Support)
+          .del();
+
+        await Promise.all([
+          updateUserProfile(kcAdminClient, user?.email!, {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+          }),
+          user!.$query().patch(userData),
+          await UserToParticipantRole.query(trx).insert({
+            userId: user!.id,
+            participantId: participant?.id!,
+            userRoleId: userRoleData.userRoleId,
+          }),
+        ]);
+      });
     });
   }
 }
