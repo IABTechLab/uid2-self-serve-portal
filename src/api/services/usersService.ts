@@ -26,7 +26,7 @@ export interface SelfResendInviteRequest extends Request {
   email?: string;
 }
 
-export type UserWithIsUid2Support = UserDTO & { isUid2Support2: boolean };
+export type UserWithIsUid2Support = UserDTO & { isUid2Support: boolean };
 export type UserWithCurrentParticipantRoleNames = UserDTO & {
   currentParticipantUserRoles?: UserRoleDTO[];
 };
