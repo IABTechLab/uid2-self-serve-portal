@@ -48,7 +48,7 @@ function ManageParticipants() {
   useEffect(() => {
     if (!LoggedInUser?.user?.isUid2Support && participant) {
       navigate(`/participant/${participant.id}/home`);
-      ErrorToast(`You do not have access to this page, rerouting back to home.`);
+      ErrorToast(`You do not have access to this page. Rerouting back to Home.`);
     }
   });
 
