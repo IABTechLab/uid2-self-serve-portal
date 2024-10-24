@@ -33,8 +33,11 @@ export const getPrettyAuditDetails = (eventData: unknown) => {
       if (typeData.length > 0 && !isNaN(Number(typeData[0]))) {
         val = mapClientTypeIdsToAdminEnums(val as number[]);
       }
+    } else if (key.toLowerCase().includes('action')) {
+      val = camelCaseToSpaced(val as string);
     }
-    outputArray.push(`${camelCaseToSpaced(key)}: ${val}`);
+    const formattedKey = key.toLowerCase().includes('siteid') ? 'Site ID' : camelCaseToSpaced(key);
+    outputArray.push(`${formattedKey}: ${val}`);
   }
   const outputString = outputArray.join(' | ');
   return outputString;
