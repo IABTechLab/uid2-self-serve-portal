@@ -12,9 +12,7 @@ export async function handleAuditTrail(req: UserParticipantRequest, res: Respons
       return item === UserRoleId.Admin || item === UserRoleId.UID2Support;
     }).length === 0
   ) {
-    //return res.status(500).json({ message: 'Permission Denied' });
-    return res.status(200).json([]);
-    // return []
+    return res.status(500).json({ message: 'Permission Denied' });
   }
   const auditTrail = await GetParticipantAuditTrail(req.participant!);
   return res.status(200).json(auditTrail ?? []);
