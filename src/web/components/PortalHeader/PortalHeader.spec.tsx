@@ -1,11 +1,35 @@
 import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import * as stories from './PortalHeader.stories';
 import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
-import { Participant } from '../../../api/entities/Participant';
+import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
+import {
+  createParticipantContextValue,
+  createUserContextValue,
+  TestContextProvider,
+} from '../../../testHelpers/testContextProvider';
+import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
+import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
+import { PortalHeader } from './PortalHeader';
+import { UserWithIsUid2Support } from '../../../api/services/usersService';
 
-const { InvalidEmailAddress, NoEmailAddress, ValidEmailAddress } = composeStories(stories);
+const { InvalidEmailAddress, NoEmailAddress } = composeStories(stories);
+
+const renderPortalHeaderWithContext = (
+  userContextValue: UserContextWithSetter,
+  participantContextValue: ParticipantWithSetter
+) => {
+  return render(
+    <TestContextProvider
+      userContextValue={userContextValue}
+      participantContextValue={participantContextValue}
+    >
+      <PortalHeader email='test@example.com' fullName='Test Name' logout={() => {}} />
+    </TestContextProvider>
+  );
+};
 
 describe('Portal Header tests', () => {
   test('when an invalid email address is provided, a home link is still displayed', async () => {
@@ -20,12 +44,34 @@ describe('Portal Header tests', () => {
     expect(button).toHaveTextContent('Not logged in');
   });
 
-  test('when user has uid2support role', () => {
-    render(<ValidEmailAddress />);
-    const mockParticipant = createMockParticipant();
-    const mockUser = createMockUser([mockParticipant] as Participant[]);
-    mockUser.isUid2Support = true;
-    const button = screen.getByRole('button');
-    expect(button).toHaveTextContent('Not logged in');
+  describe('Audit Trail in Portal Header tests based on role', () => {
+    let participantContextValue: ParticipantWithSetter;
+    let userContextValue: UserContextWithSetter;
+    let mockParticipant: ParticipantDTO;
+    let mockUser: UserWithIsUid2Support;
+
+    beforeAll(() => {
+      mockParticipant = createMockParticipant();
+      participantContextValue = createParticipantContextValue(mockParticipant);
+      mockUser = createMockUser([mockParticipant] as Participant[]);
+      userContextValue = createUserContextValue(mockUser);
+    });
+
+    test('when user has uid2support role', async () => {
+      mockUser.isUid2Support = true;
+      renderPortalHeaderWithContext(userContextValue, participantContextValue);
+      const dropdownMenuButton = screen.getByRole('button');
+      await userEvent.click(dropdownMenuButton);
+      const auditTrailMenuItem = screen.getByRole('menuitem', { name: 'Audit Trail' });
+      expect(auditTrailMenuItem).toBeInTheDocument();
+    });
+
+    test('when user does not have uid2support role', async () => {
+      mockUser.isUid2Support = false;
+      renderPortalHeaderWithContext(userContextValue, participantContextValue);
+      const button = screen.getByRole('button');
+      await userEvent.click(button);
+      expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
+    });
   });
 });
