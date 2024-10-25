@@ -12,6 +12,7 @@ import { ParticipantRequest, UserParticipantRequest } from '../../services/parti
 import { UpdateUserRoleIdSchema } from '../../services/userService';
 import {
   getAllUsersFromParticipantWithRoles,
+  getUserFromParticipantWithRoles,
   inviteUserToParticipant,
 } from '../../services/usersService';
 
@@ -19,6 +20,12 @@ export async function handleGetParticipantUsers(req: ParticipantRequest, res: Re
   const { participant } = req;
   const users = await getAllUsersFromParticipantWithRoles(participant!);
   return res.status(200).json(users);
+}
+
+export async function handleGetParticipantUser(req: UserParticipantRequest, res: Response) {
+  const { participant, user } = req;
+  const participantUser = await getUserFromParticipantWithRoles(participant!, user!);
+  return res.status(200).json(participantUser);
 }
 
 const userInvitationSchema = z.object({

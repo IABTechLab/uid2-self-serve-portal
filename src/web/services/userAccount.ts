@@ -78,6 +78,17 @@ export async function GetAllUsersOfParticipant(participantId: number) {
   }
 }
 
+export async function GetUserFromParticipant(participantId: number, userId: number) {
+  try {
+    const result = await axios.get<UserResponse>(`/participants/${participantId}/${userId}`, {
+      validateStatus: (status) => [200, 404].includes(status),
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load user');
+  }
+}
+
 export async function RemoveUser(id: number, participantId: number) {
   try {
     return await axios.delete(`/participants/${participantId}/users/${id}`);

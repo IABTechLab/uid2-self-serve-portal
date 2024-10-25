@@ -16,9 +16,11 @@ import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
-import { getPathWithParticipant } from '../../utils/urlHelpers';
+import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
+import { GetAllUsersOfParticipant, GetUserFromParticipant } from '../../services/userAccount';
+import { UserRole, UserRoleDTO, UserRoleId } from '../../../api/entities/UserRole';
 
 export type PortalHeaderProps = {
   email: string | undefined;
@@ -37,9 +39,7 @@ export function PortalHeader({
   const { LoggedInUser } = useContext(CurrentUserContext);
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
-  if (LoggedInUser?.user?.isUid2Support) {
-    routes.push(AuditTrailRoute);
-  }
+
   const showUserNavigationAndSettings =
     LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
 
@@ -57,6 +57,32 @@ export function PortalHeader({
   useEffect(() => {
     setDarkMode?.(darkToggleState);
   }, [darkToggleState, setDarkMode]);
+
+  const [userRolesForParticipant, setUserRolesForParticipant] = useState<UserRoleDTO[]>([]);
+
+  useEffect(() => {
+    const getUserRolesForCurrentParticipant = async () => {
+      const parsedParticipantId = parseParticipantId(participantId);
+      if (parsedParticipantId && LoggedInUser?.user) {
+        const userFromPartcipant = await GetUserFromParticipant(
+          parsedParticipantId,
+          LoggedInUser?.user?.id
+        );
+        const currentRoles = userFromPartcipant.currentParticipantUserRoles;
+        if (currentRoles) {
+          setUserRolesForParticipant(currentRoles);
+        }
+      }
+    };
+    getUserRolesForCurrentParticipant();
+  });
+
+  if (
+    LoggedInUser?.user?.isUid2Support ||
+    userRolesForParticipant.find((role) => role.id === UserRoleId.Admin)
+  ) {
+    routes.push(AuditTrailRoute);
+  }
 
   return (
     <header className='portal-header'>
