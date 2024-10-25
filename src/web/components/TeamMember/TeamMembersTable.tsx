@@ -46,7 +46,7 @@ function TeamMembersTableContent({
             <SortableTableHeader<UserResponse> sortKey='email' header='Email' />
             <SortableTableHeader<UserResponse> sortKey='jobFunction' header='Job Function' />
             <SortableTableHeader<UserResponse>
-              sortKey='currentParticipantUserRoleNames'
+              sortKey='currentParticipantUserRoles'
               header='Roles'
             />
             <th className='action'>Actions</th>

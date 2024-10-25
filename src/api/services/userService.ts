@@ -4,11 +4,12 @@ import { z } from 'zod';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserJobFunction } from '../entities/User';
+import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { isUid2Support } from '../middleware/usersMiddleware';
+import { enrichUserWithUid2Support } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -17,12 +18,16 @@ import {
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
 import { getParticipantsApproved, UserParticipantRequest } from './participantsService';
-import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
+import { findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   jobFunction: z.nativeEnum(UserJobFunction),
+});
+
+export const UpdateUserRoleIdSchema = z.object({
+  userRoleId: z.nativeEnum(UserRoleId),
 });
 
 export const SelfResendInvitationSchema = z.object({ email: z.string() });
@@ -32,17 +37,15 @@ export class UserService {
   public async getCurrentUser(req: UserRequest) {
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
-    const userWithIsApprover = await enrichUserWithIsApprover(user!);
-    if (userWithIsApprover) {
-      if (await isUid2Support(userEmail)) {
-        const allParticipants = await getParticipantsApproved();
-        userWithIsApprover.participants = allParticipants;
-      }
+    const userWithUid2Support = await enrichUserWithUid2Support(user!);
+    if (userWithUid2Support.isUid2Support) {
+      const allParticipants = await getParticipantsApproved();
+      userWithUid2Support.participants = allParticipants;
     }
-    userWithIsApprover.participants = userWithIsApprover?.participants?.sort((a, b) =>
+    userWithUid2Support.participants = userWithUid2Support?.participants?.sort((a, b) =>
       a.name.localeCompare(b.name)
     );
-    return userWithIsApprover;
+    return userWithUid2Support;
   }
 
   public async getDefaultParticipant(req: UserRequest) {
@@ -96,7 +99,8 @@ export class UserService {
   public async updateUser(req: UserParticipantRequest) {
     const { user, participant } = req;
     const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
-    const data = updateUserSchema.parse(req.body);
+    const userData = updateUserSchema.parse(req.body);
+    const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
     const traceId = getTraceId(req);
 
     const auditTrailInsertObject = constructAuditTrailObject(
@@ -105,22 +109,37 @@ export class UserService {
       {
         action: AuditAction.Update,
         email: user!.email, // So we know which user is being updated, in case their name changes
-        firstName: data.firstName,
-        lastName: data.lastName,
-        jobFunction: data.jobFunction,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        jobFunction: userData.jobFunction,
+        userRoleId: userRoleData.userRoleId,
       },
       participant!.id
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
       const kcAdminClient = await getKcAdminClient();
-      await Promise.all([
-        updateUserProfile(kcAdminClient, user?.email!, {
-          firstName: data.firstName,
-          lastName: data.lastName,
-        }),
-        user!.$query().patch(data),
-      ]);
+
+      await UserToParticipantRole.transaction(async (trx) => {
+        await UserToParticipantRole.query(trx)
+          .where('participantId', participant!.id)
+          .where('userId', user!.id)
+          .whereNot('userRoleId', UserRoleId.UID2Support)
+          .del();
+
+        await Promise.all([
+          updateUserProfile(kcAdminClient, user?.email!, {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+          }),
+          user!.$query().patch(userData),
+          await UserToParticipantRole.query(trx).insert({
+            userId: user!.id,
+            participantId: participant?.id!,
+            userRoleId: userRoleData.userRoleId,
+          }),
+        ]);
+      });
     });
   }
 }

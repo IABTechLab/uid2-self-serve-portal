@@ -1,4 +1,5 @@
 import { BaseModel } from './BaseModel';
+import { ModelObjectOpt } from './ModelObjectOpt';
 
 export enum UserRoleId {
   Admin = 1,
@@ -13,3 +14,5 @@ export class UserRole extends BaseModel {
   declare id: number;
   declare roleName: string;
 }
+
+export type UserRoleDTO = ModelObjectOpt<UserRole>;

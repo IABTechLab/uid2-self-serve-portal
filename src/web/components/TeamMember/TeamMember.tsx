@@ -101,7 +101,9 @@ function TeamMember({
       <td>{person.email}</td>
       <td>{person.jobFunction}</td>
       <td>
-        <LabelRow labelNames={person.currentParticipantUserRoleNames ?? []} />
+        <LabelRow
+          labelNames={person.currentParticipantUserRoles?.map((role) => role.roleName) ?? []}
+        />
       </td>
       <td className='action'>
         <div className='action-cell'>
