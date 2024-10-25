@@ -111,10 +111,15 @@ export const getAllUsersFromParticipantWithRoles = async (participant: Participa
   return mapUsersWithParticipantRoles(usersWithParticipants, participant.id);
 };
 
-export const getUserToParticipantRoles = async (participant: Participant, user: User) => {
-  return await UserToParticipantRole.query()
+export const getUserRolesForCurrentParticipant = async (participant: Participant, user: User) => {
+  const userToParticipantRoles = await UserToParticipantRole.query()
     .where('participantId', participant.id)
     .where('userId', user.id);
+
+  const userRoles = await UserRole.query();
+  return userToParticipantRoles.map((role) => {
+    return userRoles.find((userRole) => userRole.id === role.userRoleId) ?? null;
+  });
 };
 
 export const getAllUsersFromParticipant = async (participant: Participant) => {

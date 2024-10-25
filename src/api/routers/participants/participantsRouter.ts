@@ -49,8 +49,8 @@ import {
 } from './participantsSharingPermissions';
 import { handleGetSignedParticipants } from './participantsSigned';
 import {
-  handleGetParticipantUser,
   handleGetParticipantUsers,
+  handleGetUserRolesForCurrentParticipant,
   handleInviteUserToParticipant,
 } from './participantsUsers';
 
@@ -140,7 +140,7 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/auditTrail', handleAuditTrail);
 
   participantsRouter.get('/:participantId/users', handleGetParticipantUsers);
-  participantsRouter.get('/:participantId/:userId', handleGetParticipantUser);
+  participantsRouter.get('/:participantId/:userId', handleGetUserRolesForCurrentParticipant);
   const participantUsersRouter = createParticipantUsersRouter();
   participantsRouter.use('/:participantId/users', participantUsersRouter);
   participantsRouter.use('/:participantId/:userId', participantUsersRouter);

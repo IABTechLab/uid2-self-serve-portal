@@ -11,16 +11,17 @@ import * as Switch from '@radix-ui/react-switch';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
+import { PortalRoute } from '../../screens/routeUtils';
 import { TeamMembersRoute } from '../../screens/teamMembers';
+import { GetUserRolesForCurrentParticipant } from '../../services/userAccount';
 import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
-import { GetAllUsersOfParticipant, GetUserFromParticipant } from '../../services/userAccount';
-import { UserRole, UserRoleDTO, UserRoleId } from '../../../api/entities/UserRole';
 
 export type PortalHeaderProps = {
   email: string | undefined;
@@ -38,7 +39,34 @@ export function PortalHeader({
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
 
-  const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
+  const [routes, setRoutes] = useState<PortalRoute[]>([
+    ParticipantInformationRoute,
+    TeamMembersRoute,
+    EmailContactsRoute,
+  ]);
+
+  useEffect(() => {
+    const getUserRolesForCurrentParticipant = async () => {
+      const user = LoggedInUser?.user;
+      if (user?.isUid2Support) {
+        setRoutes([...routes, AuditTrailRoute]);
+        return;
+      }
+      const parsedParticipantId = parseParticipantId(participantId);
+      if (parsedParticipantId && user) {
+        const userRolesForCurrentParticipant = await GetUserRolesForCurrentParticipant(
+          parsedParticipantId,
+          user.id
+        );
+        if (userRolesForCurrentParticipant.find((role) => role.id === UserRoleId.Admin)) {
+          setRoutes([...routes, AuditTrailRoute]);
+        }
+      }
+    };
+    if (!routes.includes(AuditTrailRoute)) {
+      getUserRolesForCurrentParticipant();
+    }
+  }, [LoggedInUser?.user, participantId, routes]);
 
   const showUserNavigationAndSettings =
     LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
@@ -57,32 +85,6 @@ export function PortalHeader({
   useEffect(() => {
     setDarkMode?.(darkToggleState);
   }, [darkToggleState, setDarkMode]);
-
-  const [userRolesForParticipant, setUserRolesForParticipant] = useState<UserRoleDTO[]>([]);
-
-  useEffect(() => {
-    const getUserRolesForCurrentParticipant = async () => {
-      const parsedParticipantId = parseParticipantId(participantId);
-      if (parsedParticipantId && LoggedInUser?.user) {
-        const userFromPartcipant = await GetUserFromParticipant(
-          parsedParticipantId,
-          LoggedInUser?.user?.id
-        );
-        const currentRoles = userFromPartcipant.currentParticipantUserRoles;
-        if (currentRoles) {
-          setUserRolesForParticipant(currentRoles);
-        }
-      }
-    };
-    getUserRolesForCurrentParticipant();
-  });
-
-  if (
-    LoggedInUser?.user?.isUid2Support ||
-    userRolesForParticipant.find((role) => role.id === UserRoleId.Admin)
-  ) {
-    routes.push(AuditTrailRoute);
-  }
 
   return (
     <header className='portal-header'>
