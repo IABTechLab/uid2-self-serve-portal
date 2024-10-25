@@ -12,7 +12,8 @@ const mockTourData: VersionedTourStep[] = [
   },
 ];
 
-const mockUser = createMockUser([createMockParticipant()] as Participant[]);
+const mockParticipant = createMockParticipant();
+const mockUser = createMockUser([mockParticipant] as Participant[]);
 const mockLoggedInUser = createUserContextValue(mockUser).LoggedInUser;
 
 describe('Tour tests', () => {
@@ -23,7 +24,7 @@ describe('Tour tests', () => {
         seenForVersions: ['0.35.0'],
       })
     );
-    const steps = GetTourSteps(mockLoggedInUser, mockTourData);
+    const steps = GetTourSteps(mockLoggedInUser, mockParticipant, mockTourData);
     expect(steps).toContainEqual(mockTourData[0]);
   });
   test('When the last tour seen is the same as a tour, it is excluded.', () => {
@@ -33,7 +34,7 @@ describe('Tour tests', () => {
         seenForVersions: ['0.35.0', '0.36.0'],
       })
     );
-    const steps = GetTourSteps(mockLoggedInUser, mockTourData);
+    const steps = GetTourSteps(mockLoggedInUser, mockParticipant, mockTourData);
     expect(steps).not.toContainEqual(mockTourData[0]);
   });
   test('When the last tour seen is higher than a tour, it is excluded.', () => {
@@ -43,7 +44,7 @@ describe('Tour tests', () => {
         seenForVersions: ['0.37.0', '0.35.0', '0.36.0'],
       })
     );
-    const steps = GetTourSteps(mockLoggedInUser, mockTourData);
+    const steps = GetTourSteps(mockLoggedInUser, mockParticipant, mockTourData);
     expect(steps).not.toContainEqual(mockTourData[0]);
   });
   test('When a tour was skipped (i.e. lower than highest seen but not in seen list), it is excluded.', () => {
@@ -53,7 +54,7 @@ describe('Tour tests', () => {
         seenForVersions: ['0.37.0', '0.35.0'],
       })
     );
-    const steps = GetTourSteps(mockLoggedInUser, mockTourData);
+    const steps = GetTourSteps(mockLoggedInUser, mockParticipant, mockTourData);
     expect(steps).not.toContainEqual(mockTourData[0]);
   });
   test('Compare Versions sorts in correct order', () => {
