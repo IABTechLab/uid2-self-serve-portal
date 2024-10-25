@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
+import { UserRoleId } from '../../../api/entities/UserRole';
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import {
   InviteTeamMemberForm,
@@ -12,8 +14,6 @@ import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
 import './TeamMembersTable.scss';
-import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
-import { UserRole, UserRoleId } from '../../../api/entities/UserRole';
 
 type TeamMembersTableProps = Readonly<{
   teamMembers: UserResponse[];
@@ -43,15 +43,14 @@ function TeamMembersTableContent({
   const sortedTeamMembers = sortData(teamMembers);
 
   useEffect(() => {
-    const currentUser = teamMembers.find((tm) => tm.id === LoggedInUser?.user?.id);
-    if (
-      currentUser?.currentParticipantUserRoles?.find(
-        (role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support)
-      )
-    ) {
+    const currentUser = teamMembers.find((teamMember) => teamMember.id === LoggedInUser?.user?.id);
+    const isUserAdminOrSupport = currentUser?.currentParticipantUserRoles?.find(
+      (role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support)
+    );
+    if (isUserAdminOrSupport) {
       setShowTeamMemberActions(true);
     }
-  });
+  }, [LoggedInUser, teamMembers]);
 
   return (
     <div className='portal-team'>
