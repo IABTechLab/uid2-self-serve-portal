@@ -66,10 +66,10 @@ const shouldRemoveAuditTrailStep = async (
     return true;
   }
   const userRoles = await GetUserRolesForCurrentParticipant(participant.id, user.id);
-  if (!userRoles.find((role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support))) {
-    return true;
+  if (userRoles.find((role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support))) {
+    return false;
   }
-  return false;
+  return true;
 };
 
 function shouldRemoveCurrentStep(
@@ -85,7 +85,9 @@ function shouldRemoveCurrentStep(
     if (loggedInUser?.user?.isUid2Support) {
       return false;
     }
-    return shouldRemoveAuditTrailStep(loggedInUser?.user, participant);
+    shouldRemoveAuditTrailStep(loggedInUser?.user, participant).then((result) => {
+      return result;
+    });
   }
   return false;
 }
