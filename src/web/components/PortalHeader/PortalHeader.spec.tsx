@@ -17,12 +17,6 @@ import * as stories from './PortalHeader.stories';
 
 const { InvalidEmailAddress, NoEmailAddress } = composeStories(stories);
 
-const mockUseParams = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockUseParams,
-}));
-
 const renderPortalHeaderWithContext = (
   userContextValue: UserContextWithSetter,
   participantContextValue: ParticipantWithSetter
