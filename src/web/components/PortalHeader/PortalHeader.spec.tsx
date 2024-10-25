@@ -2,9 +2,9 @@ import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as stories from './PortalHeader.stories';
-import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
+import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import {
   createParticipantContextValue,
   createUserContextValue,
@@ -13,9 +13,15 @@ import {
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
 import { PortalHeader } from './PortalHeader';
-import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import * as stories from './PortalHeader.stories';
 
 const { InvalidEmailAddress, NoEmailAddress } = composeStories(stories);
+
+const mockUseParams = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => mockUseParams,
+}));
 
 const renderPortalHeaderWithContext = (
   userContextValue: UserContextWithSetter,

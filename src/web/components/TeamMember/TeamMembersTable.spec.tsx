@@ -1,4 +1,9 @@
 import { render, screen } from '@testing-library/react';
+
+import { Participant,ParticipantDTO } from '../../../api/entities/Participant';
+import { UserRoleId } from '../../../api/entities/UserRole';
+import { UserWithCurrentParticipantRoleNames } from '../../../api/services/usersService';
+import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import {
   createParticipantContextValue,
   createUserContextValueWithParticipantRoleName,
@@ -6,12 +11,7 @@ import {
 } from '../../../testHelpers/testContextProvider';
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
-
 import TeamMembersTable from './TeamMembersTable';
-import { ParticipantDTO, Participant } from '../../../api/entities/Participant';
-import { UserWithCurrentParticipantRoleNames } from '../../../api/services/usersService';
-import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
-import { UserRoleId } from '../../../api/entities/UserRole';
 
 const renderTeamMembersTableWithContext = (
   userContextValue: UserContextWithSetter,

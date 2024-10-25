@@ -3,6 +3,7 @@ import { useNavigate, useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
+import { UserWithIsUid2Support } from '../../api/services/usersService';
 import { Loading } from '../components/Core/Loading/Loading';
 import { ErrorToast, SuccessToast, WarningToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
@@ -46,7 +47,8 @@ function ManageParticipants() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!LoggedInUser?.user?.isUid2Support && participant) {
+    const user = LoggedInUser?.user as UserWithIsUid2Support;
+    if (user?.isUid2Support && participant) {
       navigate(`/participant/${participant.id}/home`);
       ErrorToast(`You do not have access to this page. Rerouting back to Home.`);
     }
