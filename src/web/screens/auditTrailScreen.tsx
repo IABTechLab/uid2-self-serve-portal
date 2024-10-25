@@ -30,7 +30,7 @@ function AuditTrail() {
       navigate(`/participant/${participant.id}/home`);
       ErrorToast(`You do not have access to this page. Rerouting back to Home.`);
     }
-  });
+  }, []);
 
   return (
     <>
