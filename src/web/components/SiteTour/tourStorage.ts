@@ -1,10 +1,10 @@
 import Joyride from 'react-joyride';
 
 import config from '../../../../package.json';
-import { GetUserRolesForCurrentParticipant, UserAccount } from '../../services/userAccount';
-import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
-import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserRoleId } from '../../../api/entities/UserRole';
+import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import { GetUserRolesForCurrentParticipant, UserAccount } from '../../services/userAccount';
 
 const { version } = config;
 
@@ -63,12 +63,13 @@ const shouldRemoveAuditTrailStep = async (
   participant: ParticipantDTO | null
 ) => {
   if (!user || !participant) {
-    return false;
+    return true;
   }
   const userRoles = await GetUserRolesForCurrentParticipant(participant.id, user.id);
   if (!userRoles.find((role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support))) {
     return true;
   }
+  return false;
 };
 
 function shouldRemoveCurrentStep(

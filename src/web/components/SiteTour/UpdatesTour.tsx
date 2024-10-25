@@ -2,8 +2,8 @@ import { useContext } from 'react';
 import Joyride, { Actions, CallBackProps } from 'react-joyride';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
-import { GetTourSteps, markTourAsSeen } from './tourStorage';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
+import { GetTourSteps, markTourAsSeen } from './tourStorage';
 
 function callback(data: CallBackProps) {
   const doNotShowAgainActions: Actions[] = ['close', 'skip', 'stop', 'reset'];
