@@ -3,6 +3,7 @@ import Joyride, { Actions, CallBackProps } from 'react-joyride';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { GetTourSteps, markTourAsSeen } from './tourStorage';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 
 function callback(data: CallBackProps) {
   const doNotShowAgainActions: Actions[] = ['close', 'skip', 'stop', 'reset'];
@@ -11,7 +12,8 @@ function callback(data: CallBackProps) {
 
 export function UpdatesTour() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const tourSteps = GetTourSteps(LoggedInUser);
+  const { participant } = useContext(ParticipantContext);
+  const tourSteps = GetTourSteps(LoggedInUser, participant);
   const showTour = tourSteps.length > 0;
   const actionButtonStyle = {
     backgroundColor: '#cdf200', // --theme-button

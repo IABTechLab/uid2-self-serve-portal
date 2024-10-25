@@ -1,7 +1,10 @@
 import Joyride from 'react-joyride';
 
 import config from '../../../../package.json';
-import { UserAccount } from '../../services/userAccount';
+import { GetUserRolesForCurrentParticipant, UserAccount } from '../../services/userAccount';
+import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
+import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import { UserRoleId } from '../../../api/entities/UserRole';
 
 const { version } = config;
 
@@ -55,15 +58,33 @@ function saveTourData(data: TourData) {
   localStorage.setItem(tourStorageKey, JSON.stringify(data));
 }
 
-function shouldRemoveCurrentStep(step: VersionedTourStep, loggedInUser: UserAccount) {
+const shouldRemoveAuditTrailStep = async (
+  user: UserWithIsUid2Support | null | undefined,
+  participant: ParticipantDTO | null
+) => {
+  if (!user || !participant) {
+    return false;
+  }
+  const userRoles = await GetUserRolesForCurrentParticipant(participant.id, user.id);
+  if (!userRoles.find((role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support))) {
+    return true;
+  }
+};
+
+function shouldRemoveCurrentStep(
+  step: VersionedTourStep,
+  loggedInUser: UserAccount | null,
+  participant: ParticipantDTO | null
+) {
   if (step?.target === `.participant-switcher`) {
     if ((loggedInUser?.user?.participants?.length ?? 0) <= 1) {
       return true;
     }
   } else if (step?.target === `.profile-dropdown-button` && step?.version === '0.48.0') {
-    if (!loggedInUser.user?.isApprover) {
-      return true;
+    if (loggedInUser?.user?.isUid2Support) {
+      return false;
     }
+    return shouldRemoveAuditTrailStep(loggedInUser?.user, participant);
   }
   return false;
 }
@@ -86,6 +107,7 @@ export const compareVersions = (a: string, b: string): number => {
 
 export function GetTourSteps(
   loggedInUser: UserAccount | null,
+  participant: ParticipantDTO | null,
   steps = tourSteps
 ): VersionedTourStep[] {
   // search seen steps for the highest version number
@@ -94,7 +116,7 @@ export function GetTourSteps(
   storedVersions.sort((first, second) => compareVersions(second, first));
   const highestSeenVersion = storedVersions.length > 0 ? storedVersions[0] : '0.0.0';
   return steps.filter((step) => {
-    if (loggedInUser && shouldRemoveCurrentStep(step, loggedInUser)) return;
+    if (shouldRemoveCurrentStep(step, loggedInUser, participant)) return;
     const stepVersionIsHigher = compareVersions(step?.version, highestSeenVersion) > 0;
     return stepVersionIsHigher;
   });
