@@ -9,7 +9,7 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { isUid2Support } from '../middleware/usersMiddleware';
+import { enrichUserWithUid2Support } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -18,7 +18,7 @@ import {
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
 import { getParticipantsApproved, UserParticipantRequest } from './participantsService';
-import { enrichUserWithIsApprover, findUserByEmail, UserRequest } from './usersService';
+import { findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
   firstName: z.string(),
@@ -37,17 +37,15 @@ export class UserService {
   public async getCurrentUser(req: UserRequest) {
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
-    const userWithIsApprover = await enrichUserWithIsApprover(user!);
-    if (userWithIsApprover) {
-      if (await isUid2Support(userEmail)) {
-        const allParticipants = await getParticipantsApproved();
-        userWithIsApprover.participants = allParticipants;
-      }
+    const userWithUid2Support = await enrichUserWithUid2Support(user!);
+    if (userWithUid2Support.isUid2Support) {
+      const allParticipants = await getParticipantsApproved();
+      userWithUid2Support.participants = allParticipants;
     }
-    userWithIsApprover.participants = userWithIsApprover?.participants?.sort((a, b) =>
+    userWithUid2Support.participants = userWithUid2Support?.participants?.sort((a, b) =>
       a.name.localeCompare(b.name)
     );
-    return userWithIsApprover;
+    return userWithUid2Support;
   }
 
   public async getDefaultParticipant(req: UserRequest) {

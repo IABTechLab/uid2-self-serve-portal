@@ -1,14 +1,15 @@
-import { Suspense, useContext, useState } from 'react';
-import { useRevalidator } from 'react-router-dom';
+import { Suspense, useContext, useEffect, useState } from 'react';
+import { useNavigate, useRevalidator } from 'react-router-dom';
 import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
-import { SuccessToast, WarningToast } from '../components/Core/Popups/Toast';
+import { ErrorToast, SuccessToast, WarningToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import ApprovedParticipantsTable from '../components/ParticipantManagement/ApprovedParticipantsTable';
 import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
+import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
 import {
@@ -41,6 +42,15 @@ const loader = makeLoader(() => {
 function ManageParticipants() {
   const [showAddParticipantsDialog, setShowAddParticipantsDialog] = useState<boolean>(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
+  const { LoggedInUser } = useContext(CurrentUserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!LoggedInUser?.user?.isUid2Support && participant) {
+      navigate(`/participant/${participant.id}/home`);
+      ErrorToast(`You do not have access to this page. Rerouting back to Home.`);
+    }
+  });
 
   const data = useLoaderData<typeof loader>();
 

@@ -37,7 +37,7 @@ export function PortalHeader({
   const { LoggedInUser } = useContext(CurrentUserContext);
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
-  if (LoggedInUser?.user?.isApprover) {
+  if (LoggedInUser?.user?.isUid2Support) {
     routes.push(AuditTrailRoute);
   }
   const showUserNavigationAndSettings =
