@@ -33,7 +33,7 @@ function TeamMembersTableContent({
   const { LoggedInUser } = useContext(CurrentUserContext);
 
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
-  const [showTeamMemberActions, setShowTeamMemberActions] = useState<boolean>(false);
+  const [allowTeamMemberActions, setAllowTeamMemberActions] = useState<boolean>(false);
 
   const onOpenChangeTeamMemberDialog = () => {
     setShowTeamMemberDialog(!showTeamMemberDialog);
@@ -48,7 +48,7 @@ function TeamMembersTableContent({
       (role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support)
     );
     if (isUserAdminOrSupport) {
-      setShowTeamMemberActions(true);
+      setAllowTeamMemberActions(true);
     }
   }, [LoggedInUser, teamMembers]);
 
@@ -64,7 +64,7 @@ function TeamMembersTableContent({
               sortKey='currentParticipantUserRoles'
               header='Roles'
             />
-            {showTeamMemberActions && <th className='action'>Actions</th>}
+            {allowTeamMemberActions && <th className='action'>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -76,12 +76,12 @@ function TeamMembersTableContent({
               resendInvite={resendInvite}
               onRemoveTeamMember={onRemoveTeamMember}
               onUpdateTeamMember={onUpdateTeamMember}
-              showTeamMemberActions={showTeamMemberActions}
+              allowTeamMemberActions={allowTeamMemberActions}
             />
           ))}
         </tbody>
       </table>
-      {showTeamMemberActions && (
+      {allowTeamMemberActions && (
         <div className='add-team-member'>
           <button className='small-button' type='button' onClick={onOpenChangeTeamMemberDialog}>
             Add Team Member
