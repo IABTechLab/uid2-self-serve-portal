@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
+import { UserRoleId } from '../../../api/entities/UserRole';
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import {
   InviteTeamMemberForm,
@@ -28,7 +30,10 @@ function TeamMembersTableContent({
   onRemoveTeamMember,
   onUpdateTeamMember,
 }: TeamMembersTableProps) {
+  const { LoggedInUser } = useContext(CurrentUserContext);
+
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
+  const [allowTeamMemberActions, setAllowTeamMemberActions] = useState<boolean>(false);
 
   const onOpenChangeTeamMemberDialog = () => {
     setShowTeamMemberDialog(!showTeamMemberDialog);
@@ -36,6 +41,16 @@ function TeamMembersTableContent({
 
   const { sortData } = useSortable<UserDTO>();
   const sortedTeamMembers = sortData(teamMembers);
+
+  useEffect(() => {
+    const user = teamMembers.find((teamMember) => teamMember.id === LoggedInUser?.user?.id);
+    const isUserAdminOrSupport = user?.currentParticipantUserRoles?.find(
+      (role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support)
+    );
+    if (isUserAdminOrSupport) {
+      setAllowTeamMemberActions(true);
+    }
+  }, [LoggedInUser, teamMembers]);
 
   return (
     <div className='portal-team'>
@@ -49,7 +64,7 @@ function TeamMembersTableContent({
               sortKey='currentParticipantUserRoles'
               header='Roles'
             />
-            <th className='action'>Actions</th>
+            {allowTeamMemberActions && <th className='action'>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -61,22 +76,25 @@ function TeamMembersTableContent({
               resendInvite={resendInvite}
               onRemoveTeamMember={onRemoveTeamMember}
               onUpdateTeamMember={onUpdateTeamMember}
+              allowTeamMemberActions={allowTeamMemberActions}
             />
           ))}
         </tbody>
       </table>
-      <div className='add-team-member'>
-        <button className='small-button' type='button' onClick={onOpenChangeTeamMemberDialog}>
-          Add Team Member
-        </button>
-        {showTeamMemberDialog && (
-          <TeamMemberDialog
-            teamMembers={teamMembers}
-            onAddTeamMember={onAddTeamMember}
-            onOpenChange={onOpenChangeTeamMemberDialog}
-          />
-        )}
-      </div>
+      {allowTeamMemberActions && (
+        <div className='add-team-member'>
+          <button className='small-button' type='button' onClick={onOpenChangeTeamMemberDialog}>
+            Add Team Member
+          </button>
+          {showTeamMemberDialog && (
+            <TeamMemberDialog
+              teamMembers={teamMembers}
+              onAddTeamMember={onAddTeamMember}
+              onOpenChange={onOpenChangeTeamMemberDialog}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }

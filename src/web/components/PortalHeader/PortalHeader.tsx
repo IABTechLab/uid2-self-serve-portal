@@ -11,12 +11,15 @@ import * as Switch from '@radix-ui/react-switch';
 import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
+import { PortalRoute } from '../../screens/routeUtils';
 import { TeamMembersRoute } from '../../screens/teamMembers';
-import { getPathWithParticipant } from '../../utils/urlHelpers';
+import { GetUserRolesForCurrentParticipant } from '../../services/userAccount';
+import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
 
@@ -36,10 +39,35 @@ export function PortalHeader({
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
 
-  const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
-  if (LoggedInUser?.user?.isUid2Support) {
-    routes.push(AuditTrailRoute);
-  }
+  const [routes, setRoutes] = useState<PortalRoute[]>([
+    ParticipantInformationRoute,
+    TeamMembersRoute,
+    EmailContactsRoute,
+  ]);
+
+  useEffect(() => {
+    const getUserRolesForCurrentParticipant = async () => {
+      const user = LoggedInUser?.user;
+      if (user?.isUid2Support) {
+        setRoutes([...routes, AuditTrailRoute]);
+        return;
+      }
+      const parsedParticipantId = parseParticipantId(participantId);
+      if (parsedParticipantId && user) {
+        const userRolesForCurrentParticipant = await GetUserRolesForCurrentParticipant(
+          parsedParticipantId,
+          user.id
+        );
+        if (userRolesForCurrentParticipant.find((role) => role.id === UserRoleId.Admin)) {
+          setRoutes([...routes, AuditTrailRoute]);
+        }
+      }
+    };
+    if (!routes.includes(AuditTrailRoute)) {
+      getUserRolesForCurrentParticipant();
+    }
+  }, [LoggedInUser?.user, participantId, routes]);
+
   const showUserNavigationAndSettings =
     LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
 

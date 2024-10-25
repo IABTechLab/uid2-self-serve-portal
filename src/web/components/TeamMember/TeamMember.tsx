@@ -20,6 +20,7 @@ type TeamMemberProps = Readonly<{
   resendInvite: (id: number, participantId: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
+  allowTeamMemberActions: boolean;
 }>;
 
 enum InviteState {
@@ -34,8 +35,9 @@ function TeamMember({
   resendInvite,
   onRemoveTeamMember,
   onUpdateTeamMember,
+  allowTeamMemberActions,
 }: TeamMemberProps) {
-  const [reinviteState, setInviteState] = useState<InviteState>(InviteState.initial);
+  const [reinviteState, setReinviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
   const [showTeamMemberRemoveDialog, setShowTeamMemberRemoveDialog] = useState<boolean>();
@@ -58,14 +60,14 @@ function TeamMember({
       return;
     }
 
-    setInviteState(InviteState.inProgress);
+    setReinviteState(InviteState.inProgress);
     try {
       await resendInvite(person.id, participant!.id);
       SuccessToast('Invitation sent.');
-      setInviteState(InviteState.sent);
+      setReinviteState(InviteState.sent);
     } catch (e) {
       setErrorInfo(e as Error);
-      setInviteState(InviteState.error);
+      setReinviteState(InviteState.error);
       handleErrorToast(e);
     }
   }, [participant, person.id, reinviteState, resendInvite]);
@@ -105,46 +107,48 @@ function TeamMember({
           labelNames={person.currentParticipantUserRoles?.map((role) => role.roleName) ?? []}
         />
       </td>
-      <td className='action'>
-        <div className='action-cell'>
-          {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-          <div>
-            {person.acceptedTerms || (
-              <button
-                type='button'
-                className={clsx('invite-button', {
-                  clickable: reinviteState === InviteState.initial,
-                  error: reinviteState === InviteState.error,
-                })}
-                onClick={() => onResendInvite()}
-              >
-                {reinviteState === InviteState.initial && 'Resend Invitation'}
-                {reinviteState === InviteState.inProgress && 'Sending...'}
-                {reinviteState === InviteState.sent && 'Invitation Sent'}
-                {reinviteState === InviteState.error && 'Try again later'}
-              </button>
-            )}
-            <ActionButton onClick={onOpenChangeTeamMemberDialog} icon='pencil' />
-            {showTeamMemberDialog && (
-              <TeamMemberDialog
-                teamMembers={existingTeamMembers}
-                onUpdateTeamMember={handleUpdateUser}
-                person={person}
-                onOpenChange={onOpenChangeTeamMemberDialog}
-              />
-            )}
+      {allowTeamMemberActions && (
+        <td className='action'>
+          <div className='action-cell'>
+            {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
+            <div>
+              {person.acceptedTerms || (
+                <button
+                  type='button'
+                  className={clsx('invite-button', {
+                    clickable: reinviteState === InviteState.initial,
+                    error: reinviteState === InviteState.error,
+                  })}
+                  onClick={() => onResendInvite()}
+                >
+                  {reinviteState === InviteState.initial && 'Resend Invitation'}
+                  {reinviteState === InviteState.inProgress && 'Sending...'}
+                  {reinviteState === InviteState.sent && 'Invitation Sent'}
+                  {reinviteState === InviteState.error && 'Try again later'}
+                </button>
+              )}
 
-            <ActionButton onClick={onOpenChangeTeamMemberRemoveDialog} icon='trash-can' />
-            {showTeamMemberRemoveDialog && (
-              <TeamMemberRemoveConfirmationDialog
-                onRemoveTeamMember={handleRemoveUser}
-                person={person}
-                onOpenChange={onOpenChangeTeamMemberRemoveDialog}
-              />
-            )}
+              <ActionButton onClick={onOpenChangeTeamMemberDialog} icon='pencil' />
+              {showTeamMemberDialog && (
+                <TeamMemberDialog
+                  teamMembers={existingTeamMembers}
+                  onUpdateTeamMember={handleUpdateUser}
+                  person={person}
+                  onOpenChange={onOpenChangeTeamMemberDialog}
+                />
+              )}
+              <ActionButton onClick={onOpenChangeTeamMemberRemoveDialog} icon='trash-can' />
+              {showTeamMemberRemoveDialog && (
+                <TeamMemberRemoveConfirmationDialog
+                  onRemoveTeamMember={handleRemoveUser}
+                  person={person}
+                  onOpenChange={onOpenChangeTeamMemberRemoveDialog}
+                />
+              )}
+            </div>
           </div>
-        </div>
-      </td>
+        </td>
+      )}
     </tr>
   );
 }
