@@ -13,7 +13,7 @@ import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
-  user: UserWithIsUid2Support | null;
+  user: UserWithIsUid2Support | UserWithCurrentParticipantRoleNames | null;
 };
 
 export type InviteTeamMemberForm = {

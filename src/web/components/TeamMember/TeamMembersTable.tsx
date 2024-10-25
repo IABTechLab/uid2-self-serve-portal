@@ -45,7 +45,7 @@ function TeamMembersTableContent({
   useEffect(() => {
     const user = teamMembers.find((teamMember) => teamMember.id === LoggedInUser?.user?.id);
     const isUserAdminOrSupport = user?.currentParticipantUserRoles?.find(
-      (role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support)
+      (role) => role.id === UserRoleId.UID2Support || role.id === UserRoleId.Admin
     );
     if (isUserAdminOrSupport) {
       setAllowTeamMemberActions(true);

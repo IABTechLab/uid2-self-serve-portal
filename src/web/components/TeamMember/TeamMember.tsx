@@ -109,7 +109,7 @@ function TeamMember({
       </td>
       {allowTeamMemberActions && (
         <td className='action'>
-          <div className='action-cell'>
+          <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
             <div>
               {person.acceptedTerms || (
