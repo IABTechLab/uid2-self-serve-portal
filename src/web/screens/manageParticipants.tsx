@@ -46,8 +46,7 @@ function ManageParticipants() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = LoggedInUser?.user;
-    if (user?.isUid2Support && participant) {
+    if (!LoggedInUser?.user?.isUid2Support && participant) {
       navigate(`/participant/${participant.id}/home`);
       ErrorToast(`You do not have access to this page. Rerouting back to Home.`);
     }

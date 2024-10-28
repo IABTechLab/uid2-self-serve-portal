@@ -48,13 +48,12 @@ export function PortalHeader({
   if (
     user?.isUid2Support ||
     userRolesForCurrentParticipant?.includes(UserRoleId.Admin) ||
-    userRolesForCurrentParticipant?.includes(UserRoleId.Operations)
+    userRolesForCurrentParticipant?.includes(UserRoleId.UID2Support)
   ) {
     routes.push(AuditTrailRoute);
   }
 
-  const showUserNavigationAndSettings =
-    LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
+  const showUserNavigationAndSettings = user?.acceptedTerms && user?.participants!.length > 0;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const handleSelect = () => {
