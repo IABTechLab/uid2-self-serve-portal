@@ -11,7 +11,6 @@ import * as Switch from '@radix-ui/react-switch';
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
@@ -19,9 +18,9 @@ import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
 import { getPathWithParticipant } from '../../utils/urlHelpers';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 import './PortalHeader.scss';
-import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 export type PortalHeaderProps = {
   email: string | undefined;

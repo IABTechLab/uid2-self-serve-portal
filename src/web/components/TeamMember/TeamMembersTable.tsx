@@ -8,12 +8,12 @@ import {
   UpdateTeamMemberForm,
   UserResponse,
 } from '../../services/userAccount';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
 import './TeamMembersTable.scss';
-import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 type TeamMembersTableProps = Readonly<{
   teamMembers: UserResponse[];
