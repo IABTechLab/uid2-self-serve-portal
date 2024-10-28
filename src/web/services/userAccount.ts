@@ -4,7 +4,6 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { UserCreationPartial } from '../../api/entities/User';
-// import { UserRoleDTO } from '../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
@@ -75,20 +74,6 @@ export async function GetAllUsersOfParticipant(participantId: number) {
     throw backendError(e, 'Could not load users');
   }
 }
-
-// export async function GetUserRolesForCurrentParticipant(participantId: number, userId: number) {
-//   try {
-//     const result = await axios.get<UserRoleDTO[]>(
-//       `/participants/${participantId}/users/${userId}`,
-//       {
-//         validateStatus: (status) => [200, 404].includes(status),
-//       }
-//     );
-//     return result.data;
-//   } catch (e: unknown) {
-//     throw backendError(e, 'Could not load user roles');
-//   }
-// }
 
 export async function RemoveUser(id: number, participantId: number) {
   try {
