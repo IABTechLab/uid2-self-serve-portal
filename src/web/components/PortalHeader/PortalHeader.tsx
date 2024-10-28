@@ -21,6 +21,7 @@ import { TeamMembersRoute } from '../../screens/teamMembers';
 import { getPathWithParticipant } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 export type PortalHeaderProps = {
   email: string | undefined;
@@ -36,21 +37,12 @@ export function PortalHeader({
   logout,
 }: Readonly<PortalHeaderProps>) {
   const { participant } = useContext(ParticipantContext);
-
   const { LoggedInUser } = useContext(CurrentUserContext);
   const user = LoggedInUser?.user;
-  const userRolesForCurrentParticipant = user?.participants?.find(
-    (p) => p.id === participant?.id
-  )?.currentUserRoleIds;
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
-  if (
-    user?.isUid2Support ||
-    [UserRoleId.UID2Support, UserRoleId.Admin].some((role) =>
-      userRolesForCurrentParticipant?.includes(role)
-    )
-  ) {
+  if (user && participant && isUserAdminOrSupport(user, participant.id)) {
     routes.push(AuditTrailRoute);
   }
 

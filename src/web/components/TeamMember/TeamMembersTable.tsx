@@ -14,6 +14,7 @@ import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
 import './TeamMembersTable.scss';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 type TeamMembersTableProps = Readonly<{
   teamMembers: UserResponse[];
@@ -32,9 +33,6 @@ function TeamMembersTableContent({
 }: TeamMembersTableProps) {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
-  const userRolesForCurrentParticipant = LoggedInUser?.user?.participants?.find(
-    (p) => p.id === participant?.id
-  )?.currentUserRoleIds;
 
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
   const [showTeamMemberActions, setShowTeamMemberActions] = useState<boolean>(false);
@@ -47,15 +45,14 @@ function TeamMembersTableContent({
   const sortedTeamMembers = sortData(teamMembers);
 
   useEffect(() => {
-    const isUserAdminOrSupport =
-      LoggedInUser?.user?.isUid2Support ||
-      [UserRoleId.UID2Support, UserRoleId.Admin].some((role) =>
-        userRolesForCurrentParticipant?.includes(role)
-      );
-    if (isUserAdminOrSupport) {
+    if (
+      LoggedInUser?.user &&
+      participant &&
+      isUserAdminOrSupport(LoggedInUser.user, participant.id)
+    ) {
       setShowTeamMemberActions(true);
     }
-  }, [LoggedInUser, teamMembers, userRolesForCurrentParticipant]);
+  }, [LoggedInUser, teamMembers]);
 
   return (
     <div className='portal-team'>
