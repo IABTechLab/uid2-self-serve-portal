@@ -4,6 +4,7 @@ import { UserController } from '../controllers/userController';
 import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
 import { LoggerService } from '../services/loggerService';
 import { UserService } from '../services/userService';
+import { handleGetUserRolesForCurrentParticipant } from './participants/participantsUsers';
 
 const createParticipantUsersRouter = () => {
   const participantUsersRouter = express.Router({ mergeParams: true });
@@ -16,6 +17,7 @@ const createParticipantUsersRouter = () => {
   );
   participantUsersRouter.delete('/:userId', userController.removeUser.bind(userController));
   participantUsersRouter.patch('/:userId', userController.updateUser.bind(userController));
+  participantUsersRouter.get('/:userId', handleGetUserRolesForCurrentParticipant);
 
   return participantUsersRouter;
 };

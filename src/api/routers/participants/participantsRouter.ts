@@ -140,10 +140,8 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/auditTrail', handleAuditTrail);
 
   participantsRouter.get('/:participantId/users', handleGetParticipantUsers);
-  participantsRouter.get('/:participantId/:userId', handleGetUserRolesForCurrentParticipant);
   const participantUsersRouter = createParticipantUsersRouter();
   participantsRouter.use('/:participantId/users', participantUsersRouter);
-  participantsRouter.use('/:participantId/:userId', participantUsersRouter);
 
   const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
