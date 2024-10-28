@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import {
   InviteTeamMemberForm,
@@ -13,7 +14,6 @@ import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
 import './TeamMembersTable.scss';
-import { ParticipantContext } from '../../contexts/ParticipantProvider';
 
 type TeamMembersTableProps = Readonly<{
   teamMembers: UserResponse[];

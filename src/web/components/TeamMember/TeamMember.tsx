@@ -127,7 +127,11 @@ function TeamMember({
                 </button>
               )}
 
-              <ActionButton onClick={onOpenChangeTeamMemberDialog} icon='pencil' />
+              <ActionButton
+                onClick={onOpenChangeTeamMemberDialog}
+                icon='pencil'
+                aria-label='Edit Team Member'
+              />
               {showTeamMemberDialog && (
                 <TeamMemberDialog
                   teamMembers={existingTeamMembers}
@@ -136,7 +140,11 @@ function TeamMember({
                   onOpenChange={onOpenChangeTeamMemberDialog}
                 />
               )}
-              <ActionButton onClick={onOpenChangeTeamMemberRemoveDialog} icon='trash-can' />
+              <ActionButton
+                onClick={onOpenChangeTeamMemberRemoveDialog}
+                icon='trash-can'
+                aria-label='Remove Team Member'
+              />
               {showTeamMemberRemoveDialog && (
                 <TeamMemberRemoveConfirmationDialog
                   onRemoveTeamMember={handleRemoveUser}

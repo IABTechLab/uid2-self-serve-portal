@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
 import { UserRoleId } from '../../../api/entities/UserRole';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import {
   createParticipantContextValue,
@@ -11,7 +12,6 @@ import {
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
 import TeamMembersTable from './TeamMembersTable';
-import { UserWithParticipantRoles } from '../../../api/services/usersService';
 
 const renderTeamMembersTableWithContext = (
   userContextValue: UserContextWithSetter,
@@ -67,16 +67,17 @@ describe('manage team member functionality testing', () => {
       expect(addTeamMemberButton).toBeInTheDocument();
       const actionsHeader = screen.getByRole('columnheader', { name: 'Actions' });
       expect(actionsHeader).toBeInTheDocument();
-      expect(screen.getByTestId('action-cell')).toBeInTheDocument();
+      expect(screen.getByLabelText('Edit Team Member')).toBeInTheDocument();
     }
   );
 
   it('should not include any manage team member functionality', () => {
+    mockUser.isUid2Support = false;
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Operations, roleName: 'Operations' }];
     userContextValue = createUserContextValue(mockUser);
     renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
     expect(screen.queryByRole('button', { name: 'Add Team Member' })).not.toBeInTheDocument();
     expect(screen.queryByRole('columnheader', { name: 'Actions' })).not.toBeInTheDocument();
-    expect(screen.queryByTestId('action-cell')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Edit Team Member')).not.toBeInTheDocument();
   });
 });
