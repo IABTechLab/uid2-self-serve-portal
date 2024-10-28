@@ -41,8 +41,9 @@ const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const user = LoggedInUser?.user;
-  const uid2SupportMenu = user?.isUid2Support ? Uid2SupportRoutes.filter((r) => r.description) : [];
+  const uid2SupportMenu = LoggedInUser?.user?.isUid2Support
+    ? Uid2SupportRoutes.filter((r) => r.description)
+    : [];
 
   return (
     <div className='app-panel'>
