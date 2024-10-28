@@ -60,7 +60,10 @@ describe('manage team member functionality testing', () => {
   it.each(teamMemberManageRoles)(
     'should include all manage team member functionality',
     (manageRole) => {
+      // setting uid2 support to false to make sure the roles are tested
+      mockUser.isUid2Support = false;
       mockUser.currentParticipantUserRoles = [manageRole];
+      mockParticipant.currentUserRoleIds = [manageRole.id];
       userContextValue = createUserContextValue(mockUser);
       renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
       const addTeamMemberButton = screen.getByRole('button', { name: 'Add Team Member' });
@@ -74,6 +77,7 @@ describe('manage team member functionality testing', () => {
   it('should not include any manage team member functionality', () => {
     mockUser.isUid2Support = false;
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Operations, roleName: 'Operations' }];
+    mockParticipant.currentUserRoleIds = [UserRoleId.Operations];
     userContextValue = createUserContextValue(mockUser);
     renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
     expect(screen.queryByRole('button', { name: 'Add Team Member' })).not.toBeInTheDocument();
