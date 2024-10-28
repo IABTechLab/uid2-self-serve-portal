@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import { UserWithIsUid2Support } from '../../api/services/usersService';
 import { SideNav } from '../components/Navigation/SideNav';
 import { TermsAndConditionsDialog } from '../components/TermsAndConditions/TermsAndConditionsDialog';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
@@ -42,7 +41,7 @@ const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const user = LoggedInUser?.user as UserWithIsUid2Support;
+  const user = LoggedInUser?.user;
   const uid2SupportMenu = user?.isUid2Support ? Uid2SupportRoutes.filter((r) => r.description) : [];
 
   return (

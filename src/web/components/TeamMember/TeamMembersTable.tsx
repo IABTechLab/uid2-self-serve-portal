@@ -39,7 +39,7 @@ function TeamMembersTableContent({
     setShowTeamMemberDialog(!showTeamMemberDialog);
   };
 
-  const { sortData } = useSortable<UserDTO>();
+  const { sortData } = useSortable<UserResponse>();
   const sortedTeamMembers = sortData(teamMembers);
 
   useEffect(() => {

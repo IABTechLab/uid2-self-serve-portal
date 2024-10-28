@@ -5,15 +5,12 @@ import { z } from 'zod';
 
 import { UserCreationPartial } from '../../api/entities/User';
 import { UserRoleDTO } from '../../api/entities/UserRole';
-import {
-  UserWithCurrentParticipantRoleNames,
-  UserWithIsUid2Support,
-} from '../../api/services/usersService';
+import { UserWithParticipantRoles } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
-  user: UserWithIsUid2Support | UserWithCurrentParticipantRoleNames | null;
+  user: UserWithParticipantRoles | null;
 };
 
 export type InviteTeamMemberForm = {
@@ -27,11 +24,11 @@ export type InviteTeamMemberForm = {
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
-export type UserResponse = UserWithCurrentParticipantRoleNames;
+export type UserResponse = UserWithParticipantRoles;
 
-export async function GetLoggedInUserAccount(): Promise<UserWithIsUid2Support | null> {
+export async function GetLoggedInUserAccount(): Promise<UserWithParticipantRoles | null> {
   try {
-    const result = await axios.get<UserWithIsUid2Support>(`/users/current`, {
+    const result = await axios.get<UserWithParticipantRoles>(`/users/current`, {
       validateStatus: (status) => [200, 404].includes(status),
     });
     if (result.status === 200) return result.data;

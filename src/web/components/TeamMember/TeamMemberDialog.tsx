@@ -2,7 +2,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { UserWithCurrentParticipantRoleNames } from '../../../api/services/usersService';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import {
   InviteTeamMemberForm,
   UpdateTeamMemberForm,
@@ -17,13 +17,13 @@ import { TextInput } from '../Input/TextInput';
 import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
 
 type AddTeamMemberDialogProps = {
-  teamMembers: UserWithCurrentParticipantRoleNames[];
+  teamMembers: UserWithParticipantRoles[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
   person?: never;
 };
 type UpdateTeamMemberDialogProps = {
-  teamMembers: UserWithCurrentParticipantRoleNames[];
+  teamMembers: UserWithParticipantRoles[];
   onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
   person: UserResponse;

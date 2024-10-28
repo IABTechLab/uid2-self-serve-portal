@@ -12,7 +12,6 @@ import { useContext, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { UserWithIsUid2Support } from '../../../api/services/usersService';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
@@ -48,8 +47,8 @@ export function PortalHeader({
 
   useEffect(() => {
     const getUserRolesForCurrentParticipant = async () => {
-      const user = LoggedInUser?.user as UserWithIsUid2Support;
-      if (user?.isUid2Support) {
+      const user = LoggedInUser?.user;
+      if (LoggedInUser?.user?.isUid2Support) {
         setRoutes([...routes, AuditTrailRoute]);
         return;
       }

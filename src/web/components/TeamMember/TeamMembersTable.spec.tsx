@@ -1,22 +1,22 @@
 import { render, screen } from '@testing-library/react';
 
-import { Participant,ParticipantDTO } from '../../../api/entities/Participant';
+import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { UserWithCurrentParticipantRoleNames } from '../../../api/services/usersService';
 import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import {
   createParticipantContextValue,
-  createUserContextValueWithParticipantRoleName,
+  createUserContextValue,
   TestContextProvider,
 } from '../../../testHelpers/testContextProvider';
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
 import TeamMembersTable from './TeamMembersTable';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 
 const renderTeamMembersTableWithContext = (
   userContextValue: UserContextWithSetter,
   participantContextValue: ParticipantWithSetter,
-  teamMembers: UserWithCurrentParticipantRoleNames[]
+  teamMembers: UserWithParticipantRoles[]
 ) => {
   return render(
     <TestContextProvider
@@ -46,7 +46,7 @@ describe('manage team member functionality testing', () => {
   let participantContextValue: ParticipantWithSetter;
   let userContextValue: UserContextWithSetter;
   let mockParticipant: ParticipantDTO;
-  let mockUser: UserWithCurrentParticipantRoleNames;
+  let mockUser: UserWithParticipantRoles;
   beforeAll(() => {
     mockParticipant = createMockParticipant();
     participantContextValue = createParticipantContextValue(mockParticipant);
@@ -61,7 +61,7 @@ describe('manage team member functionality testing', () => {
     'should include all manage team member functionality',
     (manageRole) => {
       mockUser.currentParticipantUserRoles = [manageRole];
-      userContextValue = createUserContextValueWithParticipantRoleName(mockUser);
+      userContextValue = createUserContextValue(mockUser);
       renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
       const addTeamMemberButton = screen.getByRole('button', { name: 'Add Team Member' });
       expect(addTeamMemberButton).toBeInTheDocument();
@@ -73,7 +73,7 @@ describe('manage team member functionality testing', () => {
 
   it('should not include any manage team member functionality', () => {
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Operations, roleName: 'Operations' }];
-    userContextValue = createUserContextValueWithParticipantRoleName(mockUser);
+    userContextValue = createUserContextValue(mockUser);
     renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
     expect(screen.queryByRole('button', { name: 'Add Team Member' })).not.toBeInTheDocument();
     expect(screen.queryByRole('columnheader', { name: 'Actions' })).not.toBeInTheDocument();

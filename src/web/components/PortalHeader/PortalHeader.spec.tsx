@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
-import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import {
   createParticipantContextValue,
@@ -48,7 +48,7 @@ describe('Portal Header tests', () => {
     let participantContextValue: ParticipantWithSetter;
     let userContextValue: UserContextWithSetter;
     let mockParticipant: ParticipantDTO;
-    let mockUser: UserWithIsUid2Support;
+    let mockUser: UserWithParticipantRoles;
 
     beforeAll(() => {
       mockParticipant = createMockParticipant();
