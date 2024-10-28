@@ -80,4 +80,24 @@ describe('manage team member functionality testing', () => {
     expect(screen.queryByRole('columnheader', { name: 'Actions' })).not.toBeInTheDocument();
     expect(screen.queryByLabelText('Edit Team Member')).not.toBeInTheDocument();
   });
+
+  it('should include all manage team member functionality when user has uid2support', () => {
+    mockUser.isUid2Support = true;
+    userContextValue = createUserContextValue(mockUser);
+    renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
+    const addTeamMemberButton = screen.getByRole('button', { name: 'Add Team Member' });
+    expect(addTeamMemberButton).toBeInTheDocument();
+    const actionsHeader = screen.getByRole('columnheader', { name: 'Actions' });
+    expect(actionsHeader).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit Team Member')).toBeInTheDocument();
+  });
+
+  it('should not include any manage team member functionality when user does not have uid2support', () => {
+    mockUser.isUid2Support = false;
+    userContextValue = createUserContextValue(mockUser);
+    renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
+    expect(screen.queryByRole('button', { name: 'Add Team Member' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('columnheader', { name: 'Actions' })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('Edit Team Member')).not.toBeInTheDocument();
+  });
 });
