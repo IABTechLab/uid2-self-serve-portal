@@ -16,9 +16,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
-import { PortalRoute } from '../../screens/routeUtils';
 import { TeamMembersRoute } from '../../screens/teamMembers';
-import { GetUserRolesForCurrentParticipant } from '../../services/userAccount';
 import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
@@ -37,40 +35,23 @@ export function PortalHeader({
   logout,
 }: Readonly<PortalHeaderProps>) {
   const { participantId } = useParams();
+  const parsedParticipantId = parseParticipantId(participantId);
+
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const user = LoggedInUser?.user;
+  const userRolesForCurrentParticipant = user?.participants?.find(
+    (p) => p.id === parsedParticipantId
+  )?.currentUserRoleIds;
 
-  const [routes, setRoutes] = useState<PortalRoute[]>([
-    ParticipantInformationRoute,
-    TeamMembersRoute,
-    EmailContactsRoute,
-  ]);
+  const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
-  useEffect(() => {
-    const getUserRolesForCurrentParticipant = async () => {
-      const user = LoggedInUser?.user;
-      if (LoggedInUser?.user?.isUid2Support) {
-        setRoutes([...routes, AuditTrailRoute]);
-        return;
-      }
-      const parsedParticipantId = parseParticipantId(participantId);
-      if (parsedParticipantId && user) {
-        const userRolesForCurrentParticipant = await GetUserRolesForCurrentParticipant(
-          parsedParticipantId,
-          user.id
-        );
-        if (
-          userRolesForCurrentParticipant.find(
-            (role) => role.id === UserRoleId.Admin || role.id === UserRoleId.UID2Support
-          )
-        ) {
-          setRoutes([...routes, AuditTrailRoute]);
-        }
-      }
-    };
-    if (!routes.includes(AuditTrailRoute)) {
-      getUserRolesForCurrentParticipant();
-    }
-  }, [LoggedInUser?.user, participantId, routes]);
+  if (
+    user?.isUid2Support ||
+    userRolesForCurrentParticipant?.includes(UserRoleId.Admin) ||
+    userRolesForCurrentParticipant?.includes(UserRoleId.Operations)
+  ) {
+    routes.push(AuditTrailRoute);
+  }
 
   const showUserNavigationAndSettings =
     LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;

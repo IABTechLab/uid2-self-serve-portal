@@ -19,7 +19,7 @@ type TeamMemberProps = Readonly<{
   resendInvite: (id: number, participantId: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
-  allowTeamMemberActions: boolean;
+  showTeamMemberActions: boolean;
 }>;
 
 enum InviteState {
@@ -34,7 +34,7 @@ function TeamMember({
   resendInvite,
   onRemoveTeamMember,
   onUpdateTeamMember,
-  allowTeamMemberActions,
+  showTeamMemberActions,
 }: TeamMemberProps) {
   const [reinviteState, setReinviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -106,7 +106,7 @@ function TeamMember({
           labelNames={person.currentParticipantUserRoles?.map((role) => role.roleName) ?? []}
         />
       </td>
-      {allowTeamMemberActions && (
+      {showTeamMemberActions && (
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}

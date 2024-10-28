@@ -45,6 +45,7 @@ describe('Portal Header tests', () => {
   });
 
   describe('Audit Trail in Portal Header tests based on role', () => {
+    const user = userEvent.setup();
     let participantContextValue: ParticipantWithSetter;
     let userContextValue: UserContextWithSetter;
     let mockParticipant: ParticipantDTO;
@@ -61,7 +62,9 @@ describe('Portal Header tests', () => {
       mockUser.isUid2Support = true;
       renderPortalHeaderWithContext(userContextValue, participantContextValue);
       const dropdownMenuButton = screen.getByRole('button');
-      await userEvent.click(dropdownMenuButton);
+
+      await user.click(dropdownMenuButton);
+
       const auditTrailMenuItem = screen.getByRole('menuitem', { name: 'Audit Trail' });
       expect(auditTrailMenuItem).toBeInTheDocument();
     });
@@ -69,8 +72,8 @@ describe('Portal Header tests', () => {
     test('when user does not have uid2support role', async () => {
       mockUser.isUid2Support = false;
       renderPortalHeaderWithContext(userContextValue, participantContextValue);
-      const button = screen.getByRole('button');
-      await userEvent.click(button);
+      const dropdownMenuButton = screen.getByRole('button');
+      await user.click(dropdownMenuButton);
       expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
     });
   });
