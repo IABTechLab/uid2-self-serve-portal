@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 
-import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
@@ -34,8 +33,13 @@ function TeamMembersTableContent({
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
 
+  const showTeamMemberActions =
+    (LoggedInUser?.user &&
+      participant &&
+      isUserAdminOrSupport(LoggedInUser?.user, participant.id)) ??
+    false;
+
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
-  const [showTeamMemberActions, setShowTeamMemberActions] = useState<boolean>(false);
 
   const onOpenChangeTeamMemberDialog = () => {
     setShowTeamMemberDialog(!showTeamMemberDialog);
@@ -43,16 +47,6 @@ function TeamMembersTableContent({
 
   const { sortData } = useSortable<UserResponse>();
   const sortedTeamMembers = sortData(teamMembers);
-
-  useEffect(() => {
-    if (
-      LoggedInUser?.user &&
-      participant &&
-      isUserAdminOrSupport(LoggedInUser.user, participant.id)
-    ) {
-      setShowTeamMemberActions(true);
-    }
-  }, [LoggedInUser, teamMembers]);
 
   return (
     <div className='portal-team'>
