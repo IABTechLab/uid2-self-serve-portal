@@ -76,19 +76,19 @@ export async function GetAllUsersOfParticipant(participantId: number) {
   }
 }
 
-export async function GetUserRolesForCurrentParticipant(participantId: number, userId: number) {
-  try {
-    const result = await axios.get<UserRoleDTO[]>(
-      `/participants/${participantId}/users/${userId}`,
-      {
-        validateStatus: (status) => [200, 404].includes(status),
-      }
-    );
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load user roles');
-  }
-}
+// export async function GetUserRolesForCurrentParticipant(participantId: number, userId: number) {
+//   try {
+//     const result = await axios.get<UserRoleDTO[]>(
+//       `/participants/${participantId}/users/${userId}`,
+//       {
+//         validateStatus: (status) => [200, 404].includes(status),
+//       }
+//     );
+//     return result.data;
+//   } catch (e: unknown) {
+//     throw backendError(e, 'Could not load user roles');
+//   }
+// }
 
 export async function RemoveUser(id: number, participantId: number) {
   try {
