@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
+import { UserRoleId } from '../../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { createMockParticipant, createMockUser } from '../../../testHelpers/dataMocks';
 import {
@@ -14,7 +15,6 @@ import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
 import { PortalHeader } from './PortalHeader';
 import * as stories from './PortalHeader.stories';
-import { UserRoleId } from '../../../api/entities/UserRole';
 
 const { InvalidEmailAddress, NoEmailAddress } = composeStories(stories);
 

@@ -4,7 +4,7 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { UserCreationPartial } from '../../api/entities/User';
-import { UserRoleDTO } from '../../api/entities/UserRole';
+// import { UserRoleDTO } from '../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 

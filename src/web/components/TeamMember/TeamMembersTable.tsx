@@ -55,7 +55,7 @@ function TeamMembersTableContent({
     if (isUserAdminOrSupport) {
       setShowTeamMemberActions(true);
     }
-  }, [LoggedInUser, teamMembers]);
+  }, [LoggedInUser, teamMembers, userRolesForCurrentParticipant]);
 
   return (
     <div className='portal-team'>
