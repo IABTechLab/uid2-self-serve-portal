@@ -9,18 +9,9 @@
   }
 
   .portal-team-table {
-    font-size: 0.875rem;
-
-    .name {
-      width: 30%;
-    }
-
-    .email {
-      width: 30%;
-    }
-
-    .jobFunction {
-      width: 10%;
+    .role-header {
+      display: flex;
+      gap: 10px;
     }
 
     td {

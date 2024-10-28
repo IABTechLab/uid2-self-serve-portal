@@ -8,6 +8,7 @@ import {
   UserResponse,
 } from '../../services/userAccount';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMember from './TeamMember';
 import TeamMemberDialog from './TeamMemberDialog';
 
@@ -45,10 +46,15 @@ function TeamMembersTableContent({
             <SortableTableHeader<UserResponse> sortKey='firstName' header='Name' />
             <SortableTableHeader<UserResponse> sortKey='email' header='Email' />
             <SortableTableHeader<UserResponse> sortKey='jobFunction' header='Job Function' />
-            <SortableTableHeader<UserResponse>
-              sortKey='currentParticipantUserRoles'
-              header='Roles'
-            />
+            <th>
+              <div className='role-header'>
+                <div>Role</div>
+                <Tooltip>
+                  Admin and Operations roles can perform most of the same actions in the portal.
+                  However, only the Admin role can manage team members.
+                </Tooltip>
+              </div>
+            </th>
             <th className='action'>Actions</th>
           </tr>
         </thead>
