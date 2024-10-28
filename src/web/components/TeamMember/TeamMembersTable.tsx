@@ -32,6 +32,9 @@ function TeamMembersTableContent({
 }: TeamMembersTableProps) {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
+  const userRolesForCurrentParticipant = LoggedInUser?.user?.participants?.find(
+    (p) => p.id === participant?.id
+  )?.currentUserRoleIds;
 
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
   const [showTeamMemberActions, setShowTeamMemberActions] = useState<boolean>(false);
@@ -44,13 +47,11 @@ function TeamMembersTableContent({
   const sortedTeamMembers = sortData(teamMembers);
 
   useEffect(() => {
-    const userRolesForCurrentParticipant = LoggedInUser?.user?.participants?.find(
-      (p) => p.id === participant?.id
-    )?.currentUserRoleIds;
     const isUserAdminOrSupport =
       LoggedInUser?.user?.isUid2Support ||
-      userRolesForCurrentParticipant?.includes(UserRoleId.UID2Support) ||
-      userRolesForCurrentParticipant?.includes(UserRoleId.Admin);
+      [UserRoleId.UID2Support, UserRoleId.Admin].some((role) =>
+        userRolesForCurrentParticipant?.includes(role)
+      );
     if (isUserAdminOrSupport) {
       setShowTeamMemberActions(true);
     }

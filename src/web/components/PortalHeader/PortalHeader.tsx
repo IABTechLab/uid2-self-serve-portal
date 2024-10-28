@@ -47,8 +47,9 @@ export function PortalHeader({
 
   if (
     user?.isUid2Support ||
-    userRolesForCurrentParticipant?.includes(UserRoleId.Admin) ||
-    userRolesForCurrentParticipant?.includes(UserRoleId.UID2Support)
+    [UserRoleId.UID2Support, UserRoleId.Admin].some((role) =>
+      userRolesForCurrentParticipant?.includes(role)
+    )
   ) {
     routes.push(AuditTrailRoute);
   }
