@@ -9,15 +9,16 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 import * as Switch from '@radix-ui/react-switch';
 import { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
-import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
+import { getPathWithParticipant } from '../../utils/urlHelpers';
 
 import './PortalHeader.scss';
 
@@ -34,13 +35,12 @@ export function PortalHeader({
   setDarkMode = undefined,
   logout,
 }: Readonly<PortalHeaderProps>) {
-  const { participantId } = useParams();
-  const parsedParticipantId = parseParticipantId(participantId);
+  const { participant } = useContext(ParticipantContext);
 
   const { LoggedInUser } = useContext(CurrentUserContext);
   const user = LoggedInUser?.user;
   const userRolesForCurrentParticipant = user?.participants?.find(
-    (p) => p.id === parsedParticipantId
+    (p) => p.id === participant?.id
   )?.currentUserRoleIds;
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
@@ -74,7 +74,7 @@ export function PortalHeader({
   return (
     <header className='portal-header'>
       <div className='title'>
-        <Link data-testid='title-link' to={`/participant/${participantId}/home`}>
+        <Link data-testid='title-link' to={`/participant/${participant?.id}/home`}>
           <img
             src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
             alt='UID2 logo'
@@ -94,11 +94,11 @@ export function PortalHeader({
               {routes.map((route) => {
                 return (
                   <DropdownMenuItem
-                    key={getPathWithParticipant(route.path, participantId)}
+                    key={getPathWithParticipant(route.path, participant?.id)}
                     className='dropdown-menu-item'
                     onClick={handleSelect}
                   >
-                    <Link to={getPathWithParticipant(route.path, participantId)} className='link'>
+                    <Link to={getPathWithParticipant(route.path, participant?.id)} className='link'>
                       {route.description}
                     </Link>
                   </DropdownMenuItem>
