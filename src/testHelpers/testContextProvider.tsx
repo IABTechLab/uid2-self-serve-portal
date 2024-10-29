@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ParticipantDTO } from '../api/entities/Participant';
-import { UserWithIsUid2Support } from '../api/services/usersService';
+import { UserWithParticipantRoles } from '../api/services/usersService';
 import { CurrentUserContext, UserContextWithSetter } from '../web/contexts/CurrentUserProvider';
 import { ParticipantContext, ParticipantWithSetter } from '../web/contexts/ParticipantProvider';
 
@@ -12,7 +12,7 @@ export const createTestKeycloakInstance = () => {
   return new Keycloak();
 };
 
-export const createUserContextValue = (user: UserWithIsUid2Support): UserContextWithSetter => ({
+export const createUserContextValue = (user: UserWithParticipantRoles): UserContextWithSetter => ({
   LoggedInUser: {
     profile: {},
     user,

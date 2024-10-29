@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
-import { UserDTO } from '../../../api/entities/User';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
-import {
-  InviteTeamMemberForm,
-  UpdateTeamMemberForm,
-  UserResponse,
-} from '../../services/userAccount';
+import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMember from './TeamMember';
@@ -15,7 +14,7 @@ import TeamMemberDialog from './TeamMemberDialog';
 import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = Readonly<{
-  teamMembers: UserResponse[];
+  teamMembers: UserWithParticipantRoles[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
@@ -29,13 +28,22 @@ function TeamMembersTableContent({
   onRemoveTeamMember,
   onUpdateTeamMember,
 }: TeamMembersTableProps) {
+  const { LoggedInUser } = useContext(CurrentUserContext);
+  const { participant } = useContext(ParticipantContext);
+
+  const showTeamMemberActions =
+    (LoggedInUser?.user &&
+      participant &&
+      isUserAdminOrSupport(LoggedInUser?.user, participant.id)) ??
+    false;
+
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>(false);
 
   const onOpenChangeTeamMemberDialog = () => {
     setShowTeamMemberDialog(!showTeamMemberDialog);
   };
 
-  const { sortData } = useSortable<UserDTO>();
+  const { sortData } = useSortable<UserWithParticipantRoles>();
   const sortedTeamMembers = sortData(teamMembers);
 
   return (
@@ -43,9 +51,12 @@ function TeamMembersTableContent({
       <table className='portal-team-table'>
         <thead>
           <tr>
-            <SortableTableHeader<UserResponse> sortKey='firstName' header='Name' />
-            <SortableTableHeader<UserResponse> sortKey='email' header='Email' />
-            <SortableTableHeader<UserResponse> sortKey='jobFunction' header='Job Function' />
+            <SortableTableHeader<UserWithParticipantRoles> sortKey='firstName' header='Name' />
+            <SortableTableHeader<UserWithParticipantRoles> sortKey='email' header='Email' />
+            <SortableTableHeader<UserWithParticipantRoles>
+              sortKey='jobFunction'
+              header='Job Function'
+            />
             <th>
               <div className='role-header'>
                 <div>Role</div>
@@ -55,7 +66,7 @@ function TeamMembersTableContent({
                 </Tooltip>
               </div>
             </th>
-            <th className='action'>Actions</th>
+            {showTeamMemberActions && <th className='action'>Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -67,22 +78,25 @@ function TeamMembersTableContent({
               resendInvite={resendInvite}
               onRemoveTeamMember={onRemoveTeamMember}
               onUpdateTeamMember={onUpdateTeamMember}
+              showTeamMemberActions={showTeamMemberActions}
             />
           ))}
         </tbody>
       </table>
-      <div className='add-team-member'>
-        <button className='small-button' type='button' onClick={onOpenChangeTeamMemberDialog}>
-          Add Team Member
-        </button>
-        {showTeamMemberDialog && (
-          <TeamMemberDialog
-            teamMembers={teamMembers}
-            onAddTeamMember={onAddTeamMember}
-            onOpenChange={onOpenChangeTeamMemberDialog}
-          />
-        )}
-      </div>
+      {showTeamMemberActions && (
+        <div className='add-team-member'>
+          <button className='small-button' type='button' onClick={onOpenChangeTeamMemberDialog}>
+            Add Team Member
+          </button>
+          {showTeamMemberDialog && (
+            <TeamMemberDialog
+              teamMembers={teamMembers}
+              onAddTeamMember={onAddTeamMember}
+              onOpenChange={onOpenChangeTeamMemberDialog}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 }
