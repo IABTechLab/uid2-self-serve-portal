@@ -30,7 +30,8 @@ export const isAdminOrUid2Support: Handler = async (req: ParticipantRequest, res
   const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
   const userIsAdminOrUid2Support =
-    userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) || isUid2Support(userEmail);
+    userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) ||
+    (await isUid2Support(userEmail));
   if (!userIsAdminOrUid2Support) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
