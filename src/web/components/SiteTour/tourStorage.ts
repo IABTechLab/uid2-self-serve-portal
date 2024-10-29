@@ -3,8 +3,12 @@ import Joyride from 'react-joyride';
 import config from '../../../../package.json';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { UserWithIsUid2Support } from '../../../api/services/usersService';
+import {
+  UserWithIsUid2Support,
+  UserWithParticipantRoles,
+} from '../../../api/services/usersService';
 import { GetUserRolesForCurrentParticipant, UserAccount } from '../../services/userAccount';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 const { version } = config;
 
@@ -59,17 +63,14 @@ function saveTourData(data: TourData) {
 }
 
 const shouldRemoveAuditTrailStep = async (
-  user: UserWithIsUid2Support | null | undefined,
+  user: UserWithParticipantRoles | null | undefined,
   participant: ParticipantDTO | null
 ) => {
   if (!user || !participant) {
     return true;
   }
-  const userRoles = await GetUserRolesForCurrentParticipant(participant.id, user.id);
-  if (userRoles.find((role) => role.id === (UserRoleId.Admin || UserRoleId.UID2Support))) {
-    return false;
-  }
-  return true;
+  const isAdminOrSupport = isUserAdminOrSupport(user, participant.id);
+  return !isAdminOrSupport;
 };
 
 function shouldRemoveCurrentStep(
