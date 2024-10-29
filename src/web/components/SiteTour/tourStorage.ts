@@ -13,7 +13,7 @@ export type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][nu
 };
 // Temporary solution: all tour steps without a version are treated as relevant to the current version.
 // Update the version after release to avoid showing it again. We can automate this in the release pipeline.
-const tourSteps: VersionedTourStep[] = [
+export const tourSteps: VersionedTourStep[] = [
   {
     target: `.profile-dropdown-button`,
     content: `We've moved some menu items to your profile dropdown.`,
@@ -65,7 +65,7 @@ const shouldRemoveParticipantSwitcherStep = (user: UserWithParticipantRoles | nu
   return (user?.participants?.length ?? 0) <= 1;
 };
 
-const shouldRemoveAuditTrailStep = async (
+const shouldRemoveAuditTrailStep = (
   user: UserWithParticipantRoles | null | undefined,
   participant: ParticipantDTO | null
 ) => {
@@ -84,9 +84,7 @@ function shouldRemoveCurrentStep(
     return shouldRemoveParticipantSwitcherStep(loggedInUser?.user);
   }
   if (step?.title === 'Audit Trail') {
-    shouldRemoveAuditTrailStep(loggedInUser?.user, participant).then((result) => {
-      return result;
-    });
+    return shouldRemoveAuditTrailStep(loggedInUser?.user, participant);
   }
   return false;
 }
