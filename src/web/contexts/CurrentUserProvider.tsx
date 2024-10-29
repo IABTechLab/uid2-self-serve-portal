@@ -17,9 +17,9 @@ export const CurrentUserContext = createContext<UserContextWithSetter>({
   },
 });
 
-function CurrentUserProvider({ children }: { children: ReactNode }) {
+function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { keycloak } = useKeycloak();
-  const [loading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ function CurrentUserProvider({ children }: { children: ReactNode }) {
 
   return (
     <CurrentUserContext.Provider value={userContext}>
-      {loading ? <Loading /> : children}
+      {isLoading ? <Loading /> : children}
     </CurrentUserContext.Provider>
   );
 }
