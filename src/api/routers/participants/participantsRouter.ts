@@ -1,18 +1,15 @@
-import express, { Response } from 'express';
+import express from 'express';
 
-import { ApiRoleDTO } from '../../entities/ApiRole';
-import { Participant } from '../../entities/Participant';
 import { isApproverCheck } from '../../middleware/approversMiddleware';
 import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
-import { getApiRoles } from '../../services/apiKeyService';
-import {
-  ParticipantRequest,
-  updateParticipant,
-  UserParticipantRequest,
-} from '../../services/participantsService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { createParticipantUsersRouter } from '../participantUsersRouter';
+import {
+  handleCompleteRecommendations,
+  handleGetParticipant,
+  handleUpdateParticipant,
+} from './participants';
 import {
   handleAddApiKey,
   handleDeleteApiKey,
@@ -20,6 +17,7 @@ import {
   handleGetParticipantApiKeys,
   handleUpdateApiKey,
 } from './participantsApiKeys';
+import { handleGetParticipantApiRoles } from './participantsApiRoles';
 import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
 import {
   handleApproveParticipant,
@@ -49,36 +47,6 @@ import {
 } from './participantsSharingPermissions';
 import { handleGetSignedParticipants } from './participantsSigned';
 import { handleGetParticipantUsers, handleInviteUserToParticipant } from './participantsUsers';
-
-const handleUpdateParticipant = async (req: UserParticipantRequest, res: Response) => {
-  const { participant } = req;
-  if (!participant) {
-    return res.status(404).send('Unable to find participant');
-  }
-  await updateParticipant(participant, req);
-  return res.sendStatus(200);
-};
-
-const handleGetParticipant = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  return res.status(200).json(participant);
-};
-
-const handleGetParticipantApiRoles = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  const apiRoles: ApiRoleDTO[] = await getApiRoles(participant!);
-  return res.status(200).json(apiRoles);
-};
-
-const handleCompleteRecommendations = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  const updatedParticipant = await Participant.query()
-    .patchAndFetchById(participant!.id, {
-      completedRecommendations: true,
-    })
-    .withGraphFetched('types');
-  return res.status(200).json(updatedParticipant);
-};
 
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
