@@ -26,7 +26,6 @@ export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, 
 
 export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
   const { participant } = req;
-  console.log(`isAdminOrUid2SupportCheck!`);
   const userEmail = req.auth?.payload.email as string;
   const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
