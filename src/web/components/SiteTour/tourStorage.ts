@@ -26,14 +26,14 @@ export const tourSteps: VersionedTourStep[] = [
     content: `You can now switch between participants that you have access to, and view or complete actions for the selected participant.`,
     disableBeacon: true,
     title: `Participant Switcher`,
-    version: '0.48.0',
+    version: '0.49.0',
   },
   {
     target: `.profile-dropdown-button`,
     content: `Within this menu, we've added a new item, Audit Trail, where you can view details of all past actions for the selected participant.`,
     disableBeacon: true,
     title: 'Audit Trail',
-    version: '0.48.0',
+    version: '0.49.0',
   },
 ];
 
