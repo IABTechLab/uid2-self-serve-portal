@@ -46,7 +46,6 @@ describe('Portal Header tests', () => {
   });
 
   describe('Audit Trail in Portal Header tests based on role', () => {
-    const user = userEvent.setup();
     let participantContextValue: ParticipantWithSetter;
     let userContextValue: UserContextWithSetter;
     let mockParticipant: ParticipantDTO;
@@ -64,6 +63,7 @@ describe('Portal Header tests', () => {
       renderPortalHeaderWithContext(userContextValue, participantContextValue);
       const dropdownMenuButton = screen.getByRole('button');
 
+      const user = userEvent.setup();
       await user.click(dropdownMenuButton);
 
       const auditTrailMenuItem = screen.getByRole('menuitem', { name: 'Audit Trail' });
@@ -74,7 +74,10 @@ describe('Portal Header tests', () => {
       mockUser.isUid2Support = false;
       renderPortalHeaderWithContext(userContextValue, participantContextValue);
       const dropdownMenuButton = screen.getByRole('button');
+
+      const user = userEvent.setup();
       await user.click(dropdownMenuButton);
+
       expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
     });
 
@@ -90,7 +93,10 @@ describe('Portal Header tests', () => {
         userContextValue = createUserContextValue(mockUser);
         renderPortalHeaderWithContext(userContextValue, participantContextValue);
         const dropdownMenuButton = screen.getByRole('button');
+
+        const user = userEvent.setup();
         await user.click(dropdownMenuButton);
+
         expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
       }
     );
@@ -103,6 +109,7 @@ describe('Portal Header tests', () => {
       userContextValue = createUserContextValue(mockUser);
       renderPortalHeaderWithContext(userContextValue, participantContextValue);
       const dropdownMenuButton = screen.getByRole('button');
+      const user = userEvent.setup();
       await user.click(dropdownMenuButton);
       expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
     });
