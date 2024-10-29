@@ -8,7 +8,6 @@ import { createParticipantUsersRouter } from '../participantUsersRouter';
 import {
   handleCompleteRecommendations,
   handleGetParticipant,
-  handleGetParticipantApiRoles,
   handleUpdateParticipant,
 } from './participants';
 import {
@@ -18,6 +17,7 @@ import {
   handleGetParticipantApiKeys,
   handleUpdateApiKey,
 } from './participantsApiKeys';
+import { handleGetParticipantApiRoles } from './participantsApiRoles';
 import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
 import {
   handleApproveParticipant,
