@@ -19,6 +19,5 @@ export const isUserOperations = (
   user: UserWithParticipantRoles,
   participantId: number
 ): boolean => {
-  const userRolesForCurrentParticipant = getUserRolesForParticipant(user, participantId);
-  return userRolesForCurrentParticipant?.includes(UserRoleId.Operations) ?? false;
+  return getUserRolesForParticipant(user, participantId)?.includes(UserRoleId.Operations) ?? false;
 };
