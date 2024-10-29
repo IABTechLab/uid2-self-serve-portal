@@ -2,12 +2,8 @@ import Joyride from 'react-joyride';
 
 import config from '../../../../package.json';
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { UserRoleId } from '../../../api/entities/UserRole';
-import {
-  UserWithIsUid2Support,
-  UserWithParticipantRoles,
-} from '../../../api/services/usersService';
-import { GetUserRolesForCurrentParticipant, UserAccount } from '../../services/userAccount';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { UserAccount } from '../../services/userAccount';
 import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 const { version } = config;
