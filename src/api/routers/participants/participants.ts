@@ -1,8 +1,6 @@
 import { Response } from 'express';
 
-import { ApiRoleDTO } from '../../entities/ApiRole';
 import { Participant } from '../../entities/Participant';
-import { getApiRoles } from '../../services/apiKeyService';
 import {
   ParticipantRequest,
   updateParticipant,
@@ -21,12 +19,6 @@ export const handleUpdateParticipant = async (req: UserParticipantRequest, res: 
 export const handleGetParticipant = async (req: ParticipantRequest, res: Response) => {
   const { participant } = req;
   return res.status(200).json(participant);
-};
-
-export const handleGetParticipantApiRoles = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  const apiRoles: ApiRoleDTO[] = await getApiRoles(participant!);
-  return res.status(200).json(apiRoles);
 };
 
 export const handleCompleteRecommendations = async (req: ParticipantRequest, res: Response) => {
