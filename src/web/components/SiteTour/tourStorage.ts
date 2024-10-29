@@ -4,7 +4,7 @@ import config from '../../../../package.json';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { UserAccount } from '../../services/userAccount';
-import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
+import { isUserOperations } from '../../utils/userRoleHelpers';
 
 const { version } = config;
 
@@ -65,8 +65,7 @@ const shouldRemoveAuditTrailStep = async (
   if (!user || !participant) {
     return true;
   }
-  const isAdminOrSupport = isUserAdminOrSupport(user, participant.id);
-  return !isAdminOrSupport;
+  return isUserOperations(user, participant.id);
 };
 
 function shouldRemoveCurrentStep(
