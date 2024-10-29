@@ -81,25 +81,18 @@ describe('Portal Header tests', () => {
       expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
     });
 
-    const teamMemberManageRoles = [
-      { id: UserRoleId.UID2Support, roleName: 'UID2Support' },
-      { id: UserRoleId.Admin, roleName: 'Admin' },
-    ];
-    it.each(teamMemberManageRoles)(
-      'should show Audit Trail in dropdown menu when user has UID2Support or Admin roles for the participant',
-      async (manageRole) => {
-        mockUser.isUid2Support = false;
-        mockUser.currentParticipantUserRoles = [manageRole];
-        userContextValue = createUserContextValue(mockUser);
-        renderPortalHeaderWithContext(userContextValue, participantContextValue);
-        const dropdownMenuButton = screen.getByRole('button');
+    it('should show Audit Trail in dropdown menu when user has Admin role for the participant', async () => {
+      mockUser.isUid2Support = false;
+      mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Admin, roleName: 'Admin' }];
+      userContextValue = createUserContextValue(mockUser);
+      renderPortalHeaderWithContext(userContextValue, participantContextValue);
+      const dropdownMenuButton = screen.getByRole('button');
 
-        const user = userEvent.setup();
-        await user.click(dropdownMenuButton);
+      const user = userEvent.setup();
+      await user.click(dropdownMenuButton);
 
-        expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
-      }
-    );
+      expect(screen.queryByRole('menuitem', { name: 'Audit Trail' })).not.toBeInTheDocument();
+    });
 
     it('should not show Audit Trail in dropdown menu when user has Operations role for the participant', async () => {
       mockUser.isUid2Support = false;

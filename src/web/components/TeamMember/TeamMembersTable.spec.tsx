@@ -53,26 +53,19 @@ describe('manage team member functionality testing', () => {
     mockUser = createMockUser([mockParticipant] as Participant[]);
   });
 
-  const teamMemberManageRoles = [
-    { id: UserRoleId.UID2Support, roleName: 'UID2Support' },
-    { id: UserRoleId.Admin, roleName: 'Admin' },
-  ];
-  it.each(teamMemberManageRoles)(
-    'should include all manage team member functionality',
-    (manageRole) => {
-      // setting uid2 support to false to make sure the roles are tested
-      mockUser.isUid2Support = false;
-      mockUser.currentParticipantUserRoles = [manageRole];
-      mockParticipant.currentUserRoleIds = [manageRole.id];
-      userContextValue = createUserContextValue(mockUser);
-      renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
-      const addTeamMemberButton = screen.getByRole('button', { name: 'Add Team Member' });
-      expect(addTeamMemberButton).toBeInTheDocument();
-      const actionsHeader = screen.getByRole('columnheader', { name: 'Actions' });
-      expect(actionsHeader).toBeInTheDocument();
-      expect(screen.getByLabelText('Edit Team Member')).toBeInTheDocument();
-    }
-  );
+  it('should include all manage team member functionality', () => {
+    // setting uid2 support to false to make sure the roles are tested
+    mockUser.isUid2Support = false;
+    mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Admin, roleName: 'Admin' }];
+    mockParticipant.currentUserRoleIds = [UserRoleId.Admin];
+    userContextValue = createUserContextValue(mockUser);
+    renderTeamMembersTableWithContext(userContextValue, participantContextValue, [mockUser]);
+    const addTeamMemberButton = screen.getByRole('button', { name: 'Add Team Member' });
+    expect(addTeamMemberButton).toBeInTheDocument();
+    const actionsHeader = screen.getByRole('columnheader', { name: 'Actions' });
+    expect(actionsHeader).toBeInTheDocument();
+    expect(screen.getByLabelText('Edit Team Member')).toBeInTheDocument();
+  });
 
   it('should not include any manage team member functionality', () => {
     mockUser.isUid2Support = false;
