@@ -48,11 +48,7 @@ import {
   handleUpdateSharingTypes,
 } from './participantsSharingPermissions';
 import { handleGetSignedParticipants } from './participantsSigned';
-import {
-  handleGetParticipantUsers,
-  handleGetUserRolesForCurrentParticipant,
-  handleInviteUserToParticipant,
-} from './participantsUsers';
+import { handleGetParticipantUsers, handleInviteUserToParticipant } from './participantsUsers';
 
 const handleUpdateParticipant = async (req: UserParticipantRequest, res: Response) => {
   const { participant } = req;
@@ -140,10 +136,8 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/auditTrail', handleAuditTrail);
 
   participantsRouter.get('/:participantId/users', handleGetParticipantUsers);
-  participantsRouter.get('/:participantId/:userId', handleGetUserRolesForCurrentParticipant);
   const participantUsersRouter = createParticipantUsersRouter();
   participantsRouter.use('/:participantId/users', participantUsersRouter);
-  participantsRouter.use('/:participantId/:userId', participantUsersRouter);
 
   const businessContactsRouter = createBusinessContactsRouter();
   participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);

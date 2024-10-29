@@ -26,8 +26,8 @@ export interface SelfResendInviteRequest extends Request {
   email?: string;
 }
 
-export type UserWithIsUid2Support = UserDTO & { isUid2Support: boolean };
-export type UserWithCurrentParticipantRoleNames = UserDTO & {
+export type UserWithParticipantRoles = UserDTO & {
+  isUid2Support: boolean;
   currentParticipantUserRoles?: UserRoleDTO[];
 };
 
@@ -109,17 +109,6 @@ export const getAllUsersFromParticipantWithRoles = async (participant: Participa
     .withGraphFetched('userToParticipantRoles');
 
   return mapUsersWithParticipantRoles(usersWithParticipants, participant.id);
-};
-
-export const getUserRolesForCurrentParticipant = async (participant: Participant, user: User) => {
-  const userToParticipantRoles = await UserToParticipantRole.query()
-    .where('participantId', participant.id)
-    .where('userId', user.id);
-
-  const userRoles = await UserRole.query();
-  return userToParticipantRoles.map((role) => {
-    return userRoles.find((userRole) => userRole.id === role.userRoleId) ?? null;
-  });
 };
 
 export const getAllUsersFromParticipant = async (participant: Participant) => {

@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useContext, useState } from 'react';
 
-import { UserDTO } from '../../../api/entities/User';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
-import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { UpdateTeamMemberForm } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
@@ -15,12 +15,12 @@ import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
 type TeamMemberProps = Readonly<{
-  existingTeamMembers: UserDTO[];
-  person: UserResponse;
+  existingTeamMembers: UserWithParticipantRoles[];
+  person: UserWithParticipantRoles;
   resendInvite: (id: number, participantId: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
-  allowTeamMemberActions: boolean;
+  showTeamMemberActions: boolean;
 }>;
 
 enum InviteState {
@@ -35,7 +35,7 @@ function TeamMember({
   resendInvite,
   onRemoveTeamMember,
   onUpdateTeamMember,
-  allowTeamMemberActions,
+  showTeamMemberActions,
 }: TeamMemberProps) {
   const [reinviteState, setReinviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -107,9 +107,9 @@ function TeamMember({
           labelNames={person.currentParticipantUserRoles?.map((role) => role.roleName) ?? []}
         />
       </td>
-      {allowTeamMemberActions && (
+      {showTeamMemberActions && (
         <td className='action'>
-          <div className='action-cell'>
+          <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
             <div>
               {person.acceptedTerms || (
@@ -128,7 +128,11 @@ function TeamMember({
                 </button>
               )}
 
-              <ActionButton onClick={onOpenChangeTeamMemberDialog} icon='pencil' />
+              <ActionButton
+                onClick={onOpenChangeTeamMemberDialog}
+                icon='pencil'
+                aria-label='Edit Team Member'
+              />
               {showTeamMemberDialog && (
                 <TeamMemberDialog
                   teamMembers={existingTeamMembers}
@@ -137,7 +141,11 @@ function TeamMember({
                   onOpenChange={onOpenChangeTeamMemberDialog}
                 />
               )}
-              <ActionButton onClick={onOpenChangeTeamMemberRemoveDialog} icon='trash-can' />
+              <ActionButton
+                onClick={onOpenChangeTeamMemberRemoveDialog}
+                icon='trash-can'
+                aria-label='Remove Team Member'
+              />
               {showTeamMemberRemoveDialog && (
                 <TeamMemberRemoveConfirmationDialog
                   onRemoveTeamMember={handleRemoveUser}

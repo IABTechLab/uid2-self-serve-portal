@@ -9,17 +9,16 @@ import {
 } from '@radix-ui/react-dropdown-menu';
 import * as Switch from '@radix-ui/react-switch';
 import { useContext, useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { UserRoleId } from '../../../api/entities/UserRole';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
-import { PortalRoute } from '../../screens/routeUtils';
 import { TeamMembersRoute } from '../../screens/teamMembers';
-import { GetUserRolesForCurrentParticipant } from '../../services/userAccount';
-import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
+import { getPathWithParticipant } from '../../utils/urlHelpers';
+import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
 import './PortalHeader.scss';
 
@@ -36,40 +35,17 @@ export function PortalHeader({
   setDarkMode = undefined,
   logout,
 }: Readonly<PortalHeaderProps>) {
-  const { participantId } = useParams();
+  const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const user = LoggedInUser?.user;
 
-  const [routes, setRoutes] = useState<PortalRoute[]>([
-    ParticipantInformationRoute,
-    TeamMembersRoute,
-    EmailContactsRoute,
-  ]);
+  const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
-  useEffect(() => {
-    const getUserRolesForCurrentParticipant = async () => {
-      const user = LoggedInUser?.user;
-      if (user?.isUid2Support) {
-        setRoutes([...routes, AuditTrailRoute]);
-        return;
-      }
-      const parsedParticipantId = parseParticipantId(participantId);
-      if (parsedParticipantId && user) {
-        const userRolesForCurrentParticipant = await GetUserRolesForCurrentParticipant(
-          parsedParticipantId,
-          user.id
-        );
-        if (userRolesForCurrentParticipant.find((role) => role.id === UserRoleId.Admin)) {
-          setRoutes([...routes, AuditTrailRoute]);
-        }
-      }
-    };
-    if (!routes.includes(AuditTrailRoute)) {
-      getUserRolesForCurrentParticipant();
-    }
-  }, [LoggedInUser?.user, participantId, routes]);
+  if (user && participant && isUserAdminOrSupport(user, participant.id)) {
+    routes.push(AuditTrailRoute);
+  }
 
-  const showUserNavigationAndSettings =
-    LoggedInUser?.user?.acceptedTerms && LoggedInUser?.user?.participants!.length > 0;
+  const showUserNavigationAndSettings = user?.acceptedTerms && user?.participants!.length > 0;
 
   const [menuOpen, setMenuOpen] = useState(false);
   const handleSelect = () => {
@@ -89,7 +65,7 @@ export function PortalHeader({
   return (
     <header className='portal-header'>
       <div className='title'>
-        <Link data-testid='title-link' to={`/participant/${participantId}/home`}>
+        <Link data-testid='title-link' to={`/participant/${participant?.id}/home`}>
           <img
             src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
             alt='UID2 logo'
@@ -109,11 +85,11 @@ export function PortalHeader({
               {routes.map((route) => {
                 return (
                   <DropdownMenuItem
-                    key={getPathWithParticipant(route.path, participantId)}
+                    key={getPathWithParticipant(route.path, participant?.id)}
                     className='dropdown-menu-item'
                     onClick={handleSelect}
                   >
-                    <Link to={getPathWithParticipant(route.path, participantId)} className='link'>
+                    <Link to={getPathWithParticipant(route.path, participant?.id)} className='link'>
                       {route.description}
                     </Link>
                   </DropdownMenuItem>

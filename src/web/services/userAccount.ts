@@ -4,16 +4,12 @@ import log from 'loglevel';
 import { z } from 'zod';
 
 import { UserCreationPartial } from '../../api/entities/User';
-import { UserRoleDTO } from '../../api/entities/UserRole';
-import {
-  UserWithCurrentParticipantRoleNames,
-  UserWithIsUid2Support,
-} from '../../api/services/usersService';
+import { UserWithParticipantRoles } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
 export type UserAccount = {
   profile: KeycloakProfile;
-  user: UserWithIsUid2Support | null;
+  user: UserWithParticipantRoles | null;
 };
 
 export type InviteTeamMemberForm = {
@@ -27,11 +23,10 @@ export type InviteTeamMemberForm = {
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
-export type UserResponse = UserWithCurrentParticipantRoleNames;
 
-export async function GetLoggedInUserAccount(): Promise<UserWithIsUid2Support | null> {
+export async function GetLoggedInUserAccount(): Promise<UserWithParticipantRoles | null> {
   try {
-    const result = await axios.get<UserWithIsUid2Support>(`/users/current`, {
+    const result = await axios.get<UserWithParticipantRoles>(`/users/current`, {
       validateStatus: (status) => [200, 404].includes(status),
     });
     if (result.status === 200) return result.data;
@@ -70,23 +65,15 @@ export async function SelfResendInvitation(formData: SelfResendInvitationForm): 
 
 export async function GetAllUsersOfParticipant(participantId: number) {
   try {
-    const result = await axios.get<UserResponse[]>(`/participants/${participantId}/users`, {
-      validateStatus: (status) => [200, 404].includes(status),
-    });
+    const result = await axios.get<UserWithParticipantRoles[]>(
+      `/participants/${participantId}/users`,
+      {
+        validateStatus: (status) => [200, 404].includes(status),
+      }
+    );
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load users');
-  }
-}
-
-export async function GetUserRolesForCurrentParticipant(participantId: number, userId: number) {
-  try {
-    const result = await axios.get<UserRoleDTO[]>(`/participants/${participantId}/${userId}`, {
-      validateStatus: (status) => [200, 404].includes(status),
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load user roles');
   }
 }
 
