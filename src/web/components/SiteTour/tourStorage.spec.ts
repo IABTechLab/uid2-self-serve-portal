@@ -77,7 +77,7 @@ describe('Tour tests', () => {
     expect(versions.slice(-1)[0]).toBe('102.102.102');
   });
 
-  test('all steps shown for those with the correct user roles and number of participants', () => {
+  test('all steps shown for those with the correct user roles and multiple participants', () => {
     mockUser.isUid2Support = false;
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Admin, roleName: 'Admin' }];
     mockUser.participants = [mockParticipant, mockParticipant2] as Participant[];

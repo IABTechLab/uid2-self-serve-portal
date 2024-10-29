@@ -18,7 +18,7 @@ export const tourSteps: VersionedTourStep[] = [
     target: `.profile-dropdown-button`,
     content: `We've moved some menu items to your profile dropdown.`,
     disableBeacon: true,
-    title: `New Menu Items`,
+    title: `Menu Items to Profile Dropdown`,
     version: '0.36.0',
   },
   {
