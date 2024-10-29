@@ -8,10 +8,7 @@ export const isUserAdminOrSupport = (
   const userRolesForCurrentParticipant = user.participants?.find(
     (p) => p.id === participantId
   )?.currentUserRoleIds;
-  return (
-    user.isUid2Support ||
-    [UserRoleId.UID2Support, UserRoleId.Admin].some((role) =>
-      userRolesForCurrentParticipant?.includes(role)
-    )
-  );
+  const isAdminOrSupport =
+    user.isUid2Support || userRolesForCurrentParticipant?.includes(UserRoleId.Admin);
+  return isAdminOrSupport ?? false;
 };
