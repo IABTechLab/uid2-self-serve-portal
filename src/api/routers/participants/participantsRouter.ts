@@ -3,7 +3,7 @@ import express, { Response } from 'express';
 import { ApiRoleDTO } from '../../entities/ApiRole';
 import { Participant } from '../../entities/Participant';
 import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
-import { isAdminOrUid2Support, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
+import { isAdminOrUid2SupportCheck, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
 import { getApiRoles } from '../../services/apiKeyService';
 import {
@@ -107,10 +107,14 @@ export function createParticipantsRouter() {
 
   participantsRouter.post(
     '/:participantId/invite',
-    isAdminOrUid2Support,
+    isAdminOrUid2SupportCheck,
     handleInviteUserToParticipant
   );
-  participantsRouter.get('/:participantId/auditTrail', isAdminOrUid2Support, handleGetAuditTrail);
+  participantsRouter.get(
+    '/:participantId/auditTrail',
+    isAdminOrUid2SupportCheck,
+    handleGetAuditTrail
+  );
 
   participantsRouter.get('/:participantId/sharingPermission', handleGetSharingPermission);
   participantsRouter.post('/:participantId/sharingPermission/add', handleAddSharingPermission);
