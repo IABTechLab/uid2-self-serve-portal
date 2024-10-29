@@ -82,7 +82,6 @@ describe('Tour tests', () => {
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Admin, roleName: 'Admin' }];
     mockUser.participants = [mockParticipant, mockParticipant2] as Participant[];
     mockParticipant.currentUserRoleIds = [UserRoleId.Admin];
-    const mockLoggedInUser = createUserContextValue(mockUser).LoggedInUser;
     localStorage.removeItem(tourStorageKey);
 
     const steps = GetTourSteps(mockLoggedInUser, mockParticipant);
@@ -94,7 +93,6 @@ describe('Tour tests', () => {
     mockUser.isUid2Support = false;
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Operations, roleName: 'Operations' }];
     mockParticipant.currentUserRoleIds = [UserRoleId.Operations];
-    const mockLoggedInUser = createUserContextValue(mockUser).LoggedInUser;
 
     const steps = GetTourSteps(mockLoggedInUser, mockParticipant);
 
