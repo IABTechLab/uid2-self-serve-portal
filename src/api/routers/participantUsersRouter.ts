@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { UserController } from '../controllers/userController';
-import { isAdminCheck } from '../middleware/userRoleMiddleware';
+import { isAdminOrUid2Support } from '../middleware/userRoleMiddleware';
 import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
 import { LoggerService } from '../services/loggerService';
 import { UserService } from '../services/userService';
@@ -10,7 +10,7 @@ const createParticipantUsersRouter = () => {
   const participantUsersRouter = express.Router({ mergeParams: true });
   const userController = new UserController(new UserService(), new LoggerService());
 
-  participantUsersRouter.use('/:userId', verifyAndEnrichUser, isAdminCheck);
+  participantUsersRouter.use('/:userId', verifyAndEnrichUser, isAdminOrUid2Support);
   participantUsersRouter.post(
     '/:userId/resendInvitation',
     userController.resendInvitation.bind(userController)

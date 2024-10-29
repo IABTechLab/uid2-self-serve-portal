@@ -9,7 +9,7 @@ import {
   createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
 import { UserRoleId } from '../../entities/UserRole';
-import { isAdminCheck, isUid2SupportCheck } from '../userRoleMiddleware';
+import { isAdminOrUid2Support, isUid2SupportCheck } from '../userRoleMiddleware';
 
 describe('User Role Middleware Tests', () => {
   let knex: Knex;
@@ -55,7 +55,7 @@ describe('User Role Middleware Tests', () => {
       });
       const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
 
-      await isAdminCheck(userParticipantRequest, res, next);
+      await isAdminOrUid2Support(userParticipantRequest, res, next);
 
       expect(res.status).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
@@ -67,7 +67,7 @@ describe('User Role Middleware Tests', () => {
       });
       const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
 
-      await isAdminCheck(userParticipantRequest, res, next);
+      await isAdminOrUid2Support(userParticipantRequest, res, next);
 
       expect(res.status).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
@@ -79,7 +79,7 @@ describe('User Role Middleware Tests', () => {
       });
       const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
 
-      await isAdminCheck(userParticipantRequest, res, next);
+      await isAdminOrUid2Support(userParticipantRequest, res, next);
 
       expect(res.status).toHaveBeenCalledWith(403);
       expect(next).not.toHaveBeenCalled();

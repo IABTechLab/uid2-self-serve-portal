@@ -3,7 +3,7 @@ import express, { Response } from 'express';
 import { ApiRoleDTO } from '../../entities/ApiRole';
 import { Participant } from '../../entities/Participant';
 import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
-import { isAdminCheck, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
+import { isAdminOrUid2Support, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
 import { getApiRoles } from '../../services/apiKeyService';
 import {
@@ -105,8 +105,12 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
 
-  participantsRouter.post('/:participantId/invite', isAdminCheck, handleInviteUserToParticipant);
-  participantsRouter.get('/:participantId/auditTrail', isAdminCheck, handleGetAuditTrail);
+  participantsRouter.post(
+    '/:participantId/invite',
+    isAdminOrUid2Support,
+    handleInviteUserToParticipant
+  );
+  participantsRouter.get('/:participantId/auditTrail', isAdminOrUid2Support, handleGetAuditTrail);
 
   participantsRouter.get('/:participantId/sharingPermission', handleGetSharingPermission);
   participantsRouter.post('/:participantId/sharingPermission/add', handleAddSharingPermission);
