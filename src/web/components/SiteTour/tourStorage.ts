@@ -18,18 +18,21 @@ const tourSteps: VersionedTourStep[] = [
     target: `.profile-dropdown-button`,
     content: `We've moved some menu items to your profile dropdown.`,
     disableBeacon: true,
+    title: `New Menu Items`,
     version: '0.36.0',
   },
   {
     target: `.participant-switcher`,
     content: `You can now switch between participants that you have access to, and view or complete actions for the selected participant.`,
     disableBeacon: true,
+    title: `Participant Switcher`,
     version: '0.48.0',
   },
   {
     target: `.profile-dropdown-button`,
-    content: `Within this menu, we've added a new item, Audit Trail, so that you can view details of all past actions for the selected participant.`,
+    content: `Within this menu, we've added a new item, Audit Trail, where you can view details of all past actions for the selected participant.`,
     disableBeacon: true,
+    title: 'Audit Trail',
     version: '0.48.0',
   },
 ];
@@ -58,6 +61,10 @@ function saveTourData(data: TourData) {
   localStorage.setItem(tourStorageKey, JSON.stringify(data));
 }
 
+const shouldRemoveParticipantSwitcherStep = (user: UserWithParticipantRoles | null | undefined) => {
+  return (user?.participants?.length ?? 0) <= 1;
+};
+
 const shouldRemoveAuditTrailStep = async (
   user: UserWithParticipantRoles | null | undefined,
   participant: ParticipantDTO | null
@@ -73,14 +80,10 @@ function shouldRemoveCurrentStep(
   loggedInUser: UserAccount | null,
   participant: ParticipantDTO | null
 ) {
-  if (step?.target === `.participant-switcher`) {
-    if ((loggedInUser?.user?.participants?.length ?? 0) <= 1) {
-      return true;
-    }
-  } else if (step?.target === `.profile-dropdown-button` && step?.version === '0.48.0') {
-    if (loggedInUser?.user?.isUid2Support) {
-      return false;
-    }
+  if (step?.title === `Participant Switcher`) {
+    return shouldRemoveParticipantSwitcherStep(loggedInUser?.user);
+  }
+  if (step?.title === 'Audit Trail') {
     shouldRemoveAuditTrailStep(loggedInUser?.user, participant).then((result) => {
       return result;
     });
