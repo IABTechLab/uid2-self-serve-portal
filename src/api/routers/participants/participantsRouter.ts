@@ -2,8 +2,8 @@ import express, { Response } from 'express';
 
 import { ApiRoleDTO } from '../../entities/ApiRole';
 import { Participant } from '../../entities/Participant';
-import { isApproverCheck } from '../../middleware/approversMiddleware';
 import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
+import { isAdminCheck, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
 import { getApiRoles } from '../../services/apiKeyService';
 import {
@@ -26,7 +26,7 @@ import {
   handleGetApprovedParticipants,
   handleGetParticipantsAwaitingApproval,
 } from './participantsApproval';
-import { handleAuditTrail } from './participantsAuditTrail';
+import { handleGetAuditTrail } from './participantsAuditTrail';
 import {
   handleCreateParticipant,
   handleCreateParticipantFromRequest,
@@ -88,23 +88,25 @@ export function createParticipantsRouter() {
 
   participantsRouter.get(
     '/awaitingApproval',
-    isApproverCheck,
+    isUid2SupportCheck,
     handleGetParticipantsAwaitingApproval
   );
-  participantsRouter.get('/approved', isApproverCheck, handleGetApprovedParticipants);
+  participantsRouter.get('/approved', isUid2SupportCheck, handleGetApprovedParticipants);
 
   participantsRouter.use('/:participantId', enrichCurrentUser);
 
-  participantsRouter.put('/:participantId/approve', isApproverCheck, handleApproveParticipant);
-  participantsRouter.put('/:participantId', isApproverCheck, handleUpdateParticipant);
+  participantsRouter.put('/:participantId/approve', isUid2SupportCheck, handleApproveParticipant);
+  participantsRouter.put('/:participantId', isUid2SupportCheck, handleUpdateParticipant);
   participantsRouter.put('/', handleCreateParticipant);
 
   participantsRouter.use('/:participantId', verifyAndEnrichParticipant);
 
   participantsRouter.get('/:participantId', handleGetParticipant);
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
-  participantsRouter.post('/:participantId/invite', handleInviteUserToParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
+
+  participantsRouter.post('/:participantId/invite', isAdminCheck, handleInviteUserToParticipant);
+  participantsRouter.get('/:participantId/auditTrail', isAdminCheck, handleGetAuditTrail);
 
   participantsRouter.get('/:participantId/sharingPermission', handleGetSharingPermission);
   participantsRouter.post('/:participantId/sharingPermission/add', handleAddSharingPermission);
@@ -133,7 +135,6 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/:participantId/appNames', handleGetParticipantAppNames);
   participantsRouter.post('/:participantId/appNames', handleSetParticipantAppNames);
-  participantsRouter.get('/:participantId/auditTrail', handleAuditTrail);
 
   participantsRouter.get('/:participantId/users', handleGetParticipantUsers);
   const participantUsersRouter = createParticipantUsersRouter();
