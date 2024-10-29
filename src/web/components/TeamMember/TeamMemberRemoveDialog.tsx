@@ -1,8 +1,8 @@
-import { UserResponse } from '../../services/userAccount';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { Dialog } from '../Core/Dialog/Dialog';
 
 type TeamMemberRemoveConfirmationDialogProps = Readonly<{
-  person: UserResponse;
+  person: UserWithParticipantRoles;
   onRemoveTeamMember: () => Promise<void>;
   onOpenChange: () => void;
 }>;

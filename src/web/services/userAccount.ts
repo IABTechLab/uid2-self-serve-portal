@@ -23,7 +23,6 @@ export type InviteTeamMemberForm = {
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
-export type UserResponse = UserWithParticipantRoles;
 
 export async function GetLoggedInUserAccount(): Promise<UserWithParticipantRoles | null> {
   try {
@@ -66,9 +65,12 @@ export async function SelfResendInvitation(formData: SelfResendInvitationForm): 
 
 export async function GetAllUsersOfParticipant(participantId: number) {
   try {
-    const result = await axios.get<UserResponse[]>(`/participants/${participantId}/users`, {
-      validateStatus: (status) => [200, 404].includes(status),
-    });
+    const result = await axios.get<UserWithParticipantRoles[]>(
+      `/participants/${participantId}/users`,
+      {
+        validateStatus: (status) => [200, 404].includes(status),
+      }
+    );
     return result.data;
   } catch (e: unknown) {
     throw backendError(e, 'Could not load users');

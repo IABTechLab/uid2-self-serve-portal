@@ -2,8 +2,9 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useContext, useState } from 'react';
 
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
-import { UpdateTeamMemberForm, UserResponse } from '../../services/userAccount';
+import { UpdateTeamMemberForm } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
@@ -14,8 +15,8 @@ import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
 type TeamMemberProps = Readonly<{
-  existingTeamMembers: UserResponse[];
-  person: UserResponse;
+  existingTeamMembers: UserWithParticipantRoles[];
+  person: UserWithParticipantRoles;
   resendInvite: (id: number, participantId: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;

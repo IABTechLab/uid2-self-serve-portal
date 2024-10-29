@@ -1,8 +1,8 @@
-import { UserResponse } from '../../services/userAccount';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 
 export const validateUniqueTeamMemberEmail = (
   value: string,
-  existingTeamMembers: UserResponse[]
+  existingTeamMembers: UserWithParticipantRoles[]
 ) => {
   if (existingTeamMembers.filter((t) => t.email === value).length > 0) {
     return false;

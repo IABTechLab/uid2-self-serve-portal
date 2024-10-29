@@ -1,13 +1,10 @@
 import { useContext, useState } from 'react';
 
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
-import {
-  InviteTeamMemberForm,
-  UpdateTeamMemberForm,
-  UserResponse,
-} from '../../services/userAccount';
+import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
 import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import TeamMember from './TeamMember';
@@ -16,7 +13,7 @@ import TeamMemberDialog from './TeamMemberDialog';
 import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = Readonly<{
-  teamMembers: UserResponse[];
+  teamMembers: UserWithParticipantRoles[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
@@ -45,7 +42,7 @@ function TeamMembersTableContent({
     setShowTeamMemberDialog(!showTeamMemberDialog);
   };
 
-  const { sortData } = useSortable<UserResponse>();
+  const { sortData } = useSortable<UserWithParticipantRoles>();
   const sortedTeamMembers = sortData(teamMembers);
 
   return (
@@ -53,10 +50,13 @@ function TeamMembersTableContent({
       <table className='portal-team-table'>
         <thead>
           <tr>
-            <SortableTableHeader<UserResponse> sortKey='firstName' header='Name' />
-            <SortableTableHeader<UserResponse> sortKey='email' header='Email' />
-            <SortableTableHeader<UserResponse> sortKey='jobFunction' header='Job Function' />
-            <SortableTableHeader<UserResponse>
+            <SortableTableHeader<UserWithParticipantRoles> sortKey='firstName' header='Name' />
+            <SortableTableHeader<UserWithParticipantRoles> sortKey='email' header='Email' />
+            <SortableTableHeader<UserWithParticipantRoles>
+              sortKey='jobFunction'
+              header='Job Function'
+            />
+            <SortableTableHeader<UserWithParticipantRoles>
               sortKey='currentParticipantUserRoles'
               header='Roles'
             />

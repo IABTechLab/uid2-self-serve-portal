@@ -3,11 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
-import {
-  InviteTeamMemberForm,
-  UpdateTeamMemberForm,
-  UserResponse,
-} from '../../services/userAccount';
+import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
@@ -26,7 +22,7 @@ type UpdateTeamMemberDialogProps = {
   teamMembers: UserWithParticipantRoles[];
   onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
-  person: UserResponse;
+  person: UserWithParticipantRoles;
 };
 type TeamMemberDialogProps = AddTeamMemberDialogProps | UpdateTeamMemberDialogProps;
 

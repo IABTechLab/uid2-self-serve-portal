@@ -33,13 +33,13 @@ const renderPortalHeaderWithContext = (
 };
 
 describe('Portal Header tests', () => {
-  test('when an invalid email address is provided, a home link is still displayed', async () => {
+  it('when an invalid email address is provided, a home link is still displayed', async () => {
     render(<InvalidEmailAddress />);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', expect.stringContaining('/home'));
   });
 
-  test('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
+  it('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
     render(<NoEmailAddress />);
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent('Not logged in');
