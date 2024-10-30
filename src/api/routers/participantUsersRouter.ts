@@ -10,13 +10,22 @@ const createParticipantUsersRouter = () => {
   const participantUsersRouter = express.Router({ mergeParams: true });
   const userController = new UserController(new UserService(), new LoggerService());
 
-  participantUsersRouter.use('/:userId', verifyAndEnrichUser, isAdminOrUid2SupportCheck);
+  participantUsersRouter.use('/:userId', verifyAndEnrichUser);
   participantUsersRouter.post(
     '/:userId/resendInvitation',
+    isAdminOrUid2SupportCheck,
     userController.resendInvitation.bind(userController)
   );
-  participantUsersRouter.delete('/:userId', userController.removeUser.bind(userController));
-  participantUsersRouter.patch('/:userId', userController.updateUser.bind(userController));
+  participantUsersRouter.delete(
+    '/:userId',
+    isAdminOrUid2SupportCheck,
+    userController.removeUser.bind(userController)
+  );
+  participantUsersRouter.patch(
+    '/:userId',
+    isAdminOrUid2SupportCheck,
+    userController.updateUser.bind(userController)
+  );
 
   return participantUsersRouter;
 };
