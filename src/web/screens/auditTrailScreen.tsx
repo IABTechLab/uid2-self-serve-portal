@@ -21,6 +21,10 @@ function AuditTrail() {
   return (
     <>
       <h1>Audit Trail</h1>
+      <p className='heading-details'>
+        View a detailed log of all past actions performed by, or on behalf of, the current
+        participant.
+      </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading audit trail...' />}>
           <AwaitTypesafe resolve={data.auditTrail}>
