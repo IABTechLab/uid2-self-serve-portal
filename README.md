@@ -277,9 +277,12 @@ The following steps describe the minimal steps required to successfully log in t
    update p
    set status = 'approved'
    from dbo.participants p
-   left join dbo.users u
-     on p.id = u.participantId
-   where u.email = @email
+   where p.id in (
+    select upr.participantId
+    from dbo.users u
+    join dbo.usersToParticipantRoles upr on u.id = upr.userId
+    where u.email = @email
+   );
    ```
 
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
