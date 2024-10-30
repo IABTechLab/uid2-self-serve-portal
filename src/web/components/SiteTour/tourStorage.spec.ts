@@ -77,7 +77,7 @@ describe('Tour tests', () => {
     expect(versions.slice(-1)[0]).toBe('102.102.102');
   });
 
-  test('all steps shown for those with the correct user roles and multiple participants', () => {
+  test('all steps returned for those with the correct user roles and multiple participants', () => {
     mockUser.isUid2Support = false;
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Admin, roleName: 'Admin' }];
     mockUser.participants = [mockParticipant, mockParticipant2] as Participant[];
@@ -89,7 +89,7 @@ describe('Tour tests', () => {
     expect(steps).toEqual(tourSteps);
   });
 
-  test('audit trail step not shown for those without the correct user roles', () => {
+  test('audit trail step is filtered out for those without the correct user roles', () => {
     mockUser.isUid2Support = false;
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Operations, roleName: 'Operations' }];
     mockParticipant.currentUserRoleIds = [UserRoleId.Operations];
@@ -99,7 +99,7 @@ describe('Tour tests', () => {
     expect(steps).not.toContainEqual(tourSteps.find((step) => step.title === 'Audit Trail'));
   });
 
-  test('participant switcher step not shown for a user with only one participant', () => {
+  test('participant switcher step is filtered out for a user with only one participant', () => {
     mockUser.isUid2Support = false;
     mockUser.participants = [mockParticipant as Participant];
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Operations, roleName: 'Admin' }];
