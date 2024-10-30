@@ -5,7 +5,7 @@ import {
   convertSiteToSharingSiteDTO,
   SharingSiteDTO,
 } from '../helpers/siteConvertingHelpers';
-import { isApproverCheck } from '../middleware/approversMiddleware';
+import { isUid2SupportCheck } from '../middleware/userRoleMiddleware';
 import { getSiteList, getVisibleSiteList } from '../services/adminServiceClient';
 import { AdminSiteDTO, mapAdminSitesToSiteDTOs } from '../services/adminServiceHelpers';
 import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/participantsService';
@@ -13,7 +13,7 @@ import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/partic
 export function createSitesRouter() {
   const sitesRouter = express.Router();
 
-  sitesRouter.get('/unattached/', isApproverCheck, async (_req, res) => {
+  sitesRouter.get('/unattached/', isUid2SupportCheck, async (_req, res) => {
     const allSitesPromise = getSiteList();
     const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
