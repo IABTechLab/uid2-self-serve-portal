@@ -47,23 +47,14 @@ describe('User Role Middleware Tests', () => {
       expect(next).not.toHaveBeenCalled();
     });
   });
-  describe('Admin Role check', () => {
-    it('should call next if requesting user has Admin Role for the participant', async () => {
+  describe('Admin Role or UID2 Support check', () => {
+    it.each([
+      { role: UserRoleId.Admin, description: 'Admin Role for the participant' },
+      { role: UserRoleId.UID2Support, description: 'UID2 support role' },
+    ])('should call next if requesting user has $description', async ({ role }) => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
-        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.Admin }],
-      });
-      const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
-
-      await isAdminOrUid2SupportCheck(userParticipantRequest, res, next);
-
-      expect(res.status).not.toHaveBeenCalled();
-      expect(next).toHaveBeenCalled();
-    });
-    it('should call next if requesting user has UID2 support role', async () => {
-      const participant = await createParticipant(knex, {});
-      const user = await createUser({
-        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.UID2Support }],
+        participantToRoles: [{ participantId: participant.id, userRoleId: role }],
       });
       const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
 
