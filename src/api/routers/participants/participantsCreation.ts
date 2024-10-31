@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { z } from 'zod';
 
+import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import {
@@ -15,6 +16,7 @@ import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
+  mapClientTypeIdsToAdminEnums,
   mapClientTypesToAdminEnums,
   SiteCreationRequest,
 } from '../../services/adminServiceHelpers';
@@ -126,9 +128,11 @@ async function createParticipant(
     {
       action: AuditAction.Add,
       siteId: parsedParticipantRequest.siteId!,
-      apiRoles: parsedParticipantRequest.apiRoles.map((role) => role.id),
+      apiRoles: getRoleNamesByIds(parsedParticipantRequest.apiRoles.map((role) => role.id)),
       participantName: parsedParticipantRequest.name,
-      participantTypes: parsedParticipantRequest.types.map((type) => type.id),
+      participantTypes: mapClientTypeIdsToAdminEnums(
+        parsedParticipantRequest.types.map((type) => type.id)
+      ),
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,

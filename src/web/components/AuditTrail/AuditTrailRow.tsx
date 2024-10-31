@@ -16,7 +16,6 @@ function AuditTrailRow({ log }: AuditTrailProps) {
 
   return (
     <tr>
-      <td>{log.id}</td>
       <td>{log.userEmail}</td>
       <td>{log.event.replace(/([a-z])([A-Z])/g, '$1 $2')}</td>
       <td className='event-data'>{formattedEventData}</td>

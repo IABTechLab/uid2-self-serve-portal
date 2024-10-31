@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { UserJobFunction } from '../../entities/User';
+import { getUserRoleById } from '../../entities/UserRole';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import {
   constructAuditTrailObject,
@@ -42,7 +43,7 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
         lastName: userPartial.lastName,
         email: userPartial.email,
         jobFunction: userPartial.jobFunction,
-        userRoleId: userRoleIdData.userRoleId,
+        userRoleId: getUserRoleById(userRoleIdData.userRoleId),
       },
       participant!.id
     );
