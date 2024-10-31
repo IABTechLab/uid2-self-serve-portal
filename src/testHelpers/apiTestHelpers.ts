@@ -57,6 +57,9 @@ export const createUserParticipantRequest = (
     params: {
       userId: targetUserId,
     },
+    headers: {
+      traceId: faker.string.uuid(),
+    },
   } as unknown as UserParticipantRequest;
 };
 

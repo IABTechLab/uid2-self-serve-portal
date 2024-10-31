@@ -2,20 +2,10 @@ import { NextFunction, Response } from 'express';
 import { z } from 'zod';
 
 import { User } from '../entities/User';
-import { UserRoleId } from '../entities/UserRole';
-import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
-
-export const isUid2Support = async (userEmail: string) => {
-  const user = await findUserByEmail(userEmail);
-  const userWithUid2SupportRole = await UserToParticipantRole.query()
-    .where('userId', user!.id)
-    .andWhere('userRoleId', UserRoleId.UID2Support)
-    .first();
-  return !!userWithUid2SupportRole;
-};
+import { isUid2Support } from './userRoleMiddleware';
 
 export const isUserBelongsToParticipant = async (
   email: string,
@@ -58,6 +48,14 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   }
   req.user = user;
   return next();
+};
+
+export const enrichUserWithUid2Support = async (user: User) => {
+  const userIsUid2Support = await isUid2Support(user.email);
+  return {
+    ...user,
+    isUid2Support: userIsUid2Support,
+  };
 };
 
 const userIdSchema = z.object({

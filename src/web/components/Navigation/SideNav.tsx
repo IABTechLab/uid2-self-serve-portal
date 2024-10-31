@@ -35,9 +35,9 @@ function MenuItem({
 
 export type SideNavProps = Readonly<{
   standardMenu: PortalRoute[];
-  adminMenu: PortalRoute[];
+  uid2SupportMenu: PortalRoute[];
 }>;
-export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
+export function SideNav({ standardMenu, uid2SupportMenu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>
       <NavigationMenuList className='main-nav'>
@@ -46,10 +46,10 @@ export function SideNav({ standardMenu, adminMenu }: SideNavProps) {
         {standardMenu
           .filter((m) => (m.location ?? 'default') === 'default')
           .map((m) => MenuItem(m))}
-        {adminMenu.length > 0 && (
+        {uid2SupportMenu.length > 0 && (
           <>
             <div className='side-nav-divider' />
-            {adminMenu
+            {uid2SupportMenu
               .filter((m) => (m.location ?? 'default') === 'default')
               .map((m) => MenuItem(m))}
           </>

@@ -1,18 +1,15 @@
-import express, { Response } from 'express';
+import express from 'express';
 
-import { ApiRoleDTO } from '../../entities/ApiRole';
-import { Participant } from '../../entities/Participant';
-import { isApproverCheck } from '../../middleware/approversMiddleware';
 import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
+import { isAdminOrUid2SupportCheck, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../../middleware/usersMiddleware';
-import { getApiRoles } from '../../services/apiKeyService';
-import {
-  ParticipantRequest,
-  updateParticipant,
-  UserParticipantRequest,
-} from '../../services/participantsService';
 import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { createParticipantUsersRouter } from '../participantUsersRouter';
+import {
+  handleCompleteRecommendations,
+  handleGetParticipant,
+  handleUpdateParticipant,
+} from './participants';
 import {
   handleAddApiKey,
   handleDeleteApiKey,
@@ -20,13 +17,14 @@ import {
   handleGetParticipantApiKeys,
   handleUpdateApiKey,
 } from './participantsApiKeys';
+import { handleGetParticipantApiRoles } from './participantsApiRoles';
 import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
 import {
   handleApproveParticipant,
   handleGetApprovedParticipants,
   handleGetParticipantsAwaitingApproval,
 } from './participantsApproval';
-import { handleAuditTrail } from './participantsAuditTrail';
+import { handleGetAuditTrail } from './participantsAuditTrail';
 import {
   handleCreateParticipant,
   handleCreateParticipantFromRequest,
@@ -50,36 +48,6 @@ import {
 import { handleGetSignedParticipants } from './participantsSigned';
 import { handleGetParticipantUsers, handleInviteUserToParticipant } from './participantsUsers';
 
-const handleUpdateParticipant = async (req: UserParticipantRequest, res: Response) => {
-  const { participant } = req;
-  if (!participant) {
-    return res.status(404).send('Unable to find participant');
-  }
-  await updateParticipant(participant, req);
-  return res.sendStatus(200);
-};
-
-const handleGetParticipant = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  return res.status(200).json(participant);
-};
-
-const handleGetParticipantApiRoles = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  const apiRoles: ApiRoleDTO[] = await getApiRoles(participant!);
-  return res.status(200).json(apiRoles);
-};
-
-const handleCompleteRecommendations = async (req: ParticipantRequest, res: Response) => {
-  const { participant } = req;
-  const updatedParticipant = await Participant.query()
-    .patchAndFetchById(participant!.id, {
-      completedRecommendations: true,
-    })
-    .withGraphFetched('types');
-  return res.status(200).json(updatedParticipant);
-};
-
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
@@ -88,23 +56,33 @@ export function createParticipantsRouter() {
 
   participantsRouter.get(
     '/awaitingApproval',
-    isApproverCheck,
+    isUid2SupportCheck,
     handleGetParticipantsAwaitingApproval
   );
-  participantsRouter.get('/approved', isApproverCheck, handleGetApprovedParticipants);
+  participantsRouter.get('/approved', isUid2SupportCheck, handleGetApprovedParticipants);
 
   participantsRouter.use('/:participantId', enrichCurrentUser);
 
-  participantsRouter.put('/:participantId/approve', isApproverCheck, handleApproveParticipant);
-  participantsRouter.put('/:participantId', isApproverCheck, handleUpdateParticipant);
+  participantsRouter.put('/:participantId/approve', isUid2SupportCheck, handleApproveParticipant);
+  participantsRouter.put('/:participantId', isUid2SupportCheck, handleUpdateParticipant);
   participantsRouter.put('/', handleCreateParticipant);
 
   participantsRouter.use('/:participantId', verifyAndEnrichParticipant);
 
   participantsRouter.get('/:participantId', handleGetParticipant);
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
-  participantsRouter.post('/:participantId/invite', handleInviteUserToParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
+
+  participantsRouter.post(
+    '/:participantId/invite',
+    isAdminOrUid2SupportCheck,
+    handleInviteUserToParticipant
+  );
+  participantsRouter.get(
+    '/:participantId/auditTrail',
+    isAdminOrUid2SupportCheck,
+    handleGetAuditTrail
+  );
 
   participantsRouter.get('/:participantId/sharingPermission', handleGetSharingPermission);
   participantsRouter.post('/:participantId/sharingPermission/add', handleAddSharingPermission);
@@ -133,7 +111,6 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/:participantId/appNames', handleGetParticipantAppNames);
   participantsRouter.post('/:participantId/appNames', handleSetParticipantAppNames);
-  participantsRouter.get('/:participantId/auditTrail', handleAuditTrail);
 
   participantsRouter.get('/:participantId/users', handleGetParticipantUsers);
   const participantUsersRouter = createParticipantUsersRouter();

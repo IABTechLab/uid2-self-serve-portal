@@ -33,19 +33,21 @@ export const StandardRoutes: PortalRoute[] = [
   AuditTrailRoute,
 ];
 
-export const AdminRoutes: PortalRoute[] = [ManageParticipantsRoute];
+export const Uid2SupportRoutes: PortalRoute[] = [ManageParticipantsRoute];
 
-export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...AdminRoutes];
+export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...Uid2SupportRoutes];
 
 const standardMenu = StandardRoutes.filter((r) => r.description);
 
 function Dashboard() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const adminMenu = LoggedInUser?.user?.isApprover ? AdminRoutes.filter((r) => r.description) : [];
+  const uid2SupportMenu = LoggedInUser?.user?.isUid2Support
+    ? Uid2SupportRoutes.filter((r) => r.description)
+    : [];
 
   return (
     <div className='app-panel'>
-      <SideNav standardMenu={standardMenu} adminMenu={adminMenu} />
+      <SideNav standardMenu={standardMenu} uid2SupportMenu={uid2SupportMenu} />
       <div className='dashboard-content'>
         {!LoggedInUser?.user?.acceptedTerms ? <TermsAndConditionsDialog /> : <Outlet />}
       </div>

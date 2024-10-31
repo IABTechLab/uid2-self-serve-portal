@@ -33,6 +33,7 @@ export const WithTeamMembers: Story = {
         lastName: 'test',
         jobFunction: UserJobFunction.DA,
         acceptedTerms: true,
+        isUid2Support: false,
       },
       {
         id: 2,
@@ -41,6 +42,7 @@ export const WithTeamMembers: Story = {
         lastName: 'user 2',
         jobFunction: UserJobFunction.Engineering,
         acceptedTerms: false,
+        isUid2Support: false,
       },
     ],
   },

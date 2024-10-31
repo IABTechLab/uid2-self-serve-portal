@@ -2,12 +2,8 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { UserWithCurrentParticipantRoleNames } from '../../../api/services/usersService';
-import {
-  InviteTeamMemberForm,
-  UpdateTeamMemberForm,
-  UserResponse,
-} from '../../services/userAccount';
+import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
@@ -17,16 +13,16 @@ import { TextInput } from '../Input/TextInput';
 import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
 
 type AddTeamMemberDialogProps = {
-  teamMembers: UserWithCurrentParticipantRoleNames[];
+  teamMembers: UserWithParticipantRoles[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
   person?: never;
 };
 type UpdateTeamMemberDialogProps = {
-  teamMembers: UserWithCurrentParticipantRoleNames[];
+  teamMembers: UserWithParticipantRoles[];
   onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
-  person: UserResponse;
+  person: UserWithParticipantRoles;
 };
 type TeamMemberDialogProps = AddTeamMemberDialogProps | UpdateTeamMemberDialogProps;
 
