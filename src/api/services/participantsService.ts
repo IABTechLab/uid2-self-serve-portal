@@ -284,6 +284,7 @@ export const updateParticipant = async (participant: Participant, req: UserParti
   } = updateParticipantSchema.parse(req.body);
   const { user } = req;
   const traceId = getTraceId(req);
+  const updatedParticipantId = Number(req.params.participantId);
 
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
@@ -294,7 +295,8 @@ export const updateParticipant = async (participant: Participant, req: UserParti
       participantName,
       participantTypes: mapClientTypeIdsToAdminEnums(participantTypeIds),
       crmAgreementNumber,
-    }
+    },
+    updatedParticipantId
   );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
