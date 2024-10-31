@@ -61,6 +61,7 @@ export const handleApproveParticipant = async (req: UserParticipantRequest, res:
     {
       oldName: participant?.name,
       newName: data.name,
+      siteId: data.siteId!,
       oldTypeIds: mapClientTypeIdsToAdminEnums(participant?.types!.map((type) => type.id) ?? []),
       newTypeIds: mapClientTypeIdsToAdminEnums(data.types.map((type) => type.id)),
       apiRoles: getRoleNamesByIds(data.apiRoles.map((role) => role.id)),

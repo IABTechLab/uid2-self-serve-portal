@@ -77,6 +77,7 @@ export const handleAddApiKey = async (req: UserParticipantRequest, res: Response
     AuditTrailEvents.ManageApiKey,
     {
       action: AuditAction.Add,
+      siteId: participant.siteId,
       keyName,
       apiRoles,
     },
