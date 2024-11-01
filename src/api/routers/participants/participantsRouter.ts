@@ -61,17 +61,15 @@ export function createParticipantsRouter() {
   );
   participantsRouter.get('/approved', isUid2SupportCheck, handleGetApprovedParticipants);
 
-  participantsRouter.use('/:participantId', enrichCurrentUser);
-
-  participantsRouter.put('/:participantId/approve', isUid2SupportCheck, handleApproveParticipant);
-  participantsRouter.put('/:participantId', isUid2SupportCheck, handleUpdateParticipant);
   participantsRouter.put('/', handleCreateParticipant);
 
-  participantsRouter.use('/:participantId', verifyAndEnrichParticipant);
+  participantsRouter.use('/:participantId', verifyAndEnrichParticipant, enrichCurrentUser);
 
   participantsRouter.get('/:participantId', handleGetParticipant);
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
+  participantsRouter.put('/:participantId', handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
+  participantsRouter.put('/:participantId/approve', handleApproveParticipant);
 
   participantsRouter.post(
     '/:participantId/invite',

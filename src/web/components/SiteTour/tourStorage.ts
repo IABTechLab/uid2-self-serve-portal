@@ -1,22 +1,10 @@
-import Joyride from 'react-joyride';
-
 import config from '../../../../package.json';
+import { ParticipantDTO } from '../../../api/entities/Participant';
+import { UserAccount } from '../../services/userAccount';
+import { compareVersions, shouldRemoveCurrentStep } from './tourHelpers';
+import { tourSteps, VersionedTourStep } from './tourSteps';
 
 const { version } = config;
-
-export type VersionedTourStep = React.ComponentProps<typeof Joyride>['steps'][number] & {
-  version: string;
-};
-// Temporary solution: all tour steps without a version are treated as relevant to the current version.
-// Update the version after release to avoid showing it again. We can automate this in the release pipeline.
-const tourSteps: VersionedTourStep[] = [
-  {
-    target: `.profile-dropdown-button`,
-    content: `We've moved some menu items to your profile dropdown.`,
-    disableBeacon: true,
-    version: '0.36.0',
-  },
-];
 
 type TourData = {
   seenForVersions: string[];
@@ -48,23 +36,18 @@ export function markTourAsSeen() {
   saveTourData(tourData);
 }
 
-export const compareVersions = (a: string, b: string): number => {
-  const parsedA = a.split('.').map((v) => parseInt(v, 10));
-  const parsedB = b.split('.').map((v) => parseInt(v, 10));
-  for (let versionPart = 0; versionPart < parsedA.length; versionPart++) {
-    if (parsedA[versionPart] !== parsedB[versionPart])
-      return parsedA[versionPart] - parsedB[versionPart];
-  }
-  return 0;
-};
-
-export function GetTourSteps(steps = tourSteps): VersionedTourStep[] {
+export function GetTourSteps(
+  loggedInUser: UserAccount | null,
+  participant: ParticipantDTO | null,
+  steps = tourSteps
+): VersionedTourStep[] {
   // search seen steps for the highest version number
   const storedVersions = getTourData().seenForVersions;
   // Sort in reverse order - highest first
   storedVersions.sort((first, second) => compareVersions(second, first));
   const highestSeenVersion = storedVersions.length > 0 ? storedVersions[0] : '0.0.0';
   return steps.filter((step) => {
+    if (shouldRemoveCurrentStep(step, loggedInUser, participant)) return;
     const stepVersionIsHigher = compareVersions(step?.version, highestSeenVersion) > 0;
     return stepVersionIsHigher;
   });
