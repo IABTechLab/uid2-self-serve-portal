@@ -61,9 +61,13 @@ const makeMetricsApiMiddleware = (options: Options, logger: Logger) => {
       if (route.methods.indexOf(req.method) === -1) {
         return false;
       }
-
-      if (route.path.match(path)) {
-        return true;
+      try {
+        if (route.path.match(path)) {
+          return true;
+        }
+      } catch (e: unknown) {
+        logger.error(`Unable to perform regex match on path: ${e}`);
+        return false;
       }
 
       return false;
