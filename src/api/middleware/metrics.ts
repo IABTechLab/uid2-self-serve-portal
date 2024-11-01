@@ -66,7 +66,7 @@ const makeMetricsApiMiddleware = (options: Options, logger: Logger) => {
           return true;
         }
       } catch (e: unknown) {
-        console.error('Invalid path', e);
+        logger.error(`Unable to perform regex match on path: ${e}`);
         return false;
       }
 
