@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
-import { getPathWithParticipant } from '../../utils/urlHelpers';
+import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpers';
 import { ParticipantSwitcher } from './ParticipantSwitcher';
 
 import './NoParticipantAccessView.scss';
@@ -15,11 +15,11 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
   const location = useLocation();
 
   const onBackToParticipant = () => {
-    let participantId;
-    if (user?.participants) {
+    let participantId = parseParticipantId(
+      localStorage.getItem('lastSelectedParticipantId') ?? undefined
+    );
+    if (!participantId && user?.participants && user?.participants.length > 0) {
       participantId = user.participants[0].id;
-    } else {
-      participantId = localStorage.getItem('lastSelectedParticipantId');
     }
     if (participantId) {
       const newPath = getPathWithParticipant(location.pathname, participantId);
