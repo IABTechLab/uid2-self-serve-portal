@@ -24,6 +24,7 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
+import { getAllUid2Support } from './uid2SupportService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -63,12 +64,13 @@ export const sendNewParticipantEmail = async (
     jobFunction: requestor.jobFunction,
   };
 
-  const approvers = await findApproversByType(typeIds);
+  //const approvers = await findApproversByType(typeIds);
+  const uid2SupportApprovers = await getAllUid2Support();
   const emailArgs: EmailArgs = {
     subject: 'New Participant Request',
     templateData,
     template: 'newParticipantReadyForReview',
-    to: approvers.map((a) => ({ name: a.displayName, email: a.email })),
+    to: uid2SupportApprovers.map((a) => ({ name: a.firstName, email: a.email })),
   };
   emailService.sendEmail(emailArgs, traceId);
 };
