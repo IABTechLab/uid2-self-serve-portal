@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { ParticipantType } from '../entities/ParticipantType';
 import { UserJobFunction } from '../entities/User';
-import { UserRoleId } from '../entities/UserRole';
+import { getUserRoleById, UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
@@ -112,7 +112,7 @@ export class UserService {
         firstName: userData.firstName,
         lastName: userData.lastName,
         jobFunction: userData.jobFunction,
-        userRoleId: userRoleData.userRoleId,
+        userRoleId: getUserRoleById(userRoleData.userRoleId),
       },
       participant!.id
     );

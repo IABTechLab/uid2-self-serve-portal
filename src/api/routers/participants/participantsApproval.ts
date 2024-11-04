@@ -1,11 +1,15 @@
 import { Response } from 'express';
 
+import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { AuditTrailEvents } from '../../entities/AuditTrail';
 import { ParticipantApprovalPartial, ParticipantStatus } from '../../entities/Participant';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { setSiteClientTypes } from '../../services/adminServiceClient';
-import { ParticipantApprovalResponse } from '../../services/adminServiceHelpers';
+import {
+  mapClientTypeIdsToAdminEnums,
+  ParticipantApprovalResponse,
+} from '../../services/adminServiceHelpers';
 import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
@@ -56,11 +60,11 @@ export const handleApproveParticipant = async (req: UserParticipantRequest, res:
     AuditTrailEvents.ApproveAccount,
     {
       oldName: participant?.name,
-      siteId: data.siteId!,
       newName: data.name,
-      oldTypeIds: participant?.types!.map((type) => type.id),
-      newTypeIds: data.types.map((type) => type.id),
-      apiRoles: data.apiRoles.map((role) => role.id),
+      siteId: data.siteId!,
+      oldTypeIds: mapClientTypeIdsToAdminEnums(participant?.types!.map((type) => type.id) ?? []),
+      newTypeIds: mapClientTypeIdsToAdminEnums(data.types.map((type) => type.id)),
+      apiRoles: getRoleNamesByIds(data.apiRoles.map((role) => role.id)),
     },
     participant!.id
   );

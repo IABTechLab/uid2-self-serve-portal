@@ -83,11 +83,10 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
       <table className='audit-log-table'>
         <thead>
           <tr>
-            <th>ID</th>
+            <SortableTableHeader<AuditTrailDTO> sortKey='updated_at' header='Date' />
             <SortableTableHeader<AuditTrailDTO> sortKey='userEmail' header='User' />
             <SortableTableHeader<AuditTrailDTO> sortKey='event' header='Event' />
             <th>Event Data</th>
-            <SortableTableHeader<AuditTrailDTO> sortKey='updated_at' header='Date' />
             <th>Succeeded</th>
           </tr>
         </thead>

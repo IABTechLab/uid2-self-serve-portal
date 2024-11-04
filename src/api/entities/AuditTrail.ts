@@ -4,9 +4,9 @@ import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 
 export enum AuditAction {
-  Add = 'add',
-  Delete = 'delete',
-  Update = 'update',
+  Add = 'Add',
+  Delete = 'Delete',
+  Update = 'Update',
 }
 
 export enum AuditTrailEvents {
