@@ -16,10 +16,10 @@ function AuditTrailRow({ log }: AuditTrailProps) {
 
   return (
     <tr>
+      <td>{eventDate}</td>
       <td>{log.userEmail}</td>
       <td>{log.event.replace(/([a-z])([A-Z])/g, '$1 $2')}</td>
       <td className='event-data'>{formattedEventData}</td>
-      <td>{eventDate}</td>
       <td className='succeeded'>
         <FontAwesomeIcon
           className={log.succeeded ? 'icon_check' : 'icon_x'}
