@@ -297,26 +297,20 @@ The following steps describe the minimal steps required to successfully log in t
 1. If using Visual Studio Code, you may need to set `FAST_REFRESH=false` in your .env file
 1. Azure Data Studio is an adequate program for manipulating the SQL Server database
 
-### Admin screens/routes
+### UID2 Support Screens/Routes
 
-Certain screens/routes are considered admin-only. Run the following to assign yourself as an admin:
+Certain screens/routes are only able to view with the UID2 support role, such as the Manage Participants screen. Run the following to assign yourself the UID2 support role:
 
 ```
 use [uid2_selfserve]
 
-declare @displayName as nvarchar(256) = '<first name> <last name>'
-declare @email as nvarchar(256) = '<Enter your email here>'
+declare @email as nvarchar(256) = 'example@example.com';
 
-select * from dbo.approvers where email = @email
-
-insert into dbo.approvers (displayName, email, participantTypeId)
-values
-(@displayName, @email, 1),
-(@displayName, @email, 2),
-(@displayName, @email, 3),
-(@displayName, @email, 4)
-
-select * from dbo.approvers where email = @email
+insert into dbo.usersToParticipantRoles (userId, participantId, userRoleId)
+select u.id, upr.participantId, 3
+from dbo.users u
+join dbo.usersToParticipantRoles upr on u.id = upr.userId
+where u.email = @email;
 ```
 
 You will then want to assign some API Permissions to your participant in the `Manage Participants` screen. This will allow you to use the full functionality of the `API Keys` screen.
