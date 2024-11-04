@@ -2,6 +2,7 @@ import { Request } from 'express';
 import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
+import { getRoleNamesByIds } from '../../web/utils/apiRoles';
 import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import {
@@ -16,7 +17,11 @@ import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
-import { ClientType, SharingListResponse } from './adminServiceHelpers';
+import {
+  ClientType,
+  mapClientTypeIdsToAdminEnums,
+  SharingListResponse,
+} from './adminServiceHelpers';
 import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
@@ -278,9 +283,9 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     AuditTrailEvents.ManageParticipant,
     {
       action: AuditAction.Update,
-      apiRoles,
+      apiRoles: getRoleNamesByIds(apiRoles),
       participantName,
-      participantTypes: participantTypeIds,
+      participantTypes: mapClientTypeIdsToAdminEnums(participantTypeIds),
       crmAgreementNumber,
     }
   );
