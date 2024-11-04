@@ -58,4 +58,9 @@ describe('Tour tests', () => {
     const steps = GetTourSteps(mockLoggedInUser, mockParticipant, mockTourData);
     expect(steps).not.toContainEqual(mockTourData[0]);
   });
+  test('When user is logging in for the first time, no steps are returned', () => {
+    localStorage.removeItem(tourStorageKey);
+    const steps = GetTourSteps(mockLoggedInUser, mockParticipant, mockTourData);
+    expect(steps).toHaveLength(0);
+  });
 });
