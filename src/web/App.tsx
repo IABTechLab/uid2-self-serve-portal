@@ -31,7 +31,7 @@ function AppContent() {
     return <ErrorView message='You do not have access to any participants.' />;
   }
   if (location.pathname !== '/account/create' && LoggedInUser && !participant) {
-    return <NoParticipantAccessView />;
+    return <NoParticipantAccessView user={LoggedInUser?.user} />;
   }
 
   const showUpdatesTour =
