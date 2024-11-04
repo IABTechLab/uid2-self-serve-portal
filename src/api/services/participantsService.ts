@@ -17,7 +17,6 @@ import { SSP_WEB_BASE_URL } from '../envars';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
-// import {  getApprovableParticipantTypeIds } from './approversService';
 import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
@@ -64,7 +63,6 @@ export const sendNewParticipantEmail = async (
     jobFunction: requestor.jobFunction,
   };
 
-  // const approvers = await findApproversByType(typeIds);
   const uid2SupportUsers = await getAllUid2SupportUsers();
   const emailArgs: EmailArgs = {
     subject: 'New Participant Request',
@@ -98,14 +96,7 @@ export const mapParticipantToApprovalRequest = (
 };
 
 export const getParticipantsAwaitingApproval = async (): Promise<Participant[]> => {
-  // const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
   const participantsAwaitingApproval = await Participant.query()
-    // .whereIn(
-    //   'id',
-    //   Participant.relatedQuery('types')
-    //     .whereIn('participantTypeId', approvableParticipantTypeIds)
-    //     .select('participantId')
-    // )
     .withGraphFetched('[types, users]')
     .where('status', ParticipantStatus.AwaitingApproval);
   return participantsAwaitingApproval;
