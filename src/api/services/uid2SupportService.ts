@@ -2,7 +2,7 @@ import { User } from '../entities/User';
 import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 
-export const getAllUid2Support = async () => {
+export const getAllUid2SupportUsers = async () => {
   const uid2SupportUserToParticipantRoles = await UserToParticipantRole.query()
     .distinct('userId')
     .where('userRoleId', UserRoleId.UID2Support);

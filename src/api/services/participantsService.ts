@@ -17,14 +17,14 @@ import { SSP_WEB_BASE_URL } from '../envars';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
-import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
+//import {  getApprovableParticipantTypeIds } from './approversService';
 import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { getAllUid2Support } from './uid2SupportService';
+import { getAllUid2SupportUsers } from './uid2SupportService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -65,12 +65,12 @@ export const sendNewParticipantEmail = async (
   };
 
   //const approvers = await findApproversByType(typeIds);
-  const uid2SupportApprovers = await getAllUid2Support();
+  const uid2SupportUsers = await getAllUid2SupportUsers();
   const emailArgs: EmailArgs = {
     subject: 'New Participant Request',
     templateData,
     template: 'newParticipantReadyForReview',
-    to: uid2SupportApprovers.map((a) => ({ name: a.firstName, email: a.email })),
+    to: uid2SupportUsers.map((user) => ({ name: user!.firstName, email: user!.email })),
   };
   emailService.sendEmail(emailArgs, traceId);
 };
@@ -98,14 +98,14 @@ export const mapParticipantToApprovalRequest = (
 };
 
 export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {
-  const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
+  //const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
   const participantsAwaitingApproval = await Participant.query()
-    .whereIn(
-      'id',
-      Participant.relatedQuery('types')
-        .whereIn('participantTypeId', approvableParticipantTypeIds)
-        .select('participantId')
-    )
+    // .whereIn(
+    //   'id',
+    //   Participant.relatedQuery('types')
+    //     .whereIn('participantTypeId', approvableParticipantTypeIds)
+    //     .select('participantId')
+    // )
     .withGraphFetched('[types, users]')
     .where('status', ParticipantStatus.AwaitingApproval);
   return participantsAwaitingApproval;
@@ -123,7 +123,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const getParticipantsApproved = async (): Promise<Participant[]> => {
   return Participant.query()
     .where('status', ParticipantStatus.Approved)
-    .withGraphFetched('[apiRoles, approver, types, users]');
+    .withGraphFetched('[apiRoles, types, users]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
