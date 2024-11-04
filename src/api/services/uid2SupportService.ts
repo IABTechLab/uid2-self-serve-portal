@@ -8,7 +8,7 @@ export const getAllUid2SupportUsers = async () => {
     .where('userRoleId', UserRoleId.UID2Support);
   const uid2SupportUsers = await Promise.all(
     uid2SupportUserToParticipantRoles.map(async (user) => {
-      return await User.query().findOne('id', user.userId);
+      return User.query().findOne('id', user.userId);
     })
   );
   return uid2SupportUsers.filter((user) => user !== undefined);

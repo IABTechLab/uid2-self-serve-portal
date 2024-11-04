@@ -27,8 +27,7 @@ export const handleGetParticipantsAwaitingApproval = async (
   req: ParticipantRequest,
   res: Response
 ) => {
-  const email = String(req.auth?.payload?.email);
-  const participantsAwaitingApproval = await getParticipantsAwaitingApproval(email);
+  const participantsAwaitingApproval = await getParticipantsAwaitingApproval();
   const result: ParticipantRequestDTO[] = participantsAwaitingApproval.map(
     mapParticipantToApprovalRequest
   );

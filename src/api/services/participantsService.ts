@@ -17,7 +17,7 @@ import { SSP_WEB_BASE_URL } from '../envars';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import { ClientType, SharingListResponse } from './adminServiceHelpers';
-//import {  getApprovableParticipantTypeIds } from './approversService';
+// import {  getApprovableParticipantTypeIds } from './approversService';
 import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
@@ -64,7 +64,7 @@ export const sendNewParticipantEmail = async (
     jobFunction: requestor.jobFunction,
   };
 
-  //const approvers = await findApproversByType(typeIds);
+  // const approvers = await findApproversByType(typeIds);
   const uid2SupportUsers = await getAllUid2SupportUsers();
   const emailArgs: EmailArgs = {
     subject: 'New Participant Request',
@@ -97,8 +97,8 @@ export const mapParticipantToApprovalRequest = (
   };
 };
 
-export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {
-  //const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
+export const getParticipantsAwaitingApproval = async (): Promise<Participant[]> => {
+  // const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
   const participantsAwaitingApproval = await Participant.query()
     // .whereIn(
     //   'id',
@@ -123,7 +123,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const getParticipantsApproved = async (): Promise<Participant[]> => {
   return Participant.query()
     .where('status', ParticipantStatus.Approved)
-    .withGraphFetched('[apiRoles, types, users]');
+    .withGraphFetched('[apiRoles, approver, types, users]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
