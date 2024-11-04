@@ -46,6 +46,7 @@ export function GetTourSteps(
   // if there are no seen version, this is the users first time in the portal
   // new features don't make sense to show in this case
   if (storedVersions.length === 0) {
+    markTourAsSeen();
     return [];
   }
   // Sort in reverse order - highest first

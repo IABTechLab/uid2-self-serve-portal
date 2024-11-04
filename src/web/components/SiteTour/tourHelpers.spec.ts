@@ -4,7 +4,7 @@ import { createMockParticipant, createMockUser } from '../../../testHelpers/data
 import { createUserContextValue } from '../../../testHelpers/testContextProvider';
 import { compareVersions } from './tourHelpers';
 import { tourSteps } from './tourSteps';
-import { GetTourSteps,tourStorageKey } from './tourStorage';
+import { GetTourSteps, tourStorageKey } from './tourStorage';
 
 describe('testing tour storage helper functions', () => {
   const mockParticipant = createMockParticipant();
@@ -29,7 +29,7 @@ describe('testing tour storage helper functions', () => {
     mockUser.currentParticipantUserRoles = [{ id: UserRoleId.Admin, roleName: 'Admin' }];
     mockUser.participants = [mockParticipant, mockParticipant2] as Participant[];
     mockParticipant.currentUserRoleIds = [UserRoleId.Admin];
-    localStorage.removeItem(tourStorageKey);
+    localStorage.setItem(tourStorageKey, JSON.stringify({ seenForVersions: ['0.1.0'] }));
 
     const steps = GetTourSteps(mockLoggedInUser, mockParticipant);
 
