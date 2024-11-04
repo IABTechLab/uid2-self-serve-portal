@@ -43,7 +43,7 @@ export function GetTourSteps(
 ): VersionedTourStep[] {
   // search seen steps for the highest version number
   const storedVersions = getTourData().seenForVersions;
-  // if there are no seen version, this is the users first time in the portal
+  // if there are no seen versions, this is the users first time in the portal
   // new features don't make sense to show in this case
   if (storedVersions.length === 0) {
     markTourAsSeen();
