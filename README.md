@@ -287,7 +287,7 @@ The following steps describe the minimal steps required to successfully log in t
 
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
-1. Optionally give your user access to the [Admin screens/routes](#admin-screensroutes)
+1. Optionally give your user access to the [UID2 Support Screens/Routes](#uid2-support-screensroutes)
 1. Return to the UI and you should be good to go!
 
 #### Notes for Mac OSX Development:
@@ -299,15 +299,16 @@ The following steps describe the minimal steps required to successfully log in t
 
 ### UID2 Support Screens/Routes
 
-Certain screens/routes are only able to view with the UID2 support role, such as the Manage Participants screen. Run the following to assign yourself the UID2 support role:
+Certain screens/routes are only viewable with the UID2 support role, such as the screen to manage participants. Run the following to assign yourself the UID2 support role:
 
 ```
 use [uid2_selfserve]
 
 declare @email as nvarchar(256) = 'example@example.com';
+declare @uid2SupportRoleId as int = 3;
 
 insert into dbo.usersToParticipantRoles (userId, participantId, userRoleId)
-select u.id, upr.participantId, 3
+select u.id, upr.participantId, @uid2SupportRoleId
 from dbo.users u
 join dbo.usersToParticipantRoles upr on u.id = upr.userId
 where u.email = @email;
