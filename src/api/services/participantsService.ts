@@ -22,13 +22,13 @@ import {
   mapClientTypeIdsToAdminEnums,
   SharingListResponse,
 } from './adminServiceHelpers';
-import { findApproversByType, getApprovableParticipantTypeIds } from './approversService';
 import {
   constructAuditTrailObject,
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
+import { getAllUid2SupportUsers } from './uid2SupportService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -68,12 +68,12 @@ export const sendNewParticipantEmail = async (
     jobFunction: requestor.jobFunction,
   };
 
-  const approvers = await findApproversByType(typeIds);
+  const uid2SupportUsers = await getAllUid2SupportUsers();
   const emailArgs: EmailArgs = {
     subject: 'New Participant Request',
     templateData,
     template: 'newParticipantReadyForReview',
-    to: approvers.map((a) => ({ name: a.displayName, email: a.email })),
+    to: uid2SupportUsers.map((user) => ({ name: user!.firstName, email: user!.email })),
   };
   emailService.sendEmail(emailArgs, traceId);
 };
@@ -100,15 +100,8 @@ export const mapParticipantToApprovalRequest = (
   };
 };
 
-export const getParticipantsAwaitingApproval = async (email: string): Promise<Participant[]> => {
-  const approvableParticipantTypeIds = await getApprovableParticipantTypeIds(email);
+export const getParticipantsAwaitingApproval = async (): Promise<Participant[]> => {
   const participantsAwaitingApproval = await Participant.query()
-    .whereIn(
-      'id',
-      Participant.relatedQuery('types')
-        .whereIn('participantTypeId', approvableParticipantTypeIds)
-        .select('participantId')
-    )
     .withGraphFetched('[types, users]')
     .where('status', ParticipantStatus.AwaitingApproval);
   return participantsAwaitingApproval;

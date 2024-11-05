@@ -287,7 +287,7 @@ The following steps describe the minimal steps required to successfully log in t
 
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
-1. Optionally give your user access to the [Admin screens/routes](#admin-screensroutes)
+1. Optionally give your user access to the [UID2 Support Screens/Routes](#uid2-support-screensroutes)
 1. Return to the UI and you should be good to go!
 
 #### Notes for Mac OSX Development:
@@ -297,26 +297,21 @@ The following steps describe the minimal steps required to successfully log in t
 1. If using Visual Studio Code, you may need to set `FAST_REFRESH=false` in your .env file
 1. Azure Data Studio is an adequate program for manipulating the SQL Server database
 
-### Admin screens/routes
+### UID2 Support Screens/Routes
 
-Certain screens/routes are considered admin-only. Run the following to assign yourself as an admin:
+Certain screens/routes are only viewable with the UID2 support role, such as the screen to manage participants. Run the following to assign yourself the UID2 support role:
 
 ```
 use [uid2_selfserve]
 
-declare @displayName as nvarchar(256) = '<first name> <last name>'
-declare @email as nvarchar(256) = '<Enter your email here>'
+declare @email as nvarchar(256) = 'example@example.com';
+declare @uid2SupportRoleId as int = 3;
 
-select * from dbo.approvers where email = @email
-
-insert into dbo.approvers (displayName, email, participantTypeId)
-values
-(@displayName, @email, 1),
-(@displayName, @email, 2),
-(@displayName, @email, 3),
-(@displayName, @email, 4)
-
-select * from dbo.approvers where email = @email
+insert into dbo.usersToParticipantRoles (userId, participantId, userRoleId)
+select u.id, upr.participantId, @uid2SupportRoleId
+from dbo.users u
+join dbo.usersToParticipantRoles upr on u.id = upr.userId
+where u.email = @email;
 ```
 
 You will then want to assign some API Permissions to your participant in the `Manage Participants` screen. This will allow you to use the full functionality of the `API Keys` screen.
