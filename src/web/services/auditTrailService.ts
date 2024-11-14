@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { AuditTrailDTO } from '../../api/entities/AuditTrail';
+import { AuditTrailDTO, AuditTrailEvents } from '../../api/entities/AuditTrail';
 import { mapClientTypeIdsToAdminEnums } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { getRoleNamesByIds } from '../utils/apiRoles';
@@ -38,4 +38,12 @@ export const getPrettyAuditDetails = (eventData: unknown) => {
   }
   const outputString = outputArray.join(' | ');
   return outputString;
+};
+
+export const getFormattedEvent = (event: AuditTrailEvents) => {
+  let formattedEvent = event.replace(/([a-z])([A-Z])/g, '$1 $2');
+  if (formattedEvent.includes('Api')) {
+    formattedEvent = formattedEvent.replace(/\bApi\b/g, 'API');
+  }
+  return formattedEvent;
 };

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
-import { getPrettyAuditDetails } from '../../services/auditTrailService';
+import { getFormattedEvent, getPrettyAuditDetails } from '../../services/auditTrailService';
 
 import './AuditTrail.scss';
 
@@ -11,6 +11,7 @@ type AuditTrailProps = Readonly<{
 
 function AuditTrailRow({ log }: AuditTrailProps) {
   const formattedEventData = getPrettyAuditDetails(log.eventData);
+  const formattedEvent = getFormattedEvent(log.event);
 
   const eventDate = new Date(log.updated_at).toLocaleString();
 
@@ -18,7 +19,7 @@ function AuditTrailRow({ log }: AuditTrailProps) {
     <tr>
       <td>{eventDate}</td>
       <td>{log.userEmail}</td>
-      <td>{log.event.replace(/([a-z])([A-Z])/g, '$1 $2')}</td>
+      <td>{formattedEvent}</td>
       <td className='event-data'>{formattedEventData}</td>
       <td className='succeeded'>
         <FontAwesomeIcon
