@@ -60,7 +60,7 @@ export function SideNav({ standardMenu, uid2SupportMenu }: SideNavProps) {
           <a
             target='_blank'
             className='outside-link'
-            href='http://unifiedid.com/docs/intro'
+            href='https://unifiedid.com/docs/category/uid2-portal'
             rel='noreferrer'
           >
             UID2 Portal Documentation
