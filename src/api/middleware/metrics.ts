@@ -8,99 +8,97 @@ import { Logger } from 'winston';
 import { SSP_APP_NAME } from '../envars';
 
 type Options = {
-  isNormalizePathEnabled?: boolean;
-  discardUnmatched?: boolean;
-  urlPatternMaker?: (path: string) => string;
+  isNormalizePathEnabled: boolean;
 };
 
-const captureAllRoutes = ({ urlPatternMaker }: Options, app: express.Express, logger: Logger) => {
-  const allRoutes = listEndpoints(app);
-  const filteredRoutes = allRoutes.filter(
-    (route) => route.path !== '/*' && route.path !== '*' && !route.path.includes(' ')
-  );
-
-  return filteredRoutes.map((route) => {
-    const path = route.path.endsWith('/') ? route.path.replace(/\/$/, '') : route.path;
-
-    logger.log('debug', `Route found: ${route.path} - ${JSON.stringify(route)}`);
-
-    // NOTE: urlPatternMaker has to create an UrlPattern compatible object.
-    const pattern = urlPatternMaker
-      ? urlPatternMaker(route.path)
-      : new UrlPattern(route.path, {
-          segmentNameCharset: 'a-zA-Z0-9_-',
-        }).toString();
-
-    if (!pattern) {
-      logger.log('debug', 'skipping route due to empty path');
-    }
-
-    return { ...route, path: pattern || path };
-  });
+type Route = {
+  methods: string[];
+  path: string;
+  pattern: UrlPattern;
 };
 
-const makeMetricsApiMiddleware = (options: Options, logger: Logger) => {
-  const { isNormalizePathEnabled, discardUnmatched } = options;
-  const allRoutes = [] as { methods: string[]; path: string; pattern?: UrlPattern }[];
+export const withoutTrailingSlash = (path: string) => {
+  // Express routes don't include a trailing slash unless it's actually just `/` path, then it stays
+  if (path !== '/' && path.endsWith('/')) {
+    return path.slice(0, -1);
+  }
+  return path;
+};
 
-  const normalizePath: NormalizePathFn = (req, _opts) => {
+export const toRoute = (path: string, methods: string[]) => {
+  const withoutSlash = withoutTrailingSlash(path);
+  return {
+    path: withoutSlash,
+    methods: methods.map((method) => method.toUpperCase()),
+    pattern: new UrlPattern(withoutSlash),
+  };
+};
+
+export const scrapeRoutes = (req: express.Request, logger: Logger) => {
+  // Scrape all the paths registered with express on the first recording of metrics. These paths will later be used
+  // to ensure we don't use unknown paths (ie spam calls) in metric labels and don't overwhelm Prometheus.
+  // Unfortunately, this doesn't include static paths since they are not registered with Express. If desired,
+  // we could add them by recursively listing /public.
+  try {
+    return listEndpoints(req.app as express.Express)
+      .filter((route) => route.path !== '/*' && route.path !== '*' && !route.path.includes(' '))
+      .map((route) => toRoute(route.path, route.methods));
+  } catch (e) {
+    logger.error(`unable to capture route for prom-metrics: ${e}`);
+    return [];
+  }
+};
+
+export const makeNormalizePath =
+  (isNormalizePathEnabled: boolean, allRoutes: Route[], logger: Logger): NormalizePathFn =>
+  (req, _opts) => {
     if (!isNormalizePathEnabled) {
       return req.url;
     }
 
-    const path = (() => {
-      const parsedPath = url.parse(req.originalUrl || req.url).pathname || req.url;
-      if (parsedPath.endsWith('/')) {
-        // Remove trailing slash
-        return parsedPath.replace(/\/$/, '');
-      }
-      return parsedPath;
-    })();
+    const parsedPath = url.parse(req.originalUrl || req.url).pathname || req.url;
+    const path = withoutTrailingSlash(parsedPath);
 
-    const pattern = allRoutes.filter((route) => {
-      if (route.methods.indexOf(req.method) === -1) {
+    const matchingRoute = allRoutes.find((route) => {
+      if (!route.methods.includes(req.method.toUpperCase())) {
         return false;
       }
+
+      // match will be null if it doesn't fit the pattern and will be some object depending on path params if it does
+      // e.g. path /abc/123 will match route /abc/:id with object {id: 123} but will return null for route /xyz/:id
       try {
-        if (route.path.match(path)) {
-          return true;
-        }
+        return route.pattern.match(path) !== null;
       } catch (e: unknown) {
         logger.error(`Unable to perform regex match on path: ${e}`);
         return false;
       }
+    });
 
-      return false;
-    })[0]?.pattern;
-
-    if (discardUnmatched && !pattern) {
-      return '';
+    if (!matchingRoute) {
+      return 'unmatched-url';
     }
 
-    return pattern?.stringify() || path || '';
+    return matchingRoute.path;
   };
 
-  const metricsMiddleware = promBundle({
-    includeMethod: true,
-    includePath: true,
-    autoregister: false,
-    customLabels: {
-      application: SSP_APP_NAME,
-    },
-    buckets: [0.03, 0.3, 1, 1.5, 3, 5, 10],
-    normalizePath,
-  });
-
+const makeMetricsApiMiddleware = (options: Options, logger: Logger) => {
+  const { isNormalizePathEnabled } = options;
+  let metricsMiddleware: promBundle.Middleware;
   const handler: RequestHandler = (req, res, next) => {
-    if (allRoutes.length === 0) {
-      try {
-        captureAllRoutes(options, req.app as express.Express, logger).forEach((route) => {
-          allRoutes.push(route);
-        });
-      } catch (e) {
-        logger.log('error', `unable to capture route for prom-metrics: ${e}`);
-      }
+    if (!metricsMiddleware) {
+      const allRoutes = scrapeRoutes(req, logger);
+      metricsMiddleware = promBundle({
+        includeMethod: true,
+        includePath: true,
+        autoregister: false,
+        customLabels: {
+          application: SSP_APP_NAME,
+        },
+        buckets: [0.03, 0.3, 1, 1.5, 3, 5, 10],
+        normalizePath: makeNormalizePath(isNormalizePathEnabled, allRoutes, logger),
+      });
     }
+
     metricsMiddleware(req, res, next);
   };
 

@@ -11,6 +11,7 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 - VS Code (or equivalent). Note that if you don't use VS Code, you will need to find equivalent extensions for things like linting.
 
 Recommended VS Code extensions:
+
 | Extension | Details | Required? |
 | --------- | ------- | --------- |
 | ESLint | Lints your code. We expect PRs to be free of linter errors, and preferably free of warnings as well. | Yes |

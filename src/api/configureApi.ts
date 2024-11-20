@@ -105,7 +105,6 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
       makeMetricsApiMiddleware(
         {
           isNormalizePathEnabled: true,
-          discardUnmatched: false,
         },
         logger
       )
