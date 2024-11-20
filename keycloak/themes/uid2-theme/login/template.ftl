@@ -42,8 +42,8 @@
         <div id="kc-header-wrapper"
              class="${properties.kcHeaderWrapperClass!}">${kcSanitize(msg("loginTitleHtml",(realm.displayNameHtml!'')))?no_esc}</div>
     </div>
-    <div class="centralize-content">.                                                                               -->
-     <#-- App-initiated actions should not see warning messages about the need to complete the action -->
+    <div class="centralize-content">
+    <#-- App-initiated actions should not see warning messages about the need to complete the action -->
     <#-- during login.                                                                               -->
     <#if displayMessage && message?has_content && (message.type != 'warning' || !isAppInitiatedAction??)>
         <div class="alert-${message.type} ${properties.kcAlertClass!} pf-m-<#if message.type = 'error'>danger<#else>${message.type}</#if>">
