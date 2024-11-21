@@ -17,26 +17,12 @@ import {
 import { assignApiParticipantMemberRole } from '../../services/kcUsersService';
 import {
   getParticipantsApproved,
-  getParticipantsAwaitingApproval,
-  mapParticipantToApprovalRequest,
   ParticipantRequest,
-  ParticipantRequestDTO,
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndApiRoles,
   UserParticipantRequest,
 } from '../../services/participantsService';
 import { getAllUsersFromParticipant } from '../../services/usersService';
-
-export const handleGetParticipantsAwaitingApproval = async (
-  req: ParticipantRequest,
-  res: Response
-) => {
-  const participantsAwaitingApproval = await getParticipantsAwaitingApproval();
-  const result: ParticipantRequestDTO[] = participantsAwaitingApproval.map(
-    mapParticipantToApprovalRequest
-  );
-  return res.status(200).json(result);
-};
 
 export const handleGetApprovedParticipants = async (_req: ParticipantRequest, res: Response) => {
   const participants = await getParticipantsApproved();

@@ -47,7 +47,7 @@ export const sendInviteEmailToNewUser = async (
   await kcAdminClient.users.executeActionsEmail({
     id: user.id!,
     clientId: SSP_KK_SSL_RESOURCE,
-    //actions: [RequiredActionAlias.UPDATE_PROFILE],
+    actions: [RequiredActionAlias.UPDATE_PASSWORD],
     redirectUri: logoutUrl,
   });
 };
