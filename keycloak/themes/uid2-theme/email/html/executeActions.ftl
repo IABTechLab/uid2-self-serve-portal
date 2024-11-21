@@ -9,4 +9,4 @@ ${kcSanitize(msg("inviteBodyHtml", user.firstName, link, linkExpirationFormatter
 <#else>
 ${kcSanitize(msg("executeActionsBodyHtml",link, linkExpiration, realmName, requiredActionsText, linkExpirationFormatter(linkExpiration)))?no_esc}
 </#if>
-</@layout.emailLayout
+</@layout.emailLayout>
