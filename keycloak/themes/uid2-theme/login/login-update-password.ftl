@@ -9,9 +9,9 @@
             <input type="password" id="password" name="password" autocomplete="current-password" style="display:none;"/>
             <div id="password-policy"> ${msg("passwordPolicy")}</div>
             <ul id="password-requirements">
-                <li>Must be at least 8 characters.</li>
-                <li>Cannot match your email address.</li>
-                <li>Cannot be a password you've used before on the UID2 Portal.</li>
+                <li>${msg("passwordMinLength")}</li>
+                <li>${msg("passwordNoEmail")}</li>
+                <li>${msg("passwordNoPrevious")}</li>
             </ul>
             <div class="${properties.kcFormGroupClass!}">
                 <div class="${properties.kcLabelWrapperClass!}">
@@ -70,7 +70,5 @@
                 </div>
             </div>
         </form>
-       
     </#if>
-    
 </@layout.registrationLayout>
