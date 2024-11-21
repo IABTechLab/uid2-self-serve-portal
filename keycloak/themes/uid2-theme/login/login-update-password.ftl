@@ -7,7 +7,13 @@
             <input type="text" id="username" name="username" value="${username}" autocomplete="username"
                    readonly="readonly" style="display:none;"/>
             <input type="password" id="password" name="password" autocomplete="current-password" style="display:none;"/>
-
+            <div id="password-policy"> ${msg("passwordPolicy")}</div>
+            <div id="set-password"> ${msg("setPassword")}</div>
+            <ul id="password-requirements">
+                <li>${msg("passwordMinLength")}</li>
+                <li>${msg("passwordNoEmail")}</li>
+                <li>${msg("passwordNoPrevious")}</li>
+            </ul>
             <div class="${properties.kcFormGroupClass!}">
                 <div class="${properties.kcLabelWrapperClass!}">
                     <label for="password-new" class="${properties.kcLabelClass!}">${msg("passwordNew")}</label>
