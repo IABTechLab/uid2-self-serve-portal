@@ -8,6 +8,7 @@ import { ErrorToast, SuccessToast, WarningToast } from '../components/Core/Popup
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
 import ApprovedParticipantsTable from '../components/ParticipantManagement/ApprovedParticipantsTable';
+import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
@@ -125,6 +126,18 @@ function ManageParticipants() {
                     onOpenChange={onOpenChangeAddParticipantDialog}
                   />
                 )}
+                <Suspense fallback={<Loading />}>
+                  <AwaitTypesafe resolve={data.participantsAwaitingApproval}>
+                    {(participantsAwaitingApproval) => (
+                      <ParticipantRequestsTable
+                        participantRequests={participantsAwaitingApproval}
+                        participantTypes={loadedData.participantTypes}
+                        apiRoles={loadedData.apiRoles}
+                        onApprove={handleApproveParticipantRequest}
+                      />
+                    )}
+                  </AwaitTypesafe>
+                </Suspense>
                 <Suspense fallback={<Loading />}>
                   <AwaitTypesafe resolve={data.participantsApproved}>
                     {(participantsApproved) => (
