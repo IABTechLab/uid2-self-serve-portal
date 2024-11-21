@@ -325,4 +325,22 @@ div.kc-logo-text {
   color: gray !important;
 }
 
+#password-policy {
+  color: #000;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+#set-password {
+  color: #000;
+  font-size: 14px;
+  line-height: 22px;
+  margin-bottom: 5px;
+}
+
+#password-requirements {
+  margin-left: 20px;
+  list-style-type: disc;
+}
+
 /* End Recovery codes */
