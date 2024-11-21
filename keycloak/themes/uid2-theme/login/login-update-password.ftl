@@ -8,6 +8,7 @@
                    readonly="readonly" style="display:none;"/>
             <input type="password" id="password" name="password" autocomplete="current-password" style="display:none;"/>
             <div id="password-policy"> ${msg("passwordPolicy")}</div>
+            <div id="set-password"> ${msg("setPassword")}</div>
             <ul id="password-requirements">
                 <li>${msg("passwordMinLength")}</li>
                 <li>${msg("passwordNoEmail")}</li>
