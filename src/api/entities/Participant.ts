@@ -5,7 +5,7 @@ import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
+import { type User, UserDTO, UserSchema } from './User';
 import { UserToParticipantRole } from './UserToParticipantRole';
 
 export enum ParticipantStatus {
