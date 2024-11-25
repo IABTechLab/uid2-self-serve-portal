@@ -141,7 +141,7 @@
         </div>
     </div>
     <div id="request-account">
-        Don't have an account? Ask your UID2 contact or <a class="" href='https://unifiedid.com/request-access' target='_blank'>request access</a>.
+        Don't have an account? Ask your UID2 contact or <a class="" href='https://unifiedid.com/docs/portal/portal-getting-started#request-an-account' target='_blank'>request access</a>.
     </div>
     <br />
     <a class="report-vulnerability" href='https://www.thetradedesk.com/us/trust/report-a-vulnerability' target='_blank'>Report a Vulnerability</a>
