@@ -119,13 +119,6 @@ export const ParticipantSchema = z.object({
   crmAgreementNumber: z.string().nullable(),
 });
 
-export const ParticipantCreationPartial = ParticipantSchema.pick({
-  name: true,
-}).extend({
-  types: z.array(ParticipantTypeSchema.pick({ id: true })),
-  users: z.array(UserCreationPartial).optional(),
-});
-
 export const ParticipantApprovalPartial = ParticipantSchema.pick({
   siteId: true,
   name: true,

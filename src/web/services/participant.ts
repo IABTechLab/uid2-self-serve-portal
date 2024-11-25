@@ -1,10 +1,9 @@
-import axios, { AxiosError, isAxiosError } from 'axios';
-import { KeycloakProfile } from 'keycloak-js';
+import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
-import { ParticipantCreationPartial, ParticipantDTO } from '../../api/entities/Participant';
+import { ParticipantDTO } from '../../api/entities/Participant';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import {
   ApiKeyDTO,
@@ -14,9 +13,7 @@ import {
 } from '../../api/services/adminServiceHelpers';
 import { ParticipantRequestDTO } from '../../api/services/participantsService';
 import { backendError } from '../utils/apiError';
-import { InviteTeamMemberForm, UserPayload } from './userAccount';
-
-export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
+import { InviteTeamMemberForm } from './userAccount';
 
 export const isCreateParticipantError = (error: unknown): error is CreateParticipantError => {
   return (

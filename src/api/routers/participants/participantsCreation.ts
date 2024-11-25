@@ -4,11 +4,7 @@ import { z } from 'zod';
 import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
-import {
-  Participant,
-  ParticipantCreationPartial,
-  ParticipantStatus,
-} from '../../entities/Participant';
+import { Participant, ParticipantStatus } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
@@ -25,11 +21,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { doesUserExistInKeycloak } from '../../services/kcUsersService';
-import {
-  getParticipantTypesByIds,
-  ParticipantRequest,
-  sendNewParticipantEmail,
-} from '../../services/participantsService';
+import { getParticipantTypesByIds, ParticipantRequest } from '../../services/participantsService';
 import {
   createAndInviteKeycloakUser,
   findUserByEmail,
