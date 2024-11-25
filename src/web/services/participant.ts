@@ -17,14 +17,6 @@ import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm, UserPayload } from './userAccount';
 
 export type ParticipantCreationPayload = z.infer<typeof ParticipantCreationPartial>;
-export type CreateParticipantForm = {
-  companyName: string;
-  companyType: number[];
-  jobFunction: string;
-  canSign: boolean;
-  signeeEmail: string;
-  agreeToTerms: boolean;
-};
 
 export const isCreateParticipantError = (error: unknown): error is CreateParticipantError => {
   return (
@@ -38,40 +30,6 @@ export type CreateParticipantError = Required<
   Pick<CreateParticipantErrorOptionalResponse, 'response'>
 > &
   Omit<CreateParticipantErrorOptionalResponse, 'response'>;
-
-export async function CreateParticipant(formData: CreateParticipantForm, user: KeycloakProfile) {
-  const users = [
-    {
-      email: user.email!,
-      jobFunction: formData.jobFunction,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      acceptedTerms: formData.agreeToTerms,
-    },
-  ] as UserPayload[];
-  if (!formData.canSign) {
-    // TODO: New feature to send an invitation to the person who can sign?
-  }
-
-  const participantPayload: ParticipantCreationPayload = {
-    name: formData.companyName,
-    types: formData.companyType.map((typeId) => ({ id: typeId })),
-    users,
-  };
-  try {
-    const newParticipant = await axios.post<ParticipantDTO>(`/participants`, participantPayload);
-    return newParticipant.data;
-  } catch (err: unknown | AxiosError<CreateParticipantError>) {
-    const status = isAxiosError(err) ? err.response?.status : null;
-    const responseMessages = isCreateParticipantError(err)
-      ? err.response?.data.map((d) => d.message)
-      : null;
-    return {
-      errorStatus: status ?? 'Unknown',
-      messages: responseMessages ?? ['An unknown error occurred.'],
-    };
-  }
-}
 
 export async function GetUsersDefaultParticipant() {
   try {
