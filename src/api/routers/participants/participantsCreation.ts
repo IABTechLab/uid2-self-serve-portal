@@ -4,11 +4,7 @@ import { z } from 'zod';
 import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
-import {
-  Participant,
-  ParticipantCreationPartial,
-  ParticipantStatus,
-} from '../../entities/Participant';
+import { Participant, ParticipantStatus } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
@@ -25,11 +21,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from '../../services/auditTrailService';
 import { doesUserExistInKeycloak } from '../../services/kcUsersService';
-import {
-  getParticipantTypesByIds,
-  ParticipantRequest,
-  sendNewParticipantEmail,
-} from '../../services/participantsService';
+import { getParticipantTypesByIds, ParticipantRequest } from '../../services/participantsService';
 import {
   createAndInviteKeycloakUser,
   findUserByEmail,
@@ -179,54 +171,3 @@ export async function handleCreateParticipant(req: ParticipantRequest, res: Resp
 
   return res.sendStatus(200);
 }
-
-export const handleCreateParticipantFromRequest = async (
-  req: ParticipantRequest,
-  res: Response
-) => {
-  try {
-    const traceId = getTraceId(req);
-    const parsedRequest = ParticipantCreationPartial.parse(req.body);
-    const { users, ...rest } = parsedRequest;
-    const participantData = {
-      ...rest,
-      status: ParticipantStatus.AwaitingApproval,
-    };
-    const user = {
-      ...users![0],
-      acceptedTerms: false,
-    };
-
-    const participant = await User.transaction(async (trx) => {
-      // create user
-      const newPortalUser = await User.query(trx).insertAndFetch(user);
-
-      // create participant
-      const newParticipant = await Participant.query(trx)
-        .insertGraphAndFetch([participantData], {
-          relate: true,
-        })
-        .first();
-
-      // update user/participant/role mapping
-      await UserToParticipantRole.query(trx).insert({
-        userId: newPortalUser.id,
-        participantId: newParticipant?.id!,
-        userRoleId: UserRoleId.Admin,
-      });
-      return newParticipant;
-    });
-
-    sendNewParticipantEmail(
-      parsedRequest,
-      parsedRequest.types.map((t) => t.id),
-      traceId
-    );
-    return res.status(201).json(participant);
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      return res.status(400).send(err.issues);
-    }
-    return res.status(400).send([{ message: 'Unable to create participant' }]);
-  }
-};

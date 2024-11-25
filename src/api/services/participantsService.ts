@@ -8,7 +8,6 @@ import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import {
   Participant,
   ParticipantApprovalPartial,
-  ParticipantCreationPartial,
   ParticipantDTO,
   ParticipantStatus,
 } from '../entities/Participant';
@@ -50,32 +49,6 @@ export const getParticipantTypesByIds = async (
   participantTypeIds: number[]
 ): Promise<ParticipantType[]> => {
   return ParticipantType.query().findByIds(participantTypeIds);
-};
-
-export const sendNewParticipantEmail = async (
-  newParticipant: z.infer<typeof ParticipantCreationPartial>,
-  typeIds: number[],
-  traceId: string
-) => {
-  const participantTypes = await getParticipantTypesByIds(typeIds);
-  const emailService = createEmailService();
-  const requestor = newParticipant.users![0];
-  const templateData = {
-    participant: newParticipant.name,
-    participantType: participantTypes.map((pt) => pt.typeName).join(', '),
-    requestor: `${requestor.firstName} ${requestor.lastName}`,
-    requestorEmail: requestor.email,
-    jobFunction: requestor.jobFunction,
-  };
-
-  const uid2SupportUsers = await getAllUid2SupportUsers();
-  const emailArgs: EmailArgs = {
-    subject: 'New Participant Request',
-    templateData,
-    template: 'newParticipantReadyForReview',
-    to: uid2SupportUsers.map((user) => ({ name: user!.firstName, email: user!.email })),
-  };
-  emailService.sendEmail(emailArgs, traceId);
 };
 
 export const mapParticipantToApprovalRequest = (

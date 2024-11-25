@@ -5,7 +5,7 @@ import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { type User, UserCreationPartial, UserDTO, UserSchema } from './User';
+import { type User, UserDTO, UserSchema } from './User';
 import { UserToParticipantRole } from './UserToParticipantRole';
 
 export enum ParticipantStatus {
@@ -117,13 +117,6 @@ export const ParticipantSchema = z.object({
   approver: z.array(UserSchema).optional(),
   dateApproved: z.date().optional(),
   crmAgreementNumber: z.string().nullable(),
-});
-
-export const ParticipantCreationPartial = ParticipantSchema.pick({
-  name: true,
-}).extend({
-  types: z.array(ParticipantTypeSchema.pick({ id: true })),
-  users: z.array(UserCreationPartial).optional(),
 });
 
 export const ParticipantApprovalPartial = ParticipantSchema.pick({

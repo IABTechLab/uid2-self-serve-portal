@@ -16,7 +16,6 @@ import { ParticipantInformationRoute } from './participantInformation';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
-import { TermsOfServiceRoute } from './termsOfService';
 
 import './dashboard.scss';
 
@@ -27,7 +26,6 @@ export const StandardRoutes: PortalRoute[] = [
   ParticipantInformationRoute,
   TeamMembersRoute,
   EmailContactsRoute,
-  TermsOfServiceRoute,
   ApiKeyManagementRoute,
   ClientSideIntegrationRoute,
   AuditTrailRoute,

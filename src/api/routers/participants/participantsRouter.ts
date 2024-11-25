@@ -25,10 +25,7 @@ import {
   handleGetParticipantsAwaitingApproval,
 } from './participantsApproval';
 import { handleGetAuditTrail } from './participantsAuditTrail';
-import {
-  handleCreateParticipant,
-  handleCreateParticipantFromRequest,
-} from './participantsCreation';
+import { handleCreateParticipant } from './participantsCreation';
 import {
   handleGetParticipantDomainNames,
   handleSetParticipantDomainNames,
@@ -52,7 +49,6 @@ export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
   participantsRouter.get('/signed', handleGetSignedParticipants);
-  participantsRouter.post('/', handleCreateParticipantFromRequest);
 
   participantsRouter.get(
     '/awaitingApproval',
