@@ -35,16 +35,6 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const currentParticipantId = parsedParticipantId ?? parsedLastSelectedParticipantId;
 
   useEffect(() => {
-    if (
-      participant &&
-      participant.status !== ParticipantStatus.Approved &&
-      location.pathname !== '/account/pending'
-    ) {
-      navigate('/account/pending');
-    }
-  }, [location.pathname, navigate, participant]);
-
-  useEffect(() => {
     const loadParticipant = async () => {
       setIsLoading(true);
       try {
