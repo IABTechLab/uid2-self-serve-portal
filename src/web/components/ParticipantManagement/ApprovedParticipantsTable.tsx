@@ -1,8 +1,13 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useState } from 'react';
+
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { UpdateParticipantForm } from '../../services/participant';
+import { PagingTool } from '../Core/Paging/PagingTool';
+import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { ApprovedParticipantItem } from './ApprovedParticipantItem';
@@ -33,12 +38,66 @@ function ApprovedParticipantsTableContent({
   participantTypes,
   onUpdateParticipant,
 }: ApprovedParticipantsTableProps) {
+  const initialRowsPerPage = 10;
+  const initialPageNumber = 1;
+
+  const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);
+  const [pageNumber, setPageNumber] = useState<number>(initialPageNumber);
+  const [searchText, setSearchText] = useState('');
+
+  const getPagedParticipants = (values: ParticipantDTO[]) => {
+    const pagedRows = values.filter((_, index) => {
+      return (
+        index >= (pageNumber - 1) * rowsPerPage &&
+        index < (pageNumber - 1) * rowsPerPage + rowsPerPage
+      );
+    });
+    return pagedRows;
+  };
+
+  const onChangeDisplayedParticipants = (
+    currentPageNumber: number,
+    currentRowsPerPage: RowsPerPageValues
+  ) => {
+    setPageNumber(currentPageNumber);
+    setRowsPerPage(currentRowsPerPage);
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(event.target.value);
+    setPageNumber(initialPageNumber);
+    setRowsPerPage(initialRowsPerPage);
+  };
+
+  let searchedParticipants = participants;
+  if (searchText.length > 1) {
+    searchedParticipants = participants.filter((item) => {
+      const search = searchText.toLowerCase();
+      return item.name.toLowerCase().indexOf(search) >= 0;
+    });
+  }
+
   const { sortData } = useSortable<ParticipantDTO>();
-  const sortedParticipants = sortData(participants);
+  const sortedParticipants = sortData(searchedParticipants);
+
+  const pagedRows = getPagedParticipants(sortedParticipants);
 
   return (
     <div className='approved-participant-container'>
-      <h2>All Participants</h2>
+      <div className='approved-participants-table-header'>
+        <div className='approved-participants-table-header-right'>
+          <div className='approved-participants-search-bar-container'>
+            <input
+              type='text'
+              className='approved-participants-search-bar'
+              onChange={handleSearch}
+              placeholder='Search participants'
+              value={searchText}
+            />
+            <FontAwesomeIcon icon='search' className='approved-participants-search-bar-icon' />
+          </div>
+        </div>
+      </div>
       <table className='approved-participants-table'>
         <thead>
           <tr>
@@ -56,7 +115,7 @@ function ApprovedParticipantsTableContent({
         </thead>
 
         <tbody>
-          {sortedParticipants.map((participant) => (
+          {pagedRows.map((participant) => (
             <ApprovedParticipantItem
               key={participant.id}
               participant={participant}
@@ -67,7 +126,22 @@ function ApprovedParticipantsTableContent({
           ))}
         </tbody>
       </table>
+      {participants.length > 0 && searchText && searchedParticipants.length === 0 && (
+        <TableNoDataPlaceholder
+          icon={<img src='/document.svg' alt='email-icon' />}
+          title='No Participants'
+        >
+          <span>There are no participants that match this search.</span>
+        </TableNoDataPlaceholder>
+      )}
       {!participants.length && <NoParticipants />}
+      {!!searchedParticipants.length && (
+        <PagingTool
+          numberTotalRows={searchedParticipants.length}
+          initialPageNumber={pageNumber}
+          onChangeRows={onChangeDisplayedParticipants}
+        />
+      )}
     </div>
   );
 }

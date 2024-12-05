@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
-import { Participant, ParticipantStatus } from '../../api/entities/Participant';
+import { Participant } from '../../api/entities/Participant';
 
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
@@ -12,7 +12,6 @@ const sampleData: Optional<
   {
     name: 'Publisher example',
     allowSharing: true,
-    status: ParticipantStatus.Approved,
     type: 'Publisher',
     siteId: 124,
     apiRoleNames: ['GENERATOR', 'SHARER'],
@@ -21,7 +20,6 @@ const sampleData: Optional<
   },
   {
     name: 'DSP example',
-    status: ParticipantStatus.Approved,
     type: 'DSP',
     allowSharing: true,
     siteId: 123,
@@ -31,7 +29,6 @@ const sampleData: Optional<
   },
   {
     name: 'DP example',
-    status: ParticipantStatus.Approved,
     allowSharing: true,
     type: 'Data Provider',
     siteId: 125,
@@ -42,7 +39,6 @@ const sampleData: Optional<
   {
     name: 'Advertiser example',
     allowSharing: true,
-    status: ParticipantStatus.Approved,
     type: 'Advertiser',
     siteId: 126,
     apiRoleNames: ['MAPPER', 'SHARER'],
@@ -52,7 +48,6 @@ const sampleData: Optional<
   {
     name: 'AwaitingSigning example',
     allowSharing: true,
-    status: ParticipantStatus.AwaitingSigning,
     type: 'Publisher',
     apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
@@ -72,7 +67,6 @@ export async function CreateParticipant(
   const participant = await knex('participants')
     .insert({
       name: details.name,
-      status: details.status,
       siteId: details.siteId,
     })
     .returning('id');

@@ -5,12 +5,7 @@ import { z } from 'zod';
 import { getRoleNamesByIds } from '../../web/utils/apiRoles';
 import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
-import {
-  Participant,
-  ParticipantApprovalPartial,
-  ParticipantDTO,
-  ParticipantStatus,
-} from '../entities/Participant';
+import { Participant, ParticipantApprovalPartial, ParticipantDTO } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
@@ -27,7 +22,6 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { getAllUid2SupportUsers } from './uid2SupportService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -39,7 +33,7 @@ export interface UserParticipantRequest extends ParticipantRequest {
 
 export type ParticipantRequestDTO = Pick<
   ParticipantDTO,
-  'id' | 'name' | 'siteId' | 'types' | 'status' | 'apiRoles'
+  'id' | 'name' | 'siteId' | 'types' | 'apiRoles'
 > & {
   requestingUser: Pick<UserDTO, 'email'> &
     Partial<Pick<UserDTO, 'jobFunction'>> & { fullName: string };
@@ -62,7 +56,6 @@ export const mapParticipantToApprovalRequest = (
     siteId: participant.siteId,
     types: participant.types,
     apiRoles: participant.apiRoles,
-    status: participant.status,
     requestingUser: {
       email: firstUser ? firstUser.email : '',
       jobFunction: firstUser?.jobFunction,
@@ -71,13 +64,6 @@ export const mapParticipantToApprovalRequest = (
         : 'There is no user attached to this participant.',
     },
   };
-};
-
-export const getParticipantsAwaitingApproval = async (): Promise<Participant[]> => {
-  const participantsAwaitingApproval = await Participant.query()
-    .withGraphFetched('[types, users]')
-    .where('status', ParticipantStatus.AwaitingApproval);
-  return participantsAwaitingApproval;
 };
 
 type SiteIdType = NonNullable<ParticipantDTO['siteId']>;
@@ -90,9 +76,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 };
 
 export const getParticipantsApproved = async (): Promise<Participant[]> => {
-  return Participant.query()
-    .where('status', ParticipantStatus.Approved)
-    .withGraphFetched('[apiRoles, approver, types, users]');
+  return Participant.query().withGraphFetched('[apiRoles, approver, types, users]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
@@ -167,7 +151,6 @@ export const updateParticipantApiRolesWithTransaction = async (
 export const updateParticipantAndTypesAndApiRoles = async (
   participant: Participant,
   participantApprovalPartial: z.infer<typeof ParticipantApprovalPartial> & {
-    status: ParticipantStatus;
     approverId: number | undefined;
     dateApproved: Date;
   }
@@ -176,7 +159,6 @@ export const updateParticipantAndTypesAndApiRoles = async (
     await participant.$query(trx).patch({
       name: participantApprovalPartial.name,
       siteId: participantApprovalPartial.siteId,
-      status: participantApprovalPartial.status,
       approverId: participantApprovalPartial.approverId,
       dateApproved: participantApprovalPartial.dateApproved,
     });

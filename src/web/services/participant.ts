@@ -39,17 +39,6 @@ export async function GetUsersDefaultParticipant() {
   }
 }
 
-export async function GetParticipantsAwaitingApproval() {
-  try {
-    const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
-      validateStatus: (status) => status === 200,
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load participants awaiting approval');
-  }
-}
-
 export async function GetApprovedParticipants() {
   try {
     const result = await axios.get<ParticipantDTO[]>(`/participants/approved`, {

@@ -2,7 +2,7 @@ import { Response } from 'express';
 
 import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { AuditTrailEvents } from '../../entities/AuditTrail';
-import { ParticipantApprovalPartial, ParticipantStatus } from '../../entities/Participant';
+import { ParticipantApprovalPartial } from '../../entities/Participant';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { setSiteClientTypes } from '../../services/adminServiceClient';
@@ -17,26 +17,12 @@ import {
 import { assignApiParticipantMemberRole } from '../../services/kcUsersService';
 import {
   getParticipantsApproved,
-  getParticipantsAwaitingApproval,
-  mapParticipantToApprovalRequest,
   ParticipantRequest,
-  ParticipantRequestDTO,
   sendParticipantApprovedEmail,
   updateParticipantAndTypesAndApiRoles,
   UserParticipantRequest,
 } from '../../services/participantsService';
 import { getAllUsersFromParticipant } from '../../services/usersService';
-
-export const handleGetParticipantsAwaitingApproval = async (
-  req: ParticipantRequest,
-  res: Response
-) => {
-  const participantsAwaitingApproval = await getParticipantsAwaitingApproval();
-  const result: ParticipantRequestDTO[] = participantsAwaitingApproval.map(
-    mapParticipantToApprovalRequest
-  );
-  return res.status(200).json(result);
-};
 
 export const handleGetApprovedParticipants = async (_req: ParticipantRequest, res: Response) => {
   const participants = await getParticipantsApproved();
@@ -49,7 +35,6 @@ export const handleApproveParticipant = async (req: UserParticipantRequest, res:
   const traceId = getTraceId(req);
   const data = {
     ...ParticipantApprovalPartial.parse(req.body),
-    status: ParticipantStatus.Approved,
     approverId: user?.id,
     dateApproved: new Date(),
   };

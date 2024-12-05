@@ -16,7 +16,6 @@ import {
   AddParticipantForm,
   ApproveParticipantRequest,
   GetApprovedParticipants,
-  GetParticipantsAwaitingApproval,
   GetUsersDefaultParticipant,
   ParticipantApprovalFormDetails,
   UpdateParticipant,
@@ -31,7 +30,6 @@ import './manageParticipants.scss';
 
 const loader = makeLoader(() => {
   return defer({
-    participantsAwaitingApproval: GetParticipantsAwaitingApproval(),
     participantsApproved: GetApprovedParticipants(),
     participantTypes: GetAllParticipantTypes(),
     apiRoles: GetAllEnabledApiRoles(),
@@ -54,19 +52,6 @@ function ManageParticipants() {
   const data = useLoaderData<typeof loader>();
 
   const reloader = useRevalidator();
-
-  const handleApproveParticipantRequest = async (
-    participantId: number,
-    formData: ParticipantApprovalFormDetails
-  ) => {
-    const approvalResponse = await ApproveParticipantRequest(participantId, formData);
-    if (approvalResponse?.users?.length === 0) {
-      WarningToast(
-        'Participant approved. Since no users are attached to participant, email confirmation sent to approver.'
-      );
-    }
-    reloader.revalidate();
-  };
 
   const onUpdateParticipant = async (
     form: UpdateParticipantForm,
@@ -97,9 +82,7 @@ function ManageParticipants() {
       <div className='manage-participants-header'>
         <div className='manage-participants-header-left'>
           <h1>Manage Participants</h1>
-          <p className='heading-details'>
-            View and manage UID2 Portal participant requests and information.
-          </p>
+          <p className='heading-details'>View and manage UID2 Portal participants.</p>
         </div>
         <div className='manage-participants-header-right'>
           <button type='button' onClick={onOpenChangeAddParticipantDialog}>

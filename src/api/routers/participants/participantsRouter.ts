@@ -19,11 +19,7 @@ import {
 } from './participantsApiKeys';
 import { handleGetParticipantApiRoles } from './participantsApiRoles';
 import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
-import {
-  handleApproveParticipant,
-  handleGetApprovedParticipants,
-  handleGetParticipantsAwaitingApproval,
-} from './participantsApproval';
+import { handleApproveParticipant, handleGetApprovedParticipants } from './participantsApproval';
 import { handleGetAuditTrail } from './participantsAuditTrail';
 import { handleCreateParticipant } from './participantsCreation';
 import {
@@ -50,11 +46,6 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/signed', handleGetSignedParticipants);
 
-  participantsRouter.get(
-    '/awaitingApproval',
-    isUid2SupportCheck,
-    handleGetParticipantsAwaitingApproval
-  );
   participantsRouter.get('/approved', isUid2SupportCheck, handleGetApprovedParticipants);
 
   participantsRouter.put('/', handleCreateParticipant);
