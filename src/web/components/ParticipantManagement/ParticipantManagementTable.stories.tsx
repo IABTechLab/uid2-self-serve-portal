@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { UserJobFunction } from '../../../api/entities/User';
-import ApprovedParticipantsTable from './ApprovedParticipantsTable';
+import ParticipantManagementTable from './ParticipantManagementTable';
 
-const meta: Meta<typeof ApprovedParticipantsTable> = {
-  component: ApprovedParticipantsTable,
+const meta: Meta<typeof ParticipantManagementTable> = {
+  component: ParticipantManagementTable,
   title: 'Manage Participants/All Participants Table',
 };
 export default meta;
 
-type Story = StoryObj<typeof ApprovedParticipantsTable>;
+type Story = StoryObj<typeof ParticipantManagementTable>;
 
 export const AllParticipants: Story = {
   args: {

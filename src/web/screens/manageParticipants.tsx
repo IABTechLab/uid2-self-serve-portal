@@ -4,20 +4,18 @@ import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
-import { ErrorToast, SuccessToast, WarningToast } from '../components/Core/Popups/Toast';
+import { ErrorToast, SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
-import ApprovedParticipantsTable from '../components/ParticipantManagement/ApprovedParticipantsTable';
+import ParticipantManagementTable from '../components/ParticipantManagement/ParticipantManagementTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
 import {
   AddParticipant,
   AddParticipantForm,
-  ApproveParticipantRequest,
-  GetApprovedParticipants,
+  GetAllParticipants,
   GetUsersDefaultParticipant,
-  ParticipantApprovalFormDetails,
   UpdateParticipant,
   UpdateParticipantForm,
 } from '../services/participant';
@@ -30,7 +28,7 @@ import './manageParticipants.scss';
 
 const loader = makeLoader(() => {
   return defer({
-    participantsApproved: GetApprovedParticipants(),
+    participants: GetAllParticipants(),
     participantTypes: GetAllParticipantTypes(),
     apiRoles: GetAllEnabledApiRoles(),
   });
@@ -109,9 +107,9 @@ function ManageParticipants() {
                   />
                 )}
                 <Suspense fallback={<Loading />}>
-                  <AwaitTypesafe resolve={data.participantsApproved}>
+                  <AwaitTypesafe resolve={data.participants}>
                     {(participantsApproved) => (
-                      <ApprovedParticipantsTable
+                      <ParticipantManagementTable
                         participants={participantsApproved}
                         apiRoles={loadedData.apiRoles}
                         participantTypes={loadedData.participantTypes}

@@ -12,18 +12,18 @@ This is the self-serve portal for UID2 participants. It enables a range of opera
 
 Recommended VS Code extensions:
 
-| Extension | Details | Required? |
-| --------- | ------- | --------- |
-| ESLint | Lints your code. We expect PRs to be free of linter errors, and preferably free of warnings as well. | Yes |
-| i18n Ally | Checks your front-end code for accessibility rules. We expect PRs to maintain a high standard of A11y. | Yes |
-| Prettier - Code formatter | Formats your code. We want PRs to contain functionality changes, not whitespace fixes and linebreak changes. Prettier makes us all use the same code style so we can focus on the things which matter. | Yes |
-| Stylelint | Same as ESLint, but for your style files. | Yes |
-| Code Spell Checker | Popular extension by Street Side Software - checks your spelling. | Yes, or similar alternative |
-| Wallaby.js | Live, in-your-IDE, as-you-type test runner. It is free for open source projects, but please read the license and satisfy yourself that you're in compliance if you use the free version. | No |
-| Docker | Helps you manage docker containers straight from VS Code. | No |
-| Auto Rename Tag | Fixes your closing tags as you edit opening tags | No |
-| Toggle Quotes | You can hit `ctrl-'` to cycle between quote styles (', ", and `) for the string you're editing. | No |
-| SonarLint | Detects and highlights issues that can lead to bugs, vulnerabilities, and code smells. | No |
+| Extension                 | Details                                                                                                                                                                                                | Required?                   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- |
+| ESLint                    | Lints your code. We expect PRs to be free of linter errors, and preferably free of warnings as well.                                                                                                   | Yes                         |
+| i18n Ally                 | Checks your front-end code for accessibility rules. We expect PRs to maintain a high standard of A11y.                                                                                                 | Yes                         |
+| Prettier - Code formatter | Formats your code. We want PRs to contain functionality changes, not whitespace fixes and linebreak changes. Prettier makes us all use the same code style so we can focus on the things which matter. | Yes                         |
+| Stylelint                 | Same as ESLint, but for your style files.                                                                                                                                                              | Yes                         |
+| Code Spell Checker        | Popular extension by Street Side Software - checks your spelling.                                                                                                                                      | Yes, or similar alternative |
+| Wallaby.js                | Live, in-your-IDE, as-you-type test runner. It is free for open source projects, but please read the license and satisfy yourself that you're in compliance if you use the free version.               | No                          |
+| Docker                    | Helps you manage docker containers straight from VS Code.                                                                                                                                              | No                          |
+| Auto Rename Tag           | Fixes your closing tags as you edit opening tags                                                                                                                                                       | No                          |
+| Toggle Quotes             | You can hit `ctrl-'` to cycle between quote styles (', ", and `) for the string you're editing.                                                                                                        | No                          |
+| SonarLint                 | Detects and highlights issues that can lead to bugs, vulnerabilities, and code smells.                                                                                                                 | No                          |
 
 ## Docker
 
@@ -268,23 +268,6 @@ The following steps describe the minimal steps required to successfully log in t
 1. Fill in the form however you want and submit the form
 1. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
 1. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-1. Approve your account by updating the `status` of the row in `dbo.participants` that corresponds to your new user, i.e.
-
-   ```
-   use [uid2_selfserve]
-
-   declare @email as nvarchar(256) = '<Enter your email here>'
-
-   update p
-   set status = 'approved'
-   from dbo.participants p
-   where p.id in (
-    select upr.participantId
-    from dbo.users u
-    join dbo.usersToParticipantRoles upr on u.id = upr.userId
-    where u.email = @email
-   );
-   ```
 
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)

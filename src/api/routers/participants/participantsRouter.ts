@@ -7,6 +7,7 @@ import { createBusinessContactsRouter } from '../businessContactsRouter';
 import { createParticipantUsersRouter } from '../participantUsersRouter';
 import {
   handleCompleteRecommendations,
+  handleGetAllParticipants,
   handleGetParticipant,
   handleUpdateParticipant,
 } from './participants';
@@ -19,7 +20,6 @@ import {
 } from './participantsApiKeys';
 import { handleGetParticipantApiRoles } from './participantsApiRoles';
 import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
-import { handleApproveParticipant, handleGetApprovedParticipants } from './participantsApproval';
 import { handleGetAuditTrail } from './participantsAuditTrail';
 import { handleCreateParticipant } from './participantsCreation';
 import {
@@ -46,7 +46,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/signed', handleGetSignedParticipants);
 
-  participantsRouter.get('/approved', isUid2SupportCheck, handleGetApprovedParticipants);
+  participantsRouter.get('/allParticipants', isUid2SupportCheck, handleGetAllParticipants);
 
   participantsRouter.put('/', handleCreateParticipant);
 
@@ -56,7 +56,6 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
   participantsRouter.put('/:participantId', handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
-  participantsRouter.put('/:participantId/approve', handleApproveParticipant);
 
   participantsRouter.post(
     '/:participantId/invite',

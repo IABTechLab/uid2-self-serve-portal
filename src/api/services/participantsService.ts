@@ -75,7 +75,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
   return sites.map((s) => s.siteId);
 };
 
-export const getParticipantsApproved = async (): Promise<Participant[]> => {
+export const getAllParticipants = async (): Promise<Participant[]> => {
   return Participant.query().withGraphFetched('[apiRoles, approver, types, users]');
 };
 

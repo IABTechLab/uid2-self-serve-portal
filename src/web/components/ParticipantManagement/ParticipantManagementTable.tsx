@@ -10,11 +10,11 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import { ApprovedParticipantItem } from './ApprovedParticipantItem';
+import { ParticipantManagmentItem } from './ParticipantManagementItem';
 
 import './ParticipantManagementTable.scss';
 
-type ApprovedParticipantsTableProps = Readonly<{
+type ParticipantManagementTableProps = Readonly<{
   participants: ParticipantDTO[];
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
@@ -25,19 +25,19 @@ function NoParticipants() {
   return (
     <TableNoDataPlaceholder
       icon={<img src='/group-icon.svg' alt='group-icon' />}
-      title='No Approved Participants'
+      title='No Participants'
     >
-      <span>There are no approved participants.</span>
+      <span>There are no participants.</span>
     </TableNoDataPlaceholder>
   );
 }
 
-function ApprovedParticipantsTableContent({
+function ParticipantManagementTableContent({
   participants,
   apiRoles,
   participantTypes,
   onUpdateParticipant,
-}: ApprovedParticipantsTableProps) {
+}: ParticipantManagementTableProps) {
   const initialRowsPerPage = 10;
   const initialPageNumber = 1;
 
@@ -83,22 +83,22 @@ function ApprovedParticipantsTableContent({
   const pagedRows = getPagedParticipants(sortedParticipants);
 
   return (
-    <div className='approved-participant-container'>
-      <div className='approved-participants-table-header'>
-        <div className='approved-participants-table-header-right'>
-          <div className='approved-participants-search-bar-container'>
+    <div className='participants-table-container'>
+      <div className='participants-table-header'>
+        <div className='participants-table-header-right'>
+          <div className='participants-search-bar-container'>
             <input
               type='text'
-              className='approved-participants-search-bar'
+              className='participants-search-bar'
               onChange={handleSearch}
               placeholder='Search participants'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='approved-participants-search-bar-icon' />
+            <FontAwesomeIcon icon='search' className='participants-search-bar-icon' />
           </div>
         </div>
       </div>
-      <table className='approved-participants-table'>
+      <table className='participants-table'>
         <thead>
           <tr>
             <SortableTableHeader<ParticipantDTO> sortKey='name' header='Name' />
@@ -116,7 +116,7 @@ function ApprovedParticipantsTableContent({
 
         <tbody>
           {pagedRows.map((participant) => (
-            <ApprovedParticipantItem
+            <ParticipantManagmentItem
               key={participant.id}
               participant={participant}
               participantTypes={participantTypes}
@@ -146,10 +146,10 @@ function ApprovedParticipantsTableContent({
   );
 }
 
-export default function ApprovedParticipantsTable(props: ApprovedParticipantsTableProps) {
+export default function ParticipantManagementTable(props: ParticipantManagementTableProps) {
   return (
     <SortableProvider>
-      <ApprovedParticipantsTableContent {...props} />
+      <ParticipantManagementTableContent {...props} />
     </SortableProvider>
   );
 }
