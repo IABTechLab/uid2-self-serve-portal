@@ -108,9 +108,9 @@ function ManageParticipants() {
                 )}
                 <Suspense fallback={<Loading />}>
                   <AwaitTypesafe resolve={data.participants}>
-                    {(participantsApproved) => (
+                    {(participants) => (
                       <ParticipantManagementTable
-                        participants={participantsApproved}
+                        participants={participants}
                         apiRoles={loadedData.apiRoles}
                         participantTypes={loadedData.participantTypes}
                         onUpdateParticipant={onUpdateParticipant}

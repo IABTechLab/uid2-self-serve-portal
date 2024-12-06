@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
 import { render, screen } from '@testing-library/react';
 import Fuse from 'fuse.js';
-
-import { SiteDTO } from '../../../api/services/adminServiceHelpers';
-import { HighlightedResult } from './ParticipantApprovalForm';
+import { SiteDTO } from '../../../../api/services/adminServiceHelpers';
+import { HighlightedResult } from './HighlightedResult';
 
 const createResult = (text: string, indices: [number, number][]) => {
   const result: Fuse.FuseResult<SiteDTO> = {

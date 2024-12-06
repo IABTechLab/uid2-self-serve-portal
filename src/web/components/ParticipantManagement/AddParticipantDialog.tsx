@@ -22,9 +22,9 @@ import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Search/SearchBar';
 import { validateCrmAgreementNumber } from './AddParticipantDialogHelper';
-import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
+import { HighlightedResult } from '../Core/HighlightedResult/HighlightedResult';
 
 type AddParticipantDialogProps = Readonly<{
   onAddParticipant: (form: AddParticipantForm) => Promise<AxiosResponse>;
