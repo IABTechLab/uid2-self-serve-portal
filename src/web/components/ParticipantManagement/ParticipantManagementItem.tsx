@@ -12,19 +12,19 @@ import EditParticipantDialog from './EditParticipantDialog';
 
 import './ParticipantManagementItem.scss';
 
-type ApprovedParticipantProps = Readonly<{
+type ParticipantManagmentItemProps = Readonly<{
   participant: ParticipantDTO;
   apiRoles: ApiRoleDTO[];
   participantTypes: ParticipantTypeDTO[];
   onUpdateParticipant: (form: UpdateParticipantForm, participant: ParticipantDTO) => Promise<void>;
 }>;
 
-export function ApprovedParticipantItem({
+export function ParticipantManagmentItem({
   participant,
   apiRoles,
   participantTypes,
   onUpdateParticipant,
-}: ApprovedParticipantProps) {
+}: ParticipantManagmentItemProps) {
   const [showEditParticipantDialog, setShowEditParticipantDialog] = useState<boolean>(false);
 
   const onOpenChangeEditParticipantDialog = () => {

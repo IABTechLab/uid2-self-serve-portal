@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
-import { Participant, ParticipantStatus } from '../../entities/Participant';
+import { Participant } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
@@ -136,7 +136,6 @@ async function createParticipant(
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
     const participantData = {
       ...parsedParticipantRequest,
-      status: ParticipantStatus.Approved,
       approverId: requestingUser?.id,
       dateApproved: new Date(),
     };

@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { createResponseObject } from '../../../testHelpers/apiTestHelpers';
-import { Participant, ParticipantStatus } from '../../entities/Participant';
+import { Participant } from '../../entities/Participant';
 import { SSP_ADMIN_SERVICE_BASE_URL } from '../../envars';
 import { KeyPairDTO } from '../../services/adminServiceHelpers';
 import { ParticipantRequest } from '../../services/participantsService';
@@ -96,7 +96,6 @@ describe('Get participant key pairs', () => {
       id: 5,
       allowSharing: true,
       completedRecommendations: true,
-      status: ParticipantStatus.Approved,
       apiRoles: [],
     });
 
@@ -122,7 +121,6 @@ describe('Get participant key pairs', () => {
       id: 5,
       allowSharing: true,
       completedRecommendations: true,
-      status: ParticipantStatus.Approved,
       apiRoles: [],
       siteId,
     });

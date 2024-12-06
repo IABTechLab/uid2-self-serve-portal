@@ -8,12 +8,6 @@ import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './Pa
 import { type User, UserDTO, UserSchema } from './User';
 import { UserToParticipantRole } from './UserToParticipantRole';
 
-export enum ParticipantStatus {
-  AwaitingSigning = 'awaitingSigning',
-  AwaitingApproval = 'awaitingApproval',
-  Approved = 'approved',
-}
-
 export class Participant extends BaseModel {
   static get tableName() {
     return 'participants';
@@ -82,7 +76,6 @@ export class Participant extends BaseModel {
   };
   declare id: number;
   declare name: string;
-  declare status: ParticipantStatus;
   declare allowSharing: boolean;
   declare completedRecommendations: boolean;
   declare siteId?: number;
@@ -107,7 +100,6 @@ export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'
 export const ParticipantSchema = z.object({
   id: z.number(),
   name: z.string(),
-  status: z.nativeEnum(ParticipantStatus),
   types: z.array(ParticipantTypeSchema).optional(),
   apiRoles: z.array(ApiRoleSchema).optional(),
   users: z.array(UserSchema).optional(),
