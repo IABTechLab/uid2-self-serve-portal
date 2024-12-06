@@ -14,6 +14,7 @@ import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
+import { HighlightedResult } from '../Core/HighlightedResult/HighlightedResult';
 import { SuccessToast } from '../Core/Popups/Toast';
 import { RootFormErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
@@ -24,7 +25,6 @@ import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Sea
 import { validateCrmAgreementNumber } from './AddParticipantDialogHelper';
 
 import './AddParticipantDialog.scss';
-import { HighlightedResult } from '../Core/HighlightedResult/HighlightedResult';
 
 type AddParticipantDialogProps = Readonly<{
   onAddParticipant: (form: AddParticipantForm) => Promise<AxiosResponse>;

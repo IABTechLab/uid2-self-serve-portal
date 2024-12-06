@@ -5,13 +5,7 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
-import {
-  ApiKeyDTO,
-  ClientType,
-  ParticipantApprovalResponse,
-  SharingListResponse,
-} from '../../api/services/adminServiceHelpers';
-import { ParticipantRequestDTO } from '../../api/services/participantsService';
+import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm } from './userAccount';
 

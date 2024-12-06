@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import { render, screen } from '@testing-library/react';
 import Fuse from 'fuse.js';
+
 import { SiteDTO } from '../../../../api/services/adminServiceHelpers';
 import { HighlightedResult } from './HighlightedResult';
 
