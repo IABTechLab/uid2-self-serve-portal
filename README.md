@@ -268,7 +268,6 @@ The following steps describe the minimal steps required to successfully log in t
 1. Fill in the form however you want and submit the form
 1. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
 1. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-
 1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
 1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
 1. Optionally give your user access to the [UID2 Support Screens/Routes](#uid2-support-screensroutes)
