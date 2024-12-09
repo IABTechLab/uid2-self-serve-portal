@@ -2,7 +2,6 @@ import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
-import { ParticipantStatus } from '../../api/entities/Participant';
 import { User, UserJobFunction } from '../../api/entities/User';
 import { UserRoleId } from '../../api/entities/UserRole';
 import { CreateParticipant } from './Participants';
@@ -11,7 +10,6 @@ type UserType = ModelObject<User>;
 
 const sampleParticipant = {
   name: 'Awaiting Approval',
-  status: ParticipantStatus.AwaitingApproval,
   allowSharing: true,
   completedRecommendations: false,
   crmAgreementNumber: '12345678',

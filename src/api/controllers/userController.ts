@@ -12,7 +12,6 @@ import {
 } from 'inversify-express-utils';
 
 import { TYPES } from '../constant/types';
-import { ParticipantStatus } from '../entities/Participant';
 import { UserRoleId } from '../entities/UserRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
@@ -56,12 +55,9 @@ export class UserController {
 
   @httpPut('/current/acceptTerms')
   public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    const doesUserHaveAnApprovedParticipant =
-      req.user?.participants?.some(
-        (participant) => participant.status === ParticipantStatus.Approved
-      ) ?? false;
+    const doesUserHaveAParticipant = (req.user?.participants?.length ?? 0) >= 1 ?? false;
 
-    if (!doesUserHaveAnApprovedParticipant) {
+    if (!doesUserHaveAParticipant) {
       res.status(403).json({
         message: 'Unauthorized. You do not have the necessary permissions.',
         errorHash: req.headers.traceId,

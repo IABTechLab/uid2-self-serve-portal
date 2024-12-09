@@ -116,6 +116,7 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
         <PagingTool
           numberTotalRows={searchedAuditRows.length}
           initialPageNumber={pageNumber}
+          initialRowsPerPage={rowsPerPage}
           onChangeRows={onChangeDisplayedAuditRows}
         />
       )}

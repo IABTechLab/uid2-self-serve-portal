@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { Participant, ParticipantDTO, ParticipantStatus } from '../api/entities/Participant';
+import { Participant, ParticipantDTO } from '../api/entities/Participant';
 import { UserJobFunction } from '../api/entities/User';
 import { UserWithParticipantRoles } from '../api/services/usersService';
 
@@ -29,7 +29,6 @@ export const createMockUser = (participants: Participant[]): UserWithParticipant
 export const createMockParticipant = (): ParticipantDTO => ({
   id: faker.number.int(),
   name: faker.company.name(),
-  status: ParticipantStatus.Approved,
   allowSharing: true,
   completedRecommendations: faker.datatype.boolean(),
   crmAgreementNumber: '12345678',

@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { Knex } from 'knex';
 
 import { ModelObjectOpt } from '../api/entities/ModelObjectOpt';
-import { Participant, ParticipantStatus } from '../api/entities/Participant';
+import { Participant } from '../api/entities/Participant';
 import { User, UserJobFunction } from '../api/entities/User';
 import { UserRoleId } from '../api/entities/UserRole';
 import { UserToParticipantRole } from '../api/entities/UserToParticipantRole';
@@ -68,7 +68,6 @@ export async function createParticipant(
   {
     name = faker.company.name(),
     allowSharing = true,
-    status = ParticipantStatus.Approved,
     type = 'Publisher',
     apiRoleNames = [],
     completedRecommendations = false,
@@ -76,7 +75,6 @@ export async function createParticipant(
   }: {
     name?: string;
     allowSharing?: boolean;
-    status?: ParticipantStatus;
     type?: string;
     completedRecommendations?: boolean;
     apiRoleNames?: string[];
@@ -86,7 +84,6 @@ export async function createParticipant(
   const data = {
     name,
     allowSharing,
-    status,
     completedRecommendations,
     crmAgreementNumber,
   };

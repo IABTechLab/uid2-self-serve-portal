@@ -2,7 +2,6 @@ import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { ParticipantStatus } from '../api/entities/Participant';
 import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
 import { ErrorView } from './components/Core/ErrorView/ErrorView';
 import { Loading } from './components/Core/Loading/Loading';
@@ -34,8 +33,7 @@ function AppContent() {
     return <NoParticipantAccessView user={LoggedInUser?.user} />;
   }
 
-  const showUpdatesTour =
-    participant?.status === ParticipantStatus.Approved && !!LoggedInUser?.user?.acceptedTerms;
+  const showUpdatesTour = !!LoggedInUser?.user?.acceptedTerms;
 
   return (
     <>
