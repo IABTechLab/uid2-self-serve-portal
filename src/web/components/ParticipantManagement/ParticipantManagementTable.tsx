@@ -138,6 +138,7 @@ function ParticipantManagementTableContent({
       {!!searchedParticipants.length && (
         <PagingTool
           numberTotalRows={searchedParticipants.length}
+          initialRowsPerPage={rowsPerPage}
           initialPageNumber={pageNumber}
           onChangeRows={onChangeDisplayedParticipants}
         />
