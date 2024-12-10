@@ -4,6 +4,7 @@ import { SortableProvider, useSortable } from '../../contexts/SortableTableProvi
 import { AddKeyPairFormProps } from '../../services/keyPairService';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import KeyPair from './KeyPair';
 import KeyPairDialog from './KeyPairDialog';
 import { OnKeyPairDisable } from './KeyPairDisableDialog';
@@ -42,8 +43,12 @@ function KeyPairsTableContent({
   return (
     <div className='key-pairs'>
       <div className='key-pairs-table-header'>
-        <div>
+        <div className='key-pairs-title'>
           <h2>Key Pairs</h2>
+          <Tooltip className='key-pair-tool-tip'>
+            A group term for the two values, Subscription ID and Public Key, which are used to
+            uniquely define a UID2 implementation that generates the token on the client side.
+          </Tooltip>
         </div>
 
         <div className='key-pairs-table-header-right'>
@@ -68,9 +73,21 @@ function KeyPairsTableContent({
             <SortableTableHeader<KeyPairModel>
               className='subscription-id'
               sortKey='subscriptionId'
-              header='Subscription ID'
+              header={
+                <div className='subscription-id-header'>
+                  <Tooltip>
+                    Identifies your site to the UID2 service. Can be shared publicly.
+                  </Tooltip>
+                  Subscription ID
+                </div>
+              }
             />
-            <th className='public-key'>Public Key</th>
+            <th>
+              <div className='subscription-id-header'>
+                <Tooltip>Used for encryption. Can be shared publicly.</Tooltip>
+                <div>Public Key</div>
+              </div>
+            </th>
             <SortableTableHeader<KeyPairModel>
               className='created'
               sortKey='created'

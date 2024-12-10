@@ -1,5 +1,5 @@
 import { Suspense, useContext, useState } from 'react';
-import { useRevalidator } from 'react-router-dom';
+import { NavLink, useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
@@ -90,6 +90,17 @@ function ApiKeyManagement() {
         </a>
         .
       </p>
+      <div>
+        The values you generate on this page are for client-server or server-side integrations.{' '}
+        <b>Store them securely and keep them secret.</b> For client-side integrations, go to the{' '}
+        <NavLink
+          to={`/participant/${participant?.id}/clientSideIntegration`}
+          className='outside-link'
+        >
+          Client-Side Integration
+        </NavLink>{' '}
+        page.
+      </div>
       <ScreenContentContainer>
         <Suspense fallback={<Loading />}>
           <AwaitTypesafe resolve={resolveAll({ apiKeys: data.apiKeys, apiRoles: data.apiRoles })}>

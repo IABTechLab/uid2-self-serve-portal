@@ -39,6 +39,15 @@
     }
   }
 
+  .subscription-id-header {
+    display: flex;
+    gap: 10px;
+  }
+
+  .key-pair-tool-tip {
+    margin-top: 0.4rem;
+  }
+
   .key-pairs-table-header {
     display: flex;
     justify-content: space-between;
@@ -48,6 +57,10 @@
     &-right {
       display: flex;
       align-items: center;
+    }
+    .key-pairs-title {
+      display: flex;
+      gap: 10px;
     }
   }
 }

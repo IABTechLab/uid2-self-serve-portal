@@ -1,5 +1,5 @@
 import { Suspense, useContext } from 'react';
-import { useRevalidator } from 'react-router-dom';
+import { NavLink, useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { ClientSideCompletion } from '../components/ClientSideCompletion/ClientSideCompletion';
@@ -165,6 +165,15 @@ function ClientSideIntegration() {
         </a>
         .
       </p>
+      <div>
+        The values you generate on this page are for client-side integrations. You do not need to
+        keep them secret. For client-server or server-side integrations, go to the{' '}
+        <NavLink to={`/participant/${participant?.id}/apiKeys`} className='outside-link'>
+          API Keys
+        </NavLink>{' '}
+        page.
+      </div>
+
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading client side integration data...' />}>
           <AwaitTypesafe
