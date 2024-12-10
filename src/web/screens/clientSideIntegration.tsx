@@ -166,12 +166,12 @@ function ClientSideIntegration() {
         .
       </p>
       <div>
-        The values you generate on this page are for client-side integrations. You do not need to
-        keep them secret. For client-server or server-side integrations, go to the{' '}
+        The values you generate on this page are public and do not need to be kept secret. For
+        client-server or server-side integrations, go to{' '}
         <NavLink to={`/participant/${participant?.id}/apiKeys`} className='outside-link'>
           API Keys
-        </NavLink>{' '}
-        page.
+        </NavLink>
+        .
       </div>
 
       <ScreenContentContainer>
