@@ -39,13 +39,13 @@
     }
   }
 
-  .subscription-id-header {
+  .key-pair-header {
     display: flex;
-    gap: 10px;
-  }
+    gap: 5px;
 
-  .key-pair-tool-tip {
-    margin-top: 0.4rem;
+    .key-pair-tool-tip {
+      margin-top: 0.4rem;
+    }
   }
 
   .key-pairs-table-header {
@@ -57,10 +57,6 @@
     &-right {
       display: flex;
       align-items: center;
-    }
-    .key-pairs-title {
-      display: flex;
-      gap: 10px;
     }
   }
 }

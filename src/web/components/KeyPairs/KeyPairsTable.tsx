@@ -43,7 +43,7 @@ function KeyPairsTableContent({
   return (
     <div className='key-pairs'>
       <div className='key-pairs-table-header'>
-        <div className='key-pairs-title'>
+        <div className='key-pair-header'>
           <h2>Key Pairs</h2>
           <Tooltip className='key-pair-tool-tip'>
             A group term for the two values, Subscription ID and Public Key, which are used to
@@ -74,7 +74,7 @@ function KeyPairsTableContent({
               className='subscription-id'
               sortKey='subscriptionId'
               header={
-                <div className='subscription-id-header'>
+                <div className='key-pair-header'>
                   <Tooltip>
                     Identifies your site to the UID2 service. Can be shared publicly.
                   </Tooltip>
@@ -83,9 +83,9 @@ function KeyPairsTableContent({
               }
             />
             <th>
-              <div className='subscription-id-header'>
+              <div className='key-pair-header'>
                 <Tooltip>Used for encryption. Can be shared publicly.</Tooltip>
-                <div>Public Key</div>
+                Public Key
               </div>
             </th>
             <SortableTableHeader<KeyPairModel>
