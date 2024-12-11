@@ -79,7 +79,8 @@ function ApiKeyManagement() {
     <>
       <h1>API Keys</h1>
       <p className='heading-details'>
-        View and manage your API keys. For more information, see{' '}
+        View and manage your API keys for client-server or server-side integrations. For more
+        information, see{' '}
         <a
           target='_blank'
           className='outside-link'
@@ -91,9 +92,7 @@ function ApiKeyManagement() {
         .
       </p>
       <div>
-        The values you generate on this page are for client-server or server-side integrations.{' '}
-        <b>They must be stored securely and kept secret.</b> For an implementation option that
-        generates UID2 tokens on the client side, go to{' '}
+        For an implementation option that generates UID2 tokens on the client side, go to{' '}
         <NavLink
           to={`/participant/${participant?.id}/clientSideIntegration`}
           className='outside-link'

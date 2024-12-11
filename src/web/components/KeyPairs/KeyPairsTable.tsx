@@ -70,22 +70,16 @@ function KeyPairsTableContent({
         <thead>
           <tr>
             <SortableTableHeader<KeyPairModel> className='name' sortKey='name' header='Name' />
-            <SortableTableHeader<KeyPairModel>
-              className='subscription-id'
-              sortKey='subscriptionId'
-              header={
-                <div className='key-pair-header'>
-                  <Tooltip>
-                    Identifies your site to the UID2 service. Can be shared publicly.
-                  </Tooltip>
-                  Subscription ID
-                </div>
-              }
-            />
             <th>
               <div className='key-pair-header'>
-                <Tooltip>Used for encryption. Can be shared publicly.</Tooltip>
+                Subscription ID
+                <Tooltip>Identifies your site to the UID2 service. Can be shared publicly.</Tooltip>
+              </div>
+            </th>
+            <th>
+              <div className='key-pair-header'>
                 Public Key
+                <Tooltip>Used for encryption. Can be shared publicly.</Tooltip>
               </div>
             </th>
             <SortableTableHeader<KeyPairModel>

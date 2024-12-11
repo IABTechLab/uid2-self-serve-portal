@@ -166,8 +166,7 @@ function ClientSideIntegration() {
         .
       </p>
       <div>
-        The values you generate on this page are public and do not need to be kept secret. For
-        client-server or server-side integrations, go to{' '}
+        For client-server or server-side integrations, go to{' '}
         <NavLink to={`/participant/${participant?.id}/apiKeys`} className='outside-link'>
           API Keys
         </NavLink>
@@ -186,8 +185,8 @@ function ClientSideIntegration() {
             {(loadedData) => (
               <>
                 <ClientSideCompletion
-                  domainNames={loadedData.domainNames}
                   appIds={loadedData.appIds}
+                  domainNames={loadedData.domainNames}
                   keyPairData={loadedData.keyPairs}
                 />
                 <KeyPairsTable
