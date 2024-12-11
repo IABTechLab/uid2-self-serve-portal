@@ -99,10 +99,9 @@ function ShowApiKeySecrets({ keySecrets, closeDialog }: ApiKeySecretsProps) {
     <div>
       <h1>API Key {keySecrets.name} Credentials</h1>
       <p>
-        Copy the key and secret.{' '}
-        <b> You must store them in a secure location, and do not share them.</b> When you close the
-        window, these values are not saved and are no longer available to you. If they are lost,
-        you&apos;ll need to create a new key.
+        Copy the key and secret. <b> Store them in a safe location and do not share them.</b> When
+        you close the window, these values are not saved and are no longer available to you. If they
+        are lost, you&apos;ll need to create a new key.
       </p>
       {secrets.map((secret) => (
         <div key={secret.valueName}>
