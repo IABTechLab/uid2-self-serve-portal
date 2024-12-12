@@ -39,6 +39,15 @@
     }
   }
 
+  .key-pair-header {
+    display: flex;
+    gap: 10px;
+
+    .key-pair-tool-tip {
+      margin-top: 0.4rem;
+    }
+  }
+
   .key-pairs-table-header {
     display: flex;
     justify-content: space-between;

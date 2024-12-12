@@ -1,5 +1,5 @@
 import { Suspense, useContext, useState } from 'react';
-import { useRevalidator } from 'react-router-dom';
+import { NavLink, useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
 import KeyCreationDialog from '../components/ApiKeyManagement/KeyCreationDialog';
@@ -79,7 +79,8 @@ function ApiKeyManagement() {
     <>
       <h1>API Keys</h1>
       <p className='heading-details'>
-        View and manage your API keys. For more information, see{' '}
+        View and manage your API keys for client-server or server-side integrations. For more
+        information, see{' '}
         <a
           target='_blank'
           className='outside-link'
@@ -90,6 +91,16 @@ function ApiKeyManagement() {
         </a>
         .
       </p>
+      <div>
+        For an implementation option that generates UID2 tokens on the client side, go to{' '}
+        <NavLink
+          to={`/participant/${participant?.id}/clientSideIntegration`}
+          className='outside-link'
+        >
+          Client-Side Integration
+        </NavLink>
+        .
+      </div>
       <ScreenContentContainer>
         <Suspense fallback={<Loading />}>
           <AwaitTypesafe resolve={resolveAll({ apiKeys: data.apiKeys, apiRoles: data.apiRoles })}>
