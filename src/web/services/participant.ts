@@ -259,10 +259,3 @@ export async function UpdateEmailContact(
     throw backendError(e, 'Could not update email contact');
   }
 }
-
-export type ParticipantApprovalFormDetails = {
-  name: string;
-  types: number[];
-  apiRoles: number[];
-  siteId: number;
-};

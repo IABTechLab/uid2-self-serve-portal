@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import Fuse from 'fuse.js';
 
-import { SiteDTO } from '../../../../api/services/adminServiceHelpers';
-
 /*
 Fuse gives us a list of spans to highlight - e.g. in "Testing Site", if the search is "Test Site", the highlights
 might be [[0, 3], [8, 11]] to highlight the words "Test" and "Site".
@@ -31,18 +29,19 @@ const getSpans = (matches: [number, number][], totalLength: number) => {
   return [...spans, finalSpan];
 };
 
-type HighlightedResultProps = Readonly<{
-  result: Fuse.FuseResult<SiteDTO>;
+type HighlightedResultProps<T> = Readonly<{
+  result: Fuse.FuseResult<T>;
+  resultText: string;
 }>;
-export function HighlightedResult({ result }: HighlightedResultProps) {
-  const text = `${result.item.name} (Site ID ${result.item.id})`;
-  if (!result.matches || result.matches.length < 1) return <span>{text}</span>;
-  const spans = getSpans([...result.matches[0].indices], result.item.name.length);
+export function HighlightedResult<T>({ result, resultText }: HighlightedResultProps<T>) {
+  //const text = `${result.item.name} (Site ID ${result.item.id})`;
+  if (!result.matches || result.matches.length < 1) return <span>{resultText}</span>;
+  const spans = getSpans([...result.matches[0].indices], resultText.length);
   return (
     <>
       {spans.map((s) => (
         <span key={`${s.start}-${s.end}`} className={clsx({ highlight: s.highlight })}>
-          {result.item.name.slice(s.start, s.end + 1)}
+          {resultText.slice(s.start, s.end + 1)}
         </span>
       ))}
     </>
