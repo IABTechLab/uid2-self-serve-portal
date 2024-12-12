@@ -10,4 +10,5 @@ export async function down(knex: Knex): Promise<void> {
   await knex.schema.alterTable('participants', (table) => {
     table.enu('status', ['initialize', 'awaitingApproval', 'approved']);
   });
+  await knex('participants').update({ status: 'approved' });
 }
