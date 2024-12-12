@@ -192,11 +192,8 @@ function AddParticipantDialog({
                           className='text-button'
                           onClick={() => onSiteClick(s.item)}
                         >
-                          <HighlightedResult
-                            result={s}
-                            resultText={`${s.item.name} (Site ID ${s.item.id})`}
-                          />
-                          (Site ID: {s.item.id})
+                          <HighlightedResult result={s} resultText={s.item.name} /> (Site ID:{' '}
+                          {s.item.id})
                         </button>
                       ))}
                     </SearchBarResults>

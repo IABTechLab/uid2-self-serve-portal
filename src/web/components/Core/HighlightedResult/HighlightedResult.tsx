@@ -34,7 +34,6 @@ type HighlightedResultProps<T> = Readonly<{
   resultText: string;
 }>;
 export function HighlightedResult<T>({ result, resultText }: HighlightedResultProps<T>) {
-  //const text = `${result.item.name} (Site ID ${result.item.id})`;
   if (!result.matches || result.matches.length < 1) return <span>{resultText}</span>;
   const spans = getSpans([...result.matches[0].indices], resultText.length);
   return (
