@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import { ParticipantDTO, ParticipantStatus } from '../../api/entities/Participant';
+import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
 import { GetSelectedParticipant, GetUsersDefaultParticipant } from '../services/participant';
 import { ApiError } from '../utils/apiError';
@@ -22,8 +22,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const location = useLocation();
-  const navigate = useNavigate();
+
   const throwError = useAsyncThrowError();
   const user = LoggedInUser?.user ?? null;
   const { participantId } = useParams();
@@ -33,16 +32,6 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   );
 
   const currentParticipantId = parsedParticipantId ?? parsedLastSelectedParticipantId;
-
-  useEffect(() => {
-    if (
-      participant &&
-      participant.status !== ParticipantStatus.Approved &&
-      location.pathname !== '/account/pending'
-    ) {
-      navigate('/account/pending');
-    }
-  }, [location.pathname, navigate, participant]);
 
   useEffect(() => {
     const loadParticipant = async () => {

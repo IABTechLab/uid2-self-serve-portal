@@ -2,6 +2,7 @@ import { Response } from 'express';
 
 import { Participant } from '../../entities/Participant';
 import {
+  getAllParticipants,
   ParticipantRequest,
   updateParticipant,
   UserParticipantRequest,
@@ -19,6 +20,12 @@ export const handleUpdateParticipant = async (req: UserParticipantRequest, res: 
 export const handleGetParticipant = async (req: ParticipantRequest, res: Response) => {
   const { participant } = req;
   return res.status(200).json(participant);
+};
+
+export const handleGetAllParticipants = async (_req: ParticipantRequest, res: Response) => {
+  const participants = await getAllParticipants();
+  const result = participants.sort((a, b) => a.name.localeCompare(b.name));
+  return res.status(200).json(result);
 };
 
 export const handleCompleteRecommendations = async (req: ParticipantRequest, res: Response) => {

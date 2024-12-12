@@ -14,6 +14,7 @@ import { extractMessageFromAxiosError } from '../../utils/errorHelpers';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
+import { HighlightedResult } from '../Core/HighlightedResult/HighlightedResult';
 import { SuccessToast } from '../Core/Popups/Toast';
 import { RootFormErrors } from '../Input/FormError';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
@@ -22,7 +23,6 @@ import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 import { SearchBarContainer, SearchBarFormInput, SearchBarResults } from '../Search/SearchBar';
 import { validateCrmAgreementNumber } from './AddParticipantDialogHelper';
-import { HighlightedResult } from './ParticipantApprovalForm';
 
 import './AddParticipantDialog.scss';
 
@@ -192,7 +192,8 @@ function AddParticipantDialog({
                           className='text-button'
                           onClick={() => onSiteClick(s.item)}
                         >
-                          <HighlightedResult result={s} /> (Site ID: {s.item.id})
+                          <HighlightedResult result={s} resultText={s.item.name} /> (Site ID:{' '}
+                          {s.item.id})
                         </button>
                       ))}
                     </SearchBarResults>

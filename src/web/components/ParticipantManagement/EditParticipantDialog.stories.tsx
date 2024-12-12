@@ -1,7 +1,6 @@
 import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserJobFunction } from '../../../api/entities/User';
 import EditParticipantDialog from './EditParticipantDialog';
 
@@ -35,7 +34,6 @@ const participant = {
     { id: 4, typeName: 'Type 4' },
   ],
   apiRoles: apiRoles.slice(0, 3),
-  status: ParticipantStatus.Approved,
   allowSharing: true,
   completedRecommendations: false,
   crmAgreementNumber: '12345678',

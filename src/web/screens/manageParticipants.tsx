@@ -4,22 +4,18 @@ import { defer, makeLoader, useLoaderData } from 'react-router-typesafe';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
-import { ErrorToast, SuccessToast, WarningToast } from '../components/Core/Popups/Toast';
+import { ErrorToast, SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import AddParticipantDialog from '../components/ParticipantManagement/AddParticipantDialog';
-import ApprovedParticipantsTable from '../components/ParticipantManagement/ApprovedParticipantsTable';
-import { ParticipantRequestsTable } from '../components/ParticipantManagement/ParticipantRequestsTable';
+import ParticipantManagementTable from '../components/ParticipantManagement/ParticipantManagementTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import { GetAllEnabledApiRoles } from '../services/apiKeyService';
 import {
   AddParticipant,
   AddParticipantForm,
-  ApproveParticipantRequest,
-  GetApprovedParticipants,
-  GetParticipantsAwaitingApproval,
+  GetAllParticipants,
   GetUsersDefaultParticipant,
-  ParticipantApprovalFormDetails,
   UpdateParticipant,
   UpdateParticipantForm,
 } from '../services/participant';
@@ -32,8 +28,7 @@ import './manageParticipants.scss';
 
 const loader = makeLoader(() => {
   return defer({
-    participantsAwaitingApproval: GetParticipantsAwaitingApproval(),
-    participantsApproved: GetApprovedParticipants(),
+    participants: GetAllParticipants(),
     participantTypes: GetAllParticipantTypes(),
     apiRoles: GetAllEnabledApiRoles(),
   });
@@ -55,19 +50,6 @@ function ManageParticipants() {
   const data = useLoaderData<typeof loader>();
 
   const reloader = useRevalidator();
-
-  const handleApproveParticipantRequest = async (
-    participantId: number,
-    formData: ParticipantApprovalFormDetails
-  ) => {
-    const approvalResponse = await ApproveParticipantRequest(participantId, formData);
-    if (approvalResponse?.users?.length === 0) {
-      WarningToast(
-        'Participant approved. Since no users are attached to participant, email confirmation sent to approver.'
-      );
-    }
-    reloader.revalidate();
-  };
 
   const onUpdateParticipant = async (
     form: UpdateParticipantForm,
@@ -98,9 +80,7 @@ function ManageParticipants() {
       <div className='manage-participants-header'>
         <div className='manage-participants-header-left'>
           <h1>Manage Participants</h1>
-          <p className='heading-details'>
-            View and manage UID2 Portal participant requests and information.
-          </p>
+          <p className='heading-details'>View and manage UID2 Portal participants.</p>
         </div>
         <div className='manage-participants-header-right'>
           <button type='button' onClick={onOpenChangeAddParticipantDialog}>
@@ -127,22 +107,10 @@ function ManageParticipants() {
                   />
                 )}
                 <Suspense fallback={<Loading />}>
-                  <AwaitTypesafe resolve={data.participantsAwaitingApproval}>
-                    {(participantsAwaitingApproval) => (
-                      <ParticipantRequestsTable
-                        participantRequests={participantsAwaitingApproval}
-                        participantTypes={loadedData.participantTypes}
-                        apiRoles={loadedData.apiRoles}
-                        onApprove={handleApproveParticipantRequest}
-                      />
-                    )}
-                  </AwaitTypesafe>
-                </Suspense>
-                <Suspense fallback={<Loading />}>
-                  <AwaitTypesafe resolve={data.participantsApproved}>
-                    {(participantsApproved) => (
-                      <ApprovedParticipantsTable
-                        participants={participantsApproved}
+                  <AwaitTypesafe resolve={data.participants}>
+                    {(participants) => (
+                      <ParticipantManagementTable
+                        participants={participants}
                         apiRoles={loadedData.apiRoles}
                         participantTypes={loadedData.participantTypes}
                         onUpdateParticipant={onUpdateParticipant}

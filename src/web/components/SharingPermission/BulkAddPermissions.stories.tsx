@@ -1,6 +1,5 @@
 import { Meta, StoryFn, StoryObj } from '@storybook/react';
 
-import { ParticipantStatus } from '../../../api/entities/Participant';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
@@ -64,7 +63,6 @@ export const Publisher: Story = {
       name: 'Participant 1',
       types: [{ id: 2, typeName: 'Publisher' }],
       allowSharing: true,
-      status: ParticipantStatus.Approved,
       completedRecommendations: false,
       crmAgreementNumber: '12345678',
     },
@@ -85,7 +83,6 @@ export const AdvertiserAndDSP: Story = {
         { id: 1, typeName: 'DSP' },
       ],
       allowSharing: true,
-      status: ParticipantStatus.Approved,
       completedRecommendations: false,
       crmAgreementNumber: '23456789',
     },
@@ -108,7 +105,6 @@ export const AllTypes: Story = {
         { id: 4, typeName: 'Data Provider' },
       ],
       allowSharing: true,
-      status: ParticipantStatus.Approved,
       completedRecommendations: false,
       crmAgreementNumber: '34567890',
     },
@@ -130,7 +126,6 @@ export const HasSharedWithPublisher: Story = {
         { id: 1, typeName: 'DSP' },
       ],
       allowSharing: true,
-      status: ParticipantStatus.Approved,
       completedRecommendations: true,
       crmAgreementNumber: '45678901',
     },

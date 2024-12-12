@@ -17,7 +17,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
-import { getParticipantsApproved, UserParticipantRequest } from './participantsService';
+import { getAllParticipants, UserParticipantRequest } from './participantsService';
 import { findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
@@ -39,7 +39,7 @@ export class UserService {
     const user = await findUserByEmail(userEmail);
     const userWithUid2Support = await enrichUserWithUid2Support(user!);
     if (userWithUid2Support.isUid2Support) {
-      const allParticipants = await getParticipantsApproved();
+      const allParticipants = await getAllParticipants();
       userWithUid2Support.participants = allParticipants;
     }
     userWithUid2Support.participants = userWithUid2Support?.participants?.sort((a, b) =>

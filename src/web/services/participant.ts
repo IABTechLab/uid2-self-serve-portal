@@ -5,13 +5,7 @@ import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
-import {
-  ApiKeyDTO,
-  ClientType,
-  ParticipantApprovalResponse,
-  SharingListResponse,
-} from '../../api/services/adminServiceHelpers';
-import { ParticipantRequestDTO } from '../../api/services/participantsService';
+import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm } from './userAccount';
 
@@ -39,25 +33,14 @@ export async function GetUsersDefaultParticipant() {
   }
 }
 
-export async function GetParticipantsAwaitingApproval() {
+export async function GetAllParticipants() {
   try {
-    const result = await axios.get<ParticipantRequestDTO[]>(`/participants/awaitingApproval`, {
+    const result = await axios.get<ParticipantDTO[]>(`/participants/allParticipants`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not load participants awaiting approval');
-  }
-}
-
-export async function GetApprovedParticipants() {
-  try {
-    const result = await axios.get<ParticipantDTO[]>(`/participants/approved`, {
-      validateStatus: (status) => status === 200,
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not load approved participants');
+    throw backendError(e, 'Could not load all participants');
   }
 }
 
@@ -274,29 +257,5 @@ export async function UpdateEmailContact(
     );
   } catch (e: unknown) {
     throw backendError(e, 'Could not update email contact');
-  }
-}
-
-export type ParticipantApprovalFormDetails = {
-  name: string;
-  types: number[];
-  apiRoles: number[];
-  siteId: number;
-};
-
-export async function ApproveParticipantRequest(
-  participantId: number,
-  formData: ParticipantApprovalFormDetails
-): Promise<ParticipantApprovalResponse> {
-  try {
-    const result = await axios.put(`/participants/${participantId}/approve`, {
-      name: formData.name,
-      siteId: formData.siteId,
-      types: formData.types.map((typeId) => ({ id: typeId })),
-      apiRoles: formData.apiRoles.map((roleId) => ({ id: roleId })),
-    });
-    return result.data;
-  } catch (e: unknown) {
-    throw backendError(e, 'Could not approve participant');
   }
 }

@@ -1,16 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { ParticipantStatus } from '../../../api/entities/Participant';
 import { UserJobFunction } from '../../../api/entities/User';
-import ApprovedParticipantsTable from './ApprovedParticipantsTable';
+import ParticipantManagementTable from './ParticipantManagementTable';
 
-const meta: Meta<typeof ApprovedParticipantsTable> = {
-  component: ApprovedParticipantsTable,
+const meta: Meta<typeof ParticipantManagementTable> = {
+  component: ParticipantManagementTable,
   title: 'Manage Participants/All Participants Table',
 };
 export default meta;
 
-type Story = StoryObj<typeof ApprovedParticipantsTable>;
+type Story = StoryObj<typeof ParticipantManagementTable>;
 
 export const AllParticipants: Story = {
   args: {
@@ -20,7 +19,6 @@ export const AllParticipants: Story = {
         name: 'Participant 2',
         types: [{ id: 1, typeName: 'Type 1' }],
         apiRoles: [],
-        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         approver: {
@@ -52,7 +50,6 @@ export const AllParticipants: Story = {
           { id: 2, typeName: 'Type 2' },
         ],
         apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 }],
-        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         approver: {
@@ -88,7 +85,6 @@ export const AllParticipants: Story = {
           { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
           { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
         ],
-        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         approver: {
@@ -126,7 +122,6 @@ export const AllParticipants: Story = {
           { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
           { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
         ],
-        status: ParticipantStatus.Approved,
         allowSharing: true,
         completedRecommendations: false,
         crmAgreementNumber: '45678901',
