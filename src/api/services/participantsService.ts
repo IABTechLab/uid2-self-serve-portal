@@ -27,7 +27,6 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { getAllUid2SupportUsers } from './uid2SupportService';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
