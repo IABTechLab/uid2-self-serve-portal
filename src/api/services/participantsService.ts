@@ -76,7 +76,9 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 };
 
 export const getAllParticipants = async (): Promise<Participant[]> => {
-  return Participant.query().withGraphFetched('[apiRoles, approver, types, users]');
+  return Participant.query()
+    .whereNotNull('siteId')
+    .withGraphFetched('[apiRoles, approver, types, users]');
 };
 
 export const getParticipantsBySiteIds = async (siteIds: number[]) => {
