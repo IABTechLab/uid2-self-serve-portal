@@ -1,6 +1,6 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
 import { ErrorView } from './components/Core/ErrorView/ErrorView';
