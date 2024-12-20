@@ -85,20 +85,22 @@
                     });
             }
 
-            loadBlacklist();           
+            loadBlacklist();     
+
+            let errorMessageDiv;      
 
             function checkPasswordBlacklist() {
                 var password = document.getElementById("password-new").value;
                 
                 if (blacklistedPasswords.includes(password)) {
-                    var errorMessageDiv = document.getElementById("password-error-message");
-                    var errorText = document.querySelector(".kcErrorMessage .error-text");
-                    errorText.textContent = "Password is commonly used.";
+                    errorMessageDiv = document.getElementById("password-error-message");
+                    let errorText = document.querySelector(".kcErrorMessage .error-text");
+                    errorText.textContent = "The password you've entered isn't allowed. Please avoid using commonly used, or easily guessed passwords to keep your account secure.";
                     errorMessageDiv.style.display = "block";
                     return false;
                 }
                 
-                var errorMessageDiv = document.getElementById("password-error-message");
+                errorMessageDiv = document.getElementById("password-error-message");
                 errorMessageDiv.style.display = "none";
                 return true; 
             }
