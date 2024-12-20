@@ -3,8 +3,11 @@
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('password','password-confirm'); section>
     <#if section = "header">
         ${msg("updatePasswordTitle")}
+        <div id="password-error-message" class="kcErrorMessage" style="display:none;">
+    <p class="error-text"></p>
+</div>
     <#elseif section = "form">
-        <form id="kc-passwd-update-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post" onsubmit="return checkPassword()">
+        <form id="kc-passwd-update-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post" onsubmit="return checkPasswordBlacklist()">
             <input type="text" id="username" name="username" value="${username}" autocomplete="username"
                    readonly="readonly" style="display:none;"/>
             <input type="password" id="password" name="password" autocomplete="current-password" style="display:none;"/>
@@ -67,28 +70,36 @@
 
 
         <script type="text/javascript">
-            // List of blacklisted passwords (can be expanded or fetched from an API)
-            const blacklistedPasswords = [
-                'password123', 'admin', 'qwerty', '123456', 'letmein'
-            ];
+            let blacklistedPasswords = [];
 
-            // Function to check if the entered password is blacklisted
-            function checkPassword() {
+            function loadBlacklist() {
+                fetch('https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt')
+                    .then(response => response.text())
+                    .then(data => {
+                        blacklistedPasswords = data.split("\n");
+                        blacklistedPasswords = blacklistedPasswords.filter(password => password.length >= 8);
+                    })
+                    .catch(error => {
+                        console.error("could not get blacklist", error);
+                    });
+            }
+
+            loadBlacklist();           
+
+            function checkPasswordBlacklist() {
                 var password = document.getElementById("password-new").value;
                 
                 if (blacklistedPasswords.includes(password)) {
-                    alert("This password is blacklisted. Please choose a different one.");
-                    return false; // Prevent form submission
-                }
-
-                var confirmPassword = document.getElementById("password-confirm").value;
-                
-                if (password !== confirmPassword) {
-                    alert("Passwords do not match.");
-                    return false; // Prevent form submission
+                    var errorMessageDiv = document.getElementById("password-error-message");
+                    var errorText = document.querySelector(".kcErrorMessage .error-text");
+                    errorText.textContent = "Password is commonly used.";
+                    errorMessageDiv.style.display = "block";
+                    return false;
                 }
                 
-                return true; // Allow form submission
+                var errorMessageDiv = document.getElementById("password-error-message");
+                errorMessageDiv.style.display = "none";
+                return true; 
             }
         </script>
         </form>
