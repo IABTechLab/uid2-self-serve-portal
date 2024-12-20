@@ -24,7 +24,6 @@ function AppContent() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
   const isLocalDev = process.env.NODE_ENV === 'development';
-  const location = useLocation();
 
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;

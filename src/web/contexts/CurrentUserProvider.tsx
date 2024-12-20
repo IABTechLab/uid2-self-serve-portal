@@ -21,8 +21,6 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { keycloak } = useKeycloak();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
-  const location = useLocation();
-  const navigate = useNavigate();
   const throwError = useAsyncThrowError();
 
   const loadUser = useCallback(async () => {
