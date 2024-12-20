@@ -1,5 +1,4 @@
 <#import "template.ftl" as layout>
-
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('password','password-confirm'); section>
     <#if section = "header">
         ${msg("updatePasswordTitle")}
@@ -73,10 +72,12 @@
             let blacklistedPasswords = [];
 
             function loadBlacklist() {
+                // txt file of common passwords recommended to blacklist by NIST
                 fetch('https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-1000000.txt')
                     .then(response => response.text())
                     .then(data => {
                         blacklistedPasswords = data.split("\n");
+                        // already do not allow length < 8, so makes sense to not include them here
                         blacklistedPasswords = blacklistedPasswords.filter(password => password.length >= 8);
                     })
                     .catch(error => {
