@@ -1,9 +1,10 @@
 <#import "template.ftl" as layout>
+
 <@layout.registrationLayout displayMessage=!messagesPerField.existsError('password','password-confirm'); section>
     <#if section = "header">
         ${msg("updatePasswordTitle")}
     <#elseif section = "form">
-        <form id="kc-passwd-update-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post">
+        <form id="kc-passwd-update-form" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post" onsubmit="return checkPassword()">
             <input type="text" id="username" name="username" value="${username}" autocomplete="username"
                    readonly="readonly" style="display:none;"/>
             <input type="password" id="password" name="password" autocomplete="current-password" style="display:none;"/>
@@ -63,6 +64,33 @@
                     </#if>
                 </div>
             </div>
+
+
+        <script type="text/javascript">
+            // List of blacklisted passwords (can be expanded or fetched from an API)
+            const blacklistedPasswords = [
+                'password123', 'admin', 'qwerty', '123456', 'letmein'
+            ];
+
+            // Function to check if the entered password is blacklisted
+            function checkPassword() {
+                var password = document.getElementById("password-new").value;
+                
+                if (blacklistedPasswords.includes(password)) {
+                    alert("This password is blacklisted. Please choose a different one.");
+                    return false; // Prevent form submission
+                }
+
+                var confirmPassword = document.getElementById("password-confirm").value;
+                
+                if (password !== confirmPassword) {
+                    alert("Passwords do not match.");
+                    return false; // Prevent form submission
+                }
+                
+                return true; // Allow form submission
+            }
+        </script>
         </form>
     </#if>
 </@layout.registrationLayout>

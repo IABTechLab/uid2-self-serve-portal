@@ -29,7 +29,7 @@ function AppContent() {
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;
   }
-  if (location.pathname !== '/account/create' && LoggedInUser && !participant) {
+  if (LoggedInUser && !participant) {
     return <NoParticipantAccessView user={LoggedInUser?.user} />;
   }
 

@@ -42,12 +42,6 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
   }, [keycloak, throwError]);
 
   useEffect(() => {
-    if (LoggedInUser && !LoggedInUser.user && location.pathname !== '/account/create') {
-      navigate('/account/create');
-    }
-  }, [LoggedInUser, location.pathname, navigate]);
-
-  useEffect(() => {
     if (keycloak.token) {
       loadUser();
     } else {
