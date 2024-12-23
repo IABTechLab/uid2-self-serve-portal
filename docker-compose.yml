@@ -17,7 +17,11 @@ services:
       ACCEPT_EULA: 'yes'
       MSSQL_SA_PASSWORD: 'D3velopmentP0'
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P D3velopmentP0 -Q 'SELECT 1'"]
+      test:
+        [
+          'CMD-SHELL',
+          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P D3velopmentP0 -Q 'SELECT 1'",
+        ]
       interval: 10s
       timeout: 10s
       retries: 5
@@ -52,6 +56,8 @@ services:
     volumes:
       - ./keycloak/realm:/opt/keycloak/data/import
       - ./keycloak/themes:/opt/keycloak/themes
+      - ./keycloak/data:/opt/keycloak/data
+
   mailhog:
     image: mailhog/mailhog
     ports:
