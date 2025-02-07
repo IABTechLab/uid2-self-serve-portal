@@ -1,9 +1,8 @@
 import { Request } from 'express';
 import expressWinston from 'express-winston';
 import winston from 'winston';
-import LokiTransport from 'winston-loki';
 
-import { SSP_APP_NAME, SSP_IS_DEVELOPMENT, SSP_LOKI_HOST } from '../envars';
+import { SSP_APP_NAME, SSP_IS_DEVELOPMENT } from '../envars';
 
 export const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
   const basicString = `${timestamp} [${label}] ${level}: ${message}`;
@@ -23,16 +22,7 @@ const loggerFormat = () => {
 };
 
 const getTransports = () => {
-  return [
-    new winston.transports.Console(),
-    new LokiTransport({
-      host: SSP_LOKI_HOST,
-      labels: {
-        app: SSP_APP_NAME,
-      },
-      format: loggerFormat(),
-    }),
-  ];
+  return [new winston.transports.Console()];
 };
 
 const logger = winston.createLogger({

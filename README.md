@@ -119,39 +119,6 @@ See https://github.com/IABTechLab/uid2-self-serve-portal/pull/98/files for an ex
 
 Keycloak also provides [Upgrading Guides](https://www.keycloak.org/docs/latest/upgrading/index.html) for each version.
 
-## Logging stack
-
-#### Tech Stack
-
-For logging, we use [Loki and Grafana](https://grafana.com/oss/loki/) to store and query logs.
-We use the [winston-express](https://www.npmjs.com/package/winston-express) helper for [express](https://www.npmjs.com/package/express) in order to log to [winston](https://github.com/winstonjs/winston) from the browser. It helps format and label our log outputs for ingestion into Loki.
-
-#### Development setup
-
-For development purposes, we can can spawn docker images for Loki/Grafana/Promtail to test and validate our loggings.
-
-To do this, an optional docker file is provided `docker-compose.log-stack.yml` in the root folder. This ensures that typical development workflows (that don't need logger stack) don't spawn these additional containers unnecessarily.
-
-To instantiate the logging stack, use the following command:-
-
-```
-docker compose -f docker-compose.yml -f docker-compose.log-stack.yml up
-```
-
-This will spawn 3 additional containers for Promtail, Loki and Grafana.
-
-Once running, log onto the Grafana UI from [http://localhost:3101](http://localhost:3101). Use the username `admin` and password `admin`.
-
-Add the Loki datasource in Grafana with the following Loki data-source url: `http://host.docker.internal:3100`. Notes: When adding Loki, if the test query fails, try a query in the **Explore** tab as it may have been added and working anyway. This url should match the value of `SSP_LOKI_HOST` in your `.env` file.
-
-The logs should now be available in the **Explore** tab to query - you may need to trigger some API requests in the UI to generate some logs. You can then debug requests by specifying the app name along with a traceId, for example:
-
-```
-{app="ssportal-dev"} |= `ae44989e-7654-4e7f-ae7c-8987a829a622`
-```
-
-Note: the name of the app should match the `SSP_APP_NAME` in your `.env` file.
-
 ## Email Templates
 
 ### Adding a New Email Template
