@@ -1,9 +1,8 @@
 import { Request } from 'express';
 import { injectable } from 'inversify';
 import winston from 'winston';
-import LokiTransport from 'winston-loki';
 
-import { SSP_APP_NAME, SSP_LOKI_HOST } from '../envars';
+import { SSP_APP_NAME } from '../envars';
 import { getTraceId, traceFormat } from '../helpers/loggingHelpers';
 
 @injectable()
@@ -31,16 +30,7 @@ export class LoggerService {
   }
 
   private getTransports(): winston.transport[] {
-    return [
-      new winston.transports.Console(),
-      new LokiTransport({
-        host: SSP_LOKI_HOST,
-        labels: {
-          app: SSP_APP_NAME,
-        },
-        format: this.loggerFormat(),
-      }),
-    ];
+    return [new winston.transports.Console()];
   }
 
   private info(message: string, traceId: string) {

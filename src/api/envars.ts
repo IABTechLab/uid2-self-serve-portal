@@ -5,9 +5,6 @@ export const SSP_APP_NAME = process.env.SSP_APP_NAME ?? 'uid2-ssportal';
 export const SSP_IS_PRODUCTION = process.env.NODE_ENV === 'production';
 export const SSP_IS_DEVELOPMENT = !SSP_IS_PRODUCTION;
 
-// Loki Config
-export const SSP_LOKI_HOST = process.env.SSP_LOKI_HOST ?? 'http://loki:3100';
-
 // Keycloak Config
 export const SSP_KK_AUDIENCE = process.env.SSP_KK_AUDIENCE ?? errorMessage;
 export const SSP_KK_SECRET = process.env.SSP_KK_SECRET ?? errorMessage;
