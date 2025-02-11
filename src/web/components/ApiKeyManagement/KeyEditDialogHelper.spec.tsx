@@ -1,59 +1,25 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { getUnapprovedRoles } from './KeyEditDialogHelper';
+import { Generator, Mapper, Bidder, Sharer } from './KeyHelper.spec';
+
+const keyRoles = [Mapper, Generator, Bidder, Sharer];
 
 describe('#getUnapprovedRoles', () => {
   test('When all roles are approved', () => {
-    const keyRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ];
+    const allApprovedRoles = [Mapper, Generator, Bidder, Sharer];
 
-    const approvedRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ];
-
-    expect(getUnapprovedRoles(keyRoles, approvedRoles)).toEqual([]);
+    expect(getUnapprovedRoles(keyRoles, allApprovedRoles)).toEqual([]);
   });
 
   test('When some roles are approved', () => {
-    const keyRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ];
+    const someApprovedRoles = [Mapper, Generator];
 
-    const approvedRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-    ];
-
-    expect(getUnapprovedRoles(keyRoles, approvedRoles)).toEqual([
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ]);
+    expect(getUnapprovedRoles(keyRoles, someApprovedRoles)).toEqual([Bidder, Sharer]);
   });
 
   test('When no roles are approved', () => {
-    const keyRoles = [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ];
+    const noApprovedRoles: ApiRoleDTO[] = [];
 
-    const approvedRoles: ApiRoleDTO[] = [];
-
-    expect(getUnapprovedRoles(keyRoles, approvedRoles)).toEqual([
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ]);
+    expect(getUnapprovedRoles(keyRoles, noApprovedRoles)).toEqual(keyRoles);
   });
 });
