@@ -1,11 +1,11 @@
-import { ApiRoleDTO } from '../entities/ApiRole';
-import { validateApiRoles } from '../services/apiKeyService';
 import {
+  Bidder,
   Generator,
   Mapper,
-  Bidder,
   Sharer,
 } from '../../web/components/ApiKeyManagement/KeyHelper.spec';
+import { ApiRoleDTO } from '../entities/ApiRole';
+import { validateApiRoles } from '../services/apiKeyService';
 
 describe('#validateApiRoles', () => {
   const allAllowedRoles: ApiRoleDTO[] = [Mapper, Generator, Bidder, Sharer];
