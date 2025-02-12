@@ -22,7 +22,7 @@ const apiKeyInitial = {
   contact: 'ApiKey',
   name: 'ApiKey',
   created: 1702830516,
-  key_id: 'F4lfa.fdas',
+  key_id: 'F4lfa.test',
   site_id: 1,
   disabled: false,
   roles: [
@@ -57,7 +57,7 @@ export const MultipleRoles = () => {
   );
 };
 
-export const KeyWithRolesParticipantIsntAllowed = () => {
+export const KeyWithRolesParticipantIsNotAllowed = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<ApiKeyDTO>(apiKeyInitial);
 

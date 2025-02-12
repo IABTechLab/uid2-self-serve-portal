@@ -107,7 +107,7 @@ describe('Key creation dialog', () => {
 
     await enterApiName('key_name');
 
-    apiRoles.map(async (apiRole) => {
+    apiRoles.forEach(async (apiRole) => {
       await clickApiRole(apiRole);
     });
 
