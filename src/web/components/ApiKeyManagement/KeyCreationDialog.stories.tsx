@@ -2,6 +2,7 @@ import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
 import KeyCreationDialog from './KeyCreationDialog';
+import { allApiRoles } from './KeyHelper.spec';
 
 const meta: Meta<typeof KeyCreationDialog> = {
   component: KeyCreationDialog,
@@ -20,12 +21,7 @@ export const MultipleRoles = () => {
       {isOpen && (
         <KeyCreationDialog
           onOpenChange={() => setIsOpen(!isOpen)}
-          availableRoles={[
-            { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-            { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-            { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-            { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-          ]}
+          availableRoles={allApiRoles}
           onKeyCreation={(form) => {
             console.log(`Add a new Key ${JSON.stringify(form)}`);
             return Promise.resolve({
