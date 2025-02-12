@@ -4,8 +4,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { OnApiKeyDisable } from './KeyDisableDialog';
 import { OnApiKeyEdit } from './KeyEditDialog';
-import KeyTable from './KeyTable';
 import { allApiRoles } from './KeyHelper.spec';
+import KeyTable from './KeyTable';
 
 const meta: Meta<typeof KeyTable> = {
   component: KeyTable,

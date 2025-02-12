@@ -1,6 +1,6 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { getUnapprovedRoles } from './KeyEditDialogHelper';
-import { Bidder, Generator, Mapper, Sharer, allApiRoles } from './KeyHelper.spec';
+import { allApiRoles,Bidder, Generator, Mapper, Sharer } from './KeyHelper.spec';
 
 const keyRoles = allApiRoles;
 

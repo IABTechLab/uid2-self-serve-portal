@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { Meta, StoryObj } from '@storybook/react';
 
-import RotateApiKeyCard from './RotateApiKeyCard';
 import { Generator, Mapper } from '../ApiKeyManagement/KeyHelper.spec';
+import RotateApiKeyCard from './RotateApiKeyCard';
 
 const meta: Meta<typeof RotateApiKeyCard> = {
   title: 'Home/Rotate API Key Card',

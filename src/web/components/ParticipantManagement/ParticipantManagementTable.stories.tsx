@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { UserJobFunction } from '../../../api/entities/User';
-import ParticipantManagementTable from './ParticipantManagementTable';
 import { allApiRoles, Bidder, Generator, Mapper } from '../ApiKeyManagement/KeyHelper.spec';
+import ParticipantManagementTable from './ParticipantManagementTable';
 
 const meta: Meta<typeof ParticipantManagementTable> = {
   component: ParticipantManagementTable,

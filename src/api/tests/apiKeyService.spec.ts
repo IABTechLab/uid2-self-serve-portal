@@ -1,7 +1,7 @@
 import {
+  allApiRoles,
   Generator,
   Mapper,
-  allApiRoles,
 } from '../../web/components/ApiKeyManagement/KeyHelper.spec';
 import { ApiRoleDTO } from '../entities/ApiRole';
 import { validateApiRoles } from '../services/apiKeyService';

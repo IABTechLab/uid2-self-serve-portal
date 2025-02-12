@@ -2,8 +2,8 @@ import type { Meta } from '@storybook/react';
 import { useState } from 'react';
 
 import { UserJobFunction } from '../../../api/entities/User';
-import EditParticipantDialog from './EditParticipantDialog';
 import { allApiRoles } from '../ApiKeyManagement/KeyHelper.spec';
+import EditParticipantDialog from './EditParticipantDialog';
 
 const meta: Meta<typeof EditParticipantDialog> = {
   component: EditParticipantDialog,
