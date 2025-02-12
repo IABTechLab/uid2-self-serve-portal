@@ -3,19 +3,13 @@ import { useState } from 'react';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import EditParticipantDialog from './EditParticipantDialog';
+import { allApiRoles } from '../ApiKeyManagement/KeyHelper.spec';
 
 const meta: Meta<typeof EditParticipantDialog> = {
   component: EditParticipantDialog,
   title: 'Manage Participants/Edit Participant Dialog',
 };
 export default meta;
-
-const apiRoles = [
-  { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-  { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-  { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-  { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-];
 
 const participantTypes = [
   { id: 1, typeName: 'DSP' },
@@ -33,7 +27,7 @@ const participant = {
     { id: 3, typeName: 'Type 3' },
     { id: 4, typeName: 'Type 4' },
   ],
-  apiRoles: apiRoles.slice(0, 3),
+  apiRoles: allApiRoles.slice(0, 3),
   allowSharing: true,
   completedRecommendations: false,
   crmAgreementNumber: '12345678',
@@ -61,7 +55,7 @@ export const ParticipantWithExistingRoles = () => {
       {isOpen && (
         <EditParticipantDialog
           onOpenChange={() => setIsOpen(!isOpen)}
-          apiRoles={apiRoles}
+          apiRoles={allApiRoles}
           participantTypes={participantTypes}
           participant={participant}
           onEditParticipant={(form) => {
@@ -84,7 +78,7 @@ export const ParticipantWithNoRolesOrTypes = () => {
       {isOpen && (
         <EditParticipantDialog
           onOpenChange={() => setIsOpen(!isOpen)}
-          apiRoles={apiRoles}
+          apiRoles={allApiRoles}
           participantTypes={participantTypes}
           participant={{ ...participant, apiRoles: [], types: [] }}
           onEditParticipant={(form) => {

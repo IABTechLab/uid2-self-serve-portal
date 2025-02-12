@@ -1,14 +1,12 @@
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { getUnapprovedRoles } from './KeyEditDialogHelper';
-import { Bidder, Generator, Mapper, Sharer } from './KeyHelper.spec';
+import { Bidder, Generator, Mapper, Sharer, allApiRoles } from './KeyHelper.spec';
 
-const keyRoles = [Mapper, Generator, Bidder, Sharer];
+const keyRoles = allApiRoles;
 
 describe('#getUnapprovedRoles', () => {
   test('When all roles are approved', () => {
-    const allApprovedRoles = [Mapper, Generator, Bidder, Sharer];
-
-    expect(getUnapprovedRoles(keyRoles, allApprovedRoles)).toEqual([]);
+    expect(getUnapprovedRoles(keyRoles, allApiRoles)).toEqual([]);
   });
 
   test('When some roles are approved', () => {

@@ -1,26 +1,23 @@
 import {
-  Bidder,
   Generator,
   Mapper,
-  Sharer,
+  allApiRoles,
 } from '../../web/components/ApiKeyManagement/KeyHelper.spec';
 import { ApiRoleDTO } from '../entities/ApiRole';
 import { validateApiRoles } from '../services/apiKeyService';
 
 describe('#validateApiRoles', () => {
-  const allAllowedRoles: ApiRoleDTO[] = [Mapper, Generator, Bidder, Sharer];
-
   test('Returns true if 1 valid role', () => {
     const keyRoles: string[] = ['MAPPER'];
 
-    const result = validateApiRoles(keyRoles, allAllowedRoles);
+    const result = validateApiRoles(keyRoles, allApiRoles);
     expect(result).toBe(true);
   });
 
   test('Returns true if multiple valid roles', () => {
     const keyRoles: string[] = ['MAPPER', 'GENERATOR', 'SHARER'];
 
-    const result = validateApiRoles(keyRoles, allAllowedRoles);
+    const result = validateApiRoles(keyRoles, allApiRoles);
 
     expect(result).toBe(true);
   });

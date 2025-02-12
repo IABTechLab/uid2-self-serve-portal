@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { Mapper, Generator, Bidder, allApiRoles } from './KeyHelper.spec';
 
 import ApiRolesCell from './ApiRolesCell';
 
@@ -32,29 +33,20 @@ type Story = StoryObj<typeof ApiRolesCell>;
 
 export const ManyRoleShowingRoleName: Story = {
   args: {
-    apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-      { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 },
-    ],
+    apiRoles: allApiRoles,
     showRoleTooltip: true,
   },
 };
 
 export const ManyRole: Story = {
   args: {
-    apiRoles: [
-      { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-      { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-      { id: 3, roleName: 'ID_READER', externalName: 'Bidder', order: 4 },
-    ],
+    apiRoles: [Mapper, Generator, Bidder],
   },
 };
 
 export const OneRole: Story = {
   args: {
-    apiRoles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
+    apiRoles: [Mapper],
   },
 };
 

@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import KeyDisableDialog from './KeyDisableDialog';
+import { Generator, Mapper } from './KeyHelper.spec';
 
 const meta: Meta<typeof KeyDisableDialog> = {
   component: KeyDisableDialog,
@@ -19,10 +20,7 @@ const apiKey = {
   key_id: 'F4lfa.fdas',
   site_id: 1,
   disabled: false,
-  roles: [
-    { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-    { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-  ],
+  roles: [Mapper, Generator],
   service_id: 0,
 };
 

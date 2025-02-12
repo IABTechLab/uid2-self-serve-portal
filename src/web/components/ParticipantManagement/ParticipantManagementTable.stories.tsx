@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import ParticipantManagementTable from './ParticipantManagementTable';
+import { allApiRoles, Bidder, Generator, Mapper } from '../ApiKeyManagement/KeyHelper.spec';
 
 const meta: Meta<typeof ParticipantManagementTable> = {
   component: ParticipantManagementTable,
@@ -49,7 +50,7 @@ export const AllParticipants: Story = {
           { id: 1, typeName: 'Type 1' },
           { id: 2, typeName: 'Type 2' },
         ],
-        apiRoles: [{ id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 }],
+        apiRoles: [Mapper],
         allowSharing: true,
         completedRecommendations: false,
         approver: {
@@ -81,10 +82,7 @@ export const AllParticipants: Story = {
           { id: 2, typeName: 'Type 2' },
           { id: 3, typeName: 'Type 3' },
         ],
-        apiRoles: [
-          { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
-          { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
-        ],
+        apiRoles: [Mapper, Generator],
         allowSharing: true,
         completedRecommendations: false,
         approver: {
@@ -117,11 +115,7 @@ export const AllParticipants: Story = {
           { id: 3, typeName: 'Type 3' },
           { id: 4, typeName: 'Type 4' },
         ],
-        apiRoles: [
-          { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
-          { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
-          { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
-        ],
+        apiRoles: [Mapper, Generator, Bidder],
         allowSharing: true,
         completedRecommendations: false,
         crmAgreementNumber: '45678901',
@@ -137,12 +131,7 @@ export const AllParticipants: Story = {
         ],
       },
     ],
-    apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
-      { id: 4, roleName: 'Role4', externalName: 'Role 4', order: 4 },
-    ],
+    apiRoles: allApiRoles,
   },
 };
 
@@ -154,11 +143,6 @@ export const NoParticipants: Story = {
       console.log(participant);
       return Promise.resolve();
     },
-    apiRoles: [
-      { id: 1, roleName: 'Role1', externalName: 'Role 1', order: 1 },
-      { id: 2, roleName: 'Role2', externalName: 'Role 2', order: 2 },
-      { id: 3, roleName: 'Role3', externalName: 'Role 3', order: 3 },
-      { id: 4, roleName: 'Role4', externalName: 'Role 4', order: 4 },
-    ],
+    apiRoles: allApiRoles,
   },
 };

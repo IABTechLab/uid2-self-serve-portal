@@ -2,6 +2,7 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import RotateApiKeyCard from './RotateApiKeyCard';
+import { Generator, Mapper } from '../ApiKeyManagement/KeyHelper.spec';
 
 const meta: Meta<typeof RotateApiKeyCard> = {
   title: 'Home/Rotate API Key Card',
@@ -18,10 +19,7 @@ const testApiKey1 = {
   key_id: 'F4lfa.fdas',
   site_id: 1,
   disabled: false,
-  roles: [
-    { id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 },
-    { id: 2, roleName: 'GENERATOR', externalName: 'Generator', order: 2 },
-  ],
+  roles: [Mapper, Generator],
   service_id: 0,
 };
 
@@ -31,7 +29,7 @@ const testApiKey2 = {
   created: 1675362193,
   key_id: 'FDSL,089',
   disabled: false,
-  roles: [{ id: 1, roleName: 'MAPPER', externalName: 'Mapper', order: 1 }],
+  roles: [Mapper],
   service_id: 0,
   site_id: 1,
 };
