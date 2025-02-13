@@ -12,7 +12,7 @@ function loadComponent(apiKeyRoles: ApiRoleDTO[], participantApiRoles: ApiRoleDT
     contact: 'ApiKey',
     name: 'ApiKey',
     created: 1702830516,
-    key_id: 'F4lfa.fdas',
+    key_id: 'F4lfa.test',
     site_id: 1,
     disabled: false,
     roles: apiKeyRoles,
@@ -95,7 +95,7 @@ describe('Key edit dialog', () => {
 
         expect(onEditMock).toHaveBeenCalledWith(
           {
-            keyId: 'F4lfa.fdas',
+            keyId: 'F4lfa.test',
             newName: 'ApiKey',
             newApiRoles: apiKeyRoles.map((role) => role.roleName),
           },
@@ -115,7 +115,7 @@ describe('Key edit dialog', () => {
 
       expect(onEditMock).toHaveBeenLastCalledWith(
         {
-          keyId: 'F4lfa.fdas',
+          keyId: 'F4lfa.test',
           newName: 'ApiKey Rename',
           newApiRoles: ['MAPPER'],
         },
@@ -152,7 +152,7 @@ describe('Key edit dialog', () => {
 
         expect(onEditMock).toHaveBeenCalledWith(
           {
-            keyId: 'F4lfa.fdas',
+            keyId: 'F4lfa.test',
             newName: 'ApiKey',
             newApiRoles: [...apiKeyRoles, Bidder].map((role) => role.roleName),
           },
@@ -183,7 +183,7 @@ describe('Key edit dialog', () => {
 
         expect(onEditMock).toHaveBeenCalledWith(
           {
-            keyId: 'F4lfa.fdas',
+            keyId: 'F4lfa.test',
             newName: 'ApiKey',
             newApiRoles: apiKeyRoles.filter((role) => role !== Mapper).map((role) => role.roleName),
           },
