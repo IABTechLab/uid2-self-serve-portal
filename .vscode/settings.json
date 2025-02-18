@@ -43,6 +43,16 @@
     "Toastify",
     "uncopied",
     "undici",
-    "unrelate"
-  ]
+    "unrelate",
+    "Keypair",
+    "typesafe",
+    "Typesafe",
+    "integ",
+    "unifiedid",
+    "envar",
+    "ssportal",
+    "DTOs",
+    "sendgrid"
+  ],
+  "cSpell.diagnosticLevel": "Hint"
 }

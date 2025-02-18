@@ -40,7 +40,7 @@ export const Default: Story = {
   },
 };
 
-export const MutipleKeysToRotate: Story = {
+export const MultipleKeysToRotate: Story = {
   args: {
     apiKeysToRotate: [testApiKey1, testApiKey2],
   },
