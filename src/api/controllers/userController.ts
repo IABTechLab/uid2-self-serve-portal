@@ -55,7 +55,7 @@ export class UserController {
 
   @httpPut('/current/acceptTerms')
   public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    const doesUserHaveAParticipant = (req.user?.participants?.length ?? 0) >= 1 ?? false;
+    const doesUserHaveAParticipant = (req.user?.participants?.length ?? 0) >= 1;
 
     if (!doesUserHaveAParticipant) {
       res.status(403).json({

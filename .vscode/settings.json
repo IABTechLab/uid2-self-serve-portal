@@ -44,5 +44,6 @@
     "uncopied",
     "undici",
     "unrelate"
-  ]
+  ],
+  "cSpell.diagnosticLevel": "Hint"
 }
