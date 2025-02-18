@@ -84,10 +84,7 @@ export const getSharingList = async (
 ): Promise<SharingListResponse> => {
   try {
     const response = await adminServiceClient.get<SharingListResponse>(
-      `/api/sharing/list/${siteId}`,
-      {
-        validateStatus: (status) => status >= 200 && status < 300,
-      }
+      `/api/sharing/list/${siteId}`
     );
     return response.data.allowed_sites
       ? response.data
@@ -116,9 +113,6 @@ export const updateSharingList = async (
         allowed_sites: siteList,
         allowed_types: typeList,
         hash,
-      },
-      {
-        validateStatus: (status) => status >= 200 && status < 300,
       }
     );
     return response.data.allowed_sites
