@@ -10,7 +10,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import { ParticipantManagmentItem } from './ParticipantManagementItem';
+import { ParticipantManagementItem } from './ParticipantManagementItem';
 
 import './ParticipantManagementTable.scss';
 
@@ -116,7 +116,7 @@ function ParticipantManagementTableContent({
 
         <tbody>
           {pagedRows.map((participant) => (
-            <ParticipantManagmentItem
+            <ParticipantManagementItem
               key={participant.id}
               participant={participant}
               participantTypes={participantTypes}
