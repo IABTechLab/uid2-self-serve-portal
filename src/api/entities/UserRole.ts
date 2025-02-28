@@ -5,7 +5,7 @@ export enum UserRoleId {
   Admin = 1,
   Operations = 2,
   UID2Support = 3,
-  UID2SuperUser = 4,
+  SuperUser = 4,
 }
 
 export const getUserRoleById = (id: number) => {

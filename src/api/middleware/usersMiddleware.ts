@@ -5,7 +5,7 @@ import { User } from '../entities/User';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
-import { isUid2Support } from './userRoleMiddleware';
+import { isSuperUser, isUid2Support } from './userRoleMiddleware';
 
 export const isUserBelongsToParticipant = async (
   email: string,
@@ -50,11 +50,21 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   return next();
 };
 
-export const enrichUserWithUid2Support = async (user: User) => {
+export const enrichUserWithSupportRoles = async (user: User) => {
   const userIsUid2Support = await isUid2Support(user.email);
+  const userIsSuperUser = await isSuperUser(user.email);
   return {
     ...user,
     isUid2Support: userIsUid2Support,
+    isSuperUser: userIsSuperUser,
+  };
+};
+
+export const enrichUserWithSuperUser = async (user: User) => {
+  const userIsSuperUser = await isSuperUser(user.email);
+  return {
+    ...user,
+    isSuperUser: userIsSuperUser,
   };
 };
 

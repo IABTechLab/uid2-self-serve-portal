@@ -54,6 +54,7 @@ export const WithTeamMember = () => {
             jobFunction: UserJobFunction.DA,
             acceptedTerms: true,
             isUid2Support: false,
+            isSuperUser: false,
           }}
           teamMembers={[]}
         />
