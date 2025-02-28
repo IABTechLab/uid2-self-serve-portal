@@ -197,3 +197,8 @@ export const inviteUserToParticipant = async (
     await createUserInPortal(userPartial, participant!.id, userRoleId);
   }
 };
+
+export const getAdminUserList = async () => {
+  const userList = User.query();
+  return userList;
+};

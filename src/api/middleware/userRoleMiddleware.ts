@@ -24,6 +24,11 @@ export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, 
   next();
 };
 
+export const isUid2SuperuserCheck2: Handler = async (req: ParticipantRequest, res, next) => {
+  // check superuser role here once we have it
+  next();
+};
+
 export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
   const { participant } = req;
   const userEmail = req.auth?.payload.email as string;

@@ -1,8 +1,4 @@
-import { useState } from 'react';
-
 import { UserDTO } from '../../../api/entities/User';
-import ActionButton from '../Core/Buttons/ActionButton';
-import { LabelRow } from '../Core/Labels/LabelRow';
 
 import './UserManagementItem.scss';
 

@@ -104,3 +104,11 @@ export async function SetTermsAccepted() {
     throw backendError(e, 'Unable to mark terms as accepted.');
   }
 }
+
+export async function GetAllUsersAdmin() {
+  try {
+    return await axios.get('/admin/users');
+  } catch (e: unknown) {
+    throw backendError(e, 'Unable to get admin user list.');
+  }
+}
