@@ -1,0 +1,20 @@
+.user-management-item {
+  line-height: 2;
+
+  .user-item-name-cell {
+    display: flex;
+    align-items: center;
+  }
+
+  .approve-button {
+    padding-right: 0;
+  }
+
+  .approver-date {
+    margin-right: 80px;
+  }
+
+  .approver-name {
+    margin-right: 40px;
+  }
+}

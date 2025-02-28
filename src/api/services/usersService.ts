@@ -198,3 +198,9 @@ export const inviteUserToParticipant = async (
     await createUserInPortal(userPartial, participant!.id, userRoleId);
   }
 };
+
+export const getAdminUserList = async () => {
+  // do we want any other filtering here?
+  const userList = await User.query().where('deleted', 0).orderBy('email');
+  return userList;
+};

@@ -58,8 +58,13 @@ export function SortableProvider<TData extends {}>({ children }: { children: Rea
     (a: TData, b: TData): number => {
       if (!sortKey) return 0;
 
-      if (a[sortKey] > b[sortKey]) return sortOrder === 'asc' ? 1 : -1;
-      if (a[sortKey] < b[sortKey]) return sortOrder === 'asc' ? -1 : 1;
+      const aSort =
+        typeof a[sortKey] === 'string' ? (a[sortKey] as string).toLowerCase() : a[sortKey];
+      const bSort =
+        typeof b[sortKey] === 'string' ? (b[sortKey] as string).toLowerCase() : b[sortKey];
+
+      if (aSort > bSort) return sortOrder === 'asc' ? 1 : -1;
+      if (aSort < bSort) return sortOrder === 'asc' ? -1 : 1;
 
       return 0;
     },
