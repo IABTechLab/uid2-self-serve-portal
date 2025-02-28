@@ -6,14 +6,8 @@ import { ScreenContentContainer } from '../components/Core/ScreenContentContaine
 import UserManagementTable from '../components/UserManagement/UserManagementTable';
 import { GetAllUsersAdmin } from '../services/userAccount';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
-import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
-
-// const oldloader = makeParticipantLoader((participantId) => {
-//   const auditTrail = GetAllUsersAdmin(participantId);
-//   return defer({ auditTrail });
-// });
 
 const loader = () => {
   const userList = GetAllUsersAdmin();
@@ -25,11 +19,8 @@ function ManageUsers() {
 
   return (
     <>
-      <h1>Audit Trail</h1>
-      <p className='heading-details'>
-        View a detailed log of all past actions performed by, or on behalf of, the current
-        participant.
-      </p>
+      <h1>Users</h1>
+      <p className='heading-details'>Manage portal users</p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading users...' />}>
           <AwaitTypesafe resolve={data.userList}>
@@ -46,7 +37,6 @@ export const ManageUsersRoute: PortalRoute = {
   element: <ManageUsers />,
   errorElement: <RouteErrorBoundary />,
   // ****** should we change the route here?
-  path: '/participant/:participantId/ManageUsers',
+  path: '/participant/:participantId/manageUsers',
   loader,
-  isHidden: true,
 };

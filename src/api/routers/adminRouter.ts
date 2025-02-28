@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { isUid2SuperuserCheck2 } from '../middleware/userRoleMiddleware';
+import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { getAdminUserList } from '../services/usersService';
 // import { getSiteList, getVisibleSiteList } from '../services/adminServiceClient';
 // import { AdminSiteDTO, mapAdminSitesToSiteDTOs } from '../services/adminServiceHelpers';
@@ -9,7 +9,7 @@ import { getAdminUserList } from '../services/usersService';
 export function createAdminRouter() {
   const adminRouter = express.Router();
 
-  adminRouter.get('/users', isUid2SuperuserCheck2, async (_req, res) => {
+  adminRouter.get('/users', isSuperUserCheck, async (_req, res) => {
     // const allSitesPromise = getSiteList();
     // const attachedSitesPromise = getAttachedSiteIDs();
     // const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);

@@ -200,6 +200,7 @@ export const inviteUserToParticipant = async (
 };
 
 export const getAdminUserList = async () => {
-  const userList = User.query();
+  // do we want any other filtering here?
+  const userList = await User.query().where('deleted', 0).orderBy('email');
   return userList;
 };

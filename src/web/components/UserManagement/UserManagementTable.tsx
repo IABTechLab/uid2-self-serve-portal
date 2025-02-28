@@ -59,7 +59,11 @@ function UserManagementTableContent({ users }: UserManagementTableProps) {
   if (searchText.length > 1) {
     searchedUsers = users.filter((item) => {
       const search = searchText.toLowerCase();
-      return item.lastName.toLowerCase().indexOf(search) >= 0;
+      return (
+        item.lastName.toLowerCase().indexOf(search) >= 0 ||
+        item.firstName.toLowerCase().indexOf(search) >= 0 ||
+        item.email.toLowerCase().indexOf(search) >= 0
+      );
     });
   }
 
@@ -87,13 +91,13 @@ function UserManagementTableContent({ users }: UserManagementTableProps) {
       <table className='users-table'>
         <thead>
           <tr>
-            <SortableTableHeader<UserDTO> sortKey='lastName' header='Name' />
-            <th>User Type</th>
-            <SortableTableHeader<UserDTO> sortKey='lastName' header='Approver' />
-            <SortableTableHeader<UserDTO> sortKey='lastName' header='Date Approved' />
-            <th>API Permissions</th>
-            <SortableTableHeader<UserDTO> sortKey='lastName' header='Salesforce Agreement Number' />
-            <th className='action'>Action</th>
+            <SortableTableHeader<UserDTO> sortKey='email' header='Email' />
+            <SortableTableHeader<UserDTO> sortKey='firstName' header='First Name' />
+            <SortableTableHeader<UserDTO> sortKey='lastName' header='Last Name' />
+            <SortableTableHeader<UserDTO> sortKey='jobFunction' header='Job Function' />
+            <th>Accepted Terms</th>
+            <th>Delete Action Here</th>
+            <th>Lock Action Here</th>
           </tr>
         </thead>
 

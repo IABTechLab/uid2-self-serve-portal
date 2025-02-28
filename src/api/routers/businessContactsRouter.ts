@@ -1,6 +1,6 @@
 import express, { Response } from 'express';
 
-import { BusinessContactSchema } from '../entities/BusinessContact';
+import { BusinessContact, BusinessContactSchema } from '../entities/BusinessContact';
 import {
   BusinessContactRequest,
   hasBusinessContactAccess,
@@ -18,14 +18,16 @@ export function createBusinessContactsRouter() {
 
   businessContactsRouter.get('/', async (req: ParticipantRequest, res: Response) => {
     const { participant } = req;
-    const businessContacts = await participant!.$relatedQuery('businessContacts');
+    const businessContacts = await BusinessContact.query().where('participantId', participant?.id!);
     return res.status(200).json(businessContacts);
   });
 
   businessContactsRouter.post('/', async (req: ParticipantRequest, res: Response) => {
     const data = BusinessContactsDTO.parse(req.body);
     const { participant } = req;
-    const newContact = await participant!.$relatedQuery('businessContacts').insert(data);
+    const newContact = await BusinessContact.query()
+      .where('participantId', participant?.id!)
+      .insert({ ...data, participantId: participant?.id! });
     return res.status(201).json(newContact);
   });
 
