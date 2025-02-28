@@ -33,7 +33,14 @@ export const StandardRoutes: PortalRoute[] = [
 
 export const Uid2SupportRoutes: PortalRoute[] = [ManageParticipantsRoute];
 
-export const DashboardRoutes: PortalRoute[] = [...StandardRoutes, ...Uid2SupportRoutes];
+// TODO: add route for Users List once created
+export const SuperUserRoutes: PortalRoute[] = [];
+
+export const DashboardRoutes: PortalRoute[] = [
+  ...StandardRoutes,
+  ...Uid2SupportRoutes,
+  ...SuperUserRoutes,
+];
 
 const standardMenu = StandardRoutes.filter((r) => r.description);
 
@@ -42,10 +49,17 @@ function Dashboard() {
   const uid2SupportMenu = LoggedInUser?.user?.isUid2Support
     ? Uid2SupportRoutes.filter((r) => r.description)
     : [];
+  const superUserMenu = LoggedInUser?.user?.isSuperUser
+    ? SuperUserRoutes.filter((r) => r.description)
+    : [];
 
   return (
     <div className='app-panel'>
-      <SideNav standardMenu={standardMenu} uid2SupportMenu={uid2SupportMenu} />
+      <SideNav
+        standardMenu={standardMenu}
+        uid2SupportMenu={uid2SupportMenu}
+        superUserMenu={superUserMenu}
+      />
       <div className='dashboard-content'>
         {!LoggedInUser?.user?.acceptedTerms ? <TermsAndConditionsDialog /> : <Outlet />}
       </div>

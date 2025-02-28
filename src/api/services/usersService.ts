@@ -28,6 +28,7 @@ export interface SelfResendInviteRequest extends Request {
 
 export type UserWithParticipantRoles = UserDTO & {
   isUid2Support: boolean;
+  isSuperUser?: boolean;
   currentParticipantUserRoles?: UserRoleDTO[];
 };
 
