@@ -24,6 +24,25 @@ export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, 
   next();
 };
 
+export const isSuperUser = async (userEmail: string) => {
+  const user = await findUserByEmail(userEmail);
+  const userWithSuperUserRole = await UserToParticipantRole.query()
+    .where('userId', user!.id)
+    .andWhere('userRoleId', UserRoleId.SuperUser)
+    .first();
+  return !!userWithSuperUserRole;
+};
+
+export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
+  if (!(await isSuperUser(req.auth?.payload?.email as string))) {
+    return res.status(403).json({
+      message: 'Unauthorized. You do not have the necessary permissions.',
+      errorHash: req.headers.traceId,
+    });
+  }
+  next();
+};
+
 export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
   const { participant } = req;
   const userEmail = req.auth?.payload.email as string;

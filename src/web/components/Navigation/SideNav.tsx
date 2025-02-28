@@ -36,8 +36,9 @@ function MenuItem({
 export type SideNavProps = Readonly<{
   standardMenu: PortalRoute[];
   uid2SupportMenu: PortalRoute[];
+  superUserMenu: PortalRoute[];
 }>;
-export function SideNav({ standardMenu, uid2SupportMenu }: SideNavProps) {
+export function SideNav({ standardMenu, uid2SupportMenu, superUserMenu }: SideNavProps) {
   return (
     <NavigationMenu className='side-nav'>
       <NavigationMenuList className='main-nav'>
@@ -50,6 +51,14 @@ export function SideNav({ standardMenu, uid2SupportMenu }: SideNavProps) {
           <>
             <div className='side-nav-divider' />
             {uid2SupportMenu
+              .filter((m) => (m.location ?? 'default') === 'default')
+              .map((m) => MenuItem(m))}
+          </>
+        )}
+        {superUserMenu.length > 0 && (
+          <>
+            <div className='side-nav-divider' />
+            {superUserMenu
               .filter((m) => (m.location ?? 'default') === 'default')
               .map((m) => MenuItem(m))}
           </>

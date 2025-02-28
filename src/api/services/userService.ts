@@ -9,7 +9,7 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { enrichUserWithUid2Support } from '../middleware/usersMiddleware';
+import { enrichUserWithSupportRoles } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -37,15 +37,15 @@ export class UserService {
   public async getCurrentUser(req: UserRequest) {
     const userEmail = req.auth?.payload?.email as string;
     const user = await findUserByEmail(userEmail);
-    const userWithUid2Support = await enrichUserWithUid2Support(user!);
-    if (userWithUid2Support.isUid2Support) {
+    const userWithSupportRoles = await enrichUserWithSupportRoles(user!);
+    if (userWithSupportRoles.isUid2Support) {
       const allParticipants = await getAllParticipants();
-      userWithUid2Support.participants = allParticipants;
+      userWithSupportRoles.participants = allParticipants;
     }
-    userWithUid2Support.participants = userWithUid2Support?.participants?.sort((a, b) =>
+    userWithSupportRoles.participants = userWithSupportRoles?.participants?.sort((a, b) =>
       a.name.localeCompare(b.name)
     );
-    return userWithUid2Support;
+    return userWithSupportRoles;
   }
 
   public async getDefaultParticipant(req: UserRequest) {
