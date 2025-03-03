@@ -24,7 +24,7 @@ function NoUsers() {
 }
 
 function UserManagementTableContent({ users }: UserManagementTableProps) {
-  const initialRowsPerPage = 10;
+  const initialRowsPerPage = 25;
   const initialPageNumber = 1;
 
   const [rowsPerPage, setRowsPerPage] = useState<RowsPerPageValues>(initialRowsPerPage);

@@ -36,7 +36,6 @@ export const ManageUsersRoute: PortalRoute = {
   description: 'Manage Users',
   element: <ManageUsers />,
   errorElement: <RouteErrorBoundary />,
-  // ****** should we change the route here?
   path: '/participant/:participantId/manageUsers',
   loader,
 };

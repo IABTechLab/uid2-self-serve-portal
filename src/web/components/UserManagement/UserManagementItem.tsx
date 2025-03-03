@@ -13,7 +13,7 @@ export function UserManagementItem({ user }: UserManagementItemProps) {
       <td>{user.firstName}</td>
       <td>{user.lastName}</td>
       <td>{user.jobFunction}</td>
-      <td>{user.acceptedTerms}</td>
+      <td>{user.acceptedTerms ? 'True' : 'False'}</td>
       <td />
       <td />
     </tr>
