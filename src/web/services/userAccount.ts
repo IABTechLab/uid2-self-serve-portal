@@ -107,9 +107,9 @@ export async function SetTermsAccepted() {
 
 export async function GetAllUsers() {
   try {
-    const userResponse = await axios.get<UserDTO[]>('/admin/users');
+    const userResponse = await axios.get<UserDTO[]>('/manage/users');
     return userResponse.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Unable to get admin user list.');
+    throw backendError(e, 'Unable to get user list.');
   }
 }

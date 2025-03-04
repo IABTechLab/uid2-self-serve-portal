@@ -89,7 +89,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     participantsRouter: createParticipantsRouter(),
     usersRouter: createUsersRouter(),
     sitesRouter: createSitesRouter(),
-    adminRouter: createManagementRouter(),
+    managementRouter: createManagementRouter(),
   };
   const router = routers.rootRouter;
   app.use((req, res, next) => {
@@ -155,7 +155,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   router.use('/users', routers.usersRouter);
   router.use('/participants', routers.participantsRouter.router);
   router.use('/sites', routers.sitesRouter);
-  router.use('/admin', routers.adminRouter);
+  router.use('/manage', routers.managementRouter);
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });
