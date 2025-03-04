@@ -4,13 +4,13 @@ import { defer, useLoaderData } from 'react-router-typesafe';
 import { Loading } from '../components/Core/Loading/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import UserManagementTable from '../components/UserManagement/UserManagementTable';
-import { GetAllUsersAdmin } from '../services/userAccount';
+import { GetAllUsers } from '../services/userAccount';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 const loader = () => {
-  const userList = GetAllUsersAdmin();
+  const userList = GetAllUsers();
   return defer({ userList });
 };
 
@@ -19,7 +19,7 @@ function ManageUsers() {
 
   return (
     <>
-      <h1>Users</h1>
+      <h1>Manage Users</h1>
       <p className='heading-details'>Manage portal users</p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading users...' />}>

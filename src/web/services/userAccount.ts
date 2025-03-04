@@ -105,7 +105,7 @@ export async function SetTermsAccepted() {
   }
 }
 
-export async function GetAllUsersAdmin() {
+export async function GetAllUsers() {
   try {
     const userResponse = await axios.get<UserDTO[]>('/admin/users');
     return userResponse.data;

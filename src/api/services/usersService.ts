@@ -199,7 +199,7 @@ export const inviteUserToParticipant = async (
   }
 };
 
-export const getAdminUserList = async () => {
+export const getAllUsersList = async () => {
   const userList = await User.query().where('deleted', 0).orderBy('email');
   return userList;
 };

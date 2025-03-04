@@ -33,7 +33,7 @@ import {
   getTraceId,
 } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
-import { createAdminRouter } from './routers/adminRouter';
+import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participants/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
@@ -89,7 +89,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     participantsRouter: createParticipantsRouter(),
     usersRouter: createUsersRouter(),
     sitesRouter: createSitesRouter(),
-    adminRouter: createAdminRouter(),
+    adminRouter: createManagementRouter(),
   };
   const router = routers.rootRouter;
   app.use((req, res, next) => {
