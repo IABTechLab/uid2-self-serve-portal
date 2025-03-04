@@ -10,6 +10,7 @@ import { backendError } from '../utils/apiError';
 export type UserAccount = {
   profile: KeycloakProfile;
   user: UserWithParticipantRoles | null;
+  isLocked?: boolean;
 };
 
 export type InviteTeamMemberForm = {
@@ -20,17 +21,23 @@ export type InviteTeamMemberForm = {
   userRoleId?: number;
 };
 
+export type LoggedInUser = {
+  user: UserWithParticipantRoles | null;
+  isLocked?: boolean;
+};
+
 export type UpdateTeamMemberForm = Omit<InviteTeamMemberForm, 'email'>;
 
 export type UserPayload = z.infer<typeof UserCreationPartial>;
 
-export async function GetLoggedInUserAccount(): Promise<UserWithParticipantRoles | null> {
+export async function GetLoggedInUserAccount(): Promise<LoggedInUser> {
   try {
     const result = await axios.get<UserWithParticipantRoles>(`/users/current`, {
-      validateStatus: (status) => [200, 404].includes(status),
+      validateStatus: (status) => [200, 403, 404].includes(status),
     });
-    if (result.status === 200) return result.data;
-    return null;
+    if (result.status === 403) return { user: null, isLocked: true };
+    if (result.status === 200) return { user: result.data };
+    return { user: null };
   } catch (e: unknown) {
     throw backendError(e, 'Could not get user account');
   }

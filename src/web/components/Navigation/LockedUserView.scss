@@ -1,0 +1,14 @@
+.user-locked-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4.5rem 6.5rem;
+  font-size: 2rem;
+  background-color: var(--theme-background-content);
+  height: 100vh;
+
+  .no-access-text {
+    font-weight: bold;
+    margin-bottom: 0.25rem;
+  }
+}
