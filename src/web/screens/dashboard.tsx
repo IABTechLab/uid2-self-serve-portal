@@ -12,6 +12,7 @@ import { EmailContactsRoute } from './emailContacts';
 import { HomeRoute } from './home';
 import { LogoutRoute } from './logout';
 import { ManageParticipantsRoute } from './manageParticipants';
+import { ManageUsersRoute } from './manageUsers';
 import { ParticipantInformationRoute } from './participantInformation';
 import { PortalRoute } from './routeUtils';
 import { SharingPermissionsRoute } from './sharingPermissions';
@@ -34,7 +35,7 @@ export const StandardRoutes: PortalRoute[] = [
 export const Uid2SupportRoutes: PortalRoute[] = [ManageParticipantsRoute];
 
 // TODO: add route for Users List once created
-export const SuperUserRoutes: PortalRoute[] = [];
+export const SuperUserRoutes: PortalRoute[] = [ManageUsersRoute];
 
 export const DashboardRoutes: PortalRoute[] = [
   ...StandardRoutes,

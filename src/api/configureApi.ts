@@ -33,6 +33,7 @@ import {
   getTraceId,
 } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
+import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participants/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
@@ -88,6 +89,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     participantsRouter: createParticipantsRouter(),
     usersRouter: createUsersRouter(),
     sitesRouter: createSitesRouter(),
+    managementRouter: createManagementRouter(),
   };
   const router = routers.rootRouter;
   app.use((req, res, next) => {
@@ -153,6 +155,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   router.use('/users', routers.usersRouter);
   router.use('/participants', routers.participantsRouter.router);
   router.use('/sites', routers.sitesRouter);
+  router.use('/manage', routers.managementRouter);
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });

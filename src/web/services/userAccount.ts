@@ -3,7 +3,7 @@ import { KeycloakProfile } from 'keycloak-js';
 import log from 'loglevel';
 import { z } from 'zod';
 
-import { UserCreationPartial } from '../../api/entities/User';
+import { UserCreationPartial, UserDTO } from '../../api/entities/User';
 import { UserWithParticipantRoles } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 
@@ -102,5 +102,14 @@ export async function SetTermsAccepted() {
     return await axios.put('/users/current/acceptTerms');
   } catch (e: unknown) {
     throw backendError(e, 'Unable to mark terms as accepted.');
+  }
+}
+
+export async function GetAllUsers() {
+  try {
+    const userResponse = await axios.get<UserDTO[]>('/manage/users');
+    return userResponse.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Unable to get user list.');
   }
 }

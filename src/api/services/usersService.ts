@@ -198,3 +198,8 @@ export const inviteUserToParticipant = async (
     await createUserInPortal(userPartial, participant!.id, userRoleId);
   }
 };
+
+export const getAllUsersList = async () => {
+  const userList = await User.query().where('deleted', 0).orderBy('email');
+  return userList;
+};
