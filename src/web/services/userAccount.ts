@@ -120,3 +120,11 @@ export async function GetAllUsers() {
     throw backendError(e, 'Unable to get user list.');
   }
 }
+
+export async function ChangeUserLock(userId: number, isLocked: boolean) {
+  try {
+    return await axios.patch(`/manage/${userId}/changeLock`, { userId, isLocked });
+  } catch (e: unknown) {
+    throw backendError(e, 'Unable to update user lock status.');
+  }
+}

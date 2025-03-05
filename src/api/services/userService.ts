@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { ParticipantType } from '../entities/ParticipantType';
-import { UserJobFunction } from '../entities/User';
+import { User, UserJobFunction } from '../entities/User';
 import { getUserRoleById, UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
@@ -140,6 +140,26 @@ export class UserService {
           }),
         ]);
       });
+    });
+  }
+
+  public async updateUserLock(req: UserParticipantRequest, userId: number, isLocked: boolean) {
+    const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
+    const updatedUser = await User.query().where('id', userId).first();
+    const traceId = getTraceId(req);
+
+    const auditTrailInsertObject = constructAuditTrailObject(
+      requestingUser!,
+      AuditTrailEvents.ChangeUserLock,
+      {
+        action: AuditAction.Update,
+        email: updatedUser?.email,
+        locked: isLocked,
+      }
+    );
+
+    await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
+      await User.query().where('id', userId).update({ locked: isLocked });
     });
   }
 }

@@ -199,6 +199,7 @@ export const inviteUserToParticipant = async (
   }
 };
 
+// should this be moved somewhere for only superuser actions?  managementService?
 export const getAllUsersList = async () => {
   const userList = await User.query().where('deleted', 0).orderBy('email');
   return userList;
