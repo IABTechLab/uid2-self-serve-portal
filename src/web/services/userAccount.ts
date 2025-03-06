@@ -123,7 +123,8 @@ export async function GetAllUsers() {
 
 export async function ChangeUserLock(userId: number, isLocked: boolean) {
   try {
-    return await axios.patch(`/manage/${userId}/changeLock`, { userId, isLocked });
+    const res = await axios.patch(`/manage/${userId}/changeLock`, { userId, isLocked });
+    return res;
   } catch (e: unknown) {
     throw backendError(e, 'Unable to update user lock status.');
   }

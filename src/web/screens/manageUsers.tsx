@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { Loading } from '../components/Core/Loading/Loading';
@@ -16,10 +17,11 @@ const loader = () => {
 
 function ManageUsers() {
   const data = useLoaderData<typeof loader>();
+  const reloader = useRevalidator();
 
   const onChangeUserLock = async (userId: number, isLocked: boolean) => {
-    console.log(`locking user: ${userId}`);
     await ChangeUserLock(userId, isLocked);
+    reloader.revalidate();
   };
 
   return (

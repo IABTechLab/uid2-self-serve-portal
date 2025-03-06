@@ -1,5 +1,4 @@
 import * as Switch from '@radix-ui/react-switch';
-import { useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
 
@@ -11,11 +10,8 @@ type UserManagementItemProps = Readonly<{
 }>;
 
 export function UserManagementItem({ user, onChangeUserLock }: UserManagementItemProps) {
-  const [lockedState, setLockedState] = useState(user.locked);
-
   const onLockedToggle = async () => {
-    await onChangeUserLock(user.id, !lockedState);
-    setLockedState(!lockedState);
+    await onChangeUserLock(user.id, !user.locked);
   };
 
   return (
@@ -26,10 +22,10 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
       <td>{user.jobFunction}</td>
       <td>{user.acceptedTerms ? 'True' : 'False'}</td>
       <td>
-        <div className='theme-switch'>
+        <div className='theme-switch action-cell' title='Disable User Access'>
           <Switch.Root
             name='dark-mode'
-            checked={lockedState}
+            checked={user.locked}
             onCheckedChange={onLockedToggle}
             className='theme-toggle clickable-item'
           >
