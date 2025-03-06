@@ -24,7 +24,7 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
       <td>
         <div className='theme-switch action-cell' title='Disable User Access'>
           <Switch.Root
-            name='dark-mode'
+            name='user-locked'
             checked={user.locked}
             onCheckedChange={onLockedToggle}
             className='theme-toggle clickable-item'

@@ -13,6 +13,11 @@ export const getAllUsersList = async () => {
   return userList;
 };
 
+export const getUserById = async (userId: number) => {
+  const user = await User.query().where('id', userId).first();
+  return user;
+};
+
 export const updateUserLock = async (
   req: UserParticipantRequest,
   userId: number,

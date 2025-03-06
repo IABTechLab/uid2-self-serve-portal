@@ -2,7 +2,7 @@ import express, { Response } from 'express';
 import { z } from 'zod';
 
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
-import { getAllUsersList, updateUserLock } from '../services/managementService';
+import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
 import { ParticipantRequest } from '../services/participantsService';
 
 const handleGetAllUsers = async (req: ParticipantRequest, res: Response) => {
@@ -13,6 +13,11 @@ const handleGetAllUsers = async (req: ParticipantRequest, res: Response) => {
 const handleChangeUserLock = async (req: ParticipantRequest, res: Response) => {
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
   const { isLocked } = z.object({ isLocked: z.boolean() }).parse(req.body);
+  const user = await getUserById(userId);
+  if (req.auth?.payload?.email === user?.email) {
+    res.status(403).send([{ message: 'You cannot lock yourself.' }]);
+    return;
+  }
   await updateUserLock(req, userId, isLocked);
   return res.status(200).end();
 };
