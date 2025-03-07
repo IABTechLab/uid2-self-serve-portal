@@ -117,15 +117,16 @@ export const removeApiParticipantMemberRole = async (
     id: SSP_KK_API_CLIENT_ID,
     roleName: API_PARTICIPANT_MEMBER_ROLE_NAME,
   });
-
-  await kcAdminClient.users.delClientRoleMappings({
-    id: users[0].id!,
-    clientUniqueId: SSP_KK_API_CLIENT_ID,
-    roles: [
-      {
-        id: apiParticipantMemberRole.id!,
-        name: apiParticipantMemberRole.name!,
-      },
-    ],
-  });
+  if (apiParticipantMemberRole) {
+    await kcAdminClient.users.delClientRoleMappings({
+      id: users[0].id!,
+      clientUniqueId: SSP_KK_API_CLIENT_ID,
+      roles: [
+        {
+          id: apiParticipantMemberRole.id!,
+          name: apiParticipantMemberRole.name!,
+        },
+      ],
+    });
+  }
 };
