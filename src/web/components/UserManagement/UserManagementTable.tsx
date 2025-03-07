@@ -98,6 +98,8 @@ function UserManagementTableContent({ users }: UserManagementTableProps) {
             <th>Accepted Terms</th>
             <th>Delete Action Here</th>
             <th>Lock Action Here</th>
+            <th>User Permissions</th>
+            <th>Audit Trail</th>
           </tr>
         </thead>
 

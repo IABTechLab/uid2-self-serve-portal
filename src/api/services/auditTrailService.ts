@@ -43,3 +43,10 @@ export const GetParticipantAuditTrail = async (participant: Participant) => {
   );
   return auditTrail;
 };
+
+export const GetUserAuditTrail = async (user: User) => {
+  const auditTrail = (await AuditTrail.query().where('userId', user.id)).sort(
+    (a, b) => b.id - a.id
+  );
+  return auditTrail;
+};
