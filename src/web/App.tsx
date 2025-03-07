@@ -6,6 +6,7 @@ import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
 import { ErrorView } from './components/Core/ErrorView/ErrorView';
 import { Loading } from './components/Core/Loading/Loading';
 import { ToastContainerWrapper } from './components/Core/Popups/Toast';
+import { LockedUserView } from './components/Navigation/LockedUserView';
 import { NoParticipantAccessView } from './components/Navigation/NoParticipantAccessView';
 import { PortalHeader } from './components/PortalHeader/PortalHeader';
 import { UpdatesTour } from './components/SiteTour/UpdatesTour';
@@ -25,6 +26,9 @@ function AppContent() {
   const { participant } = useContext(ParticipantContext);
   const isLocalDev = process.env.NODE_ENV === 'development';
 
+  if (LoggedInUser?.isLocked) {
+    return <LockedUserView />;
+  }
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;
   }

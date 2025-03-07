@@ -26,10 +26,11 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
     setIsLoading(true);
     try {
       const profile = await keycloak.loadUserProfile();
-      const user = await GetLoggedInUserAccount();
+      const { user, isLocked } = await GetLoggedInUserAccount();
       SetLoggedInUser({
         profile,
         user,
+        isLocked,
       });
     } catch (e: unknown) {
       if (e instanceof Error) throwError(e);

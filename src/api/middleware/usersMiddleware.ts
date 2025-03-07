@@ -46,6 +46,9 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
+  if (user.locked) {
+    return res.status(403).send([{ message: 'Unauthorized.' }]);
+  }
   req.user = user;
   return next();
 };

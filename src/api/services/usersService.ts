@@ -74,6 +74,7 @@ export const findUserByEmail = async (email: string) => {
   const user = await User.query()
     .findOne('email', email)
     .where('deleted', 0)
+    .where('locked', 0)
     .modify('withParticipants');
 
   if (user?.participants) {
@@ -107,6 +108,7 @@ export const getAllUsersFromParticipantWithRoles = async (participant: Participa
   const usersWithParticipants = await User.query()
     .whereIn('id', participantUserIds)
     .where('deleted', 0)
+    .where('locked', 0)
     .withGraphFetched('userToParticipantRoles');
 
   return mapUsersWithParticipantRoles(usersWithParticipants, participant.id);
@@ -117,7 +119,7 @@ export const getAllUsersFromParticipant = async (participant: Participant) => {
     await UserToParticipantRole.query().where('participantId', participant.id)
   ).map((userToParticipantRole) => userToParticipantRole.userId);
 
-  return User.query().whereIn('id', participantUserIds).where('deleted', 0);
+  return User.query().whereIn('id', participantUserIds).where('deleted', 0).where('locked', 0);
 };
 
 export const sendInviteEmailToExistingUser = (
@@ -197,9 +199,4 @@ export const inviteUserToParticipant = async (
     await createAndInviteKeycloakUser(firstName, lastName, email);
     await createUserInPortal(userPartial, participant!.id, userRoleId);
   }
-};
-
-export const getAllUsersList = async () => {
-  const userList = await User.query().where('deleted', 0).orderBy('email');
-  return userList;
 };
