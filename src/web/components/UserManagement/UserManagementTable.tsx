@@ -13,6 +13,7 @@ import './UserManagementTable.scss';
 
 type UserManagementTableProps = Readonly<{
   users: UserDTO[];
+  onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
 
 function NoUsers() {
@@ -23,7 +24,7 @@ function NoUsers() {
   );
 }
 
-function UserManagementTableContent({ users }: UserManagementTableProps) {
+function UserManagementTableContent({ users, onChangeUserLock }: UserManagementTableProps) {
   const initialRowsPerPage = 25;
   const initialPageNumber = 1;
 
@@ -96,16 +97,13 @@ function UserManagementTableContent({ users }: UserManagementTableProps) {
             <SortableTableHeader<UserDTO> sortKey='lastName' header='Last Name' />
             <SortableTableHeader<UserDTO> sortKey='jobFunction' header='Job Function' />
             <th>Accepted Terms</th>
-            <th>Delete Action Here</th>
-            <th>Lock Action Here</th>
-            <th>User Permissions</th>
-            <th>Audit Trail</th>
+            <th className='action'>Locked</th>
           </tr>
         </thead>
 
         <tbody>
           {pagedRows.map((user) => (
-            <UserManagementItem key={user.id} user={user} />
+            <UserManagementItem key={user.id} user={user} onChangeUserLock={onChangeUserLock} />
           ))}
         </tbody>
       </table>

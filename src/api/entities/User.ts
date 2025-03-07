@@ -63,6 +63,7 @@ export class User extends BaseModel {
   declare jobFunction: UserJobFunction;
   declare participants?: Participant[];
   declare acceptedTerms: boolean;
+  declare locked?: boolean;
   declare userToParticipantRoles?: UserToParticipantRole[];
 
   static readonly modifiers = {
@@ -85,6 +86,7 @@ export const UserSchema = z.object({
   phone: z.string().optional(),
   jobFunction: z.nativeEnum(UserJobFunction).optional(),
   acceptedTerms: z.boolean(),
+  locked: z.boolean().optional(),
 });
 
 export const UserCreationPartial = UserSchema.pick({

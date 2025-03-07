@@ -17,4 +17,42 @@
   .approver-name {
     margin-right: 40px;
   }
+
+  .theme-switch {
+    button {
+      all: unset;
+    }
+
+    color: var(--theme-secondary);
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    .theme-toggle {
+      width: 42px;
+      height: 25px;
+      background-color: gray;
+      border-radius: 9999px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .theme-toggle[data-state='checked'] {
+      background-color: crimson;
+    }
+
+    .thumb {
+      display: block;
+      width: 21px;
+      height: 21px;
+      background-color: white;
+      border-radius: 9999px;
+      transform: translateX(2px);
+    }
+
+    .thumb[data-state='checked'] {
+      transform: translateX(19px);
+    }
+  }
 }
