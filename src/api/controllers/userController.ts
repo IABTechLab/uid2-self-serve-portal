@@ -12,7 +12,7 @@ import {
 } from 'inversify-express-utils';
 
 import { TYPES } from '../constant/types';
-import { UserRoleId } from '../entities/UserRole';
+import { UserRole, UserRoleId } from '../entities/UserRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
@@ -144,6 +144,13 @@ export class UserController {
         .send([
           { message: 'You do not have permission to unassign the Admin role from yourself.' },
         ]);
+      return;
+    }
+    if (
+      userRoleData.userRoleId === UserRoleId.UID2Support ||
+      userRoleData.userRoleId === UserRoleId.SuperUser
+    ) {
+      res.status(403).send([{ message: 'You do not have permission to update to this role.' }]);
       return;
     }
     await this.userService.updateUser(req);

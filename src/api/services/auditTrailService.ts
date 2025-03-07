@@ -1,6 +1,6 @@
 import { AuditTrail, AuditTrailDTO, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant } from '../entities/Participant';
-import { User } from '../entities/User';
+import { User, UserDTO } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
 
 export type InsertAuditTrailDTO = Omit<AuditTrailDTO, 'id' | 'succeeded' | 'updated_at'>;

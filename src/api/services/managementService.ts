@@ -9,7 +9,10 @@ import { UserParticipantRequest } from './participantsService';
 import { findUserByEmail } from './usersService';
 
 export const getAllUsersList = async () => {
-  const userList = await User.query().where('deleted', 0).orderBy('email');
+  const userList = await User.query()
+    .where('deleted', 0)
+    .orderBy('email')
+    .withGraphFetched('userToParticipantRoles');
   return userList;
 };
 

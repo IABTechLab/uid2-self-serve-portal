@@ -1,6 +1,10 @@
 import * as Switch from '@radix-ui/react-switch';
+import { useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
+import ActionButton from '../Core/Buttons/ActionButton';
+import UserAuditTrailDialog from './UserAuditTrailDialog';
+import UserParticipantRolesDialog from './UserParticipantRolesDialog';
 
 import './UserManagementItem.scss';
 
@@ -10,8 +14,19 @@ type UserManagementItemProps = Readonly<{
 }>;
 
 export function UserManagementItem({ user, onChangeUserLock }: UserManagementItemProps) {
+  const [showUserParticipantsDialog, setShowUserParticipantsDialog] = useState<boolean>(false);
+  const [showUserAuditTrailDialog, setShowUserAuditTrailDialog] = useState<boolean>(false);
+
   const onLockedToggle = async () => {
     await onChangeUserLock(user.id, !user.locked);
+  };
+
+  const onUserParticipantsDialogChange = () => {
+    setShowUserParticipantsDialog(!showUserParticipantsDialog);
+  };
+
+  const onUserAuditTrailDialogChange = () => {
+    setShowUserAuditTrailDialog(!showUserAuditTrailDialog);
   };
 
   return (
@@ -31,6 +46,19 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
           >
             <Switch.Thumb className='thumb' />
           </Switch.Root>
+        </div>
+      </td>
+      <td className='action'>
+        <div className='action-cell'>
+          <ActionButton onClick={onUserParticipantsDialogChange} icon='pencil' />
+          {showUserParticipantsDialog && (
+            <UserParticipantRolesDialog user={user} onOpenChange={onUserParticipantsDialogChange} />
+          )}
+
+          <ActionButton onClick={onUserAuditTrailDialogChange} icon='trash-can' />
+          {showUserAuditTrailDialog && (
+            <UserAuditTrailDialog user={user} onOpenChange={onUserAuditTrailDialogChange} />
+          )}
         </div>
       </td>
     </tr>
