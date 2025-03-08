@@ -15,7 +15,7 @@ async function loadKeycloakModule() {
 loadKeycloakModule()
   .then(() => {})
   .catch((error) => {
-    console.error('Error loading Keycloak module:', error);
+    throw error;
   });
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
