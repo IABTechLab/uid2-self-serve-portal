@@ -3,7 +3,7 @@ import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRep
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
-let RequiredActionAlias: any;
+let RequiredActionAlias: typeof import('@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation').RequiredActionAlias;
 
 async function loadKeycloakModule() {
   const module = await import(
@@ -14,9 +14,7 @@ async function loadKeycloakModule() {
 
 loadKeycloakModule()
   .then(() => {})
-  .catch((error) => {
-    throw error;
-  });
+  .catch((error) => {});
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
