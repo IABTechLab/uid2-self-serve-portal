@@ -34,7 +34,6 @@ export const StandardRoutes: PortalRoute[] = [
 
 export const Uid2SupportRoutes: PortalRoute[] = [ManageParticipantsRoute];
 
-// TODO: add route for Users List once created
 export const SuperUserRoutes: PortalRoute[] = [ManageUsersRoute];
 
 export const DashboardRoutes: PortalRoute[] = [

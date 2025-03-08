@@ -1,6 +1,6 @@
 import { AuditTrail, AuditTrailDTO, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant } from '../entities/Participant';
-import { User } from '../entities/User';
+import { User, UserDTO } from '../entities/User';
 import { getLoggers } from '../helpers/loggingHelpers';
 
 export type InsertAuditTrailDTO = Omit<AuditTrailDTO, 'id' | 'succeeded' | 'updated_at'>;
@@ -39,6 +39,13 @@ export const performAsyncOperationWithAuditTrail = async <T>(
 
 export const GetParticipantAuditTrail = async (participant: Participant) => {
   const auditTrail = (await AuditTrail.query().where('participantId', participant.id)).sort(
+    (a, b) => b.id - a.id
+  );
+  return auditTrail;
+};
+
+export const GetUserAuditTrail = async (user: User) => {
+  const auditTrail = (await AuditTrail.query().where('userId', user.id)).sort(
     (a, b) => b.id - a.id
   );
   return auditTrail;

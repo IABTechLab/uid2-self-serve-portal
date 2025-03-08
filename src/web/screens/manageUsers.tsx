@@ -27,7 +27,9 @@ function ManageUsers() {
   return (
     <>
       <h1>Manage Users</h1>
-      <p className='heading-details'>Manage portal users</p>
+      <p className='heading-details'>
+        Manage portal users. Search users by email, first name or last name.
+      </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading users...' />}>
           <AwaitTypesafe resolve={data.userList}>

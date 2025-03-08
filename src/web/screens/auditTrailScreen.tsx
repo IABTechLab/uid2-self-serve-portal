@@ -4,14 +4,14 @@ import { defer, useLoaderData } from 'react-router-typesafe';
 import AuditTrailTable from '../components/AuditTrail/AuditTrailTable';
 import { Loading } from '../components/Core/Loading/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
-import { GetAuditTrail } from '../services/auditTrailService';
+import { GetParticipantAuditTrail } from '../services/auditTrailService';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 const loader = makeParticipantLoader((participantId) => {
-  const auditTrail = GetAuditTrail(participantId);
+  const auditTrail = GetParticipantAuditTrail(participantId);
   return defer({ auditTrail });
 });
 
