@@ -3,7 +3,7 @@ import { defer, useLoaderData } from 'react-router-dom';
 import { makeLoader } from 'react-router-typesafe';
 
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
-import { UserDTO } from '../../../api/entities/User';
+import { User, UserDTO } from '../../../api/entities/User';
 import { GetUserAuditTrail } from '../../../api/services/auditTrailService';
 import { GetParticipantAuditTrail } from '../../services/auditTrailService';
 import { AwaitTypesafe } from '../../utils/AwaitTypesafe';
@@ -23,7 +23,8 @@ function UserAuditTrailDialog({ user, onOpenChange }: UserParticipantRolesDialog
 
   useEffect(() => {
     const getat = async () => {
-      const at = await GetUserAuditTrail(user);
+      const u = user as User;
+      const at = await GetUserAuditTrail(u);
       setAuditTrail(at);
     };
     getat();
