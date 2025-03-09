@@ -12,7 +12,7 @@ import {
 } from 'inversify-express-utils';
 
 import { TYPES } from '../constant/types';
-import { UserRole, UserRoleId } from '../entities/UserRole';
+import { UserRoleId } from '../entities/UserRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {

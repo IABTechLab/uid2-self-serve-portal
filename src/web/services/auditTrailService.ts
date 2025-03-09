@@ -11,6 +11,15 @@ export const GetParticipantAuditTrail = async (participantId: number) => {
     const result = await axios.get<AuditTrailDTO[]>(`/participants/${participantId}/auditTrail`);
     return result.data;
   } catch (e: unknown) {
+    throw backendError(e, 'Could not get participant audit trail.');
+  }
+};
+
+export const GetAuditTrail = async () => {
+  try {
+    const result = await axios.get<AuditTrailDTO[]>('manage/users/auditTrail');
+    return result.data;
+  } catch (e: unknown) {
     throw backendError(e, 'Could not get audit trail.');
   }
 };

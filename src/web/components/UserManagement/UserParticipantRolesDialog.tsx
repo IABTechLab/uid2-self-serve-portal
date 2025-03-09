@@ -1,31 +1,39 @@
-import { FormProvider } from 'react-hook-form';
-
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
+import { UserRoleId } from '../../../api/entities/UserRole';
 import { Dialog } from '../Core/Dialog/Dialog';
-import { RootFormErrors } from '../Input/FormError';
-import { TextInput } from '../Input/TextInput';
 
 type UserParticipantRolesDialogProps = Readonly<{
   user: UserDTO;
+  usersParticipants: ParticipantDTO[];
   onOpenChange: () => void;
 }>;
 
-function UserParticipantRolesDialog({ user, onOpenChange }: UserParticipantRolesDialogProps) {
-  console.log(user);
+function UserParticipantRolesDialog({
+  user,
+  usersParticipants,
+  onOpenChange,
+}: UserParticipantRolesDialogProps) {
   return (
     <Dialog
-      title={`Participants for ${user.firstName} ${user.lastName}`}
+      title={`Participants List for ${user.firstName} ${user.lastName}`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
     >
-      {user.userToParticipantRoles?.map((role) => {
-        console.log(user.userToParticipantRoles);
-        return (
-          <div key={role.participantId}>
-            {role.userRoleId} {role.participantId}
-          </div>
-        );
-      })}
+      {user.userToParticipantRoles?.find((role) => role.userRoleId === UserRoleId.UID2Support) ? (
+        <div>This user has the UID2 support role and has access to all participants.</div>
+      ) : (
+        <div>
+          {user.userToParticipantRoles?.map((role) => {
+            return (
+              <div key={role.participantId}>
+                {usersParticipants.find((p) => p.id === role.participantId)?.name}{' '}
+                {UserRoleId[role.userRoleId]}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </Dialog>
   );
 }

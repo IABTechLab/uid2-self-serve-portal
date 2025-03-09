@@ -5,14 +5,18 @@ import { defer, useLoaderData } from 'react-router-typesafe';
 import { Loading } from '../components/Core/Loading/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import UserManagementTable from '../components/UserManagement/UserManagementTable';
+import { GetAuditTrail } from '../services/auditTrailService';
+import { GetAllParticipants } from '../services/participant';
 import { ChangeUserLock, GetAllUsers } from '../services/userAccount';
-import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 const loader = () => {
   const userList = GetAllUsers();
-  return defer({ userList });
+  const participantsList = GetAllParticipants();
+  const auditTrail = GetAuditTrail();
+  return defer({ userList, participantsList, auditTrail });
 };
 
 function ManageUsers() {
@@ -32,8 +36,21 @@ function ManageUsers() {
       </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading users...' />}>
-          <AwaitTypesafe resolve={data.userList}>
-            {(users) => <UserManagementTable users={users} onChangeUserLock={onChangeUserLock} />}
+          <AwaitTypesafe
+            resolve={resolveAll({
+              users: data.userList,
+              participants: data.participantsList,
+              auditTrail: data.auditTrail,
+            })}
+          >
+            {(loadedData) => (
+              <UserManagementTable
+                users={loadedData.users}
+                participants={loadedData.participants}
+                auditTrail={loadedData.auditTrail}
+                onChangeUserLock={onChangeUserLock}
+              />
+            )}
           </AwaitTypesafe>
         </Suspense>
       </ScreenContentContainer>

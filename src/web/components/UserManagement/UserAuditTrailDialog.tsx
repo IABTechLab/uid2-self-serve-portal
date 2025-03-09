@@ -1,35 +1,19 @@
-import { Suspense, useEffect, useState } from 'react';
-import { defer, useLoaderData } from 'react-router-dom';
-import { makeLoader } from 'react-router-typesafe';
+import { Suspense } from 'react';
 
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
-import { User, UserDTO } from '../../../api/entities/User';
-import { GetUserAuditTrail } from '../../../api/services/auditTrailService';
-import { GetParticipantAuditTrail } from '../../services/auditTrailService';
-import { AwaitTypesafe } from '../../utils/AwaitTypesafe';
-import { makeParticipantLoader } from '../../utils/loaderHelpers';
+import { UserDTO } from '../../../api/entities/User';
 import AuditTrailTable from '../AuditTrail/AuditTrailTable';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { Loading } from '../Core/Loading/Loading';
 import { ScreenContentContainer } from '../Core/ScreenContentContainer/ScreenContentContainer';
 
-type UserParticipantRolesDialogProps = Readonly<{
+type UserAuditTrailDialogProps = Readonly<{
   user: UserDTO;
+  userAuditTrail: AuditTrailDTO[];
   onOpenChange: () => void;
 }>;
 
-function UserAuditTrailDialog({ user, onOpenChange }: UserParticipantRolesDialogProps) {
-  const [auditTrail, setAuditTrail] = useState<AuditTrailDTO[]>([]);
-
-  useEffect(() => {
-    const getat = async () => {
-      const u = user as User;
-      const at = await GetUserAuditTrail(u);
-      setAuditTrail(at);
-    };
-    getat();
-  });
-
+function UserAuditTrailDialog({ user, userAuditTrail, onOpenChange }: UserAuditTrailDialogProps) {
   return (
     <Dialog
       title={`Audit Trail for ${user.firstName} ${user.lastName}`}
@@ -38,7 +22,7 @@ function UserAuditTrailDialog({ user, onOpenChange }: UserParticipantRolesDialog
     >
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading audit trail...' />}>
-          <AuditTrailTable auditTrail={auditTrail} />
+          <AuditTrailTable auditTrail={userAuditTrail} />
         </Suspense>
       </ScreenContentContainer>
     </Dialog>

@@ -1,6 +1,8 @@
 import * as Switch from '@radix-ui/react-switch';
 import { useState } from 'react';
 
+import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import ActionButton from '../Core/Buttons/ActionButton';
 import UserAuditTrailDialog from './UserAuditTrailDialog';
@@ -10,10 +12,17 @@ import './UserManagementItem.scss';
 
 type UserManagementItemProps = Readonly<{
   user: UserDTO;
+  usersParticipants: ParticipantDTO[];
+  userAuditTrail: AuditTrailDTO[];
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
 
-export function UserManagementItem({ user, onChangeUserLock }: UserManagementItemProps) {
+export function UserManagementItem({
+  user,
+  usersParticipants,
+  userAuditTrail,
+  onChangeUserLock,
+}: UserManagementItemProps) {
   const [showUserParticipantsDialog, setShowUserParticipantsDialog] = useState<boolean>(false);
   const [showUserAuditTrailDialog, setShowUserAuditTrailDialog] = useState<boolean>(false);
 
@@ -52,12 +61,20 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
         <div className='action-cell'>
           <ActionButton onClick={onUserParticipantsDialogChange} icon='pencil' />
           {showUserParticipantsDialog && (
-            <UserParticipantRolesDialog user={user} onOpenChange={onUserParticipantsDialogChange} />
+            <UserParticipantRolesDialog
+              user={user}
+              usersParticipants={usersParticipants}
+              onOpenChange={onUserParticipantsDialogChange}
+            />
           )}
 
           <ActionButton onClick={onUserAuditTrailDialogChange} icon='trash-can' />
           {showUserAuditTrailDialog && (
-            <UserAuditTrailDialog user={user} onOpenChange={onUserAuditTrailDialogChange} />
+            <UserAuditTrailDialog
+              user={user}
+              userAuditTrail={userAuditTrail}
+              onOpenChange={onUserAuditTrailDialogChange}
+            />
           )}
         </div>
       </td>
