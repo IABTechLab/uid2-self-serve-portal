@@ -4,7 +4,7 @@ import { UserRoleId } from '../../../api/entities/UserRole';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
-import './UserParticipantTable.scss';
+import './UserParticipantsTable.scss';
 
 type UserParticipantRowProps = Readonly<{
   participantName?: string;
