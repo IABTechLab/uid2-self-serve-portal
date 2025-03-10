@@ -3,18 +3,19 @@ import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRep
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
+// dyanmic import of RequiredActionAlias required by keycloak-admin-client version 26.1.3
 let RequiredActionAlias: typeof import('@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation').RequiredActionAlias;
 
-async function loadKeycloakModule() {
+async function loadKeycloakRequiredActionAlias() {
   const module = await import(
     '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation'
   );
   RequiredActionAlias = module.RequiredActionAlias;
 }
 
-loadKeycloakModule()
+loadKeycloakRequiredActionAlias()
   .then(() => {})
-  .catch((error) => {});
+  .catch(() => {});
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
