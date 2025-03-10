@@ -130,7 +130,6 @@ export const removeApiParticipantMemberRole = async (
     id: SSP_KK_API_CLIENT_ID,
     roleName: API_PARTICIPANT_MEMBER_ROLE_NAME,
   });
-
   if (apiParticipantMemberRole) {
     await kcAdminClient.users.delClientRoleMappings({
       id: users[0].id!,
