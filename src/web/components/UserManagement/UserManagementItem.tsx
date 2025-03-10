@@ -5,7 +5,7 @@ import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import UserAuditTrailDialog from './UserAuditTrailDialog';
-import UserParticipantRolesDialog from './UserParticipantRolesDialog';
+import UserParticipantsDialog from './UserParticipantsDialog';
 
 import './UserManagementItem.scss';
 
@@ -49,7 +49,7 @@ export function UserManagementItem({
           View Participants
         </button>
         {showUserParticipantsDialog && (
-          <UserParticipantRolesDialog
+          <UserParticipantsDialog
             user={user}
             userParticipants={userParticipants}
             onOpenChange={onUserParticipantsDialogChange}

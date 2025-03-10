@@ -4,17 +4,17 @@ import { UserRoleId } from '../../../api/entities/UserRole';
 import { Dialog } from '../Core/Dialog/Dialog';
 import UserParticipantsTable from './UserPartcipantsTable';
 
-type UserParticipantRolesDialogProps = Readonly<{
+type UserParticipantsDialogProps = Readonly<{
   user: UserDTO;
   userParticipants: ParticipantDTO[];
   onOpenChange: () => void;
 }>;
 
-function UserParticipantRolesDialog({
+function UserParticipantsDialog({
   user,
   userParticipants,
   onOpenChange,
-}: UserParticipantRolesDialogProps) {
+}: UserParticipantsDialogProps) {
   return (
     <Dialog
       title={`Participants List for ${user.firstName} ${user.lastName}`}
@@ -32,4 +32,4 @@ function UserParticipantRolesDialog({
   );
 }
 
-export default UserParticipantRolesDialog;
+export default UserParticipantsDialog;
