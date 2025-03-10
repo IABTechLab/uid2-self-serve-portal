@@ -17,14 +17,14 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
   const [userParticipants, setUserParticipants] = useState<ParticipantDTO[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   const getParticipants = async () => {
-  //     const participants = await GetUserParticipants(user.id);
-  //     setUserParticipants(participants);
-  //     setIsLoading(false);
-  //   };
-  //   getParticipants();
-  // }, [user]);
+  useEffect(() => {
+    const getParticipants = async () => {
+      const participants = await GetUserParticipants(user.id);
+      setUserParticipants(participants);
+      setIsLoading(false);
+    };
+    getParticipants();
+  }, [user]);
 
   return (
     <Dialog
@@ -33,7 +33,7 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
       closeButtonText='Cancel'
     >
       {isLoading ? (
-        <Loading message='Loading audit trail...' />
+        <Loading message='Loading participants...' />
       ) : (
         <div>
           {user.userToParticipantRoles?.find(

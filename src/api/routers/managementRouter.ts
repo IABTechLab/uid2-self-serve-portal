@@ -1,7 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { GetUserParticipants } from '../../web/services/participant';
+import { getUserParticipants } from '../services/participantsService';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { GetUserAuditTrail } from '../services/auditTrailService';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
@@ -20,7 +20,7 @@ const handleGetUserAuditTrail = async (req: UserParticipantRequest, res: Respons
 
 const handleGetUserParticipants = async (req: UserParticipantRequest, res: Response) => {
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
-  const participants = await GetUserParticipants(userId);
+  const participants = await getUserParticipants(userId);
   return res.status(200).json(participants ?? []);
 };
 
