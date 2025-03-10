@@ -14,7 +14,7 @@ async function loadKeycloakModule() {
 
 loadKeycloakModule()
   .then(() => {})
-  .catch((error) => {});
+  .catch(() => {});
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
