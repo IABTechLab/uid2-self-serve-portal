@@ -150,7 +150,9 @@ export class UserController {
       userRoleData.userRoleId === UserRoleId.UID2Support ||
       userRoleData.userRoleId === UserRoleId.SuperUser
     ) {
-      res.status(403).send([{ message: 'You do not have permission to update to this role.' }]);
+      res
+        .status(403)
+        .send([{ message: 'Unauthorized. You do not have permission to update to this role.' }]);
       return;
     }
     await this.userService.updateUser(req);
