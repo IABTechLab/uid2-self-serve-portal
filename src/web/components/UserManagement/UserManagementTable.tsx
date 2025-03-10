@@ -15,7 +15,7 @@ import './UserManagementTable.scss';
 
 type UserManagementTableProps = Readonly<{
   users: UserDTO[];
-  participants: ParticipantDTO[];
+  allParticipants: ParticipantDTO[];
   auditTrail: AuditTrailDTO[];
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
@@ -30,7 +30,7 @@ function NoUsers() {
 
 function UserManagementTableContent({
   users,
-  participants,
+  allParticipants,
   auditTrail,
   onChangeUserLock,
 }: UserManagementTableProps) {
@@ -83,7 +83,7 @@ function UserManagementTableContent({
   const pagedRows = getPagedUsers(sortedUsers);
 
   const getUsersParticipants = (user: UserDTO) => {
-    return participants.filter((p) =>
+    return allParticipants.filter((p) =>
       user.userToParticipantRoles?.find((role) => role.participantId === p.id)
     );
   };

@@ -46,7 +46,7 @@ function ManageUsers() {
             {(loadedData) => (
               <UserManagementTable
                 users={loadedData.users}
-                participants={loadedData.participants}
+                allParticipants={loadedData.participants}
                 auditTrail={loadedData.auditTrail}
                 onChangeUserLock={onChangeUserLock}
               />
