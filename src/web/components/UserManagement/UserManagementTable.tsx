@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
-import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
 import { PagingTool } from '../Core/Paging/PagingTool';
@@ -14,7 +13,6 @@ import './UserManagementTable.scss';
 
 type UserManagementTableProps = Readonly<{
   users: UserDTO[];
-  allParticipants: ParticipantDTO[];
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
 
@@ -26,11 +24,7 @@ function NoUsers() {
   );
 }
 
-function UserManagementTableContent({
-  users,
-  allParticipants,
-  onChangeUserLock,
-}: UserManagementTableProps) {
+function UserManagementTableContent({ users, onChangeUserLock }: UserManagementTableProps) {
   const initialRowsPerPage = 25;
   const initialPageNumber = 1;
 
@@ -79,12 +73,6 @@ function UserManagementTableContent({
 
   const pagedRows = getPagedUsers(sortedUsers);
 
-  const getUserParticipants = (user: UserDTO) => {
-    return allParticipants.filter((p) =>
-      user.userToParticipantRoles?.find((role) => role.participantId === p.id)
-    );
-  };
-
   return (
     <div className='users-table-container'>
       <div className='users-table-header'>
@@ -116,12 +104,7 @@ function UserManagementTableContent({
 
         <tbody>
           {pagedRows.map((user) => (
-            <UserManagementItem
-              key={user.id}
-              user={user}
-              userParticipants={getUserParticipants(user)}
-              onChangeUserLock={onChangeUserLock}
-            />
+            <UserManagementItem key={user.id} user={user} onChangeUserLock={onChangeUserLock} />
           ))}
         </tbody>
       </table>

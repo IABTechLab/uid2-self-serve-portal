@@ -1,6 +1,7 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { GetUserParticipants } from '../../web/services/participant';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { GetUserAuditTrail } from '../services/auditTrailService';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
@@ -15,6 +16,12 @@ const handleGetUserAuditTrail = async (req: UserParticipantRequest, res: Respons
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
   const auditTrail = await GetUserAuditTrail(userId);
   return res.status(200).json(auditTrail ?? []);
+};
+
+const handleGetUserParticipants = async (req: UserParticipantRequest, res: Response) => {
+  const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
+  const participants = await GetUserParticipants(userId);
+  return res.status(200).json(participants ?? []);
 };
 
 const handleChangeUserLock = async (req: ParticipantRequest, res: Response) => {
@@ -34,6 +41,7 @@ export function createManagementRouter() {
 
   managementRouter.get('/users', isSuperUserCheck, handleGetAllUsers);
   managementRouter.get('/:userId/auditTrail', isSuperUserCheck, handleGetUserAuditTrail);
+  managementRouter.get('/:userId/participants', isSuperUserCheck, handleGetUserParticipants);
   managementRouter.patch('/:userId/changeLock', isSuperUserCheck, handleChangeUserLock);
 
   return managementRouter;
