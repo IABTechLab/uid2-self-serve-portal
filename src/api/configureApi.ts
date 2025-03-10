@@ -36,7 +36,7 @@ import makeMetricsApiMiddleware from './middleware/metrics';
 import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participants/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
-import { createUsersRouter } from './routers/users/usersRouter';
+import { createUsersRouter } from './routers/usersRouter';
 import { API_PARTICIPANT_MEMBER_ROLE_NAME } from './services/kcUsersService';
 import { LoggerService } from './services/loggerService';
 import { UserService } from './services/userService';

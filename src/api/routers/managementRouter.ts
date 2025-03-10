@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
 import { ParticipantRequest } from '../services/participantsService';
-import { handleGetUserAuditTrail } from './users/usersAuditTrail';
+import { handleGetAuditTrail } from './auditTrail';
 
 const handleGetAllUsers = async (req: ParticipantRequest, res: Response) => {
   const userList = await getAllUsersList();
@@ -27,7 +27,7 @@ export function createManagementRouter() {
   const managementRouter = express.Router();
 
   managementRouter.get('/users', isSuperUserCheck, handleGetAllUsers);
-  managementRouter.get('/users/auditTrail', isSuperUserCheck, handleGetUserAuditTrail);
+  managementRouter.get('/users/auditTrail', isSuperUserCheck, handleGetAuditTrail);
   managementRouter.patch('/:userId/changeLock', isSuperUserCheck, handleChangeUserLock);
 
   return managementRouter;
