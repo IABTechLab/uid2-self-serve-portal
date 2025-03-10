@@ -7,6 +7,8 @@ import { Dialog } from '../Core/Dialog/Dialog';
 import { Loading } from '../Core/Loading/Loading';
 import { ScreenContentContainer } from '../Core/ScreenContentContainer/ScreenContentContainer';
 
+import './UserAuditTrailDialog.scss';
+
 type UserAuditTrailDialogProps = Readonly<{
   user: UserDTO;
   userAuditTrail: AuditTrailDTO[];
@@ -19,6 +21,7 @@ function UserAuditTrailDialog({ user, userAuditTrail, onOpenChange }: UserAuditT
       title={`Audit Trail for ${user.firstName} ${user.lastName}`}
       onOpenChange={onOpenChange}
       closeButtonText='Cancel'
+      className='audit-trail-dialog'
     >
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading audit trail...' />}>

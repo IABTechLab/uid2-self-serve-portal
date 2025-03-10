@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
-import ActionButton from '../Core/Buttons/ActionButton';
 import UserAuditTrailDialog from './UserAuditTrailDialog';
 import UserParticipantRolesDialog from './UserParticipantRolesDialog';
 
@@ -46,6 +45,29 @@ export function UserManagementItem({
       <td>{user.jobFunction}</td>
       <td>{user.acceptedTerms ? 'True' : 'False'}</td>
       <td>
+        <button type='button' className='viewable-button' onClick={onUserParticipantsDialogChange}>
+          View Participants
+        </button>
+        {showUserParticipantsDialog && (
+          <UserParticipantRolesDialog
+            user={user}
+            usersParticipants={usersParticipants}
+            onOpenChange={onUserParticipantsDialogChange}
+          />
+        )}
+
+        <button type='button' className='viewable-button' onClick={onUserAuditTrailDialogChange}>
+          View Audit Trail
+        </button>
+        {showUserAuditTrailDialog && (
+          <UserAuditTrailDialog
+            user={user}
+            userAuditTrail={userAuditTrail}
+            onOpenChange={onUserAuditTrailDialogChange}
+          />
+        )}
+      </td>
+      <td>
         <div className='theme-switch action-cell' title='Disable User Access'>
           <Switch.Root
             name='user-locked'
@@ -55,27 +77,6 @@ export function UserManagementItem({
           >
             <Switch.Thumb className='thumb' />
           </Switch.Root>
-        </div>
-      </td>
-      <td className='action'>
-        <div className='action-cell'>
-          <ActionButton onClick={onUserParticipantsDialogChange} icon='pencil' />
-          {showUserParticipantsDialog && (
-            <UserParticipantRolesDialog
-              user={user}
-              usersParticipants={usersParticipants}
-              onOpenChange={onUserParticipantsDialogChange}
-            />
-          )}
-
-          <ActionButton onClick={onUserAuditTrailDialogChange} icon='trash-can' />
-          {showUserAuditTrailDialog && (
-            <UserAuditTrailDialog
-              user={user}
-              userAuditTrail={userAuditTrail}
-              onOpenChange={onUserAuditTrailDialogChange}
-            />
-          )}
         </div>
       </td>
     </tr>

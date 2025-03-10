@@ -1,5 +1,6 @@
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
+import { ParticipantDTO } from './Participant';
 
 export enum UserRoleId {
   Admin = 1,
@@ -32,3 +33,7 @@ export class UserRole extends BaseModel {
 }
 
 export type UserRoleDTO = ModelObjectOpt<UserRole>;
+
+export type ParticipantWithUserRoleDTO = ParticipantDTO & {
+  userRole: UserRoleDTO;
+};
