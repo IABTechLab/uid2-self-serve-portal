@@ -1,7 +1,6 @@
 import * as Switch from '@radix-ui/react-switch';
 import { useState } from 'react';
 
-import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import UserAuditTrailDialog from './UserAuditTrailDialog';
@@ -12,14 +11,12 @@ import './UserManagementItem.scss';
 type UserManagementItemProps = Readonly<{
   user: UserDTO;
   userParticipants: ParticipantDTO[];
-  userAuditTrail: AuditTrailDTO[];
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
 
 export function UserManagementItem({
   user,
   userParticipants,
-  userAuditTrail,
   onChangeUserLock,
 }: UserManagementItemProps) {
   const [showUserParticipantsDialog, setShowUserParticipantsDialog] = useState<boolean>(false);
@@ -60,11 +57,7 @@ export function UserManagementItem({
           View Audit Trail
         </button>
         {showUserAuditTrailDialog && (
-          <UserAuditTrailDialog
-            user={user}
-            userAuditTrail={userAuditTrail}
-            onOpenChange={onUserAuditTrailDialogChange}
-          />
+          <UserAuditTrailDialog user={user} onOpenChange={onUserAuditTrailDialogChange} />
         )}
       </td>
       <td>

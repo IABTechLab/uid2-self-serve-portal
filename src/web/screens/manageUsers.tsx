@@ -5,7 +5,7 @@ import { defer, useLoaderData } from 'react-router-typesafe';
 import { Loading } from '../components/Core/Loading/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import UserManagementTable from '../components/UserManagement/UserManagementTable';
-import { GetAuditTrail } from '../services/auditTrailService';
+// import { GetAuditTrail } from '../services/auditTrailService';
 import { GetAllParticipants } from '../services/participant';
 import { ChangeUserLock, GetAllUsers } from '../services/userAccount';
 import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
@@ -15,8 +15,8 @@ import { PortalRoute } from './routeUtils';
 const loader = () => {
   const userList = GetAllUsers();
   const participantsList = GetAllParticipants();
-  const auditTrail = GetAuditTrail();
-  return defer({ userList, participantsList, auditTrail });
+  // const auditTrail = GetAuditTrail();
+  return defer({ userList, participantsList });
 };
 
 function ManageUsers() {
@@ -40,14 +40,14 @@ function ManageUsers() {
             resolve={resolveAll({
               users: data.userList,
               participants: data.participantsList,
-              auditTrail: data.auditTrail,
+              // auditTrail: data.auditTrail,
             })}
           >
             {(loadedData) => (
               <UserManagementTable
                 users={loadedData.users}
                 allParticipants={loadedData.participants}
-                auditTrail={loadedData.auditTrail}
+                // auditTrail={loadedData.auditTrail}
                 onChangeUserLock={onChangeUserLock}
               />
             )}

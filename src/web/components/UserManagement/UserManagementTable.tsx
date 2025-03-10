@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
-import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
@@ -16,7 +15,6 @@ import './UserManagementTable.scss';
 type UserManagementTableProps = Readonly<{
   users: UserDTO[];
   allParticipants: ParticipantDTO[];
-  auditTrail: AuditTrailDTO[];
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
 
@@ -31,7 +29,6 @@ function NoUsers() {
 function UserManagementTableContent({
   users,
   allParticipants,
-  auditTrail,
   onChangeUserLock,
 }: UserManagementTableProps) {
   const initialRowsPerPage = 25;
@@ -88,10 +85,6 @@ function UserManagementTableContent({
     );
   };
 
-  const getUserAuditTrail = (user: UserDTO) => {
-    return auditTrail.filter((audit) => audit.userId === user.id);
-  };
-
   return (
     <div className='users-table-container'>
       <div className='users-table-header'>
@@ -127,7 +120,6 @@ function UserManagementTableContent({
               key={user.id}
               user={user}
               userParticipants={getUserParticipants(user)}
-              userAuditTrail={getUserAuditTrail(user)}
               onChangeUserLock={onChangeUserLock}
             />
           ))}
