@@ -5,14 +5,14 @@ import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../
 
 let RequiredActionAlias: typeof import('@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation').RequiredActionAlias;
 
-async function loadKeycloakModule() {
+async function loadKeycloakRequiredActionAlias() {
   const module = await import(
     '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation'
   );
   RequiredActionAlias = module.RequiredActionAlias;
 }
 
-loadKeycloakModule()
+loadKeycloakRequiredActionAlias()
   .then(() => {})
   .catch(() => {});
 
