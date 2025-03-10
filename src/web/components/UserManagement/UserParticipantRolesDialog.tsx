@@ -1,5 +1,5 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
-import { User, UserDTO } from '../../../api/entities/User';
+import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { Dialog } from '../Core/Dialog/Dialog';
 import UsersParticipantsTable from './UsersPartcipantsTable';
