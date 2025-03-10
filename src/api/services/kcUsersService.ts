@@ -3,6 +3,7 @@ import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRep
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
+// dyanmic import of RequiredActionAlias required by keycloak-admin-client version 26.1.3
 let RequiredActionAlias: typeof import('@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation').RequiredActionAlias;
 
 async function loadKeycloakRequiredActionAlias() {
