@@ -7,15 +7,15 @@ import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import './UsersParticipantTable.scss';
 
 type UsersParticipantRowProps = Readonly<{
-  participantName: string;
-  roleName: string;
+  participantName?: string;
+  roleName?: string;
 }>;
 
 function UsersParticipantRow({ participantName, roleName }: UsersParticipantRowProps) {
   return (
     <tr>
-      <td className='participant-name'>{participantName}</td>
-      <td className='role-name'>{roleName}</td>
+      <td className='participant-name'>{participantName ?? 'Cannot find participant name'}</td>
+      <td className='role-name'>{roleName ?? 'Cannot find participant role'}</td>
     </tr>
   );
 }
@@ -40,7 +40,7 @@ function UsersParticipantsTableComponent({ user, usersParticipants }: UsersParti
             return (
               <UsersParticipantRow
                 key={role.participantId}
-                participantName={usersParticipants.find((p) => p.id === role.participantId)!.name}
+                participantName={usersParticipants.find((p) => p.id === role.participantId)?.name}
                 roleName={UserRoleId[role.userRoleId]}
               />
             );
