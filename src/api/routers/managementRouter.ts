@@ -1,11 +1,10 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
-import { getUserParticipants } from '../services/participantsService';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { GetUserAuditTrail } from '../services/auditTrailService';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
-import { ParticipantRequest, UserParticipantRequest } from '../services/participantsService';
+import { getUserParticipants , ParticipantRequest, UserParticipantRequest } from '../services/participantsService';
 
 const handleGetAllUsers = async (req: ParticipantRequest, res: Response) => {
   const userList = await getAllUsersList();

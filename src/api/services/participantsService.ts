@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { QueryBuilder, TransactionOrKnex } from 'objection';
+import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
 import { getRoleNamesByIds } from '../../web/utils/apiRoles';
@@ -22,8 +22,6 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { UserToParticipantRole } from '../entities/UserToParticipantRole';
-import { Knex } from 'knex';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
