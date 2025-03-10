@@ -2,17 +2,17 @@ import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { Dialog } from '../Core/Dialog/Dialog';
-import UsersParticipantsTable from './UsersPartcipantsTable';
+import UserParticipantsTable from './UserPartcipantsTable';
 
 type UserParticipantRolesDialogProps = Readonly<{
   user: UserDTO;
-  usersParticipants: ParticipantDTO[];
+  userParticipants: ParticipantDTO[];
   onOpenChange: () => void;
 }>;
 
 function UserParticipantRolesDialog({
   user,
-  usersParticipants,
+  userParticipants,
   onOpenChange,
 }: UserParticipantRolesDialogProps) {
   return (
@@ -25,7 +25,7 @@ function UserParticipantRolesDialog({
         <div>This user has the UID2 support role and has admin access to all participants.</div>
       ) : (
         <div>
-          <UsersParticipantsTable user={user} usersParticipants={usersParticipants} />
+          <UserParticipantsTable user={user} userParticipants={userParticipants} />
         </div>
       )}
     </Dialog>

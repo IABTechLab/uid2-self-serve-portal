@@ -4,14 +4,14 @@ import { UserRoleId } from '../../../api/entities/UserRole';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
-import './UsersParticipantTable.scss';
+import './UserParticipantTable.scss';
 
-type UsersParticipantRowProps = Readonly<{
+type UserParticipantRowProps = Readonly<{
   participantName?: string;
   roleName?: string;
 }>;
 
-function UsersParticipantRow({ participantName, roleName }: UsersParticipantRowProps) {
+function UserParticipantRow({ participantName, roleName }: UserParticipantRowProps) {
   return (
     <tr>
       <td className='participant-name'>{participantName ?? 'Cannot find participant name'}</td>
@@ -20,12 +20,12 @@ function UsersParticipantRow({ participantName, roleName }: UsersParticipantRowP
   );
 }
 
-type UsersParticipantsTableProps = Readonly<{
+type UserParticipantsTableProps = Readonly<{
   user: UserDTO;
-  usersParticipants: ParticipantDTO[];
+  userParticipants: ParticipantDTO[];
 }>;
 
-function UsersParticipantsTableComponent({ user, usersParticipants }: UsersParticipantsTableProps) {
+function UserParticipantsTableComponent({ user, userParticipants }: UserParticipantsTableProps) {
   return (
     <div className='users-participants-table-container'>
       <table className='users-participants-table'>
@@ -38,16 +38,16 @@ function UsersParticipantsTableComponent({ user, usersParticipants }: UsersParti
         <tbody>
           {user.userToParticipantRoles?.map((role) => {
             return (
-              <UsersParticipantRow
+              <UserParticipantRow
                 key={role.participantId}
-                participantName={usersParticipants.find((p) => p.id === role.participantId)?.name}
+                participantName={userParticipants.find((p) => p.id === role.participantId)?.name}
                 roleName={UserRoleId[role.userRoleId]}
               />
             );
           })}
         </tbody>
       </table>
-      {usersParticipants.length === 0 && (
+      {userParticipants.length === 0 && (
         <TableNoDataPlaceholder
           icon={<img src='/document.svg' alt='email-icon' />}
           title='No Participants'
@@ -59,10 +59,10 @@ function UsersParticipantsTableComponent({ user, usersParticipants }: UsersParti
   );
 }
 
-export default function UsersParticipantsTable(props: UsersParticipantsTableProps) {
+export default function UserParticipantsTable(props: UserParticipantsTableProps) {
   return (
     <SortableProvider>
-      <UsersParticipantsTableComponent {...props} />
+      <UserParticipantsTableComponent {...props} />
     </SortableProvider>
   );
 }

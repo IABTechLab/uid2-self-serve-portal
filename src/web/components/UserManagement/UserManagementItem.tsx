@@ -11,14 +11,14 @@ import './UserManagementItem.scss';
 
 type UserManagementItemProps = Readonly<{
   user: UserDTO;
-  usersParticipants: ParticipantDTO[];
+  userParticipants: ParticipantDTO[];
   userAuditTrail: AuditTrailDTO[];
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
 }>;
 
 export function UserManagementItem({
   user,
-  usersParticipants,
+  userParticipants,
   userAuditTrail,
   onChangeUserLock,
 }: UserManagementItemProps) {
@@ -51,7 +51,7 @@ export function UserManagementItem({
         {showUserParticipantsDialog && (
           <UserParticipantRolesDialog
             user={user}
-            usersParticipants={usersParticipants}
+            userParticipants={userParticipants}
             onOpenChange={onUserParticipantsDialogChange}
           />
         )}

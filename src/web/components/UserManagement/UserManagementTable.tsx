@@ -82,7 +82,7 @@ function UserManagementTableContent({
 
   const pagedRows = getPagedUsers(sortedUsers);
 
-  const getUsersParticipants = (user: UserDTO) => {
+  const getUserParticipants = (user: UserDTO) => {
     return allParticipants.filter((p) =>
       user.userToParticipantRoles?.find((role) => role.participantId === p.id)
     );
@@ -126,7 +126,7 @@ function UserManagementTableContent({
             <UserManagementItem
               key={user.id}
               user={user}
-              usersParticipants={getUsersParticipants(user)}
+              userParticipants={getUserParticipants(user)}
               userAuditTrail={getUserAuditTrail(user)}
               onChangeUserLock={onChangeUserLock}
             />
