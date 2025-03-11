@@ -44,6 +44,17 @@ export async function GetAllParticipants() {
   }
 }
 
+export async function GetUserParticipants(userId: number) {
+  try {
+    const result = await axios.get<ParticipantDTO[]>(`/manage/${userId}/participants`, {
+      validateStatus: (status) => status === 200,
+    });
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not load user participants');
+  }
+}
+
 export async function GetSignedParticipants() {
   try {
     const result = await axios.get<SignedParticipantDTO[]>(`/participants/signed`, {

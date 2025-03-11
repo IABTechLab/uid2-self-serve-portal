@@ -63,14 +63,6 @@ export const enrichUserWithSupportRoles = async (user: User) => {
   };
 };
 
-export const enrichUserWithSuperUser = async (user: User) => {
-  const userIsSuperUser = await isSuperUser(user.email);
-  return {
-    ...user,
-    isSuperUser: userIsSuperUser,
-  };
-};
-
 const userIdSchema = z.object({
   userId: z.coerce.number(),
 });

@@ -146,6 +146,15 @@ export class UserController {
         ]);
       return;
     }
+    if (
+      userRoleData.userRoleId === UserRoleId.UID2Support ||
+      userRoleData.userRoleId === UserRoleId.SuperUser
+    ) {
+      res
+        .status(403)
+        .send([{ message: 'Unauthorized. You do not have permission to update to this role.' }]);
+      return;
+    }
     await this.userService.updateUser(req);
     res.sendStatus(200);
   }

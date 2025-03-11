@@ -55,4 +55,14 @@
       transform: translateX(19px);
     }
   }
+
+  .viewable-button {
+    cursor: pointer;
+    color: var(--theme-action);
+    border: none;
+    white-space: nowrap;
+    align-items: center;
+    padding-left: 0;
+    padding-right: 10px;
+  }
 }

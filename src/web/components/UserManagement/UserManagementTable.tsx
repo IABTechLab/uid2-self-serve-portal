@@ -97,6 +97,7 @@ function UserManagementTableContent({ users, onChangeUserLock }: UserManagementT
             <SortableTableHeader<UserDTO> sortKey='lastName' header='Last Name' />
             <SortableTableHeader<UserDTO> sortKey='jobFunction' header='Job Function' />
             <th>Accepted Terms</th>
+            <th className='dialogs'>Additional User Info</th>
             <th className='action'>Locked</th>
           </tr>
         </thead>

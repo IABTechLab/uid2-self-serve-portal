@@ -1,6 +1,9 @@
 import * as Switch from '@radix-ui/react-switch';
+import { useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
+import UserAuditTrailDialog from './UserAuditTrailDialog';
+import UserParticipantsDialog from './UserParticipantsDialog';
 
 import './UserManagementItem.scss';
 
@@ -10,8 +13,19 @@ type UserManagementItemProps = Readonly<{
 }>;
 
 export function UserManagementItem({ user, onChangeUserLock }: UserManagementItemProps) {
+  const [showUserParticipantsDialog, setShowUserParticipantsDialog] = useState<boolean>(false);
+  const [showUserAuditTrailDialog, setShowUserAuditTrailDialog] = useState<boolean>(false);
+
   const onLockedToggle = async () => {
     await onChangeUserLock(user.id, !user.locked);
+  };
+
+  const onUserParticipantsDialogChange = () => {
+    setShowUserParticipantsDialog(!showUserParticipantsDialog);
+  };
+
+  const onUserAuditTrailDialogChange = () => {
+    setShowUserAuditTrailDialog(!showUserAuditTrailDialog);
   };
 
   return (
@@ -21,6 +35,21 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
       <td>{user.lastName}</td>
       <td>{user.jobFunction}</td>
       <td>{user.acceptedTerms ? 'True' : 'False'}</td>
+      <td>
+        <button type='button' className='viewable-button' onClick={onUserParticipantsDialogChange}>
+          View Participants
+        </button>
+        {showUserParticipantsDialog && (
+          <UserParticipantsDialog user={user} onOpenChange={onUserParticipantsDialogChange} />
+        )}
+
+        <button type='button' className='viewable-button' onClick={onUserAuditTrailDialogChange}>
+          View Audit Trail
+        </button>
+        {showUserAuditTrailDialog && (
+          <UserAuditTrailDialog user={user} onOpenChange={onUserAuditTrailDialogChange} />
+        )}
+      </td>
       <td>
         <div className='theme-switch action-cell' title='Disable User Access'>
           <Switch.Root

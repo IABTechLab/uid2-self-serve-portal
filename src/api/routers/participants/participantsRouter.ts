@@ -20,7 +20,7 @@ import {
 } from './participantsApiKeys';
 import { handleGetParticipantApiRoles } from './participantsApiRoles';
 import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
-import { handleGetAuditTrail } from './participantsAuditTrail';
+import { handleGetParticipantAuditTrail } from './participantsAuditTrail';
 import { handleCreateParticipant } from './participantsCreation';
 import {
   handleGetParticipantDomainNames,
@@ -65,7 +65,7 @@ export function createParticipantsRouter() {
   participantsRouter.get(
     '/:participantId/auditTrail',
     isAdminOrUid2SupportCheck,
-    handleGetAuditTrail
+    handleGetParticipantAuditTrail
   );
 
   participantsRouter.get('/:participantId/sharingPermission', handleGetSharingPermission);

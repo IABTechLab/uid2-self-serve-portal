@@ -6,12 +6,21 @@ import { backendError } from '../utils/apiError';
 import { getRoleNamesByIds } from '../utils/apiRoles';
 import { camelCaseToSpaced } from '../utils/textHelpers';
 
-export const GetAuditTrail = async (participantId: number) => {
+export const GetParticipantAuditTrail = async (participantId: number) => {
   try {
     const result = await axios.get<AuditTrailDTO[]>(`/participants/${participantId}/auditTrail`);
     return result.data;
   } catch (e: unknown) {
-    throw backendError(e, 'Could not get audit trail.');
+    throw backendError(e, 'Could not get participant audit trail.');
+  }
+};
+
+export const GetUserAuditTrail = async (userId: number) => {
+  try {
+    const result = await axios.get<AuditTrailDTO[]>(`/manage/${userId}/auditTrail`);
+    return result.data;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get user audit trail.');
   }
 };
 
