@@ -43,6 +43,8 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
   const { handleSubmit } = formMethods;
   const editMode = !!props.person;
 
+  const allowedRolesToAdd = ['Admin', 'Operations'];
+
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
       const { firstName, lastName, jobFunction, userRoleId } = formData;
@@ -105,7 +107,9 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             label='Role'
             rules={{ required: 'Please specify a role.' }}
             options={(Object.keys(UserRoleId) as Array<keyof typeof UserRoleId>)
-              .filter((key) => typeof UserRoleId[key] === 'number' && key !== 'UID2Support')
+              .filter(
+                (key) => allowedRolesToAdd.includes(key) && typeof UserRoleId[key] === 'number'
+              )
               .map((key) => ({
                 optionLabel: key,
                 value: UserRoleId[key],

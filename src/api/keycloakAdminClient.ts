@@ -1,21 +1,12 @@
+import KcAdminClient from '@keycloak/keycloak-admin-client';
+
 import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_REALM, SSP_KK_SECRET } from './envars';
 
-// dynamic import of KcAdminClient required by keycloak-admin-client version 26.1.3
-let KcAdminClient;
-
-const loadKcAdminClient = async () => {
-  KcAdminClient = (await import('@keycloak/keycloak-admin-client')).default;
-
-  const kcAdminClient = new KcAdminClient({
-    baseUrl: SSP_KK_AUTH_SERVER_URL,
-    realmName: SSP_KK_REALM,
-  });
-
-  return kcAdminClient;
-};
-
+const kcAdminClient = new KcAdminClient({
+  baseUrl: SSP_KK_AUTH_SERVER_URL,
+  realmName: SSP_KK_REALM,
+});
 export const getKcAdminClient = async () => {
-  const kcAdminClient = await loadKcAdminClient();
   await kcAdminClient.auth({
     grantType: 'client_credentials',
     clientId: SSP_KK_AUDIENCE,
