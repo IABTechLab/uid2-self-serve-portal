@@ -27,9 +27,19 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const user = LoggedInUser?.user ?? null;
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
-  const parsedLastSelectedParticipantId = parseParticipantId(
-    localStorage.getItem('lastSelectedParticipantId') ?? ''
-  );
+
+  const storedUserId = localStorage.getItem('userId') ?? '';
+
+  // if a different user has logged in, we do not want to use the lastSelectedParticipantId
+  let parsedLastSelectedParticipantId;
+  if (parseInt(storedUserId, 10) === user?.id) {
+    parsedLastSelectedParticipantId = parseParticipantId(
+      localStorage.getItem('lastSelectedParticipantId') ?? ''
+    );
+  } else {
+    localStorage.removeItem('lastSelectedParticipantId');
+    localStorage.setItem('userId', user?.id.toString() || '');
+  }
 
   const currentParticipantId = parsedParticipantId ?? parsedLastSelectedParticipantId;
 
