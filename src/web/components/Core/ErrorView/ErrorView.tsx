@@ -12,7 +12,6 @@ type ErrorViewProps = Readonly<{
   message?: string;
   errorId?: string;
   errorHash?: string;
-  logout?: () => void;
 }>;
 
 export function ErrorView({ message, errorId, errorHash }: ErrorViewProps) {
