@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
+import { getFormattedEvent, getPrettyAuditDetails } from '../../services/auditTrailService';
 import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
@@ -53,8 +54,8 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
       const search = searchText.toLowerCase();
       return (
         item.userEmail.toLowerCase().indexOf(search) >= 0 ||
-        item.event.toLowerCase().indexOf(search) >= 0 ||
-        JSON.stringify(item.eventData).toLowerCase().indexOf(search) >= 0
+        getFormattedEvent(item.event).toLowerCase().indexOf(search) >= 0 ||
+        getPrettyAuditDetails(item.eventData).toLowerCase().indexOf(search) >= 0
       );
     });
   }
