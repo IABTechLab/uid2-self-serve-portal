@@ -15,9 +15,12 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
   const location = useLocation();
 
   const onBackToParticipant = () => {
-    let participantId = parseParticipantId(
-      localStorage.getItem('lastSelectedParticipantId') ?? undefined
-    );
+    const lastSelectedParticipantIds =
+      JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '{}') ?? {};
+    let participantId;
+    if (user) {
+      participantId = parseParticipantId(lastSelectedParticipantIds[user?.id]);
+    }
     if (!participantId && user?.participants && user?.participants.length > 0) {
       participantId = user.participants[0].id;
     }
@@ -31,7 +34,7 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
     <div className='no-participant-access-container'>
       <p className='no-access-text instructions'>You do not have access to this participant.</p>
 
-      {(user?.participants?.length ?? 0) > 1 ? (
+      {(user?.participants?.length ?? 0) > 1 && (
         <>
           <p className='use-switcher-text instructions'>
             Use the dropdown below to navigate to a participant you have access to.
@@ -40,7 +43,8 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
             <ParticipantSwitcher noInitialValue />
           </div>
         </>
-      ) : (
+      )}
+      {user?.participants?.length === 1 && (
         <div>
           <button className='small-button' type='button' onClick={onBackToParticipant}>
             Back to Your Participant

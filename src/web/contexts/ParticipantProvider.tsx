@@ -27,11 +27,15 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const user = LoggedInUser?.user ?? null;
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
-  const parsedLastSelectedParticipantId = parseParticipantId(
-    localStorage.getItem('lastSelectedParticipantId') ?? ''
-  );
 
-  const currentParticipantId = parsedParticipantId ?? parsedLastSelectedParticipantId;
+  const lastSelectedParticipantIds =
+    JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '{}') ?? {};
+
+  let lastSelectedParticipantId;
+  if (user) {
+    lastSelectedParticipantId = parseParticipantId(lastSelectedParticipantIds[user?.id]);
+  }
+  const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantId ?? '';
 
   useEffect(() => {
     const loadParticipant = async () => {
@@ -42,7 +46,13 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
-          localStorage.setItem('lastSelectedParticipantId', p.id.toString());
+          if (user) {
+            lastSelectedParticipantIds[user.id] = p.id;
+            localStorage.setItem(
+              'lastSelectedParticipantIds',
+              JSON.stringify(lastSelectedParticipantIds)
+            );
+          }
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
