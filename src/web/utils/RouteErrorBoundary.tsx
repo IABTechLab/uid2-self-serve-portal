@@ -11,5 +11,5 @@ export function RouteErrorBoundary() {
   const errorId = uuidv4() as string;
   const { errorHash } = useRouteError() as RouteError;
 
-  return <ErrorView errorId={errorId} errorHash={errorHash} showLogoutButton />;
+  return <ErrorView errorId={errorId} errorHash={errorHash} />;
 }
