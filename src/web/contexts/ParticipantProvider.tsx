@@ -18,11 +18,6 @@ export const ParticipantContext = createContext<ParticipantWithSetter>({
   setParticipant: () => {},
 });
 
-export type UserIdParticipantIdPair = {
-  userId: string;
-  participantId: string;
-};
-
 function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -33,12 +28,12 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  const lastSelectedParticipantIds: UserIdParticipantIdPair[] =
+  const lastSelectedParticipantIds =
     JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '[]') ?? [];
-  const lastSelectedParticipantId = lastSelectedParticipantIds.find(
-    (id) => parseInt(id.userId, 10) === user?.id
-  )?.participantId;
-
+  let lastSelectedParticipantId;
+  if (user) {
+    lastSelectedParticipantId = lastSelectedParticipantIds[user?.id];
+  }
   const currentParticipantId =
     parsedParticipantId ?? parseParticipantId(lastSelectedParticipantId) ?? '';
 
@@ -52,13 +47,9 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             : await GetUsersDefaultParticipant();
           setParticipant(p);
           if (user) {
-            const userIdParticipantIdPair: UserIdParticipantIdPair = {
-              userId: user.id.toString(),
-              participantId: p.id.toString(),
-            };
             localStorage.setItem(
               'lastSelectedParticipantIds',
-              JSON.stringify(userIdParticipantIdPair)
+              JSON.stringify({ [user.id]: p.id, ...lastSelectedParticipantIds })
             );
           }
         }

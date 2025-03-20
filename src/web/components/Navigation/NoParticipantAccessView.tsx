@@ -5,7 +5,6 @@ import { getPathWithParticipant, parseParticipantId } from '../../utils/urlHelpe
 import { ParticipantSwitcher } from './ParticipantSwitcher';
 
 import './NoParticipantAccessView.scss';
-import { UserIdParticipantIdPair } from '../../contexts/ParticipantProvider';
 
 type NoParticipantAccessViewProps = Readonly<{
   user: UserWithParticipantRoles | null;
@@ -16,11 +15,12 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
   const location = useLocation();
 
   const onBackToParticipant = () => {
-    const lastSelectedParticipantIds: UserIdParticipantIdPair[] =
+    let lastSelectedParticipantIds =
       JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '[]') ?? [];
-    const lastSelectedParticipantId = lastSelectedParticipantIds.find(
-      (id) => parseInt(id.userId, 10) === user?.id
-    )?.participantId;
+    let lastSelectedParticipantId;
+    if (user) {
+      lastSelectedParticipantId = lastSelectedParticipantIds[user?.id];
+    }
     let participantId = parseParticipantId(lastSelectedParticipantId);
     if (!participantId && user?.participants && user?.participants.length > 0) {
       participantId = user.participants[0].id;
