@@ -1,6 +1,4 @@
-import { useKeycloak } from '@react-keycloak/web';
 import axios from 'axios';
-import { useCallback } from 'react';
 import { useAsyncError } from 'react-router-dom';
 
 import { ApiError, getErrorHash } from '../../../utils/apiError';
@@ -12,30 +10,17 @@ type ErrorViewProps = Readonly<{
   message?: string;
   errorId?: string;
   errorHash?: string;
-  showLogoutButton?: boolean;
 }>;
 
-export function ErrorView({ message, errorId, errorHash, showLogoutButton }: ErrorViewProps) {
-  const { keycloak } = useKeycloak();
-  const logout = useCallback(() => {
-    keycloak?.logout();
-  }, [keycloak]);
-
+export function ErrorView({ message, errorId, errorHash }: ErrorViewProps) {
   return (
-    <div className='error-view'>
-      {showLogoutButton && (
-        <button className='logout-button' type='button' onClick={logout}>
-          Log Out
-        </button>
-      )}
-      <div className='error-content'>
-        <img alt='Error icon' src='/uid2-logo.png' className='uid2-logo' />
-        <img alt='Error icon' src='/uid2-logo-darkmode.png' className='uid2-logo-darkmode' />
-        <div>There was an unexpected error. Please try again.</div>
-        <div>If the problem persists, contact Support and provide the following information:</div>
-        {!!message && <div>Error message: {message}</div>}
-        <div>({analyticsIdentifier(errorId, errorHash)})</div>
-      </div>
+    <div className='error-content'>
+      <img alt='Error icon' src='/uid2-logo.png' className='uid2-logo' />
+      <img alt='Error icon' src='/uid2-logo-darkmode.png' className='uid2-logo-darkmode' />
+      <div>There was an unexpected error. Please try again.</div>
+      <div>If the problem persists, contact Support and provide the following information:</div>
+      {!!message && <div>Error message: {message}</div>}
+      <div>({analyticsIdentifier(errorId, errorHash)})</div>
     </div>
   );
 }

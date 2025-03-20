@@ -1,20 +1,13 @@
-.error-view {
-  .logout-button {
-    margin-top: 2rem;
-    margin-right: 3rem;
-    float: right;
-  }
-  .error-content {
-    align-self: center;
-    text-align: center;
-    padding: 4.5rem 6.5rem;
+.error-content {
+  align-self: center;
+  text-align: center;
+  padding: 4.5rem 6.5rem;
 
-    .uid2-logo {
-      display: inline-block;
-    }
-    .uid2-logo-darkmode {
-      display: none;
-    }
+  .uid2-logo {
+    display: inline-block;
+  }
+  .uid2-logo-darkmode {
+    display: none;
   }
 }
 
