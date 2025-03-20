@@ -1,7 +1,8 @@
 import { useKeycloak } from '@react-keycloak/web';
+import { useCallback } from 'react';
+
 import { ErrorView } from '../components/Core/ErrorView/ErrorView';
 import { errorHandler, RenderedErrorProps } from './errorHandler';
-import { useCallback } from 'react';
 
 import './PortalErrorBoundary.scss';
 
