@@ -12,9 +12,10 @@ type ErrorViewProps = Readonly<{
   message?: string;
   errorId?: string;
   errorHash?: string;
+  showLogoutButton?: boolean;
 }>;
 
-export function ErrorView({ message, errorId, errorHash }: ErrorViewProps) {
+export function ErrorView({ message, errorId, errorHash, showLogoutButton }: ErrorViewProps) {
   const { keycloak } = useKeycloak();
   const logout = useCallback(() => {
     keycloak?.logout();
@@ -22,9 +23,11 @@ export function ErrorView({ message, errorId, errorHash }: ErrorViewProps) {
 
   return (
     <div className='error-view'>
-      <button className='logout-button' type='button' onClick={logout}>
-        Log Out
-      </button>
+      {showLogoutButton && (
+        <button className='logout-button' type='button' onClick={logout}>
+          Log Out
+        </button>
+      )}
       <div className='error-content'>
         <img alt='Error icon' src='/uid2-logo.png' className='uid2-logo' />
         <img alt='Error icon' src='/uid2-logo-darkmode.png' className='uid2-logo-darkmode' />

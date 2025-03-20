@@ -3,7 +3,7 @@ import { errorHandler, RenderedErrorProps } from './errorHandler';
 
 function PortalErrorComponent(props: RenderedErrorProps) {
   const { errorId, errorHash } = props;
-  return <ErrorView errorId={errorId} errorHash={errorHash} />;
+  return <ErrorView errorId={errorId} errorHash={errorHash} showLogoutButton />;
 }
 
 export const PortalErrorBoundary = errorHandler(PortalErrorComponent);
