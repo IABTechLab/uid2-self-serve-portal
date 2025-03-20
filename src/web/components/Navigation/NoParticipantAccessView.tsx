@@ -15,13 +15,12 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
   const location = useLocation();
 
   const onBackToParticipant = () => {
-    let lastSelectedParticipantIds =
-      JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '[]') ?? [];
-    let lastSelectedParticipantId;
+    const lastSelectedParticipantIds =
+      JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '{}') ?? {};
+    let participantId;
     if (user) {
-      lastSelectedParticipantId = lastSelectedParticipantIds[user?.id];
+      participantId = parseParticipantId(lastSelectedParticipantIds[user?.id]);
     }
-    let participantId = parseParticipantId(lastSelectedParticipantId);
     if (!participantId && user?.participants && user?.participants.length > 0) {
       participantId = user.participants[0].id;
     }

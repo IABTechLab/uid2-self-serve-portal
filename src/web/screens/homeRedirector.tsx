@@ -13,13 +13,15 @@ export function HomeRedirector() {
   useEffect(() => {
     const loadParticipant = async () => {
       const lastSelectedParticipantIds =
-        JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '[]') ?? [];
-      let pid;
+        JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '{}') ?? {};
+
+      let lastSelectedParticipantId;
       if (LoggedInUser?.user) {
-        pid = lastSelectedParticipantIds[LoggedInUser?.user.id];
+        lastSelectedParticipantId = parseParticipantId(
+          lastSelectedParticipantIds[LoggedInUser.user.id]
+        );
       }
 
-      const lastSelectedParticipantId = parseParticipantId(pid);
       const currentParticipant = lastSelectedParticipantId
         ? await GetSelectedParticipant(lastSelectedParticipantId)
         : await GetUsersDefaultParticipant();

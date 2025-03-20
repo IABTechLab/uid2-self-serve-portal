@@ -29,13 +29,13 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const parsedParticipantId = parseParticipantId(participantId);
 
   const lastSelectedParticipantIds =
-    JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '[]') ?? [];
+    JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '{}') ?? {};
+
   let lastSelectedParticipantId;
   if (user) {
-    lastSelectedParticipantId = lastSelectedParticipantIds[user?.id];
+    lastSelectedParticipantId = parseParticipantId(lastSelectedParticipantIds[user?.id]);
   }
-  const currentParticipantId =
-    parsedParticipantId ?? parseParticipantId(lastSelectedParticipantId) ?? '';
+  const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantId ?? '';
 
   useEffect(() => {
     const loadParticipant = async () => {
@@ -47,9 +47,10 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             : await GetUsersDefaultParticipant();
           setParticipant(p);
           if (user) {
+            lastSelectedParticipantIds[user.id] = p.id;
             localStorage.setItem(
               'lastSelectedParticipantIds',
-              JSON.stringify({ [user.id]: p.id, ...lastSelectedParticipantIds })
+              JSON.stringify(lastSelectedParticipantIds)
             );
           }
         }
