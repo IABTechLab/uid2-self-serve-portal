@@ -18,6 +18,11 @@ export const ParticipantContext = createContext<ParticipantWithSetter>({
   setParticipant: () => {},
 });
 
+export type UserIdParticipantIdPair = {
+  userId: string;
+  participantId: string;
+};
+
 function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [participant, setParticipant] = useState<ParticipantDTO | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -28,20 +33,14 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  const storedUserId = localStorage.getItem('userId') ?? '';
+  const lastSelectedParticipantIds: UserIdParticipantIdPair[] =
+    JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '[]') ?? [];
+  const lastSelectedParticipantId = lastSelectedParticipantIds.find(
+    (id) => parseInt(id.userId, 10) === user?.id
+  )?.participantId;
 
-  // if a different user has logged in, we do not want to use the lastSelectedParticipantId
-  let parsedLastSelectedParticipantId;
-  if (parseInt(storedUserId, 10) === user?.id) {
-    parsedLastSelectedParticipantId = parseParticipantId(
-      localStorage.getItem('lastSelectedParticipantId') ?? ''
-    );
-  } else {
-    localStorage.removeItem('lastSelectedParticipantId');
-    localStorage.setItem('userId', user?.id.toString() || '');
-  }
-
-  const currentParticipantId = parsedParticipantId ?? parsedLastSelectedParticipantId;
+  const currentParticipantId =
+    parsedParticipantId ?? parseParticipantId(lastSelectedParticipantId) ?? '';
 
   useEffect(() => {
     const loadParticipant = async () => {
@@ -52,7 +51,16 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
-          localStorage.setItem('lastSelectedParticipantId', p.id.toString());
+          if (user) {
+            const userIdParticipantIdPair: UserIdParticipantIdPair = {
+              userId: user.id.toString(),
+              participantId: p.id.toString(),
+            };
+            localStorage.setItem(
+              'lastSelectedParticipantIds',
+              JSON.stringify(userIdParticipantIdPair)
+            );
+          }
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
