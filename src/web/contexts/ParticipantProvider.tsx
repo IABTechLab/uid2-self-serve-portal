@@ -13,6 +13,11 @@ export type ParticipantWithSetter = {
   participant: ParticipantDTO | null;
   setParticipant: (participant: ParticipantDTO) => void;
 };
+
+export type UserIdsParticipantIds = {
+  [key: string]: number;
+};
+
 export const ParticipantContext = createContext<ParticipantWithSetter>({
   participant: null,
   setParticipant: () => {},
@@ -28,12 +33,13 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  const lastSelectedParticipantIds =
-    JSON.parse(localStorage.getItem('lastSelectedParticipantIds') ?? '{}') ?? {};
+  const lastSelectedParticipantIds: UserIdsParticipantIds = (JSON.parse(
+    localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+  ) ?? {}) as UserIdsParticipantIds;
 
   let lastSelectedParticipantId;
   if (user) {
-    lastSelectedParticipantId = parseParticipantId(lastSelectedParticipantIds[user?.id]);
+    lastSelectedParticipantId = lastSelectedParticipantIds[user?.id];
   }
   const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantId ?? '';
 
