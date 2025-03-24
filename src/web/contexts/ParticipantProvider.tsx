@@ -33,21 +33,17 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  const lastSelectedParticipantIds = (JSON.parse(
-    localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
-  ) ?? {}) as UserIdParticipantId;
-
-  let lastSelectedParticipantId;
-  if (user) {
-    lastSelectedParticipantId = lastSelectedParticipantIds[user?.id];
-  }
-  const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantId ?? '';
-
   useEffect(() => {
     const loadParticipant = async () => {
       setIsLoading(true);
       try {
         if (user) {
+          const lastSelectedParticipantIds = (JSON.parse(
+            localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+          ) ?? {}) as UserIdParticipantId;
+
+          const lastSelectedParticipantId = user ? lastSelectedParticipantIds[user.id] : undefined;
+          const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantId ?? '';
           const p = currentParticipantId
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
@@ -66,8 +62,8 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
         setIsLoading(false);
       }
     };
-    if (!participant || currentParticipantId !== participant?.id) loadParticipant();
-  }, [user, participant, throwError, currentParticipantId]);
+    if (!participant) loadParticipant();
+  }, [user, participant, throwError]);
 
   const participantContext = useMemo(
     () => ({

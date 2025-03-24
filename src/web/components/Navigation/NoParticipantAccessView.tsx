@@ -19,10 +19,7 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
     const lastSelectedParticipantIds = (JSON.parse(
       localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
     ) ?? {}) as UserIdParticipantId;
-    let participantId;
-    if (user) {
-      participantId = lastSelectedParticipantIds[user?.id];
-    }
+    let participantId = user ? lastSelectedParticipantIds[user.id] : undefined;
     if (!participantId && user?.participants && user?.participants.length > 0) {
       participantId = user.participants[0].id;
     }

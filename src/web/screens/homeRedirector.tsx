@@ -9,17 +9,15 @@ export function HomeRedirector() {
   const navigate = useNavigate();
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const userId = LoggedInUser?.user?.id ?? null;
-  const lastSelectedParticipantIds = (JSON.parse(
-    localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
-  ) ?? {}) as UserIdParticipantId;
 
   useEffect(() => {
     const loadParticipant = async () => {
-      let lastSelectedParticipantId;
-      if (userId) {
-        lastSelectedParticipantId = lastSelectedParticipantIds[userId];
-      }
+      const userId = LoggedInUser?.user?.id ?? null;
+
+      const lastSelectedParticipantIds = (JSON.parse(
+        localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+      ) ?? {}) as UserIdParticipantId;
+      const lastSelectedParticipantId = userId ? lastSelectedParticipantIds[userId] : undefined;
 
       const currentParticipant = lastSelectedParticipantId
         ? await GetSelectedParticipant(lastSelectedParticipantId)
@@ -30,7 +28,7 @@ export function HomeRedirector() {
     if (!participantId) {
       loadParticipant();
     }
-  }, [navigate, participantId, userId, lastSelectedParticipantIds]);
+  }, [navigate, participantId]);
 
   return null;
 }
