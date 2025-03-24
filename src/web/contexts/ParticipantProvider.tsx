@@ -14,7 +14,7 @@ export type ParticipantWithSetter = {
   setParticipant: (participant: ParticipantDTO) => void;
 };
 
-export type UserIdsParticipantIds = {
+export type UserIdParticipantId = {
   [key: string]: number;
 };
 
@@ -35,7 +35,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   const lastSelectedParticipantIds = (JSON.parse(
     localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
-  ) ?? {}) as UserIdsParticipantIds;
+  ) ?? {}) as UserIdParticipantId;
 
   let lastSelectedParticipantId;
   if (user) {

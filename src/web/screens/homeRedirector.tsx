@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
-import { UserIdsParticipantIds } from '../contexts/ParticipantProvider';
+import { UserIdParticipantId } from '../contexts/ParticipantProvider';
 import { GetSelectedParticipant, GetUsersDefaultParticipant } from '../services/participant';
 
 export function HomeRedirector() {
@@ -12,7 +12,7 @@ export function HomeRedirector() {
   const userId = LoggedInUser?.user?.id ?? null;
   const lastSelectedParticipantIds = (JSON.parse(
     localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
-  ) ?? {}) as UserIdsParticipantIds;
+  ) ?? {}) as UserIdParticipantId;
 
   useEffect(() => {
     const loadParticipant = async () => {
