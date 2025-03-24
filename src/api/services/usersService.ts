@@ -194,9 +194,10 @@ export const inviteUserToParticipant = async (
   const existingUser = await findUserByEmail(userPartial.email);
   if (existingUser) {
     await addAndInviteUserToParticipant(existingUser, participant, userRoleId, traceId);
-
-    const kcAdminClient = await getKcAdminClient();
-    await assignApiParticipantMemberRole(kcAdminClient, existingUser.email);
+    if (existingUser.participants?.length === 0) {
+      const kcAdminClient = await getKcAdminClient();
+      await assignApiParticipantMemberRole(kcAdminClient, existingUser.email);
+    }
   } else {
     const { firstName, lastName, email } = userPartial;
     await createAndInviteKeycloakUser(firstName, lastName, email);
