@@ -194,6 +194,7 @@ export const inviteUserToParticipant = async (
   const existingUser = await findUserByEmail(userPartial.email);
   if (existingUser) {
     await addAndInviteUserToParticipant(existingUser, participant, userRoleId, traceId);
+    // role needs to be readded if existingUser does not currently belong to any participants
     if (existingUser.participants?.length === 0) {
       const kcAdminClient = await getKcAdminClient();
       await assignApiParticipantMemberRole(kcAdminClient, existingUser.email);
