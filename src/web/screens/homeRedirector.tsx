@@ -10,7 +10,7 @@ export function HomeRedirector() {
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
   const userId = LoggedInUser?.user?.id ?? null;
-  const lastSelectedParticipantIds: UserIdsParticipantIds = (JSON.parse(
+  const lastSelectedParticipantIds = (JSON.parse(
     localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
   ) ?? {}) as UserIdsParticipantIds;
 

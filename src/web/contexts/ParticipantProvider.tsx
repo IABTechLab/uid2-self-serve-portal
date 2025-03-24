@@ -33,7 +33,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const { participantId } = useParams();
   const parsedParticipantId = parseParticipantId(participantId);
 
-  const lastSelectedParticipantIds: UserIdsParticipantIds = (JSON.parse(
+  const lastSelectedParticipantIds = (JSON.parse(
     localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
   ) ?? {}) as UserIdsParticipantIds;
 

@@ -16,7 +16,7 @@ export function NoParticipantAccessView({ user }: NoParticipantAccessViewProps) 
   const location = useLocation();
 
   const onBackToParticipant = () => {
-    const lastSelectedParticipantIds: UserIdsParticipantIds = (JSON.parse(
+    const lastSelectedParticipantIds = (JSON.parse(
       localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
     ) ?? {}) as UserIdsParticipantIds;
     let participantId;
