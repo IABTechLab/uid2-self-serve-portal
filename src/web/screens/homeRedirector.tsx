@@ -9,11 +9,10 @@ export function HomeRedirector() {
   const navigate = useNavigate();
   const { participantId } = useParams();
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const userId = LoggedInUser?.user?.id ?? null;
 
   useEffect(() => {
     const loadParticipant = async () => {
-      const userId = LoggedInUser?.user?.id ?? null;
-
       const lastSelectedParticipantIds = (JSON.parse(
         localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
       ) ?? {}) as UserIdParticipantId;
@@ -28,7 +27,7 @@ export function HomeRedirector() {
     if (!participantId) {
       loadParticipant();
     }
-  }, [navigate, participantId]);
+  }, [navigate, participantId, userId]);
 
   return null;
 }

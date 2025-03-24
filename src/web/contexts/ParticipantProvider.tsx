@@ -63,7 +63,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
       }
     };
     if (!participant) loadParticipant();
-  }, [user, participant, throwError]);
+  }, [user, participant, parsedParticipantId, throwError]);
 
   const participantContext = useMemo(
     () => ({
