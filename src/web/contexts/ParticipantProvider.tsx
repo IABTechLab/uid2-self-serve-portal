@@ -43,21 +43,20 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
           ) ?? {}) as UserIdParticipantId;
 
-          const lastSelectedParticipantId = user ? lastSelectedParticipantIds[user.id] : undefined;
           if (!currentParticipantId) {
+            const lastSelectedParticipantId = lastSelectedParticipantIds[user.id];
             currentParticipantId = lastSelectedParticipantId;
           }
+
           const p = currentParticipantId
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
-          if (user) {
-            lastSelectedParticipantIds[user.id] = p.id;
-            localStorage.setItem(
-              'lastSelectedParticipantIds',
-              JSON.stringify(lastSelectedParticipantIds)
-            );
-          }
+          lastSelectedParticipantIds[user.id] = p.id;
+          localStorage.setItem(
+            'lastSelectedParticipantIds',
+            JSON.stringify(lastSelectedParticipantIds)
+          );
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
