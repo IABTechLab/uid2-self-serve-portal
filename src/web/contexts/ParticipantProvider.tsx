@@ -45,7 +45,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
 
           const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
 
-          const p = participantId
+          const p = currentParticipantId
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
