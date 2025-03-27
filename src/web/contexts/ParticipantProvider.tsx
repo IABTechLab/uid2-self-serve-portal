@@ -32,7 +32,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const user = LoggedInUser?.user ?? null;
   const { participantId } = useParams();
 
-  let currentParticipantId = parseParticipantId(participantId);
+  const parsedParticipantId = parseParticipantId(participantId);
 
   useEffect(() => {
     const loadParticipant = async () => {
@@ -43,11 +43,9 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
           ) ?? {}) as UserIdParticipantId;
 
-          if (!currentParticipantId) {
-            currentParticipantId = lastSelectedParticipantIds[user.id];
-          }
+          const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
 
-          const p = currentParticipantId
+          const p = participantId
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
@@ -63,8 +61,8 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
         setIsLoading(false);
       }
     };
-    if (!participant || currentParticipantId !== participant?.id) loadParticipant();
-  }, [user, participant, throwError, currentParticipantId]);
+    if (!participant || parsedParticipantId !== participant?.id) loadParticipant();
+  }, [user, participant, throwError, parsedParticipantId]);
 
   const participantContext = useMemo(
     () => ({
