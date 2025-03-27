@@ -13,6 +13,11 @@ export type ParticipantWithSetter = {
   participant: ParticipantDTO | null;
   setParticipant: (participant: ParticipantDTO) => void;
 };
+
+export type UserIdParticipantId = {
+  [key: string]: number;
+};
+
 export const ParticipantContext = createContext<ParticipantWithSetter>({
   participant: null,
   setParticipant: () => {},
@@ -26,23 +31,29 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   const throwError = useAsyncThrowError();
   const user = LoggedInUser?.user ?? null;
   const { participantId } = useParams();
-  const parsedParticipantId = parseParticipantId(participantId);
-  const parsedLastSelectedParticipantId = parseParticipantId(
-    localStorage.getItem('lastSelectedParticipantId') ?? ''
-  );
 
-  const currentParticipantId = parsedParticipantId ?? parsedLastSelectedParticipantId;
+  const parsedParticipantId = parseParticipantId(participantId);
 
   useEffect(() => {
     const loadParticipant = async () => {
       setIsLoading(true);
       try {
         if (user) {
+          const lastSelectedParticipantIds = (JSON.parse(
+            localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+          ) ?? {}) as UserIdParticipantId;
+
+          const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
+
           const p = currentParticipantId
             ? await GetSelectedParticipant(currentParticipantId)
             : await GetUsersDefaultParticipant();
           setParticipant(p);
-          localStorage.setItem('lastSelectedParticipantId', p.id.toString());
+          lastSelectedParticipantIds[user.id] = p.id;
+          localStorage.setItem(
+            'lastSelectedParticipantIds',
+            JSON.stringify(lastSelectedParticipantIds)
+          );
         }
       } catch (e: unknown) {
         if (e instanceof ApiError) throwError(e);
@@ -50,8 +61,8 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
         setIsLoading(false);
       }
     };
-    if (!participant || currentParticipantId !== participant?.id) loadParticipant();
-  }, [user, participant, throwError, currentParticipantId]);
+    if (!participant || parsedParticipantId !== participant?.id) loadParticipant();
+  }, [user, participant, throwError, parsedParticipantId]);
 
   const participantContext = useMemo(
     () => ({
