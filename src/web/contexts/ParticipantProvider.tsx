@@ -44,8 +44,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           ) ?? {}) as UserIdParticipantId;
 
           if (!currentParticipantId) {
-            const lastSelectedParticipantId = lastSelectedParticipantIds[user.id];
-            currentParticipantId = lastSelectedParticipantId;
+            currentParticipantId = lastSelectedParticipantIds[user.id];
           }
 
           const p = currentParticipantId
@@ -65,7 +64,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
       }
     };
     if (!participant || currentParticipantId !== participant?.id) loadParticipant();
-  }, [user, participant, currentParticipantId, throwError]);
+  }, [user, participant, throwError, currentParticipantId]);
 
   const participantContext = useMemo(
     () => ({
