@@ -1,18 +1,23 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { CurrentUserContext } from '../contexts/CurrentUserProvider';
+import { UserIdParticipantId } from '../contexts/ParticipantProvider';
 import { GetSelectedParticipant, GetUsersDefaultParticipant } from '../services/participant';
-import { parseParticipantId } from '../utils/urlHelpers';
 
 export function HomeRedirector() {
   const navigate = useNavigate();
   const { participantId } = useParams();
+  const { LoggedInUser } = useContext(CurrentUserContext);
+  const user = LoggedInUser?.user ?? null;
 
   useEffect(() => {
     const loadParticipant = async () => {
-      const lastSelectedParticipantId = parseParticipantId(
-        localStorage.getItem('lastSelectedParticipantId') ?? ''
-      );
+      const lastSelectedParticipantIds = (JSON.parse(
+        localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+      ) ?? {}) as UserIdParticipantId;
+      const lastSelectedParticipantId = user ? lastSelectedParticipantIds[user.id] : undefined;
+
       const currentParticipant = lastSelectedParticipantId
         ? await GetSelectedParticipant(lastSelectedParticipantId)
         : await GetUsersDefaultParticipant();
@@ -22,7 +27,7 @@ export function HomeRedirector() {
     if (!participantId) {
       loadParticipant();
     }
-  }, [navigate, participantId]);
+  }, [navigate, participantId, user]);
 
   return null;
 }
