@@ -26,11 +26,12 @@ import { ParticipantRequest, UserParticipantRequest } from '../../services/parti
 
 export const handleGetParticipantApiKeys = async (req: ParticipantRequest, res: Response) => {
   const { participant } = req;
+  const traceId = getTraceId(req);
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
 
-  const adminApiKeys = await getApiKeysBySite(participant.siteId);
+  const adminApiKeys = await getApiKeysBySite(participant.siteId, traceId);
   const enabledAdminApiKeys = adminApiKeys.filter((key) => !key.disabled);
   const apiKeys = await mapAdminApiKeysToApiKeyDTOs(enabledAdminApiKeys);
 
@@ -50,8 +51,8 @@ export const handleGetParticipantApiKey = async (req: ParticipantRequest, res: R
   if (!keyId) {
     return res.status(400).send('Key id is not set');
   }
-
-  const apiKey = await getApiKey(participant.siteId, keyId);
+  const traceId = getTraceId(req);
+  const apiKey = await getApiKey(participant.siteId, keyId, traceId);
   if (!apiKey) {
     return res.status(404).send('Could not find participants key with keyId');
   }
@@ -88,7 +89,7 @@ export const handleAddApiKey = async (req: UserParticipantRequest, res: Response
     auditTrailInsertObject,
     traceId,
     async () => {
-      return createApiKey(keyName, apiRoles, participant.siteId!);
+      return createApiKey(keyName, apiRoles, participant.siteId!, traceId);
     }
   );
 
@@ -101,6 +102,7 @@ const apiKeyEditInputSchema = z.object({
   newApiRoles: z.array(z.string()),
 });
 export const handleUpdateApiKey = async (req: UserParticipantRequest, res: Response) => {
+  const traceId = getTraceId(req);
   const { participant, user } = req;
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
@@ -108,12 +110,10 @@ export const handleUpdateApiKey = async (req: UserParticipantRequest, res: Respo
 
   const { keyId, newName, newApiRoles } = apiKeyEditInputSchema.parse(req.body);
 
-  const editedKey = await getApiKey(participant.siteId, keyId);
+  const editedKey = await getApiKey(participant.siteId, keyId, traceId);
   if (!editedKey) {
     return res.status(404).send('SiteId was invalid');
   }
-
-  const traceId = getTraceId(req);
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.ManageApiKey,
@@ -142,7 +142,7 @@ export const handleUpdateApiKey = async (req: UserParticipantRequest, res: Respo
 
     const apiKeyNameChanged = newName !== editedKey.name;
     if (apiKeyNameChanged) {
-      await renameApiKey(editedKey.contact, newName);
+      await renameApiKey(editedKey.contact, newName, traceId);
     }
 
     const apiKeyRolesChanged =
@@ -151,7 +151,7 @@ export const handleUpdateApiKey = async (req: UserParticipantRequest, res: Respo
         .sort()
         .join(',') !== newApiRoles.sort().join(',');
     if (apiKeyRolesChanged) {
-      await updateApiKeyRoles(editedKey.contact, newApiRoles);
+      await updateApiKeyRoles(editedKey.contact, newApiRoles, traceId);
     }
   });
   return res.sendStatus(200);
@@ -163,16 +163,15 @@ const apiKeyDeleteInputSchema = z.object({
 export const handleDeleteApiKey = async (req: UserParticipantRequest, res: Response) => {
   const { participant, user } = req;
   const { keyId } = apiKeyDeleteInputSchema.parse(req.body);
-
+  const traceId = getTraceId(req);
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
-  const apiKey = await getApiKey(participant.siteId, keyId);
+  const apiKey = await getApiKey(participant.siteId, keyId, traceId);
   if (!apiKey) {
     return res.status(404).send('SiteId was invalid');
   }
 
-  const traceId = getTraceId(req);
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.ManageApiKey,
@@ -187,7 +186,7 @@ export const handleDeleteApiKey = async (req: UserParticipantRequest, res: Respo
   );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
-    disableApiKey(apiKey.contact)
+    disableApiKey(apiKey.contact, traceId)
   );
 
   return res.sendStatus(200);

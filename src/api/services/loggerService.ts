@@ -3,7 +3,7 @@ import { injectable } from 'inversify';
 import winston from 'winston';
 
 import { SSP_APP_NAME } from '../envars';
-import { getTraceId, traceFormat } from '../helpers/loggingHelpers';
+import { getTraceId, traceFormat, TraceId } from '../helpers/loggingHelpers';
 
 @injectable()
 export class LoggerService {
@@ -33,12 +33,12 @@ export class LoggerService {
     return [new winston.transports.Console()];
   }
 
-  private info(message: string, traceId: string) {
-    this.logger.info(`${message}, [traceId=${traceId}]`);
+  private info(message: string, traceId: TraceId) {
+    this.logger.info(`${message}, [traceId=${traceId.traceId}]`);
   }
 
-  private error(message: string, traceId: string) {
-    this.logger.error(`${message}, [traceId=${traceId}]`);
+  private error(message: string, traceId: TraceId) {
+    this.logger.error(`${message}, [traceId=${traceId.traceId}]`);
   }
 
   public getLogger(req: Request) {

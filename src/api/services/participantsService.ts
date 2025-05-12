@@ -9,7 +9,7 @@ import { Participant, ParticipantApprovalPartial, ParticipantDTO } from '../enti
 import { ParticipantType } from '../entities/ParticipantType';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
-import { getTraceId } from '../helpers/loggingHelpers';
+import { getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import {
   ClientType,
@@ -96,7 +96,7 @@ export const getParticipantsBySiteIds = async (siteIds: number[]) => {
 export const addSharingParticipants = async (
   participantSiteId: number,
   siteIds: number[],
-  traceId: string
+  traceId: TraceId
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId, traceId);
   const newSharingSet = new Set([...sharingListResponse.allowed_sites, ...siteIds]);
@@ -113,7 +113,7 @@ export const addSharingParticipants = async (
 export const deleteSharingParticipants = async (
   participantSiteId: number,
   siteIds: number[],
-  traceId: string
+  traceId: TraceId
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId, traceId);
   const newSharingList = sharingListResponse.allowed_sites.filter(
@@ -264,14 +264,14 @@ export const updateParticipant = async (participant: Participant, req: UserParti
       await updateParticipantApiRoles(participant, apiRoles, trx);
     });
     const types = await getParticipantTypesByIds(participantTypeIds);
-    setSiteClientTypes({ siteId: participant.siteId, types });
+    setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
   });
 };
 
 export const UpdateSharingTypes = async (
   participantSiteId: number,
   types: ClientType[],
-  traceId: string
+  traceId: TraceId
 ): Promise<SharingListResponse> => {
   const sharingListResponse = await getSharingList(participantSiteId, traceId);
   return updateSharingList(
@@ -283,7 +283,7 @@ export const UpdateSharingTypes = async (
   );
 };
 
-export const sendParticipantApprovedEmail = async (users: User[], traceId: string) => {
+export const sendParticipantApprovedEmail = async (users: User[], traceId: TraceId) => {
   const emailService = createEmailService();
   const emailArgs: EmailArgs = {
     subject: 'Your account has been confirmed',

@@ -1,5 +1,6 @@
 import { ApiRoleDTO } from '../entities/ApiRole';
 import { Participant } from '../entities/Participant';
+import { TraceId } from '../helpers/loggingHelpers';
 import { getApiKeyById } from './adminServiceClient';
 import { ApiKeyDTO, CreatedApiKeyDTO, mapAdminApiKeysToApiKeyDTOs } from './adminServiceHelpers';
 
@@ -35,8 +36,12 @@ export const validateApiRoles = (keyRoles: string[], allowedRoles: ApiRoleDTO[])
   return true;
 };
 
-export const getApiKey = async (siteId: number, keyId: string): Promise<ApiKeyDTO | undefined> => {
-  const apiKeyAdmin = await getApiKeyById(keyId);
+export const getApiKey = async (
+  siteId: number,
+  keyId: string,
+  traceId: TraceId
+): Promise<ApiKeyDTO | undefined> => {
+  const apiKeyAdmin = await getApiKeyById(keyId, traceId);
 
   const isApiKeyAssociatedWithSite = apiKeyAdmin?.site_id === siteId;
   if (!isApiKeyAssociatedWithSite) return undefined;

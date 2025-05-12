@@ -5,6 +5,7 @@ import { User, UserDTO } from '../entities/User';
 import { UserRole, UserRoleDTO } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
+import { TraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
@@ -125,7 +126,7 @@ export const getAllUsersFromParticipant = async (participant: Participant) => {
 export const sendInviteEmailToExistingUser = (
   participantName: string,
   existingUser: UserDTO,
-  traceId: string
+  traceId: TraceId
 ) => {
   const emailService = createEmailService();
   const emailArgs: EmailArgs = {
@@ -157,7 +158,7 @@ const addAndInviteUserToParticipant = async (
   existingUser: UserDTO,
   participant: ParticipantDTO,
   userRoleId: number,
-  traceId: string
+  traceId: TraceId
 ) => {
   await UserToParticipantRole.query().insert({
     userId: existingUser.id,
@@ -189,7 +190,7 @@ export const inviteUserToParticipant = async (
   userPartial: UserPartialDTO,
   participant: ParticipantDTO,
   userRoleId: number,
-  traceId: string
+  traceId: TraceId
 ) => {
   const existingUser = await findUserByEmail(userPartial.email);
   if (existingUser) {

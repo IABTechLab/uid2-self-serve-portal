@@ -13,10 +13,11 @@ import { ParticipantRequest, UserParticipantRequest } from '../../services/parti
 
 export async function handleGetParticipantAppNames(req: ParticipantRequest, res: Response) {
   const { participant } = req;
+  const traceId = getTraceId(req);
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
-  const participantSite = await getSite(participant.siteId);
+  const participantSite = await getSite(participant.siteId, traceId);
   return res.status(200).json(participantSite.app_names ?? []);
 }
 
@@ -43,7 +44,7 @@ export async function handleSetParticipantAppNames(req: UserParticipantRequest, 
   const updatedSite = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,
     traceId,
-    async () => setSiteAppNames(participant.siteId!, appNames)
+    async () => setSiteAppNames(participant.siteId!, appNames, traceId)
   );
 
   return res.status(200).json(updatedSite.app_names);

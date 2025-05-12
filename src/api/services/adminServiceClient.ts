@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { z } from 'zod';
 
 import { ParticipantSchema } from '../entities/Participant';
@@ -11,7 +11,7 @@ import {
   SSP_OKTA_CLIENT_ID,
   SSP_OKTA_CLIENT_SECRET,
 } from '../envars';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, TraceId } from '../helpers/loggingHelpers';
 import {
   AccessToken,
   AdminSiteDTO,
@@ -65,6 +65,47 @@ const adminServiceClient = axios.create({
   },
 });
 
+const createTracedClient = (traceId: TraceId) => {
+  return {
+    get: <T>(url: string, config?: AxiosRequestConfig) =>
+      adminServiceClient.get<T>(url, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          traceId: traceId.traceId,
+          'x-amzn-trace-id': traceId.amazonTraceId,
+        },
+      }),
+    post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+      adminServiceClient.post<T>(url, data, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          traceId: traceId.traceId,
+          'x-amzn-trace-id': traceId.amazonTraceId,
+        },
+      }),
+    put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+      adminServiceClient.put<T>(url, data, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          traceId: traceId.traceId,
+          'x-amzn-trace-id': traceId.amazonTraceId,
+        },
+      }),
+    delete: <T>(url: string, config?: AxiosRequestConfig) =>
+      adminServiceClient.delete<T>(url, {
+        ...config,
+        headers: {
+          ...config?.headers,
+          traceId: traceId.traceId,
+          'x-amzn-trace-id': traceId.amazonTraceId,
+        },
+      }),
+  };
+};
+
 adminServiceClient.interceptors.request.use(async (config) => {
   const updated = config;
   if (SSP_OKTA_AUTH_DISABLED === 'false') {
@@ -80,12 +121,11 @@ const DEFAULT_SHARING_SETTINGS: Pick<SharingListResponse, 'allowed_sites' | 'all
 
 export const getSharingList = async (
   siteId: number,
-  traceId: string
+  traceId: TraceId
 ): Promise<SharingListResponse> => {
+  const client = createTracedClient(traceId);
   try {
-    const response = await adminServiceClient.get<SharingListResponse>(
-      `/api/sharing/list/${siteId}`
-    );
+    const response = await client.get<SharingListResponse>(`/api/sharing/list/${siteId}`);
     return response.data.allowed_sites
       ? response.data
       : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
@@ -104,17 +144,15 @@ export const updateSharingList = async (
   hash: number,
   siteList: number[],
   typeList: ClientType[],
-  traceId: string
+  traceId: TraceId
 ): Promise<SharingListResponse> => {
+  const client = createTracedClient(traceId);
   try {
-    const response = await adminServiceClient.post<SharingListResponse>(
-      `/api/sharing/list/${siteId}`,
-      {
-        allowed_sites: siteList,
-        allowed_types: typeList,
-        hash,
-      }
-    );
+    const response = await client.post<SharingListResponse>(`/api/sharing/list/${siteId}`, {
+      allowed_sites: siteList,
+      allowed_types: typeList,
+      hash,
+    });
     return response.data.allowed_sites
       ? response.data
       : { ...response.data, ...DEFAULT_SHARING_SETTINGS };
@@ -125,36 +163,53 @@ export const updateSharingList = async (
   }
 };
 
-export const getSiteList = async (): Promise<AdminSiteDTO[]> => {
-  const response = await adminServiceClient.get<AdminSiteDTO[]>('/api/site/list');
+export const getSiteList = async (traceId: TraceId): Promise<AdminSiteDTO[]> => {
+  const client = createTracedClient(traceId);
+  const response = await client.get<AdminSiteDTO[]>('/api/site/list');
   return response.data;
 };
 
-export const getSite = async (siteId: number): Promise<AdminSiteDTO> => {
-  const response = await adminServiceClient.get<AdminSiteDTO>(`/api/site/${siteId}`);
+export const getSite = async (siteId: number, traceId: TraceId): Promise<AdminSiteDTO> => {
+  const client = createTracedClient(traceId);
+  const response = await client.get<AdminSiteDTO>(`/api/site/${siteId}`);
   return response.data;
 };
 
-export const getApiKeysBySite = async (siteId: number): Promise<ApiKeyAdmin[]> => {
-  const response = await adminServiceClient.get<ApiKeyAdmin[]>(`/api/client/list/${siteId}`);
+export const getApiKeysBySite = async (
+  siteId: number,
+  traceId: TraceId
+): Promise<ApiKeyAdmin[]> => {
+  const client = createTracedClient(traceId);
+  const response = await client.get<ApiKeyAdmin[]>(`/api/client/list/${siteId}`);
   return response.data;
 };
 
-export const getApiKeyById = async (keyId: string): Promise<ApiKeyAdmin> => {
-  const response = await adminServiceClient.get<ApiKeyAdmin>(`/api/client/keyId`, {
+export const getApiKeyById = async (keyId: string, traceId: TraceId): Promise<ApiKeyAdmin> => {
+  const client = createTracedClient(traceId);
+  const response = await client.get<ApiKeyAdmin>(`/api/client/keyId`, {
     params: { keyId },
   });
   return response.data;
 };
 
-export const renameApiKey = async (contact: string, newName: string): Promise<void> => {
-  await adminServiceClient.post('/api/client/rename', null, {
+export const renameApiKey = async (
+  contact: string,
+  newName: string,
+  traceId: TraceId
+): Promise<void> => {
+  const client = createTracedClient(traceId);
+  await client.post('/api/client/rename', null, {
     params: { contact, newName },
   });
 };
 
-export const updateApiKeyRoles = async (contact: string, apiRoles: string[]): Promise<void> => {
-  await adminServiceClient.post('/api/client/roles', null, {
+export const updateApiKeyRoles = async (
+  contact: string,
+  apiRoles: string[],
+  traceId: TraceId
+): Promise<void> => {
+  const client = createTracedClient(traceId);
+  await client.post('/api/client/roles', null, {
     params: {
       contact,
       roles: apiRoles.join(', '),
@@ -162,28 +217,29 @@ export const updateApiKeyRoles = async (contact: string, apiRoles: string[]): Pr
   });
 };
 
-export const disableApiKey = async (contact: string): Promise<void> => {
-  await adminServiceClient.post('/api/client/disable', null, {
+export const disableApiKey = async (contact: string, traceId: TraceId): Promise<void> => {
+  const client = createTracedClient(traceId);
+  await client.post('/api/client/disable', null, {
     params: {
       contact,
     },
   });
 };
 
-export const getVisibleSiteList = async (): Promise<AdminSiteDTO[]> => {
-  const siteList = await getSiteList();
-  return siteList.filter((x) => x.visible !== false);
+export const getVisibleSiteList = async (traceId: TraceId): Promise<AdminSiteDTO[]> => {
+  const client = createTracedClient(traceId);
+  const siteList = await client.get<AdminSiteDTO[]>('/api/site/list');
+  return siteList.data.filter((x) => x.visible !== false);
 };
 
 export const getKeyPairsList = async (
   siteId: number,
-  traceId: string,
+  traceId: TraceId,
   showDisabled?: boolean
 ): Promise<KeyPairDTO[]> => {
+  const client = createTracedClient(traceId);
   try {
-    const response = await adminServiceClient.get<KeyPairDTO[]>(
-      `/api/v2/sites/${siteId}/client-side-keypairs`
-    );
+    const response = await client.get<KeyPairDTO[]>(`/api/v2/sites/${siteId}/client-side-keypairs`);
     const allKeyPairs = response.data;
     if (!showDisabled) {
       return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
@@ -202,8 +258,13 @@ export const getKeyPairsList = async (
   }
 };
 
-export const addKeyPair = async (siteId: number, name: string): Promise<KeyPairDTO> => {
-  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/add', {
+export const addKeyPair = async (
+  siteId: number,
+  name: string,
+  traceId: TraceId
+): Promise<KeyPairDTO> => {
+  const client = createTracedClient(traceId);
+  const response = await client.post<KeyPairDTO>('/api/client_side_keypairs/add', {
     site_id: siteId,
     name,
   });
@@ -213,9 +274,11 @@ export const addKeyPair = async (siteId: number, name: string): Promise<KeyPairD
 export const updateKeyPair = async (
   subscriptionId: string,
   name: string,
+  traceId: TraceId,
   disabled: boolean = false
 ): Promise<KeyPairDTO> => {
-  const response = await adminServiceClient.post<KeyPairDTO>('/api/client_side_keypairs/update', {
+  const client = createTracedClient(traceId);
+  const response = await client.post<KeyPairDTO>('/api/client_side_keypairs/update', {
     subscription_id: subscriptionId,
     disabled,
     name,
@@ -226,9 +289,11 @@ export const updateKeyPair = async (
 export const addSite = async (
   name: string,
   description: string,
-  types: string
+  types: string,
+  traceId: TraceId
 ): Promise<SiteCreationDTO> => {
-  const response = await adminServiceClient.post<SiteCreationDTO>('/api/site/add', null, {
+  const client = createTracedClient(traceId);
+  const response = await client.post<SiteCreationDTO>('/api/site/add', null, {
     params: {
       name,
       description,
@@ -247,25 +312,28 @@ const ParticipantUpdatePartial = ParticipantSchema.pick({
 });
 
 export const setSiteClientTypes = async (
-  participantUpdatePartial: z.infer<typeof ParticipantUpdatePartial>
+  participantUpdatePartial: z.infer<typeof ParticipantUpdatePartial>,
+  traceId: TraceId
 ): Promise<void> => {
+  const client = createTracedClient(traceId);
   const adminTypes = mapClientTypesToAdminEnums(participantUpdatePartial.types).join(',');
-  const response = await adminServiceClient.post('/api/site/set-types', null, {
+  await client.post('/api/site/set-types', null, {
     params: {
       id: participantUpdatePartial.siteId,
       types: adminTypes,
     },
   });
-  return response.data;
 };
 
 export const createApiKey = async (
   name: string,
   roles: string[],
-  siteId: number
+  siteId: number,
+  traceId: TraceId
 ): Promise<CreatedApiKeyDTO> => {
   const rolesString = roles.join(', ');
-  const response = await adminServiceClient.post<CreatedApiKeyDTO>('/api/client/add', null, {
+  const client = createTracedClient(traceId);
+  const response = await client.post<CreatedApiKeyDTO>('/api/client/add', null, {
     params: {
       name,
       roles: rolesString,
@@ -278,9 +346,11 @@ export const createApiKey = async (
 
 export const setSiteDomainNames = async (
   siteId: number,
-  domainNames: string[]
+  domainNames: string[],
+  traceId: TraceId
 ): Promise<AdminSiteDTO> => {
-  const response = await adminServiceClient.post(`/api/site/domain_names?=id=${siteId}`, {
+  const client = createTracedClient(traceId);
+  const response = await client.post<AdminSiteDTO>(`/api/site/domain_names?=id=${siteId}`, {
     domain_names: domainNames,
   });
   return response.data;
@@ -288,9 +358,11 @@ export const setSiteDomainNames = async (
 
 export const setSiteAppNames = async (
   siteId: number,
-  appNames: string[]
+  appNames: string[],
+  traceId: TraceId
 ): Promise<AdminSiteDTO> => {
-  const response = await adminServiceClient.post(`/api/site/app_names?=id=${siteId}`, {
+  const client = createTracedClient(traceId);
+  const response = await client.post<AdminSiteDTO>(`/api/site/app_names?=id=${siteId}`, {
     app_names: appNames,
   });
   return response.data;

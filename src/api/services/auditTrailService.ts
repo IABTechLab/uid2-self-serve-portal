@@ -1,7 +1,7 @@
 import { AuditTrail, AuditTrailDTO, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, TraceId } from '../helpers/loggingHelpers';
 
 export type InsertAuditTrailDTO = Omit<AuditTrailDTO, 'id' | 'succeeded' | 'updated_at'>;
 
@@ -22,7 +22,7 @@ export const constructAuditTrailObject = (
 
 export const performAsyncOperationWithAuditTrail = async <T>(
   auditTrail: InsertAuditTrailDTO,
-  traceId: string,
+  traceId: TraceId,
   operation: () => Promise<T>
 ) => {
   const insertedAuditTrail = await AuditTrail.query().insert({ ...auditTrail, succeeded: false });
