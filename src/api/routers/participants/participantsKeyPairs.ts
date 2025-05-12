@@ -55,7 +55,7 @@ export const handleAddKeyPair = async (req: UserParticipantRequest, res: Respons
   const keyPairs = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,
     traceId,
-    async () => addKeyPair(participant.siteId!, name)
+    async () => addKeyPair(participant.siteId!, name, traceId)
   );
 
   return res.status(201).json(keyPairs);
@@ -85,7 +85,7 @@ export const handleUpdateKeyPair = async (req: UserParticipantRequest, res: Resp
   const updatedKeyPair = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,
     traceId,
-    async () => updateKeyPair(subscriptionId, name)
+    async () => updateKeyPair(subscriptionId, name, traceId, disabled)
   );
 
   return res.status(201).json(updatedKeyPair);
@@ -117,7 +117,7 @@ export const handleDeleteKeyPair = async (req: UserParticipantRequest, res: Resp
   );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
-    updateKeyPair(subscriptionId, disabledKeyPairName, disabled)
+    updateKeyPair(subscriptionId, disabledKeyPairName, traceId)
   );
 
   return res.sendStatus(200);

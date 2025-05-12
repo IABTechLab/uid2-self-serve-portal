@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { getTraceId } from '../helpers/loggingHelpers';
 import {
   canBeSharedWith,
   convertSiteToSharingSiteDTO,
@@ -14,7 +15,8 @@ export function createSitesRouter() {
   const sitesRouter = express.Router();
 
   sitesRouter.get('/unattached/', isUid2SupportCheck, async (_req, res) => {
-    const allSitesPromise = getSiteList();
+    const traceId = getTraceId(_req);
+    const allSitesPromise = getSiteList(traceId);
     const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
     const siteDTOs = await mapAdminSitesToSiteDTOs(
@@ -24,7 +26,8 @@ export function createSitesRouter() {
   });
 
   sitesRouter.get('/available', async (_req, res) => {
-    const visibleSites = await getVisibleSiteList();
+    const traceId = getTraceId(_req);
+    const visibleSites = await getVisibleSiteList(traceId);
     const availableSites = visibleSites.filter(canBeSharedWith);
     const matchedParticipants = await getParticipantsBySiteIds(availableSites.map((s) => s.id));
     const availableSharingSites: SharingSiteDTO[] = availableSites.map((site: AdminSiteDTO) =>
@@ -34,7 +37,8 @@ export function createSitesRouter() {
   });
 
   sitesRouter.get('/', async (_req, res) => {
-    const visibleSites = await getVisibleSiteList();
+    const traceId = getTraceId(_req);
+    const visibleSites = await getVisibleSiteList(traceId);
     const matchedParticipants = await getParticipantsBySiteIds(visibleSites.map((s) => s.id));
     const sharingSites: SharingSiteDTO[] = visibleSites.map((site: AdminSiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)

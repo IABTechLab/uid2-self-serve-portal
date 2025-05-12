@@ -1,7 +1,7 @@
 import sgMail from '@sendgrid/mail';
 
 import { SSP_SEND_GRID_API_KEY } from '../envars';
-import { getLoggers } from '../helpers/loggingHelpers';
+import { getLoggers, TraceId } from '../helpers/loggingHelpers';
 import _templateIdMapping from '../templateIdMapping.json';
 import { EmailArgs, UID2Sender } from './emailTypes';
 
@@ -27,7 +27,7 @@ const findTemplate = (template: string): string => {
 
 export const sendEmail = async (
   { to, subject, templateData, template }: EmailArgs,
-  traceId: string
+  traceId: TraceId
 ) => {
   const message = {
     from: UID2Sender,

@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { z } from 'zod';
 
 import { User } from '../entities/User';
-import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
 import { isSuperUser, isUid2Support } from './userRoleMiddleware';
@@ -10,7 +10,7 @@ import { isSuperUser, isUid2Support } from './userRoleMiddleware';
 export const isUserBelongsToParticipant = async (
   email: string,
   participantId: number,
-  traceId: string
+  traceId: TraceId
 ) => {
   const userWithParticipants = await User.query()
     .findOne({ email, deleted: 0 })
@@ -32,7 +32,7 @@ export const isUserBelongsToParticipant = async (
 export const canUserAccessParticipant = async (
   requestingUserEmail: string,
   participantId: number,
-  traceId: string
+  traceId: TraceId
 ) => {
   return (
     (await isUid2Support(requestingUserEmail)) ||

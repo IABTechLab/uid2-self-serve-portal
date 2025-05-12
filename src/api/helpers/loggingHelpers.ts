@@ -42,12 +42,12 @@ const errorLogger = winston.createLogger({
 });
 
 const infoLoggerWrapper = {
-  info: (message: string, traceId: string) => logger.info(`${message}, [traceId=${traceId}]`),
+  info: (message: string, traceId: TraceId) => logger.info(`${message}, [traceId=${traceId}]`),
 };
 
 const errorLoggerWrapper = {
-  error: (message: string, traceId: string) =>
-    errorLogger.error(`${message}, [traceId=${traceId}]`),
+  error: (message: string, traceId: TraceId) =>
+    errorLogger.error(`${message}, [traceId=${traceId.traceId}]`),
 };
 
 export const getLoggers = () => {
@@ -72,6 +72,14 @@ export const getErrorLoggingMiddleware = () =>
     headerBlacklist: headersToRedact,
   });
 
-export const getTraceId = (request: Request): string => {
-  return request?.headers?.traceId?.toString() ?? '';
+export interface TraceId {
+  traceId: string;
+  amazonTraceId: string;
+}
+
+export const getTraceId = (request: Request): TraceId => {
+  return {
+    traceId: request?.headers?.traceId?.toString() ?? '',
+    amazonTraceId: request?.headers?.xAmznTraceId?.toString() ?? '',
+  };
 };
