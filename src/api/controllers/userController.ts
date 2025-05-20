@@ -21,12 +21,17 @@ import {
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
+import { UserParticipantRequest } from '../services/participantsService';
 import {
   SelfResendInvitationSchema,
   UpdateUserRoleIdSchema,
   UserService,
 } from '../services/userService';
-import { SelfResendInviteRequest, UserRequest } from '../services/usersService';
+import {
+  getAllUsersFromParticipant,
+  SelfResendInviteRequest,
+  UserRequest,
+} from '../services/usersService';
 
 @controller('/users')
 export class UserController {
@@ -122,11 +127,19 @@ export class UserController {
   }
 
   @httpDelete('/:userId')
-  public async removeUser(@request() req: UserRequest, @response() res: Response): Promise<void> {
-    const { user } = req;
+  public async removeUser(
+    @request() req: UserParticipantRequest,
+    @response() res: Response
+  ): Promise<void> {
+    const { user, participant } = req;
 
     if (req.auth?.payload?.email === user?.email) {
       res.status(403).send([{ message: 'You do not have permission to remove yourself.' }]);
+      return;
+    }
+    const usersForParticipant = await getAllUsersFromParticipant(participant!);
+    if (usersForParticipant.length === 1 && usersForParticipant[0].id === user?.id) {
+      res.status(403).send([{ message: "You cannot remove a Participant's only user." }]);
       return;
     }
 
