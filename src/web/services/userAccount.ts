@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { KeycloakProfile } from 'keycloak-js';
 import log from 'loglevel';
 import { z } from 'zod';
@@ -88,7 +88,9 @@ export async function RemoveUser(id: number, participantId: number) {
   try {
     return await axios.delete(`/participants/${participantId}/users/${id}`);
   } catch (e: unknown) {
-    throw backendError(e, 'Could not remove user');
+    const message = `${e instanceof AxiosError ? e.response?.data[0]?.message ?? 'Could not remove user' : 'Could not remove user'}`;
+    const error = backendError(e, message);
+    throw error;
   }
 }
 
