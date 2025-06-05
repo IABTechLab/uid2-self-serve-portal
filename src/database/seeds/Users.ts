@@ -9,26 +9,30 @@ import { CreateParticipant } from './Participants';
 type UserType = ModelObject<User>;
 
 const sampleParticipant = {
-  name: 'Awaiting Approval',
+  name: 'Test Participant',
   allowSharing: true,
+  type: 'Publisher',
+  siteId: 999,
+  apiRoleNames: ['GENERATOR', 'SHARER'],
   completedRecommendations: false,
-  crmAgreementNumber: '12345678',
+  crmAgreementNumber: '86753099',
+  dateApproved: new Date('2023-08-15 18:48:16.2000000'),
 };
-const sampleData: Optional<UserType, 'id'>[] = [
+const sampleUserData: Optional<UserType, 'id'>[] = [
   {
-    email: 'test@example.com',
+    email: 'test_user@example.com',
     firstName: 'Test',
     lastName: 'User',
     phone: '+61298765432',
-    jobFunction: UserJobFunction.DA,
-    acceptedTerms: false,
+    jobFunction: UserJobFunction.Engineering,
+    acceptedTerms: true,
   },
 ];
 
 export async function seed(knex: Knex): Promise<void> {
   const existingUsers = await knex('users').whereIn(
     'email',
-    sampleData.map((d) => d.email)
+    sampleUserData.map((d) => d.email)
   );
   const existingParticipants = await knex('participants').where((p) =>
     p.whereLike('name', sampleParticipant.name)
@@ -68,18 +72,25 @@ export async function seed(knex: Knex): Promise<void> {
     'MAPPER',
     'SHARER',
   ]);
-  await knex('users').insert(sampleData);
+  await knex('users').insert(sampleUserData);
 
   // Insert user <-> participant mapping
   const newUsers = await knex('users').whereIn(
     'email',
-    sampleData.map((d) => d.email)
+    sampleUserData.map((d) => d.email)
   );
   await knex('usersToParticipantRoles').insert(
     newUsers.map((user: UserType) => ({
       userId: user.id,
       participantId,
-      userRoleId: UserRoleId.Admin,
+      userRoleId: UserRoleId.UID2Support,
+    }))
+  );
+  await knex('usersToParticipantRoles').insert(
+    newUsers.map((user: UserType) => ({
+      userId: user.id,
+      participantId,
+      userRoleId: UserRoleId.SuperUser,
     }))
   );
 }

@@ -35,7 +35,7 @@ docker compose up
 
 This will pull the needed docker images and start the stack. **IMPORTANT:** The first time you run this, the mssql database container will take a while to start. If you interrupt it during this process, the container may end up in a bad state. If this happens, you'll need to `docker compose down` and then manually delete the persistent volume first, then start over.
 
-If you get errors like `Login failed for user 'sa'. Reason: Failed to open the explicitly specified database 'keycloak'`, the Keycloak container probably tried to start before the database was ready. Run the following command to try again:
+If you get errors like `Login failed for user 'sa'. Reason: Failed to open the explicitly specified database 'keycloak'` or `dependency failed to start: container uid2_selfserve_mssql is unhealthy`, the Keycloak container probably tried to start before the database was ready. Run the following command to try again:
 
 ```
 docker compose restart keycloak
@@ -210,17 +210,13 @@ Instructs ESLint to try to fix as many issues as possible, see https://eslint.or
 
 The following steps describe the minimal steps required to successfully log in to the portal UI.
 
+1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
 1. Set up Docker, as described above: [Docker](README.md#docker)
 1. Set up your `.env` file per [Environment Variables](README.md#environment-variables)
 1. Run the following to install dependencies:
    ```
    npm install
    ```
-1. Run the following to start the API and React front-end:
-   ```
-   npm run dev
-   ```
-   Successfully running this will result in the self-serve-portal opening in the browser.
 1. Run the following to build the database schema:
    ```
    npm run knex:migrate:latest
@@ -229,16 +225,19 @@ The following steps describe the minimal steps required to successfully log in t
    ```
    npm run knex:seed:run
    ```
-1. Create an account in the UI by clicking `Request Account`. You can use a fake email address since we use [MailHog](https://github.com/mailhog/MailHog) to capture emails and store them locally. Regardless, using the [example.com](https://en.wikipedia.org/wiki/Example.com) domain is encouraged.
-1. Go to local MailHog at http://localhost:18025/ and you will see an email from `noreply@unifiedid.com` with the subject `Verify email`
-1. Open the email and Click `Verify Email`
-1. Fill in the form however you want and submit the form
-1. Connect to the database server `localhost,11433` using the credentials in [docker-compose.yml](docker-compose.yml) under `KC_DB_USERNAME` and `KC_DB_PASSWORD`
-1. In the `uid2_selfserve` database, observe that `dbo.users` now contains a row with with the details you just filled out.
-1. Assign yourself the `api-participant-member` role by following these steps: [Assign Role to a Particular User](./KeycloakAdvancedSetup.md#assign-role-to-a-particular-user)
-1. Run the Admin service locally by following [Connecting to local Admin service](#connecting-to-local-admin-service)
-1. Optionally give your user access to the [UID2 Support Screens/Routes](#uid2-support-screensroutes)
-1. Return to the UI and you should be good to go!
+1. Ensure that the Keycloak Docker is running. It often attempts to start before the keycloack database has been populated.
+1. Run the following to start the API and React front-end:
+   ```
+   npm run dev
+   ```
+   Successfully running this will result in the self-serve-portal opening in the browser.
+   You may need to refresh the page once as an error often occurs on the first run.
+1. A test user is created automatically in in the seed data but you must set a password. Go to http://localhost:3000/ and click the `Forgot Password` button.
+1. Enter the following test email address: `test_user@example.com` and click `Request Password Reset`
+1. Go to local MailHog at http://localhost:18025/ and you will see an email from `noreply@unifiedid.com` with the subject `Reset Password`
+1. Open the email and Click `Reset Password`
+1. Choose a password
+1. Log into the Self Service Portal (http://localhost:3000/)
 
 #### Notes for Mac OSX Development:
 

@@ -3,6 +3,7 @@ import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
 import { Participant } from '../../api/entities/Participant';
+import { CompleteRecommendations } from '../../web/services/participant';
 
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
@@ -17,6 +18,7 @@ const sampleData: Optional<
     apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
     crmAgreementNumber: '12345678',
+    dateApproved: new Date('2023-08-15 18:48:16.2000000'),
   },
   {
     name: 'DSP example',
@@ -26,6 +28,7 @@ const sampleData: Optional<
     apiRoleNames: ['ID_READER', 'SHARER'],
     completedRecommendations: false,
     crmAgreementNumber: '23456789',
+    dateApproved: new Date('2023-08-15 18:48:16.2000000'),
   },
   {
     name: 'DP example',
@@ -35,6 +38,7 @@ const sampleData: Optional<
     apiRoleNames: ['MAPPER', 'SHARER'],
     completedRecommendations: false,
     crmAgreementNumber: '34567890',
+    dateApproved: new Date('2023-08-15 18:48:16.2000000'),
   },
   {
     name: 'Advertiser example',
@@ -44,6 +48,7 @@ const sampleData: Optional<
     apiRoleNames: ['MAPPER', 'SHARER'],
     completedRecommendations: false,
     crmAgreementNumber: '45678901',
+    dateApproved: new Date('2023-08-15 18:48:16.2000000'),
   },
   {
     name: 'AwaitingSigning example',
@@ -52,6 +57,7 @@ const sampleData: Optional<
     apiRoleNames: ['GENERATOR', 'SHARER'],
     completedRecommendations: false,
     crmAgreementNumber: '56789012',
+    dateApproved: new Date('2023-08-15 18:48:16.2000000'),
   },
 ];
 
@@ -68,6 +74,8 @@ export async function CreateParticipant(
     .insert({
       name: details.name,
       siteId: details.siteId,
+      dateApproved: details.dateApproved,
+      crmAgreementNumber: details.crmAgreementNumber,
     })
     .returning('id');
 
