@@ -86,11 +86,4 @@ export async function seed(knex: Knex): Promise<void> {
       userRoleId: UserRoleId.UID2Support,
     }))
   );
-  await knex('usersToParticipantRoles').insert(
-    newUsers.map((user: UserType) => ({
-      userId: user.id,
-      participantId,
-      userRoleId: UserRoleId.SuperUser,
-    }))
-  );
 }

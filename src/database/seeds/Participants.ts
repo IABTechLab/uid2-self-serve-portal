@@ -3,7 +3,6 @@ import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
 import { Participant } from '../../api/entities/Participant';
-import { CompleteRecommendations } from '../../web/services/participant';
 
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<
