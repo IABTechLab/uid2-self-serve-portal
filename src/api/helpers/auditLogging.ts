@@ -97,9 +97,7 @@ const setNestedValue = (obj: Record<string, unknown>, path: string[], value: unk
   let current = obj;
   for (let i = 0; i < path.length - 1; i++) {
     const part = path[i];
-    if (!current[part]) {
-      current[part] = {};
-    }
+    current[part] ??= {};
     current = current[part] as Record<string, unknown>;
   }
   current[path[path.length - 1]] = value;
@@ -228,7 +226,7 @@ export const auditTraceFormat = winston.format((info: Logform.TransformableInfo)
   const timestamp = info.timestamp as string;
   const meta = info.meta as RequestMeta | undefined;
   const userInfo = meta?.req?.headers?.authorization
-    ? extractUserFromAuth(meta.req.headers.authorization as string)
+    ? extractUserFromAuth(meta.req.headers.authorization)
     : null;
   const actor = extractActor(userInfo, meta);
 

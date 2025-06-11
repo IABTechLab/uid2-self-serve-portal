@@ -1,5 +1,5 @@
-import { auditTraceFormat, convertToSnakeCase } from '../helpers/auditLogging';
 import winston from 'winston';
+import { auditTraceFormat, convertToSnakeCase } from '../helpers/auditLogging';
 
 describe('audit log format', () => {
   it('should format audit log correctly for a GET request', () => {
