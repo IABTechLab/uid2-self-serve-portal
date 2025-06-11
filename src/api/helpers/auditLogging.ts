@@ -125,29 +125,26 @@ export const extractConfiguredFields = (
 ): Record<string, unknown> => {
   if (!config || !data || typeof data !== 'object') return {} as Record<string, unknown>;
 
-  return config.reduce(
-    (acc, fieldConfig) => {
-      if (typeof fieldConfig === 'string') {
-        // Handle simple field paths
-        const value = (data as Record<string, unknown>)[fieldConfig];
-        if (value !== undefined) {
-          acc[fieldConfig] = value;
-        }
-      } else {
-        // Handle nested objects with field filtering
-        const { path, fields } = fieldConfig;
-        const pathParts = path.split('.');
-        const targetObj = getNestedValue(data, pathParts);
-
-        if (targetObj && typeof targetObj === 'object') {
-          const filtered = extractFieldsFromObject(targetObj, fields);
-          setNestedValue(acc, pathParts, filtered);
-        }
+  return config.reduce((acc, fieldConfig) => {
+    if (typeof fieldConfig === 'string') {
+      // Handle simple field paths
+      const value = (data as Record<string, unknown>)[fieldConfig];
+      if (value !== undefined) {
+        acc[fieldConfig] = value;
       }
-      return acc;
-    },
-    {} as Record<string, unknown>
-  );
+    } else {
+      // Handle nested objects with field filtering
+      const { path, fields } = fieldConfig;
+      const pathParts = path.split('.');
+      const targetObj = getNestedValue(data, pathParts);
+
+      if (targetObj && typeof targetObj === 'object') {
+        const filtered = extractFieldsFromObject(targetObj, fields);
+        setNestedValue(acc, pathParts, filtered);
+      }
+    }
+    return acc;
+  }, {} as Record<string, unknown>);
 };
 
 const getAuditConfig = (path: string): AuditFieldConfig => {
@@ -196,13 +193,10 @@ const toSnakeCase = (str: string): string => {
 };
 
 export const convertToSnakeCase = (obj: Record<string, unknown>): Record<string, unknown> => {
-  return Object.entries(obj).reduce(
-    (acc, [key, value]) => {
-      acc[toSnakeCase(key)] = value;
-      return acc;
-    },
-    {} as Record<string, unknown>
-  );
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    acc[toSnakeCase(key)] = value;
+    return acc;
+  }, {} as Record<string, unknown>);
 };
 
 export const createAuditLogData = (
@@ -247,7 +241,10 @@ const auditLoggerFormat = () => {
     winston.format.timestamp(),
     winston.format.json(),
     auditTraceFormat,
-    winston.format.printf(({ message }) => message)
+    winston.format.printf((info) => {
+      const { message } = info as { message: string };
+      return message;
+    })
   );
 };
 
