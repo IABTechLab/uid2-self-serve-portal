@@ -1,4 +1,5 @@
 import winston from 'winston';
+
 import { auditTraceFormat, convertToSnakeCase } from '../helpers/auditLogging';
 
 describe('audit log format', () => {
