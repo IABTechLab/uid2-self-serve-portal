@@ -6,8 +6,18 @@ import { SSP_APP_NAME, SSP_IS_DEVELOPMENT } from '../envars';
 
 export const traceFormat = winston.format.printf(({ timestamp, label, level, message, meta }) => {
   const basicString = `${timestamp} [${label}] ${level}: ${message}`;
+  const metaWithTypes = meta as {
+    req?: {
+      headers?: {
+        traceId?: string;
+        [key: string]: any;
+      };
+    };
+    [key: string]: any;
+  };
+
   const requestDetails = meta
-    ? ` [traceId=${meta.req.headers.traceId ?? ''}] metadata=${JSON.stringify(meta)}`
+    ? ` [traceId=${metaWithTypes?.req?.headers?.traceId ?? ''}] metadata=${JSON.stringify(meta)}`
     : '';
   return basicString + requestDetails;
 });
