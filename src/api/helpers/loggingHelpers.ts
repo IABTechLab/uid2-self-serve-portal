@@ -10,10 +10,10 @@ export const traceFormat = winston.format.printf(({ timestamp, label, level, mes
     req?: {
       headers?: {
         traceId?: string;
-        [key: string]: any;
+        [key: string]: unknown;
       };
     };
-    [key: string]: any;
+    [key: string]: unknown;
   };
 
   const requestDetails = meta
