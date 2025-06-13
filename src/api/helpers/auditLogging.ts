@@ -206,7 +206,7 @@ export const createAuditLogData = (
 ) => {
   const path = meta?.req?.path ?? '';
   const config = getAuditConfig(path);
-  const trace_id = meta?.req?.headers?.['X-Amzn-Trace-Id'] ?? meta?.req?.headers?.traceId ?? '';
+  const traceId = meta?.req?.headers?.['X-Amzn-Trace-Id'] ?? meta?.req?.headers?.traceId ?? '';
 
   return {
     timestamp,
@@ -215,8 +215,8 @@ export const createAuditLogData = (
     status: meta?.res?.statusCode ?? 0,
     method: meta?.req?.method ?? '',
     endpoint: path,
-    trace_id: trace_id,
-    uid_trace_id: meta?.req?.headers?.['UID-Trace-Id'] ?? trace_id,
+    trace_id: traceId,
+    uid_trace_id: meta?.req?.headers?.['UID-Trace-Id'] ?? traceId,
     actor: actor
       ? JSON.stringify(convertToSnakeCase(actor as unknown as Record<string, unknown>))
       : 'anonymous',
