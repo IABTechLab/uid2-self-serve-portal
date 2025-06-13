@@ -2,6 +2,7 @@ import expressWinston from 'express-winston';
 import winston, { Logform } from 'winston';
 
 import { SSP_APP_NAME } from '../envars';
+import { queryParam } from 'inversify-express-utils';
 
 interface RequestMeta {
   req: {
@@ -210,18 +211,18 @@ export const createAuditLogData = (
 
   return {
     timestamp,
-    log_type: 'audit',
+    logType: 'audit',
     source: SSP_APP_NAME,
     status: meta?.res?.statusCode ?? 0,
     method: meta?.req?.method ?? '',
     endpoint: path,
-    trace_id: traceId,
-    uid_trace_id: meta?.req?.headers?.['UID-Trace-Id'] ?? traceId,
+    traceId: traceId,
+    uidTraceId: meta?.req?.headers?.['UID-Trace-Id'] ?? traceId,
     actor: actor
       ? JSON.stringify(convertToSnakeCase(actor as unknown as Record<string, unknown>))
       : 'anonymous',
-    query_params: extractConfiguredFields(meta?.req?.query ?? EMPTY_RECORD, config.queryParams),
-    request_body: extractConfiguredFields(meta?.req?.body ?? EMPTY_RECORD, config.requestBody),
+    queryParams: extractConfiguredFields(meta?.req?.query ?? EMPTY_RECORD, config.queryParams),
+    requestBody: extractConfiguredFields(meta?.req?.body ?? EMPTY_RECORD, config.requestBody),
   };
 };
 
