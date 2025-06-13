@@ -2,7 +2,6 @@ import expressWinston from 'express-winston';
 import winston, { Logform } from 'winston';
 
 import { SSP_APP_NAME } from '../envars';
-import { queryParam } from 'inversify-express-utils';
 
 interface RequestMeta {
   req: {
