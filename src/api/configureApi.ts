@@ -26,12 +26,8 @@ import {
   SSP_KK_SSL_RESOURCE,
   SSP_WEB_BASE_URL,
 } from './envars';
-import {
-  getErrorLoggingMiddleware,
-  getLoggers,
-  getLoggingMiddleware,
-  getTraceId,
-} from './helpers/loggingHelpers';
+import { getAuditLoggingMiddleware } from './helpers/auditLogging';
+import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participants/participantsRouter';
@@ -101,7 +97,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
-  app.use(getLoggingMiddleware());
+  app.use(getAuditLoggingMiddleware());
 
   const { logger, errorLogger } = getLoggers();
   if (useMetrics) {

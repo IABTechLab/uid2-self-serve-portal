@@ -8,7 +8,7 @@ import { Participant } from '../../entities/Participant';
 import { User, UserCreationPartial } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
-import { getTraceId } from '../../helpers/loggingHelpers';
+import { getTraceId, TraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
 import {
@@ -33,7 +33,8 @@ import {
 } from './participantClasses';
 
 export async function validateParticipantCreationRequest(
-  participantRequest: z.infer<typeof ParticipantCreationRequest>
+  participantRequest: z.infer<typeof ParticipantCreationRequest>,
+  traceId: TraceId
 ) {
   const existingParticipant = await Participant.query().findOne(
     'name',
@@ -46,7 +47,7 @@ export async function validateParticipantCreationRequest(
     // check for duplicate site in admin
     const { siteName } = participantRequest;
     // this is inefficient but we'd need a new endpoint in admin to search by name
-    const sites = await getSiteList();
+    const sites = await getSiteList(traceId);
     if (sites.filter((site) => site.name === siteName).length > 0) {
       return 'Requested site name already exists';
     }
@@ -86,7 +87,7 @@ async function createParticipant(
   requestorEmail: string,
   participantRequest: z.infer<typeof ParticipantCreationRequest>,
   user: z.infer<typeof UserCreationPartial>,
-  traceId: string
+  traceId: TraceId
 ) {
   const types = await getParticipantTypesByIds(participantRequest.participantTypes);
 
@@ -99,10 +100,10 @@ async function createParticipant(
       description: '',
       types: adminSiteTypes,
     });
-    site = await addSite(newSite.name, newSite.description, newSite.types);
+    site = await addSite(newSite.name, newSite.description, newSite.types, traceId);
   } else {
     // existing site.  Update client types
-    setSiteClientTypes({ siteId: participantRequest.siteId, types });
+    setSiteClientTypes({ siteId: participantRequest.siteId, types }, traceId);
   }
   const apiRoles = await ApiRole.query().findByIds(participantRequest.apiRoles);
   const parsedParticipantRequest = ParticipantCreationAndApprovalPartial.parse({
@@ -157,7 +158,7 @@ export async function handleCreateParticipant(req: ParticipantRequest, res: Resp
   const participantRequest = ParticipantCreationRequest.parse(req.body);
   const traceId = getTraceId(req);
 
-  const validationError = await validateParticipantCreationRequest(participantRequest);
+  const validationError = await validateParticipantCreationRequest(participantRequest, traceId);
   if (validationError) {
     return res.status(400).send(validationError);
   }

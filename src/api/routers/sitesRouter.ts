@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { getTraceId } from '../helpers/loggingHelpers';
 import {
   canBeSharedWith,
   convertSiteToSharingSiteDTO,
@@ -13,8 +14,9 @@ import { getAttachedSiteIDs, getParticipantsBySiteIds } from '../services/partic
 export function createSitesRouter() {
   const sitesRouter = express.Router();
 
-  sitesRouter.get('/unattached/', isUid2SupportCheck, async (_req, res) => {
-    const allSitesPromise = getSiteList();
+  sitesRouter.get('/unattached/', isUid2SupportCheck, async (req, res) => {
+    const traceId = getTraceId(req);
+    const allSitesPromise = getSiteList(traceId);
     const attachedSitesPromise = getAttachedSiteIDs();
     const [allSites, attachedSites] = await Promise.all([allSitesPromise, attachedSitesPromise]);
     const siteDTOs = await mapAdminSitesToSiteDTOs(
@@ -23,8 +25,9 @@ export function createSitesRouter() {
     return res.status(200).json(siteDTOs);
   });
 
-  sitesRouter.get('/available', async (_req, res) => {
-    const visibleSites = await getVisibleSiteList();
+  sitesRouter.get('/available', async (req, res) => {
+    const traceId = getTraceId(req);
+    const visibleSites = await getVisibleSiteList(traceId);
     const availableSites = visibleSites.filter(canBeSharedWith);
     const matchedParticipants = await getParticipantsBySiteIds(availableSites.map((s) => s.id));
     const availableSharingSites: SharingSiteDTO[] = availableSites.map((site: AdminSiteDTO) =>
@@ -33,8 +36,9 @@ export function createSitesRouter() {
     return res.status(200).json(availableSharingSites);
   });
 
-  sitesRouter.get('/', async (_req, res) => {
-    const visibleSites = await getVisibleSiteList();
+  sitesRouter.get('/', async (req, res) => {
+    const traceId = getTraceId(req);
+    const visibleSites = await getVisibleSiteList(traceId);
     const matchedParticipants = await getParticipantsBySiteIds(visibleSites.map((s) => s.id));
     const sharingSites: SharingSiteDTO[] = visibleSites.map((site: AdminSiteDTO) =>
       convertSiteToSharingSiteDTO(site, matchedParticipants)

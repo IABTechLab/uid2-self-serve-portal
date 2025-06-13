@@ -13,10 +13,11 @@ import { ParticipantRequest, UserParticipantRequest } from '../../services/parti
 
 export async function handleGetParticipantDomainNames(req: ParticipantRequest, res: Response) {
   const { participant } = req;
+  const traceId = getTraceId(req);
   if (!participant?.siteId) {
     return siteIdNotSetError(req, res);
   }
-  const participantSite = await getSite(participant.siteId);
+  const participantSite = await getSite(participant.siteId, traceId);
   return res.status(200).json(participantSite.domain_names ?? []);
 }
 
@@ -44,7 +45,7 @@ export async function handleSetParticipantDomainNames(req: UserParticipantReques
   const updatedSite = await performAsyncOperationWithAuditTrail(
     auditTrailInsertObject,
     traceId,
-    async () => setSiteDomainNames(participant.siteId!, domainNames)
+    async () => setSiteDomainNames(participant.siteId!, domainNames, traceId)
   );
 
   return res.status(200).json(updatedSite.domain_names);
