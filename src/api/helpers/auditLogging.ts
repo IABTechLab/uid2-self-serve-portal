@@ -215,7 +215,7 @@ export const createAuditLogData = (
     status: meta?.res?.statusCode ?? 0,
     method: meta?.req?.method ?? '',
     endpoint: path,
-    traceId: traceId,
+    traceId,
     uidTraceId: meta?.req?.headers?.['UID-Trace-Id'] ?? traceId,
     actor: actor
       ? JSON.stringify(convertToSnakeCase(actor as unknown as Record<string, unknown>))
