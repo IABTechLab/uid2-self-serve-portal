@@ -33,6 +33,7 @@ interface Actor {
   userAgent: string;
   type: string;
   email: string;
+  id: string;
   sub: string;
   roles: string[];
 }
@@ -181,6 +182,7 @@ const extractActor = (userInfo: UserInfo | null, meta?: RequestMeta): Actor | nu
     userAgent: meta?.req?.headers?.['user-agent'] ?? '',
     type: userInfo.email ? 'user' : meta?.req?.headers?.['user-agent'] ?? '',
     email: userInfo.email,
+    id: userInfo.email,
     sub: userInfo.sub,
     roles: userInfo.roles,
   };
@@ -204,21 +206,22 @@ export const createAuditLogData = (
 ) => {
   const path = meta?.req?.path ?? '';
   const config = getAuditConfig(path);
+  const trace_id = meta?.req?.headers?.['X-Amzn-Trace-Id'] ?? meta?.req?.headers?.traceId ?? '';
 
   return {
     timestamp,
-    logType: 'audit',
+    log_type: 'audit',
     source: SSP_APP_NAME,
     status: meta?.res?.statusCode ?? 0,
     method: meta?.req?.method ?? '',
     endpoint: path,
-    traceId: meta?.req?.headers?.traceId ?? '',
-    xAmznTraceId: meta?.req?.headers?.['x-amzn-trace-id'] ?? '',
+    trace_id: trace_id,
+    uid_trace_id: meta?.req?.headers?.['UID-Trace-Id'] ?? trace_id,
     actor: actor
       ? JSON.stringify(convertToSnakeCase(actor as unknown as Record<string, unknown>))
       : 'anonymous',
-    queryParams: extractConfiguredFields(meta?.req?.query ?? EMPTY_RECORD, config.queryParams),
-    requestBody: extractConfiguredFields(meta?.req?.body ?? EMPTY_RECORD, config.requestBody),
+    query_params: extractConfiguredFields(meta?.req?.query ?? EMPTY_RECORD, config.queryParams),
+    request_body: extractConfiguredFields(meta?.req?.body ?? EMPTY_RECORD, config.requestBody),
   };
 };
 
