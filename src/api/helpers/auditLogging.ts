@@ -190,14 +190,12 @@ const extractActor = (userInfo: UserInfo | null, meta?: RequestMeta): Actor | No
 				id: userInfo.email,
 				sub: userInfo.sub,
 				roles: userInfo.roles,
-			}
+			};
 		}
-		else {
-			return {
-				ip: meta?.req?.ip ?? '',
-				userAgent: '',
-			}
-		}
+		return {
+			ip: meta?.req?.ip ?? '',
+			userAgent: '',
+		};
 };
 
 const toSnakeCase = (str: string): string => {
