@@ -1,10 +1,12 @@
 /* eslint-disable camelcase */
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import crypto from 'crypto';
 import { z } from 'zod';
 
 import { ParticipantSchema } from '../entities/Participant';
 import { ParticipantTypeSchema } from '../entities/ParticipantType';
 import {
+  SERVICE_INSTANCE_ID_PREFIX,
   SSP_ADMIN_SERVICE_BASE_URL,
   SSP_OKTA_AUTH_DISABLED,
   SSP_OKTA_AUTH_SERVER_URL,
@@ -66,6 +68,7 @@ const adminServiceClient = axios.create({
 });
 
 const createTracedClient = (traceId: TraceId) => {
+  const serviceId = `${SERVICE_INSTANCE_ID_PREFIX}:${crypto.randomUUID()}`;
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
       adminServiceClient.get<T>(url, {
@@ -73,7 +76,8 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'x-amzn-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.amazonTraceId,
+          'uid-service-id': serviceId,
         },
       }),
     post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
@@ -82,7 +86,8 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'x-amzn-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.amazonTraceId,
+          'uid-service-id': serviceId,
         },
       }),
     put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
@@ -91,7 +96,8 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'x-amzn-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.amazonTraceId,
+          'uid-service-id': serviceId,
         },
       }),
     delete: <T>(url: string, config?: AxiosRequestConfig) =>
@@ -100,7 +106,8 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'x-amzn-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.amazonTraceId,
+          'uid-service-id': serviceId,
         },
       }),
   };
