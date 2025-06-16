@@ -233,7 +233,7 @@ describe('actual winston logging', () => {
     const expectedLogEntry = {
       timestamp: '2025-05-12T05:21:36.948Z',
       logType: 'audit',
-      source: 'uid2-ssportal',
+      source: 'ssportal-dev',
       status: 304,
       method: 'GET',
       endpoint: '/api/participants/7/apiRoles',
