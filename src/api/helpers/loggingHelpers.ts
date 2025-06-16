@@ -70,12 +70,6 @@ export const getLoggers = () => {
 
 const headersToRedact = ['authorization'];
 
-export const getLoggingMiddleware = () =>
-  expressWinston.logger({
-    winstonInstance: logger,
-    headerBlacklist: headersToRedact,
-  });
-
 export const getErrorLoggingMiddleware = () =>
   expressWinston.logger({
     winstonInstance: errorLogger,

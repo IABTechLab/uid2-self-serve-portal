@@ -38,6 +38,11 @@ interface Actor {
   roles: string[];
 }
 
+interface NoActor {
+	ip: string;
+	userAgent: string;
+}
+
 interface AuditFieldConfig {
   queryParams?: string[];
   requestBody?: (string | { path: string; fields: string[] })[];
@@ -175,17 +180,22 @@ const extractUserFromAuth = (authHeader?: string): UserInfo | null => {
   }
 };
 
-const extractActor = (userInfo: UserInfo | null, meta?: RequestMeta): Actor | null => {
-  if (!userInfo) return null;
-  return {
-    ip: meta?.req?.ip ?? '',
-    userAgent: meta?.req?.headers?.['user-agent'] ?? '',
-    type: userInfo.email ? 'user' : meta?.req?.headers?.['user-agent'] ?? '',
-    email: userInfo.email,
-    id: userInfo.email,
-    sub: userInfo.sub,
-    roles: userInfo.roles,
-  };
+const extractActor = (userInfo: UserInfo | null, meta?: RequestMeta): Actor | NoActor => {
+		if(userInfo) {
+			return {
+				ip: meta?.req?.ip ?? '',
+				userAgent: meta?.req?.headers?.['user-agent'] ?? '',
+				type: userInfo.email ? 'user' : meta?.req?.headers?.['user-agent'] ?? '',
+				email: userInfo.email,
+				id: userInfo.email,
+				sub: userInfo.sub,
+				roles: userInfo.roles,
+			};
+		}
+		return {
+			ip: meta?.req?.ip ?? '',
+			userAgent: '',
+		};
 };
 
 const toSnakeCase = (str: string): string => {
@@ -202,7 +212,7 @@ export const convertToSnakeCase = (obj: Record<string, unknown>): Record<string,
 export const createAuditLogData = (
   timestamp: string,
   meta: RequestMeta | undefined,
-  actor: Actor | null
+  actor: Actor | NoActor
 ) => {
   const path = meta?.req?.path ?? '';
   const config = getAuditConfig(path);
@@ -217,9 +227,7 @@ export const createAuditLogData = (
     endpoint: path,
     traceId,
     uidTraceId: meta?.req?.headers?.['UID-Trace-Id'] ?? traceId,
-    actor: actor
-      ? JSON.stringify(convertToSnakeCase(actor as unknown as Record<string, unknown>))
-      : 'anonymous',
+    actor: JSON.stringify(convertToSnakeCase(actor as unknown as Record<string, unknown>)),
     queryParams: extractConfiguredFields(meta?.req?.query ?? EMPTY_RECORD, config.queryParams),
     requestBody: extractConfiguredFields(meta?.req?.body ?? EMPTY_RECORD, config.requestBody),
   };
