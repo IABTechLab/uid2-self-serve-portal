@@ -68,7 +68,7 @@ const adminServiceClient = axios.create({
 });
 
 const createTracedClient = (traceId: TraceId) => {
-  const serviceId = `${SERVICE_INSTANCE_ID_PREFIX}:${crypto.randomUUID()}`;
+  const instanceId = `${SERVICE_INSTANCE_ID_PREFIX}:${crypto.randomUUID()}`;
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
       adminServiceClient.get<T>(url, {
@@ -77,7 +77,7 @@ const createTracedClient = (traceId: TraceId) => {
           ...config?.headers,
           traceId: traceId.traceId,
           'uid-trace-id': traceId.amazonTraceId,
-          'uid-service-id': serviceId,
+          'uid-instance-id': instanceId,
         },
       }),
     post: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
@@ -87,7 +87,7 @@ const createTracedClient = (traceId: TraceId) => {
           ...config?.headers,
           traceId: traceId.traceId,
           'uid-trace-id': traceId.amazonTraceId,
-          'uid-service-id': serviceId,
+          'uid-instance-id': instanceId,
         },
       }),
     put: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
@@ -97,7 +97,7 @@ const createTracedClient = (traceId: TraceId) => {
           ...config?.headers,
           traceId: traceId.traceId,
           'uid-trace-id': traceId.amazonTraceId,
-          'uid-service-id': serviceId,
+          'uid-instance-id': instanceId,
         },
       }),
     delete: <T>(url: string, config?: AxiosRequestConfig) =>
@@ -107,7 +107,7 @@ const createTracedClient = (traceId: TraceId) => {
           ...config?.headers,
           traceId: traceId.traceId,
           'uid-trace-id': traceId.amazonTraceId,
-          'uid-service-id': serviceId,
+          'uid-instance-id': instanceId,
         },
       }),
   };
