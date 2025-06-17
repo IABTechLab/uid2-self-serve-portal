@@ -17,26 +17,61 @@ const config: StorybookConfig = {
   addons: [
     '@storybook/addon-webpack5-compiler-babel',
     '@storybook/addon-docs',
-    {
-      name: '@storybook/addon-styling-webpack',
-      options: {
-        rules: [
-          {
-            test: /\.s[ac]ss$/i,
-            use: [
-              'style-loader',
-              'css-loader',
-              {
-                loader: 'sass-loader',
-                options: { implementation: require.resolve('sass') },
-              },
-            ],
-          },
-        ],
-      },
-    },
+    // {
+    //   name: '@storybook/addon-styling-webpack',
+    //   options: {
+    //     rules: [
+    //       {
+    //         test: /\.s[ac]ss$/i,
+    //         use: [
+    //           'style-loader',
+    //           'css-loader',
+    //           {
+    //             loader: 'sass-loader',
+    //             options: { implementation: require.resolve('sass') },
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // },
   ],
-  staticDirs: ['../public']
+  staticDirs: ['../public'],
+
+	 webpackFinal: async (config) => {
+    config.resolve = config.resolve || {};
+    config.resolve.fallback = {
+      ...(config.resolve.fallback || {}),
+      path: require.resolve('path-browserify'),
+    };
+
+	// 	config.module?.rules?.push(
+  //   {
+  //     test: /\.s[ac]ss$/i,
+  //     use: [
+  //       'style-loader',
+  //       'css-loader',
+  //       {
+  //         loader: 'sass-loader',
+  //         options: {
+  //           implementation: require.resolve('sass'),
+  //         },
+  //       },
+  //     ],
+  //   },
+  //   {
+  //     test: /\.css$/i,
+  //     use: ['style-loader', 'css-loader'],
+  //   }
+  // );
+
+		// config.module?.rules?.push({
+		// 	test: /\.css$/i,
+		// 	use: ['style-loader', 'css-loader'],
+  	// });
+
+    return config;
+  },
 };
 
 export default config;

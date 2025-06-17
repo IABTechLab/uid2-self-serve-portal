@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';

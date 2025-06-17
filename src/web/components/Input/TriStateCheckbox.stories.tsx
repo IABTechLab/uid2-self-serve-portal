@@ -1,5 +1,5 @@
 import { CheckedState } from '@radix-ui/react-checkbox';
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { TriStateCheckbox, TriStateCheckboxState } from './TriStateCheckbox';
 

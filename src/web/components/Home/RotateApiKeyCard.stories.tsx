@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 
-import { Generator, Mapper } from '../ApiKeyManagement/KeyHelper.spec';
+import { Generator, Mapper } from '../ApiKeyManagement/KeyHelper';
 import RotateApiKeyCard from './RotateApiKeyCard';
 
 const meta: Meta<typeof RotateApiKeyCard> = {

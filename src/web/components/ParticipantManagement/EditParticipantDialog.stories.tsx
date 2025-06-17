@@ -1,8 +1,8 @@
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { UserJobFunction } from '../../../api/entities/User';
-import { allApiRoles } from '../ApiKeyManagement/KeyHelper.spec';
+import { allApiRoles } from '../ApiKeyManagement/KeyHelper';
 import EditParticipantDialog from './EditParticipantDialog';
 
 const meta: Meta<typeof EditParticipantDialog> = {

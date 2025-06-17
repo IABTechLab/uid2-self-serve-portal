@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { composeStories } from '@storybook/react';
+import { composeStories } from '@storybook/react-webpack5';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';

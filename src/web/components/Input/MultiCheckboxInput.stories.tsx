@@ -1,4 +1,4 @@
-import { Meta, StoryFn, StoryObj } from '@storybook/react';
+import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
