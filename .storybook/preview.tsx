@@ -8,7 +8,7 @@ const preview: Preview = {
     (Story) => {
       configureFontAwesomeLibrary();
       return (
-        <div className='app'>
+        <div id="root" className='app'>
           <BrowserRouter>
             <Story />
           </BrowserRouter>

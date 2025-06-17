@@ -16,25 +16,7 @@ const config: StorybookConfig = {
 
   addons: [
     '@storybook/addon-webpack5-compiler-babel',
-    '@storybook/addon-docs',
-    // {
-    //   name: '@storybook/addon-styling-webpack',
-    //   options: {
-    //     rules: [
-    //       {
-    //         test: /\.s[ac]ss$/i,
-    //         use: [
-    //           'style-loader',
-    //           'css-loader',
-    //           {
-    //             loader: 'sass-loader',
-    //             options: { implementation: require.resolve('sass') },
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // },
+    '@storybook/addon-docs'
   ],
   staticDirs: ['../public'],
 
@@ -45,32 +27,27 @@ const config: StorybookConfig = {
       path: require.resolve('path-browserify'),
     };
 
-	// 	config.module?.rules?.push(
-  //   {
-  //     test: /\.s[ac]ss$/i,
-  //     use: [
-  //       'style-loader',
-  //       'css-loader',
-  //       {
-  //         loader: 'sass-loader',
-  //         options: {
-  //           implementation: require.resolve('sass'),
-  //         },
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     test: /\.css$/i,
-  //     use: ['style-loader', 'css-loader'],
-  //   }
-  // );
+		config.module?.rules?.push(
+    {
+      test: /\.s[ac]ss$/i,
+      use: [
+        'style-loader',
+        'css-loader',
+        {
+          loader: 'sass-loader',
+          options: {
+            implementation: require.resolve('sass'),
+          },
+        },
+      ],
+    },
+    {
+      test: /\.css$/i,
+      use: ['style-loader', 'css-loader'],
+    }
+  );
 
-		// config.module?.rules?.push({
-		// 	test: /\.css$/i,
-		// 	use: ['style-loader', 'css-loader'],
-  	// });
-
-    return config;
+  	return config;
   },
 };
 
