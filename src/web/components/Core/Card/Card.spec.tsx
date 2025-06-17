@@ -1,4 +1,4 @@
-import { composeStories } from '@storybook/react-webpack5';
+import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 
 import * as stories from './Card.stories';
