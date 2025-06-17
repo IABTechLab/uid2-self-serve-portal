@@ -3,7 +3,6 @@ import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import ApiRolesCell from './ApiRolesCell';
 import { allApiRoles, Bidder, Generator, Mapper } from './KeyHelper';
 
-
 const meta: Meta<typeof ApiRolesCell> = {
   component: ApiRolesCell,
   title: 'API Management/API Roles Cell',

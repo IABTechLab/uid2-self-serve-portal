@@ -31,4 +31,3 @@ export const Bidder: ApiRoleDTO = {
 export const Sharer: ApiRoleDTO = { id: 4, roleName: 'SHARER', externalName: 'Sharer', order: 3 };
 
 export const allApiRoles = [Mapper, Generator, Bidder, Sharer];
-
