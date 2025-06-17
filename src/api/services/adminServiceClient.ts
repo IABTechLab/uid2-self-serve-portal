@@ -68,7 +68,7 @@ const adminServiceClient = axios.create({
 });
 
 const createTracedClient = (traceId: TraceId) => {
-  const instanceId = `${SERVICE_INSTANCE_ID_PREFIX}:${crypto.randomUUID()}`;
+  const instanceId = `${SERVICE_INSTANCE_ID_PREFIX}`;
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
       adminServiceClient.get<T>(url, {
