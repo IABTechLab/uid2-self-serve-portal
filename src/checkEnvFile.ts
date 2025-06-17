@@ -2,7 +2,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-const checkEnvFile = (): void => {
+const checkEnvFile = () => {
   const envFilePath = path.join(process.cwd(), '.env');
 
   try {
