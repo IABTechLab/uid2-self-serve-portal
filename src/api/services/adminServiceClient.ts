@@ -76,7 +76,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
@@ -86,7 +86,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
@@ -96,7 +96,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
@@ -106,7 +106,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
