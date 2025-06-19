@@ -1,7 +1,6 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-	console.log('creating user table migration');
   await knex.schema.createTable('users', (table) => {
     table.increments('id').primary();
     table.string('email', 256).unique();
