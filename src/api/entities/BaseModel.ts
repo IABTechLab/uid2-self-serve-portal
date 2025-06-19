@@ -17,7 +17,6 @@ export class BaseModel extends Model {
   static get modelPaths() {
     return [__dirname];
   }
-
   static get idColumn() {
     return 'id';
   }
