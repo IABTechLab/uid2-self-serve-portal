@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-import { Configure } from '../database/SelfServeDatabase.ts';
+import { Configure } from '../database/SelfServeDatabase';
 import { configureAndStartApi } from './configureApi';
 
 Configure();
