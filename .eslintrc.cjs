@@ -116,6 +116,16 @@ module.exports = {
       },
     ],
     'simple-import-sort/exports': 'error',
+		'import/extensions': [
+  		'error',
+  		'ignorePackages',
+  		{
+				ts: 'always',
+				tsx: 'never',
+				js: 'never',
+				jsx: 'never',
+  		},
+],
     'testing-library/consistent-data-testid': [
       'error',
       {
