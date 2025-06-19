@@ -1,6 +1,6 @@
 import type { Knex } from 'knex';
 
-import { SSP_DB_HOST, SSP_DB_PASSWORD, SSP_DB_PORT, SSP_DB_USER } from './src/api/envars';
+import { SSP_DB_HOST, SSP_DB_PASSWORD, SSP_DB_PORT, SSP_DB_USER } from './src/api/envars.ts';
 
 const config: Knex.Config = {
   client: 'mssql',
@@ -13,6 +13,7 @@ const config: Knex.Config = {
   },
   migrations: {
     directory: './src/database/migrations',
+		extension: 'ts'
   },
   seeds: {
     directory: './src/database/seeds',

@@ -17,6 +17,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "typeRoots": ["./node_modules/@types", "./src/typings"],
+		"allowImportingTsExtensions": true
   },
   "include": ["src"]
 }

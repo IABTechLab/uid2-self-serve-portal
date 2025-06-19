@@ -1,12 +1,25 @@
+const path = require('path');
+
 module.exports = {
   webpack: {
-    configure: {
-      resolve: {
+    configure: (webpackConfig) => {
+      webpackConfig.module.rules.push({
+        test: /\.ts$/,
+        include: path.resolve(__dirname, 'src/api'),
+        //use: 'null-loader',
+      });
+
+      webpackConfig.resolve = {
+        ...webpackConfig.resolve,
         fallback: {
+          ...webpackConfig.resolve?.fallback,
           stream: require.resolve('stream-browserify'),
           path: false,
+					url: require.resolve('url/')
         },
-      },
+      };
+
+      return webpackConfig;
     },
   },
   devServer: {
@@ -15,7 +28,7 @@ module.exports = {
     },
   },
   babel: {
-    present: ['@babel/preset-typescript', { allowDeclareFields: true }],
+    presets: ['@babel/preset-typescript'],
     plugins: [
       [
         '@babel/plugin-transform-typescript',

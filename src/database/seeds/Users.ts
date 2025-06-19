@@ -2,9 +2,9 @@ import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
-import { User, UserJobFunction } from '../../api/entities/User';
-import { UserRoleId } from '../../api/entities/UserRole';
-import { CreateParticipant } from './Participants';
+import { User, UserJobFunction } from '../../api/entities/User.ts';
+import { UserRoleId } from '../../api/entities/UserRole.ts';
+import { CreateParticipant } from './Participants.ts';
 
 type UserType = ModelObject<User>;
 

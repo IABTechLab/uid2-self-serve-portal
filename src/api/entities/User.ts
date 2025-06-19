@@ -1,10 +1,10 @@
 import Objection, { Model } from 'objection';
 import { z } from 'zod';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
-import type { Participant } from './Participant';
-import { UserToParticipantRole } from './UserToParticipantRole';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import type { Participant } from './Participant.ts';
+import { UserToParticipantRole } from './UserToParticipantRole.ts';
 
 export interface IUser {}
 export enum UserJobFunction {
