@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import KeyCreationDialog from './KeyCreationDialog';
-import { Bidder, Generator, Mapper, Sharer } from './KeyHelper.spec';
+import { Bidder, Generator, Mapper, Sharer } from './KeyHelper';
 
 const writeText = jest.fn();
 

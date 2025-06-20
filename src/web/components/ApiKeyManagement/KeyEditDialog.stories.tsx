@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
-import type { Meta } from '@storybook/react';
+import type { Meta } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import KeyEditDialog from './KeyEditDialog';
-import { allApiRoles, Generator, Mapper } from './KeyHelper.spec';
+import { allApiRoles, Generator, Mapper } from './KeyHelper';
 
 const meta: Meta<typeof KeyEditDialog> = {
   component: KeyEditDialog,
