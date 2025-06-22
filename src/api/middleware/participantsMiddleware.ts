@@ -5,6 +5,7 @@ import { Participant } from '../entities/Participant';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { ParticipantRequest } from '../services/participantsService';
 import { canUserAccessParticipant } from './usersMiddleware';
+import { ParticipantType } from '../entities/ParticipantType';
 
 const participantIdSchema = z.object({
   participantId: z.coerce.number(),

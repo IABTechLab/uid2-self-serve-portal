@@ -1,93 +1,98 @@
-import { Model } from 'objection';
-import { z } from 'zod';
-
-import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
 import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
+import { Model, RelationMappings } from 'objection';
 import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { type User, UserDTO, UserSchema } from './User';
+import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
+import { User, UserSchema } from './User';
 import { UserToParticipantRole } from './UserToParticipantRole';
+import { BusinessContact } from './BusinessContact';
+import { ModelObjectOpt } from './ModelObjectOpt';
+import { z } from 'zod';
 
 export class Participant extends BaseModel {
   static get tableName() {
     return 'participants';
   }
-  static readonly relationMappings = {
-    types: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'ParticipantType',
-      join: {
-        from: 'participants.id',
-        through: {
-          from: 'participantsToTypes.participantId',
-          to: 'participantsToTypes.participantTypeId',
+
+  static get relationMappings(): RelationMappings {
+    return {
+      types: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => ParticipantType, // lazy getter function returns class
+        join: {
+          from: 'participants.id',
+          through: {
+            from: 'participantsToTypes.participantId',
+            to: 'participantsToTypes.participantTypeId',
+          },
+          to: 'participantTypes.id',
         },
-        to: 'participantTypes.id',
       },
-    },
-    apiRoles: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'ApiRole',
-      join: {
-        from: 'participants.id',
-        through: {
-          from: 'participantsToApiRoles.participantId',
-          to: 'participantsToApiRoles.apiRoleId',
+      apiRoles: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => ApiRole, // same pattern here
+        join: {
+          from: 'participants.id',
+          through: {
+            from: 'participantsToApiRoles.participantId',
+            to: 'participantsToApiRoles.apiRoleId',
+          },
+          to: 'apiRoles.id',
         },
-        to: 'apiRoles.id',
       },
-    },
-    users: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'User',
-      join: {
-        from: 'participants.id',
-        through: {
-          from: 'usersToParticipantRoles.participantId',
-          to: 'usersToParticipantRoles.userId',
+      users: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => User,
+        join: {
+          from: 'participants.id',
+          through: {
+            from: 'usersToParticipantRoles.participantId',
+            to: 'usersToParticipantRoles.userId',
+          },
+          to: 'users.id',
         },
-        to: 'users.id',
       },
-    },
-    businessContacts: {
-      relation: Model.HasManyRelation,
-      modelClass: 'BusinessContact',
-      join: {
-        from: 'participants.id',
-        to: 'businessContacts.participantId',
+      businessContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: () => BusinessContact,
+        join: {
+          from: 'participants.id',
+          to: 'businessContacts.participantId',
+        },
       },
-    },
-    approver: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'User',
-      join: {
-        from: 'participants.approverId',
-        to: 'users.id',
+      approver: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: () => User,
+        join: {
+          from: 'participants.approverId',
+          to: 'users.id',
+        },
       },
-    },
-    participantToUserRoles: {
-      relation: Model.HasManyRelation,
-      modelClass: 'UserToParticipantRole',
-      join: {
-        from: 'participants.id',
-        to: 'usersToParticipantRoles.participantId',
+      participantToUserRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: () => UserToParticipantRole,
+        join: {
+          from: 'participants.id',
+          to: 'usersToParticipantRoles.participantId',
+        },
       },
-    },
-  };
-  declare id: number;
-  declare name: string;
-  declare allowSharing: boolean;
-  declare completedRecommendations: boolean;
-  declare siteId?: number;
-  declare types?: ParticipantType[];
-  declare apiRoles?: ApiRole[];
-  declare users?: User[];
-  declare approverId?: number;
-  declare approver?: UserDTO;
-  declare dateApproved?: Date;
-  declare crmAgreementNumber: string | null;
-  declare currentUserRoleIds?: number[];
-  declare participantToUserRoles?: UserToParticipantRole[];
+    };
+  }
+
+  // Declare instance properties (optional)
+  id!: number;
+  name!: string;
+  allowSharing!: boolean;
+  completedRecommendations!: boolean;
+  siteId?: number;
+  types?: ParticipantType[];
+  apiRoles?: ApiRole[];
+  users?: User[];
+  approverId?: number;
+  approver?: User;
+  dateApproved?: Date;
+  crmAgreementNumber!: string | null;
+  currentUserRoleIds?: number[];
+  participantToUserRoles?: UserToParticipantRole[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?

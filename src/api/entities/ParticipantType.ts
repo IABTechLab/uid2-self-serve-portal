@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
@@ -8,27 +8,30 @@ export class ParticipantType extends BaseModel {
   static get tableName() {
     return 'participantTypes';
   }
-  static relationMappings = {
-    participants: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'participantTypes.id',
-        through: {
-          from: 'participantsToTypes.participantTypeId',
-          to: 'participantsToTypes.participantId',
+
+  static get relationMappings(): RelationMappings {
+    return {
+      participants: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => import('./Participant').then(m => m.Participant) as unknown as typeof Model,
+        join: {
+          from: 'participantTypes.id',
+          through: {
+            from: 'participantsToTypes.participantTypeId',
+            to: 'participantsToTypes.participantId',
+          },
+          to: 'participants.id',
         },
-        to: 'participants.id',
       },
-    },
-  };
+    };
+  }
+
   declare id: number;
   declare typeName: string;
 }
 
 export type ParticipantTypeDTO = ModelObjectOpt<ParticipantType>;
 
-// TODO: How do we sync these with the database? I've omitted ID for now to make things safer
 export const ParticipantTypeData = {
   DSP: { typeName: 'DSP' },
   Advertiser: { typeName: 'Advertiser' },

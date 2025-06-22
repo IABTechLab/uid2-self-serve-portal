@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
@@ -26,16 +26,19 @@ export class AuditTrail extends BaseModel {
   static get tableName() {
     return 'auditTrails';
   }
-  static readonly relationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'User',
-      join: {
-        from: 'auditTrails.userId',
-        to: 'users.id',
+
+  static get relationMappings(): RelationMappings {
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: (): any => import('./User').then(m => m.User),
+        join: {
+          from: 'auditTrails.userId',
+          to: 'users.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   static get jsonAttributes() {
     return ['eventData'];

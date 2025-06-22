@@ -25,29 +25,34 @@ let terminator: HttpTerminator | null = null;
 
 function useTestServer() {
   let token = '';
-  afterAll(async () => {
-    if (api === null || terminator === null) throw Error('Server was not configured!');
-    terminator.terminate();
-    api = null;
-    terminator = null;
-  });
+
   beforeAll(async () => {
     const serverDetails = configureAndStartApi(false, 6541);
     api = serverDetails.server;
     routers = serverDetails.routers;
     terminator = createHttpTerminator({ server: api });
 
-    token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
+    token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL!, {
       username: 'test_user@example.com',
       password: '123456',
-      grant_type: 'password', // eslint-disable-line camelcase
-      client_id: 'self_serve_portal_web', // eslint-disable-line camelcase
+      grant_type: 'password',
+      client_id: 'self_serve_portal_web',
       realmName: 'self-serve-portal',
     });
   });
+
+  afterAll(async () => {
+    if (!api || !terminator) throw new Error('Server was not configured!');
+    await terminator.terminate();
+    api = null;
+    terminator = null;
+  });
+
   function withToken(apiRequest: Request) {
     return apiRequest.set('Authorization', `Bearer ${token}`);
   }
+
   return withToken;
 }
+
 export default useTestServer;

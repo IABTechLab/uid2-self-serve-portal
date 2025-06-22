@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
@@ -12,21 +12,24 @@ export class BusinessContact extends BaseModel {
   static get tableName() {
     return 'businessContacts';
   }
-  static readonly relationMappings = {
-    participant: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'businessContacts.participantId',
-        to: 'participants.id',
+
+  static get relationMappings(): RelationMappings {
+    return {
+      participant: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: (): any => import('./Participant').then(m => m.Participant),
+        join: {
+          from: 'businessContacts.participantId',
+          to: 'participants.id',
+        },
       },
-    },
-  };
+    };
+  }
 
   declare id: number;
   declare name: string;
   declare emailAlias: string;
-  declare contactType: string;
+  declare contactType: ContactType;
   declare participantId: number;
 }
 

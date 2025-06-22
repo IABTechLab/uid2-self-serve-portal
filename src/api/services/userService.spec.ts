@@ -13,6 +13,15 @@ import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
 import * as kcUsersService from './kcUsersService';
 import { UserService } from './userService';
 
+type RemoveApiParticipantMemberRole = (kcAdminClient: any, userEmail: string) => Promise<void>;
+
+jest.mock('./kcUsersService', () => ({
+  removeApiParticipantMemberRole: jest.fn(),
+}));
+
+const mockedRemoveApiParticipantMemberRole = kcUsersService.removeApiParticipantMemberRole as jest.MockedFunction<RemoveApiParticipantMemberRole>;
+
+
 describe('User Service Tests', () => {
   let knex: Knex;
   let next: NextFunction;
@@ -21,12 +30,13 @@ describe('User Service Tests', () => {
   beforeEach(async () => {
     knex = await TestConfigure();
     next = jest.fn();
-    ({ res } = createResponseObject());
-    jest.spyOn(kcUsersService, 'removeApiParticipantMemberRole').mockResolvedValue();
+    ({ res } = createResponseObject() as { res: Response });
+
+    mockedRemoveApiParticipantMemberRole.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe('User removal', () => {

@@ -1,12 +1,13 @@
-import Objection, { Model } from 'objection';
+import Objection, { Model, RelationMappings, QueryBuilder } from 'objection';
 import { z } from 'zod';
 
-import { BaseModel } from './BaseModel.ts';
-import { ModelObjectOpt } from './ModelObjectOpt.ts';
-import type { Participant } from './Participant.ts';
-import { UserToParticipantRole } from './UserToParticipantRole.ts';
+import { BaseModel } from './BaseModel';
+import { ModelObjectOpt } from './ModelObjectOpt';
+import { Participant } from './Participant';
+import type { UserToParticipantRole } from './UserToParticipantRole';
 
 export interface IUser {}
+
 export enum UserJobFunction {
   BusinessDevelopment = 'Business Development',
   DA = 'Data / Analytics',
@@ -32,28 +33,30 @@ export class User extends BaseModel {
     return `${this.firstName} ${this.lastName}`;
   }
 
-  static readonly relationMappings = {
-    participants: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'users.id',
-        through: {
-          from: 'usersToParticipantRoles.userId',
-          to: 'usersToParticipantRoles.participantId',
+  static get relationMappings(): RelationMappings {
+    return {
+      participants: {
+        relation: Model.ManyToManyRelation,
+        modelClass:Participant,
+        join: {
+          from: 'users.id',
+          through: {
+            from: 'usersToParticipantRoles.userId',
+            to: 'usersToParticipantRoles.participantId',
+          },
+          to: 'participants.id',
         },
-        to: 'participants.id',
       },
-    },
-    userToParticipantRoles: {
-      relation: Model.HasManyRelation,
-      modelClass: 'UserToParticipantRole',
-      join: {
-        from: 'users.id',
-        to: 'usersToParticipantRoles.userId',
+      userToParticipantRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: () => import('./UserToParticipantRole').then(m => m.UserToParticipantRole) as unknown as typeof Model,
+        join: {
+          from: 'users.id',
+          to: 'usersToParticipantRoles.userId',
+        },
       },
-    },
-  };
+    };
+  }
 
   declare id: number;
   declare email: string;
@@ -67,11 +70,8 @@ export class User extends BaseModel {
   declare userToParticipantRoles?: UserToParticipantRole[];
 
   static readonly modifiers = {
-    withParticipants<TResult>(query: Objection.QueryBuilder<User, TResult>) {
-      const myQuery = query.withGraphFetched(
-        '[participants.participantToUserRoles]'
-      ) as Objection.QueryBuilder<User, TResult & { participants: Participant[] }>;
-      return myQuery;
+    withParticipants<TResult>(query: QueryBuilder<User, TResult>) {
+      return query.withGraphFetched('[participants.participantToUserRoles]') as QueryBuilder<User, TResult & { participants: Participant[] }>;
     },
   };
 }

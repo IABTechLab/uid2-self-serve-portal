@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings, RelationMappingsThunk } from 'objection';
 
 export class BaseModel extends Model {
   static get modelPaths() {
@@ -7,4 +7,6 @@ export class BaseModel extends Model {
   static get idColumn() {
     return 'id';
   }
+
+	static relationMappings: RelationMappings;
 }
