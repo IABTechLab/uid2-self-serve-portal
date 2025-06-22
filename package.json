@@ -64,6 +64,7 @@
     "inter-ui": "^3.19.3",
     "inversify": "^6.0.2",
     "inversify-express-utils": "^6.4.6",
+    "jest-mock": "^30.0.2",
     "keycloak": "^1.2.0",
     "keycloak-js": "^24.0.1",
     "knex": "^2.5.1",
@@ -106,7 +107,7 @@
     "check-env-file": "tsx src/checkEnvFile.ts",
     "api-watch": "nodemon -e ts --exec tsx src/api/api.ts",
     "build-api": "npx tsc --build ./tsconfig-api.json",
-    "test-api": "npx jest --testTimeout=5000 --forceExit --runInBand --config=./src/api/jest.config.ts",
+    "test-api": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --testTimeout=5000 --forceExit --runInBand --config=./src/api/jest.config.ts",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "stylelint-check": "stylelint-config-prettier-check",
@@ -114,11 +115,11 @@
     "lint-fix": "eslint --fix .",
     "stylelint": "stylelint \"**/*.scss\"",
     "knex:migrate:latest": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:latest --knexfile ./knexfile.ts",
-  	"knex:migrate:rollback": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:rollback --all --knexfile ./knexfile.ts",
-  	"knex:migrate:down": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:down --knexfile ./knexfile.ts",
-  	"knex:migrate:make": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:make --knexfile ./knexfile.ts",
-  	"knex:seed:make": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex seed:make --knexfile ./knexfile.ts",
-  	"knex:seed:run": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex seed:run --knexfile ./knexfile.ts"
+    "knex:migrate:rollback": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:rollback --all --knexfile ./knexfile.ts",
+    "knex:migrate:down": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:down --knexfile ./knexfile.ts",
+    "knex:migrate:make": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex migrate:make --knexfile ./knexfile.ts",
+    "knex:seed:make": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex seed:make --knexfile ./knexfile.ts",
+    "knex:seed:run": "cross-env NODE_OPTIONS=--loader=ts-node/esm knex seed:run --knexfile ./knexfile.ts"
   },
   "eslintConfig": {
     "extends": [

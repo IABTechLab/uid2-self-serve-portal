@@ -1,5 +1,5 @@
 import winston from 'winston';
-
+import {jest} from '@jest/globals';
 import { auditTraceFormat, convertToSnakeCase, extractConfiguredFields } from './auditLogging';
 
 describe('audit log format', () => {
@@ -39,7 +39,7 @@ describe('audit log format', () => {
       method: 'GET',
       endpoint: '/api/participants/7/apiRoles',
       traceId: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
-      xAmznTraceId: '',
+      uid_trace_id: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
       actor: JSON.stringify(
         convertToSnakeCase({
           ip: '::1',
@@ -47,6 +47,7 @@ describe('audit log format', () => {
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36',
           type: 'user',
           email: 'ianalexnara@gmail.com',
+					id: 'ianalexnara@gmail.com',
           sub: '73df264e-8b22-4280-b73b-7ac190940268',
           roles: [
             'api-participant-admin',
@@ -227,7 +228,6 @@ describe('actual winston logging', () => {
       actor: string;
       query_params: Record<string, unknown>;
       request_body: Record<string, unknown>;
-      x_amzn_trace_id: string;
     };
     const logEntry = JSON.parse(testTransport.logs[0].message as string) as AuditLogEntry;
     const expectedLogEntry = {
@@ -241,7 +241,6 @@ describe('actual winston logging', () => {
       actor: expect.stringContaining('ianalexnara@gmail.com') as unknown as string,
       queryParams: {},
       requestBody: {},
-      xAmznTraceId: '',
     } as const;
     expect(logEntry).toMatchObject(convertToSnakeCase(expectedLogEntry));
     jest.useRealTimers();
