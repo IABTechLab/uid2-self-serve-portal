@@ -1,7 +1,8 @@
 import { z } from 'zod';
+
 import { ContactType } from './BusinessContact';
 import { ParticipantTypeSchema } from './ParticipantType';
-import { UserSchema } from './User';
+import { UserJobFunction } from './User';
 
 export const ApiRoleSchema = z.object({
   id: z.number(),
@@ -16,6 +17,16 @@ export const BusinessContactSchema = z.object({
   emailAlias: z.string(),
   contactType: z.nativeEnum(ContactType),
   participantId: z.number(),
+});
+export const UserSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  phone: z.string().optional(),
+  jobFunction: z.nativeEnum(UserJobFunction).optional(),
+  acceptedTerms: z.boolean(),
+  locked: z.boolean().optional(),
 });
 
 export const ParticipantSchema = z.object({
@@ -40,4 +51,13 @@ export const ParticipantApprovalPartial = ParticipantSchema.pick({
 }).extend({
   types: z.array(ParticipantTypeSchema.pick({ id: true })),
   apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
+});
+
+export const UserCreationPartial = UserSchema.pick({
+  email: true,
+  firstName: true,
+  lastName: true,
+  phone: true,
+  jobFunction: true,
+  acceptedTerms: true,
 });

@@ -1,5 +1,4 @@
 import { Model, RelationMappings } from 'objection';
-import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
@@ -34,4 +33,3 @@ export class ApiRole extends BaseModel {
 }
 
 export type ApiRoleDTO = Omit<ModelObjectOpt<ApiRole>, 'disabled'>;
-

@@ -1,4 +1,4 @@
-import { Model, RelationMappings, RelationMappingsThunk } from 'objection';
+import { Model, RelationMappings } from 'objection';
 
 export class BaseModel extends Model {
   static get modelPaths() {

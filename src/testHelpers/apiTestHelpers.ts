@@ -1,7 +1,8 @@
 import { faker } from '@faker-js/faker';
+import { jest } from '@jest/globals';
 import { Response } from 'express';
 import { Knex } from 'knex';
-import {jest} from '@jest/globals';
+
 import { ModelObjectOpt } from '../api/entities/ModelObjectOpt';
 import { Participant } from '../api/entities/Participant';
 import { User, UserJobFunction } from '../api/entities/User';
@@ -14,7 +15,6 @@ import { CreateParticipant } from '../database/seeds/Participants';
 type ParticipantToUserRoleDTO = Partial<
   Pick<ModelObjectOpt<UserToParticipantRole>, 'participantId' | 'userRoleId'>
 >;
-
 
 export function createResponseObject() {
   type JsonFn = (body: unknown) => Response;

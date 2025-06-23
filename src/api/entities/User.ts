@@ -1,9 +1,9 @@
-import Objection, { Model, RelationMappings, QueryBuilder } from 'objection';
-import { z } from 'zod';
+import { Model, QueryBuilder,RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { Participant } from './Participant';
+// eslint-disable-next-line import/no-cycle
 import type { UserToParticipantRole } from './UserToParticipantRole';
 
 export interface IUser {}
@@ -37,7 +37,7 @@ export class User extends BaseModel {
     return {
       participants: {
         relation: Model.ManyToManyRelation,
-        modelClass:Participant,
+        modelClass: Participant,
         join: {
           from: 'users.id',
           through: {
@@ -49,6 +49,7 @@ export class User extends BaseModel {
       },
       userToParticipantRoles: {
         relation: Model.HasManyRelation,
+				// eslint-disable-next-line import/no-cycle
         modelClass: () => import('./UserToParticipantRole').then(m => m.UserToParticipantRole) as unknown as typeof Model,
         join: {
           from: 'users.id',
@@ -77,25 +78,5 @@ export class User extends BaseModel {
 }
 
 export type UserDTO = ModelObjectOpt<User>;
-
-export const UserSchema = z.object({
-  id: z.number(),
-  email: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  phone: z.string().optional(),
-  jobFunction: z.nativeEnum(UserJobFunction).optional(),
-  acceptedTerms: z.boolean(),
-  locked: z.boolean().optional(),
-});
-
-export const UserCreationPartial = UserSchema.pick({
-  email: true,
-  firstName: true,
-  lastName: true,
-  phone: true,
-  jobFunction: true,
-  acceptedTerms: true,
-});
 
 export type UserCreationDTO = Omit<ModelObjectOpt<UserDTO>, 'id'>;

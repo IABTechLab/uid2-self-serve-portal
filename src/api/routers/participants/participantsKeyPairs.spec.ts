@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
+import { jest } from "@jest/globals";
 import { Response } from 'express';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import {jest} from "@jest/globals";
 
 import { createResponseObject } from '../../../testHelpers/apiTestHelpers';
 import { Participant } from '../../entities/Participant';
@@ -85,7 +85,6 @@ const handlers = [
 ];
 
 const server = setupServer(...handlers);
-
 
 export function createMockResponse(): Response {
 	const res: Partial<Response> = {};

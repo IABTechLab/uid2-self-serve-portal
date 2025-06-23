@@ -2,10 +2,10 @@ import { NextFunction, Response } from 'express';
 import { z } from 'zod';
 
 import { Participant } from '../entities/Participant';
+import { ParticipantType } from '../entities/ParticipantType';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { ParticipantRequest } from '../services/participantsService';
 import { canUserAccessParticipant } from './usersMiddleware';
-import { ParticipantType } from '../entities/ParticipantType';
 
 const participantIdSchema = z.object({
   participantId: z.coerce.number(),

@@ -1,6 +1,7 @@
+import { jest } from '@jest/globals';
 import { NextFunction, Response } from 'express';
 import { Knex } from 'knex';
-import { jest } from '@jest/globals';
+
 import { TestConfigure } from '../../../database/TestSelfServeDatabase';
 import {
   createParticipant,

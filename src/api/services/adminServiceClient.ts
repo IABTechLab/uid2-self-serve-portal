@@ -3,8 +3,8 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import crypto from 'crypto';
 import { z } from 'zod';
 
-import { ParticipantSchema } from '../entities/Schemas';
 import { ParticipantTypeSchema } from '../entities/ParticipantType';
+import { ParticipantSchema } from '../entities/Schemas';
 import {
   SERVICE_INSTANCE_ID_PREFIX,
   SSP_ADMIN_SERVICE_BASE_URL,

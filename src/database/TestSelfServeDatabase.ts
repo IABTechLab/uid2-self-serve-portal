@@ -1,6 +1,6 @@
+import type { Knex } from 'knex';
 import knex from 'knex';
 import { Model } from 'objection';
-import type { Knex } from 'knex';
 
 const config: Knex.Config = {
   client: 'better-sqlite3',

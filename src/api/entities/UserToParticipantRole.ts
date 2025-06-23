@@ -1,5 +1,7 @@
 import { Model, RelationMappings } from 'objection';
 
+import type { UserRole } from './UserRole';
+
 export class UserToParticipantRole extends Model {
   static get tableName() {
     return 'usersToParticipantRoles';
@@ -13,6 +15,7 @@ export class UserToParticipantRole extends Model {
     return {
       user: {
         relation: Model.BelongsToOneRelation,
+				// eslint-disable-next-line import/no-cycle
         modelClass: () => import('./User').then(m => m.User) as unknown as typeof Model,
         join: {
           from: 'usersToParticipantRoles.userId',
@@ -29,7 +32,7 @@ export class UserToParticipantRole extends Model {
       },
       role: {
         relation: Model.BelongsToOneRelation,
-        modelClass: () => import('./UserRole').then(m => m.UserRole) as unknown as typeof Model,
+        modelClass: () => import('./UserRole').then(m => m.UserRole) as unknown as typeof UserRole,
         join: {
           from: 'usersToParticipantRoles.userRoleId',
           to: 'userRoles.id',

@@ -1,9 +1,11 @@
 import { Model, RelationMappings } from 'objection';
-import { BaseModel } from './BaseModel';
+
 import type { ApiRole, ApiRoleDTO } from './ApiRole';
-import type { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
-import type { User } from './User';
+import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
+import type { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
+import type { User, UserDTO } from './User';
+import type { UserToParticipantRole } from './UserToParticipantRole';
 
 export class Participant extends BaseModel {
   static get tableName() {
@@ -50,7 +52,7 @@ export class Participant extends BaseModel {
       },
       businessContacts: {
         relation: Model.HasManyRelation,
-        modelClass: './BusinessContact', 
+        modelClass: './BusinessContact',
         join: {
           from: 'participants.id',
           to: 'businessContacts.participantId',
@@ -58,7 +60,7 @@ export class Participant extends BaseModel {
       },
       approver: {
         relation: Model.BelongsToOneRelation,
-        modelClass: './User', 
+        modelClass: './User',
         join: {
           from: 'participants.approverId',
           to: 'users.id',
@@ -66,7 +68,7 @@ export class Participant extends BaseModel {
       },
       participantToUserRoles: {
         relation: Model.HasManyRelation,
-        modelClass: './UserToParticipantRole', 
+        modelClass: './UserToParticipantRole',
         join: {
           from: 'participants.id',
           to: 'usersToParticipantRoles.participantId',
@@ -85,11 +87,11 @@ export class Participant extends BaseModel {
   apiRoles?: ApiRole[];
   users?: User[];
   approverId?: number;
-  approver?: User;
+  approver?: UserDTO;
   dateApproved?: Date;
   crmAgreementNumber!: string | null;
   currentUserRoleIds?: number[];
-  participantToUserRoles?: User[];
+  participantToUserRoles?: UserToParticipantRole[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -98,5 +100,3 @@ export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'
   apiRoles?: ApiRoleDTO[];
   users?: ModelObjectOpt<User>[];
 };
-
-

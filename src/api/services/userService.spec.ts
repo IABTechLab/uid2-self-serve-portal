@@ -15,7 +15,7 @@ import { UserService } from './userService';
 
 jest.mock('./kcUsersService');
 
-const mockedRemoveApiParticipantMemberRole = kcUsersService.removeApiParticipantMemberRole as jest.Mock<Promise<void>, [any, string]>;
+const mockedRemoveApiParticipantMemberRole = kcUsersService.removeApiParticipantMemberRole as jest.MockedFunction<typeof kcUsersService.removeApiParticipantMemberRole>;
 
 describe('User Service Tests', () => {
   let knex: Knex;

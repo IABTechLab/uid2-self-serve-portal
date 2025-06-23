@@ -31,7 +31,7 @@ export class AuditTrail extends BaseModel {
     return {
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: (): any => import('./User').then(m => m.User),
+        modelClass: () => import('./User').then(m => m.User) as unknown as typeof Model,
         join: {
           from: 'auditTrails.userId',
           to: 'users.id',

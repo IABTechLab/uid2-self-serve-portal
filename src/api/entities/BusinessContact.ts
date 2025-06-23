@@ -1,5 +1,4 @@
 import { Model, RelationMappings } from 'objection';
-import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 
@@ -17,7 +16,7 @@ export class BusinessContact extends BaseModel {
     return {
       participant: {
         relation: Model.BelongsToOneRelation,
-        modelClass: (): any => import('./Participant').then(m => m.Participant),
+        modelClass: () => import('./Participant').then(m => m.Participant) as unknown as typeof Model,
         join: {
           from: 'businessContacts.participantId',
           to: 'participants.id',
@@ -32,11 +31,3 @@ export class BusinessContact extends BaseModel {
   declare contactType: ContactType;
   declare participantId: number;
 }
-
-export const BusinessContactSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  emailAlias: z.string(),
-  contactType: z.nativeEnum(ContactType),
-  participantId: z.number(),
-});
