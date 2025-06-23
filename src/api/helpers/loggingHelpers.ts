@@ -85,6 +85,6 @@ export const getTraceId = (request: Request): TraceId => {
   const traceId = request?.headers?.traceId?.toString() || '';
   return {
     traceId,
-    uidTraceId: request?.headers['X-Amzn-Trace-Id']?.toString() || traceId || '',
+    uidTraceId: request?.headers['x-amzn-trace-id']?.toString() || traceId || '',
   };
 };

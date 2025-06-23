@@ -216,7 +216,7 @@ export const createAuditLogData = (
 ) => {
   const path = meta?.req?.path ?? '';
   const config = getAuditConfig(path);
-  const traceId = meta?.req?.headers?.['X-Amzn-Trace-Id'] ?? meta?.req?.headers?.traceId ?? '';
+  const traceId = meta?.req?.headers?.['x-amzn-trace-id'] ?? meta?.req?.headers?.traceId ?? '';
 
   return {
     timestamp,
