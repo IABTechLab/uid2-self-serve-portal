@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import crypto from 'crypto';
 import { z } from 'zod';
 
 import { ParticipantTypeSchema } from '../entities/ParticipantType';
