@@ -82,9 +82,10 @@ export interface TraceId {
 }
 
 export const getTraceId = (request: Request): TraceId => {
-  const traceId = request?.headers?.traceId?.toString() || '';
+  const traceId = request?.headers?.traceId?.toString() || ''
+	const uidTraceId = (request?.headers?.['X-Amzn-Trace-Id'] as string | undefined) ?? traceId ?? '';
   return {
     traceId,
-    uidTraceId: request?.headers['X-Amzn-Trace-Id']?.toString() || traceId || '',
+    uidTraceId
   };
 };
