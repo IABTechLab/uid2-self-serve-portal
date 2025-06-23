@@ -10,4 +10,4 @@ RUN chmod -R 775 /opt/keycloak/data/import
 USER keycloak
 
 ENTRYPOINT sed -i -E "s#http://localhost:[0-9]*#$SSP_WEB_HOST#g" opt/keycloak/data/import/realm-export.json && \
-/opt/keycloak/bin/kc.sh start --hostname=$SSP_AUTH_HOST --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --spi-theme-welcome-theme=uid-theme --health-enabled=true --metrics-enabled=true --spi-connections-jpa-legacy-migration-strategy=update
+/opt/keycloak/bin/kc.sh start --hostname=$SSP_AUTH_HOST --import-realm --spi-theme-static-max-age=-1 --spi-theme-cache-themes=false --spi-theme-cache-templates=false --health-enabled=true --metrics-enabled=true --spi-connections-jpa-legacy-migration-strategy=update
