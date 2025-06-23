@@ -34,7 +34,7 @@ function useTestServer() {
 
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL!, {
       username: 'test_user@example.com',
-      password: '123456',
+      password: 'test12345',
       grant_type: 'password',
       client_id: 'self_serve_portal_web',
       realmName: 'self-serve-portal',

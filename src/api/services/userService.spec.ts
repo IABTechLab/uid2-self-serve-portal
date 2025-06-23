@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
 import { Knex } from 'knex';
-import {jest} from "@jest/globals";
+import { jest } from '@jest/globals';
 import { TestConfigure } from '../../database/TestSelfServeDatabase';
 import {
   createParticipant,
@@ -13,14 +13,9 @@ import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
 import * as kcUsersService from './kcUsersService';
 import { UserService } from './userService';
 
-type RemoveApiParticipantMemberRole = (kcAdminClient: any, userEmail: string) => Promise<void>;
+jest.mock('./kcUsersService');
 
-jest.mock('./kcUsersService', () => ({
-  removeApiParticipantMemberRole: jest.fn(),
-}));
-
-const mockedRemoveApiParticipantMemberRole = kcUsersService.removeApiParticipantMemberRole as jest.MockedFunction<RemoveApiParticipantMemberRole>;
-
+const mockedRemoveApiParticipantMemberRole = kcUsersService.removeApiParticipantMemberRole as jest.Mock<Promise<void>, [any, string]>;
 
 describe('User Service Tests', () => {
   let knex: Knex;
@@ -32,7 +27,7 @@ describe('User Service Tests', () => {
     next = jest.fn();
     ({ res } = createResponseObject() as { res: Response });
 
-    mockedRemoveApiParticipantMemberRole.mockResolvedValue(undefined);
+    mockedRemoveApiParticipantMemberRole.mockResolvedValue();
   });
 
   afterEach(() => {
@@ -63,6 +58,7 @@ describe('User Service Tests', () => {
         expect(kcUsersService.removeApiParticipantMemberRole).not.toHaveBeenCalled();
       });
     });
+
     describe('User is removed from their only participant', () => {
       it('removes the user from their only participant and removes the keycloak role', async () => {
         const participant = await createParticipant(knex, {});
