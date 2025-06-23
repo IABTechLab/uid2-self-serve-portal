@@ -116,16 +116,6 @@ module.exports = {
       },
     ],
     'simple-import-sort/exports': 'error',
-		'import/extensions': [
-  		'error',
-  		'ignorePackages',
-  		{
-				ts: 'always',
-				tsx: 'never',
-				js: 'never',
-				jsx: 'never',
-  		},
-],
     'testing-library/consistent-data-testid': [
       'error',
       {
@@ -194,5 +184,20 @@ module.exports = {
         ],
       },
     },
+		{
+			files: ['./src/database/seeds/**/*.{ts,tsx,js,jsx}'],
+			rules: {
+				'import/extensions': [
+					'error',
+					'ignorePackages',
+					{
+						ts: 'always',
+						tsx: 'never',
+						js: 'never',
+						jsx: 'never',
+					},
+				],
+			},
+		},
   ],
 };

@@ -1,12 +1,9 @@
-import { BaseModel } from './BaseModel';
 import { Model, RelationMappings } from 'objection';
-import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
-import { User, UserSchema } from './User';
-import { UserToParticipantRole } from './UserToParticipantRole';
-import { BusinessContact } from './BusinessContact';
+import { BaseModel } from './BaseModel';
+import type { ApiRole, ApiRoleDTO } from './ApiRole';
+import type { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
+import type { User } from './User';
 import { ModelObjectOpt } from './ModelObjectOpt';
-import { z } from 'zod';
 
 export class Participant extends BaseModel {
   static get tableName() {
@@ -17,7 +14,7 @@ export class Participant extends BaseModel {
     return {
       types: {
         relation: Model.ManyToManyRelation,
-        modelClass: () => ParticipantType, // lazy getter function returns class
+        modelClass: './ParticipantType',
         join: {
           from: 'participants.id',
           through: {
@@ -29,7 +26,7 @@ export class Participant extends BaseModel {
       },
       apiRoles: {
         relation: Model.ManyToManyRelation,
-        modelClass: () => ApiRole, // same pattern here
+        modelClass: './ApiRole',
         join: {
           from: 'participants.id',
           through: {
@@ -41,7 +38,7 @@ export class Participant extends BaseModel {
       },
       users: {
         relation: Model.ManyToManyRelation,
-        modelClass: () => User,
+        modelClass: './User',
         join: {
           from: 'participants.id',
           through: {
@@ -53,7 +50,7 @@ export class Participant extends BaseModel {
       },
       businessContacts: {
         relation: Model.HasManyRelation,
-        modelClass: () => BusinessContact,
+        modelClass: './BusinessContact', 
         join: {
           from: 'participants.id',
           to: 'businessContacts.participantId',
@@ -61,7 +58,7 @@ export class Participant extends BaseModel {
       },
       approver: {
         relation: Model.BelongsToOneRelation,
-        modelClass: () => User,
+        modelClass: './User', 
         join: {
           from: 'participants.approverId',
           to: 'users.id',
@@ -69,7 +66,7 @@ export class Participant extends BaseModel {
       },
       participantToUserRoles: {
         relation: Model.HasManyRelation,
-        modelClass: () => UserToParticipantRole,
+        modelClass: './UserToParticipantRole', 
         join: {
           from: 'participants.id',
           to: 'usersToParticipantRoles.participantId',
@@ -78,7 +75,7 @@ export class Participant extends BaseModel {
     };
   }
 
-  // Declare instance properties (optional)
+  // Declare instance properties with types
   id!: number;
   name!: string;
   allowSharing!: boolean;
@@ -92,7 +89,7 @@ export class Participant extends BaseModel {
   dateApproved?: Date;
   crmAgreementNumber!: string | null;
   currentUserRoleIds?: number[];
-  participantToUserRoles?: UserToParticipantRole[];
+  participantToUserRoles?: User[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
@@ -102,26 +99,4 @@ export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'
   users?: ModelObjectOpt<User>[];
 };
 
-export const ParticipantSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  types: z.array(ParticipantTypeSchema).optional(),
-  apiRoles: z.array(ApiRoleSchema).optional(),
-  users: z.array(UserSchema).optional(),
-  allowSharing: z.boolean(),
-  siteId: z.number().optional(),
-  approverId: z.number().optional(),
-  approver: z.array(UserSchema).optional(),
-  dateApproved: z.date().optional(),
-  crmAgreementNumber: z.string().nullable(),
-});
 
-export const ParticipantApprovalPartial = ParticipantSchema.pick({
-  siteId: true,
-  name: true,
-  types: true,
-  apiRoles: true,
-}).extend({
-  types: z.array(ParticipantTypeSchema.pick({ id: true })),
-  apiRoles: z.array(ParticipantTypeSchema.pick({ id: true })),
-});

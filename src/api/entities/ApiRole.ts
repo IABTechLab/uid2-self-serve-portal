@@ -13,7 +13,7 @@ export class ApiRole extends BaseModel {
     return {
       participants: {
         relation: Model.ManyToManyRelation,
-        modelClass: (): any => import('./Participant').then(m => m.Participant),
+        modelClass: () => import('./Participant').then(m => m.Participant) as unknown as typeof Model,
         join: {
           from: 'apiRoles.id',
           through: {
@@ -35,9 +35,3 @@ export class ApiRole extends BaseModel {
 
 export type ApiRoleDTO = Omit<ModelObjectOpt<ApiRole>, 'disabled'>;
 
-export const ApiRoleSchema = z.object({
-  id: z.number(),
-  roleName: z.string(),
-  externalName: z.string(),
-  order: z.number(),
-});

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { ParticipantSchema } from '../../entities/Participant';
 import { ParticipantTypeSchema } from '../../entities/ParticipantType';
+import { ParticipantSchema } from '../../entities/Schemas';
 
 export const ParticipantCreationRequest = z.object({
   participantName: z.string(),

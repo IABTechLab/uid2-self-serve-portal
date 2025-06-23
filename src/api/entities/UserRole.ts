@@ -1,5 +1,5 @@
-import { BaseModel } from './BaseModel.ts';
-import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { BaseModel } from './BaseModel';
+import { ModelObjectOpt } from './ModelObjectOpt';
 
 export enum UserRoleId {
   Admin = 1,

@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import crypto from 'crypto';
 import { z } from 'zod';
 
-import { ParticipantSchema } from '../entities/Participant';
+import { ParticipantSchema } from '../entities/Schemas';
 import { ParticipantTypeSchema } from '../entities/ParticipantType';
 import {
   SERVICE_INSTANCE_ID_PREFIX,
