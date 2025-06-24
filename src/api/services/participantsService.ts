@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { getRoleNamesByIds } from '../../web/utils/apiRoles';
 import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
-import { Participant,  ParticipantDTO } from '../entities/Participant';
+import { Participant, ParticipantDTO } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { ParticipantApprovalPartial } from '../entities/Schemas';
 import { User, UserDTO } from '../entities/User';
