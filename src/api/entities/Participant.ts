@@ -1,5 +1,4 @@
 import { Model } from 'objection';
-import { z } from 'zod';
 
 import { ApiRole, ApiRoleDTO } from './ApiRole';
 import { BaseModel } from './BaseModel';
