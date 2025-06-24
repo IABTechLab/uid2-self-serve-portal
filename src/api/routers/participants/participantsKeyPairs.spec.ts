@@ -90,8 +90,8 @@ export function createMockResponse(): Response {
 	const res: Partial<Response> = {};
 
 	res.status = jest.fn(() => res as Response) as (code: number) => Response;
-	res.send = jest.fn(() => res as Response) as (body?: any) => Response;
-	res.json = jest.fn(() => res as Response) as (body?: any) => Response;
+	res.send = jest.fn(() => res as Response) as (body?: unknown) => Response;
+	res.json = jest.fn(() => res as Response) as (body?: unknown) => Response;
 
 	return res as Response;
 }

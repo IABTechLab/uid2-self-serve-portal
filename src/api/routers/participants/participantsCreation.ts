@@ -5,7 +5,7 @@ import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { Participant } from '../../entities/Participant';
-import { UserCreationPartial } from '../../entities/User';
+import { UserCreationPartial } from '../../entities/Schemas';
 import { User } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';

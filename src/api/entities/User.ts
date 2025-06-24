@@ -1,5 +1,4 @@
 import { Model, QueryBuilder,RelationMappings } from 'objection';
-import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
@@ -78,25 +77,5 @@ export class User extends BaseModel {
 }
 
 export type UserDTO = ModelObjectOpt<User>;
-
-export const UserSchema = z.object({
-  id: z.number(),
-  email: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  phone: z.string().optional(),
-  jobFunction: z.nativeEnum(UserJobFunction).optional(),
-  acceptedTerms: z.boolean(),
-  locked: z.boolean().optional(),
-});
-
-export const UserCreationPartial = UserSchema.pick({
-  email: true,
-  firstName: true,
-  lastName: true,
-  phone: true,
-  jobFunction: true,
-  acceptedTerms: true,
-});
 
 export type UserCreationDTO = Omit<ModelObjectOpt<UserDTO>, 'id'>;

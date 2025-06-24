@@ -1,5 +1,4 @@
 import { Model, RelationMappings } from 'objection';
-import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 
@@ -33,10 +32,4 @@ export class BusinessContact extends BaseModel {
   declare participantId: number;
 }
 
-export const BusinessContactSchema = z.object({
-	id: z.number(),
-	name: z.string(),
-	emailAlias: z.string(),
-	contactType: z.nativeEnum(ContactType),
-	participantId: z.number(),
-});
+

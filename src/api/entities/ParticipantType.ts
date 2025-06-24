@@ -1,5 +1,4 @@
 import { Model, RelationMappings } from 'objection';
-import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
@@ -40,7 +39,3 @@ export const ParticipantTypeData = {
   Publisher: { typeName: 'Publisher' },
 };
 
-export const ParticipantTypeSchema = z.object({
-  id: z.number(),
-  typeName: z.string().optional(),
-});

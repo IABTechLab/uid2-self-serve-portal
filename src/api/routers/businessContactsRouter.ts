@@ -1,6 +1,7 @@
 import express, { Response } from 'express';
 
-import { BusinessContact, BusinessContactSchema } from '../entities/BusinessContact';
+import { BusinessContact } from '../entities/BusinessContact';
+import { BusinessContactSchema } from '../entities/Schemas';
 import {
   BusinessContactRequest,
   hasBusinessContactAccess,
