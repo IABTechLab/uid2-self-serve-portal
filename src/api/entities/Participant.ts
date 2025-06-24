@@ -77,22 +77,20 @@ export class Participant extends BaseModel {
       },
     };
   }
-
-  // Declare instance properties with types
-  id!: number;
-  name!: string;
-  allowSharing!: boolean;
-  completedRecommendations!: boolean;
-  siteId?: number;
-  types?: ParticipantType[];
-  apiRoles?: ApiRole[];
-  users?: User[];
-  approverId?: number;
-  approver?: UserDTO;
-  dateApproved?: Date;
-  crmAgreementNumber!: string | null;
-  currentUserRoleIds?: number[];
-  participantToUserRoles?: UserToParticipantRole[];
+	declare id: number;
+  declare name: string;
+  declare allowSharing: boolean;
+  declare completedRecommendations: boolean;
+  declare siteId?: number;
+  declare types?: ParticipantType[];
+  declare apiRoles?: ApiRole[];
+  declare users?: User[];
+  declare approverId?: number;
+  declare approver?: UserDTO;
+  declare dateApproved?: Date;
+  declare crmAgreementNumber: string | null;
+  declare currentUserRoleIds?: number[];
+  declare participantToUserRoles?: UserToParticipantRole[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?

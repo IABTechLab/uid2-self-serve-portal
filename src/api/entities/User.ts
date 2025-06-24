@@ -7,7 +7,6 @@ import { Participant } from './Participant';
 import { UserToParticipantRole } from './UserToParticipantRole';
 
 export interface IUser {}
-
 export enum UserJobFunction {
   BusinessDevelopment = 'Business Development',
   DA = 'Data / Analytics',

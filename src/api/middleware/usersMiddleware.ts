@@ -74,13 +74,6 @@ export const verifyAndEnrichUser = async (
   const { userId } = userIdSchema.parse(req.params);
   const { participant } = req;
   const traceId = getTraceId(req);
-	// console.log("DEBUGGING!!!!!!!!!!!");
-	// console.log(User.relationMappings);
-	// console.log(User.getRelation('participants'));
-	// console.log(User.getRelation('userToParticipantRoles'));
-	// const rel = User.relationMappings;
-	// const test = rel['userToParticipantRoles'];
-	// console.log("model class", test.modelClass);
   const targetUser = await User.query().findById(userId).modify('withParticipants');
 
   if (!targetUser) {

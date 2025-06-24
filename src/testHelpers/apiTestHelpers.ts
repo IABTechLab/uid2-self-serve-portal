@@ -21,15 +21,15 @@ export function createResponseObject() {
   type SendFn = (body: unknown) => Response;
   type StatusFn = (code: number) => Response;
 
-  const json = jest.fn<JsonFn>((body: unknown) => { void body; return res; });
-  const send = jest.fn<SendFn>((body: unknown) => { void body; return res; });
-  const status = jest.fn<StatusFn>((code: number) => { void code; return res; });
+	const res = {} as Response;
 
-  const res = {
-    json,
-    send,
-    status,
-  } as unknown as Response;
+  const json = jest.fn<JsonFn>((_body: unknown) => res);
+  const send = jest.fn<SendFn>((_body: unknown) => res);
+  const status = jest.fn<StatusFn>((_code: number) => res);
+
+	res.json = json as typeof res.json;
+	res.send = send as typeof res.send;
+	res.status = status as typeof res.status;
 
   return { res, json, send, status };
 }
