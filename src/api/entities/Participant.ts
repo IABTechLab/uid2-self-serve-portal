@@ -5,7 +5,6 @@ import { ApiRole, ApiRoleDTO } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
 import { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
-import { ApiRoleSchema, ParticipantTypeSchema, UserSchema } from './Schemas';
 import { type User, UserDTO } from './User';
 import { UserToParticipantRole } from './UserToParticipantRole';
 
