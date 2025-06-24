@@ -1,9 +1,9 @@
 import { Model, QueryBuilder,RelationMappings } from 'objection';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
-import { Participant } from './Participant'; // eslint-disable-line import/no-cycle
-import { UserToParticipantRole } from './UserToParticipantRole'; // eslint-disable-line import/no-cycle
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
+import { UserToParticipantRole } from './UserToParticipantRole.ts'; // eslint-disable-line import/no-cycle
 
 export interface IUser {}
 export enum UserJobFunction {

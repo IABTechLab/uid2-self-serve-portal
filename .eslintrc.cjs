@@ -185,7 +185,9 @@ module.exports = {
       },
     },
 		{
-			files: ['./src/database/seeds/**/*.{ts,tsx,js,jsx}'],
+			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/**/*.{ts,tsx,js,jsx}',
+				'./src/api/keycloakAdminClient.ts', './knexfile.ts'
+			],
 			rules: {
 				'import/extensions': [
 					'error',

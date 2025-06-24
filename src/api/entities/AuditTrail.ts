@@ -1,8 +1,8 @@
 import { Model, RelationMappings } from 'objection';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
-import { User } from './User';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { User } from './User.ts';
 
 export enum AuditAction {
   Add = 'Add',
