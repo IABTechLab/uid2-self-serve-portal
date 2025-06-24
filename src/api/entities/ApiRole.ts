@@ -2,6 +2,7 @@ import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
+import { Participant } from './Participant'; // eslint-disable-line import/no-cycle
 
 export class ApiRole extends BaseModel {
   static get tableName() {
@@ -12,7 +13,7 @@ export class ApiRole extends BaseModel {
     return {
       participants: {
         relation: Model.ManyToManyRelation,
-        modelClass: () => import('./Participant').then(m => m.Participant) as unknown as typeof Model,
+        modelClass: () => Participant,
         join: {
           from: 'apiRoles.id',
           through: {

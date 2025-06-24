@@ -2,6 +2,7 @@ import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
+import { User } from './User';
 
 export enum AuditAction {
   Add = 'Add',
@@ -31,7 +32,7 @@ export class AuditTrail extends BaseModel {
     return {
       user: {
         relation: Model.BelongsToOneRelation,
-        modelClass: () => import('./User').then(m => m.User) as unknown as typeof Model,
+        modelClass: () => User,
         join: {
           from: 'auditTrails.userId',
           to: 'users.id',

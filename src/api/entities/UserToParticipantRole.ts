@@ -1,8 +1,8 @@
 import { Model, RelationMappings } from 'objection';
 
-import { Participant } from './Participant';
-import { User } from './User';
-import { UserRole } from './UserRole';
+import { Participant } from './Participant'; // eslint-disable-line import/no-cycle
+import { User } from './User';  // eslint-disable-line import/no-cycle
+import { UserRole } from './UserRole'; // eslint-disable-line import/no-cycle
 
 export class UserToParticipantRole extends Model {
   static get tableName() {
@@ -17,7 +17,6 @@ export class UserToParticipantRole extends Model {
     return {
       user: {
         relation: Model.BelongsToOneRelation,
-				// eslint-disable-next-line import/no-cycle
         modelClass: User,
         join: {
           from: 'usersToParticipantRoles.userId',

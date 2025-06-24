@@ -1,12 +1,12 @@
 import { Model, RelationMappings } from 'objection';
 
-import { ApiRole, ApiRoleDTO } from './ApiRole';
+import { ApiRole, ApiRoleDTO } from './ApiRole'; // eslint-disable-line import/no-cycle
 import { BaseModel } from './BaseModel';
-import { BusinessContact } from './BusinessContact';
+import { BusinessContact } from './BusinessContact'; // eslint-disable-line import/no-cycle
 import { ModelObjectOpt } from './ModelObjectOpt';
-import { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
-import { User, UserDTO } from './User';
-import { UserToParticipantRole } from './UserToParticipantRole';
+import { ParticipantType, ParticipantTypeDTO } from './ParticipantType'; // eslint-disable-line import/no-cycle
+import { User, UserDTO } from './User'; // eslint-disable-line import/no-cycle
+import { UserToParticipantRole } from './UserToParticipantRole'; // eslint-disable-line import/no-cycle
 
 export class Participant extends BaseModel {
   static get tableName() {
