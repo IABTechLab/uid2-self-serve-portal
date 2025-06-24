@@ -5,7 +5,8 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+		"allowImportingTsExtensions": true,
   },
   "include": ["src/**/*"],
   "exclude": [
