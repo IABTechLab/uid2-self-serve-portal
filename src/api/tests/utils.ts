@@ -34,7 +34,7 @@ function useTestServer() {
 
     token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL!, {
       username: 'test_user@example.com',
-      password: '12345',
+      password: '123456',
       grant_type: 'password', // eslint-disable-line camelcase
       client_id: 'self_serve_portal_web', // eslint-disable-line camelcase
       realmName: 'self-serve-portal',
@@ -51,7 +51,6 @@ function useTestServer() {
   function withToken(apiRequest: Request) {
     return apiRequest.set('Authorization', `Bearer ${token}`);
   }
-
   return withToken;
 }
 export default useTestServer;
