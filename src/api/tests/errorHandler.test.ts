@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import request, { Request } from 'supertest';
 import { jest } from "@jest/globals";
-
+import request, { Request } from 'supertest';
 
 import { ParticipantType } from '../entities/ParticipantType';
 import useTestServer, { api } from './utils';

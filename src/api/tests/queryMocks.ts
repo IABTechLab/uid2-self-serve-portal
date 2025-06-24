@@ -1,5 +1,5 @@
-import { QueryBuilder } from 'objection';
 import { jest } from "@jest/globals";
+import { QueryBuilder } from 'objection';
 
 import { BusinessContact, ContactType } from '../entities/BusinessContact';
 import { Participant } from '../entities/Participant';

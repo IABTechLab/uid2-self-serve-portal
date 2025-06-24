@@ -1,5 +1,5 @@
-import request, { Request } from 'supertest';
 import { jest } from "@jest/globals";
+import request, { Request } from 'supertest';
 
 import { ContactType } from '../entities/BusinessContact';
 import { BusinessContactRequest } from '../services/businessContactsService';
