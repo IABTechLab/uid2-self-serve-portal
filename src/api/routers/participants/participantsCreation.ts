@@ -5,6 +5,7 @@ import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { Participant } from '../../entities/Participant';
+import { UserCreationPartial } from '../../entities/Schemas';
 import { User } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
@@ -31,7 +32,6 @@ import {
   ParticipantCreationAndApprovalPartial,
   ParticipantCreationRequest,
 } from './participantClasses';
-import { UserCreationPartial } from '../../entities/Schemas';
 
 export async function validateParticipantCreationRequest(
   participantRequest: z.infer<typeof ParticipantCreationRequest>,

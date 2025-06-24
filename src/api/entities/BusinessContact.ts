@@ -28,4 +28,3 @@ export class BusinessContact extends BaseModel {
   declare contactType: string;
   declare participantId: number;
 }
-

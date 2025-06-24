@@ -29,4 +29,3 @@ export class ApiRole extends BaseModel {
 }
 
 export type ApiRoleDTO = Omit<ModelObjectOpt<ApiRole>, 'disabled'>;
-

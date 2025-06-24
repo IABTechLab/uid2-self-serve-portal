@@ -1,5 +1,4 @@
 import Objection, { Model } from 'objection';
-import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
