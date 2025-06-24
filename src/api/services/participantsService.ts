@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { getRoleNamesByIds } from '../../web/utils/apiRoles';
 import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
-import { Participant, ParticipantApprovalPartial, ParticipantDTO } from '../entities/Participant';
+import { Participant, ParticipantDTO } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
@@ -22,6 +22,7 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
+import { ParticipantApprovalPartial } from '../entities/Schemas';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
