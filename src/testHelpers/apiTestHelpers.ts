@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Response } from 'express';
 import { Knex } from 'knex';
+import { jest } from "@jest/globals";
 
 import { ModelObjectOpt } from '../api/entities/ModelObjectOpt';
 import { Participant } from '../api/entities/Participant';
@@ -16,13 +17,20 @@ type ParticipantToUserRoleDTO = Partial<
 >;
 
 export function createResponseObject() {
-  const res = {} as unknown as Response;
-  const json = jest.fn();
-  res.json = json;
-  const send = jest.fn();
-  res.send = send;
-  const status = jest.fn(() => res);
-  res.status = status;
+  type JsonFn = (body: unknown) => Response;
+  type SendFn = (body: unknown) => Response;
+  type StatusFn = (code: number) => Response;
+
+	const res = {} as Response;
+
+  const json = jest.fn<JsonFn>((_body: unknown) => res);
+  const send = jest.fn<SendFn>((_body: unknown) => res);
+  const status = jest.fn<StatusFn>((_code: number) => res);
+
+	res.json = json as typeof res.json;
+	res.send = send as typeof res.send;
+	res.status = status as typeof res.status;
+
   return { res, json, send, status };
 }
 
