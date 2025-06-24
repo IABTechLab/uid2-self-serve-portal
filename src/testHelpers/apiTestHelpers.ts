@@ -27,9 +27,7 @@ export function createResponseObject() {
   const send = jest.fn<SendFn>((_body: unknown) => res);
   const status = jest.fn<StatusFn>((_code: number) => res);
 
-	res.json = json as typeof res.json;
-	res.send = send as typeof res.send;
-	res.status = status as typeof res.status;
+	Object.assign(res, { json, send, status });
 
   return { res, json, send, status };
 }
