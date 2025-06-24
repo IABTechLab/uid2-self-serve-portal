@@ -1,22 +1,23 @@
 import { Model, RelationMappings } from 'objection';
 
-import type { ApiRole, ApiRoleDTO } from './ApiRole';
+import { ApiRole, ApiRoleDTO } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
-import type { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
-import type { User, UserDTO } from './User';
-import type { UserToParticipantRole } from './UserToParticipantRole';
+import { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
+import { User, UserDTO } from './User';
+import { UserToParticipantRole } from './UserToParticipantRole';
+import { BusinessContact } from './BusinessContact.ts';
 
 export class Participant extends BaseModel {
   static get tableName() {
     return 'participants';
   }
 
-  static get relationMappings(): RelationMappings {
+	static get relationMappings(): RelationMappings {
     return {
       types: {
         relation: Model.ManyToManyRelation,
-        modelClass: './ParticipantType',
+        modelClass: ParticipantType,
         join: {
           from: 'participants.id',
           through: {
@@ -28,7 +29,7 @@ export class Participant extends BaseModel {
       },
       apiRoles: {
         relation: Model.ManyToManyRelation,
-        modelClass: './ApiRole',
+        modelClass: ApiRole,
         join: {
           from: 'participants.id',
           through: {
@@ -40,7 +41,7 @@ export class Participant extends BaseModel {
       },
       users: {
         relation: Model.ManyToManyRelation,
-        modelClass: './User',
+        modelClass: User,
         join: {
           from: 'participants.id',
           through: {
@@ -50,25 +51,25 @@ export class Participant extends BaseModel {
           to: 'users.id',
         },
       },
-      businessContacts: {
-        relation: Model.HasManyRelation,
-        modelClass: './BusinessContact',
-        join: {
-          from: 'participants.id',
-          to: 'businessContacts.participantId',
-        },
-      },
       approver: {
         relation: Model.BelongsToOneRelation,
-        modelClass: './User',
+        modelClass: User,
         join: {
           from: 'participants.approverId',
           to: 'users.id',
         },
       },
+      businessContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: BusinessContact,
+        join: {
+          from: 'participants.id',
+          to: 'businessContacts.participantId',
+        },
+      },
       participantToUserRoles: {
         relation: Model.HasManyRelation,
-        modelClass: './UserToParticipantRole',
+        modelClass: UserToParticipantRole,
         join: {
           from: 'participants.id',
           to: 'usersToParticipantRoles.participantId',

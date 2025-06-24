@@ -1,6 +1,8 @@
 import { Model, RelationMappings } from 'objection';
 
-import type { UserRole } from './UserRole';
+import { UserRole } from './UserRole';
+import { User } from './User';
+import { Participant } from './Participant';
 
 export class UserToParticipantRole extends Model {
   static get tableName() {
@@ -16,7 +18,7 @@ export class UserToParticipantRole extends Model {
       user: {
         relation: Model.BelongsToOneRelation,
 				// eslint-disable-next-line import/no-cycle
-        modelClass: () => import('./User').then(m => m.User) as unknown as typeof Model,
+        modelClass: User,
         join: {
           from: 'usersToParticipantRoles.userId',
           to: 'users.id',
@@ -24,7 +26,7 @@ export class UserToParticipantRole extends Model {
       },
       participant: {
         relation: Model.BelongsToOneRelation,
-        modelClass: () => import('./Participant').then(m => m.Participant) as unknown as typeof Model,
+        modelClass: Participant,
         join: {
           from: 'usersToParticipantRoles.participantId',
           to: 'participants.id',
@@ -32,7 +34,7 @@ export class UserToParticipantRole extends Model {
       },
       role: {
         relation: Model.BelongsToOneRelation,
-        modelClass: () => import('./UserRole').then(m => m.UserRole) as unknown as typeof UserRole,
+        modelClass: UserRole,
         join: {
           from: 'usersToParticipantRoles.userRoleId',
           to: 'userRoles.id',

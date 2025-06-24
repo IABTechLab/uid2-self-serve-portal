@@ -2,9 +2,9 @@ import { Model, QueryBuilder,RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
-import { Participant } from './Participant';
 // eslint-disable-next-line import/no-cycle
-import type { UserToParticipantRole } from './UserToParticipantRole';
+import { UserToParticipantRole } from './UserToParticipantRole';
+import { Participant } from './Participant';
 
 export interface IUser {}
 
@@ -49,8 +49,7 @@ export class User extends BaseModel {
       },
       userToParticipantRoles: {
         relation: Model.HasManyRelation,
-				// eslint-disable-next-line import/no-cycle
-        modelClass: () => import('./UserToParticipantRole').then(m => m.UserToParticipantRole) as unknown as typeof Model,
+        modelClass: UserToParticipantRole,
         join: {
           from: 'users.id',
           to: 'usersToParticipantRoles.userId',
@@ -80,3 +79,7 @@ export class User extends BaseModel {
 export type UserDTO = ModelObjectOpt<User>;
 
 export type UserCreationDTO = Omit<ModelObjectOpt<UserDTO>, 'id'>;
+
+export function lazyModel<T extends typeof Model>(importer: () => Promise<T>): () => Promise<T> {
+  return importer;
+}

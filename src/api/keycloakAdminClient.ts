@@ -5,6 +5,9 @@ let KcAdminClient;
 
 const loadKcAdminClient = async () => {
   KcAdminClient = (await import('@keycloak/keycloak-admin-client')).default;
+	console.log('KEYCLOAK ADMIN CLIENT MODULEEEEEEEEE');
+	const m = await import('@keycloak/keycloak-admin-client');
+	console.log(m);
 
   const kcAdminClient = new KcAdminClient({
     baseUrl: SSP_KK_AUTH_SERVER_URL,

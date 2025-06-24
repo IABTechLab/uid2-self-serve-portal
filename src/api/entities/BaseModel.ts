@@ -8,5 +8,10 @@ export class BaseModel extends Model {
     return 'id';
   }
 
-	static relationMappings: RelationMappings;
+	static async getRelationMappingsAsync(): Promise<RelationMappings> {
+    // Default implementation returns static relationMappings getter
+    // TypeScript ensures `this` has static relationMappings if implemented.
+    // Use a type assertion to tell TS `this` has `relationMappings` property.
+    return (this as typeof Model & { relationMappings: RelationMappings }).relationMappings;
+  }
 }

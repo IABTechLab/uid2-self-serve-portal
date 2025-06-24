@@ -18,7 +18,8 @@ export const verifyAndEnrichParticipant = async (
   const { participantId } = participantIdSchema.parse(req.params);
   const traceId = getTraceId(req);
   const userEmail = req.auth?.payload?.email as string;
-
+	//console.log(Participant.relationMappings);
+	//console.log(Participant.getRelation('types'))
   let participant = await Participant.query().findById(participantId).withGraphFetched('types');
 
   if (!(await canUserAccessParticipant(userEmail, participantId, traceId))) {
