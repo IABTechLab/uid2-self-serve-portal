@@ -1,3 +1,5 @@
+@import '../Search/SearchBar.scss';
+
 .sharing-permissions-table {
   h2 {
     margin-top: 0;
@@ -15,16 +17,9 @@
   }
 
   .sharing-permissions-search-bar-container {
+    @extend .search-bar-container;
     width: 190px;
-    display: flex;
-    align-items: center;
-    border-bottom: 2px solid var(--theme-action);
-    padding: 6px 2px;
     justify-content: space-between;
-    ::placeholder {
-      color: var(--theme-search-text);
-      opacity: 1;
-    }
   }
 
   .sharing-permission-search-bar-icon {

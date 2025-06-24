@@ -1,3 +1,5 @@
+@import '../Search/SearchBar.scss';
+
 .users-table-container {
   .users-table {
     width: 100%;
@@ -20,14 +22,7 @@
     }
 
     .users-search-bar-container {
-      display: flex;
-      align-items: center;
-      border-bottom: 2px solid var(--theme-action);
-      padding: 6px 2px;
-      ::placeholder {
-        color: var(--theme-search-text);
-        opacity: 1;
-      }
+      @extend .search-bar-container;
     }
 
     .users-search-bar-icon {

@@ -1,3 +1,5 @@
+@import '../Search/SearchBar.scss';
+
 .audit-trail-table-container {
   .audit-log-table {
     font-size: 0.875rem;
@@ -44,14 +46,7 @@
     }
 
     .audit-trail-search-bar-container {
-      display: flex;
-      align-items: center;
-      border-bottom: 2px solid var(--theme-action);
-      padding: 6px 2px;
-      ::placeholder {
-        color: var(--theme-search-text);
-        opacity: 1;
-      }
+      @extend .search-bar-container;
     }
 
     .audit-trail-search-bar-icon {

@@ -48,3 +48,14 @@
     border: 1px solid var(--theme-input-border);
   }
 }
+
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid var(--theme-action);
+  padding: 6px 2px;
+  ::placeholder {
+    color: var(--theme-search-text);
+    opacity: 1;
+  }
+}
