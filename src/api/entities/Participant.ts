@@ -1,12 +1,13 @@
 import { Model } from 'objection';
 import { z } from 'zod';
 
-import { ApiRole, ApiRoleDTO, ApiRoleSchema } from './ApiRole';
+import { ApiRole, ApiRoleDTO } from './ApiRole';
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
-import { ParticipantType, ParticipantTypeDTO, ParticipantTypeSchema } from './ParticipantType';
-import { type User, UserDTO, UserSchema } from './User';
+import { ParticipantType, ParticipantTypeDTO } from './ParticipantType';
+import { type User, UserDTO } from './User';
 import { UserToParticipantRole } from './UserToParticipantRole';
+import { ApiRoleSchema, ParticipantTypeSchema, UserSchema } from './Schemas';
 
 export class Participant extends BaseModel {
   static get tableName() {

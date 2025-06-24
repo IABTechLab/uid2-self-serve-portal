@@ -1,11 +1,12 @@
 import express, { Response } from 'express';
 
-import { BusinessContact, BusinessContactSchema } from '../entities/BusinessContact';
+import { BusinessContact } from '../entities/BusinessContact';
 import {
   BusinessContactRequest,
   hasBusinessContactAccess,
 } from '../services/businessContactsService';
 import { ParticipantRequest } from '../services/participantsService';
+import { BusinessContactSchema } from '../entities/Schemas';
 
 export const BusinessContactsDTO = BusinessContactSchema.pick({
   name: true,

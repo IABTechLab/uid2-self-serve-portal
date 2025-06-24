@@ -35,8 +35,3 @@ export const ParticipantTypeData = {
   DataProvider: { typeName: 'Data Provider' },
   Publisher: { typeName: 'Publisher' },
 };
-
-export const ParticipantTypeSchema = z.object({
-  id: z.number(),
-  typeName: z.string().optional(),
-});

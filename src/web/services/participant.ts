@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
-import { BusinessContactSchema } from '../../api/entities/BusinessContact';
+import { BusinessContactSchema } from '../../api/entities/Schemas';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
