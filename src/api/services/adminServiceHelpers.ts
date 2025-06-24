@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 import { ApiRole, ApiRoleDTO } from '../entities/ApiRole';
-import { ParticipantTypeSchema } from '../entities/ParticipantType';
+import { ParticipantTypeSchema } from '../entities/Schemas';
 import { User } from '../entities/User';
 
 export type AccessToken = {

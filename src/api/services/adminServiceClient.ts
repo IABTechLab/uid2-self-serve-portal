@@ -2,8 +2,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { z } from 'zod';
 
-import { ParticipantSchema } from '../entities/Participant';
-import { ParticipantTypeSchema } from '../entities/ParticipantType';
+import { ParticipantSchema, ParticipantTypeSchema } from '../entities/Schemas';
 import {
   SERVICE_INSTANCE_ID_PREFIX,
   SSP_ADMIN_SERVICE_BASE_URL,
