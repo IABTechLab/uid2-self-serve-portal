@@ -40,7 +40,7 @@ describe('audit log format', () => {
       method: 'GET',
       endpoint: '/api/participants/7/apiRoles',
       traceId: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
-      uid_trace_id: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
+      uidTraceId: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
       actor: JSON.stringify(
         convertToSnakeCase({
           ip: '::1',

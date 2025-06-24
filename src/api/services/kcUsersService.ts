@@ -20,9 +20,9 @@ loadKeycloakRequiredActionAlias()
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
 export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
-	//console.log('test query users!!!!!!');
-	//console.log(kcAdminClient.users);
-	//console.log(email);
+	// console.log('test query users!!!!!!');
+	// console.log(kcAdminClient.users);
+	// console.log(email);
 	// console.log(kcAdminClient.users.find({
   //   email,
   //   extract: true,
@@ -131,8 +131,8 @@ export const removeApiParticipantMemberRole = async (
   userEmail: string
 ) => {
   const users = await queryUsersByEmail(kcAdminClient, userEmail);
-	//console.log('kcadminclient ', kcAdminClient);
-	//console.log("USERSSSSS", users)
+	// console.log('kcadminclient ', kcAdminClient);
+	// console.log("USERSSSSS", users)
   if (users.length !== 1) throw Error(`Unable to remove role from ${userEmail}`);
 
   const apiParticipantMemberRole = await kcAdminClient.clients.findRole({

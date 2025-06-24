@@ -3,11 +3,11 @@ import { z } from 'zod';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
-import { BusinessContactSchema } from '../../api/entities/Schemas';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
 import { InviteTeamMemberForm } from './userAccount';
+import { BusinessContactSchema } from '../../api/entities/BusinessContact';
 
 export const isCreateParticipantError = (error: unknown): error is CreateParticipantError => {
   return (

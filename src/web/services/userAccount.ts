@@ -3,8 +3,7 @@ import { KeycloakProfile } from 'keycloak-js';
 import log from 'loglevel';
 import { z } from 'zod';
 
-import { UserCreationPartial } from '../../api/entities/Schemas';
-import {  UserDTO } from '../../api/entities/User';
+import {  UserCreationPartial, UserDTO } from '../../api/entities/User';
 import { UserWithParticipantRoles } from '../../api/services/usersService';
 import { backendError } from '../utils/apiError';
 

@@ -1,8 +1,8 @@
 import { Model, RelationMappings } from 'objection';
 
-import { UserRole } from './UserRole';
-import { User } from './User';
 import { Participant } from './Participant';
+import { User } from './User';
+import { UserRole } from './UserRole';
 
 export class UserToParticipantRole extends Model {
   static get tableName() {

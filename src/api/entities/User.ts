@@ -1,10 +1,11 @@
 import { Model, QueryBuilder,RelationMappings } from 'objection';
+import { z } from 'zod';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
+import { Participant } from './Participant';
 // eslint-disable-next-line import/no-cycle
 import { UserToParticipantRole } from './UserToParticipantRole';
-import { Participant } from './Participant';
 
 export interface IUser {}
 
@@ -78,8 +79,24 @@ export class User extends BaseModel {
 
 export type UserDTO = ModelObjectOpt<User>;
 
-export type UserCreationDTO = Omit<ModelObjectOpt<UserDTO>, 'id'>;
+export const UserSchema = z.object({
+  id: z.number(),
+  email: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  phone: z.string().optional(),
+  jobFunction: z.nativeEnum(UserJobFunction).optional(),
+  acceptedTerms: z.boolean(),
+  locked: z.boolean().optional(),
+});
 
-export function lazyModel<T extends typeof Model>(importer: () => Promise<T>): () => Promise<T> {
-  return importer;
-}
+export const UserCreationPartial = UserSchema.pick({
+  email: true,
+  firstName: true,
+  lastName: true,
+  phone: true,
+  jobFunction: true,
+  acceptedTerms: true,
+});
+
+export type UserCreationDTO = Omit<ModelObjectOpt<UserDTO>, 'id'>;

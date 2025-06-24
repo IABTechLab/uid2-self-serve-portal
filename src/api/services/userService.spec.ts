@@ -1,4 +1,4 @@
-
+import { jest } from "@jest/globals";
 import { NextFunction, Response } from 'express';
 import { Knex } from 'knex';
 
@@ -11,25 +11,18 @@ import {
   getParticipantIdsOfUser,
 } from '../../testHelpers/apiTestHelpers';
 import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
-
-import { jest } from "@jest/globals";
 import { UserService } from './userService';
 
 jest.unstable_mockModule('./kcUsersService', () => ({
 	removeApiParticipantMemberRole: jest.fn(() => {})
-}))
+}));
 
-const {removeApiParticipantMemberRole} = await import ('./kcUsersService');
+const { removeApiParticipantMemberRole } = await import ('./kcUsersService');
 
 describe('User Service Tests', () => {
   let knex: Knex;
   let next: NextFunction;
   let res: Response;
-
-	let removeSpy: jest.Mock;
-	
-	console.log("API PARTICIPANT MEMBER ROLE: ", jest.isMockFunction(removeApiParticipantMemberRole))
-
 
   beforeEach(async () => {
     knex = await TestConfigure();
