@@ -20,7 +20,7 @@ loadKeycloakRequiredActionAlias()
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
 export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
-	return kcAdminClient.users.find({
+  return kcAdminClient.users.find({
     email,
     extract: true,
   });
