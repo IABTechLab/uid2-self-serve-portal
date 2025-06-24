@@ -101,5 +101,3 @@ export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users'
   apiRoles?: ApiRoleDTO[];
   users?: ModelObjectOpt<User>[];
 };
-
-

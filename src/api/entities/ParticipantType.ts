@@ -38,4 +38,3 @@ export const ParticipantTypeData = {
   DataProvider: { typeName: 'Data Provider' },
   Publisher: { typeName: 'Publisher' },
 };
-
