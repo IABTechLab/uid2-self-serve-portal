@@ -18,7 +18,6 @@ type ParticipantToUserRoleDTO = Partial<
 
 export function createResponseObject() {
 	const res = {} as Response;
-
 	const json = jest.fn((_body: unknown) => res);
 	const send = jest.fn((_body: unknown) => res);
 	const status = jest.fn((_code: number) => res);
