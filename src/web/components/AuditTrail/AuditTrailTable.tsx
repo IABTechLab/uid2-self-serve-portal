@@ -11,6 +11,7 @@ import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import AuditTrailRow from './AuditTrailRow';
 
 import './AuditTrail.scss';
+import '../../styles/search.scss';
 
 type AuditTrailTableProps = Readonly<{
   auditTrail: AuditTrailDTO[];
@@ -67,17 +68,20 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
 
   return (
     <div className='audit-trail-table-container'>
-      <div className='audit-trail-table-header'>
-        <div className='audit-trail-table-header-right'>
-          <div className='audit-trail-search-bar-container'>
+      <div className='audit-trail-table-header standard-search-bar-table-header'>
+        <div className='audit-trail-table-header-right standard-search-bar-table-header-right'>
+          <div className='audit-trail-search-bar-container standard-search-bar-container'>
             <input
               type='text'
-              className='audit-trail-search-bar'
+              className='audit-trail-search-bar standard-search-bar'
               onChange={handleSearch}
               placeholder='Search audit trail'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='audit-trail-search-bar-icon' />
+            <FontAwesomeIcon
+              icon='search'
+              className='audit-trail-search-bar-icon standard-search-bar-icon'
+            />
           </div>
         </div>
       </div>

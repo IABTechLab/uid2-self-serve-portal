@@ -1,5 +1,3 @@
-@import '../Search/SearchBar.scss';
-
 .audit-trail-table-container {
   .audit-log-table {
     font-size: 0.875rem;
@@ -31,38 +29,6 @@
       .icon_check {
         color: green;
       }
-    }
-  }
-
-  .audit-trail-table-header {
-    display: flex;
-    justify-content: end;
-    align-items: baseline;
-    padding-bottom: 10px;
-
-    &-right {
-      display: flex;
-      justify-content: right;
-    }
-
-    .audit-trail-search-bar-container {
-      @extend .search-bar-container;
-    }
-
-    .audit-trail-search-bar-icon {
-      color: var(--theme-search-text);
-      height: 16px;
-      margin-left: 8px;
-    }
-
-    .audit-trail-search-bar {
-      width: 100%;
-      border: none;
-      outline: none;
-      color: var(--theme-search-text);
-      font-weight: 400;
-      font-size: 0.75rem;
-      background: none;
     }
   }
 }

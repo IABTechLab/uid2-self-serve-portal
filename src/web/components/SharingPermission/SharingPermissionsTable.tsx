@@ -26,6 +26,7 @@ import {
 } from './ParticipantTableHelper';
 
 import './SharingPermissionsTable.scss';
+import '../../styles/search.scss';
 
 function NoParticipant() {
   return (
@@ -140,15 +141,18 @@ export function SharingPermissionsTableContent({
             onSelectedChange={setSelectedTypes}
           />
         </div>
-        <div className='sharing-permissions-search-bar-container'>
+        <div className='sharing-permissions-search-bar-container standard-search-bar-container'>
           <input
             type='text'
-            className='sharing-permissions-search-bar'
+            className='sharing-permissions-search-bar standard-search-bar'
             onChange={(event) => setFilterText(event.target.value)}
             placeholder='Search sharing permissions'
             value={filterText}
           />
-          <FontAwesomeIcon icon='search' className='sharing-permission-search-bar-icon' />
+          <FontAwesomeIcon
+            icon='search'
+            className='sharing-permission-search-bar-icon standard-search-bar-icon'
+          />
         </div>
       </div>
       <ParticipantsTable

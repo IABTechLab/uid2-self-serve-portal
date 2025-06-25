@@ -13,6 +13,7 @@ import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { ParticipantManagementItem } from './ParticipantManagementItem';
 
 import './ParticipantManagementTable.scss';
+import '../../styles/search.scss';
 
 type ParticipantManagementTableProps = Readonly<{
   participants: ParticipantDTO[];
@@ -84,17 +85,20 @@ function ParticipantManagementTableContent({
 
   return (
     <div className='participants-table-container'>
-      <div className='participants-table-header'>
-        <div className='participants-table-header-right'>
-          <div className='participants-search-bar-container'>
+      <div className='participants-table-header standard-search-bar-table-header'>
+        <div className='participants-table-header-right standard-search-bar-table-header-right'>
+          <div className='participants-search-bar-container standard-search-bar-container'>
             <input
               type='text'
-              className='participants-search-bar'
+              className='participants-search-bar standard-search-bar'
               onChange={handleSearch}
               placeholder='Search participants'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='participants-search-bar-icon' />
+            <FontAwesomeIcon
+              icon='search'
+              className='participants-search-bar-icon standard-search-bar-icon'
+            />
           </div>
         </div>
       </div>

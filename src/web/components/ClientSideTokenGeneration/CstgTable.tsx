@@ -17,6 +17,7 @@ import {
 import { CstgItem } from './CstgItem';
 
 import './CstgTable.scss';
+import '../../styles/search.scss';
 
 type CstgTableProps = Readonly<{
   cstgValues: string[];
@@ -223,16 +224,19 @@ export function CstgTable({
             </div>
           )}
         </div>
-        <div className='cstg-values-table-header-right'>
-          <div className='cstg-values-search-bar-container'>
+        <div className='cstg-values-table-header-right standard-search-bar-table-header-right'>
+          <div className='cstg-values-search-bar-container standard-search-bar-container'>
             <input
               type='text'
-              className='cstg-values-search-bar'
+              className='cstg-values-search-bar standard-search-bar'
               onChange={handleSearchCstgValue}
               placeholder={`Search ${formattedCstgValueType}s`}
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='cstg-values-search-bar-icon' />
+            <FontAwesomeIcon
+              icon='search'
+              className='cstg-values-search-bar-icon standard-search-bar-icon'
+            />
           </div>
           <div className='add-cstg-value-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDialog}>

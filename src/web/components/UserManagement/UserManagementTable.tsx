@@ -10,6 +10,7 @@ import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { UserManagementItem } from './UserManagementItem';
 
 import './UserManagementTable.scss';
+import '../../styles/search.scss';
 
 type UserManagementTableProps = Readonly<{
   users: UserDTO[];
@@ -75,17 +76,20 @@ function UserManagementTableContent({ users, onChangeUserLock }: UserManagementT
 
   return (
     <div className='users-table-container'>
-      <div className='users-table-header'>
-        <div className='users-table-header-right'>
-          <div className='users-search-bar-container'>
+      <div className='users-table-header standard-search-bar-table-header'>
+        <div className='users-table-header-right standard-search-bar-table-header-right'>
+          <div className='users-search-bar-container standard-search-bar-container'>
             <input
               type='text'
-              className='users-search-bar'
+              className='users-search-bar standard-search-bar'
               onChange={handleSearch}
               placeholder='Search users'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='users-search-bar-icon' />
+            <FontAwesomeIcon
+              icon='search'
+              className='users-search-bar-icon standard-search-bar-icon'
+            />
           </div>
         </div>
       </div>
