@@ -90,7 +90,6 @@
     "typescript": "^5.4.5",
     "typescript-cookie": "^1.0.6",
     "undici": "^6.4.0",
-    "url": "^0.11.4",
     "url-pattern": "^1.0.3",
     "utility-types": "^3.11.0",
     "uuid": "^9.0.1",
