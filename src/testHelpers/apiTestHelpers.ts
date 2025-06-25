@@ -17,19 +17,15 @@ type ParticipantToUserRoleDTO = Partial<
 >;
 
 export function createResponseObject() {
-  type JsonFn = (body: unknown) => Response;
-  type SendFn = (body: unknown) => Response;
-  type StatusFn = (code: number) => Response;
-
 	const res = {} as Response;
 
-  const json = jest.fn<JsonFn>((_body: unknown) => res);
-  const send = jest.fn<SendFn>((_body: unknown) => res);
-  const status = jest.fn<StatusFn>((_code: number) => res);
-
+	const json = jest.fn((_body: unknown) => res);
+	const send = jest.fn((_body: unknown) => res);
+	const status = jest.fn((_code: number) => res);
+	
 	Object.assign(res, { json, send, status });
 
-  return { res, json, send, status };
+	return { res, json, send, status };
 }
 
 export const createParticipantRequest = (
