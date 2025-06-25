@@ -7,7 +7,6 @@ module.exports = {
         test: /\.ts$/,
         include: path.resolve(__dirname, 'src/api'),
       });
-
       webpackConfig.resolve = {
         ...webpackConfig.resolve,
         fallback: {
