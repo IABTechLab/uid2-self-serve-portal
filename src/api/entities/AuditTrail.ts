@@ -29,17 +29,17 @@ export class AuditTrail extends BaseModel {
   }
 
   static get relationMappings(): RelationMappings {
-    return {
-      user: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: () => User,
-        join: {
-          from: 'auditTrails.userId',
-          to: 'users.id',
-        },
-      },
-    };
-  }
+		return {
+			user: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: () => User,
+				join: {
+					from: 'auditTrails.userId',
+					to: 'users.id',
+				},
+			},
+		};
+  };
 
   static get jsonAttributes() {
     return ['eventData'];

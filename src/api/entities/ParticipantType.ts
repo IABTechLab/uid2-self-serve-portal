@@ -10,21 +10,21 @@ export class ParticipantType extends BaseModel {
   }
 
   static get relationMappings(): RelationMappings {
-    return {
-      participants: {
-        relation: Model.ManyToManyRelation,
-        modelClass: () => Participant,
-        join: {
-          from: 'participantTypes.id',
-          through: {
-            from: 'participantsToTypes.participantTypeId',
-            to: 'participantsToTypes.participantId',
-          },
-          to: 'participants.id',
-        },
-      },
-    };
-  }
+		return {
+			participants: {
+				relation: Model.ManyToManyRelation,
+				modelClass: () => Participant,
+				join: {
+					from: 'participantTypes.id',
+					through: {
+						from: 'participantsToTypes.participantTypeId',
+						to: 'participantsToTypes.participantId',
+					},
+					to: 'participants.id',
+				},
+			},
+		};
+  };
 
   declare id: number;
   declare typeName: string;

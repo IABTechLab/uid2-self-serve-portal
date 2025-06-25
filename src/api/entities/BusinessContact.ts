@@ -14,17 +14,17 @@ export class BusinessContact extends BaseModel {
   }
 
   static get relationMappings(): RelationMappings {
-    return {
-      participant: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: () => Participant,
-        join: {
-          from: 'businessContacts.participantId',
-          to: 'participants.id',
-        },
-      },
-    };
-  }
+		return {
+			participant: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: () => Participant,
+				join: {
+					from: 'businessContacts.participantId',
+					to: 'participants.id',
+				},
+			},
+		};
+  };
 
   declare id: number;
   declare name: string;

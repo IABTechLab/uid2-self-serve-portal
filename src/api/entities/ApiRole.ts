@@ -10,22 +10,21 @@ export class ApiRole extends BaseModel {
   }
 
   static get relationMappings(): RelationMappings {
-    return {
-      participants: {
-        relation: Model.ManyToManyRelation,
-        modelClass: () => Participant,
-        join: {
-          from: 'apiRoles.id',
-          through: {
-            from: 'participantsToApiRoles.apiRoleId',
-            to: 'participantsToApiRoles.participantId',
-          },
-          to: 'participants.id',
-        },
-      },
-    };
-  }
-
+		return {
+			participants: {
+				relation: Model.ManyToManyRelation,
+				modelClass: () => Participant,
+				join: {
+					from: 'apiRoles.id',
+					through: {
+						from: 'participantsToApiRoles.apiRoleId',
+						to: 'participantsToApiRoles.participantId',
+					},
+					to: 'participants.id',
+				},
+			},
+		};
+  };
   declare id: number;
   declare roleName: string;
   declare externalName: string;
