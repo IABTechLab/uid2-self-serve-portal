@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import request, { Request } from 'supertest';
 
 import { ContactType } from '../entities/BusinessContact';

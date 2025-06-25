@@ -78,12 +78,14 @@ export const getErrorLoggingMiddleware = () =>
 
 export interface TraceId {
   traceId: string;
-  amazonTraceId: string;
+  uidTraceId: string;
 }
 
 export const getTraceId = (request: Request): TraceId => {
+  const traceId = request?.headers?.traceId?.toString() || '';
+	const uidTraceId = (request?.headers?.['x-amzn-trace-id'] as string | undefined) ?? traceId ?? '';
   return {
-    traceId: request?.headers?.traceId?.toString() ?? '',
-    amazonTraceId: request?.headers?.xAmznTraceId?.toString() ?? '',
+    traceId,
+    uidTraceId
   };
 };

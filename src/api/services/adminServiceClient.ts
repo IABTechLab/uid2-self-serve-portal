@@ -1,10 +1,8 @@
 /* eslint-disable camelcase */
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
-import crypto from 'crypto';
 import { z } from 'zod';
 
-import { ParticipantSchema } from '../entities/Participant';
-import { ParticipantTypeSchema } from '../entities/ParticipantType';
+import { ParticipantSchema, ParticipantTypeSchema } from '../entities/Schemas';
 import {
   SERVICE_INSTANCE_ID_PREFIX,
   SSP_ADMIN_SERVICE_BASE_URL,
@@ -68,7 +66,7 @@ const adminServiceClient = axios.create({
 });
 
 const createTracedClient = (traceId: TraceId) => {
-  const instanceId = `${SERVICE_INSTANCE_ID_PREFIX}:${crypto.randomUUID()}`;
+  const instanceId = `${SERVICE_INSTANCE_ID_PREFIX}`;
   return {
     get: <T>(url: string, config?: AxiosRequestConfig) =>
       adminServiceClient.get<T>(url, {
@@ -76,7 +74,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
@@ -86,7 +84,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
@@ -96,7 +94,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),
@@ -106,7 +104,7 @@ const createTracedClient = (traceId: TraceId) => {
         headers: {
           ...config?.headers,
           traceId: traceId.traceId,
-          'uid-trace-id': traceId.amazonTraceId,
+          'uid-trace-id': traceId.uidTraceId,
           'uid-instance-id': instanceId,
         },
       }),

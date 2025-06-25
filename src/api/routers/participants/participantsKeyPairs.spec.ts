@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { jest } from "@jest/globals";
 import { Response } from 'express';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
@@ -85,6 +86,15 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
+function createMockResponse(): Response {
+	const res: Partial<Response> = {};
+	res.status = jest.fn(() => res as Response) as (code: number) => Response;
+	res.send = jest.fn(() => res as Response) as (body?: unknown) => Response;
+	res.json = jest.fn(() => res as Response) as (body?: unknown) => Response;
+
+	return res as Response;
+}
+
 describe('Get participant key pairs', () => {
   beforeAll(() => server.listen());
   afterEach(() => server.resetHandlers());
@@ -129,10 +139,7 @@ describe('Get participant key pairs', () => {
       participant: participantObject,
     } as ParticipantRequest;
 
-    const res = {} as unknown as Response;
-    res.json = jest.fn();
-    res.send = jest.fn();
-    res.status = jest.fn(() => res);
+    const res = createMockResponse();
     const enabledKeys = keys.filter((key) => !key.disabled);
 
     await handleGetParticipantKeyPairs(participantRequest, res);
