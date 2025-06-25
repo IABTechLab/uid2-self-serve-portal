@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import winston from 'winston';
 
 import { auditTraceFormat, convertToSnakeCase, extractConfiguredFields } from './auditLogging';
@@ -39,7 +40,7 @@ describe('audit log format', () => {
       method: 'GET',
       endpoint: '/api/participants/7/apiRoles',
       traceId: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
-			uidTraceId: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
+      uidTraceId: 'b96aaad6-e8ba-4697-9273-6ab7607af102',
       actor: JSON.stringify(
         convertToSnakeCase({
           ip: '::1',

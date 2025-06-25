@@ -1,7 +1,8 @@
-import * as Knex from 'knex';
+import type { Knex } from 'knex';
+import knex from 'knex';
 import { Model } from 'objection';
 
-const config: Knex.Knex.Config = {
+const config: Knex.Config = {
   client: 'better-sqlite3',
   connection: {
     filename: ':memory:',
@@ -9,15 +10,14 @@ const config: Knex.Knex.Config = {
   migrations: {
     directory: './src/database/migrations',
   },
-
   useNullAsDefault: true,
 };
 
-export async function TestConfigure(): Promise<Knex.Knex> {
-  const knex = Knex.knex(config);
-  Model.knex(knex);
+export async function TestConfigure(): Promise<Knex> {
+  const knexInstance = knex(config);
+  Model.knex(knexInstance);
 
-  await knex.migrate.latest();
+  await knexInstance.migrate.latest();
 
-  return knex;
+  return knexInstance;
 }

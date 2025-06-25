@@ -1,9 +1,9 @@
-import * as Knex from 'knex';
+import knex from 'knex';
 import { Model } from 'objection';
 
-import config from '../../knexfile';
+import config from '../../knexfile.ts';
 
 export function Configure(): void {
-  const knex = Knex.knex(config);
-  Model.knex(knex);
+  const knexInstance = knex(config);
+  Model.knex(knexInstance);
 }

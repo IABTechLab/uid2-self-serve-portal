@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
 /**
  * See this page for info: mswjs.io/docs/migrations/1.x-to-2.x/#frequent-issues
- *
- *
  *
  * @note The block below contains polyfills for Node.js globals
  * required for Jest to function when running JSDOM tests.

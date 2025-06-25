@@ -1,26 +1,31 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
 
 export class ApiRole extends BaseModel {
   static get tableName() {
     return 'apiRoles';
   }
-  static relationMappings = {
-    participants: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'apiRoles.id',
-        through: {
-          from: 'participantsToApiRoles.apiRoleId',
-          to: 'participantsToApiRoles.participantId',
+
+  static get relationMappings(): RelationMappings {
+    return {
+      participants: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => Participant,
+        join: {
+          from: 'apiRoles.id',
+          through: {
+            from: 'participantsToApiRoles.apiRoleId',
+            to: 'participantsToApiRoles.participantId',
+          },
+          to: 'participants.id',
         },
-        to: 'participants.id',
       },
-    },
-  };
+    };
+  }
+
   declare id: number;
   declare roleName: string;
   declare externalName: string;

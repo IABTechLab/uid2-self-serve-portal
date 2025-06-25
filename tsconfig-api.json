@@ -1,11 +1,15 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
+		"target": "esnext",
+    "module": "esnext",
     "outDir": "api-dist",
     "resolveJsonModule": true,
     "allowJs": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+		"allowImportingTsExtensions": true,
+		"noEmit": true,
   },
   "include": ["src/**/*"],
   "exclude": [

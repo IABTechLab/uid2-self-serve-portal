@@ -184,5 +184,22 @@ module.exports = {
         ],
       },
     },
+		{
+			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/**/*.{ts,tsx,js,jsx}',
+				'./src/api/keycloakAdminClient.ts', './knexfile.ts'
+			],
+			rules: {
+				'import/extensions': [
+					'error',
+					'ignorePackages',
+					{
+						ts: 'always',
+						tsx: 'never',
+						js: 'never',
+						jsx: 'never',
+					},
+				],
+			},
+		},
   ],
 };

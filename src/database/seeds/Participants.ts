@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { ModelObject } from 'objection';
 import { Optional } from 'utility-types';
 
-import { Participant } from '../../api/entities/Participant';
+import { Participant } from '../../api/entities/Participant.ts';
 
 type ParticipantsType = ModelObject<Participant>;
 const sampleData: Optional<

@@ -1,26 +1,31 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { Participant } from './Participant.ts';  // eslint-disable-line import/no-cycle
 
 export class ParticipantType extends BaseModel {
   static get tableName() {
     return 'participantTypes';
   }
-  static relationMappings = {
-    participants: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'participantTypes.id',
-        through: {
-          from: 'participantsToTypes.participantTypeId',
-          to: 'participantsToTypes.participantId',
+
+  static get relationMappings(): RelationMappings {
+    return {
+      participants: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => Participant,
+        join: {
+          from: 'participantTypes.id',
+          through: {
+            from: 'participantsToTypes.participantTypeId',
+            to: 'participantsToTypes.participantId',
+          },
+          to: 'participants.id',
         },
-        to: 'participants.id',
       },
-    },
-  };
+    };
+  }
+
   declare id: number;
   declare typeName: string;
 }
