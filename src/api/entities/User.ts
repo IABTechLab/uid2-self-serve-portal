@@ -31,12 +31,11 @@ export class User extends BaseModel {
     return `${this.firstName} ${this.lastName}`;
   }
 
-
   static get relationMappings(): RelationMappings {
 		return {
 			participants: {
 				relation: Model.ManyToManyRelation,
-				modelClass: 'Participant',
+				modelClass: () => Participant,
 				join: {
 					from: 'users.id',
 					through: {
@@ -48,7 +47,7 @@ export class User extends BaseModel {
 			},
 			userToParticipantRoles: {
 				relation: Model.HasManyRelation,
-				modelClass: 'UserToParticipantRole',
+				modelClass: () => UserToParticipantRole,
 				join: {
 					from: 'users.id',
 					to: 'usersToParticipantRoles.userId',

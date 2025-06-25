@@ -7,11 +7,9 @@ export class UserToParticipantRole extends Model {
   static get tableName() {
     return 'usersToParticipantRoles';
   }
-
   static get idColumn() {
     return ['userId', 'participantId', 'userRoleId'];
   }
-
   static get relationMappings(): RelationMappings {
 		return {
 			user: {
@@ -40,7 +38,6 @@ export class UserToParticipantRole extends Model {
 			},
 		};
   };
-
   declare userId: number;
   declare participantId: number;
   declare userRoleId: number;

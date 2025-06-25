@@ -25,7 +25,6 @@ export class ParticipantType extends BaseModel {
 			},
 		};
   };
-
   declare id: number;
   declare typeName: string;
 }
