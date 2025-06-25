@@ -53,7 +53,7 @@ export class User extends BaseModel {
 					to: 'usersToParticipantRoles.userId',
 				},
 			},
-		}
+		};
   };
 
   declare id: number;

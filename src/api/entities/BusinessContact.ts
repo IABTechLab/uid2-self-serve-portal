@@ -21,7 +21,7 @@ export class BusinessContact extends BaseModel {
 					to: 'participants.id',
 				},
 			},
-		}
+		};
   };
 
   declare id: number;

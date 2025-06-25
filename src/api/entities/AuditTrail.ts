@@ -1,4 +1,4 @@
-import { Model, RelationMapping, RelationMappings } from 'objection';
+import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
@@ -36,7 +36,7 @@ export class AuditTrail extends BaseModel {
 					to: 'users.id',
 				},
 			},
-		}
+		};
   };
 
   static get jsonAttributes() {

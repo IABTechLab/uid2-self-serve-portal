@@ -33,7 +33,7 @@ export class UserToParticipantRole extends Model {
 					to: 'userRoles.id',
 				},
 			},
-		}
+		};
   };
   declare userId: number;
   declare participantId: number;

@@ -21,7 +21,7 @@ export class ApiRole extends BaseModel {
 					to: 'participants.id',
 				},
 			},
-		}
+		};
   };
   declare id: number;
   declare roleName: string;

@@ -73,7 +73,7 @@ export class Participant extends BaseModel {
 					to: 'usersToParticipantRoles.participantId',
 				},
 			},
-		}
+		};
   };
   declare id: number;
   declare name: string;
