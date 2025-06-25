@@ -86,9 +86,8 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
-export function createMockResponse(): Response {
+function createMockResponse(): Response {
 	const res: Partial<Response> = {};
-
 	res.status = jest.fn(() => res as Response) as (code: number) => Response;
 	res.send = jest.fn(() => res as Response) as (body?: unknown) => Response;
 	res.json = jest.fn(() => res as Response) as (body?: unknown) => Response;
@@ -141,7 +140,6 @@ describe('Get participant key pairs', () => {
     } as ParticipantRequest;
 
     const res = createMockResponse();
-    res.status = jest.fn(() => res);
     const enabledKeys = keys.filter((key) => !key.disabled);
 
     await handleGetParticipantKeyPairs(participantRequest, res);
