@@ -1,9 +1,5 @@
 import { faker } from '@faker-js/faker';
-<<<<<<< HEAD
-import { jest } from '@jest/globals';
-=======
 import { jest } from "@jest/globals";
->>>>>>> main
 import { Response } from 'express';
 import { Knex } from 'knex';
 
