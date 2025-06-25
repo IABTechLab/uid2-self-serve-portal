@@ -1,4 +1,4 @@
-import { Model, QueryBuilder,RelationMappings } from 'objection';
+import { Model, QueryBuilder, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
