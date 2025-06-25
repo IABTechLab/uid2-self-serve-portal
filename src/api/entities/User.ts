@@ -2,8 +2,8 @@ import { Model, QueryBuilder, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
-import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
-import { UserToParticipantRole } from './UserToParticipantRole.ts'; // eslint-disable-line import/no-cycle
+import type { Participant } from './Participant.ts';
+import type { UserToParticipantRole } from './UserToParticipantRole.ts';
 
 export interface IUser {}
 export enum UserJobFunction {
@@ -35,7 +35,7 @@ export class User extends BaseModel {
 		return {
 			participants: {
 				relation: Model.ManyToManyRelation,
-				modelClass: () => Participant,
+				modelClass: 'Participant',
 				join: {
 					from: 'users.id',
 					through: {
@@ -47,7 +47,7 @@ export class User extends BaseModel {
 			},
 			userToParticipantRoles: {
 				relation: Model.HasManyRelation,
-				modelClass: () => UserToParticipantRole,
+				modelClass: 'UserToParticipantRole',
 				join: {
 					from: 'users.id',
 					to: 'usersToParticipantRoles.userId',

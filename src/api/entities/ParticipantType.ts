@@ -2,7 +2,6 @@ import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
-import { Participant } from './Participant.ts';  // eslint-disable-line import/no-cycle
 
 export class ParticipantType extends BaseModel {
   static get tableName() {
@@ -12,7 +11,7 @@ export class ParticipantType extends BaseModel {
 		return {
 			participants: {
 				relation: Model.ManyToManyRelation,
-				modelClass: () => Participant,
+				modelClass: 'Participant',
 				join: {
 					from: 'participantTypes.id',
 					through: {

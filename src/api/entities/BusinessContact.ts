@@ -1,7 +1,6 @@
 import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
-import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
 
 export enum ContactType {
   Business = 'Business',
@@ -16,7 +15,7 @@ export class BusinessContact extends BaseModel {
 		return {
 			participant: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: () => Participant,
+				modelClass: 'Participant',
 				join: {
 					from: 'businessContacts.participantId',
 					to: 'participants.id',

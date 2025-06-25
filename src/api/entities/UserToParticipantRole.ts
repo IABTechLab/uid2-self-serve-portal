@@ -1,9 +1,5 @@
 import { Model, RelationMappings } from 'objection';
 
-import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
-import { User } from './User.ts';  // eslint-disable-line import/no-cycle
-import { UserRole } from './UserRole.ts'; // eslint-disable-line import/no-cycle
-
 export class UserToParticipantRole extends Model {
   static get tableName() {
     return 'usersToParticipantRoles';
@@ -15,7 +11,7 @@ export class UserToParticipantRole extends Model {
 		return {
 			user: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: () => User,
+				modelClass: 'User',
 				join: {
 					from: 'usersToParticipantRoles.userId',
 					to: 'users.id',
@@ -23,7 +19,7 @@ export class UserToParticipantRole extends Model {
 			},
 			participant: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: () => Participant,
+				modelClass: 'Participant',
 				join: {
 					from: 'usersToParticipantRoles.participantId',
 					to: 'participants.id',
@@ -31,7 +27,7 @@ export class UserToParticipantRole extends Model {
 			},
 			role: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: () => UserRole,
+				modelClass: 'UserRole',
 				join: {
 					from: 'usersToParticipantRoles.userRoleId',
 					to: 'userRoles.id',

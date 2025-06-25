@@ -1,12 +1,11 @@
 import { Model, RelationMappings } from 'objection';
 
-import { ApiRole, ApiRoleDTO } from './ApiRole.ts'; // eslint-disable-line import/no-cycle
+import type { ApiRole, ApiRoleDTO } from './ApiRole.ts';
 import { BaseModel } from './BaseModel.ts';
-import { BusinessContact } from './BusinessContact.ts'; // eslint-disable-line import/no-cycle
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
-import { ParticipantType, ParticipantTypeDTO } from './ParticipantType.ts'; // eslint-disable-line import/no-cycle
-import { User, UserDTO } from './User.ts'; // eslint-disable-line import/no-cycle
-import { UserToParticipantRole } from './UserToParticipantRole.ts'; // eslint-disable-line import/no-cycle
+import type { ParticipantType, ParticipantTypeDTO } from './ParticipantType.ts';
+import type { User, UserDTO } from './User.ts';
+import type { UserToParticipantRole } from './UserToParticipantRole.ts';
 
 export class Participant extends BaseModel {
   static get tableName() {
@@ -16,7 +15,7 @@ export class Participant extends BaseModel {
 		return {
 			types: {
 				relation: Model.ManyToManyRelation,
-				modelClass: () => ParticipantType,
+				modelClass: 'ParticipantType',
 				join: {
 					from: 'participants.id',
 					through: {
@@ -28,7 +27,7 @@ export class Participant extends BaseModel {
 			},
 			apiRoles: {
 				relation: Model.ManyToManyRelation,
-				modelClass: () => ApiRole,
+				modelClass: 'ApiRole',
 				join: {
 					from: 'participants.id',
 					through: {
@@ -40,7 +39,7 @@ export class Participant extends BaseModel {
 			},
 			users: {
 				relation: Model.ManyToManyRelation,
-				modelClass: () => User,
+				modelClass: 'User',
 				join: {
 					from: 'participants.id',
 					through: {
@@ -52,7 +51,7 @@ export class Participant extends BaseModel {
 			},
 			businessContacts: {
 				relation: Model.HasManyRelation,
-				modelClass: () => BusinessContact,
+				modelClass: 'BusinessContact',
 				join: {
 					from: 'participants.id',
 					to: 'businessContacts.participantId',
@@ -60,7 +59,7 @@ export class Participant extends BaseModel {
 			},
 			approver: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: () => User,
+				modelClass: 'User',
 				join: {
 					from: 'participants.approverId',
 					to: 'users.id',
@@ -68,7 +67,7 @@ export class Participant extends BaseModel {
 			},
 			participantToUserRoles: {
 				relation: Model.HasManyRelation,
-				modelClass: () => UserToParticipantRole,
+				modelClass: 'UserToParticipantRole',
 				join: {
 					from: 'participants.id',
 					to: 'usersToParticipantRoles.participantId',
