@@ -12,7 +12,6 @@ export class Participant extends BaseModel {
   static get tableName() {
     return 'participants';
   }
-
   static get relationMappings(): RelationMappings {
 		return {
 			types: {
@@ -77,7 +76,7 @@ export class Participant extends BaseModel {
 			},
 		};
   };
-	declare id: number;
+  declare id: number;
   declare name: string;
   declare allowSharing: boolean;
   declare completedRecommendations: boolean;

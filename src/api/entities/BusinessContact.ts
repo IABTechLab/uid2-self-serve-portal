@@ -12,7 +12,6 @@ export class BusinessContact extends BaseModel {
   static get tableName() {
     return 'businessContacts';
   }
-
   static get relationMappings(): RelationMappings {
 		return {
 			participant: {

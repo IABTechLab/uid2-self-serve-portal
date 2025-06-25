@@ -8,7 +8,6 @@ export class ParticipantType extends BaseModel {
   static get tableName() {
     return 'participantTypes';
   }
-
   static get relationMappings(): RelationMappings {
 		return {
 			participants: {

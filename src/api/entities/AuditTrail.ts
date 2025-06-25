@@ -27,7 +27,6 @@ export class AuditTrail extends BaseModel {
   static get tableName() {
     return 'auditTrails';
   }
-
   static get relationMappings(): RelationMappings {
 		return {
 			user: {
