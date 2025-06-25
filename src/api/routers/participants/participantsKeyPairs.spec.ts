@@ -86,14 +86,8 @@ const handlers = [
 
 const server = setupServer(...handlers);
 
-<<<<<<< HEAD
-export function createMockResponse(): Response {
-	const res: Partial<Response> = {};
-
-=======
 function createMockResponse(): Response {
 	const res: Partial<Response> = {};
->>>>>>> main
 	res.status = jest.fn(() => res as Response) as (code: number) => Response;
 	res.send = jest.fn(() => res as Response) as (body?: unknown) => Response;
 	res.json = jest.fn(() => res as Response) as (body?: unknown) => Response;
