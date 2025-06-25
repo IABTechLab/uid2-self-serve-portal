@@ -1,0 +1,23 @@
+# See https://aquasecurity.github.io/trivy/v0.35/docs/vulnerability/examples/filter/
+
+# for more details
+
+# e.g.
+
+# CVE-2022-3996
+
+# https://atlassian.thetradedesk.com/jira/browse/UID2-4091
+
+CVE-2024-45296
+CVE-2025-27152
+
+
+# Both vulnerabilities below require upgrading react-router, in both cases blocked by dependencies.
+# For details see https://thetradedesk.slack.com/archives/G01SS5EQE91/p1745551035526029
+
+## For the below two vulnerabilities see https://thetradedesk.slack.com/archives/G01SS5EQE91/p1745551035526029
+https://thetradedesk.atlassian.net/browse/UID2-5396
+CVE-2025-43864 exp:2025-05-12
+
+# https://thetradedesk.atlassian.net/browse/UID2-5395
+GHSA-cpj6-fhp6-mr6j exp:2025-05-12
