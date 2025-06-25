@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel';
 import { ModelObjectOpt } from './ModelObjectOpt';
@@ -7,19 +7,21 @@ export class ApiRole extends BaseModel {
   static get tableName() {
     return 'apiRoles';
   }
-  static relationMappings = {
-    participants: {
-      relation: Model.ManyToManyRelation,
-      modelClass: 'Participant',
-      join: {
-        from: 'apiRoles.id',
-        through: {
-          from: 'participantsToApiRoles.apiRoleId',
-          to: 'participantsToApiRoles.participantId',
-        },
-        to: 'participants.id',
-      },
-    },
+  static get relationMappings(): RelationMappings {
+		return {
+			participants: {
+				relation: Model.ManyToManyRelation,
+				modelClass: 'Participant',
+				join: {
+					from: 'apiRoles.id',
+					through: {
+						from: 'participantsToApiRoles.apiRoleId',
+						to: 'participantsToApiRoles.participantId',
+					},
+					to: 'participants.id',
+				},
+			},
+		};
   };
   declare id: number;
   declare roleName: string;
