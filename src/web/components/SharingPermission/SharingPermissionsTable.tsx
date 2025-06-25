@@ -26,7 +26,6 @@ import {
 } from './ParticipantTableHelper';
 
 import './SharingPermissionsTable.scss';
-import '../../styles/search.scss';
 
 function NoParticipant() {
   return (
@@ -149,10 +148,7 @@ export function SharingPermissionsTableContent({
             placeholder='Search sharing permissions'
             value={filterText}
           />
-          <FontAwesomeIcon
-            icon='search'
-            className='sharing-permission-search-bar-icon standard-search-bar-icon'
-          />
+          <FontAwesomeIcon icon='search' className='standard-search-bar-icon' />
         </div>
       </div>
       <ParticipantsTable
