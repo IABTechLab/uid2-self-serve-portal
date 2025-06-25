@@ -1,5 +1,9 @@
 import { faker } from '@faker-js/faker';
+<<<<<<< HEAD
 import { jest } from '@jest/globals';
+=======
+import { jest } from "@jest/globals";
+>>>>>>> main
 import { Response } from 'express';
 import { Knex } from 'knex';
 
@@ -17,21 +21,12 @@ type ParticipantToUserRoleDTO = Partial<
 >;
 
 export function createResponseObject() {
-  type JsonFn = (body: unknown) => Response;
-  type SendFn = (body: unknown) => Response;
-  type StatusFn = (code: number) => Response;
-
 	const res = {} as Response;
-
-  const json = jest.fn<JsonFn>((_body: unknown) => res);
-  const send = jest.fn<SendFn>((_body: unknown) => res);
-  const status = jest.fn<StatusFn>((_code: number) => res);
-
-	res.json = json as typeof res.json;
-	res.send = send as typeof res.send;
-	res.status = status as typeof res.status;
-
-  return { res, json, send, status };
+	const json = jest.fn((_body: unknown) => res);
+	const send = jest.fn((_body: unknown) => res);
+	const status = jest.fn((_code: number) => res);
+	Object.assign(res, { json, send, status });
+	return { res, json, send, status };
 }
 
 export const createParticipantRequest = (
