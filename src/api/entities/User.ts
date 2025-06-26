@@ -1,4 +1,4 @@
-import { Model, QueryBuilder, RelationMappings } from 'objection';
+import Objection, { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
@@ -68,8 +68,11 @@ export class User extends BaseModel {
   declare userToParticipantRoles?: UserToParticipantRole[];
 
   static readonly modifiers = {
-    withParticipants<TResult>(query: QueryBuilder<User, TResult>) {
-      return query.withGraphFetched('[participants.participantToUserRoles]') as QueryBuilder<User, TResult & { participants: Participant[] }>;
+    withParticipants<TResult>(query: Objection.QueryBuilder<User, TResult>) {
+      const myQuery = query.withGraphFetched(
+        '[participants.participantToUserRoles]'
+      ) as Objection.QueryBuilder<User, TResult & { participants: Participant[] }>;
+      return myQuery;
     },
   };
 }
