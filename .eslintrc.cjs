@@ -201,5 +201,11 @@ module.exports = {
 				],
 			},
 		},
+		{
+      files: ['src/api/entities/**/*.ts'],
+      rules: {
+        'import/no-cycle': 'off',
+      },
+    },
   ],
 };

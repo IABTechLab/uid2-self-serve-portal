@@ -2,11 +2,11 @@ import { Model, RelationMappings } from 'objection';
 
 import { ApiRole, ApiRoleDTO } from './ApiRole.ts';
 import { BaseModel } from './BaseModel.ts';
+import { BusinessContact } from './BusinessContact.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
 import { ParticipantType, ParticipantTypeDTO } from './ParticipantType.ts';
 import { User, UserDTO } from './User.ts';
 import { UserToParticipantRole } from './UserToParticipantRole.ts';
-import { BusinessContact } from './BusinessContact.ts';
 
 export class Participant extends BaseModel {
   static get tableName() {

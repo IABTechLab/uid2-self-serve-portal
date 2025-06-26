@@ -1,7 +1,8 @@
 import { Model, RelationMappings } from 'objection';
-import { User } from './User';
-import { Participant } from './Participant';
-import { UserRole } from './UserRole';
+
+import { Participant } from './Participant.ts';
+import { User } from './User.ts';
+import { UserRole } from './UserRole.ts';
 
 export class UserToParticipantRole extends Model {
   static get tableName() {
