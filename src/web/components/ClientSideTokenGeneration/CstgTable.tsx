@@ -223,7 +223,7 @@ export function CstgTable({
             </div>
           )}
         </div>
-        <div className='search-bar-table-header-right'>
+        <div className='table-header-right'>
           <div className='search-bar-container'>
             <input
               type='text'

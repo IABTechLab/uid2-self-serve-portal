@@ -75,8 +75,8 @@ function UserManagementTableContent({ users, onChangeUserLock }: UserManagementT
 
   return (
     <div className='users-table-container'>
-      <div className='search-bar-table-header'>
-        <div className='search-bar-table-header-right'>
+      <div className='table-header'>
+        <div className='table-header-right'>
           <div className='search-bar-container'>
             <input
               type='text'
