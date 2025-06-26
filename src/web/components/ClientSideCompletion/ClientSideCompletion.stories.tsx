@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { ClientSideCompletion } from './ClientSideCompletion';
 

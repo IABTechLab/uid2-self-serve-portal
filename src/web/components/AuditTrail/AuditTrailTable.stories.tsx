@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { AuditTrailEvents } from '../../../api/entities/AuditTrail';
 import AuditTrailTable from './AuditTrailTable';

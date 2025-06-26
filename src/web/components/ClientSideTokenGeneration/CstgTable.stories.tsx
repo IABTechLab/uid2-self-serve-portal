@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { CstgValueType } from './CstgHelper';
 import { CstgTable } from './CstgTable';
