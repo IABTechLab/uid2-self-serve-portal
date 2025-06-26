@@ -1,13 +1,13 @@
 @import './styles/colors';
 @import './styles/themes';
-@import './styles/toast.scss';
+@import './styles/toast';
 
 .app {
   @import 'styles/tables';
   @import 'styles/text';
   @import 'styles/buttons';
-  @import 'styles/search.scss';
-  @import 'styles/forms.scss';
+  @import 'styles/search';
+  @import 'styles/forms';
 
   text-align: left;
   min-height: 100%;
