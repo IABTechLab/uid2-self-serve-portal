@@ -2,8 +2,6 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import clsx from 'clsx';
 
-import '../../../styles/buttons.scss';
-
 type ActionButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
   icon: IconProp;
   iconClassName?: string;

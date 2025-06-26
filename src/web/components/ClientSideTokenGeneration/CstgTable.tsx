@@ -17,7 +17,6 @@ import {
 import { CstgItem } from './CstgItem';
 
 import './CstgTable.scss';
-// import '../../styles/search.scss';
 
 type CstgTableProps = Readonly<{
   cstgValues: string[];
