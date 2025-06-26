@@ -1,4 +1,4 @@
-import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_REALM, SSP_KK_SECRET } from './envars.ts';
+import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_REALM, SSP_KK_SECRET } from './envars';
 
 // dynamic import of KcAdminClient required by keycloak-admin-client version 26.1.3
 let KcAdminClient;

@@ -185,19 +185,15 @@ module.exports = {
       },
     },
 		{
-			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/**/*.{ts,tsx,js,jsx}',
-				'./src/api/keycloakAdminClient.ts', './knexfile.ts'
+			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/seeds/**/*.{ts,tsx,js,jsx}', './knexfile.ts'
 			],
 			rules: {
 				'import/extensions': [
 					'error',
 					'ignorePackages',
 					{
-						ts: 'always',
-						tsx: 'never',
-						js: 'never',
-						jsx: 'never',
-					},
+						_: 'always'
+					}
 				],
 			},
 		},

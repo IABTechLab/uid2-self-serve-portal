@@ -13,7 +13,6 @@ const config: Knex.Config = {
   },
   migrations: {
     directory: './src/database/migrations',
-		extension: 'ts'
   },
   seeds: {
     directory: './src/database/seeds',

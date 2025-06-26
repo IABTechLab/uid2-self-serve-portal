@@ -59,7 +59,7 @@ describe('User Service Tests', () => {
       });
     });
 		// Test commented out until jest mocking + ESM + keycloak has a better solution
-    /**(
+    /* * (
 		 * describe('User is removed from their only participant', () => {
 			//jest.spyOn(kcUsersService, 'removeApiParticipantMemberRole').mockResolvedValueOnce();
       it('removes the user from their only participant and removes the keycloak role', async () => {
@@ -82,6 +82,6 @@ describe('User Service Tests', () => {
         );
       });
     });
-		**/
+		* */
   });
 });
