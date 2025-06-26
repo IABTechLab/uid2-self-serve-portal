@@ -185,8 +185,7 @@ module.exports = {
       },
     },
 		{
-			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/seeds/**/*.{ts,tsx,js,jsx}', './knexfile.ts'
-			],
+			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/seeds/**/*.{ts,tsx,js,jsx}', './knexfile.ts'],
 			rules: {
 				'import/extensions': [
 					'error',
