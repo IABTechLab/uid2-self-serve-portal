@@ -223,16 +223,16 @@ export function CstgTable({
             </div>
           )}
         </div>
-        <div className='standard-search-bar-table-header-right'>
-          <div className='cstg-values-search-bar-container standard-search-bar-container'>
+        <div className='search-bar-table-header-right'>
+          <div className='search-bar-container'>
             <input
               type='text'
-              className='standard-search-bar'
+              className='search-bar-input'
               onChange={handleSearchCstgValue}
               placeholder={`Search ${formattedCstgValueType}s`}
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='standard-search-bar-icon' />
+            <FontAwesomeIcon icon='search' className='search-bar-icon' />
           </div>
           <div className='add-cstg-value-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDialog}>

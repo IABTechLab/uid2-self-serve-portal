@@ -1,16 +1,16 @@
-.standard-search-bar-table-header {
+.search-bar-table-header {
   display: flex;
   justify-content: end;
   align-items: baseline;
   padding-bottom: 10px;
 }
 
-.standard-search-bar-table-header-right {
+.search-bar-table-header-right {
   display: flex;
   justify-content: right;
 }
 
-.standard-search-bar-container {
+.search-bar-container {
   display: flex;
   align-items: center;
   border-bottom: 2px solid var(--theme-action);
@@ -21,13 +21,13 @@
   }
 }
 
-.standard-search-bar-icon {
+.search-bar-icon {
   color: var(--theme-search-text);
   height: 16px;
   margin-left: 8px;
 }
 
-.standard-search-bar {
+.search-bar-input {
   width: 100%;
   border: none;
   outline: none;

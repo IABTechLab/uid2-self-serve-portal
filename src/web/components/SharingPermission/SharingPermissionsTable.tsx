@@ -140,15 +140,15 @@ export function SharingPermissionsTableContent({
             onSelectedChange={setSelectedTypes}
           />
         </div>
-        <div className='sharing-permissions-search-bar-container standard-search-bar-container'>
+        <div className='search-bar-container'>
           <input
             type='text'
-            className='sharing-permissions-search-bar standard-search-bar'
+            className='search-bar-input'
             onChange={(event) => setFilterText(event.target.value)}
             placeholder='Search sharing permissions'
             value={filterText}
           />
-          <FontAwesomeIcon icon='search' className='standard-search-bar-icon' />
+          <FontAwesomeIcon icon='search' className='search-bar-icon' />
         </div>
       </div>
       <ParticipantsTable
