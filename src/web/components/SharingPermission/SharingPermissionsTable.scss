@@ -14,23 +14,9 @@
     margin-bottom: 10px;
   }
 
-  .sharing-permissions-search-bar-container {
+  .search-bar-container {
     width: 190px;
-    display: flex;
-    align-items: center;
-    border-bottom: 2px solid var(--theme-action);
-    padding: 6px 2px;
     justify-content: space-between;
-    ::placeholder {
-      color: var(--theme-search-text);
-      opacity: 1;
-    }
-  }
-
-  .sharing-permission-search-bar-icon {
-    color: var(--theme-search-text);
-    height: 16px;
-    margin-left: 8px;
   }
 
   .sharing-permission-actions {
@@ -40,15 +26,8 @@
     padding-left: 11px;
   }
 
-  .sharing-permissions-search-bar {
-    width: 100%;
-    border: none;
-    outline: none;
-    color: var(--theme-search-text);
-    font-weight: 400;
-    font-size: 0.75rem;
+  .search-bar-input {
     line-height: 0.9375rem;
-    background: none;
   }
 
   .shared-participants-table {

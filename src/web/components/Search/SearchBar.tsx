@@ -107,7 +107,7 @@ export function SearchBarFormInput<
         <FontAwesomeIcon icon='search' className='search-icon' />
         <input
           type='text'
-          className={clsx('search-bar-input', inputClassName)}
+          className={clsx('search-bar-form-input', inputClassName)}
           aria-label={inputName}
           aria-invalid={error ? 'true' : 'false'}
           {...rest}

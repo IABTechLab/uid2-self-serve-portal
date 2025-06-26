@@ -67,17 +67,17 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
 
   return (
     <div className='audit-trail-table-container'>
-      <div className='audit-trail-table-header'>
-        <div className='audit-trail-table-header-right'>
-          <div className='audit-trail-search-bar-container'>
+      <div className='table-header'>
+        <div className='table-header-right'>
+          <div className='search-bar-container'>
             <input
               type='text'
-              className='audit-trail-search-bar'
+              className='search-bar-input'
               onChange={handleSearch}
               placeholder='Search audit trail'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='audit-trail-search-bar-icon' />
+            <FontAwesomeIcon icon='search' className='search-bar-icon' />
           </div>
         </div>
       </div>
