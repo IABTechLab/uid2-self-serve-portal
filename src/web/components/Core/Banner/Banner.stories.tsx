@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 
-import { Banner } from './Banner';
+import { Banner, BannerProps } from './Banner';
 
 const meta: Meta<typeof Banner> = {
   title: 'Shared Components/Banner',
@@ -10,10 +10,10 @@ const meta: Meta<typeof Banner> = {
 export default meta;
 type Story = StoryObj<typeof Banner>;
 
-export const Info: Story = {
+export const Info = {
   args: {
     message: 'here is an info banner',
-    type: 'Info',
+    type: 'Info' as BannerProps["type"],
   },
 };
 

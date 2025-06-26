@@ -1,18 +1,18 @@
-import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import * as stories from './TypeFilter.stories';
+import { TypeFilter } from './TypeFilter';
 
-const { Default } = composeStories(stories);
+const { Default } = stories;
 
 describe('TypeFilter', () => {
   it('calls onFilterChange with correct type id when a type button is clicked', async () => {
     const user = userEvent.setup();
     const mockOnFilterChange = jest.fn();
 
-    render(<Default onFilterChange={mockOnFilterChange} />);
+    render(<TypeFilter {...Default.args} onFilterChange={mockOnFilterChange} />);
 
     const button = screen.getByText('DSP');
     await user.click(button);

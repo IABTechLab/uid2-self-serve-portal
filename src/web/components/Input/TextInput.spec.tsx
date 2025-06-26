@@ -1,15 +1,13 @@
-import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './TextInput.stories';
-
-const { WithValidation } = composeStories(stories);
+import { TextInput } from './TextInput';
 
 describe('TextInput', () => {
   it('verifies field based on rule', async () => {
     const user = userEvent.setup();
-    render(<WithValidation />);
+    render(<TextInput {...stories.WithValidation.args} inputName='textInput'/>);
     const textInput = screen.getByTestId('text-input');
     await user.type(textInput, '123');
     expect(screen.getByDisplayValue('123')).toBeInTheDocument();

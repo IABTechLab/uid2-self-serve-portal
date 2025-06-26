@@ -1,25 +1,25 @@
-import { composeStories } from '@storybook/react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './BulkAddPermissions.stories';
+import { BulkAddPermissions } from './BulkAddPermissions';
 
-const { Publisher, HasSharedWithPublisher } = composeStories(stories);
+const { Publisher, HasSharedWithPublisher } = stories;
 
 describe('BulkAddPermissions', () => {
   it('DSP checkbox is initially checked for a Publisher', async () => {
-    render(<Publisher />);
+    render(<BulkAddPermissions {...Publisher.args} />);
     const dspCheckbox = await screen.findByTestId('dsp');
 
     expect(dspCheckbox).toHaveAttribute('data-state', 'checked');
   });
   it('Renders "View Participants" button when there are checkboxes selected', () => {
-    render(<Publisher />);
+    render(<BulkAddPermissions {...Publisher.args} />);
     expect(screen.getByRole('button', { name: 'View Participants' })).toBeInTheDocument();
   });
   it('Hides "View Participants" button when no checkboxes selected', async () => {
     const user = userEvent.setup();
-    render(<Publisher />);
+    render(<BulkAddPermissions {...Publisher.args} />);
     const dspCheckbox = screen.getByTestId('dsp');
 
     // uncheck DSP
@@ -29,7 +29,7 @@ describe('BulkAddPermissions', () => {
   });
   it('Displays DSP participants when clicking "View Participants" as a Publisher', async () => {
     const user = userEvent.setup();
-    render(<Publisher />);
+    render(<BulkAddPermissions {...Publisher.args} />);
 
     await user.click(screen.getByRole('button', { name: 'View Participants' }));
     const participantsTable = screen.getByRole('table');
@@ -38,7 +38,7 @@ describe('BulkAddPermissions', () => {
   });
   it('Shows warning when removing a shared type', async () => {
     const user = userEvent.setup();
-    render(<HasSharedWithPublisher />);
+    render(<BulkAddPermissions {...HasSharedWithPublisher.args} />);
 
     // Expand collapsible
     await user.click(screen.getByRole('button'));
@@ -55,7 +55,7 @@ describe('BulkAddPermissions', () => {
   });
   it('Publisher checkbox is checked when participant has shared with Publisher', async () => {
     const user = userEvent.setup();
-    render(<HasSharedWithPublisher />);
+    render(<BulkAddPermissions {...HasSharedWithPublisher.args} />);
 
     // Expand collapsible
     await user.click(screen.getByRole('button'));

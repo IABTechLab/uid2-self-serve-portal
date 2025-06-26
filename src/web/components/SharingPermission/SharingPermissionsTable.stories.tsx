@@ -3,6 +3,7 @@ import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 
 const response: SharingSiteDTO[] = [
   {
@@ -68,12 +69,10 @@ const meta: Meta<typeof SharingPermissionsTable> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof SharingPermissionsTable>;
-
-export const SharedWithParticipants: Story = {
+export const SharedWithParticipants = {
   args: {
     sharedSiteIds: [10, 11, 12, 14, 15, 17],
-    sharedTypes: ['DSP', 'DATA_PROVIDER'],
+    sharedTypes: ['DSP', 'DATA_PROVIDER'] as ClientType[],
     onDeleteSharingPermission: () => Promise.resolve(),
   },
 };

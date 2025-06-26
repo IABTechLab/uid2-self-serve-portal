@@ -6,9 +6,9 @@ type CardProps = {
   title?: string;
   description?: string;
   className?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
-export function Card({ title, description, className, children }: CardProps) {
+export function Card({ title, description, className, children }: Readonly<CardProps>) {
   return (
     <div className={clsx('card', className)}>
       {title && (

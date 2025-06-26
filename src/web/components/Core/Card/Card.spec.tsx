@@ -1,24 +1,24 @@
-import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 
 import * as stories from './Card.stories';
+import { Card } from './Card';
 
-const { WithDescription, WithTitle, NoHeader } = composeStories(stories);
+const { WithDescription, WithTitle, NoHeader } = stories;
 
 test('has title', () => {
-  render(<WithTitle />);
+  render(<Card {...WithTitle.args} />);
   const title = screen.getByTestId('card-title');
   expect(title.textContent).toContain('Card Title');
 });
 
 test('has description', () => {
-  render(<WithDescription />);
+  render(<Card {...WithDescription.args} />);
   const description = screen.getByTestId('card-description');
   expect(description.textContent).toContain('Here is the description');
 });
 
 test('without header', async () => {
-  render(<NoHeader />);
+  render(<Card {...NoHeader.args} />);
   const title = screen.queryByTestId('card-description');
   expect(title).toBeNull();
 });

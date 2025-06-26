@@ -2,14 +2,13 @@ import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { ParticipantSearchBar } from './ParticipantSearchBar';
+import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 
 const meta: Meta<typeof ParticipantSearchBar> = {
   title: 'Sharing Permissions/Participant Search Bar',
   component: ParticipantSearchBar,
 };
 export default meta;
-
-type Story = StoryObj<typeof ParticipantSearchBar>;
 
 const Template: StoryFn<typeof ParticipantSearchBar> = (args) => {
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set([1, 3]));
@@ -25,7 +24,7 @@ const Template: StoryFn<typeof ParticipantSearchBar> = (args) => {
   );
 };
 
-export const SearchBar: Story = {
+export const SearchBar = {
   render: Template,
 
   args: {
@@ -54,6 +53,10 @@ export const SearchBar: Story = {
         clientTypes: ['PUBLISHER'],
         canBeSharedWith: true,
       },
-    ],
+    ] as SharingSiteDTO[],
+		selectedParticipantIds: new Set<number>([1,3]),
+		open: false,
+		onSelectedChange: () => {},
+		onToggleOpen: () => {}
   },
 };

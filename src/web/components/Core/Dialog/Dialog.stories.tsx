@@ -11,7 +11,7 @@ const meta: Meta<typeof Dialog> = {
 export default meta;
 type Story = StoryObj<typeof Dialog>;
 
-export const Default: Story = {
+export const Default = {
   args: {
     title: 'Dialog Title',
     closeButtonText: 'Close',
@@ -19,21 +19,21 @@ export const Default: Story = {
   },
 };
 
-export const WithoutTitle: Story = {
+export const WithoutTitle = {
   args: {
     ...Default.args,
     title: undefined,
   },
 };
 
-export const WithoutCloseText: Story = {
+export const WithoutCloseText = {
   args: {
     ...Default.args,
     closeButtonText: undefined,
   },
 };
 
-export const WithoutCloseButtons: Story = {
+export const WithoutCloseButtons = {
   args: {
     ...Default.args,
     closeButtonText: undefined,

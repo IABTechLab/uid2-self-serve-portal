@@ -35,7 +35,7 @@ export const WithLabel: Story = {
   },
 };
 
-export const WithValidation: Story = {
+export const WithValidation = {
   render: Template,
 
   args: {

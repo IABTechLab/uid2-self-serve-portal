@@ -67,7 +67,7 @@ export const OneOption: Story = {
   },
 };
 
-export const WithValidation: Story = {
+export const WithValidation = {
   render: Template,
 
   args: {
@@ -75,7 +75,7 @@ export const WithValidation: Story = {
     label: 'Select options',
     options,
     rules: {
-      validate: (value) => (value && value.length > 1) || 'At least two options are required',
+      validate: (value: string | any[]) => (value && value.length > 1) || 'At least two options are required',
     },
   },
 };

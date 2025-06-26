@@ -1,6 +1,7 @@
-import { Meta, StoryObj } from '@storybook/react-webpack5';
+import { Meta } from '@storybook/react-webpack5';
 
 import { ParticipantItem } from './ParticipantItem';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 
 const meta: Meta<typeof ParticipantItem> = {
   title: 'Sharing Permissions/Participant Item',
@@ -17,14 +18,13 @@ const meta: Meta<typeof ParticipantItem> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ParticipantItem>;
 
-export const Checked: Story = {
+export const Checked = {
   args: {
     site: {
       id: 1,
       name: 'Participant 1',
-      clientTypes: ['DSP'],
+      clientTypes: ['DSP'] as ClientType[],
       canBeSharedWith: true,
     },
     onClick: () => {},
@@ -32,12 +32,12 @@ export const Checked: Story = {
   },
 };
 
-export const Unchecked: Story = {
+export const Unchecked = {
   args: {
     site: {
       id: 2,
       name: 'Participant 2',
-      clientTypes: ['DSP'],
+      clientTypes: ['DSP'] as ClientType[],
       canBeSharedWith: true,
     },
     onClick: () => {},
@@ -45,7 +45,7 @@ export const Unchecked: Story = {
   },
 };
 
-export const AddedByManual: Story = {
+export const AddedByManual = {
   args: {
     site: {
       id: 2,
@@ -59,7 +59,7 @@ export const AddedByManual: Story = {
   },
 };
 
-export const AddedByAuto: Story = {
+export const AddedByAuto = {
   args: {
     site: {
       id: 2,
@@ -73,7 +73,7 @@ export const AddedByAuto: Story = {
   },
 };
 
-export const AddedByAutoAndManual: Story = {
+export const AddedByAutoAndManual = {
   args: {
     site: {
       id: 2,

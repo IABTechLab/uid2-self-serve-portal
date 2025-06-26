@@ -1,14 +1,14 @@
-import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import * as stories from './SharingPermissionsTable.stories';
+import { SharingPermissionsTable } from './SharingPermissionsTable';
 
-const { SharedWithParticipants } = composeStories(stories);
+const { SharedWithParticipants } = stories;
 
 describe('SharingPermissionsTable', () => {
   it('renders correctly with shared participants', async () => {
-    render(<SharedWithParticipants />);
+    render(<SharingPermissionsTable {...SharedWithParticipants.args} />);
     expect(await screen.findByText('Site 1')).toBeInTheDocument();
     expect(await screen.findByText('Site 2')).toBeInTheDocument();
     expect(await screen.findByText('Site 3')).toBeInTheDocument();
@@ -18,7 +18,7 @@ describe('SharingPermissionsTable', () => {
   it('handles search bar changes', async () => {
     const user = userEvent.setup();
 
-    render(<SharedWithParticipants />);
+    render(<SharingPermissionsTable {...SharedWithParticipants.args} />);
     const searchInput = screen.getByPlaceholderText('Search sharing permissions');
     await user.type(searchInput, 'Site 1');
     expect(searchInput).toHaveValue('Site 1');
@@ -26,7 +26,7 @@ describe('SharingPermissionsTable', () => {
 
   it('renders delete permissions button when there are permissions selected', async () => {
     const user = userEvent.setup();
-    render(<SharedWithParticipants />);
+    render(<SharingPermissionsTable {...SharedWithParticipants.args} />);
 
     const firstCheckbox = screen.getAllByRole('checkbox')[0];
     await user.click(firstCheckbox);
@@ -35,12 +35,12 @@ describe('SharingPermissionsTable', () => {
   });
 
   it('shows participants included by site ID even if they are not a valid sharing target', () => {
-    render(<SharedWithParticipants />);
+    render(<SharingPermissionsTable {...SharedWithParticipants.args} />);
     expect(screen.getByText('No SHARER and explicitly included')).toBeInTheDocument();
   });
 
   it('does not show participants that are included by group if they are not a valid sharing target', () => {
-    render(<SharedWithParticipants />);
+    render(<SharingPermissionsTable {...SharedWithParticipants.args} />);
     screen.getByText('Site 1');
     expect(screen.queryByText('No SHARER and not explicitly included')).not.toBeInTheDocument();
   });

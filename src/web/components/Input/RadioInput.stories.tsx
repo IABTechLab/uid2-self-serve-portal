@@ -11,7 +11,6 @@ const meta: Meta<typeof RadioInput> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof RadioInput>;
 
 const Template: StoryFn<typeof RadioInput> = (args) => {
   const formMethods = useForm();
@@ -32,17 +31,17 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 4', value: 'option4', disabled: true },
 ];
 
-export const WithLabel: Story = {
+export const WithLabel = {
   render: Template,
 
   args: {
     inputName: 'default radio',
     label: 'Select an option',
-    options,
+    options: options,
   },
 };
 
-export const WithValidation: Story = {
+export const WithValidation = {
   render: Template,
 
   args: {

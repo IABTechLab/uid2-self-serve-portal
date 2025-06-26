@@ -3,6 +3,8 @@ import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
+import { ParticipantDTO } from '../../../api/entities/Participant';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 
 const meta: Meta<typeof BulkAddPermissions> = {
   title: 'Sharing Permissions/Bulk Add Permissions',
@@ -50,11 +52,9 @@ const Template: StoryFn<typeof BulkAddPermissions> = (args) => (
   </TestAvailableSiteListProvider>
 );
 
-type Story = StoryObj<typeof BulkAddPermissions>;
-
 const onBulkAddSharingPermission = (types: string[]) => Promise.resolve(console.log(types));
 
-export const Publisher: Story = {
+export const Publisher = {
   render: Template,
 
   args: {
@@ -71,7 +71,7 @@ export const Publisher: Story = {
   },
 };
 
-export const AdvertiserAndDSP: Story = {
+export const AdvertiserAndDSP = {
   render: Template,
 
   args: {
@@ -87,11 +87,11 @@ export const AdvertiserAndDSP: Story = {
       crmAgreementNumber: '23456789',
     },
     onBulkAddSharingPermission,
-    sharedTypes: [],
+    sharedTypes: [] as ClientType[],
   },
 };
 
-export const AllTypes: Story = {
+export const AllTypes = {
   render: Template,
 
   args: {
@@ -113,7 +113,7 @@ export const AllTypes: Story = {
   },
 };
 
-export const HasSharedWithPublisher: Story = {
+export const HasSharedWithPublisher = {
   render: Template,
 
   args: {
@@ -128,8 +128,8 @@ export const HasSharedWithPublisher: Story = {
       allowSharing: true,
       completedRecommendations: true,
       crmAgreementNumber: '45678901',
-    },
+    }  as ParticipantDTO,
     onBulkAddSharingPermission,
-    sharedTypes: ['PUBLISHER'],
+    sharedTypes: ['PUBLISHER'] as ClientType[],
   },
 };
