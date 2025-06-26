@@ -37,6 +37,10 @@
     border: 1px solid var(--theme-input-border);
   }
 
+  .search-bar-form-input {
+    width: 100%;
+  }
+
   .search-bar-results {
     background: var(--theme-background-content);
     box-shadow: 0 4px 8px var(--theme-box-shadow);
