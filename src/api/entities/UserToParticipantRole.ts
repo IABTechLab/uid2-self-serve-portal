@@ -1,4 +1,7 @@
 import { Model, RelationMappings } from 'objection';
+import { User } from './User';
+import { Participant } from './Participant';
+import { UserRole } from './UserRole';
 
 export class UserToParticipantRole extends Model {
   static get tableName() {
@@ -11,7 +14,7 @@ export class UserToParticipantRole extends Model {
 		return {
 			user: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: 'User',
+				modelClass: () => User,
 				join: {
 					from: 'usersToParticipantRoles.userId',
 					to: 'users.id',
@@ -19,7 +22,7 @@ export class UserToParticipantRole extends Model {
 			},
 			participant: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: 'Participant',
+				modelClass: () => Participant,
 				join: {
 					from: 'usersToParticipantRoles.participantId',
 					to: 'participants.id',
@@ -27,7 +30,7 @@ export class UserToParticipantRole extends Model {
 			},
 			role: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: 'UserRole',
+				modelClass: () => UserRole,
 				join: {
 					from: 'usersToParticipantRoles.userRoleId',
 					to: 'userRoles.id',
