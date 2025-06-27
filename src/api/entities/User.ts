@@ -1,9 +1,9 @@
 import Objection, { Model, RelationMappings } from 'objection';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
-import type { Participant } from './Participant';
-import { UserToParticipantRole } from './UserToParticipantRole';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { Participant } from './Participant.ts';
+import { UserToParticipantRole } from './UserToParticipantRole.ts';
 
 export interface IUser {}
 export enum UserJobFunction {
@@ -35,7 +35,7 @@ export class User extends BaseModel {
 		return {
 			participants: {
 				relation: Model.ManyToManyRelation,
-				modelClass: 'Participant',
+				modelClass: () => Participant,
 				join: {
 					from: 'users.id',
 					through: {
@@ -47,7 +47,7 @@ export class User extends BaseModel {
 			},
 			userToParticipantRoles: {
 				relation: Model.HasManyRelation,
-				modelClass: 'UserToParticipantRole',
+				modelClass: () => UserToParticipantRole,
 				join: {
 					from: 'users.id',
 					to: 'usersToParticipantRoles.userId',

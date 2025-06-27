@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals';
 import winston from 'winston';
 
 import { auditTraceFormat, convertToSnakeCase, extractConfiguredFields } from './auditLogging';

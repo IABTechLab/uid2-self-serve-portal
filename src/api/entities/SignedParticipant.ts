@@ -1,5 +1,5 @@
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
 
 export class SignedParticipant extends BaseModel {
   static get tableName() {

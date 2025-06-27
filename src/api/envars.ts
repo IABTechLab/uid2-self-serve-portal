@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const errorMessage = 'Unable to get envar value';
 
 // General Config

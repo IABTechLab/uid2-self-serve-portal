@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-import { ContactType } from './BusinessContact';
-import { UserJobFunction } from './User';
+import { ContactType } from './BusinessContact.ts';
+import { UserJobFunction } from './User.ts';
 
 export const ApiRoleSchema = z.object({
   id: z.number(),
