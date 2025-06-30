@@ -3,8 +3,9 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import { FieldPath, FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 import './MultiCheckboxInput.scss';
+import React from 'react';
 
-export function StyledCheckbox(props: Checkbox.CheckboxProps) {
+export const StyledCheckbox = React.forwardRef<HTMLButtonElement, Checkbox.CheckboxProps>((props, ref) => {
   const className = `${props?.className ?? ''} checkbox-root`.trim();
   const childrenOrDefault = props.children ?? (
     <Checkbox.CheckboxIndicator className='checkbox-indicator'>
@@ -16,25 +17,30 @@ export function StyledCheckbox(props: Checkbox.CheckboxProps) {
     <Checkbox.Root
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rootProps}
+			ref={ref}
     >
       {childrenOrDefault}
     </Checkbox.Root>
   );
-}
+});
 
 type ExtraCheckboxProps = Omit<
   Checkbox.CheckboxProps,
   'checked' | 'defaultChecked' | 'required' | 'onCheckedChange'
 >;
-export function FormStyledCheckbox<
+export const FormStyledCheckbox = React.forwardRef(<
   TFieldValues extends FieldValues,
   TFieldName extends FieldPath<TFieldValues>
->(props: UseControllerProps<TFieldValues, TFieldName> & ExtraCheckboxProps) {
+>(
+	props: UseControllerProps<TFieldValues, TFieldName> & ExtraCheckboxProps,
+	ref: React.Ref<HTMLButtonElement>
+) => {
   const { field } = useController<TFieldValues, TFieldName>({ ...props });
   return (
     <StyledCheckbox
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
+			ref={ref}
       checked={field.value}
       onBlur={field.onBlur}
       name={field.name}
@@ -42,3 +48,4 @@ export function FormStyledCheckbox<
     />
   );
 }
+);

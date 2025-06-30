@@ -1,9 +1,13 @@
-import { Meta, StoryObj } from '@storybook/react-webpack5';
+import { Meta, StoryObj } from '@storybook/react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
+
+export const createStory = (story: { render: Function; args: any }) => {
+  return () => story.render(story.args);
+};
 
 const response: SharingSiteDTO[] = [
   {
@@ -68,6 +72,8 @@ const meta: Meta<typeof SharingPermissionsTable> = {
   ],
 };
 export default meta;
+
+type Story = StoryObj<typeof SharingPermissionsTable>;
 
 export const SharedWithParticipants = {
   args: {

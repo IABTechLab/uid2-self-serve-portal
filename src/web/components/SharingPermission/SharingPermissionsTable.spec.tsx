@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import * as stories from './SharingPermissionsTable.stories';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
 
-const { SharedWithParticipants } = stories;
+const { createStory, SharedWithParticipants } = stories;
 
 describe('SharingPermissionsTable', () => {
   it('renders correctly with shared participants', async () => {
