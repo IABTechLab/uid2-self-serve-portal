@@ -1,5 +1,4 @@
-import type { Knex } from 'knex';
-import knex from 'knex';
+import knex, { type Knex } from 'knex';
 import { Model } from 'objection';
 
 const config: Knex.Config = {
