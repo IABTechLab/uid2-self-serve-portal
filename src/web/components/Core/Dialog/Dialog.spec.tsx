@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { Dialog } from './Dialog';
 import * as stories from './Dialog.stories';
 
-const { Default, WithoutCloseButtons, WithoutCloseText } = stories;
+const { Default, WithoutCloseText, WithoutCloseButtons } = stories;
 
 describe('Dialog', () => {
   it('renders correctly with default props', () => {

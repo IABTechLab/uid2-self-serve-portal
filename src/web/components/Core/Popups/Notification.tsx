@@ -7,7 +7,7 @@ import './Notification.scss';
 type NotificationProps = Readonly<{
   icon?: IconProp;
   title?: ReactNode;
-  notification?: ReactNode;
+  notification: ReactNode;
   className?: string;
 }>;
 

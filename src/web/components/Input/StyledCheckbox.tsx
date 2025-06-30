@@ -23,24 +23,23 @@ export const StyledCheckbox = React.forwardRef<HTMLButtonElement, Checkbox.Check
     </Checkbox.Root>
   );
 });
-
 type ExtraCheckboxProps = Omit<
   Checkbox.CheckboxProps,
   'checked' | 'defaultChecked' | 'required' | 'onCheckedChange'
 >;
-export const FormStyledCheckbox = React.forwardRef(<
-  TFieldValues extends FieldValues,
-  TFieldName extends FieldPath<TFieldValues>
+
+function FormStyledCheckboxInner<
+  TFieldValues extends FieldValues = FieldValues,
+  TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
 >(
-	props: UseControllerProps<TFieldValues, TFieldName> & ExtraCheckboxProps,
-	ref: React.Ref<HTMLButtonElement>
-) => {
-  const { field } = useController<TFieldValues, TFieldName>({ ...props });
+  props: UseControllerProps<TFieldValues, TFieldName> & ExtraCheckboxProps,
+  ref: React.Ref<HTMLButtonElement>
+) {
+  const { field } = useController<TFieldValues, TFieldName>(props);
   return (
     <StyledCheckbox
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-			ref={ref}
+      ref={ref}
       checked={field.value}
       onBlur={field.onBlur}
       name={field.name}
@@ -48,4 +47,12 @@ export const FormStyledCheckbox = React.forwardRef(<
     />
   );
 }
-);
+
+export const FormStyledCheckbox = React.forwardRef(FormStyledCheckboxInner) as <
+  TFieldValues extends FieldValues = FieldValues,
+  TFieldName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
+>(
+  props: UseControllerProps<TFieldValues, TFieldName> & ExtraCheckboxProps & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }
+) => React.ReactElement | null;
