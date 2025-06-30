@@ -75,17 +75,17 @@ function UserManagementTableContent({ users, onChangeUserLock }: UserManagementT
 
   return (
     <div className='users-table-container'>
-      <div className='users-table-header'>
-        <div className='users-table-header-right'>
-          <div className='users-search-bar-container'>
+      <div className='table-header'>
+        <div className='table-header-right'>
+          <div className='search-bar-container'>
             <input
               type='text'
-              className='users-search-bar'
+              className='search-bar-input'
               onChange={handleSearch}
               placeholder='Search users'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='users-search-bar-icon' />
+            <FontAwesomeIcon icon='search' className='search-bar-icon' />
           </div>
         </div>
       </div>

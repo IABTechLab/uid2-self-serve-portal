@@ -247,7 +247,9 @@ export const getKeyPairsList = async (
     const response = await client.get<KeyPairDTO[]>(`/api/v2/sites/${siteId}/client-side-keypairs`);
     const allKeyPairs = response.data;
     if (!showDisabled) {
-      return allKeyPairs.filter((keyPair) => keyPair.disabled === false);
+      return allKeyPairs.filter(
+        (keyPair) => keyPair.disabled === false && !keyPair.name?.includes('-disabled')
+      );
     }
     return allKeyPairs;
   } catch (e: unknown) {

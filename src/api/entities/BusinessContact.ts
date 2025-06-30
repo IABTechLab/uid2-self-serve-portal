@@ -1,7 +1,7 @@
 import { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
-import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
+import { Participant } from './Participant.ts';
 
 export enum ContactType {
   Business = 'Business',
@@ -12,19 +12,18 @@ export class BusinessContact extends BaseModel {
   static get tableName() {
     return 'businessContacts';
   }
-
   static get relationMappings(): RelationMappings {
-    return {
-      participant: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: () => Participant,
-        join: {
-          from: 'businessContacts.participantId',
-          to: 'participants.id',
-        },
-      },
-    };
-  }
+		return {
+			participant: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: () => Participant,
+				join: {
+					from: 'businessContacts.participantId',
+					to: 'participants.id',
+				},
+			},
+		};
+  };
 
   declare id: number;
   declare name: string;

@@ -117,7 +117,7 @@ export const handleDeleteKeyPair = async (req: UserParticipantRequest, res: Resp
   );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () =>
-    updateKeyPair(subscriptionId, disabledKeyPairName, traceId)
+    updateKeyPair(subscriptionId, disabledKeyPairName, traceId, disabled)
   );
 
   return res.sendStatus(200);

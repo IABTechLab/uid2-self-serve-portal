@@ -6,9 +6,7 @@ module.exports = {
       webpackConfig.module.rules.push({
         test: /\.ts$/,
         include: path.resolve(__dirname, 'src/api'),
-        //use: 'null-loader',
       });
-
       webpackConfig.resolve = {
         ...webpackConfig.resolve,
         fallback: {

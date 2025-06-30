@@ -9,7 +9,7 @@ import useTestServer, { api, routers } from './utils';
 describe('Business Contact Service Tests', () => {
   const withToken = useTestServer();
 
-  beforeAll(async () => {
+  beforeAll(() => {
     routers!.participantsRouter.businessContactsRouter.get(
       '/:contactId',
       (req: BusinessContactRequest, res) => {
@@ -18,7 +18,7 @@ describe('Business Contact Service Tests', () => {
     );
   });
 
-  afterEach(async() => {
+  afterEach(() => {
     jest.restoreAllMocks();
   });
 

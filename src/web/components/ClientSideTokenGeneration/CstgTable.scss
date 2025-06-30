@@ -20,13 +20,6 @@
       width: 20%;
     }
 
-    .action-cell {
-      font-size: 0.8125rem;
-      display: flex;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-    }
-
     .no-search-results {
       width: 500px;
     }
@@ -41,37 +34,8 @@
     justify-content: space-between;
     align-items: baseline;
 
-    &-right {
-      display: flex;
-      justify-content: right;
-    }
-
-    .cstg-values-search-bar-container {
-      display: flex;
-      align-items: center;
-      border-bottom: 2px solid var(--theme-action);
-      padding: 6px 2px;
-      ::placeholder {
-        color: var(--theme-search-text);
-        opacity: 1;
-      }
+    .search-bar-container {
       margin-right: 20px;
-    }
-
-    .cstg-values-search-bar-icon {
-      color: var(--theme-search-text);
-      height: 16px;
-      margin-left: 8px;
-    }
-
-    .cstg-values-search-bar {
-      width: 100%;
-      border: none;
-      outline: none;
-      color: var(--theme-search-text);
-      font-weight: 400;
-      font-size: 0.75rem;
-      background: none;
     }
   }
 }

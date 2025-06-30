@@ -84,17 +84,17 @@ function ParticipantManagementTableContent({
 
   return (
     <div className='participants-table-container'>
-      <div className='participants-table-header'>
-        <div className='participants-table-header-right'>
-          <div className='participants-search-bar-container'>
+      <div className='table-header'>
+        <div className='table-header-right'>
+          <div className='search-bar-container'>
             <input
               type='text'
-              className='participants-search-bar'
+              className='search-bar-input'
               onChange={handleSearch}
               placeholder='Search participants'
               value={searchText}
             />
-            <FontAwesomeIcon icon='search' className='participants-search-bar-icon' />
+            <FontAwesomeIcon icon='search' className='search-bar-icon' />
           </div>
         </div>
       </div>

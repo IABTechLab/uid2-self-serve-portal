@@ -1,9 +1,9 @@
-import { Model, QueryBuilder,RelationMappings } from 'objection';
+import Objection, { Model, RelationMappings } from 'objection';
 
 import { BaseModel } from './BaseModel.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
-import { Participant } from './Participant.ts'; // eslint-disable-line import/no-cycle
-import { UserToParticipantRole } from './UserToParticipantRole.ts'; // eslint-disable-line import/no-cycle
+import { Participant } from './Participant.ts';
+import { UserToParticipantRole } from './UserToParticipantRole.ts';
 
 export interface IUser {}
 export enum UserJobFunction {
@@ -32,29 +32,29 @@ export class User extends BaseModel {
   }
 
   static get relationMappings(): RelationMappings {
-    return {
-      participants: {
-        relation: Model.ManyToManyRelation,
-        modelClass: Participant,
-        join: {
-          from: 'users.id',
-          through: {
-            from: 'usersToParticipantRoles.userId',
-            to: 'usersToParticipantRoles.participantId',
-          },
-          to: 'participants.id',
-        },
-      },
-      userToParticipantRoles: {
-        relation: Model.HasManyRelation,
-        modelClass: UserToParticipantRole,
-        join: {
-          from: 'users.id',
-          to: 'usersToParticipantRoles.userId',
-        },
-      },
-    };
-  }
+		return {
+			participants: {
+				relation: Model.ManyToManyRelation,
+				modelClass: () => Participant,
+				join: {
+					from: 'users.id',
+					through: {
+						from: 'usersToParticipantRoles.userId',
+						to: 'usersToParticipantRoles.participantId',
+					},
+					to: 'participants.id',
+				},
+			},
+			userToParticipantRoles: {
+				relation: Model.HasManyRelation,
+				modelClass: () => UserToParticipantRole,
+				join: {
+					from: 'users.id',
+					to: 'usersToParticipantRoles.userId',
+				},
+			},
+		};
+  };
 
   declare id: number;
   declare email: string;
@@ -68,8 +68,11 @@ export class User extends BaseModel {
   declare userToParticipantRoles?: UserToParticipantRole[];
 
   static readonly modifiers = {
-    withParticipants<TResult>(query: QueryBuilder<User, TResult>) {
-      return query.withGraphFetched('[participants.participantToUserRoles]') as QueryBuilder<User, TResult & { participants: Participant[] }>;
+    withParticipants<TResult>(query: Objection.QueryBuilder<User, TResult>) {
+      const myQuery = query.withGraphFetched(
+        '[participants.participantToUserRoles]'
+      ) as Objection.QueryBuilder<User, TResult & { participants: Participant[] }>;
+      return myQuery;
     },
   };
 }

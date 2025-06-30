@@ -1,3 +1,15 @@
+.table-header {
+  display: flex;
+  justify-content: end;
+  align-items: baseline;
+  padding-bottom: 10px;
+}
+
+.table-header-right {
+  display: flex;
+  justify-content: right;
+}
+
 table {
   border-collapse: collapse;
 
