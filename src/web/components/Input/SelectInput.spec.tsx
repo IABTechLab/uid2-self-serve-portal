@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { WithValidationStory } from './MultiCheckboxInput.stories';
+import { WithValidationStory } from './SelectInput.stories';
 
 describe('SelectInput', () => {
   it('verifies field based on rule', async () => {

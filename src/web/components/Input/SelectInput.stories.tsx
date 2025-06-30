@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Option, SelectInput } from './SelectInput';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof SelectInput> = {
   title: 'Shared Components/Inputs/Select',
@@ -48,3 +49,5 @@ export const WithValidation = {
     rules: { required: 'This field is required' },
   },
 };
+
+export const WithValidationStory = CreateStory(WithValidation);
