@@ -9,10 +9,6 @@ const meta: Meta<typeof ParticipantSearchBar> = {
 };
 export default meta;
 
-export const CreateStory = (story: { render: Function; args: {} }) => {
-  return () => story.render(story.args);
-};
-
 const Template: StoryFn<typeof ParticipantSearchBar> = (args) => {
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set([1, 3]));
   const [open, setOpen] = useState<boolean>(false);

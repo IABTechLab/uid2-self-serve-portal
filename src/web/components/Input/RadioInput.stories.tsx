@@ -12,10 +12,6 @@ const meta: Meta<typeof RadioInput> = {
 
 export default meta;
 
-export const CreateStory = (story: { render: Function; args: {} }) => {
-  return () => story.render(story.args);
-};
-
 const Template: StoryFn<typeof RadioInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;

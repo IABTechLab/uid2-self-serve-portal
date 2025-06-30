@@ -52,10 +52,6 @@ const Template: StoryFn<typeof BulkAddPermissions> = (args) => (
   </TestAvailableSiteListProvider>
 );
 
-export const CreateStory = (story: { render: Function; args: {} }) => {
-  return () => story.render(story.args);
-};
-
 const onBulkAddSharingPermission = (types: string[]) => Promise.resolve(console.log(types));
 
 export const Publisher = {

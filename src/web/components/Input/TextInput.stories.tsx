@@ -4,10 +4,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { TextInput } from './TextInput';
 
-export const CreateStory = (story: { render: Function; args: {} }) => {
-  return () => story.render(story.args);
-};
-
 const meta: Meta<typeof TextInput> = {
   title: 'Shared Components/Inputs/Text',
   component: TextInput,

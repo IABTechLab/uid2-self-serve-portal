@@ -7,8 +7,9 @@ import { MultiCheckboxInput } from './MultiCheckboxInput';
 import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
-const { CreateStory, WithValidation } = stories;
+const { WithValidation } = stories;
 const WithValidationStory = CreateStory(WithValidation);
 
 const checkBoxOptionsList = [

@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import * as stories from './RadioInput.stories';
 
-const { CreateStory, WithValidation, WithLabel } = stories;
+const { WithValidation, WithLabel } = stories;
 const WithValidationStory = CreateStory(WithValidation);
 const WithLabelStory = CreateStory(WithLabel);
 

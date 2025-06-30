@@ -1,9 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import * as stories from './ParticipantSearchBar.stories';
 
-const { CreateStory, SearchBar } = stories;
+const { SearchBar } = stories;
 const SearchBarStory = CreateStory(SearchBar);
 
 describe('ParticipantSearchBar', () => {

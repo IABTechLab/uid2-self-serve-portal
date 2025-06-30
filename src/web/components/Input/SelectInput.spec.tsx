@@ -1,9 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import * as stories from './SelectInput.stories';
 
-const { CreateStory, WithValidation } = stories;
+const {  WithValidation } = stories;
 const WithValidationStory = CreateStory(WithValidation);
 
 describe('SelectInput', () => {
