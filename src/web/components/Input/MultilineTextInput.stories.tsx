@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { MultilineTextInput } from './MultilineTextInput';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof MultilineTextInput> = {
   title: 'Shared Components/Inputs/MultilineText',
@@ -51,3 +52,5 @@ export const WithValidation = {
     rules: { required: 'Please enter some text.' },
   },
 };
+
+export const WithValidationStory = CreateStory(WithValidation);

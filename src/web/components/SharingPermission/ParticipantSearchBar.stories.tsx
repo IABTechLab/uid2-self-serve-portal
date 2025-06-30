@@ -2,6 +2,7 @@ import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { ParticipantSearchBar } from './ParticipantSearchBar';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof ParticipantSearchBar> = {
   title: 'Sharing Permissions/Participant Search Bar',
@@ -55,3 +56,5 @@ export const SearchBar = {
 		],
   },
 };
+
+export const SearchBarStory = CreateStory(SearchBar);

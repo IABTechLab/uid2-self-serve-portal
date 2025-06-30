@@ -1,12 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import * as stories from './RadioInput.stories';
 
-const { WithValidation, WithLabel } = stories;
-const WithValidationStory = CreateStory(WithValidation);
-const WithLabelStory = CreateStory(WithLabel);
+const { WithValidationStory, WithLabelStory } = stories;
 
 describe('RadioInput', () => {
   it('verifies field based on rule', async () => {

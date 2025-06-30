@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react-webpack5';
+import { Meta } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { Dialog } from './Dialog';
@@ -9,7 +9,6 @@ const meta: Meta<typeof Dialog> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Dialog>;
 
 export const Default = {
   args: {
@@ -19,21 +18,21 @@ export const Default = {
   },
 };
 
-export const WithoutTitle: Story = {
+export const WithoutTitle = {
   args: {
     ...Default.args,
     title: undefined,
   },
 };
 
-export const WithoutCloseText: Story = {
+export const WithoutCloseText = {
   args: {
     ...Default.args,
     closeButtonText: undefined,
   },
 };
 
-export const WithoutCloseButtons: Story = {
+export const WithoutCloseButtons = {
   args: {
     ...Default.args,
     closeButtonText: undefined,

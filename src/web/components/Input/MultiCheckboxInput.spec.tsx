@@ -4,13 +4,10 @@ import userEvent from '@testing-library/user-event';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { MultiCheckboxInput } from './MultiCheckboxInput';
-import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { WithValidationStory } from './MultiCheckboxInput.stories';
 
-const { WithValidation } = stories;
-const WithValidationStory = CreateStory(WithValidation);
 
 const checkBoxOptionsList = [
   [[{ optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' }]],

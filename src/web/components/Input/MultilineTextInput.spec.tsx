@@ -1,11 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
-import * as stories from './MultilineTextInput.stories';
-
-const {  WithValidation } = stories;
-const WithValidationStory = CreateStory(WithValidation);
+import { WithValidationStory } from './MultiCheckboxInput.stories';
 
 describe('MultilineTextInput', () => {
   it('verifies field based on rule', async () => {

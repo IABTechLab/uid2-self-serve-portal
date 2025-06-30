@@ -5,6 +5,7 @@ import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof BulkAddPermissions> = {
   title: 'Sharing Permissions/Bulk Add Permissions',
@@ -71,6 +72,8 @@ export const Publisher = {
   },
 };
 
+export const PublisherStory = CreateStory(Publisher);
+
 export const AdvertiserAndDSP = {
   render: Template,
 
@@ -133,3 +136,5 @@ export const HasSharedWithPublisher = {
     sharedTypes: ['PUBLISHER'] as ClientType[],
   },
 };
+
+export const HasSharedWithPublisherStory = CreateStory(HasSharedWithPublisher);

@@ -3,9 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TypeFilter } from './TypeFilter';
-import * as stories from './TypeFilter.stories';
-
-const { Default } = stories;
+import { Default } from './TypeFilter.stories';
 
 describe('TypeFilter', () => {
   it('calls onFilterChange with correct type id when a type button is clicked', async () => {

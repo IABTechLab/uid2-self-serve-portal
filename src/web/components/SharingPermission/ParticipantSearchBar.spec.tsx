@@ -1,11 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
-import * as stories from './ParticipantSearchBar.stories';
-
-const { SearchBar } = stories;
-const SearchBarStory = CreateStory(SearchBar);
+import { SearchBarStory } from './ParticipantSearchBar.stories';
 
 describe('ParticipantSearchBar', () => {
   it('should only show participant list when search bar is clicked', async () => {

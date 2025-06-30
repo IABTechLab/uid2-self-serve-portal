@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { TextInput } from './TextInput';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof TextInput> = {
   title: 'Shared Components/Inputs/Text',
@@ -44,3 +45,5 @@ export const WithValidation = {
     rules: { maxLength: { value: 2, message: 'Too many characters' } },
   },
 };
+
+export const WithValidationStory = CreateStory(WithValidation);

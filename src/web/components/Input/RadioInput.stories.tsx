@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { RadioInput } from './RadioInput';
 import { Option } from './SelectInput';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof RadioInput> = {
   title: 'Shared Components/Inputs/Radio',
@@ -41,6 +42,8 @@ export const WithLabel = {
   },
 };
 
+export const WithLabelStory = CreateStory(WithLabel);
+
 export const WithValidation = {
   render: Template,
 
@@ -51,3 +54,6 @@ export const WithValidation = {
     rules: { required: 'This field is required' },
   },
 };
+
+export const WithValidationStory = CreateStory(WithValidation);
+

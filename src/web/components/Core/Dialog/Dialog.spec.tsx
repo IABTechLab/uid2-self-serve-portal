@@ -4,9 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { Dialog } from './Dialog';
 import * as stories from './Dialog.stories';
 
+const { Default, WithoutCloseButtons, WithoutCloseText } = stories;
+
 describe('Dialog', () => {
   it('renders correctly with default props', () => {
-    render(<Dialog {...stories.Default.args} />);
+    render(<Dialog {...Default.args} />);
 
     expect(screen.getByText('Dialog Title')).toBeInTheDocument();
     expect(screen.getByText('Dialog content goes here')).toBeInTheDocument();
@@ -15,14 +17,14 @@ describe('Dialog', () => {
   });
 
   it('does not render text close button if closeButton is undefined', () => {
-    render(<Dialog {...stories.WithoutCloseText.args} />);
+    render(<Dialog {...WithoutCloseText.args} />);
 
     expect(screen.queryByRole('button', { name: 'Close Button' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Close Icon' })).toBeInTheDocument();
   });
 
   it('does not render close buttons if hideCloseButtons', () => {
-    render(<Dialog {...stories.WithoutCloseButtons.args} />);
+    render(<Dialog {...WithoutCloseButtons.args} />);
 
     expect(screen.queryByRole('button', { name: 'Close Button' })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Close Icon' })).not.toBeInTheDocument();
