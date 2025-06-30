@@ -184,5 +184,23 @@ module.exports = {
         ],
       },
     },
+		{
+			files: ['./src/api/entities/**/*.{ts,tsx,js,jsx}', './src/database/seeds/**/*.{ts,tsx,js,jsx}', './knexfile.ts'],
+			rules: {
+				'import/extensions': [
+					'error',
+					'ignorePackages',
+					{
+						_: 'always'
+					}
+				],
+			},
+		},
+		{
+      files: ['src/api/entities/**/*.ts'],
+      rules: {
+        'import/no-cycle': 'off',
+      },
+    },
   ],
 };

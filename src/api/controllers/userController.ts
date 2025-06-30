@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import express from 'express';
 import { inject } from 'inversify';
 import {
   controller,
@@ -21,17 +21,13 @@ import {
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
-import { UserParticipantRequest } from '../services/participantsService';
+import * as participantsService from '../services/participantsService';
 import {
   SelfResendInvitationSchema,
   UpdateUserRoleIdSchema,
   UserService,
 } from '../services/userService';
-import {
-  getAllUsersFromParticipant,
-  SelfResendInviteRequest,
-  UserRequest,
-} from '../services/usersService';
+import * as usersService from '../services/usersService';
 
 @controller('/users')
 export class UserController {
@@ -42,8 +38,8 @@ export class UserController {
 
   @httpGet('/current')
   public async getCurrentUser(
-    @request() req: UserRequest,
-    @response() res: Response
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
   ): Promise<void> {
     const result = await this.userService.getCurrentUser(req);
     res.json(result);
@@ -51,15 +47,15 @@ export class UserController {
 
   @httpGet('/current/participant')
   public async getDefaultParticipant(
-    @request() req: UserRequest,
-    @response() res: Response
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
   ): Promise<void> {
     const result = await this.userService.getDefaultParticipant(req);
     res.json(result);
   }
 
   @httpPut('/current/acceptTerms')
-  public async acceptTerms(@request() req: UserRequest, @response() res: Response): Promise<void> {
+  public async acceptTerms(@request() req: usersService.UserRequest, @response() res: express.Response): Promise<void> {
     const doesUserHaveAParticipant = (req.user?.participants?.length ?? 0) >= 1;
 
     if (!doesUserHaveAParticipant) {
@@ -80,8 +76,8 @@ export class UserController {
 
   @httpPost('/selfResendInvitation')
   public async selfResendInvitation(
-    @request() req: SelfResendInviteRequest,
-    @response() res: Response
+    @request() req: usersService.SelfResendInviteRequest,
+    @response() res: express.Response
   ): Promise<void> {
     const { email } = SelfResendInvitationSchema.parse(req.body);
     const logger = this.loggerService.getLogger(req);
@@ -97,8 +93,8 @@ export class UserController {
 
   @httpPost('/:userId/resendInvitation')
   public async resendInvitation(
-    @request() req: UserRequest,
-    @response() res: Response
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
   ): Promise<void> {
     const logger = this.loggerService.getLogger(req);
     const traceId = getTraceId(req);
@@ -128,8 +124,8 @@ export class UserController {
 
   @httpDelete('/:userId')
   public async removeUser(
-    @request() req: UserParticipantRequest,
-    @response() res: Response
+    @request() req: participantsService.UserParticipantRequest,
+    @response() res: express.Response
   ): Promise<void> {
     const { user, participant } = req;
 
@@ -137,7 +133,7 @@ export class UserController {
       res.status(403).send([{ message: 'You do not have permission to remove yourself.' }]);
       return;
     }
-    const usersForParticipant = await getAllUsersFromParticipant(participant!);
+    const usersForParticipant = await usersService.getAllUsersFromParticipant(participant!);
     if (usersForParticipant.length === 1 && usersForParticipant[0].id === user?.id) {
       res.status(403).send([{ message: "You cannot remove a Participant's only user." }]);
       return;
@@ -148,7 +144,7 @@ export class UserController {
   }
 
   @httpPatch('/:userId')
-  public async updateUser(@request() req: UserRequest, @response() res: Response): Promise<void> {
+  public async updateUser(@request() req: usersService.UserRequest, @response() res: express.Response): Promise<void> {
     const { user } = req;
     const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
     if (req.auth?.payload?.email === user?.email && userRoleData.userRoleId !== UserRoleId.Admin) {

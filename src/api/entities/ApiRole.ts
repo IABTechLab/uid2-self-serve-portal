@@ -1,17 +1,19 @@
 import { Model, RelationMappings } from 'objection';
 
-import { BaseModel } from './BaseModel';
-import { ModelObjectOpt } from './ModelObjectOpt';
+import { BaseModel } from './BaseModel.ts';
+import { ModelObjectOpt } from './ModelObjectOpt.ts';
+import { Participant } from './Participant.ts';
 
 export class ApiRole extends BaseModel {
   static get tableName() {
     return 'apiRoles';
   }
+
   static get relationMappings(): RelationMappings {
 		return {
 			participants: {
 				relation: Model.ManyToManyRelation,
-				modelClass: 'Participant',
+				modelClass: () => Participant,
 				join: {
 					from: 'apiRoles.id',
 					through: {
