@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as stories from './SharingPermissionsTable.stories';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
+import * as stories from './SharingPermissionsTable.stories';
 
 const { createStory, SharedWithParticipants } = stories;
 

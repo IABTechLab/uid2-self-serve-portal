@@ -1,7 +1,7 @@
 import { Meta } from '@storybook/react-webpack5';
 
-import { ParticipantItem } from './ParticipantItem';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
+import { ParticipantItem } from './ParticipantItem';
 
 const meta: Meta<typeof ParticipantItem> = {
   title: 'Sharing Permissions/Participant Item',

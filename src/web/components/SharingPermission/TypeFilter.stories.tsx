@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 
-import { TypeFilter } from './TypeFilter';
 import { ClientType } from '../../../api/services/adminServiceHelpers';
+import { TypeFilter } from './TypeFilter';
 
 const meta: Meta<typeof TypeFilter> = {
   title: 'Sharing Permissions/Type Filter',

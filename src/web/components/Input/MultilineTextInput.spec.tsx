@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as stories from './MultilineTextInput.stories';
 import { MultilineTextInput } from './MultilineTextInput';
-
+import * as stories from './MultilineTextInput.stories';
 
 describe('MultilineTextInput', () => {
   it('verifies field based on rule', async () => {

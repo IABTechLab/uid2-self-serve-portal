@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { Info } from './Banner.stories';
-import { Banner } from './Banner';
 
+import { Banner } from './Banner';
+import { Info } from './Banner.stories';
 
 test('has icon and message rendered', () => {
   render(<Banner {...Info.args} />);

@@ -1,9 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
-import { ClientType } from '../../../api/services/adminServiceHelpers';
 
 export const createStory = (story: { render: Function; args: any }) => {
   return () => story.render(story.args);

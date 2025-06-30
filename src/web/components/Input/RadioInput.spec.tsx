@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as stories from './RadioInput.stories';
 import { RadioInput } from './RadioInput';
+import * as stories from './RadioInput.stories';
 
 const { WithValidation, WithLabel } = stories;
 

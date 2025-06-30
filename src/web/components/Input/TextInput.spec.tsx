@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as stories from './TextInput.stories';
 import { TextInput } from './TextInput';
+import * as stories from './TextInput.stories';
 
 describe('TextInput', () => {
   it('verifies field based on rule', async () => {

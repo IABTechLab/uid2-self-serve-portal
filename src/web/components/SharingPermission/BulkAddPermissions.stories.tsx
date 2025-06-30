@@ -1,10 +1,10 @@
 import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
 
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
-import { ParticipantDTO } from '../../../api/entities/Participant';
-import { ClientType } from '../../../api/services/adminServiceHelpers';
 
 const meta: Meta<typeof BulkAddPermissions> = {
   title: 'Sharing Permissions/Bulk Add Permissions',

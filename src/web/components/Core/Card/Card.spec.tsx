@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
-import * as stories from './Card.stories';
 import { Card } from './Card';
+import * as stories from './Card.stories';
 
 const { WithDescription, WithTitle, NoHeader } = stories;
 

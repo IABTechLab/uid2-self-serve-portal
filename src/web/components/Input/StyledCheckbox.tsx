@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Checkbox from '@radix-ui/react-checkbox';
+import React from 'react';
 import { FieldPath, FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 import './MultiCheckboxInput.scss';
-import React from 'react';
 
 export const StyledCheckbox = React.forwardRef<HTMLButtonElement, Checkbox.CheckboxProps>((props, ref) => {
   const className = `${props?.className ?? ''} checkbox-root`.trim();

@@ -1,7 +1,7 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { Notification } from './Notification';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const meta: Meta<typeof Notification> = {
   title: 'Shared Components/Notification',

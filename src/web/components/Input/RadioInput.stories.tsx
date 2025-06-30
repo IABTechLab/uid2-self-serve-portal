@@ -37,7 +37,7 @@ export const WithLabel = {
   args: {
     inputName: 'default radio',
     label: 'Select an option',
-    options: options,
+    options,
   },
 };
 
