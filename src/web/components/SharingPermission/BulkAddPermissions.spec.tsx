@@ -3,10 +3,10 @@ import userEvent from '@testing-library/user-event';
 
 import * as stories from './BulkAddPermissions.stories';
 
-const { createStory, Publisher, HasSharedWithPublisher } = stories;
+const { CreateStory, Publisher, HasSharedWithPublisher } = stories;
 
-const PublisherStory = createStory(Publisher);
-const HasSharedWithPublisherStory = createStory(HasSharedWithPublisher);
+const PublisherStory = CreateStory(Publisher);
+const HasSharedWithPublisherStory = CreateStory(HasSharedWithPublisher);
 
 describe('BulkAddPermissions', () => {
   it('DSP checkbox is initially checked for a Publisher', async () => {

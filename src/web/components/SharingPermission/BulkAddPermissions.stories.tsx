@@ -1,4 +1,4 @@
-import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
@@ -52,7 +52,7 @@ const Template: StoryFn<typeof BulkAddPermissions> = (args) => (
   </TestAvailableSiteListProvider>
 );
 
-export const createStory = (story: { render: Function; args: any }) => {
+export const CreateStory = (story: { render: Function; args: {} }) => {
   return () => story.render(story.args);
 };
 

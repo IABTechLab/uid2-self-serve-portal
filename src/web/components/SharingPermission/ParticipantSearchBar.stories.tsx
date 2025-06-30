@@ -1,7 +1,6 @@
-import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
-import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 const meta: Meta<typeof ParticipantSearchBar> = {
@@ -9,6 +8,10 @@ const meta: Meta<typeof ParticipantSearchBar> = {
   component: ParticipantSearchBar,
 };
 export default meta;
+
+export const CreateStory = (story: { render: Function; args: {} }) => {
+  return () => story.render(story.args);
+};
 
 const Template: StoryFn<typeof ParticipantSearchBar> = (args) => {
   const [selectedParticipants, setSelectedParticipants] = useState<Set<number>>(new Set([1, 3]));
@@ -53,10 +56,6 @@ export const SearchBar = {
         clientTypes: ['PUBLISHER'],
         canBeSharedWith: true,
       },
-    ] as SharingSiteDTO[],
-		selectedParticipantIds: new Set<number>([1,3]),
-		open: false,
-		onSelectedChange: () => {},
-		onToggleOpen: () => {}
+		],
   },
 };

@@ -1,13 +1,15 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { SelectInput } from './SelectInput';
 import * as stories from './SelectInput.stories';
+
+const { CreateStory, WithValidation } = stories;
+const WithValidationStory = CreateStory(WithValidation);
 
 describe('SelectInput', () => {
   it('verifies field based on rule', async () => {
     const user = userEvent.setup();
-    render(<SelectInput {...stories.WithValidation.args} inputName='select' />);
+    render(<WithValidationStory />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
     await user.click(submitButton);
     const errorMessage = screen.getByRole('alert');

@@ -12,6 +12,10 @@ const meta: Meta<typeof MultilineTextInput> = {
 export default meta;
 type Story = StoryObj<typeof MultilineTextInput>;
 
+export const CreateStory = (story: { render: Function; args: {} }) => {
+  return () => story.render(story.args);
+};
+
 const Template: StoryFn<typeof MultilineTextInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;

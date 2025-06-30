@@ -1,13 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { MultilineTextInput } from './MultilineTextInput';
 import * as stories from './MultilineTextInput.stories';
+
+const { CreateStory, WithValidation } = stories;
+const WithValidationStory = CreateStory(WithValidation);
 
 describe('MultilineTextInput', () => {
   it('verifies field based on rule', async () => {
     const user = userEvent.setup();
-    render(<MultilineTextInput {...stories.WithValidation.args} inputName='multilineTextInput'/>);
+    render(<WithValidationStory />);
     const submitButton = screen.getByRole('button', { name: 'Submit' });
 
     await user.click(submitButton);

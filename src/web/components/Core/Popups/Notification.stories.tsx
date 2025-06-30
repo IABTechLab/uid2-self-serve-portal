@@ -11,21 +11,21 @@ const meta: Meta<typeof Notification> = {
 export default meta;
 type Story = StoryObj<typeof Notification>;
 
-export const WithIcon = {
+export const WithIcon: Story = {
   args: {
     icon: 'check-circle' as IconProp,
     notification: <p>Here is notification</p>,
   },
 };
 
-export const WithTitle = {
+export const WithTitle: Story = {
   args: {
     notification: <p>Here is notification information</p>,
     title: 'An title',
   },
 };
 
-export const WithoutIconAndTitle = {
+export const WithoutIconAndTitle: Story = {
   args: {
     notification: <p>Here is just notification</p>,
   },

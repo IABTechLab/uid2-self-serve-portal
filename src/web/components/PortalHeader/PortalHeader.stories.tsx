@@ -20,15 +20,9 @@ export const ValidEmailAddress: Story = {
 export const InvalidEmailAddress = {
   args: {
     email: '123',
-		fullName: '',
-		logout: () => {}
   },
 };
 
 export const NoEmailAddress = {
-  args: {
-		email: '',
-		fullName: '',
-		logout: () => {}
-	},
+  args: {},
 };

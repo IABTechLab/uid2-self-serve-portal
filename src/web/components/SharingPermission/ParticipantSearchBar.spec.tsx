@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { ParticipantSearchBar } from './ParticipantSearchBar';
 import * as stories from './ParticipantSearchBar.stories';
 
-const { SearchBar } = stories;
+const { CreateStory, SearchBar } = stories;
+const SearchBarStory = CreateStory(SearchBar);
 
 describe('ParticipantSearchBar', () => {
   it('should only show participant list when search bar is clicked', async () => {
     const user = userEvent.setup();
-    render(<ParticipantSearchBar {...SearchBar.args} />);
+    render(<SearchBarStory />);
 
     expect(screen.queryByTestId('participant-table')).not.toBeInTheDocument();
 
@@ -20,7 +20,7 @@ describe('ParticipantSearchBar', () => {
 
   it('should mark defaultSelected participants as checked', async () => {
     const user = userEvent.setup();
-    render(<ParticipantSearchBar {...SearchBar.args} />);
+    render(<SearchBarStory />);
     await user.click(screen.getByRole('textbox'));
     const [
       ,

@@ -11,7 +11,7 @@ export default meta;
 
 type Story = StoryObj<typeof TypeFilter>;
 
-export const Default = {
+export const Default: Story = {
   args: {
     types: ['DSP', 'PUBLISHER', 'DATA_PROVIDER'] as ClientType[],
     onFilterChange: (selectedTypeIds: Set<ClientType>) => {

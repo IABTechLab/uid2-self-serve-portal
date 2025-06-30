@@ -9,6 +9,10 @@ const meta: Meta<typeof SelectInput> = {
   component: SelectInput,
 };
 
+export const CreateStory = (story: { render: Function; args: {} }) => {
+  return () => story.render(story.args);
+};
+
 export default meta;
 type Story = StoryObj<typeof SelectInput>;
 

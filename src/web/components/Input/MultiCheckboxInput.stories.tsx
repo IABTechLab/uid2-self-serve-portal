@@ -19,6 +19,10 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 3', value: 'option3' },
 ];
 
+export const CreateStory = (story: { render: Function; args: {} }) => {
+  return () => story.render(story.args);
+};
+
 const Template: StoryFn<typeof MultiCheckboxInput> = (args) => {
   const formMethods = useForm();
   const { handleSubmit } = formMethods;
@@ -75,7 +79,7 @@ export const WithValidation = {
     label: 'Select options',
     options,
     rules: {
-      validate: (value: string | any[]) => (value && value.length > 1) || 'At least two options are required',
+      validate: (value: string[]) => (value && value.length > 1) || 'At least two options are required',
     },
   },
 };

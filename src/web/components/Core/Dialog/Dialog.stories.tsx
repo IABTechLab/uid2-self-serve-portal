@@ -19,21 +19,21 @@ export const Default = {
   },
 };
 
-export const WithoutTitle = {
+export const WithoutTitle: Story = {
   args: {
     ...Default.args,
     title: undefined,
   },
 };
 
-export const WithoutCloseText = {
+export const WithoutCloseText: Story = {
   args: {
     ...Default.args,
     closeButtonText: undefined,
   },
 };
 
-export const WithoutCloseButtons = {
+export const WithoutCloseButtons: Story = {
   args: {
     ...Default.args,
     closeButtonText: undefined,

@@ -8,6 +8,9 @@ import * as stories from './MultiCheckboxInput.stories';
 import { Option } from './SelectInput';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 
+const { CreateStory, WithValidation } = stories;
+const WithValidationStory = CreateStory(WithValidation);
+
 const checkBoxOptionsList = [
   [[{ optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' }]],
   [
@@ -166,7 +169,7 @@ describe('CheckboxInput', () => {
 
   it('Verifies field based on rule', async () => {
     const user = userEvent.setup();
-    render(<MultiCheckboxInput {...stories.WithValidation.args} />);
+    render(<WithValidationStory />);
 
     await user.click(screen.getByRole('checkbox', { name: 'Option 2' }));
     await waitFor(() => {
