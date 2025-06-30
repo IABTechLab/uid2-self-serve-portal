@@ -1,4 +1,5 @@
 import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
+
 import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_REALM, SSP_KK_SECRET } from './envars';
 
 let KcAdminClientClass: typeof KeycloakAdminClient | null = null;
@@ -17,7 +18,7 @@ export const getKcAdminClient = async () => {
 	if (!KcAdminClientClass) {
 		await loadKcAdminClient();
 		if (!KcAdminClientClass) {
-    	throw new Error('Failed to load Keycloak Admin Client class');
+			throw new Error('Failed to load Keycloak Admin Client class');
 		}
   }
 
