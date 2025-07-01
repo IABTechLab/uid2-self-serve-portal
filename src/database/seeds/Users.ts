@@ -27,6 +27,14 @@ const sampleUserData: Optional<UserType, 'id'>[] = [
     jobFunction: UserJobFunction.Engineering,
     acceptedTerms: true,
   },
+  {
+    email: 'sample_user@example.com',
+    firstName: 'Sample',
+    lastName: 'User',
+    phone: '+61298765432',
+    jobFunction: UserJobFunction.Engineering,
+    acceptedTerms: true,
+  },
 ];
 
 export async function seed(knex: Knex): Promise<void> {
