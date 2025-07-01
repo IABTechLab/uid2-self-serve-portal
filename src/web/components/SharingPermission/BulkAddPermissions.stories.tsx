@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-webpack5';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
 
@@ -70,8 +69,6 @@ export const Publisher = {
   },
 };
 
-export const PublisherStory = CreateStory(Publisher);
-
 export const AdvertiserAndDSP = {
   render: Template,
 
@@ -134,5 +131,3 @@ export const HasSharedWithPublisher = {
     sharedTypes: ['PUBLISHER'],
   },
 };
-
-export const HasSharedWithPublisherStory = CreateStory(HasSharedWithPublisher);

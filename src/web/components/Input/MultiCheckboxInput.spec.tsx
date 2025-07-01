@@ -6,8 +6,10 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
-import { WithValidationStory } from './MultiCheckboxInput.stories';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { WithValidation } from './MultiCheckboxInput.stories';
 
+const WithValidationStory = CreateStory(WithValidation);
 
 const checkBoxOptionsList = [
   [[{ optionLabel: 'Option 1', optionToolTip: 'Option1', value: 'option1' }]],

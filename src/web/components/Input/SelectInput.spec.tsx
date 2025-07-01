@@ -1,7 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { WithValidationStory } from './SelectInput.stories';
+import { WithValidation } from './SelectInput.stories';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
+
+const WithValidationStory = CreateStory(WithValidation);
 
 describe('SelectInput', () => {
   it('verifies field based on rule', async () => {

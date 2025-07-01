@@ -1,7 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { WithValidationStory } from './MultilineTextInput.stories';
+import { WithValidation } from './MultilineTextInput.stories';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
+
+const WithValidationStory = CreateStory(WithValidation);
 
 describe('MultilineTextInput', () => {
   it('verifies field based on rule', async () => {

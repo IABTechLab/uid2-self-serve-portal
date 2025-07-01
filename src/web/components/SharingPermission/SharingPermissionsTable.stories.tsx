@@ -66,6 +66,7 @@ const meta: Meta<typeof SharingPermissionsTable> = {
       </TestAllSitesListProvider>
     ),
   ],
+	excludeStories: ['Response']
 };
 export default meta;
 

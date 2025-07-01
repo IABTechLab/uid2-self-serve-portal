@@ -1,9 +1,10 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { HasSharedWithPublisher, Publisher } from './BulkAddPermissions.stories';
 
-import * as stories from './BulkAddPermissions.stories';
-
-const { PublisherStory, HasSharedWithPublisherStory } = stories;
+const PublisherStory = CreateStory(Publisher);
+const HasSharedWithPublisherStory = CreateStory(HasSharedWithPublisher);
 
 describe('BulkAddPermissions', () => {
   it('DSP checkbox is initially checked for a Publisher', async () => {

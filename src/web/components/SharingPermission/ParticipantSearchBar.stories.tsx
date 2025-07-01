@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 const meta: Meta<typeof ParticipantSearchBar> = {
@@ -57,4 +56,3 @@ export const SearchBar = {
   },
 };
 
-export const SearchBarStory = CreateStory(SearchBar);

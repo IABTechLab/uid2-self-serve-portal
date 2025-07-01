@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { RadioInput } from './RadioInput';
 import { Option } from './SelectInput';
@@ -42,8 +41,6 @@ export const WithLabel = {
   },
 };
 
-export const WithLabelStory = CreateStory(WithLabel);
-
 export const WithValidation = {
   render: Template,
 
@@ -54,5 +51,3 @@ export const WithValidation = {
     rules: { required: 'This field is required' },
   },
 };
-
-export const WithValidationStory = CreateStory(WithValidation);
