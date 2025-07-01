@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { WithValidation } from './MultilineTextInput.stories';
 import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { WithValidation } from './MultilineTextInput.stories';
 
 const WithValidationStory = CreateStory(WithValidation);
 

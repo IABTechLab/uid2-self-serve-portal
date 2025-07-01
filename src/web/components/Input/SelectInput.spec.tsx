@@ -1,8 +1,8 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { WithValidation } from './SelectInput.stories';
 import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { WithValidation } from './SelectInput.stories';
 
 const WithValidationStory = CreateStory(WithValidation);
 

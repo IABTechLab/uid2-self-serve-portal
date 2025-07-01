@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { SearchBar } from './ParticipantSearchBar.stories';
 import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { SearchBar } from './ParticipantSearchBar.stories';
 
 const SearchBarStory = CreateStory(SearchBar);
 

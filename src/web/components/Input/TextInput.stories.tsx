@@ -44,4 +44,3 @@ export const WithValidation = {
     rules: { maxLength: { value: 2, message: 'Too many characters' } },
   },
 };
-
