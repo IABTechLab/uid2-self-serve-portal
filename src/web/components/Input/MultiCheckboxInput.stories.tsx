@@ -1,10 +1,10 @@
 import { Meta, StoryFn, StoryObj } from '@storybook/react-webpack5';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { MultiCheckboxInput } from './MultiCheckboxInput';
 import { Option } from './SelectInput';
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof MultiCheckboxInput> = {
   title: 'Shared Components/Inputs/Checkbox',

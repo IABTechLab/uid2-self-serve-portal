@@ -1,5 +1,6 @@
-import { Meta, StoryObj } from '@storybook/react';
-import { useForm, FormProvider, UseFormProps } from 'react-hook-form';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
+import { FormProvider, useForm, UseFormProps } from 'react-hook-form';
+
 import { FormStyledCheckbox } from './StyledCheckbox';
 
 type FormData = {
@@ -11,7 +12,7 @@ const CheckboxWithForm = ({
   ...checkboxArgs
 }: {
   formProps?: UseFormProps<FormData>;
-  [key: string]: any;
+  [key: string]: unknown;
 }) => {
   const methods = useForm<FormData>(formProps);
   const { control, watch, handleSubmit } = methods;

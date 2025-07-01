@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react-webpack5';
+import { Meta } from '@storybook/react-webpack5';
 
 import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TypeFilter } from './TypeFilter';
@@ -8,8 +8,6 @@ const meta: Meta<typeof TypeFilter> = {
   component: TypeFilter,
 };
 export default meta;
-
-type Story = StoryObj<typeof TypeFilter>;
 
 export const Default = {
   args: {

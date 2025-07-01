@@ -1,8 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
-import { ParticipantSearchBar } from './ParticipantSearchBar';
 import { CreateStory } from '../../../testHelpers/storybookHelpers';
+import { ParticipantSearchBar } from './ParticipantSearchBar';
 
 const meta: Meta<typeof ParticipantSearchBar> = {
   title: 'Sharing Permissions/Participant Search Bar',

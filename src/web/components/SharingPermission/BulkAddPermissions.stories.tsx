@@ -1,11 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react-webpack5';
 
-import { ParticipantDTO } from '../../../api/entities/Participant';
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
-import { ClientType } from '../../../api/services/adminServiceHelpers';
+import { CreateStory } from '../../../testHelpers/storybookHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
 import { BulkAddPermissions } from './BulkAddPermissions';
-import { CreateStory } from '../../../testHelpers/storybookHelpers';
 
 const meta: Meta<typeof BulkAddPermissions> = {
   title: 'Sharing Permissions/Bulk Add Permissions',
@@ -90,7 +88,7 @@ export const AdvertiserAndDSP = {
       crmAgreementNumber: '23456789',
     },
     onBulkAddSharingPermission,
-    sharedTypes: [] as ClientType[],
+    sharedTypes: [],
   },
 };
 
@@ -131,9 +129,9 @@ export const HasSharedWithPublisher = {
       allowSharing: true,
       completedRecommendations: true,
       crmAgreementNumber: '45678901',
-    }  as ParticipantDTO,
+    },
     onBulkAddSharingPermission,
-    sharedTypes: ['PUBLISHER'] as ClientType[],
+    sharedTypes: ['PUBLISHER'],
   },
 };
 
