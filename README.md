@@ -248,22 +248,7 @@ The following steps describe the minimal steps required to successfully log in t
 
 ### UID2 Support Screens/Routes
 
-Certain screens/routes are only viewable with the UID2 support role, such as the screen to manage participants. Run the following to assign yourself the UID2 support role:
-
-```
-use [uid2_selfserve]
-
-declare @email as nvarchar(256) = 'example@example.com';
-declare @uid2SupportRoleId as int = 3;
-
-insert into dbo.usersToParticipantRoles (userId, participantId, userRoleId)
-select u.id, upr.participantId, @uid2SupportRoleId
-from dbo.users u
-join dbo.usersToParticipantRoles upr on u.id = upr.userId
-where u.email = @email;
-```
-
-You will then want to assign some API Permissions to your participant in the `Manage Participants` screen. This will allow you to use the full functionality of the `API Keys` screen.
+You will want to assign some API Permissions to your participant in the `Manage Participants` screen. This will allow you to use the full functionality of the `API Keys` screen.
 
 ### Connecting to local Admin service
 
