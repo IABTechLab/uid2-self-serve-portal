@@ -1,4 +1,4 @@
-import { Meta, StoryFn, StoryObj } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
 import { TestAvailableSiteListProvider } from '../../services/site';
@@ -50,11 +50,9 @@ const Template: StoryFn<typeof BulkAddPermissions> = (args) => (
   </TestAvailableSiteListProvider>
 );
 
-type Story = StoryObj<typeof BulkAddPermissions>;
-
 const onBulkAddSharingPermission = (types: string[]) => Promise.resolve(console.log(types));
 
-export const Publisher: Story = {
+export const Publisher = {
   render: Template,
 
   args: {
@@ -71,7 +69,7 @@ export const Publisher: Story = {
   },
 };
 
-export const AdvertiserAndDSP: Story = {
+export const AdvertiserAndDSP = {
   render: Template,
 
   args: {
@@ -91,7 +89,7 @@ export const AdvertiserAndDSP: Story = {
   },
 };
 
-export const AllTypes: Story = {
+export const AllTypes = {
   render: Template,
 
   args: {
@@ -113,7 +111,7 @@ export const AllTypes: Story = {
   },
 };
 
-export const HasSharedWithPublisher: Story = {
+export const HasSharedWithPublisher = {
   render: Template,
 
   args: {

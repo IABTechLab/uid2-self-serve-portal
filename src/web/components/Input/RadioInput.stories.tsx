@@ -1,4 +1,4 @@
-import { Meta, StoryFn, StoryObj } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
@@ -11,7 +11,6 @@ const meta: Meta<typeof RadioInput> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof RadioInput>;
 
 const Template: StoryFn<typeof RadioInput> = (args) => {
   const formMethods = useForm();
@@ -32,7 +31,7 @@ const options: Option<string>[] = [
   { optionLabel: 'Option 4', value: 'option4', disabled: true },
 ];
 
-export const WithLabel: Story = {
+export const WithLabel = {
   render: Template,
 
   args: {
@@ -42,7 +41,7 @@ export const WithLabel: Story = {
   },
 };
 
-export const WithValidation: Story = {
+export const WithValidation = {
   render: Template,
 
   args: {

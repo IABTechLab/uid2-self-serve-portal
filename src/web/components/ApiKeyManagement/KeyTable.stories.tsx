@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
-import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { OnApiKeyDisable } from './KeyDisableDialog';
 import { OnApiKeyEdit } from './KeyEditDialog';
-import { allApiRoles } from './KeyHelper.spec';
+import { allApiRoles } from './KeyHelper';
 import KeyTable from './KeyTable';
 
 const meta: Meta<typeof KeyTable> = {
@@ -15,21 +14,13 @@ export default meta;
 
 type Story = StoryObj<typeof KeyTable>;
 
-const apiRolesMap = new Map<string, ApiRoleDTO>(
-  allApiRoles.map((apiRole) => [apiRole.roleName, apiRole])
-);
-
-const apiRoleNameToApiRoleDTO = (roleNames: string[]) => {
-  return roleNames.map((roleName) => apiRolesMap.get(roleName)!);
-};
-
 const onKeyEdit: OnApiKeyEdit = (form, setApiKey) => {
   console.log(`editing ${form.keyId}`);
 
   setApiKey((oldApiKey) => {
     const newApiKey = { ...oldApiKey };
     newApiKey.name = form.newName;
-    newApiKey.roles = apiRoleNameToApiRoleDTO(form.newApiRoles);
+    newApiKey.roles = allApiRoles.filter((role) => role.roleName === form.newName);
 
     return newApiKey;
   });
@@ -58,7 +49,7 @@ export const ManyKeys: Story = {
         created: 1701210253,
         key_id: 'FDSL,089',
         disabled: false,
-        roles: apiRoleNameToApiRoleDTO(['MAPPER']),
+        roles: allApiRoles.filter((role) => role.roleName === 'MAPPER'),
         service_id: 0,
         site_id: 1,
       },
@@ -68,7 +59,7 @@ export const ManyKeys: Story = {
         created: 1702830516,
         key_id: 'F4lfa.fdas',
         disabled: false,
-        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR']),
+        roles: allApiRoles.filter((role) => ['MAPPER', 'GENERATOR'].includes(role.roleName)),
         service_id: 0,
         site_id: 1,
       },
@@ -78,7 +69,7 @@ export const ManyKeys: Story = {
         created: 17028300516,
         key_id: 'REIO_38',
         disabled: false,
-        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER']),
+        roles: allApiRoles.filter((role) => ['MAPPER', 'GENERATOR', 'ID_READER'].includes(role.roleName)),
         service_id: 0,
         site_id: 1,
       },
@@ -88,7 +79,7 @@ export const ManyKeys: Story = {
         created: 1702840516,
         key_id: 'BNJMB_934',
         disabled: false,
-        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER']),
+        roles: allApiRoles,
         service_id: 0,
         site_id: 1,
       },
@@ -98,12 +89,12 @@ export const ManyKeys: Story = {
         created: 1702840516,
         key_id: 'FDSFDFS_934',
         disabled: false,
-        roles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER', 'OPTOUT']),
+        roles: allApiRoles,
         service_id: 0,
         site_id: 1,
       },
     ],
-    availableRoles: apiRoleNameToApiRoleDTO(['MAPPER', 'GENERATOR', 'ID_READER', 'SHARER']),
+    availableRoles: allApiRoles,
     onKeyEdit,
     onKeyDisable,
   },

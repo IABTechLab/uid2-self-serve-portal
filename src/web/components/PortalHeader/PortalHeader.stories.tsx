@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { PortalHeader } from './PortalHeader';
 
@@ -17,12 +17,12 @@ export const ValidEmailAddress: Story = {
   },
 };
 
-export const InvalidEmailAddress: Story = {
+export const InvalidEmailAddress = {
   args: {
     email: '123',
   },
 };
 
-export const NoEmailAddress: Story = {
+export const NoEmailAddress = {
   args: {},
 };

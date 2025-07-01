@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { UserJobFunction } from '../../../api/entities/User';
-import { allApiRoles, Bidder, Generator, Mapper } from '../ApiKeyManagement/KeyHelper.spec';
+import { allApiRoles, Bidder, Generator, Mapper } from '../ApiKeyManagement/KeyHelper';
 import ParticipantManagementTable from './ParticipantManagementTable';
 
 const meta: Meta<typeof ParticipantManagementTable> = {
