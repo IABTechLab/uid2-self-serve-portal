@@ -34,13 +34,21 @@ const renderPortalHeaderWithContext = (
 
 describe('Portal Header tests', () => {
   it('when an invalid email address is provided, a home link is still displayed', async () => {
-    render(<MemoryRouter><PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} /></MemoryRouter>);
+    render(
+			<MemoryRouter>
+				<PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} />
+			</MemoryRouter>
+		);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', expect.stringContaining('/home'));
   });
 
   it('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
-    render(<MemoryRouter><PortalHeader {...NoEmailAddress.args} email={undefined} fullName={undefined} logout={() => {}}/></MemoryRouter>);
+    render(
+			<MemoryRouter>
+				<PortalHeader {...NoEmailAddress.args} email={undefined} fullName={undefined} logout={() => {}}/>
+			</MemoryRouter>
+		);
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent('Not logged in');
   });
