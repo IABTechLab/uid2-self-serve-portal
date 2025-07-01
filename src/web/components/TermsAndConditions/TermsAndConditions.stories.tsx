@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-webpack5';
 
 import { Dialog } from '../Core/Dialog/Dialog';
 import { TermsAndConditions, TermsAndConditionsForm } from './TermsAndConditions';

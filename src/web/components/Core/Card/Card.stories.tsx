@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 
 import { Card } from './Card';
 
@@ -7,22 +7,21 @@ const meta: Meta<typeof Card> = {
   component: Card,
 };
 export default meta;
-type Story = StoryObj<typeof Card>;
 
-export const WithTitle: Story = {
+export const WithTitle = {
   args: {
     title: 'Card Title',
   },
 };
 
-export const WithDescription: Story = {
+export const WithDescription = {
   args: {
     title: 'Title',
     description: 'Here is the description',
   },
 };
 
-export const NoHeader: Story = {
+export const NoHeader = {
   args: {
     children: 'test',
   },

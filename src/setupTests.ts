@@ -4,13 +4,8 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { setProjectAnnotations } from '@storybook/react';
-
-import * as globalStorybookConfig from '../.storybook/preview';
 import { configureFontAwesomeLibrary } from './web/configureFontAwesomeLibrary';
 
-setProjectAnnotations(globalStorybookConfig);
 configureFontAwesomeLibrary();
 
 window.HTMLElement.prototype.scrollIntoView = jest.fn();

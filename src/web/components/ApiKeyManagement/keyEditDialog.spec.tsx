@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ApiKeyDTO } from '../../../api/services/adminServiceHelpers';
 import KeyEditDialog from './KeyEditDialog';
-import { Bidder, Generator, Mapper, Sharer } from './KeyHelper.spec';
+import { Bidder, Generator, Mapper, Sharer } from './KeyHelper';
 
 function loadComponent(apiKeyRoles: ApiRoleDTO[], participantApiRoles: ApiRoleDTO[]) {
   const apiKey: ApiKeyDTO = {

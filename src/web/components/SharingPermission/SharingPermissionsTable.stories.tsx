@@ -1,10 +1,11 @@
-import { Meta, StoryObj } from '@storybook/react';
+import { Meta } from '@storybook/react-webpack5';
 
 import { SharingSiteDTO } from '../../../api/helpers/siteConvertingHelpers';
+import { ClientType } from '../../../api/services/adminServiceHelpers';
 import { TestAllSitesListProvider } from '../../services/site';
 import { SharingPermissionsTable } from './SharingPermissionsTable';
 
-const response: SharingSiteDTO[] = [
+export const Response: SharingSiteDTO[] = [
   {
     name: 'Site 1',
     clientTypes: ['PUBLISHER'],
@@ -60,20 +61,19 @@ const meta: Meta<typeof SharingPermissionsTable> = {
   component: SharingPermissionsTable,
   decorators: [
     (Story) => (
-      <TestAllSitesListProvider response={response}>
+      <TestAllSitesListProvider response={Response}>
         <Story />
       </TestAllSitesListProvider>
     ),
   ],
+	excludeStories: ['Response']
 };
 export default meta;
 
-type Story = StoryObj<typeof SharingPermissionsTable>;
-
-export const SharedWithParticipants: Story = {
+export const SharedWithParticipants = {
   args: {
     sharedSiteIds: [10, 11, 12, 14, 15, 17],
-    sharedTypes: ['DSP', 'DATA_PROVIDER'],
+    sharedTypes: ['DSP', 'DATA_PROVIDER'] as ClientType[],
     onDeleteSharingPermission: () => Promise.resolve(),
   },
 };

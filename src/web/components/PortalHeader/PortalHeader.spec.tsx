@@ -1,6 +1,6 @@
-import { composeStories } from '@storybook/react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 
 import { Participant, ParticipantDTO } from '../../../api/entities/Participant';
 import { UserRoleId } from '../../../api/entities/UserRole';
@@ -16,7 +16,7 @@ import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
 import { PortalHeader } from './PortalHeader';
 import * as stories from './PortalHeader.stories';
 
-const { InvalidEmailAddress, NoEmailAddress } = composeStories(stories);
+const { InvalidEmailAddress, NoEmailAddress } = stories;
 
 const renderPortalHeaderWithContext = (
   userContextValue: UserContextWithSetter,
@@ -34,13 +34,21 @@ const renderPortalHeaderWithContext = (
 
 describe('Portal Header tests', () => {
   it('when an invalid email address is provided, a home link is still displayed', async () => {
-    render(<InvalidEmailAddress />);
+    render(
+			<MemoryRouter>
+				<PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} />
+			</MemoryRouter>
+		);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', expect.stringContaining('/home'));
   });
 
   it('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
-    render(<NoEmailAddress />);
+    render(
+			<MemoryRouter>
+				<PortalHeader {...NoEmailAddress.args} email={undefined} fullName={undefined} logout={() => {}}/>
+			</MemoryRouter>
+		);
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent('Not logged in');
   });
