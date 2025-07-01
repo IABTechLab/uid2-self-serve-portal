@@ -233,7 +233,7 @@ The following steps describe the minimal steps required to successfully log in t
    Successfully running this will result in the self-serve-portal opening in the browser.
    You may need to refresh the page once as an error often occurs on the first run.
 1. A test user is created automatically in in the seed data but you must set a password. Go to http://localhost:3000/ and click the `Forgot Password` button.
-1. Enter the following test email address: `test_user@example.com` and click `Request Password Reset`
+1. Enter the following test email address: `sample_user@example.com` and click `Request Password Reset`
 1. Go to local MailHog at http://localhost:18025/ and you will see an email from `noreply@unifiedid.com` with the subject `Reset Password`
 1. Open the email and Click `Reset Password`
 1. Choose a password

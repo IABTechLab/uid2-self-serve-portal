@@ -102,6 +102,7 @@
     "dev": "run-p start api",
     "start": "craco start",
     "build": "craco build",
+    "test-single": "craco test",
     "test": "craco test --testPathPattern=src/web/",
     "api": "run-p check-env-file api-watch",
     "check-env-file": "tsx src/checkEnvFile.ts",
