@@ -13,7 +13,7 @@ module.exports = {
           ...webpackConfig.resolve?.fallback,
           stream: require.resolve('stream-browserify'),
           path: false,
-					url: require.resolve('url/')
+					url: require.resolve('url')
         },
       };
 
