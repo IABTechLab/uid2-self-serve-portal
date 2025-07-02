@@ -19,7 +19,6 @@ COPY src/ src
 COPY craco.config.cjs ./craco.config.cjs
 ENV CRACO_CONFIG=craco.config.cjs
 
-
 RUN npm run build
 RUN npm run build-api
 
