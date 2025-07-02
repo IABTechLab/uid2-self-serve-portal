@@ -20,5 +20,6 @@
 		"allowImportingTsExtensions": true,
 		"types": ["jest"]
   },
-  "include": ["src"]
+  "include": ["src"],
+	"exclude": ["craco.config.js"]
 }
