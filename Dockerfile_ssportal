@@ -16,6 +16,7 @@ RUN npm ci --production=false
 COPY public/ public
 COPY src/ src
 
+COPY craco.config.cjs ./
 RUN mv craco.config.cjs craco.config.js
 
 RUN npm run build
