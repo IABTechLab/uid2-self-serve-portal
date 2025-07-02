@@ -1,2 +1,3 @@
 /api-dist/*
 babel.config.js
+craco.config.js
