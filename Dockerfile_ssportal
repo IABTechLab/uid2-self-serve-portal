@@ -23,4 +23,4 @@ RUN npm run build
 RUN npm run build-api
 
 EXPOSE 80
-CMD nginx -g 'pid /tmp/nginx.pid;' & node api-dist/src/api/api.js
+CMD nginx -g 'pid /tmp/nginx.pid;' & node api-dist/api/api.js
