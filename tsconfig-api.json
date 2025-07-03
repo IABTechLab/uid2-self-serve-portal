@@ -9,7 +9,6 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
 		"allowImportingTsExtensions": true,
-		"noEmit": true,
   },
   "include": ["src/**/*"],
   "exclude": [
