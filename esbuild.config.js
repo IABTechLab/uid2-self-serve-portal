@@ -1,7 +1,10 @@
 import { build } from 'esbuild';
 import { globSync } from 'glob';
 
-const entryPoints = globSync('src/api/**/*.ts');
+const entryPoints = [
+  ...globSync('src/api/**/*.ts'),
+  ...globSync('src/database/**/*.ts')
+];
 
 build({
   entryPoints,
