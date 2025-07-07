@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { z } from 'zod';
 
-import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { Participant } from '../../entities/Participant';
@@ -9,6 +8,7 @@ import { UserCreationPartial } from '../../entities/Schemas';
 import { User } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
+import { getRoleNamesByIds } from '../../helpers/apiHelper';
 import { getTraceId, TraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';

@@ -2,7 +2,7 @@ import sgMail from '@sendgrid/mail';
 
 import { SSP_SEND_GRID_API_KEY } from '../envars';
 import { getLoggers, TraceId } from '../helpers/loggingHelpers';
-import _templateIdMapping from '../templateIdMapping.json';
+import _templateIdMapping from '../templateIdMapping.json' with { type: 'json' };
 import { EmailArgs, UID2Sender } from './emailTypes';
 
 type TemplateIdMapping = {

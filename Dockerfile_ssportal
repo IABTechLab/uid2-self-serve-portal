@@ -22,5 +22,9 @@ ENV CRACO_CONFIG=craco.config.cjs
 RUN npm run build
 RUN npm run build-api
 
+COPY src/api/*.json api-dist/api/
+COPY api-dist/ api-dist/
+COPY api-dist/knexfile.js ./knexfile.js
+
 EXPOSE 80
 CMD nginx -g 'pid /tmp/nginx.pid;' & node api-dist/api/api.js
