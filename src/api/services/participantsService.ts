@@ -9,6 +9,7 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { ParticipantApprovalPartial } from '../entities/Schemas';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
+import { getRoleNamesByIds } from '../helpers/apiHelper';
 import { getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import {
@@ -22,7 +23,6 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { getRoleNamesByIds } from '../helpers/apiHelper';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;

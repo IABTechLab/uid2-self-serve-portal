@@ -8,6 +8,7 @@ import { UserCreationPartial } from '../../entities/Schemas';
 import { User } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
+import { getRoleNamesByIds } from '../../helpers/apiHelper';
 import { getTraceId, TraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
@@ -31,7 +32,6 @@ import {
   ParticipantCreationAndApprovalPartial,
   ParticipantCreationRequest,
 } from './participantClasses';
-import { getRoleNamesByIds } from '../../helpers/apiHelper';
 
 export async function validateParticipantCreationRequest(
   participantRequest: z.infer<typeof ParticipantCreationRequest>,
