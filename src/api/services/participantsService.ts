@@ -2,7 +2,6 @@ import { Request } from 'express';
 import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
-import { getRoleNamesByIds } from '../../web/utils/apiRoles';
 import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant, ParticipantDTO } from '../entities/Participant';
@@ -23,6 +22,7 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
+import { getRoleNamesByIds } from '../helpers/apiHelper';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;

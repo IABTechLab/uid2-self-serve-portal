@@ -1,7 +1,6 @@
 import { Response } from 'express';
 import { z } from 'zod';
 
-import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { Participant } from '../../entities/Participant';
@@ -32,6 +31,7 @@ import {
   ParticipantCreationAndApprovalPartial,
   ParticipantCreationRequest,
 } from './participantClasses';
+import { getRoleNamesByIds } from '../../helpers/apiHelper';
 
 export async function validateParticipantCreationRequest(
   participantRequest: z.infer<typeof ParticipantCreationRequest>,
