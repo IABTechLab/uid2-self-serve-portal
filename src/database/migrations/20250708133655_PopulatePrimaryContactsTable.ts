@@ -12,7 +12,7 @@ export async function up(knex: Knex): Promise<void> {
     .select('usersToParticipantRoles.participantId', 'users.id as userId')
     .where('users.deleted', 0)
     .where('users.locked', 0)) as UserToPrimary[];
-  // TO CONFIRM: do we want filter by certain roles (Admin) ?
+  // TO DO: Take first user that is NOT operations =/= 2
 
   if (rows.length === 0) return;
 
