@@ -20,9 +20,22 @@ jobs:
       release_type: ${{ inputs.release_type }}
     secrets: inherit
 
+  buildApi:
+    runs-on: ubuntu-latest
+    needs: incrementVersionNumber
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build API
+        run: npm run build-api
+
   publishForApiUi:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
-    needs: incrementVersionNumber
+    needs: [incrementVersionNumber, buildApi]
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
       image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
