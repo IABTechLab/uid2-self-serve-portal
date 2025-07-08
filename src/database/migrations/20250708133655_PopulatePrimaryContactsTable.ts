@@ -1,8 +1,8 @@
 import { Knex } from 'knex';
 
 interface PrimaryContactData {
-  userId: number;
   participantId: number;
+  userId: number;
 }
 
 export async function up(knex: Knex): Promise<void> {
