@@ -37,6 +37,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ inputs.IMAGE_NAME }}
           tags: |
             type=sha,prefix=${{ steps.version.outputs.package_version }}-,format=short
+      - name: Build API
+        run: npm run build-api
       - name: Build and push Docker image (${{ inputs.IMAGE_NAME }})
         uses: docker/build-push-action@v5
         with:
