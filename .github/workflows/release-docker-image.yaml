@@ -52,12 +52,6 @@ jobs:
   publishForApiUi:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
     needs: [incrementVersionNumber, prepareArtifact]
-    steps:
-      - name: Download built API files
-        uses: actions/download-artifact@v3
-        with:
-          name: api-dist
-          path: api-dist/
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
       image_tag: ${{ needs.incrementVersionNumber.outputs.image_tag }}
