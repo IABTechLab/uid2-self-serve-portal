@@ -34,7 +34,7 @@ jobs:
         run: npm run build-api
 
       - name: Upload built API files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: api-dist
           path: api-dist/
@@ -44,7 +44,7 @@ jobs:
     needs: buildApi
     steps:
       - name: Download built API files
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: api-dist
           path: api-dist/
