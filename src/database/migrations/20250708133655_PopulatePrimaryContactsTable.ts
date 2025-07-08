@@ -1,40 +1,39 @@
 import { Knex } from 'knex';
 
-interface UserToPrimary {
+interface PrimaryUserData {
   userId: number;
   participantId: number;
 }
 
 export async function up(knex: Knex): Promise<void> {
-  // Step 1: Fetch valid users from usersToParticipantRoles
-  const rows = (await knex('usersToParticipantRoles')
-    .join('users', 'users.id', '=', 'usersToParticipantRoles.userId') // get full user info for filtering
+  const eligibleUsers = (await knex('usersToParticipantRoles')
+    .join('users', 'users.id', '=', 'usersToParticipantRoles.userId')
     .select('usersToParticipantRoles.participantId', 'users.id as userId')
     .where('users.deleted', 0)
-    .where('users.locked', 0)) as UserToPrimary[];
-  // TO DO: Take first user that is NOT operations =/= 2
+    .where('users.locked', 0)
+    .whereNot('usersToParticipantRoles.userRoleId', 2)) as PrimaryUserData[]; // exclude Operations role;
 
-  if (rows.length === 0) return;
+  if (eligibleUsers.length === 0) return;
 
-  // Step 2: Add first user and track unique participants
   const primaryContactsMap = new Map<number, number>();
-  for (const row of rows) {
-    if (!primaryContactsMap.has(row.participantId)) {
-      primaryContactsMap.set(row.participantId, row.userId);
+  for (const user of eligibleUsers) {
+    if (!primaryContactsMap.has(user.participantId)) {
+      primaryContactsMap.set(user.participantId, user.userId);
     }
   }
 
-  // Step 3: Translate map to SQL array
-  const dataToInsert = Array.from(primaryContactsMap.entries()).map(([participantId, userId]) => ({
-    userId,
-    participantId,
-  }));
+  const dataObjectToSqlArray = Array.from(primaryContactsMap.entries()).map(
+    ([participantId, userId]) => ({
+      userId,
+      participantId,
+    })
+  );
 
-  await knex('primaryContacts').insert(dataToInsert);
+  await knex('primaryContacts').insert(dataObjectToSqlArray);
 }
 
 export async function down(knex: Knex): Promise<void> {
-  knex('primaryContacts')
+  await knex('primaryContacts')
     .whereIn('participantId', knex('usersToParticipantRoles').distinct('participantId'))
     .del();
 }
