@@ -1,6 +1,6 @@
 import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
-import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
+import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
 
