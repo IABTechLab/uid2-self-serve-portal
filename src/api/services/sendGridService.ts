@@ -2,13 +2,15 @@ import sgMail from '@sendgrid/mail';
 
 import { SSP_SEND_GRID_API_KEY } from '../envars';
 import { getLoggers, TraceId } from '../helpers/loggingHelpers';
-import _templateIdMapping from '../templateIdMapping.json' with { type: 'json' };
 import { EmailArgs, UID2Sender } from './emailTypes';
+import path from 'path';
+import fs from 'fs';
 
 type TemplateIdMapping = {
   [key: string]: string;
 };
-const templateIdMapping = _templateIdMapping as TemplateIdMapping;
+const jsonPath = path.resolve(new URL('.', import.meta.url).pathname, '../templateIdMapping.json');
+const templateIdMapping = JSON.parse(fs.readFileSync(jsonPath, 'utf-8')) as TemplateIdMapping;
 
 const isProduction = process.env.NODE_ENV === 'production';
 if (isProduction) {
