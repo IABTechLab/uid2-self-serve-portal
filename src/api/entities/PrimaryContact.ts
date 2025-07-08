@@ -33,6 +33,6 @@ export class PrimaryContact extends Model {
     };
   }
 
-  declare userId: number;
   declare participantId: number;
+  declare userId: number;
 }
