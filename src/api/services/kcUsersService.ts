@@ -1,8 +1,8 @@
 import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
-import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation";
+import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation.js";
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
-import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars';
+import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars.ts';
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
