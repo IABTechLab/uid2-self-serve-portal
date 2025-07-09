@@ -74,6 +74,18 @@ export class Participant extends BaseModel {
           to: 'usersToParticipantRoles.participantId',
         },
       },
+      primaryContact: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: () => User,
+        join: {
+          from: 'participants.id',
+          through: {
+            from: 'primaryContacts.participantId',
+            to: 'primaryContacts.userId',
+          },
+          to: 'users.id',
+        },
+      },
     };
   }
   declare id: number;
