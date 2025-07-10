@@ -31,6 +31,9 @@ function TeamMembersTableContent({
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
 
+  console.log('Participant from context:', participant);
+  console.log('Primary Contact ID:', participant?.primaryContact);
+
   const showTeamMemberActions =
     (LoggedInUser?.user &&
       participant &&

@@ -98,6 +98,9 @@ function TeamMember({
               <Label text='Pending' />
             </div>
           )}
+          <div className='pending-label'>
+            <Label text='Primary Contact' />
+          </div>
         </div>
       </td>
       <td>{person.email}</td>

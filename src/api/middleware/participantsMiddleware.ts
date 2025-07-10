@@ -6,9 +6,7 @@ import { getTraceId } from '../helpers/loggingHelpers';
 import { ParticipantRequest } from '../services/participantsService';
 import { canUserAccessParticipant } from './usersMiddleware';
 
-const participantIdSchema = z.object({
-  participantId: z.coerce.number(),
-});
+const participantIdSchema = z.object({ participantId: z.coerce.number() });
 export const verifyAndEnrichParticipant = async (
   req: ParticipantRequest,
   res: Response,
@@ -18,7 +16,9 @@ export const verifyAndEnrichParticipant = async (
   const traceId = getTraceId(req);
   const userEmail = req.auth?.payload?.email as string;
 
-  let participant = await Participant.query().findById(participantId).withGraphFetched('types');
+  let participant = await Participant.query()
+    .findById(participantId)
+    .withGraphFetched('[types, primaryContact]');
 
   if (!(await canUserAccessParticipant(userEmail, participantId, traceId))) {
     participant = undefined;
