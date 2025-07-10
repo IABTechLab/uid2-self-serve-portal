@@ -9,7 +9,7 @@ export class PrimaryContact extends Model {
   }
 
   static get idColumn() {
-    return ['participantId'];
+    return ['participantId', 'userId'];
   }
 
   static get relationMappings(): RelationMappings {

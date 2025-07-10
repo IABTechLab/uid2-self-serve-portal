@@ -106,8 +106,12 @@ export class Participant extends BaseModel {
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?
-export type ParticipantDTO = Omit<ModelObjectOpt<Participant>, 'types' | 'users' | 'apiRoles'> & {
+export type ParticipantDTO = Omit<
+  ModelObjectOpt<Participant>,
+  'types' | 'users' | 'apiRoles' | 'primaryContact'
+> & {
   types?: ParticipantTypeDTO[];
   apiRoles?: ApiRoleDTO[];
   users?: ModelObjectOpt<User>[];
+  primaryContact?: ModelObjectOpt<User>;
 };

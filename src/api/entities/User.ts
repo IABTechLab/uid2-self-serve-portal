@@ -32,29 +32,29 @@ export class User extends BaseModel {
   }
 
   static get relationMappings(): RelationMappings {
-		return {
-			participants: {
-				relation: Model.ManyToManyRelation,
-				modelClass: () => Participant,
-				join: {
-					from: 'users.id',
-					through: {
-						from: 'usersToParticipantRoles.userId',
-						to: 'usersToParticipantRoles.participantId',
-					},
-					to: 'participants.id',
-				},
-			},
-			userToParticipantRoles: {
-				relation: Model.HasManyRelation,
-				modelClass: () => UserToParticipantRole,
-				join: {
-					from: 'users.id',
-					to: 'usersToParticipantRoles.userId',
-				},
-			},
-		};
-  };
+    return {
+      participants: {
+        relation: Model.ManyToManyRelation,
+        modelClass: () => Participant,
+        join: {
+          from: 'users.id',
+          through: {
+            from: 'usersToParticipantRoles.userId',
+            to: 'usersToParticipantRoles.participantId',
+          },
+          to: 'participants.id',
+        },
+      },
+      userToParticipantRoles: {
+        relation: Model.HasManyRelation,
+        modelClass: () => UserToParticipantRole,
+        join: {
+          from: 'users.id',
+          to: 'usersToParticipantRoles.userId',
+        },
+      },
+    };
+  }
 
   declare id: number;
   declare email: string;
