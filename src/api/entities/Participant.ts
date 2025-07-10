@@ -75,7 +75,7 @@ export class Participant extends BaseModel {
         },
       },
       primaryContact: {
-        relation: Model.BelongsToOneRelation,
+        relation: Model.HasOneThroughRelation,
         modelClass: () => User,
         join: {
           from: 'participants.id',
