@@ -98,6 +98,11 @@ function TeamMember({
               <Label text='Pending' />
             </div>
           )}
+          {participant?.primaryContact?.id === person.id && (
+            <div className='pending-label'>
+              <Label text='Primary Contact' />
+            </div>
+          )}
         </div>
       </td>
       <td>{person.email}</td>
