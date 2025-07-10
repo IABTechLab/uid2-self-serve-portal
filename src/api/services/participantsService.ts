@@ -2,7 +2,6 @@ import { Request } from 'express';
 import { TransactionOrKnex } from 'objection';
 import { z } from 'zod';
 
-import { getRoleNamesByIds } from '../../web/utils/apiRoles';
 import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant, ParticipantDTO } from '../entities/Participant';
@@ -10,6 +9,7 @@ import { ParticipantType } from '../entities/ParticipantType';
 import { ParticipantApprovalPartial } from '../entities/Schemas';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
+import { getRoleNamesByIds } from '../helpers/apiHelper';
 import { getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
 import {

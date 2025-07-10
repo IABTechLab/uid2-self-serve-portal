@@ -93,7 +93,6 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     next();
   });
   app.use(cors()); // TODO: Make this more secure
-  app.use(bodyParser.json());
   app.use(bodyParser.json({ limit: '50mb' }));
   app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
