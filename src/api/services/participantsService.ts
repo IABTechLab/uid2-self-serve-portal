@@ -79,7 +79,7 @@ export const getAttachedSiteIDs = async (): Promise<SiteIdType[]> => {
 export const getAllParticipants = async (): Promise<Participant[]> => {
   return Participant.query()
     .whereNotNull('dateApproved')
-    .withGraphFetched('[apiRoles, approver, types, users]');
+    .withGraphFetched('[apiRoles, approver, types, users, primaryContact]');
 };
 
 export const getUserParticipants = async (userId: number): Promise<Participant[]> => {

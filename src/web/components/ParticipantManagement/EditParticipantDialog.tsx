@@ -10,7 +10,7 @@ import { Dialog } from '../Core/Dialog/Dialog';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
 import { TextInput } from '../Input/TextInput';
 import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
-import { getContactInformation } from './EditParticipantDialogHelpers';
+import { getPrimaryContactInformation } from './EditParticipantDialogHelpers';
 
 import './EditParticipantDialog.scss';
 
@@ -34,7 +34,7 @@ function EditParticipantDialog({
     onOpenChange();
   };
 
-  const contact = getContactInformation(participant);
+  const contact = getPrimaryContactInformation(participant);
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
