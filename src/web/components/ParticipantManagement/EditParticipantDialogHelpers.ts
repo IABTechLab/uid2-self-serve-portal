@@ -1,6 +1,6 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 
-export const getContactInformation = (participant: ParticipantDTO) => {
+export const getPrimaryContactInformation = (participant: ParticipantDTO) => {
   const defaultMessage = 'Information not available';
 
   return (
