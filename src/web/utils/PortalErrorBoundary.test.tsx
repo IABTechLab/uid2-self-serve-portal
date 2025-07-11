@@ -2,7 +2,6 @@ import * as cloak from '@react-keycloak/web';
 import { render, screen } from '@testing-library/react';
 import * as axios from 'axios';
 
-// import * as axios from 'axios';
 import { mockBackendError } from '../../testHelpers/errorMocks';
 import * as keycloakMocks from '../../testHelpers/keycloakMocks';
 import { App } from '../App';

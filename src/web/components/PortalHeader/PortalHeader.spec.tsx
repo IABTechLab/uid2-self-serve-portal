@@ -9,7 +9,7 @@ import { createMockParticipant, createMockUser } from '../../../testHelpers/data
 import {
   createParticipantContextValue,
   createUserContextValue,
-  TestContextProviderWithoughKeycloak,
+  TestContextProviderWithoutKeycloak,
 } from '../../../testHelpers/testContextProvider';
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
@@ -23,12 +23,12 @@ const renderPortalHeaderWithContext = (
   participantContextValue: ParticipantWithSetter
 ) => {
   return render(
-    <TestContextProviderWithoughKeycloak
+    <TestContextProviderWithoutKeycloak
       userContextValue={userContextValue}
       participantContextValue={participantContextValue}
     >
       <PortalHeader email='test@example.com' fullName='Test Name' logout={() => {}} />
-    </TestContextProviderWithoughKeycloak>
+    </TestContextProviderWithoutKeycloak>
   );
 };
 

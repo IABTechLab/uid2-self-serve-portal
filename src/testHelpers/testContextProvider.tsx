@@ -58,7 +58,7 @@ export function TestContextProvider({
   );
 }
 
-export function TestContextProviderWithoughKeycloak({
+export function TestContextProviderWithoutKeycloak({
   children,
   participantContextValue,
   userContextValue,
