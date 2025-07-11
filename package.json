@@ -104,7 +104,7 @@
     "dev": "run-p start api",
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test --testPathPattern=src/web/",
+    "test": "craco test --testPathPattern=src/web/ --runInBand",
     "api": "run-p check-env-file api-watch",
     "check-env-file": "tsx src/checkEnvFile.ts",
     "api-watch": "nodemon -e ts --exec tsx src/api/api.ts",

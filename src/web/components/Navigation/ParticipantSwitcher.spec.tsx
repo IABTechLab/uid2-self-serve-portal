@@ -6,7 +6,7 @@ import { createMockParticipant, createMockUser } from '../../../testHelpers/data
 import {
   createParticipantContextValue,
   createUserContextValue,
-  TestContextProvider,
+  TestContextProviderWithoutKeycloak,
 } from '../../../testHelpers/testContextProvider';
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
@@ -23,12 +23,12 @@ const renderParticipantSwitcherWithContext = (
   userContextValue: UserContextWithSetter
 ) => {
   return render(
-    <TestContextProvider
+    <TestContextProviderWithoutKeycloak
       participantContextValue={participantContextValue}
       userContextValue={userContextValue}
     >
       <ParticipantSwitcher />
-    </TestContextProvider>
+    </TestContextProviderWithoutKeycloak>
   );
 };
 

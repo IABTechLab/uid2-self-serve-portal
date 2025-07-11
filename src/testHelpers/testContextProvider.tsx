@@ -57,3 +57,17 @@ export function TestContextProvider({
     </ReactKeycloakProvider>
   );
 }
+
+export function TestContextProviderWithoutKeycloak({
+  children,
+  participantContextValue,
+  userContextValue,
+}: TestContextProviderProps) {
+  return (
+    <ParticipantContext.Provider value={participantContextValue ?? defaultParticipantContext}>
+      <CurrentUserContext.Provider value={userContextValue ?? defaultUserContext}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </CurrentUserContext.Provider>
+    </ParticipantContext.Provider>
+  );
+}

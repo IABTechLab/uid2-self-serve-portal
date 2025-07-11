@@ -8,14 +8,26 @@ const { Checked, Unchecked } = stories;
 
 describe('ParticipantItem', () => {
   it('renders unchecked state correctly', () => {
-    render(<ParticipantItem {...Unchecked.args} />);
+    render(
+      <table>
+        <tbody>
+          <ParticipantItem {...Unchecked.args} />
+        </tbody>
+      </table>
+    );
     expect(screen.getByText(Unchecked.args.site!.name)).toBeInTheDocument();
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toHaveAttribute('data-state', 'unchecked');
   });
 
   it('renders checked state correctly', () => {
-    render(<ParticipantItem {...Checked.args} />);
+    render(
+      <table>
+        <tbody>
+          <ParticipantItem {...Checked.args} />
+        </tbody>
+      </table>
+    );
     expect(screen.getByText(Checked.args.site!.name)).toBeInTheDocument();
     const checkbox = screen.getByRole('checkbox');
     expect(checkbox).toHaveAttribute('data-state', 'checked');
@@ -24,7 +36,13 @@ describe('ParticipantItem', () => {
   it('handles checkbox click', async () => {
     const user = userEvent.setup();
     const handleClick = jest.fn();
-    render(<ParticipantItem {...Unchecked.args} onClick={handleClick} />);
+    render(
+      <table>
+        <tbody>
+          <ParticipantItem {...Unchecked.args} onClick={handleClick} />
+        </tbody>
+      </table>
+    );
 
     await user.click(screen.getByRole('checkbox'));
     expect(handleClick).toHaveBeenCalled();
