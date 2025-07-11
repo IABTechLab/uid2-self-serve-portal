@@ -1,14 +1,15 @@
 import { Response } from 'express';
 import { z } from 'zod';
 
-import { getRoleNamesByIds } from '../../../web/utils/apiRoles';
 import { ApiRole } from '../../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
 import { Participant } from '../../entities/Participant';
+import { PrimaryContact } from '../../entities/PrimaryContact';
 import { UserCreationPartial } from '../../entities/Schemas';
 import { User } from '../../entities/User';
 import { UserRoleId } from '../../entities/UserRole';
 import { UserToParticipantRole } from '../../entities/UserToParticipantRole';
+import { getRoleNamesByIds } from '../../helpers/apiHelper';
 import { getTraceId, TraceId } from '../../helpers/loggingHelpers';
 import { getKcAdminClient } from '../../keycloakAdminClient';
 import { addSite, getSiteList, setSiteClientTypes } from '../../services/adminServiceClient';
@@ -62,9 +63,7 @@ const createParticipantWithUser = async (
 ): Promise<Participant | undefined> => {
   const participant = await User.transaction(async (trx) => {
     let user = await findUserByEmail(parsedUser.email);
-    if (!user) {
-      user = await User.query(trx).insertAndFetch(parsedUser);
-    }
+    user ??= await User.query(trx).insertAndFetch(parsedUser);
 
     // create participant
     const newParticipant = await Participant.query(trx)
@@ -73,12 +72,23 @@ const createParticipantWithUser = async (
       })
       .first();
 
+    if (!newParticipant) {
+      throw new Error('Failed to create participant');
+    }
+
     // update user/participant/role mapping
     await UserToParticipantRole.query(trx).insert({
       userId: user.id,
-      participantId: newParticipant?.id!,
+      participantId: newParticipant.id,
       userRoleId: UserRoleId.Admin,
     });
+
+    // create initial primary contact to participant mapping
+    await PrimaryContact.query(trx).insert({
+      participantId: newParticipant.id,
+      userId: user.id,
+    });
+
     return newParticipant;
   });
   return participant;
