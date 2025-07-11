@@ -9,7 +9,7 @@ import { createMockParticipant, createMockUser } from '../../../testHelpers/data
 import {
   createParticipantContextValue,
   createUserContextValue,
-  TestContextProvider,
+  TestContextProviderWithoughKeycloak,
 } from '../../../testHelpers/testContextProvider';
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
@@ -23,32 +23,37 @@ const renderPortalHeaderWithContext = (
   participantContextValue: ParticipantWithSetter
 ) => {
   return render(
-    <TestContextProvider
+    <TestContextProviderWithoughKeycloak
       userContextValue={userContextValue}
       participantContextValue={participantContextValue}
     >
       <PortalHeader email='test@example.com' fullName='Test Name' logout={() => {}} />
-    </TestContextProvider>
+    </TestContextProviderWithoughKeycloak>
   );
 };
 
 describe('Portal Header tests', () => {
   it('when an invalid email address is provided, a home link is still displayed', async () => {
     render(
-			<MemoryRouter>
-				<PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} />
-			</MemoryRouter>
-		);
+      <MemoryRouter>
+        <PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} />
+      </MemoryRouter>
+    );
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('href', expect.stringContaining('/home'));
   });
 
   it('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
     render(
-			<MemoryRouter>
-				<PortalHeader {...NoEmailAddress.args} email={undefined} fullName={undefined} logout={() => {}}/>
-			</MemoryRouter>
-		);
+      <MemoryRouter>
+        <PortalHeader
+          {...NoEmailAddress.args}
+          email={undefined}
+          fullName={undefined}
+          logout={() => {}}
+        />
+      </MemoryRouter>
+    );
     const button = screen.getByRole('button');
     expect(button).toHaveTextContent('Not logged in');
   });
