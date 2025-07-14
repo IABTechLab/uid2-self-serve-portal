@@ -1,16 +1,22 @@
+import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
+import { FormStyledCheckbox, StyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
+
+import './TeamMemberDialog.scss';
 
 type AddTeamMemberDialogProps = {
   teamMembers: UserWithParticipantRoles[];
@@ -31,6 +37,9 @@ const isUpdateTeamMemberDialogProps = (
 ): props is UpdateTeamMemberDialogProps => 'person' in props;
 
 function TeamMemberDialog(props: TeamMemberDialogProps) {
+  const { participant } = useContext(ParticipantContext);
+  const isPrimaryContact =
+    isUpdateTeamMemberDialogProps(props) && participant?.primaryContact?.id === props.person?.id;
   const formMethods = useForm<InviteTeamMemberForm>({
     defaultValues: {
       firstName: props.person?.firstName,
@@ -48,17 +57,16 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
       const { firstName, lastName, jobFunction, userRoleId } = formData;
-      await props.onUpdateTeamMember({
-        firstName,
-        lastName,
-        jobFunction,
-        userRoleId,
-      });
+      await props.onUpdateTeamMember({ firstName, lastName, jobFunction, userRoleId });
     } else {
       await props.onAddTeamMember(formData);
     }
     props.onOpenChange();
   };
+
+  // const selectPrimaryContactCheckbox = (
+
+  // )
 
   return (
     <Dialog
@@ -96,10 +104,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             label='Job Function'
             rules={{ required: 'Please specify your job function.' }}
             options={(Object.keys(UserJobFunction) as Array<keyof typeof UserJobFunction>).map(
-              (key) => ({
-                optionLabel: UserJobFunction[key],
-                value: UserJobFunction[key],
-              })
+              (key) => ({ optionLabel: UserJobFunction[key], value: UserJobFunction[key] })
             )}
           />
           <RadioInput
@@ -110,11 +115,17 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               .filter(
                 (key) => allowedRolesToAdd.includes(key) && typeof UserRoleId[key] === 'number'
               )
-              .map((key) => ({
-                optionLabel: key,
-                value: UserRoleId[key],
-              }))}
+              .map((key) => ({ optionLabel: key, value: UserRoleId[key] }))}
           />
+          <div className='checkbox-container'>
+            <StyledCheckbox
+              className='checkbox'
+              checked={isPrimaryContact}
+              disabled={isPrimaryContact}
+            />
+            <span className='checkbox-text'>Set as primary contact</span>
+          </div>
+
           <FormSubmitButton>Save Team Member</FormSubmitButton>
         </form>
       </FormProvider>
