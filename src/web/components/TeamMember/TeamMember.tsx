@@ -162,7 +162,8 @@ function TeamMember({
               )}
               {isPrimaryContact && (
                 <Tooltip>
-                  Cannot delete Team Member marked as participant&#39;s primary contact.
+                  Cannot delete a team member marked as primary contact. To delete them, assign
+                  another team member as the primary contact via the edit button.
                 </Tooltip>
               )}
             </div>
