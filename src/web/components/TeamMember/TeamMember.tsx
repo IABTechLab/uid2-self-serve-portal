@@ -118,7 +118,7 @@ function TeamMember({
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-            <div>
+            <div className='action-buttons'>
               {person.acceptedTerms || (
                 <button
                   type='button'
@@ -134,7 +134,6 @@ function TeamMember({
                   {reinviteState === InviteState.error && 'Try again later'}
                 </button>
               )}
-
               <ActionButton
                 onClick={onOpenChangeTeamMemberDialog}
                 icon='pencil'
@@ -161,10 +160,10 @@ function TeamMember({
                   onOpenChange={onOpenChangeTeamMemberRemoveDialog}
                 />
               )}
+              {isPrimaryContact && (
+                <Tooltip>Team member marked as participant&#39;s primary contact.</Tooltip>
+              )}
             </div>
-            {isPrimaryContact && (
-              <Tooltip>Team member marked as participant&#39;s primary contact.</Tooltip>
-            )}
           </div>
         </td>
       )}
