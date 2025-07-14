@@ -90,6 +90,15 @@ function TeamMember({
     }
   };
 
+  const actionButtonDelete = (
+    <ActionButton
+      onClick={onOpenChangeTeamMemberRemoveDialog}
+      icon='trash-can'
+      aria-label='Remove Team Member'
+      disabled={isPrimaryContact}
+    />
+  );
+
   return (
     <tr>
       <td>
@@ -118,55 +127,49 @@ function TeamMember({
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-            <div className='action-buttons'>
-              {person.acceptedTerms || (
-                <button
-                  type='button'
-                  className={clsx('invite-button', {
-                    clickable: reinviteState === InviteState.initial,
-                    error: reinviteState === InviteState.error,
-                  })}
-                  onClick={() => onResendInvite()}
-                >
-                  {reinviteState === InviteState.initial && 'Resend Invitation'}
-                  {reinviteState === InviteState.inProgress && 'Sending...'}
-                  {reinviteState === InviteState.sent && 'Invitation Sent'}
-                  {reinviteState === InviteState.error && 'Try again later'}
-                </button>
-              )}
-              <ActionButton
-                onClick={onOpenChangeTeamMemberDialog}
-                icon='pencil'
-                aria-label='Edit Team Member'
+            {person.acceptedTerms || (
+              <button
+                type='button'
+                className={clsx('invite-button', {
+                  clickable: reinviteState === InviteState.initial,
+                  error: reinviteState === InviteState.error,
+                })}
+                onClick={() => onResendInvite()}
+              >
+                {reinviteState === InviteState.initial && 'Resend Invitation'}
+                {reinviteState === InviteState.inProgress && 'Sending...'}
+                {reinviteState === InviteState.sent && 'Invitation Sent'}
+                {reinviteState === InviteState.error && 'Try again later'}
+              </button>
+            )}
+            <ActionButton
+              onClick={onOpenChangeTeamMemberDialog}
+              icon='pencil'
+              aria-label='Edit Team Member'
+            />
+            {showTeamMemberDialog && (
+              <TeamMemberDialog
+                teamMembers={existingTeamMembers}
+                onUpdateTeamMember={handleUpdateUser}
+                person={person}
+                onOpenChange={onOpenChangeTeamMemberDialog}
               />
-              {showTeamMemberDialog && (
-                <TeamMemberDialog
-                  teamMembers={existingTeamMembers}
-                  onUpdateTeamMember={handleUpdateUser}
-                  person={person}
-                  onOpenChange={onOpenChangeTeamMemberDialog}
-                />
-              )}
-              <ActionButton
-                onClick={onOpenChangeTeamMemberRemoveDialog}
-                icon='trash-can'
-                aria-label='Remove Team Member'
-                disabled={isPrimaryContact}
+            )}
+            {isPrimaryContact ? (
+              <Tooltip trigger={actionButtonDelete}>
+                Cannot delete primary contact. To delete them, assign another team member as the
+                primary contact via the edit button.
+              </Tooltip>
+            ) : (
+              actionButtonDelete
+            )}
+            {showTeamMemberRemoveDialog && (
+              <TeamMemberRemoveConfirmationDialog
+                onRemoveTeamMember={handleRemoveUser}
+                person={person}
+                onOpenChange={onOpenChangeTeamMemberRemoveDialog}
               />
-              {showTeamMemberRemoveDialog && (
-                <TeamMemberRemoveConfirmationDialog
-                  onRemoveTeamMember={handleRemoveUser}
-                  person={person}
-                  onOpenChange={onOpenChangeTeamMemberRemoveDialog}
-                />
-              )}
-              {isPrimaryContact && (
-                <Tooltip>
-                  Cannot delete primary contact. To delete them, assign another team member as the
-                  primary contact via the edit button.
-                </Tooltip>
-              )}
-            </div>
+            )}
           </div>
         </td>
       )}

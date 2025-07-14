@@ -6,7 +6,9 @@ import { getTraceId } from '../helpers/loggingHelpers';
 import { ParticipantRequest } from '../services/participantsService';
 import { canUserAccessParticipant } from './usersMiddleware';
 
-const participantIdSchema = z.object({ participantId: z.coerce.number() });
+const participantIdSchema = z.object({
+  participantId: z.coerce.number(),
+});
 export const verifyAndEnrichParticipant = async (
   req: ParticipantRequest,
   res: Response,
