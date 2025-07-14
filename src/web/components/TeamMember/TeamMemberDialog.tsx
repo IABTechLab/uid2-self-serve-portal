@@ -47,12 +47,15 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
       email: props.person?.email,
       jobFunction: props.person?.jobFunction,
       userRoleId: props.person?.currentParticipantUserRoles?.[0]?.id ?? undefined,
+      setPrimaryContact: isPrimaryContact,
     },
   });
   const { handleSubmit } = formMethods;
   const editMode = !!props.person;
 
   const allowedRolesToAdd = ['Admin', 'Operations'];
+  const selectedRoleId = formMethods.watch('userRoleId');
+  const isOperations = selectedRoleId === UserRoleId.Operations;
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
@@ -64,9 +67,36 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     props.onOpenChange();
   };
 
-  // const selectPrimaryContactCheckbox = (
-
-  // )
+  // checkboxContent conditional logic
+  let checkboxContent;
+  if (isPrimaryContact) {
+    checkboxContent = (
+      <>
+        <StyledCheckbox className='checkbox' checked disabled />
+        <span className='checkbox-text'>Set as primary contact</span>
+      </>
+    );
+  } else if (isOperations) {
+    checkboxContent = (
+      <Tooltip
+        trigger={
+          <>
+            <StyledCheckbox className='checkbox' disabled />
+            <span className='checkbox-text'>Set as primary contact</span>
+          </>
+        }
+      >
+        Only Admins can be assigned as primary contact
+      </Tooltip>
+    );
+  } else {
+    checkboxContent = (
+      <>
+        <FormStyledCheckbox name='setPrimaryContact' className='checkbox' />
+        <span className='checkbox-text'>Set as primary contact</span>
+      </>
+    );
+  }
 
   return (
     <Dialog
@@ -117,14 +147,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               )
               .map((key) => ({ optionLabel: key, value: UserRoleId[key] }))}
           />
-          <div className='checkbox-container'>
-            <StyledCheckbox
-              className='checkbox'
-              checked={isPrimaryContact}
-              disabled={isPrimaryContact}
-            />
-            <span className='checkbox-text'>Set as primary contact</span>
-          </div>
+          <div className='checkbox-container'>{checkboxContent}</div>
 
           <FormSubmitButton>Save Team Member</FormSubmitButton>
         </form>
