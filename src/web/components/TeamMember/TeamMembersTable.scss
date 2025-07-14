@@ -65,7 +65,7 @@
       .primary-contact-label {
         margin-left: 10px;
         .label {
-          background-color: #f7c948;
+          background-color: var(--theme-label-primary-contact-background);
         }
       }
     }
