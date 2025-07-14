@@ -11,6 +11,7 @@ import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
 import { Label } from '../Core/Labels/Label';
 import { LabelRow } from '../Core/Labels/LabelRow';
 import { SuccessToast } from '../Core/Popups/Toast';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
@@ -42,6 +43,7 @@ function TeamMember({
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
   const [showTeamMemberRemoveDialog, setShowTeamMemberRemoveDialog] = useState<boolean>();
   const { participant } = useContext(ParticipantContext);
+  const isPrimaryContact = participant?.primaryContact?.id === person.id;
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
@@ -88,6 +90,15 @@ function TeamMember({
     }
   };
 
+  const actionButtonDelete = (
+    <ActionButton
+      onClick={onOpenChangeTeamMemberRemoveDialog}
+      icon='trash-can'
+      aria-label='Remove Team Member'
+      disabled={isPrimaryContact}
+    />
+  );
+
   return (
     <tr>
       <td>
@@ -96,6 +107,11 @@ function TeamMember({
           {person.acceptedTerms || (
             <div className='pending-label'>
               <Label text='Pending' />
+            </div>
+          )}
+          {isPrimaryContact && (
+            <div className='primary-contact-label'>
+              <Label text='Primary Contact' />
             </div>
           )}
         </div>
@@ -111,49 +127,49 @@ function TeamMember({
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-            <div>
-              {person.acceptedTerms || (
-                <button
-                  type='button'
-                  className={clsx('invite-button', {
-                    clickable: reinviteState === InviteState.initial,
-                    error: reinviteState === InviteState.error,
-                  })}
-                  onClick={() => onResendInvite()}
-                >
-                  {reinviteState === InviteState.initial && 'Resend Invitation'}
-                  {reinviteState === InviteState.inProgress && 'Sending...'}
-                  {reinviteState === InviteState.sent && 'Invitation Sent'}
-                  {reinviteState === InviteState.error && 'Try again later'}
-                </button>
-              )}
-
-              <ActionButton
-                onClick={onOpenChangeTeamMemberDialog}
-                icon='pencil'
-                aria-label='Edit Team Member'
+            {person.acceptedTerms || (
+              <button
+                type='button'
+                className={clsx('invite-button', {
+                  clickable: reinviteState === InviteState.initial,
+                  error: reinviteState === InviteState.error,
+                })}
+                onClick={() => onResendInvite()}
+              >
+                {reinviteState === InviteState.initial && 'Resend Invitation'}
+                {reinviteState === InviteState.inProgress && 'Sending...'}
+                {reinviteState === InviteState.sent && 'Invitation Sent'}
+                {reinviteState === InviteState.error && 'Try again later'}
+              </button>
+            )}
+            <ActionButton
+              onClick={onOpenChangeTeamMemberDialog}
+              icon='pencil'
+              aria-label='Edit Team Member'
+            />
+            {showTeamMemberDialog && (
+              <TeamMemberDialog
+                teamMembers={existingTeamMembers}
+                onUpdateTeamMember={handleUpdateUser}
+                person={person}
+                onOpenChange={onOpenChangeTeamMemberDialog}
               />
-              {showTeamMemberDialog && (
-                <TeamMemberDialog
-                  teamMembers={existingTeamMembers}
-                  onUpdateTeamMember={handleUpdateUser}
-                  person={person}
-                  onOpenChange={onOpenChangeTeamMemberDialog}
-                />
-              )}
-              <ActionButton
-                onClick={onOpenChangeTeamMemberRemoveDialog}
-                icon='trash-can'
-                aria-label='Remove Team Member'
+            )}
+            {isPrimaryContact ? (
+              <Tooltip trigger={actionButtonDelete}>
+                Cannot delete primary contact. To delete them, assign another team member as the
+                primary contact via the edit button.
+              </Tooltip>
+            ) : (
+              actionButtonDelete
+            )}
+            {showTeamMemberRemoveDialog && (
+              <TeamMemberRemoveConfirmationDialog
+                onRemoveTeamMember={handleRemoveUser}
+                person={person}
+                onOpenChange={onOpenChangeTeamMemberRemoveDialog}
               />
-              {showTeamMemberRemoveDialog && (
-                <TeamMemberRemoveConfirmationDialog
-                  onRemoveTeamMember={handleRemoveUser}
-                  person={person}
-                  onOpenChange={onOpenChangeTeamMemberRemoveDialog}
-                />
-              )}
-            </div>
+            )}
           </div>
         </td>
       )}
