@@ -35,6 +35,11 @@
         align-items: center;
         padding: 0 10px;
       }
+
+      .tooltip {
+        padding-left: 10px;
+        margin-right: -25px;
+      }
     }
 
     .name-cell {
@@ -49,3 +54,12 @@
     }
   }
 }
+
+// Optional: override on small screens
+// @media (max-width: 768px) {
+//   .portal-team-table .action-cell .tooltip {
+//     margin-right: 0; // ✅ allow it to wrap naturally
+//     padding-left: 10px;
+//     align-self: center;
+//   }
+// }

@@ -11,6 +11,7 @@ import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
 import { Label } from '../Core/Labels/Label';
 import { LabelRow } from '../Core/Labels/LabelRow';
 import { SuccessToast } from '../Core/Popups/Toast';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
@@ -42,6 +43,7 @@ function TeamMember({
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
   const [showTeamMemberRemoveDialog, setShowTeamMemberRemoveDialog] = useState<boolean>();
   const { participant } = useContext(ParticipantContext);
+  const isPrimaryContact = participant?.primaryContact?.id === person.id;
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
@@ -98,7 +100,7 @@ function TeamMember({
               <Label text='Pending' />
             </div>
           )}
-          {participant?.primaryContact?.id === person.id && (
+          {isPrimaryContact && (
             <div className='pending-label'>
               <Label text='Primary Contact' />
             </div>
@@ -150,6 +152,7 @@ function TeamMember({
                 onClick={onOpenChangeTeamMemberRemoveDialog}
                 icon='trash-can'
                 aria-label='Remove Team Member'
+                disabled={isPrimaryContact}
               />
               {showTeamMemberRemoveDialog && (
                 <TeamMemberRemoveConfirmationDialog
@@ -159,6 +162,9 @@ function TeamMember({
                 />
               )}
             </div>
+            {isPrimaryContact && (
+              <Tooltip>Team member marked as participant&#39;s primary contact.</Tooltip>
+            )}
           </div>
         </td>
       )}
