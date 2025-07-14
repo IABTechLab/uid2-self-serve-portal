@@ -54,10 +54,18 @@
     .name-cell {
       display: flex;
       align-items: center;
+
       .pending-label {
         margin-left: 10px;
         .label {
           background-color: var(--theme-label-pending-background);
+        }
+      }
+
+      .primary-contact-label {
+        margin-left: 10px;
+        .label {
+          background-color: #f7c948;
         }
       }
     }

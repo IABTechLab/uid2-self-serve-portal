@@ -101,7 +101,7 @@ function TeamMember({
             </div>
           )}
           {isPrimaryContact && (
-            <div className='pending-label'>
+            <div className='primary-contact-label'>
               <Label text='Primary Contact' />
             </div>
           )}
@@ -161,7 +161,9 @@ function TeamMember({
                 />
               )}
               {isPrimaryContact && (
-                <Tooltip>Team member marked as participant&#39;s primary contact.</Tooltip>
+                <Tooltip>
+                  Cannot delete Team Member marked as participant&#39;s primary contact.
+                </Tooltip>
               )}
             </div>
           </div>
