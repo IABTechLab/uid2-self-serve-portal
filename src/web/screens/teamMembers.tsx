@@ -8,7 +8,7 @@ import { ScreenContentContainer } from '../components/Core/ScreenContentContaine
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { InviteTeamMember } from '../services/participant';
+import { InviteTeamMember, UpdatePrimaryContact } from '../services/participant';
 import {
   GetAllUsersOfParticipant,
   InviteTeamMemberForm,
@@ -38,8 +38,12 @@ function TeamMembers() {
     try {
       const response = await InviteTeamMember(formData, participant!.id);
       if (response.status === 201) {
+        // if (formData.setPrimaryContact) {
+        //   await UpdatePrimaryContact(participant!.id, response.data.user.id);
+        // }
         SuccessToast('Team member added.');
       }
+
       reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -60,9 +64,14 @@ function TeamMembers() {
 
   const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
     try {
+      console.log(formData);
       const response = await UpdateUser(userId, formData, participant!.id);
       if (response.status === 200) {
         SuccessToast('Team member updated.');
+        if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
+          console.log('adding new primary contact in teamMembers.tsx');
+          await UpdatePrimaryContact(participant!.id, userId);
+        }
       }
       reloader.revalidate();
       if (LoggedInUser?.user?.id === userId) await loadUser();

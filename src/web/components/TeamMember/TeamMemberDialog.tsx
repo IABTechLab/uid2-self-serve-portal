@@ -59,44 +59,40 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
-      const { firstName, lastName, jobFunction, userRoleId } = formData;
-      await props.onUpdateTeamMember({ firstName, lastName, jobFunction, userRoleId });
+      const { firstName, lastName, jobFunction, userRoleId, setPrimaryContact } = formData;
+      await props.onUpdateTeamMember({ firstName, lastName, jobFunction, userRoleId, setPrimaryContact });
     } else {
       await props.onAddTeamMember(formData);
     }
     props.onOpenChange();
   };
 
-  // checkboxContent conditional logic
-  let checkboxContent;
-  if (isPrimaryContact) {
-    checkboxContent = (
-      <>
-        <StyledCheckbox className='checkbox' checked disabled />
-        <span className='checkbox-text'>Set as primary contact</span>
-      </>
-    );
-  } else if (isOperations) {
-    checkboxContent = (
-      <Tooltip
-        trigger={
-          <>
-            <StyledCheckbox className='checkbox' disabled />
-            <span className='checkbox-text'>Set as primary contact</span>
-          </>
-        }
-      >
-        Only Admins can be assigned as primary contact
-      </Tooltip>
-    );
-  } else {
-    checkboxContent = (
-      <>
-        <FormStyledCheckbox name='setPrimaryContact' className='checkbox' />
-        <span className='checkbox-text'>Set as primary contact</span>
-      </>
-    );
-  }
+  const checkbox = (
+    <FormStyledCheckbox
+      name='setPrimaryContact'
+      control={formMethods.control}
+      className='checkbox'
+      disabled={isPrimaryContact || isOperations}
+    />
+  );
+
+  const checkboxContent = isOperations ? (
+    <Tooltip
+      trigger={
+        <>
+          {checkbox}
+          <span className='checkbox-text'>Set as primary contact</span>
+        </>
+      }
+    >
+      Only Admins can be assigned as primary contact
+    </Tooltip>
+  ) : (
+    <>
+      {checkbox}
+      <span className='checkbox-text'>Set as primary contact</span>
+    </>
+  );
 
   return (
     <Dialog
