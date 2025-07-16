@@ -305,16 +305,18 @@ export async function updatePrimaryContact(
   const traceId = getTraceId(req);
 
   const existing = await PrimaryContact.query().findOne({ participantId });
+  const existingUser = existing?.userId ? await User.query().findById(existing.userId) : null;
+  const newUser = await User.query().findById(newUserId);
 
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.UpdatePrimaryContact,
     {
       action: AuditAction.Update,
-      participantId,
-      previousPrimaryContactUserId: existing?.userId ?? null,
-      newPrimaryContactUserId: newUserId,
-    }
+      previousPrimaryContact: existingUser?.email ?? null,
+      newPrimaryContact: newUser?.email ?? null,
+    },
+    participantId
   );
 
   await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
