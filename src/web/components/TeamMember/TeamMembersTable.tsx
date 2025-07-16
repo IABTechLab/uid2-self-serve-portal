@@ -19,7 +19,11 @@ type TeamMembersTableProps = Readonly<{
   selectedParticipant?: ParticipantDTO;
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
-  onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
+  onUpdateTeamMember: (
+    id: number,
+    form: UpdateTeamMemberForm,
+    hasUserFieldsChanged: boolean
+  ) => Promise<void>;
   resendInvite: (id: number, participantId: number) => Promise<void>;
 }>;
 

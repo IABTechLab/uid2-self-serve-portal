@@ -67,15 +67,23 @@ function TeamMembers() {
     }
   };
 
-  const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
+  const handleUpdateTeamMember = async (
+    userId: number,
+    formData: UpdateTeamMemberForm,
+    hasUserFieldsChanged: boolean
+  ) => {
     try {
-      const response = await UpdateUser(userId, formData, participant!.id);
-      if (response.status === 200) {
-        if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
-          await UpdatePrimaryContact(participant!.id, userId);
+      if (hasUserFieldsChanged) {
+        const response = await UpdateUser(userId, formData, participant!.id);
+        if (response.status === 200) {
+          SuccessToast('Team member updated.');
         }
-        SuccessToast('Team member updated.');
       }
+
+      if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
+        await UpdatePrimaryContact(participant!.id, userId);
+      }
+
       reloader.revalidate();
       if (LoggedInUser?.user?.id === userId) await loadUser();
     } catch (e: unknown) {
