@@ -20,7 +20,7 @@ export enum AuditTrailEvents {
   UpdateAppNames = 'UpdateAppNames',
   ManageTeamMembers = 'ManageTeamMembers',
   ChangeUserLock = 'ChangeUserLock',
-  // Add 'Update Primary Contact'
+  UpdatePrimaryContact = 'UpdatePrimaryContact',
 }
 
 export class AuditTrail extends BaseModel {
@@ -28,17 +28,17 @@ export class AuditTrail extends BaseModel {
     return 'auditTrails';
   }
   static get relationMappings(): RelationMappings {
-		return {
-			user: {
-				relation: Model.BelongsToOneRelation,
-				modelClass: 'User',
-				join: {
-					from: 'auditTrails.userId',
-					to: 'users.id',
-				},
-			},
-		};
-  };
+    return {
+      user: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'User',
+        join: {
+          from: 'auditTrails.userId',
+          to: 'users.id',
+        },
+      },
+    };
+  }
 
   static get jsonAttributes() {
     return ['eventData'];

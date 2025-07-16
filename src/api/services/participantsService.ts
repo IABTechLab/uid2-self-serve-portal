@@ -296,20 +296,35 @@ export const sendParticipantApprovedEmail = async (users: User[], traceId: Trace
   emailService.sendEmail(emailArgs, traceId);
 };
 
-export async function updatePrimaryContact(participantId: number, newUserId: number) {
+export async function updatePrimaryContact(
+  participantId: number,
+  newUserId: number,
+  req: UserParticipantRequest
+) {
+  const { user } = req;
+  const traceId = getTraceId(req);
+
   const existing = await PrimaryContact.query().findOne({ participantId });
 
-  if (existing) {
-    await PrimaryContact.query().delete().where({ participantId });
+  const auditTrailInsertObject = constructAuditTrailObject(
+    user!,
+    AuditTrailEvents.UpdatePrimaryContact,
+    {
+      action: AuditAction.Update,
+      participantId,
+      previousPrimaryContactUserId: existing?.userId ?? null,
+      newPrimaryContactUserId: newUserId,
+    }
+  );
+
+  await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
+    if (existing) {
+      await PrimaryContact.query().delete().where({ participantId });
+    }
 
     await PrimaryContact.query().insert({
       participantId,
       userId: newUserId,
     });
-  } else {
-    await PrimaryContact.query().insert({
-      participantId,
-      userId: newUserId,
-    });
-  }
+  });
 }

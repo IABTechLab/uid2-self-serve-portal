@@ -48,6 +48,6 @@ export const handleUpdatePrimaryContact = async (req: UserParticipantRequest, re
     return res.status(404).send('Participant not found');
   }
 
-  await updatePrimaryContact(participant.id, userId);
+  await updatePrimaryContact(participant.id, userId, req);
   return res.sendStatus(204);
 };

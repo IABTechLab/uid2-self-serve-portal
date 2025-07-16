@@ -97,6 +97,7 @@ function TeamMembersTableContent({
               teamMembers={teamMembers}
               onAddTeamMember={onAddTeamMember}
               onOpenChange={onOpenChangeTeamMemberDialog}
+              selectedParticipant={selectedParticipant}
             />
           )}
         </div>
