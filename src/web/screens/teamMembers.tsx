@@ -8,7 +8,11 @@ import { ScreenContentContainer } from '../components/Core/ScreenContentContaine
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { InviteTeamMember, UpdatePrimaryContact } from '../services/participant';
+import {
+  GetSelectedParticipant,
+  InviteTeamMember,
+  UpdatePrimaryContact,
+} from '../services/participant';
 import {
   GetAllUsersOfParticipant,
   InviteTeamMemberForm,
@@ -25,7 +29,8 @@ import { PortalRoute } from './routeUtils';
 
 const loader = makeParticipantLoader((participantId) => {
   const users = GetAllUsersOfParticipant(participantId);
-  return defer({ users });
+  const selectedParticipant = GetSelectedParticipant(participantId);
+  return defer({ users, selectedParticipant });
 });
 
 function TeamMembers() {
@@ -64,14 +69,12 @@ function TeamMembers() {
 
   const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
     try {
-      console.log(formData);
       const response = await UpdateUser(userId, formData, participant!.id);
       if (response.status === 200) {
-        SuccessToast('Team member updated.');
         if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
-          console.log('adding new primary contact in teamMembers.tsx');
           await UpdatePrimaryContact(participant!.id, userId);
         }
+        SuccessToast('Team member updated.');
       }
       reloader.revalidate();
       if (LoggedInUser?.user?.id === userId) await loadUser();
@@ -90,13 +93,18 @@ function TeamMembers() {
         <Suspense fallback={<Loading message='Loading team data...' />}>
           <AwaitTypesafe resolve={data.users}>
             {(users) => (
-              <TeamMembersTable
-                teamMembers={users}
-                onAddTeamMember={handleAddTeamMember}
-                resendInvite={ResendInvite}
-                onRemoveTeamMember={handleRemoveTeamMember}
-                onUpdateTeamMember={handleUpdateTeamMember}
-              />
+              <AwaitTypesafe resolve={data.selectedParticipant}>
+                {(selectedParticipant) => (
+                  <TeamMembersTable
+                    teamMembers={users}
+                    selectedParticipant={selectedParticipant} // ✅ Pass it here
+                    onAddTeamMember={handleAddTeamMember}
+                    resendInvite={ResendInvite}
+                    onRemoveTeamMember={handleRemoveTeamMember}
+                    onUpdateTeamMember={handleUpdateTeamMember}
+                  />
+                )}
+              </AwaitTypesafe>
             )}
           </AwaitTypesafe>
         </Suspense>

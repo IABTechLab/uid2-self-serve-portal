@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useContext, useState } from 'react';
 
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { UpdateTeamMemberForm } from '../../services/userAccount';
@@ -22,6 +23,7 @@ type TeamMemberProps = Readonly<{
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
   showTeamMemberActions: boolean;
+  selectedParticipant?: ParticipantDTO;
 }>;
 
 enum InviteState {
@@ -37,13 +39,13 @@ function TeamMember({
   onRemoveTeamMember,
   onUpdateTeamMember,
   showTeamMemberActions,
+  selectedParticipant,
 }: TeamMemberProps) {
   const [reinviteState, setReinviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
   const [showTeamMemberRemoveDialog, setShowTeamMemberRemoveDialog] = useState<boolean>();
-  const { participant } = useContext(ParticipantContext);
-  const isPrimaryContact = participant?.primaryContact?.id === person.id;
+  const isPrimaryContact = selectedParticipant?.primaryContact?.id === person.id;
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
@@ -64,7 +66,7 @@ function TeamMember({
 
     setReinviteState(InviteState.inProgress);
     try {
-      await resendInvite(person.id, participant!.id);
+      await resendInvite(person.id, selectedParticipant!.id);
       SuccessToast('Invitation sent.');
       setReinviteState(InviteState.sent);
     } catch (e) {
@@ -72,7 +74,7 @@ function TeamMember({
       setReinviteState(InviteState.error);
       handleErrorToast(e);
     }
-  }, [participant, person.id, reinviteState, resendInvite]);
+  }, [selectedParticipant, person.id, reinviteState, resendInvite]);
 
   const handleRemoveUser = async () => {
     try {

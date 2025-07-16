@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 
+import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
@@ -15,6 +16,7 @@ import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = Readonly<{
   teamMembers: UserWithParticipantRoles[];
+  selectedParticipant?: ParticipantDTO;
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
@@ -23,6 +25,7 @@ type TeamMembersTableProps = Readonly<{
 
 function TeamMembersTableContent({
   teamMembers,
+  selectedParticipant,
   onAddTeamMember,
   resendInvite,
   onRemoveTeamMember,
@@ -75,6 +78,7 @@ function TeamMembersTableContent({
               existingTeamMembers={teamMembers}
               key={t.email}
               person={t}
+              selectedParticipant={selectedParticipant}
               resendInvite={resendInvite}
               onRemoveTeamMember={onRemoveTeamMember}
               onUpdateTeamMember={onUpdateTeamMember}

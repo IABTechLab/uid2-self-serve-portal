@@ -59,7 +59,7 @@ export function createParticipantsRouter() {
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
   participantsRouter.put(
     '/:participantId/primaryContact',
-    // isAdminOrUid2SupportCheck,
+    isAdminOrUid2SupportCheck,
     handleUpdatePrimaryContact
   );
 
