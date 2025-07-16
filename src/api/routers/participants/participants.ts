@@ -1,10 +1,12 @@
 import { Response } from 'express';
+import { z } from 'zod';
 
 import { Participant } from '../../entities/Participant';
 import {
   getAllParticipants,
   ParticipantRequest,
   updateParticipant,
+  updatePrimaryContact,
   UserParticipantRequest,
 } from '../../services/participantsService';
 
@@ -36,4 +38,16 @@ export const handleCompleteRecommendations = async (req: ParticipantRequest, res
     })
     .withGraphFetched('types');
   return res.status(200).json(updatedParticipant);
+};
+
+export const handleUpdatePrimaryContact = async (req: UserParticipantRequest, res: Response) => {
+  const { participant } = req;
+  const { userId } = z.object({ userId: z.number() }).parse(req.body);
+
+  if (!participant) {
+    return res.status(404).send('Participant not found');
+  }
+
+  await updatePrimaryContact(participant.id, userId);
+  return res.sendStatus(204);
 };

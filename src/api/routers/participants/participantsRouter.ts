@@ -10,6 +10,7 @@ import {
   handleGetAllParticipants,
   handleGetParticipant,
   handleUpdateParticipant,
+  handleUpdatePrimaryContact,
 } from './participants';
 import {
   handleAddApiKey,
@@ -56,6 +57,11 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
   participantsRouter.put('/:participantId', handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
+  participantsRouter.put(
+    '/:participantId/primaryContact',
+    // isAdminOrUid2SupportCheck,
+    handleUpdatePrimaryContact
+  );
 
   participantsRouter.post(
     '/:participantId/invite',

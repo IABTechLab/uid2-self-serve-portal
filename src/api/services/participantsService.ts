@@ -6,6 +6,7 @@ import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant, ParticipantDTO } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
+import { PrimaryContact } from '../entities/PrimaryContact';
 import { ParticipantApprovalPartial } from '../entities/Schemas';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
@@ -294,3 +295,21 @@ export const sendParticipantApprovedEmail = async (users: User[], traceId: Trace
   };
   emailService.sendEmail(emailArgs, traceId);
 };
+
+export async function updatePrimaryContact(participantId: number, newUserId: number) {
+  const existing = await PrimaryContact.query().findOne({ participantId });
+
+  if (existing) {
+    await PrimaryContact.query().delete().where({ participantId });
+
+    await PrimaryContact.query().insert({
+      participantId,
+      userId: newUserId,
+    });
+  } else {
+    await PrimaryContact.query().insert({
+      participantId,
+      userId: newUserId,
+    });
+  }
+}

@@ -273,7 +273,7 @@ export async function UpdateEmailContact(
 
 export async function UpdatePrimaryContact(participantId: number, newPrimaryContactUserId: number) {
   try {
-    await axios.patch(`/participants/${participantId}/primaryContact`, {
+    await axios.put(`/participants/${participantId}/primaryContact`, {
       userId: newPrimaryContactUserId,
     });
   } catch (e: unknown) {
