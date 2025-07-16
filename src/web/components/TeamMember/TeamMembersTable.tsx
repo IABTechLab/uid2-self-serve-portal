@@ -16,7 +16,6 @@ import './TeamMembersTable.scss';
 
 type TeamMembersTableProps = Readonly<{
   teamMembers: UserWithParticipantRoles[];
-  selectedParticipant?: ParticipantDTO;
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
   onUpdateTeamMember: (
@@ -29,7 +28,6 @@ type TeamMembersTableProps = Readonly<{
 
 function TeamMembersTableContent({
   teamMembers,
-  selectedParticipant,
   onAddTeamMember,
   resendInvite,
   onRemoveTeamMember,
@@ -82,7 +80,6 @@ function TeamMembersTableContent({
               existingTeamMembers={teamMembers}
               key={t.email}
               person={t}
-              selectedParticipant={selectedParticipant}
               resendInvite={resendInvite}
               onRemoveTeamMember={onRemoveTeamMember}
               onUpdateTeamMember={onUpdateTeamMember}
@@ -101,7 +98,6 @@ function TeamMembersTableContent({
               teamMembers={teamMembers}
               onAddTeamMember={onAddTeamMember}
               onOpenChange={onOpenChangeTeamMemberDialog}
-              selectedParticipant={selectedParticipant}
             />
           )}
         </div>

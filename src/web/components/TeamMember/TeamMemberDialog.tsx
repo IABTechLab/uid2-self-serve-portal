@@ -1,9 +1,10 @@
+import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
@@ -21,14 +22,12 @@ type AddTeamMemberDialogProps = {
   teamMembers: UserWithParticipantRoles[];
   onAddTeamMember: (form: InviteTeamMemberForm) => Promise<void>;
   onOpenChange: () => void;
-  selectedParticipant?: ParticipantDTO;
   person?: never;
 };
 type UpdateTeamMemberDialogProps = {
   teamMembers: UserWithParticipantRoles[];
   onUpdateTeamMember: (form: UpdateTeamMemberForm, hasUserFieldsChanged: boolean) => Promise<void>;
   onOpenChange: () => void;
-  selectedParticipant?: ParticipantDTO;
   person: UserWithParticipantRoles;
 };
 type TeamMemberDialogProps = AddTeamMemberDialogProps | UpdateTeamMemberDialogProps;
@@ -38,9 +37,9 @@ const isUpdateTeamMemberDialogProps = (
 ): props is UpdateTeamMemberDialogProps => 'person' in props;
 
 function TeamMemberDialog(props: TeamMemberDialogProps) {
+  const { participant } = useContext(ParticipantContext);
   const isPrimaryContact =
-    isUpdateTeamMemberDialogProps(props) &&
-    props.selectedParticipant?.primaryContact?.id === props.person?.id;
+    isUpdateTeamMemberDialogProps(props) && participant?.primaryContact?.id === props.person?.id;
   const formMethods = useForm<InviteTeamMemberForm>({
     defaultValues: {
       firstName: props.person?.firstName,
@@ -66,13 +65,16 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
         lastName !== props.person.lastName ||
         jobFunction !== props.person.jobFunction ||
         userRoleId !== props.person.currentParticipantUserRoles?.[0]?.id;
-      await props.onUpdateTeamMember({
-        firstName,
-        lastName,
-        jobFunction,
-        userRoleId,
-        setPrimaryContact,
-      }, hasUserFieldsChanged);
+      await props.onUpdateTeamMember(
+        {
+          firstName,
+          lastName,
+          jobFunction,
+          userRoleId,
+          setPrimaryContact,
+        },
+        hasUserFieldsChanged
+      );
     } else {
       await props.onAddTeamMember(formData);
     }

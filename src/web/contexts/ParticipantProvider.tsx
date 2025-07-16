@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
@@ -12,6 +12,7 @@ import { CurrentUserContext } from './CurrentUserProvider';
 export type ParticipantWithSetter = {
   participant: ParticipantDTO | null;
   setParticipant: (participant: ParticipantDTO) => void;
+  loadParticipant: () => Promise<void>;
 };
 
 export type UserIdParticipantId = {
@@ -21,6 +22,7 @@ export type UserIdParticipantId = {
 export const ParticipantContext = createContext<ParticipantWithSetter>({
   participant: null,
   setParticipant: () => {},
+  loadParticipant: async () => {},
 });
 
 function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
@@ -34,42 +36,47 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   const parsedParticipantId = parseParticipantId(participantId);
 
-  useEffect(() => {
-    const loadParticipant = async () => {
-      setIsLoading(true);
-      try {
-        if (user) {
-          const lastSelectedParticipantIds = (JSON.parse(
-            localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
-          ) ?? {}) as UserIdParticipantId;
+  const loadParticipant = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      if (user) {
+        const lastSelectedParticipantIds = (JSON.parse(
+          localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+        ) ?? {}) as UserIdParticipantId;
 
-          const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
+        const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
 
-          const p = currentParticipantId
-            ? await GetSelectedParticipant(currentParticipantId)
-            : await GetUsersDefaultParticipant();
-          setParticipant(p);
-          lastSelectedParticipantIds[user.id] = p.id;
-          localStorage.setItem(
-            'lastSelectedParticipantIds',
-            JSON.stringify(lastSelectedParticipantIds)
-          );
-        }
-      } catch (e: unknown) {
-        if (e instanceof ApiError) throwError(e);
-      } finally {
-        setIsLoading(false);
+        const p = currentParticipantId
+          ? await GetSelectedParticipant(currentParticipantId)
+          : await GetUsersDefaultParticipant();
+
+        setParticipant(p);
+        lastSelectedParticipantIds[user.id] = p.id;
+        localStorage.setItem(
+          'lastSelectedParticipantIds',
+          JSON.stringify(lastSelectedParticipantIds)
+        );
       }
-    };
-    if (!participant || parsedParticipantId !== participant?.id) loadParticipant();
-  }, [user, participant, throwError, parsedParticipantId]);
+    } catch (e: unknown) {
+      if (e instanceof ApiError) throwError(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [user, parsedParticipantId, throwError]);
+
+  useEffect(() => {
+    if (!participant || parsedParticipantId !== participant?.id) {
+      loadParticipant();
+    }
+  }, [participant, parsedParticipantId, loadParticipant]);
 
   const participantContext = useMemo(
     () => ({
       participant,
       setParticipant,
+      loadParticipant, // <-- New
     }),
-    [participant]
+    [participant, loadParticipant]
   );
   return (
     <ParticipantContext.Provider value={participantContext}>

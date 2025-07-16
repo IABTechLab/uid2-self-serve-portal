@@ -29,14 +29,13 @@ import { PortalRoute } from './routeUtils';
 
 const loader = makeParticipantLoader((participantId) => {
   const users = GetAllUsersOfParticipant(participantId);
-  const selectedParticipant = GetSelectedParticipant(participantId);
-  return defer({ users, selectedParticipant });
+  return defer({ users });
 });
 
 function TeamMembers() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const data = useLoaderData<typeof loader>();
-  const { participant } = useContext(ParticipantContext);
+  const { participant, loadParticipant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
@@ -82,6 +81,7 @@ function TeamMembers() {
 
       if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
         await UpdatePrimaryContact(participant!.id, userId);
+        await loadParticipant();
       }
 
       reloader.revalidate();
@@ -101,18 +101,13 @@ function TeamMembers() {
         <Suspense fallback={<Loading message='Loading team data...' />}>
           <AwaitTypesafe resolve={data.users}>
             {(users) => (
-              <AwaitTypesafe resolve={data.selectedParticipant}>
-                {(selectedParticipant) => (
-                  <TeamMembersTable
-                    teamMembers={users}
-                    selectedParticipant={selectedParticipant} // ✅ Pass it here
-                    onAddTeamMember={handleAddTeamMember}
-                    resendInvite={ResendInvite}
-                    onRemoveTeamMember={handleRemoveTeamMember}
-                    onUpdateTeamMember={handleUpdateTeamMember}
-                  />
-                )}
-              </AwaitTypesafe>
+              <TeamMembersTable
+                teamMembers={users}
+                onAddTeamMember={handleAddTeamMember}
+                resendInvite={ResendInvite}
+                onRemoveTeamMember={handleRemoveTeamMember}
+                onUpdateTeamMember={handleUpdateTeamMember}
+              />
             )}
           </AwaitTypesafe>
         </Suspense>

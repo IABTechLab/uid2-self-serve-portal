@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import log from 'loglevel';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useState } from 'react';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { UpdateTeamMemberForm } from '../../services/userAccount';
 import { handleErrorToast } from '../../utils/apiError';
 import ActionButton from '../Core/Buttons/ActionButton';
@@ -26,7 +27,6 @@ type TeamMemberProps = Readonly<{
     hasUserFieldsChanged: boolean
   ) => Promise<void>;
   showTeamMemberActions: boolean;
-  selectedParticipant?: ParticipantDTO;
 }>;
 
 enum InviteState {
@@ -42,13 +42,13 @@ function TeamMember({
   onRemoveTeamMember,
   onUpdateTeamMember,
   showTeamMemberActions,
-  selectedParticipant,
 }: TeamMemberProps) {
   const [reinviteState, setReinviteState] = useState<InviteState>(InviteState.initial);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [showTeamMemberDialog, setShowTeamMemberDialog] = useState<boolean>();
   const [showTeamMemberRemoveDialog, setShowTeamMemberRemoveDialog] = useState<boolean>();
-  const isPrimaryContact = selectedParticipant?.primaryContact?.id === person.id;
+  const { participant } = useContext(ParticipantContext);
+  const isPrimaryContact = participant?.primaryContact?.id === person.id;
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
@@ -69,7 +69,7 @@ function TeamMember({
 
     setReinviteState(InviteState.inProgress);
     try {
-      await resendInvite(person.id, selectedParticipant!.id);
+      await resendInvite(person.id, participant!.id);
       SuccessToast('Invitation sent.');
       setReinviteState(InviteState.sent);
     } catch (e) {
@@ -77,7 +77,7 @@ function TeamMember({
       setReinviteState(InviteState.error);
       handleErrorToast(e);
     }
-  }, [selectedParticipant, person.id, reinviteState, resendInvite]);
+  }, [participant, person.id, reinviteState, resendInvite]);
 
   const handleRemoveUser = async () => {
     try {
@@ -161,7 +161,6 @@ function TeamMember({
                 onUpdateTeamMember={handleUpdateUser}
                 person={person}
                 onOpenChange={onOpenChangeTeamMemberDialog}
-                selectedParticipant={selectedParticipant}
               />
             )}
             {isPrimaryContact ? (
