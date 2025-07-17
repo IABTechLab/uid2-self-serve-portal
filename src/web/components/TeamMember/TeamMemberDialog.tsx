@@ -91,22 +91,18 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
   );
 
   const checkboxContent = isOperations ? (
-    <Tooltip
-      trigger={
-        <>
-          {checkbox}
-          <span className='checkbox-text'>Set as primary contact</span>
-        </>
-      }
-    >
-      Only Admins can be assigned as primary contact
-    </Tooltip>
+    <div className='checkbox-trigger'>
+      <Tooltip trigger={checkbox}>Primary contact must have Admin role.</Tooltip>
+      <span className='checkbox-text'>Set as primary contact</span>
+    </div>
   ) : (
     <>
       {checkbox}
       <span className='checkbox-text'>Set as primary contact</span>
     </>
   );
+
+  const roleLabel = isPrimaryContact ? 'Role - Primary contact must have admin role' : 'Role';
 
   return (
     <Dialog
@@ -149,7 +145,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
           />
           <RadioInput
             inputName='userRoleId'
-            label='Role'
+            label={roleLabel}
             rules={{ required: 'Please specify a role.' }}
             options={(Object.keys(UserRoleId) as Array<keyof typeof UserRoleId>)
               .filter(

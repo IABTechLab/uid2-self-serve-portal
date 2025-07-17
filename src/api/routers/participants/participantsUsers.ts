@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { z } from 'zod';
 
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
-import { User, UserJobFunction } from '../../entities/User';
+import { UserJobFunction } from '../../entities/User';
 import { getUserRoleById } from '../../entities/UserRole';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import {
