@@ -37,10 +37,12 @@ function TeamMembers() {
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
     try {
       const response = await InviteTeamMember(formData, participant!.id);
+      const { user } = response.data as { user: { id: number } };
       if (response.status === 201) {
-        // if (formData.setPrimaryContact) {
-        //   await UpdatePrimaryContact(participant!.id, response.data.user.id);
-        // }
+        if (formData.setPrimaryContact) {
+          await UpdatePrimaryContact(participant!.id, user.id);
+          await loadParticipant();
+        }
         SuccessToast('Team member added.');
       }
 

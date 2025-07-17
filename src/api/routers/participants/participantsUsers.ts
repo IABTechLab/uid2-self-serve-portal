@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { z } from 'zod';
 
 import { AuditAction, AuditTrailEvents } from '../../entities/AuditTrail';
-import { UserJobFunction } from '../../entities/User';
+import { User, UserJobFunction } from '../../entities/User';
 import { getUserRoleById } from '../../entities/UserRole';
 import { getTraceId } from '../../helpers/loggingHelpers';
 import {
@@ -48,11 +48,18 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
       participant!.id
     );
 
+    let createdUser;
+
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-      await inviteUserToParticipant(userPartial, participant!, userRoleIdData.userRoleId, traceId);
+      createdUser = await inviteUserToParticipant(
+        userPartial,
+        participant!,
+        userRoleIdData.userRoleId,
+        traceId
+      );
     });
 
-    return res.sendStatus(201);
+    return res.status(201).json({ user: createdUser });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).send(err.issues);
