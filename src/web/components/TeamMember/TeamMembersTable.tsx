@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
 
-import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';

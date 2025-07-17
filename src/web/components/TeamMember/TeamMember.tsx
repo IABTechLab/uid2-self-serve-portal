@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useContext, useState } from 'react';
 
-import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { UpdateTeamMemberForm } from '../../services/userAccount';

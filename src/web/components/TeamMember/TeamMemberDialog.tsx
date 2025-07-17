@@ -12,7 +12,7 @@ import { Dialog } from '../Core/Dialog/Dialog';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
-import { FormStyledCheckbox, StyledCheckbox } from '../Input/StyledCheckbox';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
 
@@ -155,7 +155,11 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               .filter(
                 (key) => allowedRolesToAdd.includes(key) && typeof UserRoleId[key] === 'number'
               )
-              .map((key) => ({ optionLabel: key, value: UserRoleId[key] }))}
+              .map((key) => ({
+                optionLabel: key,
+                value: UserRoleId[key],
+                disabled: isPrimaryContact && key === 'Operations',
+              }))}
           />
           <div className='checkbox-container'>{checkboxContent}</div>
 

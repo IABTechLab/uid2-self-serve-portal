@@ -8,11 +8,7 @@ import { ScreenContentContainer } from '../components/Core/ScreenContentContaine
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import {
-  GetSelectedParticipant,
-  InviteTeamMember,
-  UpdatePrimaryContact,
-} from '../services/participant';
+import { InviteTeamMember, UpdatePrimaryContact } from '../services/participant';
 import {
   GetAllUsersOfParticipant,
   InviteTeamMemberForm,
