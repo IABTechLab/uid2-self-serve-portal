@@ -22,7 +22,11 @@ const createUsersRouter = () => {
     userController.selfResendInvitation.bind(userController)
   );
 
-  usersRouter.post('/resetPassword', userController.resetPassword.bind(userController));
+  usersRouter.post(
+    '/resetPassword',
+    isSuperUserCheck,
+    userController.resetPassword.bind(userController)
+  );
 
   return usersRouter;
 };
