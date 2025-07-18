@@ -30,7 +30,7 @@ export const UpdateUserRoleIdSchema = z.object({
   userRoleId: z.nativeEnum(UserRoleId),
 });
 
-export const SelfResendInvitationSchema = z.object({ email: z.string() });
+export const KeycloakRequestSchema = z.object({ email: z.string() });
 
 @injectable()
 export class UserService {

@@ -24,7 +24,7 @@ import {
 import { LoggerService } from '../services/loggerService';
 import * as participantsService from '../services/participantsService';
 import {
-  SelfResendInvitationSchema,
+  KeycloakRequestSchema,
   UpdateUserRoleIdSchema,
   UserService,
 } from '../services/userService';
@@ -83,7 +83,7 @@ export class UserController {
     @request() req: usersService.KeycloakRequest,
     @response() res: express.Response
   ): Promise<void> {
-    const { email } = SelfResendInvitationSchema.parse(req.body);
+    const { email } = KeycloakRequestSchema.parse(req.body);
     const logger = this.loggerService.getLogger(req);
     const kcAdminClient = await getKcAdminClient();
     const user = await queryUsersByEmail(kcAdminClient, email);
@@ -131,7 +131,7 @@ export class UserController {
     @request() req: usersService.KeycloakRequest,
     @response() res: express.Response
   ): Promise<void> {
-    const { email } = SelfResendInvitationSchema.parse(req.body);
+    const { email } = KeycloakRequestSchema.parse(req.body);
     const logger = this.loggerService.getLogger(req);
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
