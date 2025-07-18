@@ -21,7 +21,7 @@ function ResetPasswordDialog({ user, resetPassword, onOpenChange }: ResetPasswor
       </ul>
       <div className='dialog-footer-section'>
         <button type='button' className='primary-button' onClick={handleResetPassword}>
-          Set Password Reset
+          Reset Password
         </button>
       </div>
     </Dialog>
