@@ -54,6 +54,18 @@ export async function ResendInvite(id: number, participantId: number): Promise<v
   }
 }
 
+export async function ResetPassword(userEmail: string): Promise<void> {
+  try {
+    return await axios.post(`/users/resetPassword`, {
+      email: userEmail,
+    });
+  } catch (e: unknown) {
+    const error = backendError(e, 'Unable to set a password reset');
+    log.error(error);
+    throw error;
+  }
+}
+
 export type SelfResendInvitationForm = {
   email: string;
 };
@@ -89,7 +101,11 @@ export async function RemoveUser(id: number, participantId: number) {
   try {
     return await axios.delete(`/participants/${participantId}/users/${id}`);
   } catch (e: unknown) {
-    const message = `${e instanceof AxiosError ? e.response?.data[0]?.message ?? 'Could not remove user' : 'Could not remove user'}`;
+    const message = `${
+      e instanceof AxiosError
+        ? e.response?.data[0]?.message ?? 'Could not remove user'
+        : 'Could not remove user'
+    }`;
     const error = backendError(e, message);
     throw error;
   }

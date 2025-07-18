@@ -5,7 +5,7 @@ import { defer, useLoaderData } from 'react-router-typesafe';
 import { Loading } from '../components/Core/Loading/Loading';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
 import UserManagementTable from '../components/UserManagement/UserManagementTable';
-import { ChangeUserLock, GetAllUsers } from '../services/userAccount';
+import { ChangeUserLock, GetAllUsers, ResetPassword } from '../services/userAccount';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -33,7 +33,13 @@ function ManageUsers() {
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading users...' />}>
           <AwaitTypesafe resolve={data.userList}>
-            {(users) => <UserManagementTable users={users} onChangeUserLock={onChangeUserLock} />}
+            {(users) => (
+              <UserManagementTable
+                users={users}
+                onChangeUserLock={onChangeUserLock}
+                resetPassword={ResetPassword}
+              />
+            )}
           </AwaitTypesafe>
         </Suspense>
       </ScreenContentContainer>

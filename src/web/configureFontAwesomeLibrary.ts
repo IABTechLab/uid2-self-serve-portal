@@ -12,6 +12,7 @@ import {
   faEllipsisH,
   faExclamationCircle,
   faEye,
+  faKey,
   faMinus,
   faPencil,
   faPlus,
@@ -51,4 +52,5 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faAngleRight);
   library.add(faAngleLeft);
   library.add(faTriangleExclamation);
+  library.add(faKey);
 }

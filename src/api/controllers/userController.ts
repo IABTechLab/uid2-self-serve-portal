@@ -18,6 +18,7 @@ import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignApiParticipantMemberRole,
   queryUsersByEmail,
+  resetUserPassword,
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
@@ -55,7 +56,10 @@ export class UserController {
   }
 
   @httpPut('/current/acceptTerms')
-  public async acceptTerms(@request() req: usersService.UserRequest, @response() res: express.Response): Promise<void> {
+  public async acceptTerms(
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
+  ): Promise<void> {
     const doesUserHaveAParticipant = (req.user?.participants?.length ?? 0) >= 1;
 
     if (!doesUserHaveAParticipant) {
@@ -122,6 +126,38 @@ export class UserController {
     res.sendStatus(200);
   }
 
+  @httpPost('/resetPassword')
+  public async resetPassword(
+    @request() req: usersService.SelfResendInviteRequest,
+    @response() res: express.Response
+  ): Promise<void> {
+    const { email } = SelfResendInvitationSchema.parse(req.body);
+    const logger = this.loggerService.getLogger(req);
+    const traceId = getTraceId(req);
+    const kcAdminClient = await getKcAdminClient();
+    const user = await queryUsersByEmail(kcAdminClient, email);
+
+    const resultLength = user?.length ?? 0;
+    if (resultLength < 1) {
+      logger.error(`Multiple results received when loading user entry for ${email}`);
+      res.status(404).json({
+        errorHash: traceId,
+      });
+      return;
+    }
+    if (resultLength > 1) {
+      logger.error(`Multiple results received when loading user entry for ${email}`);
+      res.status(500).json({
+        errorHash: traceId,
+      });
+      return;
+    }
+
+    logger.info(`Setting password update for ${email}, keycloak ID ${user[0].id}`);
+    await resetUserPassword(kcAdminClient, user[0]);
+    res.sendStatus(200);
+  }
+
   @httpDelete('/:userId')
   public async removeUser(
     @request() req: participantsService.UserParticipantRequest,
@@ -144,7 +180,10 @@ export class UserController {
   }
 
   @httpPatch('/:userId')
-  public async updateUser(@request() req: usersService.UserRequest, @response() res: express.Response): Promise<void> {
+  public async updateUser(
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
+  ): Promise<void> {
     const { user } = req;
     const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
     if (req.auth?.payload?.email === user?.email && userRoleData.userRoleId !== UserRoleId.Admin) {

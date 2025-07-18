@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { UserController } from '../controllers/userController';
+import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../middleware/usersMiddleware';
 import { LoggerService } from '../services/loggerService';
 import { UserService } from '../services/userService';
@@ -20,6 +21,8 @@ const createUsersRouter = () => {
     '/selfResendInvitation',
     userController.selfResendInvitation.bind(userController)
   );
+
+  usersRouter.post('/resetPassword', userController.resetPassword.bind(userController));
 
   return usersRouter;
 };

@@ -1,5 +1,5 @@
 import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
-import { RequiredActionAlias } from "@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation.js";
+import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/requiredActionProviderRepresentation.js';
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars.ts';
@@ -129,4 +129,16 @@ export const removeApiParticipantMemberRole = async (
       ],
     });
   }
+};
+
+export const resetUserPassword = async (
+  kcAdminClient: KeycloakAdminClient,
+  user: UserRepresentation
+) => {
+  await kcAdminClient.users.update(
+    { id: user.id! },
+    {
+      requiredActions: [RequiredActionAlias.UPDATE_PASSWORD],
+    }
+  );
 };
