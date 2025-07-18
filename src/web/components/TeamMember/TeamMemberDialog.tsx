@@ -81,29 +81,6 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     props.onOpenChange();
   };
 
-  const checkbox = (
-    <FormStyledCheckbox
-      name='setPrimaryContact'
-      control={formMethods.control}
-      className='checkbox'
-      disabled={isPrimaryContact || isOperations}
-    />
-  );
-
-  const checkboxContent = isOperations ? (
-    <div className='checkbox-trigger'>
-      <Tooltip trigger={checkbox}>Primary contact must have Admin role.</Tooltip>
-      <span className='checkbox-text'>Set as primary contact</span>
-    </div>
-  ) : (
-    <>
-      {checkbox}
-      <span className='checkbox-text'>Set as primary contact</span>
-    </>
-  );
-
-  const roleLabel = isPrimaryContact ? 'Role - Primary contact must have admin role' : 'Role';
-
   return (
     <Dialog
       title={`${editMode ? 'Edit' : 'Add'} Team Member`}
@@ -145,7 +122,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
           />
           <RadioInput
             inputName='userRoleId'
-            label={roleLabel}
+            label={isPrimaryContact ? 'Role - Primary contact must have admin role' : 'Role'}
             rules={{ required: 'Please specify a role.' }}
             options={(Object.keys(UserRoleId) as Array<keyof typeof UserRoleId>)
               .filter(
@@ -157,7 +134,35 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                 disabled: isPrimaryContact && key === 'Operations',
               }))}
           />
-          <div className='checkbox-container'>{checkboxContent}</div>
+          <div className='checkbox-container'>
+            {isOperations ? (
+              <div className='checkbox-trigger'>
+                <Tooltip
+                  trigger={
+                    <FormStyledCheckbox
+                      name='setPrimaryContact'
+                      control={formMethods.control}
+                      className='checkbox'
+                      disabled={isPrimaryContact}
+                    />
+                  }
+                >
+                  Primary contact must have Admin role.
+                </Tooltip>
+                <span className='checkbox-text'>Set as primary contact</span>
+              </div>
+            ) : (
+              <>
+                <FormStyledCheckbox
+                  name='setPrimaryContact'
+                  control={formMethods.control}
+                  className='checkbox'
+                  disabled={isPrimaryContact}
+                />
+                <span className='checkbox-text'>Set as primary contact</span>
+              </>
+            )}
+          </div>
 
           <FormSubmitButton>Save Team Member</FormSubmitButton>
         </form>

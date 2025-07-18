@@ -1,4 +1,12 @@
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useParams } from 'react-router-dom';
 
 import { ParticipantDTO } from '../../api/entities/Participant';
@@ -74,7 +82,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
     () => ({
       participant,
       setParticipant,
-      loadParticipant, // <-- New
+      loadParticipant,
     }),
     [participant, loadParticipant]
   );
