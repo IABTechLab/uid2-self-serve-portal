@@ -80,7 +80,7 @@ export class UserController {
 
   @httpPost('/selfResendInvitation')
   public async selfResendInvitation(
-    @request() req: usersService.SelfResendInviteRequest,
+    @request() req: usersService.KeycloakRequest,
     @response() res: express.Response
   ): Promise<void> {
     const { email } = SelfResendInvitationSchema.parse(req.body);
@@ -128,7 +128,7 @@ export class UserController {
 
   @httpPost('/resetPassword')
   public async resetPassword(
-    @request() req: usersService.SelfResendInviteRequest,
+    @request() req: usersService.KeycloakRequest,
     @response() res: express.Response
   ): Promise<void> {
     const { email } = SelfResendInvitationSchema.parse(req.body);
