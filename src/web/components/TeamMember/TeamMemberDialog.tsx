@@ -136,23 +136,23 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
           />
           <div className='checkbox-container'>
             {isOperations ? (
-              <div className='checkbox-trigger'>
-                <Tooltip
-                  trigger={
+              <Tooltip
+                trigger={
+                  <div className='checkbox-trigger'>
                     <FormStyledCheckbox
                       name='setPrimaryContact'
                       control={formMethods.control}
                       className='checkbox'
                       disabled
                     />
-                  }
-                >
-                  Primary contact must have Admin role.
-                </Tooltip>
-                <span className='checkbox-text'>Set as primary contact</span>
-              </div>
+                    <span className='checkbox-text'>Set as primary contact</span>
+                  </div>
+                }
+              >
+                Primary contact must have Admin role.
+              </Tooltip>
             ) : (
-              <>
+              <div className='checkbox-trigger'>
                 <FormStyledCheckbox
                   name='setPrimaryContact'
                   control={formMethods.control}
@@ -160,7 +160,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                   disabled={isPrimaryContact}
                 />
                 <span className='checkbox-text'>Set as primary contact</span>
-              </>
+              </div>
             )}
           </div>
 
