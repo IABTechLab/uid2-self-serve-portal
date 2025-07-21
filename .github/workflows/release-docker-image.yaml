@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Patch version in package.json
+        run: |
+          jq '.version = "${{ needs.incrementVersionNumber.outputs.new_version }}"' package.json > tmp.json
+          mv tmp.json package.json
+
       - name: Build API
         run: npm run build-api
 
