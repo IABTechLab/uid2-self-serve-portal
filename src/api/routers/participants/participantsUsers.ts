@@ -48,18 +48,16 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
       participant!.id
     );
 
-    const createdUser = await performAsyncOperationWithAuditTrail(
-      auditTrailInsertObject,
-      traceId,
-      async () => {
-        await inviteUserToParticipant(
-          userPartial,
-          participant!,
-          userRoleIdData.userRoleId,
-          traceId
-        );
-      }
-    );
+    let createdUser;
+
+    await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
+      createdUser = await inviteUserToParticipant(
+        userPartial,
+        participant!,
+        userRoleIdData.userRoleId,
+        traceId
+      );
+    });
 
     return res.status(201).json({ user: createdUser });
   } catch (err) {

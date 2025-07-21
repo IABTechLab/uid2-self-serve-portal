@@ -1,4 +1,4 @@
-import { Suspense, useContext } from 'react';
+import { Suspense, useContext, useEffect, useRef } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
@@ -78,8 +78,13 @@ function TeamMembers() {
       }
 
       if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
-        await UpdatePrimaryContact(participant!.id, userId);
-        await loadParticipant();
+        const response = await UpdatePrimaryContact(participant!.id, userId);
+        if (response.status === 204) {
+          await loadParticipant();
+          setTimeout(() => { // Force next event loop tick to correctly trigger the toast
+            SuccessToast('Primary contact updated.');
+          }, 0);
+        }
       }
 
       reloader.revalidate();
