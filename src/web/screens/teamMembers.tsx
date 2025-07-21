@@ -1,4 +1,4 @@
-import { Suspense, useContext, useEffect, useRef } from 'react';
+import { Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
@@ -81,7 +81,8 @@ function TeamMembers() {
         const response = await UpdatePrimaryContact(participant!.id, userId);
         if (response.status === 204) {
           await loadParticipant();
-          setTimeout(() => { // Force next event loop tick to correctly trigger the toast
+          setTimeout(() => {
+            // Force next event loop tick to correctly trigger the toast
             SuccessToast('Primary contact updated.');
           }, 0);
         }
