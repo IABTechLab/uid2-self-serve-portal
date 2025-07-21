@@ -1,16 +1,22 @@
+import { useContext } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
+import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { InviteTeamMemberForm, UpdateTeamMemberForm } from '../../services/userAccount';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { RadioInput } from '../Input/RadioInput';
 import { SelectInput } from '../Input/SelectInput';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { validateUniqueTeamMemberEmail } from './TeamMemberHelper';
+
+import './TeamMemberDialog.scss';
 
 type AddTeamMemberDialogProps = {
   teamMembers: UserWithParticipantRoles[];
@@ -20,7 +26,7 @@ type AddTeamMemberDialogProps = {
 };
 type UpdateTeamMemberDialogProps = {
   teamMembers: UserWithParticipantRoles[];
-  onUpdateTeamMember: (form: UpdateTeamMemberForm) => Promise<void>;
+  onUpdateTeamMember: (form: UpdateTeamMemberForm, hasUserFieldsChanged: boolean) => Promise<void>;
   onOpenChange: () => void;
   person: UserWithParticipantRoles;
 };
@@ -31,6 +37,9 @@ const isUpdateTeamMemberDialogProps = (
 ): props is UpdateTeamMemberDialogProps => 'person' in props;
 
 function TeamMemberDialog(props: TeamMemberDialogProps) {
+  const { participant } = useContext(ParticipantContext);
+  const isPrimaryContact =
+    isUpdateTeamMemberDialogProps(props) && participant?.primaryContact?.id === props.person?.id;
   const formMethods = useForm<InviteTeamMemberForm>({
     defaultValues: {
       firstName: props.person?.firstName,
@@ -38,22 +47,34 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
       email: props.person?.email,
       jobFunction: props.person?.jobFunction,
       userRoleId: props.person?.currentParticipantUserRoles?.[0]?.id ?? undefined,
+      setPrimaryContact: isPrimaryContact,
     },
   });
   const { handleSubmit } = formMethods;
   const editMode = !!props.person;
 
   const allowedRolesToAdd = ['Admin', 'Operations'];
+  const selectedRoleId = formMethods.watch('userRoleId');
+  const isOperations = selectedRoleId === UserRoleId.Operations;
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
-      const { firstName, lastName, jobFunction, userRoleId } = formData;
-      await props.onUpdateTeamMember({
-        firstName,
-        lastName,
-        jobFunction,
-        userRoleId,
-      });
+      const { firstName, lastName, jobFunction, userRoleId, setPrimaryContact } = formData;
+      const hasUserFieldsChanged =
+        firstName !== props.person.firstName ||
+        lastName !== props.person.lastName ||
+        jobFunction !== props.person.jobFunction ||
+        userRoleId !== props.person.currentParticipantUserRoles?.[0]?.id;
+      await props.onUpdateTeamMember(
+        {
+          firstName,
+          lastName,
+          jobFunction,
+          userRoleId,
+          setPrimaryContact,
+        },
+        hasUserFieldsChanged
+      );
     } else {
       await props.onAddTeamMember(formData);
     }
@@ -96,10 +117,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             label='Job Function'
             rules={{ required: 'Please specify your job function.' }}
             options={(Object.keys(UserJobFunction) as Array<keyof typeof UserJobFunction>).map(
-              (key) => ({
-                optionLabel: UserJobFunction[key],
-                value: UserJobFunction[key],
-              })
+              (key) => ({ optionLabel: UserJobFunction[key], value: UserJobFunction[key] })
             )}
           />
           <RadioInput
@@ -113,8 +131,58 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               .map((key) => ({
                 optionLabel: key,
                 value: UserRoleId[key],
+                disabled: isPrimaryContact && key === 'Operations',
               }))}
           />
+          <div className='checkbox-container'>
+            {isOperations && (
+              <Tooltip
+                trigger={
+                  <div className='checkbox'>
+                    <FormStyledCheckbox
+                      name='setPrimaryContact'
+                      control={formMethods.control}
+                      className='checkbox'
+                      disabled
+                    />
+                    <span className='checkbox-text'>Set as primary contact</span>
+                  </div>
+                }
+              >
+                Primary contact must have Admin role.
+              </Tooltip>
+            )}
+
+            {isPrimaryContact && (
+              <Tooltip
+                trigger={
+                  <div className='checkbox'>
+                    <FormStyledCheckbox
+                      name='setPrimaryContact'
+                      control={formMethods.control}
+                      className='checkbox'
+                      disabled
+                    />
+                    <span className='checkbox-text'>Set as primary contact</span>
+                  </div>
+                }
+              >
+                You can&apos;t uncheck the current primary contact or change their Admin role.
+              </Tooltip>
+            )}
+
+            {!isOperations && !isPrimaryContact && (
+              <div className='checkbox'>
+                <FormStyledCheckbox
+                  name='setPrimaryContact'
+                  control={formMethods.control}
+                  className='checkbox'
+                />
+                <span className='checkbox-text'>Set as primary contact</span>
+              </div>
+            )}
+          </div>
+
           <FormSubmitButton>Save Team Member</FormSubmitButton>
         </form>
       </FormProvider>

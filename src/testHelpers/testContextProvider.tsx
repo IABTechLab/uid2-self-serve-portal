@@ -25,6 +25,7 @@ export const createParticipantContextValue = (
 ): ParticipantWithSetter => ({
   participant,
   setParticipant: () => {},
+  loadParticipant: async () => {},
 });
 
 const defaultUserContext: UserContextWithSetter = {
@@ -35,6 +36,7 @@ const defaultUserContext: UserContextWithSetter = {
 const defaultParticipantContext: ParticipantWithSetter = {
   participant: null,
   setParticipant: () => {},
+  loadParticipant: async () => {},
 };
 
 interface TestContextProviderProps extends PropsWithChildren {

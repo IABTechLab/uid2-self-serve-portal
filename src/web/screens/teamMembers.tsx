@@ -8,7 +8,7 @@ import { ScreenContentContainer } from '../components/Core/ScreenContentContaine
 import TeamMembersTable from '../components/TeamMember/TeamMembersTable';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
-import { InviteTeamMember } from '../services/participant';
+import { InviteTeamMember, UpdatePrimaryContact } from '../services/participant';
 import {
   GetAllUsersOfParticipant,
   InviteTeamMemberForm,
@@ -31,15 +31,21 @@ const loader = makeParticipantLoader((participantId) => {
 function TeamMembers() {
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const data = useLoaderData<typeof loader>();
-  const { participant } = useContext(ParticipantContext);
+  const { participant, loadParticipant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
     try {
       const response = await InviteTeamMember(formData, participant!.id);
+      const { user } = response.data as { user: { id: number } };
       if (response.status === 201) {
+        if (formData.setPrimaryContact) {
+          await UpdatePrimaryContact(participant!.id, user.id);
+          await loadParticipant();
+        }
         SuccessToast('Team member added.');
       }
+
       reloader.revalidate();
     } catch (e: unknown) {
       handleErrorToast(e);
@@ -58,12 +64,30 @@ function TeamMembers() {
     }
   };
 
-  const handleUpdateTeamMember = async (userId: number, formData: UpdateTeamMemberForm) => {
+  const handleUpdateTeamMember = async (
+    userId: number,
+    formData: UpdateTeamMemberForm,
+    hasUserFieldsChanged: boolean
+  ) => {
     try {
-      const response = await UpdateUser(userId, formData, participant!.id);
-      if (response.status === 200) {
-        SuccessToast('Team member updated.');
+      if (hasUserFieldsChanged) {
+        const response = await UpdateUser(userId, formData, participant!.id);
+        if (response.status === 200) {
+          SuccessToast('Team member updated.');
+        }
       }
+
+      if (formData.setPrimaryContact && userId !== participant?.primaryContact?.id) {
+        const response = await UpdatePrimaryContact(participant!.id, userId);
+        if (response.status === 204) {
+          await loadParticipant();
+          // Force success toast to persist after reloading context
+          setTimeout(() => {
+            SuccessToast('Primary contact updated.');
+          }, 0);
+        }
+      }
+
       reloader.revalidate();
       if (LoggedInUser?.user?.id === userId) await loadUser();
     } catch (e: unknown) {

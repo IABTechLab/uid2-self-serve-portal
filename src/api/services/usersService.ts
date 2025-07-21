@@ -203,6 +203,7 @@ export const inviteUserToParticipant = async (
   } else {
     const { firstName, lastName, email } = userPartial;
     await createAndInviteKeycloakUser(firstName, lastName, email);
-    await createUserInPortal(userPartial, participant!.id, userRoleId);
+    const newUser = await createUserInPortal(userPartial, participant!.id, userRoleId);
+    return newUser;
   }
 };

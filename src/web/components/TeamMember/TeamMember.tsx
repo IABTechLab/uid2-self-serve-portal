@@ -20,7 +20,11 @@ type TeamMemberProps = Readonly<{
   person: UserWithParticipantRoles;
   resendInvite: (id: number, participantId: number) => Promise<void>;
   onRemoveTeamMember: (id: number) => Promise<void>;
-  onUpdateTeamMember: (id: number, form: UpdateTeamMemberForm) => Promise<void>;
+  onUpdateTeamMember: (
+    id: number,
+    form: UpdateTeamMemberForm,
+    hasUserFieldsChanged: boolean
+  ) => Promise<void>;
   showTeamMemberActions: boolean;
 }>;
 
@@ -82,9 +86,12 @@ function TeamMember({
     }
   };
 
-  const handleUpdateUser = async (formData: UpdateTeamMemberForm) => {
+  const handleUpdateUser = async (
+    formData: UpdateTeamMemberForm,
+    hasUserFieldsChanged: boolean
+  ) => {
     try {
-      await onUpdateTeamMember(person.id, formData);
+      await onUpdateTeamMember(person.id, formData, hasUserFieldsChanged);
     } catch (e) {
       setErrorInfo(e as Error);
     }

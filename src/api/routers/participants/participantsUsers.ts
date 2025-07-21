@@ -49,10 +49,14 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
     );
 
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-      await inviteUserToParticipant(userPartial, participant!, userRoleIdData.userRoleId, traceId);
+      const createdUser = await inviteUserToParticipant(
+        userPartial,
+        participant!,
+        userRoleIdData.userRoleId,
+        traceId
+      );
+      return res.status(201).json({ user: createdUser });
     });
-
-    return res.sendStatus(201);
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).send(err.issues);

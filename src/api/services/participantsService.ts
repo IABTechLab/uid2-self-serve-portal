@@ -6,6 +6,7 @@ import { ApiRole } from '../entities/ApiRole';
 import { AuditAction, AuditTrailEvents } from '../entities/AuditTrail';
 import { Participant, ParticipantDTO } from '../entities/Participant';
 import { ParticipantType } from '../entities/ParticipantType';
+import { PrimaryContact } from '../entities/PrimaryContact';
 import { ParticipantApprovalPartial } from '../entities/Schemas';
 import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
@@ -294,3 +295,38 @@ export const sendParticipantApprovedEmail = async (users: User[], traceId: Trace
   };
   emailService.sendEmail(emailArgs, traceId);
 };
+
+export async function updatePrimaryContact(
+  participantId: number,
+  newUserId: number,
+  req: UserParticipantRequest
+) {
+  const { user } = req;
+  const traceId = getTraceId(req);
+
+  const existing = await PrimaryContact.query().findOne({ participantId });
+  const existingUser = existing?.userId ? await User.query().findById(existing.userId) : null;
+  const newUser = await User.query().findById(newUserId);
+
+  const auditTrailInsertObject = constructAuditTrailObject(
+    user!,
+    AuditTrailEvents.UpdatePrimaryContact,
+    {
+      action: AuditAction.Update,
+      previousPrimaryContact: existingUser?.email ?? null,
+      newPrimaryContact: newUser?.email ?? null,
+    },
+    participantId
+  );
+
+  await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
+    if (existing) {
+      await PrimaryContact.query().delete().where({ participantId });
+    }
+
+    await PrimaryContact.query().insert({
+      participantId,
+      userId: newUserId,
+    });
+  });
+}

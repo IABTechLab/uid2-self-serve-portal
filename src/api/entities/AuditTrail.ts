@@ -20,6 +20,7 @@ export enum AuditTrailEvents {
   UpdateAppNames = 'UpdateAppNames',
   ManageTeamMembers = 'ManageTeamMembers',
   ChangeUserLock = 'ChangeUserLock',
+  UpdatePrimaryContact = 'UpdatePrimaryContact',
 }
 
 export class AuditTrail extends BaseModel {

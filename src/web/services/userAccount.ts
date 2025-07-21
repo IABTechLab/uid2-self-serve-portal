@@ -20,6 +20,7 @@ export type InviteTeamMemberForm = {
   email: string;
   jobFunction: string;
   userRoleId?: number;
+  setPrimaryContact?: boolean;
 };
 
 export type LoggedInUser = {

@@ -270,3 +270,13 @@ export async function UpdateEmailContact(
     throw backendError(e, 'Could not update email contact');
   }
 }
+
+export async function UpdatePrimaryContact(participantId: number, newPrimaryContactUserId: number) {
+  try {
+    return await axios.put(`/participants/${participantId}/primaryContact`, {
+      userId: newPrimaryContactUserId,
+    });
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not update primary contact');
+  }
+}
