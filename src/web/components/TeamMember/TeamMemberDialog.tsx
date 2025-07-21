@@ -138,7 +138,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             {isOperations && (
               <Tooltip
                 trigger={
-                  <div className='checkbox-trigger'>
+                  <div className='checkbox'>
                     <FormStyledCheckbox
                       name='setPrimaryContact'
                       control={formMethods.control}
@@ -156,7 +156,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             {isPrimaryContact && (
               <Tooltip
                 trigger={
-                  <div className='checkbox-trigger'>
+                  <div className='checkbox'>
                     <FormStyledCheckbox
                       name='setPrimaryContact'
                       control={formMethods.control}
@@ -172,7 +172,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
             )}
 
             {!isOperations && !isPrimaryContact && (
-              <div className='checkbox-trigger'>
+              <div className='checkbox'>
                 <FormStyledCheckbox
                   name='setPrimaryContact'
                   control={formMethods.control}
