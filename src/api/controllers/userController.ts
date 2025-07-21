@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import express from 'express';
 import { inject } from 'inversify';
 import {
@@ -13,7 +14,6 @@ import {
 
 import { TYPES } from '../constant/types';
 import { UserRoleId } from '../entities/UserRole';
-import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignApiParticipantMemberRole,
@@ -29,7 +29,19 @@ import {
   UserService,
 } from '../services/userService';
 import * as usersService from '../services/usersService';
-import { AxiosError } from 'axios';
+
+const checkKeycloakQueryResult = (resultLength: number, email: string): void => {
+  if (resultLength < 1) {
+    const error = new AxiosError(`No results received when loading user entry for ${email}`);
+    error.status = 400;
+    throw error;
+  }
+  if (resultLength > 1) {
+    const error = new AxiosError(`Multiple results received when loading user entry for ${email}`);
+    error.status = 400;
+    throw error;
+  }
+};
 
 @controller('/users')
 export class UserController {
@@ -89,19 +101,7 @@ export class UserController {
     const kcAdminClient = await getKcAdminClient();
     const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
 
-    const resultLength = user?.length ?? 0;
-    if (resultLength < 1) {
-      const error = new AxiosError(`No results received when loading user entry for ${email}`);
-      error.status = 400;
-      throw error;
-    }
-    if (resultLength > 1) {
-      const error = new AxiosError(
-        `Multiple results received when loading user entry for ${email}`
-      );
-      error.status = 400;
-      throw error;
-    }
+    checkKeycloakQueryResult(user?.length ?? 0, email);
 
     logger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`);
     await sendInviteEmailToNewUser(kcAdminClient, user[0]);
@@ -117,21 +117,7 @@ export class UserController {
     const kcAdminClient = await getKcAdminClient();
     const user = await queryKeycloakUsersByEmail(kcAdminClient, req.user?.email ?? '');
 
-    const resultLength = user?.length ?? 0;
-    if (resultLength < 1) {
-      const error = new AxiosError(
-        `No results received when loading user entry for ${req.user?.email}`
-      );
-      error.status = 400;
-      throw error;
-    }
-    if (resultLength > 1) {
-      const error = new AxiosError(
-        `Multiple results received when loading user entry for ${req.user?.email}`
-      );
-      error.status = 400;
-      throw error;
-    }
+    checkKeycloakQueryResult(user?.length ?? 0, req.user?.email ?? '');
 
     logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmailToNewUser(kcAdminClient, user[0]);
@@ -148,19 +134,7 @@ export class UserController {
     const kcAdminClient = await getKcAdminClient();
     const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
 
-    const resultLength = user?.length ?? 0;
-    if (resultLength < 1) {
-      const error = new AxiosError(`No results received when loading user entry for ${email}`);
-      error.status = 400;
-      throw error;
-    }
-    if (resultLength > 1) {
-      const error = new AxiosError(
-        `Multiple results received when loading user entry for ${email}`
-      );
-      error.status = 400;
-      throw error;
-    }
+    checkKeycloakQueryResult(user?.length ?? 0, email);
 
     logger.info(`Setting password update for ${email}, keycloak ID ${user[0].id}`);
     await resetUserPassword(kcAdminClient, user[0]);
