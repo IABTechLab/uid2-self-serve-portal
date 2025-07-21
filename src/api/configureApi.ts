@@ -206,7 +206,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
     if (err instanceof AxiosError) {
       errorLogger.error(`API Error: ${err.response?.data?.message}`, traceId);
       errorLogger.error(err.stack!, traceId);
-      code = err.response?.status! || err.status!;
+      code = err.response?.status ?? err.status ?? 500;
       if (err.response?.data?.message) {
         currentMessage = `${err.response?.data?.message}`!;
       }
