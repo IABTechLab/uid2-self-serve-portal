@@ -31,14 +31,14 @@ import {
 import * as usersService from '../services/usersService';
 
 const checkKeycloakQueryResult = (resultLength: number, email: string): void => {
-  if (resultLength < 1) {
-    const error = new AxiosError(`No results received when loading user entry for ${email}`);
+  if (resultLength !== 1) {
+    const error = new AxiosError();
     error.status = 400;
-    throw error;
-  }
-  if (resultLength > 1) {
-    const error = new AxiosError(`Multiple results received when loading user entry for ${email}`);
-    error.status = 400;
+    if (resultLength < 1) {
+      error.message = `No results received when loading user entry for ${email}`;
+    } else if (resultLength > 1) {
+      error.message = `Multiple results received when loading user entry for ${email}`;
+    }
     throw error;
   }
 };
