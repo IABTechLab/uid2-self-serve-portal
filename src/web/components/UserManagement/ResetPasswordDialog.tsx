@@ -14,8 +14,8 @@ function ResetPasswordDialog({ user, resetPassword, onOpenChange }: ResetPasswor
   };
 
   return (
-    <Dialog title='Force Reset Password' onOpenChange={onOpenChange} closeButtonText='Cancel'>
-      <p>Are you sure you want to force a password reset to this user? </p>
+    <Dialog title='Reset Password' onOpenChange={onOpenChange} closeButtonText='Cancel'>
+      <p>Are you sure you want to force a password reset for this user? </p>
       <ul className='dot-list'>
         <li>{user.email}</li>
       </ul>
