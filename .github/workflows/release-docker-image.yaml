@@ -44,6 +44,12 @@ jobs:
           name: api-dist
           path: api-dist/
 
+      - name: Upload patched package.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: patched-package
+          path: package.json
+
   publishForApiUi:
     name: Build & Publish API/UI Image
     runs-on: ubuntu-latest
@@ -60,6 +66,12 @@ jobs:
         with:
           name: api-dist
           path: api-dist/
+
+      - name: Download patched package.json
+        uses: actions/download-artifact@v4
+        with:
+          name: patched-package
+          path: .
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
