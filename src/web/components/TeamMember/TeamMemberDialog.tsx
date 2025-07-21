@@ -143,7 +143,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                       name='setPrimaryContact'
                       control={formMethods.control}
                       className='checkbox'
-                      disabled={isPrimaryContact}
+                      disabled
                     />
                   }
                 >
