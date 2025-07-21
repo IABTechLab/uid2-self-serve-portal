@@ -63,11 +63,9 @@ export function UserManagementItem({
         )}
       </td>
       <td>
-        <ActionButton
-          onClick={onOpenChangeResetPasswordDialog}
-          icon='key'
-          aria-label='Force Reset Password'
-        />
+        <button type='button' className='viewable-button' onClick={onOpenChangeResetPasswordDialog}>
+          Reset Password
+        </button>
         {showResetPasswordDialog && (
           <ResetPasswordDialog
             user={user}

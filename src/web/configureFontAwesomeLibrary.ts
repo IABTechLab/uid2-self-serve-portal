@@ -17,6 +17,8 @@ import {
   faPencil,
   faPlus,
   faSearch,
+  faLock,
+  faRedo,
   faSort,
   faSortDown,
   faSortUp,
@@ -24,6 +26,8 @@ import {
   faTrashCan,
   faTriangleExclamation,
   faXmark,
+  faRotateRight,
+  faArrowsRotate,
 } from '@fortawesome/free-solid-svg-icons';
 
 export function configureFontAwesomeLibrary(): void {
@@ -53,4 +57,8 @@ export function configureFontAwesomeLibrary(): void {
   library.add(faAngleLeft);
   library.add(faTriangleExclamation);
   library.add(faKey);
+  library.add(faLock);
+  library.add(faRedo);
+  library.add(faRotateRight);
+  library.add(faArrowsRotate);
 }

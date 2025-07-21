@@ -103,7 +103,7 @@ function UserManagementTableContent({
             <SortableTableHeader<UserDTO> sortKey='jobFunction' header='Job Function' />
             <th>Accepted Terms</th>
             <th className='dialogs'>Additional User Info</th>
-            <th className='password-reset'> Password Reset</th>
+            <th className='password-reset'> Password</th>
             <th className='action'>Locked</th>
           </tr>
         </thead>
