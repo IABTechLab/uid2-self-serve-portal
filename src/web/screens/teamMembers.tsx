@@ -81,8 +81,8 @@ function TeamMembers() {
         const response = await UpdatePrimaryContact(participant!.id, userId);
         if (response.status === 204) {
           await loadParticipant();
+          // Force success toast to persist after reloading context
           setTimeout(() => {
-            // Force next event loop tick to correctly trigger the toast
             SuccessToast('Primary contact updated.');
           }, 0);
         }
