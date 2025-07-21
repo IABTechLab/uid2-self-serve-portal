@@ -135,58 +135,52 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               }))}
           />
           <div className='checkbox-container'>
-            {(() => {
-              if (isOperations) {
-                return (
-                  <Tooltip
-                    trigger={
-                      <div className='checkbox-trigger'>
-                        <FormStyledCheckbox
-                          name='setPrimaryContact'
-                          control={formMethods.control}
-                          className='checkbox'
-                          disabled
-                        />
-                        <span className='checkbox-text'>Set as primary contact</span>
-                      </div>
-                    }
-                  >
-                    Primary contact must have Admin role.
-                  </Tooltip>
-                );
-              }
+            {isOperations && (
+              <Tooltip
+                trigger={
+                  <div className='checkbox-trigger'>
+                    <FormStyledCheckbox
+                      name='setPrimaryContact'
+                      control={formMethods.control}
+                      className='checkbox'
+                      disabled
+                    />
+                    <span className='checkbox-text'>Set as primary contact</span>
+                  </div>
+                }
+              >
+                Primary contact must have Admin role.
+              </Tooltip>
+            )}
 
-              if (isPrimaryContact) {
-                return (
-                  <Tooltip
-                    trigger={
-                      <div className='checkbox-trigger'>
-                        <FormStyledCheckbox
-                          name='setPrimaryContact'
-                          control={formMethods.control}
-                          className='checkbox'
-                          disabled
-                        />
-                        <span className='checkbox-text'>Set as primary contact</span>
-                      </div>
-                    }
-                  >
-                    You can&apos;t uncheck the current primary contact or change their Admin role.
-                  </Tooltip>
-                );
-              }
+            {isPrimaryContact && (
+              <Tooltip
+                trigger={
+                  <div className='checkbox-trigger'>
+                    <FormStyledCheckbox
+                      name='setPrimaryContact'
+                      control={formMethods.control}
+                      className='checkbox'
+                      disabled
+                    />
+                    <span className='checkbox-text'>Set as primary contact</span>
+                  </div>
+                }
+              >
+                You can&apos;t uncheck the current primary contact or change their Admin role.
+              </Tooltip>
+            )}
 
-              return (
-                <div className='checkbox-trigger'>
-                  <FormStyledCheckbox
-                    name='setPrimaryContact'
-                    control={formMethods.control}
-                    className='checkbox'
-                  />
-                  <span className='checkbox-text'>Set as primary contact</span>
-                </div>
-              );
-            })()}
+            {!isOperations && !isPrimaryContact && (
+              <div className='checkbox-trigger'>
+                <FormStyledCheckbox
+                  name='setPrimaryContact'
+                  control={formMethods.control}
+                  className='checkbox'
+                />
+                <span className='checkbox-text'>Set as primary contact</span>
+              </div>
+            )}
           </div>
 
           <FormSubmitButton>Save Team Member</FormSubmitButton>
