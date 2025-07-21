@@ -88,7 +88,7 @@ export class UserController {
     const kcAdminClient = await getKcAdminClient();
     const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
     if (user.length !== 1) {
-      res.sendStatus(200);
+      res.sendStatus(400);
     }
     logger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`);
     await sendInviteEmailToNewUser(kcAdminClient, user[0]);
@@ -106,19 +106,8 @@ export class UserController {
     const user = await queryKeycloakUsersByEmail(kcAdminClient, req.user?.email ?? '');
 
     const resultLength = user?.length ?? 0;
-    if (resultLength < 1) {
-      logger.error(`No results received when loading user entry for ${req.user?.email}`);
-      res.status(404).json({
-        errorHash: traceId,
-      });
-      return;
-    }
-    if (resultLength > 1) {
-      logger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
-      res.status(500).json({
-        errorHash: traceId,
-      });
-      return;
+    if (resultLength !== 1) {
+      res.status(400);
     }
 
     logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
@@ -138,19 +127,8 @@ export class UserController {
     const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
 
     const resultLength = user?.length ?? 0;
-    if (resultLength < 1) {
-      logger.error(`No results received when loading user entry for ${email}`);
-      res.status(404).json({
-        errorHash: traceId,
-      });
-      return;
-    }
-    if (resultLength > 1) {
-      logger.error(`Multiple results received when loading user entry for ${email}`);
-      res.status(500).json({
-        errorHash: traceId,
-      });
-      return;
+    if (resultLength !== 1) {
+      res.status(400);
     }
 
     logger.info(`Setting password update for ${email}, keycloak ID ${user[0].id}`);
