@@ -139,7 +139,7 @@ export class UserController {
 
     const resultLength = user?.length ?? 0;
     if (resultLength < 1) {
-      logger.error(`Multiple results received when loading user entry for ${email}`);
+      logger.error(`No results received when loading user entry for ${email}`);
       res.status(404).json({
         errorHash: traceId,
       });

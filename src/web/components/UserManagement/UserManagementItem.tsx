@@ -2,7 +2,6 @@ import * as Switch from '@radix-ui/react-switch';
 import { useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
-import ActionButton from '../Core/Buttons/ActionButton';
 import ResetPasswordDialog from './ResetPasswordDialog';
 import UserAuditTrailDialog from './UserAuditTrailDialog';
 import UserParticipantsDialog from './UserParticipantsDialog';
