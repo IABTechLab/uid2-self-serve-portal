@@ -48,18 +48,15 @@ export async function handleInviteUserToParticipant(req: UserParticipantRequest,
       participant!.id
     );
 
-    let createdUser;
-
     await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-      createdUser = await inviteUserToParticipant(
+      const createdUser = await inviteUserToParticipant(
         userPartial,
         participant!,
         userRoleIdData.userRoleId,
         traceId
       );
+      return res.status(201).json({ user: createdUser });
     });
-
-    return res.status(201).json({ user: createdUser });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).send(err.issues);
