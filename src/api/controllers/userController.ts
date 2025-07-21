@@ -17,7 +17,7 @@ import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignApiParticipantMemberRole,
-  queryUsersByEmail,
+  queryKeycloakUsersByEmail,
   resetUserPassword,
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
@@ -86,7 +86,7 @@ export class UserController {
     const { email } = KeycloakRequestSchema.parse(req.body);
     const logger = this.loggerService.getLogger(req);
     const kcAdminClient = await getKcAdminClient();
-    const user = await queryUsersByEmail(kcAdminClient, email);
+    const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
     if (user.length !== 1) {
       res.sendStatus(200);
     }
@@ -103,7 +103,7 @@ export class UserController {
     const logger = this.loggerService.getLogger(req);
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
-    const user = await queryUsersByEmail(kcAdminClient, req.user?.email ?? '');
+    const user = await queryKeycloakUsersByEmail(kcAdminClient, req.user?.email ?? '');
 
     const resultLength = user?.length ?? 0;
     if (resultLength < 1) {
@@ -135,7 +135,7 @@ export class UserController {
     const logger = this.loggerService.getLogger(req);
     const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
-    const user = await queryUsersByEmail(kcAdminClient, email);
+    const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
 
     const resultLength = user?.length ?? 0;
     if (resultLength < 1) {

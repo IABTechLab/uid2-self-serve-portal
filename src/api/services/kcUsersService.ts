@@ -6,7 +6,10 @@ import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
-export const queryUsersByEmail = async (kcAdminClient: KeycloakAdminClient, email: string) => {
+export const queryKeycloakUsersByEmail = async (
+  kcAdminClient: KeycloakAdminClient,
+  email: string
+) => {
   return kcAdminClient.users.find({
     email,
     extract: true,
@@ -17,7 +20,7 @@ export const doesUserExistInKeycloak = async (
   kcAdminClient: KeycloakAdminClient,
   email: string
 ) => {
-  const existingKcUser = await queryUsersByEmail(kcAdminClient, email);
+  const existingKcUser = await queryKeycloakUsersByEmail(kcAdminClient, email);
   return existingKcUser.length > 0;
 };
 
@@ -27,7 +30,7 @@ export const createNewUser = async (
   lastName: string,
   email: string
 ) => {
-  const users = await queryUsersByEmail(kcAdminClient, email);
+  const users = await queryKeycloakUsersByEmail(kcAdminClient, email);
   if (users.length > 0) return users[0];
 
   return kcAdminClient.users.create({
@@ -62,7 +65,7 @@ export const updateUserProfile = async (
   userEmail: string,
   updateUserPayload: UpdateUserPayload
 ) => {
-  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  const users = await queryKeycloakUsersByEmail(kcAdminClient, userEmail);
   if (users.length !== 1) throw Error(`Unable to update entry for ${userEmail}`);
 
   await kcAdminClient.users.update(
@@ -78,7 +81,7 @@ const assignClientRoleToUser = async (
   userEmail: string,
   roleName: string
 ) => {
-  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  const users = await queryKeycloakUsersByEmail(kcAdminClient, userEmail);
   if (users.length !== 1) throw Error(`Unable to assign role to ${userEmail}`);
 
   const clientRole = await kcAdminClient.clients.findRole({
@@ -110,7 +113,7 @@ export const removeApiParticipantMemberRole = async (
   kcAdminClient: KeycloakAdminClient,
   userEmail: string
 ) => {
-  const users = await queryUsersByEmail(kcAdminClient, userEmail);
+  const users = await queryKeycloakUsersByEmail(kcAdminClient, userEmail);
   if (users.length !== 1) throw Error(`Unable to remove role from ${userEmail}`);
 
   const apiParticipantMemberRole = await kcAdminClient.clients.findRole({
