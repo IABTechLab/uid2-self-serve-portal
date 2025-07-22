@@ -235,7 +235,8 @@ function AddParticipantDialog({
               <h4>Participant Contact Information</h4>
               <span>
                 Enter the information of the participant who is requesting the account. An email
-                will be sent to the contact with instructions to access the account.
+                will be sent to the contact with instructions to access the account and they will be
+                set to the primary contact for the participant.
               </span>
               <div className='add-participant-dialog-flex'>
                 <div>
