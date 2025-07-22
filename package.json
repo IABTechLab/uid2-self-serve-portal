@@ -222,7 +222,7 @@
     "path-browserify": "^1.0.1",
     "prop-types": "^15.8.1",
     "react-refresh": "^0.14.2",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.89.2",
     "sass-loader": "^13.3.3",
@@ -244,6 +244,7 @@
     "postcss": "^8.4.21",
     "svgo": "3.2.0",
     "resolve-url-loader": "5.0.0",
-    "storybook": "$storybook"
+    "storybook": "$storybook",
+    "form-data": "^4.0.4"
   }
 }
