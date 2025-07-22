@@ -1,5 +1,6 @@
 import { UserDTO } from '../../../api/entities/User';
 import { Dialog } from '../Core/Dialog/Dialog';
+import { SuccessToast } from '../Core/Popups/Toast';
 
 type ResetPasswordDialogProps = Readonly<{
   user: UserDTO;
@@ -10,6 +11,7 @@ type ResetPasswordDialogProps = Readonly<{
 function ResetPasswordDialog({ user, resetPassword, onOpenChange }: ResetPasswordDialogProps) {
   const handleResetPassword = async () => {
     await resetPassword(user.email);
+    SuccessToast('Reset password completed.');
     onOpenChange();
   };
 
