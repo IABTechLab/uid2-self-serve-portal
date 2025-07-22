@@ -23,7 +23,7 @@ export interface SiteRequest extends Request {
   siteId?: number;
 }
 
-export interface SelfResendInviteRequest extends Request {
+export interface KeycloakRequest extends Request {
   email?: string;
 }
 

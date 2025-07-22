@@ -2,6 +2,7 @@ import * as Switch from '@radix-ui/react-switch';
 import { useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
+import ResetPasswordDialog from './ResetPasswordDialog';
 import UserAuditTrailDialog from './UserAuditTrailDialog';
 import UserParticipantsDialog from './UserParticipantsDialog';
 
@@ -10,11 +11,17 @@ import './UserManagementItem.scss';
 type UserManagementItemProps = Readonly<{
   user: UserDTO;
   onChangeUserLock: (userId: number, isLocked: boolean) => Promise<void>;
+  resetPassword: (userEmail: string) => Promise<void>;
 }>;
 
-export function UserManagementItem({ user, onChangeUserLock }: UserManagementItemProps) {
+export function UserManagementItem({
+  user,
+  onChangeUserLock,
+  resetPassword,
+}: UserManagementItemProps) {
   const [showUserParticipantsDialog, setShowUserParticipantsDialog] = useState<boolean>(false);
   const [showUserAuditTrailDialog, setShowUserAuditTrailDialog] = useState<boolean>(false);
+  const [showResetPasswordDialog, setShowPasswordResetDialog] = useState<boolean>(false);
 
   const onLockedToggle = async () => {
     await onChangeUserLock(user.id, !user.locked);
@@ -26,6 +33,10 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
 
   const onUserAuditTrailDialogChange = () => {
     setShowUserAuditTrailDialog(!showUserAuditTrailDialog);
+  };
+
+  const onOpenChangeResetPasswordDialog = () => {
+    setShowPasswordResetDialog(!showResetPasswordDialog);
   };
 
   return (
@@ -48,6 +59,18 @@ export function UserManagementItem({ user, onChangeUserLock }: UserManagementIte
         </button>
         {showUserAuditTrailDialog && (
           <UserAuditTrailDialog user={user} onOpenChange={onUserAuditTrailDialogChange} />
+        )}
+      </td>
+      <td>
+        <button type='button' className='viewable-button' onClick={onOpenChangeResetPasswordDialog}>
+          Reset Password
+        </button>
+        {showResetPasswordDialog && (
+          <ResetPasswordDialog
+            user={user}
+            onOpenChange={onOpenChangeResetPasswordDialog}
+            resetPassword={resetPassword}
+          />
         )}
       </td>
       <td>
