@@ -5,7 +5,6 @@ import clsx from 'clsx';
 type ActionButtonProps = Readonly<React.ButtonHTMLAttributes<HTMLButtonElement>> & {
   icon: IconProp;
   iconClassName?: string;
-  icon2?: IconProp;
 };
 
 function ActionButton(props: ActionButtonProps) {
@@ -18,7 +17,6 @@ function ActionButton(props: ActionButtonProps) {
       {...buttonProps}
     >
       <FontAwesomeIcon icon={icon} className={iconClassName} />
-      {props.icon2 && <FontAwesomeIcon icon={props.icon2} />}
       {children}
     </button>
   );
