@@ -1,3 +1,4 @@
+import Papa from 'papaparse';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -95,6 +96,35 @@ function CstgAddDialog({
     setDeleteExistingList(!deleteExistingList);
   };
 
+  function handleCsvUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    Papa.parse(file, {
+      complete: (results: Papa.ParseResult<unknown>) => {
+        const parsedValues = results.data
+          .flat()
+          .map((val) => String(val).trim())
+          .filter((val) => val.length > 0);
+
+        if (parsedValues.length === 0) return;
+
+        const existing = formMethods.getValues('cstgValues') || '';
+        const newValues = existing
+          ? `${existing}\n${parsedValues.join('\n')}`
+          : parsedValues.join('\n');
+        formMethods.setValue('cstgValues', newValues);
+      },
+      error: (err) => {
+        console.error('CSV parsing error:', err);
+        handleError('Failed to parse CSV file. Please try again.');
+      },
+      skipEmptyLines: true,
+    });
+
+    e.target.value = '';
+  }
+
   return (
     <div className='cstg-add-dialog'>
       <Dialog title={`Add ${cstgValueType}s`} closeButtonText='Cancel' onOpenChange={onOpenChange}>
@@ -105,6 +135,27 @@ function CstgAddDialog({
           <form onSubmit={handleSubmit(onSubmit)}>
             {addInstructions} <br />
             Valid separators: comma, semicolon, space, tab, or new line.
+        <p>
+          <em>Upload a CSV file to auto-populate or type directly into the textbox.</em>
+        </p>
+            <div className='csv-upload'>
+              <label htmlFor='csv-upload' className='csv-label'>
+                Upload CSV
+              </label>
+              <input
+                id='csv-upload'
+                type='file'
+                accept='.csv'
+                onChange={handleCsvUpload}
+                className='csv-input'
+              />
+            </div>
+            <MultilineTextInput
+              inputName='cstgValues'
+              label={`${cstgValueType}s`}
+              rules={{ required: `Please specify ${formattedCstgValueType}s.` }}
+              className='cstg-add-input'
+            />
             <div className='checkbox-container'>
               <StyledCheckbox
                 className='checkbox'
@@ -113,12 +164,6 @@ function CstgAddDialog({
               />
               <div className='checkbox-text'>{`Replace all existing ${formattedCstgValueType}s with the new ones.`}</div>
             </div>
-            <MultilineTextInput
-              inputName='cstgValues'
-              label={`${cstgValueType}s`}
-              rules={{ required: `Please specify ${formattedCstgValueType}s.` }}
-              className='cstg-add-input'
-            />
             <div className='form-footer'>
               <button type='submit' className='primary-button'>
                 {deleteExistingList ? 'Replace' : 'Add'} {`${cstgValueType}s`}

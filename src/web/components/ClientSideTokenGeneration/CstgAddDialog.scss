@@ -21,4 +21,37 @@
     background-color: var(--theme-background-header);
     color: var(--theme-secondary);
   }
+
+  .csv-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+  
+    .csv-label {
+      font-weight: 600;
+      // color: #333;
+      cursor: pointer;
+    }
+  
+    .csv-input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      // background-color: #fafafa;
+      font-size: 14px;
+      transition: border-color 0.2s ease-in-out;
+  
+      &:hover {
+        border-color: #888;
+      }
+  
+      &:focus {
+        outline: none;
+        border-color: #007aff;
+        background-color: #fff;
+      }
+    }
+  }
+  
 }
