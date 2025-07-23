@@ -118,7 +118,7 @@ function CstgAddDialog({
           : parsedValues.join('\n');
         formMethods.setValue('cstgValues', newValues);
       },
-      error: (_err) => {
+      error: () => {
         handleError('Failed to parse CSV file. Please try again.');
       },
       skipEmptyLines: true,

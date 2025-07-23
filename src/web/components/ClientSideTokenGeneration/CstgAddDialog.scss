@@ -47,8 +47,7 @@
 
       &:focus {
         outline: none;
-        border-color: #007aff;
-        background-color: #fff;
+        border-color: var(--theme-action);
       }
     }
   }
