@@ -104,8 +104,8 @@ function CstgAddDialog({
       complete: (results: Papa.ParseResult<unknown>) => {
         const parsedValues = results.data
           .flat()
-          .map((val) => String(val).trim())
-          .filter((val) => val.length > 0);
+          .map((val: unknown) => String(val).trim())
+          .filter((val: string) => val.length > 0);
 
         if (parsedValues.length === 0) {
           handleError('No values parsed from CSV file.');
