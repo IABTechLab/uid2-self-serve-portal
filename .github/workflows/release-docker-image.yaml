@@ -30,6 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Patch version in package.json
+        run: |
+          jq '.version = "${{ needs.incrementVersionNumber.outputs.new_version }}"' package.json > tmp.json
+          mv tmp.json package.json
+
       - name: Build API
         run: npm run build-api
 
@@ -38,6 +43,12 @@ jobs:
         with:
           name: api-dist
           path: api-dist/
+
+      - name: Upload patched package.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: patched-package
+          path: package.json
 
   publishForApiUi:
     name: Build & Publish API/UI Image
@@ -55,6 +66,12 @@ jobs:
         with:
           name: api-dist
           path: api-dist/
+
+      - name: Download patched package.json
+        uses: actions/download-artifact@v4
+        with:
+          name: patched-package
+          path: .
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

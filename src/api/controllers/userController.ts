@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import express from 'express';
 import { inject } from 'inversify';
 import {
@@ -13,21 +14,34 @@ import {
 
 import { TYPES } from '../constant/types';
 import { UserRoleId } from '../entities/UserRole';
-import { getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import {
   assignApiParticipantMemberRole,
-  queryUsersByEmail,
+  queryKeycloakUsersByEmail,
+  resetUserPassword,
   sendInviteEmailToNewUser,
 } from '../services/kcUsersService';
 import { LoggerService } from '../services/loggerService';
 import * as participantsService from '../services/participantsService';
 import {
-  SelfResendInvitationSchema,
+  KeycloakRequestSchema,
   UpdateUserRoleIdSchema,
   UserService,
 } from '../services/userService';
 import * as usersService from '../services/usersService';
+
+const checkKeycloakQueryResult = (resultLength: number, email: string): void => {
+  if (resultLength !== 1) {
+    const error = new AxiosError();
+    error.status = 400;
+    if (resultLength < 1) {
+      error.message = `No results received when loading user entry for ${email}`;
+    } else if (resultLength > 1) {
+      error.message = `Multiple results received when loading user entry for ${email}`;
+    }
+    throw error;
+  }
+};
 
 @controller('/users')
 export class UserController {
@@ -55,7 +69,10 @@ export class UserController {
   }
 
   @httpPut('/current/acceptTerms')
-  public async acceptTerms(@request() req: usersService.UserRequest, @response() res: express.Response): Promise<void> {
+  public async acceptTerms(
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
+  ): Promise<void> {
     const doesUserHaveAParticipant = (req.user?.participants?.length ?? 0) >= 1;
 
     if (!doesUserHaveAParticipant) {
@@ -76,16 +93,16 @@ export class UserController {
 
   @httpPost('/selfResendInvitation')
   public async selfResendInvitation(
-    @request() req: usersService.SelfResendInviteRequest,
+    @request() req: usersService.KeycloakRequest,
     @response() res: express.Response
   ): Promise<void> {
-    const { email } = SelfResendInvitationSchema.parse(req.body);
+    const { email } = KeycloakRequestSchema.parse(req.body);
     const logger = this.loggerService.getLogger(req);
     const kcAdminClient = await getKcAdminClient();
-    const user = await queryUsersByEmail(kcAdminClient, email);
-    if (user.length !== 1) {
-      res.sendStatus(200);
-    }
+    const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
+
+    checkKeycloakQueryResult(user?.length ?? 0, email);
+
     logger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`);
     await sendInviteEmailToNewUser(kcAdminClient, user[0]);
     res.sendStatus(200);
@@ -97,28 +114,30 @@ export class UserController {
     @response() res: express.Response
   ): Promise<void> {
     const logger = this.loggerService.getLogger(req);
-    const traceId = getTraceId(req);
     const kcAdminClient = await getKcAdminClient();
-    const user = await queryUsersByEmail(kcAdminClient, req.user?.email ?? '');
+    const user = await queryKeycloakUsersByEmail(kcAdminClient, req.user?.email ?? '');
 
-    const resultLength = user?.length ?? 0;
-    if (resultLength < 1) {
-      logger.error(`No results received when loading user entry for ${req.user?.email}`);
-      res.status(404).json({
-        errorHash: traceId,
-      });
-      return;
-    }
-    if (resultLength > 1) {
-      logger.error(`Multiple results received when loading user entry for ${req.user?.email}`);
-      res.status(500).json({
-        errorHash: traceId,
-      });
-      return;
-    }
+    checkKeycloakQueryResult(user?.length ?? 0, req.user?.email ?? '');
 
     logger.info(`Resending invitation email for ${req.user?.email}, keycloak ID ${user[0].id}`);
     await sendInviteEmailToNewUser(kcAdminClient, user[0]);
+    res.sendStatus(200);
+  }
+
+  @httpPost('/resetPassword')
+  public async resetPassword(
+    @request() req: usersService.KeycloakRequest,
+    @response() res: express.Response
+  ): Promise<void> {
+    const { email } = KeycloakRequestSchema.parse(req.body);
+    const logger = this.loggerService.getLogger(req);
+    const kcAdminClient = await getKcAdminClient();
+    const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
+
+    checkKeycloakQueryResult(user?.length ?? 0, email);
+
+    logger.info(`Setting password update for ${email}, keycloak ID ${user[0].id}`);
+    await resetUserPassword(kcAdminClient, user[0]);
     res.sendStatus(200);
   }
 
@@ -144,7 +163,10 @@ export class UserController {
   }
 
   @httpPatch('/:userId')
-  public async updateUser(@request() req: usersService.UserRequest, @response() res: express.Response): Promise<void> {
+  public async updateUser(
+    @request() req: usersService.UserRequest,
+    @response() res: express.Response
+  ): Promise<void> {
     const { user } = req;
     const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
     if (req.auth?.payload?.email === user?.email && userRoleData.userRoleId !== UserRoleId.Admin) {

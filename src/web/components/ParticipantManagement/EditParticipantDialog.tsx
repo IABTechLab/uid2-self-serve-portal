@@ -97,10 +97,10 @@ function EditParticipantDialog({
             }}
           />
           <div className='contact-name'>
-            <TextInput inputName='contactFirstName' label='Contact First Name' disabled />
-            <TextInput inputName='contactLastName' label='Contact Last Name' disabled />
+            <TextInput inputName='contactFirstName' label='Primary Contact First Name' disabled />
+            <TextInput inputName='contactLastName' label='Primary Contact Last Name' disabled />
           </div>
-          <TextInput inputName='contactEmail' label='Contact Email' disabled />
+          <TextInput inputName='contactEmail' label='Primary Contact Email' disabled />
           <FormSubmitButton>Save Participant</FormSubmitButton>
         </form>
       </FormProvider>

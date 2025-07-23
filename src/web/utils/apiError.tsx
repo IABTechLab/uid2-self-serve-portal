@@ -25,7 +25,7 @@ export function backendError(e: unknown, overrideMessage: string) {
       statusCode: e.status || e.response?.status,
     });
   }
-  return Error(overrideMessage);
+  return new ApiError(overrideMessage, { statusCode: 500 });
 }
 
 const isError = (obj: unknown): obj is Error => obj instanceof Error;
