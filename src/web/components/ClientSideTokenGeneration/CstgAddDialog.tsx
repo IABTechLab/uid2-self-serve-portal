@@ -107,7 +107,10 @@ function CstgAddDialog({
           .map((val) => String(val).trim())
           .filter((val) => val.length > 0);
 
-        if (parsedValues.length === 0) return;
+        if (parsedValues.length === 0) {
+          handleError('No values parsed from CSV file.');
+          return;
+        }
 
         const existing = formMethods.getValues('cstgValues') || '';
         const newValues = existing
