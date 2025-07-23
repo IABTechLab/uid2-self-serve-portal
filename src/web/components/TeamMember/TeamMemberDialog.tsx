@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, useWatch } from 'react-hook-form';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
@@ -54,7 +54,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
   const editMode = !!props.person;
 
   const allowedRolesToAdd = ['Admin', 'Operations'];
-  const selectedRoleId = formMethods.watch('userRoleId');
+  const selectedRoleId = useWatch({ name: 'userRoleId', control: formMethods.control });
   const isOperations = selectedRoleId === UserRoleId.Operations;
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
