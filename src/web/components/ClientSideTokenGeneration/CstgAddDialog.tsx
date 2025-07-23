@@ -115,8 +115,7 @@ function CstgAddDialog({
           : parsedValues.join('\n');
         formMethods.setValue('cstgValues', newValues);
       },
-      error: (err) => {
-        console.error('CSV parsing error:', err);
+      error: (_err) => {
         handleError('Failed to parse CSV file. Please try again.');
       },
       skipEmptyLines: true,
@@ -134,10 +133,9 @@ function CstgAddDialog({
         <FormProvider {...formMethods}>
           <form onSubmit={handleSubmit(onSubmit)}>
             {addInstructions} <br />
+            <br />
+            Upload a CSV file to auto-populate or type directly into the textbox. <br />
             Valid separators: comma, semicolon, space, tab, or new line.
-        <p>
-          <em>Upload a CSV file to auto-populate or type directly into the textbox.</em>
-        </p>
             <div className='csv-upload'>
               <label htmlFor='csv-upload' className='csv-label'>
                 Upload CSV
