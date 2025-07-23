@@ -1,7 +1,6 @@
 .cstg-add-dialog {
   .checkbox-container {
     display: flex;
-    padding-top: 20px;
     vertical-align: middle;
     color: var(--theme-secondary);
     border-color: white;
@@ -20,5 +19,36 @@
   .cstg-add-input {
     background-color: var(--theme-background-header);
     color: var(--theme-secondary);
+  }
+
+  .csv-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+
+    .csv-label {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      line-height: 2rem;
+      cursor: pointer;
+    }
+
+    .csv-input {
+      padding: 8px 12px;
+      border: 1px solid var(--theme-input-border);
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s ease-in-out;
+
+      &:hover {
+        border-color: var(--theme-divider);
+      }
+
+      &:focus {
+        outline: none;
+        border-color: var(--theme-action);
+      }
+    }
   }
 }
