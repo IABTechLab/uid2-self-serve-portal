@@ -42,7 +42,7 @@
       transition: border-color 0.2s ease-in-out;
 
       &:hover {
-        border-color: #888;
+        border-color: var(--theme-divider);
       }
 
       &:focus {
