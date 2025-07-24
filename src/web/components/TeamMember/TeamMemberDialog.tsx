@@ -150,7 +150,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                       className='checkbox'
                       disabled
                     />
-                    <span className='checkbox-text'>Set as primary contact</span>
+                    <span className='checkbox-disabled-text'>Set as primary contact</span>
                   </div>
                 }
               >
@@ -168,7 +168,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                       className='checkbox'
                       disabled
                     />
-                    <span className='checkbox-text'>Set as primary contact</span>
+                    <span className='checkbox-disabled-text'>Set as primary contact</span>
                   </div>
                 }
               >
