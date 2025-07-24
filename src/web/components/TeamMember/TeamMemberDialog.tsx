@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { FormProvider, useForm, useWatch } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 
 import { UserJobFunction } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
@@ -50,12 +50,13 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
       setPrimaryContact: isPrimaryContact,
     },
   });
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, watch } = formMethods;
   const editMode = !!props.person;
 
   const allowedRolesToAdd = ['Admin', 'Operations'];
-  const selectedRoleId = useWatch({ name: 'userRoleId', control: formMethods.control });
+  const selectedRoleId = watch('userRoleId');
   const isOperations = selectedRoleId === UserRoleId.Operations;
+  const isPrimaryContactChecked = watch('setPrimaryContact');
 
   const onSubmit = async (formData: InviteTeamMemberForm) => {
     if (isUpdateTeamMemberDialogProps(props)) {
@@ -131,7 +132,11 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               .map((key) => ({
                 optionLabel: key,
                 value: UserRoleId[key],
-                disabled: isPrimaryContact && key === 'Operations',
+                disabled: (isPrimaryContact || isPrimaryContactChecked) && key === 'Operations',
+                optionToolTip:
+                  (isPrimaryContact || isPrimaryContactChecked) && key === 'Operations'
+                    ? 'Admin role is required for the primary contact.'
+                    : undefined,
               }))}
           />
           <div className='checkbox-container'>
@@ -167,7 +172,8 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                   </div>
                 }
               >
-                You can&apos;t uncheck the current primary contact or change their Admin role.
+                This user is the primary contact. To change it, assign a different user as the
+                primary contact.
               </Tooltip>
             )}
 
