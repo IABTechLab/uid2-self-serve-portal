@@ -50,7 +50,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
       setPrimaryContact: isPrimaryContact,
     },
   });
-  const { handleSubmit, watch } = formMethods;
+  const { handleSubmit, watch, register } = formMethods;
   const editMode = !!props.person;
 
   const allowedRolesToAdd = ['Admin', 'Operations'];
@@ -81,6 +81,25 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     }
     props.onOpenChange();
   };
+  let toolTipText;
+  if (isOperations) {
+    toolTipText = 'Primary contact must have Admin role.';
+  } else if (isPrimaryContact) {
+    toolTipText =
+      'This user is the primary contact. To change it, assign a different user as the primary contact.';
+  }
+
+  const checkBoxComponent = (
+    <div className='checkbox'>
+      <FormStyledCheckbox
+        name='setPrimaryContact'
+        control={formMethods.control}
+        className='checkbox'
+        disabled={isOperations || isPrimaryContact}
+      />
+      <span className='checkbox-text'>Set as primary contact</span>
+    </div>
+  );
 
   return (
     <Dialog
@@ -140,7 +159,12 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               }))}
           />
           <div className='checkbox-container'>
-            {isOperations && (
+            {!isPrimaryContact && !isOperations ? (
+              <div>{checkBoxComponent}</div>
+            ) : (
+              <Tooltip trigger={checkBoxComponent}>{toolTipText}</Tooltip>
+            )}
+            {/* {isOperations && (
               <Tooltip
                 trigger={
                   <div className='checkbox'>
@@ -186,7 +210,7 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
                 />
                 <span className='checkbox-text'>Set as primary contact</span>
               </div>
-            )}
+            )} */}
           </div>
 
           <FormSubmitButton>Save Team Member</FormSubmitButton>
