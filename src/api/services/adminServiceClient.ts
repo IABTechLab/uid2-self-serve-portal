@@ -226,7 +226,7 @@ export const disableApiKey = async (contact: string, traceId: TraceId): Promise<
   const client = createTracedClient(traceId);
   await client.post('/api/client/disable', null, {
     params: {
-      contact,
+      contact: encodeURIComponent(contact),
     },
   });
 };
