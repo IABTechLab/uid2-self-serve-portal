@@ -2,6 +2,7 @@ import * as RadioGroup from '@radix-ui/react-radio-group';
 import clsx from 'clsx';
 import { FieldPath, FieldValues, useController, useFormContext } from 'react-hook-form';
 
+import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { BaseInputProps, Input } from './Input';
 import { SelectInputProps } from './SelectInput';
 
@@ -35,21 +36,31 @@ export function RadioInput<
         aria-invalid={error ? 'true' : 'false'}
         onValueChange={field.onChange}
       >
-        {options.map(({ optionLabel, value, disabled }) => (
-          <div className='radio-option' key={optionLabel}>
-            <RadioGroup.Item
-              className={clsx('radio-group-item', disabled ? 'disabled' : '')}
-              value={value}
-              id={optionLabel}
-              disabled={disabled}
-            >
-              <RadioGroup.Indicator className='radio-group-indicator' />
-            </RadioGroup.Item>
-            <label className='option-label' htmlFor={optionLabel}>
-              {optionLabel}
-            </label>
-          </div>
-        ))}
+        {options.map(({ optionLabel, value, disabled, optionToolTip }) => {
+          const radioItem = (
+            <div className='radio-option' key={optionLabel}>
+              <RadioGroup.Item
+                className={clsx('radio-group-item', disabled ? 'disabled' : '')}
+                value={value}
+                id={optionLabel}
+                disabled={disabled}
+              >
+                <RadioGroup.Indicator className='radio-group-indicator' />
+              </RadioGroup.Item>
+              <label className='option-label' htmlFor={optionLabel}>
+                {optionLabel}
+              </label>
+            </div>
+          );
+
+          return optionToolTip ? (
+            <div key={optionLabel} className='radio-option-tooltip-wrapper'>
+              <Tooltip trigger={radioItem}>{optionToolTip}</Tooltip>
+            </div>
+          ) : (
+            radioItem
+          );
+        })}
       </RadioGroup.Root>
     </Input>
   );

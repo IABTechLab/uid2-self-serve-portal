@@ -164,8 +164,8 @@ function TeamMember({
             )}
             {isPrimaryContact ? (
               <Tooltip trigger={actionButtonDelete}>
-                Cannot delete primary contact. To delete them, assign another team member as the
-                primary contact via the edit button.
+                One primary contact is required. To delete this team member, first assign another
+                team member as the primary contact.
               </Tooltip>
             ) : (
               actionButtonDelete
