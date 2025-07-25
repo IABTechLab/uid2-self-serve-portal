@@ -16,6 +16,10 @@ const hostedFaroUrl =
   'https://faro-collector-prod-us-east-0.grafana.net/collect/0e0a878597e4df4ead54287f1152af30';
 
 const configMaps: { [index: string]: ClientConfig } = {
+  'portal.test.unifiedid.com': {
+    faroUrl: hostedFaroUrl,
+    environment: 'test',
+  },
   'portal.integ.unifiedid.com': {
     faroUrl: hostedFaroUrl,
     environment: 'integ',
