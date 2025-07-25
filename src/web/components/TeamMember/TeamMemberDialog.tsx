@@ -82,6 +82,26 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
     props.onOpenChange();
   };
 
+  let toolTipText;
+  if (isOperations) {
+    toolTipText = 'Primary contact must have Admin role.';
+  } else if (isPrimaryContact) {
+    toolTipText =
+      'This user is the primary contact. To change it, assign a different user as the primary contact.';
+  }
+
+  const checkBoxComponent = (
+    <div className='checkbox'>
+      <FormStyledCheckbox
+        name='setPrimaryContact'
+        control={formMethods.control}
+        className='checkbox'
+        disabled={isOperations || isPrimaryContact}
+      />
+      <span className='checkbox-text'>Set as primary contact</span>
+    </div>
+  );
+
   return (
     <Dialog
       title={`${editMode ? 'Edit' : 'Add'} Team Member`}
@@ -140,52 +160,10 @@ function TeamMemberDialog(props: TeamMemberDialogProps) {
               }))}
           />
           <div className='checkbox-container'>
-            {isOperations && (
-              <Tooltip
-                trigger={
-                  <div className='checkbox'>
-                    <FormStyledCheckbox
-                      name='setPrimaryContact'
-                      control={formMethods.control}
-                      className='checkbox'
-                      disabled
-                    />
-                    <span className='checkbox-disabled-text'>Set as primary contact</span>
-                  </div>
-                }
-              >
-                Primary contact must have Admin role.
-              </Tooltip>
-            )}
-
-            {isPrimaryContact && (
-              <Tooltip
-                trigger={
-                  <div className='checkbox'>
-                    <FormStyledCheckbox
-                      name='setPrimaryContact'
-                      control={formMethods.control}
-                      className='checkbox'
-                      disabled
-                    />
-                    <span className='checkbox-disabled-text'>Set as primary contact</span>
-                  </div>
-                }
-              >
-                This user is the primary contact. To change it, assign a different user as the
-                primary contact.
-              </Tooltip>
-            )}
-
-            {!isOperations && !isPrimaryContact && (
-              <div className='checkbox'>
-                <FormStyledCheckbox
-                  name='setPrimaryContact'
-                  control={formMethods.control}
-                  className='checkbox'
-                />
-                <span className='checkbox-text'>Set as primary contact</span>
-              </div>
+            {toolTipText ? (
+              <Tooltip trigger={checkBoxComponent}>{toolTipText}</Tooltip>
+            ) : (
+              checkBoxComponent
             )}
           </div>
 
