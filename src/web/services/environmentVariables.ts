@@ -24,6 +24,10 @@ const configMaps: { [index: string]: ClientConfig } = {
     faroUrl: hostedFaroUrl,
     environment: 'integ',
   },
+  'uid2-integ-core-use2-ssp-alb-652178420.us-east-2.elb.amazonaws.com': {
+    faroUrl: hostedFaroUrl,
+    environment: 'integ',
+  },
   'portal.unifiedid.com': {
     faroUrl: hostedFaroUrl,
     environment: 'prod',
