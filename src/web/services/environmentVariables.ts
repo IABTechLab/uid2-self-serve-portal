@@ -17,7 +17,7 @@ const hostedFaroUrl =
 
 const configMaps: { [index: string]: ClientConfig } = {
   'portal.test.unifiedid.com': {
-    faroUrl: hostedFaroUrl,
+    faroUrl: '',
     environment: 'test',
   },
   'portal.integ.unifiedid.com': {
