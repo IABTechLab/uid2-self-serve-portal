@@ -38,9 +38,9 @@ export const formatCstgValueType = (valueType: CstgValueType) => {
 };
 
 export const extractTopLevelDomain = (domainName: string) => {
-  const topLevelDomain = parse(domainName).domain;
-  if (topLevelDomain && topLevelDomain !== domainName) {
-    return topLevelDomain;
+  const topLevelDomainInfo = parse(domainName, { allowPrivateDomains: true });
+  if (topLevelDomainInfo.domain) {
+    return topLevelDomainInfo.domain;
   }
   return domainName;
 };
