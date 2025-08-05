@@ -52,9 +52,17 @@ function CstgEditDialog({
     const originalCstgValue = cstgValue;
 
     if (cstgValueType === CstgValueType.Domain) {
-      updatedCstgValue = extractTopLevelDomain(updatedCstgValue);
+      const topLevelDomain = extractTopLevelDomain(updatedCstgValue);
+      if (topLevelDomain) {
+        updatedCstgValue =  topLevelDomain;
+      } else {
+        setError('root.serverError', {
+          type: '400',
+          message: `The ${formattedCstgValueType} is a public suffix and not allowed.`,
+        });
+        return;
+      }
     }
-
     if (updatedCstgValue === originalCstgValue) {
       onOpenChange();
     } else if (existingCstgValues.includes(updatedCstgValue)) {
@@ -62,6 +70,7 @@ function CstgEditDialog({
         type: '400',
         message: `The ${formattedCstgValueType} already exists.`,
       });
+      return;
     }
     if (cstgValueType === CstgValueType.MobileAppId) {
       if (!validateAppId(updatedCstgValue)) {
