@@ -42,7 +42,6 @@ export const extractTopLevelDomain = (domainName: string): string => {
   if (topLevelDomainInfo.domain) {
     return topLevelDomainInfo.domain;
   }
-  // Return null if it's a public suffix
   if (topLevelDomainInfo.isPrivate) {
     return 'publicSuffix';
   }
