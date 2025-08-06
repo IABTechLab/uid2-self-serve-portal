@@ -65,10 +65,10 @@ function CstgAddDialog({
       const publicSuffixDomains: string[] = [];
       newCstgValues.forEach((newDomain, index) => {
         const topLevelDomain = extractTopLevelDomain(newDomain);
-        if (topLevelDomain) {
-          newCstgValues[index] = topLevelDomain;
-        } else {
+        if (topLevelDomain === 'publicSuffix') {
           publicSuffixDomains.push(newDomain);
+        } else {
+          newCstgValues[index] = topLevelDomain;
         }
       });
       if (publicSuffixDomains.length > 0) {

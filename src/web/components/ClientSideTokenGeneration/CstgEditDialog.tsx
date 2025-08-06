@@ -53,15 +53,14 @@ function CstgEditDialog({
 
     if (cstgValueType === CstgValueType.Domain) {
       const topLevelDomain = extractTopLevelDomain(updatedCstgValue);
-      if (topLevelDomain) {
-        updatedCstgValue =  topLevelDomain;
-      } else {
+      if (topLevelDomain === 'publicSuffix') {
         setError('root.serverError', {
           type: '400',
           message: `The ${formattedCstgValueType} is a public suffix and not allowed.`,
         });
         return;
       }
+      updatedCstgValue = topLevelDomain;
     }
     if (updatedCstgValue === originalCstgValue) {
       onOpenChange();

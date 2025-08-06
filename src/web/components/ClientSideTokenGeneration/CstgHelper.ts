@@ -37,14 +37,14 @@ export const formatCstgValueType = (valueType: CstgValueType) => {
   }
 };
 
-export const extractTopLevelDomain = (domainName: string): string | null => {
+export const extractTopLevelDomain = (domainName: string): string => {
   const topLevelDomainInfo = parse(domainName, { allowPrivateDomains: true });
   if (topLevelDomainInfo.domain) {
     return topLevelDomainInfo.domain;
   }
   // Return null if it's a public suffix
   if (topLevelDomainInfo.isPrivate) {
-    return null;
+    return 'publicSuffix';
   }
   return domainName;
 };
