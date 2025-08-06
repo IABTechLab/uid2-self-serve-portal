@@ -37,10 +37,13 @@ export const formatCstgValueType = (valueType: CstgValueType) => {
   }
 };
 
-export const extractTopLevelDomain = (domainName: string) => {
-  const topLevelDomain = parse(domainName).domain;
-  if (topLevelDomain && topLevelDomain !== domainName) {
-    return topLevelDomain;
+export const extractTopLevelDomain = (domainName: string): string => {
+  const topLevelDomainInfo = parse(domainName, { allowPrivateDomains: true });
+  if (topLevelDomainInfo.domain) {
+    return topLevelDomainInfo.domain;
+  }
+  if (topLevelDomainInfo.isPrivate) {
+    return 'publicSuffix';
   }
   return domainName;
 };

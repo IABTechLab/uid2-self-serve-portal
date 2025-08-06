@@ -62,9 +62,23 @@ function CstgAddDialog({
     if (newCstgValues.length === 0) {
       handleError(`The ${formattedCstgValueType}s entered already exist.`);
     } else if (cstgValueType === CstgValueType.Domain) {
+      const publicSuffixDomains: string[] = [];
       newCstgValues.forEach((newDomain, index) => {
-        newCstgValues[index] = extractTopLevelDomain(newDomain);
+        const topLevelDomain = extractTopLevelDomain(newDomain);
+        if (topLevelDomain === 'publicSuffix') {
+          publicSuffixDomains.push(newDomain);
+        } else {
+          newCstgValues[index] = topLevelDomain;
+        }
       });
+      if (publicSuffixDomains.length > 0) {
+        handleError(
+          `The following domains are public suffixes and not allowed: ${formatStringsWithSeparator(
+            publicSuffixDomains
+          )}`
+        );
+        return;
+      }
       // filter for uniqueness (e.g. 2 different domains entered could have the same root-level domain)
       const dedupedRootLevelDomains = deduplicateStrings(newCstgValues);
       const invalidDomains = await onAddCstgValues(dedupedRootLevelDomains, deleteExistingList);
