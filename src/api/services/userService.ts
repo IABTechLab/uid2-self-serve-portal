@@ -32,6 +32,37 @@ export const UpdateUserRoleIdSchema = z.object({
 
 export const KeycloakRequestSchema = z.object({ email: z.string() });
 
+export const getCurrentUser = async (req: UserRequest) => {
+  const userEmail = req.auth?.payload?.email as string;
+  const user = await findUserByEmail(userEmail);
+  const userWithSupportRoles = await enrichUserWithSupportRoles(user!);
+  if (userWithSupportRoles.isUid2Support) {
+    const allParticipants = await getAllParticipants();
+    userWithSupportRoles.participants = allParticipants;
+  }
+  userWithSupportRoles.participants = userWithSupportRoles?.participants?.sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+  return userWithSupportRoles;
+};
+
+export const getDefaultParticipant = async (req: UserRequest) => {
+  const traceId = getTraceId(req);
+  const currentParticipant = req.user?.participants?.[0];
+  if (!currentParticipant) return undefined;
+  const currentSite = !currentParticipant.siteId
+    ? undefined
+    : await getSite(currentParticipant.siteId, traceId);
+  const apiRoles = await getApiRoles(currentParticipant);
+  const allParticipantTypes = await ParticipantType.query();
+  const result = {
+    ...currentParticipant,
+    types: mapClientTypeToParticipantType(currentSite?.clientTypes || [], allParticipantTypes),
+    apiRoles,
+  };
+  return result;
+};
+
 @injectable()
 export class UserService {
   public async getCurrentUser(req: UserRequest) {
