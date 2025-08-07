@@ -1,7 +1,6 @@
-import { AxiosError } from 'axios';
 import express, { Response } from 'express';
 
-import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
+import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../middleware/usersMiddleware';
@@ -47,44 +46,45 @@ const handleAcceptTerms = async (req: UserRequest, res: Response) => {
   return res.sendStatus(200);
 };
 
-const checkKeycloakQueryResult = (resultLength: number, email: string): void => {
+const checkKeycloakQueryResult = (
+  resultLength: number,
+  email: string,
+  traceId: TraceId,
+  res: Response,
+  errorLogger: ReturnType<typeof getLoggers>['errorLogger']
+) => {
   if (resultLength !== 1) {
-    const error = new AxiosError();
-    error.status = 400;
-    if (resultLength < 1) {
-      error.message = `No results received when loading user entry for ${email}`;
-    } else if (resultLength > 1) {
-      error.message = `Multiple results received when loading user entry for ${email}`;
-    }
-    throw error;
+    const message =
+      resultLength < 1
+        ? `No results received when loading user entry for ${email}`
+        : `Multiple results received when loading user entry for ${email}`;
+    errorLogger.error(message, traceId);
+    return res.sendStatus(500);
   }
 };
 
 const handleSelfResendInvitation = async (req: KeycloakRequest, res: Response) => {
   const { email } = KeycloakRequestSchema.parse(req.body);
-  // const logger = LoggerService.getLogger(req);
   const { infoLogger, errorLogger } = getLoggers();
   const traceId = getTraceId(req);
   const kcAdminClient = await getKcAdminClient();
   const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
 
-  checkKeycloakQueryResult(user?.length ?? 0, email);
+  checkKeycloakQueryResult(user?.length ?? 0, email, traceId, res, errorLogger);
 
   infoLogger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`, traceId);
-  // logger.info(`Resending invitation email for ${email}, keycloak ID ${user[0].id}`);
   await sendInviteEmailToNewUser(kcAdminClient, user[0]);
   return res.sendStatus(200);
 };
 
 const handleResetPassword = async (req: KeycloakRequest, res: Response) => {
   const { email } = KeycloakRequestSchema.parse(req.body);
-  // const logger = this.loggerService.getLogger(req);
   const { infoLogger, errorLogger } = getLoggers();
   const traceId = getTraceId(req);
   const kcAdminClient = await getKcAdminClient();
   const user = await queryKeycloakUsersByEmail(kcAdminClient, email);
 
-  checkKeycloakQueryResult(user?.length ?? 0, email);
+  checkKeycloakQueryResult(user?.length ?? 0, email, traceId, res, errorLogger);
 
   infoLogger.info(`Setting password update for ${email}, keycloak ID ${user[0].id}`, traceId);
   await resetUserPassword(kcAdminClient, user[0]);
