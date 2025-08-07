@@ -63,6 +63,10 @@ export const getDefaultParticipant = async (req: UserRequest) => {
   return result;
 };
 
+export const updateUser = async (req: UserRequest) => {
+
+};
+
 @injectable()
 export class UserService {
   public async getCurrentUser(req: UserRequest) {
