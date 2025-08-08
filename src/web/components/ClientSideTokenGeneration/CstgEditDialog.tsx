@@ -41,7 +41,7 @@ function CstgEditDialog({
   const formattedCstgValueType = formatCstgValueType(cstgValueType);
 
   const showInvalidError = () => {
-    setError('root.serverError', {
+    setError('root.formError', {
       type: '400',
       message: `The ${formattedCstgValueType} is invalid.`,
     });
@@ -54,7 +54,7 @@ function CstgEditDialog({
     if (cstgValueType === CstgValueType.Domain) {
       const topLevelDomain = extractTopLevelDomain(updatedCstgValue);
       if (topLevelDomain === 'publicSuffix') {
-        setError('root.serverError', {
+        setError('root.formError', {
           type: '400',
           message: `The ${formattedCstgValueType} is a public suffix and not allowed.`,
         });
@@ -65,7 +65,7 @@ function CstgEditDialog({
     if (updatedCstgValue === originalCstgValue) {
       onOpenChange();
     } else if (existingCstgValues.includes(updatedCstgValue)) {
-      setError('root.serverError', {
+      setError('root.formError', {
         type: '400',
         message: `The ${formattedCstgValueType} already exists.`,
       });

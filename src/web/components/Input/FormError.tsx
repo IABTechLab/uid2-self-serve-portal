@@ -1,16 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { FieldErrors, FieldValues, UseFormSetError } from 'react-hook-form';
-
-export function setGlobalErrors<TFieldValues extends FieldValues>(
-  setError: UseFormSetError<TFieldValues>,
-  errors: string[]
-) {
-  errors.forEach((m, i) => {
-    setError(`root.serverError-${i}`, {
-      message: m,
-    });
-  });
-}
+import { FieldErrors } from 'react-hook-form';
 
 export function getGlobalErrorsAsArray(root: FieldErrors['root']) {
   if (!root) return [];

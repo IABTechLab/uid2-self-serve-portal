@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import Fuse from 'fuse.js';
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -96,11 +96,17 @@ function AddParticipantDialog({
       try {
         await onSubmit(formData);
       } catch (err) {
+        const error = err as AxiosError;
         const message =
-          extractMessageFromAxiosError(err as Error) ?? 'Something went wrong, please try again';
+          extractMessageFromAxiosError(error) ?? 'Something went wrong, please try again';
 
-        setError('root.serverError', {
-          type: '400',
+        let errorName = `root.serverError`;
+        if (error.status === 400) {
+          errorName = `root.formError`;
+        }
+
+        setError(errorName as `root.${string}`, {
+          type: error.status?.toString() ?? '500',
           message,
         });
       }
