@@ -7,11 +7,7 @@ import { isAdminOrUid2SupportCheck } from '../middleware/userRoleMiddleware';
 import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
 import { queryKeycloakUsersByEmail, sendInviteEmailToNewUser } from '../services/kcUsersService';
 import { UserParticipantRequest } from '../services/participantsService';
-import {
-  removeUser,
-  updateUser,
-  UpdateUserRoleIdSchema,
-} from '../services/userService';
+import { removeUser, updateUser, UpdateUserRoleIdSchema } from '../services/userService';
 import { getAllUsersFromParticipant, UserRequest } from '../services/usersService';
 
 // Handlers
