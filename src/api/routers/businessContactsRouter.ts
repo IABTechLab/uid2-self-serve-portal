@@ -14,7 +14,6 @@ export const BusinessContactsDTO = BusinessContactSchema.pick({
   contactType: true,
 });
 
-// Handlers
 const handleGetBusinessContacts = async (req: ParticipantRequest, res: Response) => {
   const { participant } = req;
   const businessContacts = await BusinessContact.query().where('participantId', participant?.id!);
@@ -43,7 +42,6 @@ const handleUpdateBusinessContact = async (req: BusinessContactRequest, res: Res
   return res.sendStatus(200);
 };
 
-// Router
 export function createBusinessContactsRouter() {
   const businessContactsRouter = express.Router();
 
