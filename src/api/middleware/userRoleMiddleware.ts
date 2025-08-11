@@ -2,7 +2,7 @@ import { Handler } from 'express';
 
 import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
-import { ParticipantRequest, UserParticipantRequest } from '../services/participantsService';
+import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
 export const isUid2Support = async (userEmail: string) => {
@@ -43,16 +43,14 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
   next();
 };
 
-export const isAdminOrUid2SupportCheck: Handler = async (
-  req: UserParticipantRequest,
-  res,
-  next
-) => {
-  const { participant, user } = req;
+export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
+  const { participant } = req;
+  const userEmail = req.auth?.payload.email as string;
+  const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
   const userIsAdminOrUid2Support =
     userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) ||
-    (await isUid2Support(user!.email));
+    (await isUid2Support(userEmail));
   if (!userIsAdminOrUid2Support) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
