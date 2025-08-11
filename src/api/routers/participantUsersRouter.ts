@@ -1,19 +1,19 @@
 import express, { Response } from 'express';
 
-import { UserController } from '../controllers/userController';
+// import { UserController } from '../controllers/userController';
 import { UserRoleId } from '../entities/UserRole';
 import { getLoggers, getTraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { isAdminOrUid2SupportCheck } from '../middleware/userRoleMiddleware';
 import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
 import { queryKeycloakUsersByEmail, sendInviteEmailToNewUser } from '../services/kcUsersService';
-import { LoggerService } from '../services/loggerService';
+// import { LoggerService } from '../services/loggerService';
 import { UserParticipantRequest } from '../services/participantsService';
 import {
   removeUser,
   updateUser,
   UpdateUserRoleIdSchema,
-  UserService,
+  // UserService,
 } from '../services/userService';
 import { getAllUsersFromParticipant, UserRequest } from '../services/usersService';
 
@@ -83,7 +83,7 @@ const handleResendInvitation = async (req: UserRequest, res: Response) => {
 
 const createParticipantUsersRouter = () => {
   const participantUsersRouter = express.Router({ mergeParams: true });
-  const userController = new UserController(new UserService(), new LoggerService());
+  // const userController = new UserController(new UserService(), new LoggerService());
 
   participantUsersRouter.use('/:userId', verifyAndEnrichUser);
   participantUsersRouter.post(

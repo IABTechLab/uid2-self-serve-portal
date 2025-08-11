@@ -11,7 +11,7 @@ import {
   getParticipantIdsOfUser,
 } from '../../testHelpers/apiTestHelpers';
 import { verifyAndEnrichUser } from '../middleware/usersMiddleware';
-import { UserService } from '../services/userService';
+import { removeUser } from '../services/userService';
 
 jest.unstable_mockModule('../services/kcUsersService', () => ({
   removeApiParticipantMemberRole: jest.fn(() => {}),
@@ -48,8 +48,7 @@ describe('User Service Tests', () => {
         const request = createUserParticipantRequest(user.email, targetParticipant, user.id);
         await verifyAndEnrichUser(request, res, next);
 
-        const userService = new UserService();
-        await userService.removeUser(request);
+        await removeUser(request);
 
         const userParticipantIds = await getParticipantIdsOfUser(user.email);
         expect(userParticipantIds).not.toContain(targetParticipant.id);
@@ -68,8 +67,7 @@ describe('User Service Tests', () => {
         const request = createUserParticipantRequest(user.email, participant, user.id);
         await verifyAndEnrichUser(request, res, next);
 
-        const userService = new UserService();
-        await userService.removeUser(request);
+        await removeUser(request);
 
         const userParticipantIds = await getParticipantIdsOfUser(user.email);
         expect(userParticipantIds).not.toContain(participant.id);
