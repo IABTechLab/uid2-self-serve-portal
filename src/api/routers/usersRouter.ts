@@ -17,6 +17,7 @@ import {
 } from '../services/userService';
 import { KeycloakRequest, UserRequest } from '../services/usersService';
 
+// Handlers
 const handleGetCurrentUser = async (req: UserRequest, res: Response) => {
   const user = await getCurrentUser(req);
   return res.json(user);
@@ -91,6 +92,7 @@ const handleResetPassword = async (req: KeycloakRequest, res: Response) => {
   res.sendStatus(200);
 };
 
+// Router
 const createUsersRouter = () => {
   const usersRouter = express.Router();
 

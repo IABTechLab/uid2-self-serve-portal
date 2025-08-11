@@ -27,7 +27,7 @@ import { getAuditLoggingMiddleware } from './helpers/auditLogging';
 import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createManagementRouter } from './routers/managementRouter';
-import { createParticipantsRouter } from './routers/participants/participantsRouter';
+import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
 import { API_PARTICIPANT_MEMBER_ROLE_NAME } from './services/kcUsersService';

@@ -15,6 +15,7 @@ import {
   ParticipantRequest,
 } from '../services/participantsService';
 
+// Handlers
 const getSharingSites = async (req: ParticipantRequest, res: Response) => {
   const traceId = getTraceId(req);
   const visibleSites = await getVisibleSiteList(traceId);
@@ -47,6 +48,7 @@ const getUnattachedSites = async (req: ParticipantRequest, res: Response) => {
   return res.status(200).json(siteDTOs);
 };
 
+// Router
 export function createSitesRouter() {
   const sitesRouter = express.Router();
 

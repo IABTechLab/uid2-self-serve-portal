@@ -6,6 +6,7 @@ import { GetUserAuditTrail } from '../services/auditTrailService';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
 import { getUserParticipants, ParticipantRequest } from '../services/participantsService';
 
+// Handlers
 const handleGetAllUsers = async (req: ParticipantRequest, res: Response) => {
   const userList = await getAllUsersList();
   return res.status(200).json(userList);
@@ -35,6 +36,7 @@ const handleChangeUserLock = async (req: ParticipantRequest, res: Response) => {
   return res.status(200).end();
 };
 
+// Router
 export function createManagementRouter() {
   const managementRouter = express.Router();
 

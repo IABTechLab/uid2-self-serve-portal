@@ -1,46 +1,52 @@
 import express from 'express';
 
-import { verifyAndEnrichParticipant } from '../../middleware/participantsMiddleware';
-import { isAdminOrUid2SupportCheck, isUid2SupportCheck } from '../../middleware/userRoleMiddleware';
-import { enrichCurrentUser } from '../../middleware/usersMiddleware';
-import { createBusinessContactsRouter } from '../businessContactsRouter';
-import { createParticipantUsersRouter } from '../participantUsersRouter';
+import { verifyAndEnrichParticipant } from '../middleware/participantsMiddleware';
+import { isAdminOrUid2SupportCheck, isUid2SupportCheck } from '../middleware/userRoleMiddleware';
+import { enrichCurrentUser } from '../middleware/usersMiddleware';
+import { createBusinessContactsRouter } from './businessContactsRouter';
 import {
   handleCompleteRecommendations,
   handleGetAllParticipants,
   handleGetParticipant,
   handleUpdateParticipant,
   handleUpdatePrimaryContact,
-} from './participants';
+} from './participantHandlers/participants';
 import {
   handleAddApiKey,
   handleDeleteApiKey,
   handleGetParticipantApiKey,
   handleGetParticipantApiKeys,
   handleUpdateApiKey,
-} from './participantsApiKeys';
-import { handleGetParticipantApiRoles } from './participantsApiRoles';
-import { handleGetParticipantAppNames, handleSetParticipantAppNames } from './participantsAppIds';
-import { handleGetParticipantAuditTrail } from './participantsAuditTrail';
-import { handleCreateParticipant } from './participantsCreation';
+} from './participantHandlers/participantsApiKeys';
+import { handleGetParticipantApiRoles } from './participantHandlers/participantsApiRoles';
+import {
+  handleGetParticipantAppNames,
+  handleSetParticipantAppNames,
+} from './participantHandlers/participantsAppIds';
+import { handleGetParticipantAuditTrail } from './participantHandlers/participantsAuditTrail';
+import { handleCreateParticipant } from './participantHandlers/participantsCreation';
 import {
   handleGetParticipantDomainNames,
   handleSetParticipantDomainNames,
-} from './participantsDomainNames';
+} from './participantHandlers/participantsDomainNames';
 import {
   handleAddKeyPair,
   handleDeleteKeyPair,
   handleGetParticipantKeyPairs,
   handleUpdateKeyPair,
-} from './participantsKeyPairs';
+} from './participantHandlers/participantsKeyPairs';
 import {
   handleAddSharingPermission,
   handleGetSharingPermission,
   handleRemoveSharingPermission,
   handleUpdateSharingTypes,
-} from './participantsSharingPermissions';
-import { handleGetSignedParticipants } from './participantsSigned';
-import { handleGetParticipantUsers, handleInviteUserToParticipant } from './participantsUsers';
+} from './participantHandlers/participantsSharingPermissions';
+import { handleGetSignedParticipants } from './participantHandlers/participantsSigned';
+import {
+  handleGetParticipantUsers,
+  handleInviteUserToParticipant,
+} from './participantHandlers/participantsUsers';
+import { createParticipantUsersRouter } from './participantUsersRouter';
 
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
