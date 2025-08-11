@@ -47,7 +47,7 @@ function CstgAddDialog({
   } = formMethods;
 
   const handleError = (message: string) => {
-    setError('root.serverError', {
+    setError('root.formError', {
       type: '400',
       message,
     });
