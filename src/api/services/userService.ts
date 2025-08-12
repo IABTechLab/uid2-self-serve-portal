@@ -62,6 +62,38 @@ export const getDefaultParticipant = async (req: UserRequest) => {
   return result;
 };
 
+export const removeUser = async (req: UserParticipantRequest) => {
+  const { user, participant } = req;
+  const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
+  const traceId = getTraceId(req);
+
+  const auditTrailInsertObject = constructAuditTrailObject(
+    requestingUser!,
+    AuditTrailEvents.ManageTeamMembers,
+    {
+      action: AuditAction.Delete,
+      email: user?.email,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      jobFunction: user?.jobFunction,
+    },
+    participant!.id
+  );
+
+  await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
+    await UserToParticipantRole.query()
+      .where('userId', user!.id)
+      .andWhere('participantId', participant!.id)
+      .del();
+
+    const participantsOfUser = await UserToParticipantRole.query().where('userId', user!.id);
+    if (participantsOfUser.length === 0) {
+      const kcAdminClient = await getKcAdminClient();
+      await removeApiParticipantMemberRole(kcAdminClient, user!.email);
+    }
+  });
+};
+
 export const updateUser = async (req: UserParticipantRequest) => {
   const { user, participant } = req;
   const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
@@ -109,34 +141,4 @@ export const updateUser = async (req: UserParticipantRequest) => {
   });
 };
 
-export const removeUser = async (req: UserParticipantRequest) => {
-  const { user, participant } = req;
-  const requestingUser = await findUserByEmail(req.auth?.payload.email as string);
-  const traceId = getTraceId(req);
 
-  const auditTrailInsertObject = constructAuditTrailObject(
-    requestingUser!,
-    AuditTrailEvents.ManageTeamMembers,
-    {
-      action: AuditAction.Delete,
-      email: user?.email,
-      firstName: user?.firstName,
-      lastName: user?.lastName,
-      jobFunction: user?.jobFunction,
-    },
-    participant!.id
-  );
-
-  await performAsyncOperationWithAuditTrail(auditTrailInsertObject, traceId, async () => {
-    await UserToParticipantRole.query()
-      .where('userId', user!.id)
-      .andWhere('participantId', participant!.id)
-      .del();
-
-    const participantsOfUser = await UserToParticipantRole.query().where('userId', user!.id);
-    if (participantsOfUser.length === 0) {
-      const kcAdminClient = await getKcAdminClient();
-      await removeApiParticipantMemberRole(kcAdminClient, user!.email);
-    }
-  });
-};
