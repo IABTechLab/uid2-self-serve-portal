@@ -227,16 +227,6 @@ export function CstgTable({
           )}
         </div>
         <div className='table-header-right'>
-          {/* <div className='search-bar-container'>
-            <input
-              type='text'
-              className='search-bar-input'
-              onChange={handleSearchCstgValue}
-              placeholder={`Search ${formattedCstgValueType}s`}
-              value={searchText}
-            />
-            <FontAwesomeIcon icon='search' className='search-bar-icon' />
-          </div> */}
           <SearchBarHeader
             value={searchText}
             onChange={handleSearchCstgValue}

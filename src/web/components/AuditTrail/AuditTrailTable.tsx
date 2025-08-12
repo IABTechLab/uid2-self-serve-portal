@@ -1,4 +1,3 @@
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
@@ -70,16 +69,6 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
     <div className='audit-trail-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          {/* <div className='search-bar-container'>
-            <input
-              type='text'
-              className='search-bar-input'
-              onChange={handleSearch}
-              placeholder='Search audit trail'
-              value={searchText}
-            />
-            <FontAwesomeIcon icon='search' className='search-bar-icon' />
-          </div> */}
           <SearchBarHeader
             value={searchText}
             onChange={handleSearch}
