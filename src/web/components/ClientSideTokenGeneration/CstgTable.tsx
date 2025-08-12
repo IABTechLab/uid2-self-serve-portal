@@ -6,6 +6,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
+import SearchBarHeader from '../Search/SearchBarHeader';
 import CstgAddDialog from './CstgAddDialog';
 import CstgDeleteDialog from './CstgDeleteDialog';
 import {
@@ -183,7 +184,9 @@ export function CstgTable({
     setPagedCstgValues(getPagedValues(searchedCstgValues, currentPageNumber, currentRowsPerPage));
   };
 
-  const deletingMultipleItemsMessage = `Delete ${cstgValueType}${selectedCstgValues.length > 1 ? 's' : ''}`;
+  const deletingMultipleItemsMessage = `Delete ${cstgValueType}${
+    selectedCstgValues.length > 1 ? 's' : ''
+  }`;
   const deleteMessage = isSelectedAll
     ? `Delete All ${cstgValueType}s`
     : deletingMultipleItemsMessage;
@@ -224,7 +227,7 @@ export function CstgTable({
           )}
         </div>
         <div className='table-header-right'>
-          <div className='search-bar-container'>
+          {/* <div className='search-bar-container'>
             <input
               type='text'
               className='search-bar-input'
@@ -233,7 +236,12 @@ export function CstgTable({
               value={searchText}
             />
             <FontAwesomeIcon icon='search' className='search-bar-icon' />
-          </div>
+          </div> */}
+          <SearchBarHeader
+            value={searchText}
+            onChange={handleSearchCstgValue}
+            placeholder={`Search ${formattedCstgValueType}s`}
+          />
           <div className='add-cstg-value-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDialog}>
               {`Add ${cstgValueType}s`}
