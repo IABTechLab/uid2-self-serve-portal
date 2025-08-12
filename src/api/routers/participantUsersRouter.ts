@@ -10,7 +10,6 @@ import { UserParticipantRequest } from '../services/participantsService';
 import { removeUser, updateUser, UpdateUserRoleIdSchema } from '../services/userService';
 import { getAllUsersFromParticipant, UserRequest } from '../services/usersService';
 
-// Handlers
 const handleUpdateUser = async (req: UserRequest, res: Response) => {
   const { user } = req;
   const userRoleData = UpdateUserRoleIdSchema.parse(req.body);
@@ -75,7 +74,6 @@ const handleResendInvitation = async (req: UserRequest, res: Response) => {
   return res.sendStatus(200);
 };
 
-// Router
 const createParticipantUsersRouter = () => {
   const participantUsersRouter = express.Router({ mergeParams: true });
 

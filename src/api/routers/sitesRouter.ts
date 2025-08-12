@@ -15,8 +15,7 @@ import {
   ParticipantRequest,
 } from '../services/participantsService';
 
-// Handlers
-const getSharingSites = async (req: ParticipantRequest, res: Response) => {
+const handleGetSharingSites = async (req: ParticipantRequest, res: Response) => {
   const traceId = getTraceId(req);
   const visibleSites = await getVisibleSiteList(traceId);
   const matchedParticipants = await getParticipantsBySiteIds(visibleSites.map((s) => s.id));
@@ -26,7 +25,7 @@ const getSharingSites = async (req: ParticipantRequest, res: Response) => {
   return res.status(200).json(sharingSites);
 };
 
-const getAvailableSharingSites = async (req: ParticipantRequest, res: Response) => {
+const handleGetAvailableSharingSites = async (req: ParticipantRequest, res: Response) => {
   const traceId = getTraceId(req);
   const visibleSites = await getVisibleSiteList(traceId);
   const availableSites = visibleSites.filter(canBeSharedWith);
@@ -37,7 +36,7 @@ const getAvailableSharingSites = async (req: ParticipantRequest, res: Response) 
   return res.status(200).json(availableSharingSites);
 };
 
-const getUnattachedSites = async (req: ParticipantRequest, res: Response) => {
+const handleGetUnattachedSites = async (req: ParticipantRequest, res: Response) => {
   const traceId = getTraceId(req);
   const allSitesPromise = getSiteList(traceId);
   const attachedSitesPromise = getAttachedSiteIDs();
@@ -48,13 +47,12 @@ const getUnattachedSites = async (req: ParticipantRequest, res: Response) => {
   return res.status(200).json(siteDTOs);
 };
 
-// Router
 export function createSitesRouter() {
   const sitesRouter = express.Router();
 
-  sitesRouter.get('/', getSharingSites);
-  sitesRouter.get('/available', getAvailableSharingSites);
-  sitesRouter.get('/unattached/', isUid2SupportCheck, getUnattachedSites);
+  sitesRouter.get('/', handleGetSharingSites);
+  sitesRouter.get('/available', handleGetAvailableSharingSites);
+  sitesRouter.get('/unattached/', isUid2SupportCheck, handleGetUnattachedSites);
 
   return sitesRouter;
 }
