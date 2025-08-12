@@ -31,9 +31,6 @@ export const UpdateUserRoleIdSchema = z.object({
 
 export const KeycloakRequestSchema = z.object({ email: z.string() });
 
-
-
-
 export const getCurrentUser = async (req: UserRequest) => {
   const userEmail = req.auth?.payload?.email as string;
   const user = await findUserByEmail(userEmail);
@@ -143,5 +140,3 @@ export const updateUser = async (req: UserParticipantRequest) => {
     });
   });
 };
-
-
