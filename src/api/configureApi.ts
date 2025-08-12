@@ -6,12 +6,9 @@ import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimCheck, JWTPayload } from 'express-oauth2-jwt-bearer';
-import { Container } from 'inversify';
-import { InversifyExpressServer } from 'inversify-express-utils';
 import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
-import { TYPES } from './constant/types';
 import { ApiRole } from './entities/ApiRole';
 import { ParticipantType } from './entities/ParticipantType';
 import {
@@ -30,12 +27,10 @@ import { getAuditLoggingMiddleware } from './helpers/auditLogging';
 import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createManagementRouter } from './routers/managementRouter';
-import { createParticipantsRouter } from './routers/participants/participantsRouter';
+import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
 import { createUsersRouter } from './routers/usersRouter';
 import { API_PARTICIPANT_MEMBER_ROLE_NAME } from './services/kcUsersService';
-import { LoggerService } from './services/loggerService';
-import { UserService } from './services/userService';
 
 const BASE_REQUEST_PATH = '/api';
 
@@ -76,9 +71,6 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath
 }
 
 export function configureAndStartApi(useMetrics: boolean = true, portNumber: number = 6540) {
-  const container = new Container();
-  container.bind<UserService>(TYPES.UserService).to(UserService);
-  container.bind<LoggerService>(TYPES.LoggerService).to(LoggerService);
   const app = express();
   const routers = {
     rootRouter: express.Router(),
@@ -244,8 +236,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   };
   app.use(errorHandler);
   const port = portNumber;
-  const inversifyExpressServer = new InversifyExpressServer(container, router, null, app);
-  const server = inversifyExpressServer.build().listen(port, () => {
+  const server = app.listen(port, () => {
     logger.info(`Listening on port ${port}.`);
   });
   return { server, routers };
