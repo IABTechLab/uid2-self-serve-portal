@@ -6,7 +6,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import SearchBarHeader from '../Search/SearchBarHeader';
+import TableSearchBar from '../Search/TableSearchBar';
 import { UserManagementItem } from './UserManagementItem';
 
 import './UserManagementTable.scss';
@@ -82,11 +82,7 @@ function UserManagementTableContent({
     <div className='users-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          <SearchBarHeader
-            value={searchText}
-            onChange={handleSearch}
-            placeholder='Search users'
-          />
+          <TableSearchBar value={searchText} onChange={handleSearch} placeholder='Search users' />
         </div>
       </div>
       <table className='users-table'>

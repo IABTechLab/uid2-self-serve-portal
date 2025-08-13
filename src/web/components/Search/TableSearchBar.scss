@@ -1,4 +1,4 @@
-.search-bar-header-container {
+.table-search-bar-container {
   display: flex;
   align-items: center;
   border-bottom: 2px solid var(--theme-action);
@@ -10,13 +10,13 @@
   }
 }
 
-.search-bar-header-icon {
+.table-search-bar-icon {
   color: var(--theme-search-text);
   height: 16px;
   margin-left: 8px;
 }
 
-.search-bar-header-input {
+.table-search-bar-input {
   width: 100%;
   border: none;
   outline: none;

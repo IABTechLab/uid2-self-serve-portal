@@ -6,7 +6,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
-import SearchBarHeader from '../Search/SearchBarHeader';
+import TableSearchBar from '../Search/TableSearchBar';
 import CstgAddDialog from './CstgAddDialog';
 import CstgDeleteDialog from './CstgDeleteDialog';
 import {
@@ -227,7 +227,7 @@ export function CstgTable({
           )}
         </div>
         <div className='table-header-right'>
-          <SearchBarHeader
+          <TableSearchBar
             value={searchText}
             onChange={handleSearchCstgValue}
             placeholder={`Search ${formattedCstgValueType}s`}

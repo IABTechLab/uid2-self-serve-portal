@@ -7,7 +7,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import SearchBarHeader from '../Search/SearchBarHeader';
+import TableSearchBar from '../Search/TableSearchBar';
 import AuditTrailRow from './AuditTrailRow';
 
 import './AuditTrail.scss';
@@ -69,7 +69,7 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
     <div className='audit-trail-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          <SearchBarHeader
+          <TableSearchBar
             value={searchText}
             onChange={handleSearch}
             placeholder='Search audit trail'

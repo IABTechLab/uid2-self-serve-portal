@@ -13,7 +13,7 @@ import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { MultiSelectDropdown } from '../Input/MultiSelectDropdown';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
-import SearchBarHeader from '../Search/SearchBarHeader';
+import TableSearchBar from '../Search/TableSearchBar';
 import { DeletePermissionDialog } from './DeletePermissionDialog';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
@@ -140,7 +140,7 @@ export function SharingPermissionsTableContent({
             onSelectedChange={setSelectedTypes}
           />
         </div>
-        <SearchBarHeader
+        <TableSearchBar
           value={filterText}
           onChange={(event) => setFilterText(event.target.value)}
           placeholder='Search sharing permissions'

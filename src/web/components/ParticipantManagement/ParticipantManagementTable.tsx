@@ -9,7 +9,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import SearchBarHeader from '../Search/SearchBarHeader';
+import TableSearchBar from '../Search/TableSearchBar';
 import { ParticipantManagementItem } from './ParticipantManagementItem';
 
 import './ParticipantManagementTable.scss';
@@ -86,7 +86,7 @@ function ParticipantManagementTableContent({
     <div className='participants-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          <SearchBarHeader
+          <TableSearchBar
             value={searchText}
             onChange={handleSearch}
             placeholder='Search participants'
