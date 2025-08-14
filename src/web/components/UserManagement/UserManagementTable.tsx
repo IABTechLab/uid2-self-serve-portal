@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { UserDTO } from '../../../api/entities/User';
@@ -7,6 +6,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
+import TableSearchBar from '../Search/TableSearchBar';
 import { UserManagementItem } from './UserManagementItem';
 
 import './UserManagementTable.scss';
@@ -82,16 +82,7 @@ function UserManagementTableContent({
     <div className='users-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          <div className='search-bar-container'>
-            <input
-              type='text'
-              className='search-bar-input'
-              onChange={handleSearch}
-              placeholder='Search users'
-              value={searchText}
-            />
-            <FontAwesomeIcon icon='search' className='search-bar-icon' />
-          </div>
+          <TableSearchBar value={searchText} onChange={handleSearch} placeholder='Search users' />
         </div>
       </div>
       <table className='users-table'>

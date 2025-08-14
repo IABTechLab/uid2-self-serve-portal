@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { AuditTrailDTO } from '../../../api/entities/AuditTrail';
@@ -8,6 +7,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
+import TableSearchBar from '../Search/TableSearchBar';
 import AuditTrailRow from './AuditTrailRow';
 
 import './AuditTrail.scss';
@@ -69,16 +69,11 @@ function AuditTrailTableComponent({ auditTrail }: AuditTrailTableProps) {
     <div className='audit-trail-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          <div className='search-bar-container'>
-            <input
-              type='text'
-              className='search-bar-input'
-              onChange={handleSearch}
-              placeholder='Search audit trail'
-              value={searchText}
-            />
-            <FontAwesomeIcon icon='search' className='search-bar-icon' />
-          </div>
+          <TableSearchBar
+            value={searchText}
+            onChange={handleSearch}
+            placeholder='Search audit trail'
+          />
         </div>
       </div>
       <table className='audit-log-table'>

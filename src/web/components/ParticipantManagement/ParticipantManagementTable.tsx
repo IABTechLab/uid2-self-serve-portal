@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
@@ -10,6 +9,7 @@ import { PagingTool } from '../Core/Paging/PagingTool';
 import { RowsPerPageValues } from '../Core/Paging/PagingToolHelper';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
+import TableSearchBar from '../Search/TableSearchBar';
 import { ParticipantManagementItem } from './ParticipantManagementItem';
 
 import './ParticipantManagementTable.scss';
@@ -86,16 +86,11 @@ function ParticipantManagementTableContent({
     <div className='participants-table-container'>
       <div className='table-header'>
         <div className='table-header-right'>
-          <div className='search-bar-container'>
-            <input
-              type='text'
-              className='search-bar-input'
-              onChange={handleSearch}
-              placeholder='Search participants'
-              value={searchText}
-            />
-            <FontAwesomeIcon icon='search' className='search-bar-icon' />
-          </div>
+          <TableSearchBar
+            value={searchText}
+            onChange={handleSearch}
+            placeholder='Search participants'
+          />
         </div>
       </div>
       <table className='participants-table'>

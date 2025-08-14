@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 
 import { SharingSiteWithSource } from '../../../api/helpers/siteConvertingHelpers';
@@ -14,6 +13,7 @@ import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 import { MultiSelectDropdown } from '../Input/MultiSelectDropdown';
 import { TriStateCheckbox, TriStateCheckboxState } from '../Input/TriStateCheckbox';
+import TableSearchBar from '../Search/TableSearchBar';
 import { DeletePermissionDialog } from './DeletePermissionDialog';
 import { ParticipantsTable } from './ParticipantsTable';
 import {
@@ -140,16 +140,11 @@ export function SharingPermissionsTableContent({
             onSelectedChange={setSelectedTypes}
           />
         </div>
-        <div className='search-bar-container'>
-          <input
-            type='text'
-            className='search-bar-input'
-            onChange={(event) => setFilterText(event.target.value)}
-            placeholder='Search sharing permissions'
-            value={filterText}
-          />
-          <FontAwesomeIcon icon='search' className='search-bar-icon' />
-        </div>
+        <TableSearchBar
+          value={filterText}
+          onChange={(event) => setFilterText(event.target.value)}
+          placeholder='Search sharing permissions'
+        />
       </div>
       <ParticipantsTable
         sites={filteredSites}
