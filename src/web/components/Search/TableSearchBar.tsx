@@ -4,7 +4,6 @@ import React from 'react';
 import './TableSearchBar.scss';
 
 interface TableSearchBarProps {
-  // updated
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
