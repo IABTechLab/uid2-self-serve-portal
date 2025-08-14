@@ -227,11 +227,13 @@ export function CstgTable({
           )}
         </div>
         <div className='table-header-right'>
-          <TableSearchBar
-            value={searchText}
-            onChange={handleSearchCstgValue}
-            placeholder={`Search ${formattedCstgValueType}s`}
-          />
+          <div className='search-wrapper'>
+            <TableSearchBar
+              value={searchText}
+              onChange={handleSearchCstgValue}
+              placeholder={`Search ${formattedCstgValueType}s`}
+            />
+          </div>
           <div className='add-cstg-value-button'>
             <button className='small-button' type='button' onClick={onOpenChangeAddDialog}>
               {`Add ${cstgValueType}s`}
