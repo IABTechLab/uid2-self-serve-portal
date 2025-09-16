@@ -332,6 +332,21 @@ export const setSiteClientTypes = async (
   });
 };
 
+export const setSiteVisibility = async (
+  siteId: number,
+  visible: boolean,
+  traceId: TraceId
+): Promise<AdminSiteDTO> => {
+  const client = createTracedClient(traceId);
+  const response = await client.post<AdminSiteDTO>('/api/site/update', null, {
+    params: {
+      id: siteId,
+      visible,
+    },
+  });
+  return response.data;
+};
+
 export const createApiKey = async (
   name: string,
   roles: string[],

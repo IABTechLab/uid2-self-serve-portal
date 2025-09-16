@@ -124,6 +124,7 @@ export type UpdateParticipantForm = {
   contactFirstName: string;
   contactLastName: string;
   contactEmail: string;
+  visible: boolean;
 };
 
 export type AddParticipantForm = {

@@ -12,7 +12,7 @@ import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getRoleNamesByIds } from '../helpers/apiHelper';
 import { getTraceId, TraceId } from '../helpers/loggingHelpers';
-import { getSharingList, setSiteClientTypes, updateSharingList } from './adminServiceClient';
+import { getSharingList, setSiteClientTypes, setSiteVisibility, updateSharingList } from './adminServiceClient';
 import {
   ClientType,
   mapClientTypeIdsToAdminEnums,
@@ -234,6 +234,7 @@ const updateParticipantSchema = z.object({
   participantTypes: z.array(z.number()),
   participantName: z.string(),
   crmAgreementNumber: z.string().nullable(),
+  visible: z.boolean().optional(),
 });
 export const updateParticipant = async (participant: Participant, req: UserParticipantRequest) => {
   const {
@@ -241,6 +242,7 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     participantTypes: participantTypeIds,
     participantName,
     crmAgreementNumber,
+    visible,
   } = updateParticipantSchema.parse(req.body);
   const { user } = req;
   const traceId = getTraceId(req);
@@ -267,6 +269,9 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     });
     const types = await getParticipantTypesByIds(participantTypeIds);
     setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
+    if (visible !== undefined && participant.siteId !== undefined) {
+      await setSiteVisibility(participant.siteId, visible, traceId);
+    }
   });
 };
 

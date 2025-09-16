@@ -8,6 +8,7 @@ import { sortApiRoles } from '../../utils/apiRoles';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
 import { getPrimaryContactInformation } from './EditParticipantDialogHelpers';
@@ -29,8 +30,10 @@ function EditParticipantDialog({
   participantTypes,
   onOpenChange,
 }: EditParticipantDialogProps) {
+  console.log(participant);
   const onSubmit = async (formData: UpdateParticipantForm) => {
     await onEditParticipant(formData, participant);
+    console.log(formData);
     onOpenChange();
   };
 
@@ -44,6 +47,7 @@ function EditParticipantDialog({
     contactFirstName: contact.firstName,
     contactLastName: contact.lastName,
     contactEmail: contact.email,
+    visible: participant.visible ?? true,
   };
 
   const formMethods = useForm<UpdateParticipantForm>({
@@ -75,7 +79,12 @@ function EditParticipantDialog({
             }))}
             rules={{ required: 'Please specify Participant Types.' }}
           />
-          <TextInput inputName='siteId' label='Site ID' disabled />
+          <TextInput inputName='siteId' label='Site ID' disabled className='site-id-input' />
+
+          <div className='visible-checkbox'>
+            <FormStyledCheckbox name='visible' control={formMethods.control} className='checkbox' />
+            <span className='checkbox-text'>Visible</span>
+          </div>
           <MultiCheckboxInput
             inputName='apiRoles'
             label='API Permissions'
