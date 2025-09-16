@@ -30,10 +30,8 @@ function EditParticipantDialog({
   participantTypes,
   onOpenChange,
 }: EditParticipantDialogProps) {
-  console.log(participant);
   const onSubmit = async (formData: UpdateParticipantForm) => {
     await onEditParticipant(formData, participant);
-    console.log(formData);
     onOpenChange();
   };
 
