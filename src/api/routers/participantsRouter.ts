@@ -1,7 +1,11 @@
 import express from 'express';
 
 import { verifyAndEnrichParticipant } from '../middleware/participantsMiddleware';
-import { isAdminOrUid2SupportCheck, isUid2SupportCheck } from '../middleware/userRoleMiddleware';
+import {
+  isAdminOrUid2SupportCheck,
+  isSuperUserCheck,
+  isUid2SupportCheck,
+} from '../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../middleware/usersMiddleware';
 import { createBusinessContactsRouter } from './businessContactsRouter';
 import {

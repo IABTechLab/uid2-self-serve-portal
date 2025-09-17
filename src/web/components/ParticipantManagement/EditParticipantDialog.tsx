@@ -59,7 +59,7 @@ function EditParticipantDialog({
       const isVisible = await GetParticipantVisibility(participant.id);
       formMethods.reset({ ...originalFormValues, visible: isVisible });
     })();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participant.id]);
 
   return (
@@ -87,10 +87,9 @@ function EditParticipantDialog({
             rules={{ required: 'Please specify Participant Types.' }}
           />
           <TextInput inputName='siteId' label='Site ID' disabled className='site-id-input' />
-
-          <div className='visible-checkbox'>
+          <div className='visibility-checkbox'>
             <FormStyledCheckbox name='visible' control={formMethods.control} className='checkbox' />
-            <span className='checkbox-text'>Visible</span>
+            <span className='checkbox-text'>Set as visible to other shared participants</span>
           </div>
           <MultiCheckboxInput
             inputName='apiRoles'
