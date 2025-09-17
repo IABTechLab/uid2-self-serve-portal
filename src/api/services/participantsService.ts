@@ -14,7 +14,7 @@ import { getRoleNamesByIds } from '../helpers/apiHelper';
 import { getTraceId, TraceId } from '../helpers/loggingHelpers';
 import {
   getSharingList,
-  getSiteVisibility,
+  getSite,
   setSiteClientTypes,
   setSiteVisibility,
   updateSharingList,
@@ -277,10 +277,18 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
     if (visible !== undefined && participant.siteId !== undefined) {
       await setSiteVisibility(participant.siteId, visible, traceId);
-      const visibility = await getSiteVisibility(participant.siteId, traceId);
-      console.log(visibility);
     }
   });
+};
+
+export const getParticipantVisibility = async (req: ParticipantRequest) => {
+  const { participant } = req;
+  const traceId = getTraceId(req);
+  if (!participant?.siteId) {
+    return null;
+  }
+  const participantSite = await getSite(participant.siteId, traceId);
+  return participantSite.visible;
 };
 
 export const UpdateSharingTypes = async (

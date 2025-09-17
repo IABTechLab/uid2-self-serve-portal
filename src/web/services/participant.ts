@@ -281,3 +281,14 @@ export async function UpdatePrimaryContact(participantId: number, newPrimaryCont
     throw backendError(e, 'Could not update primary contact');
   }
 }
+
+export async function GetParticipantVisibility(participantId: number): Promise<boolean> {
+  try {
+    const result = await axios.get<{ visible: boolean }>(
+      `/participants/${participantId}/visibility`
+    );
+    return result.data.visible;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get participant visibility');
+  }
+}

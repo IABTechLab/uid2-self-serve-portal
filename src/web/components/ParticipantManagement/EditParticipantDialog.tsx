@@ -1,9 +1,10 @@
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { UpdateParticipantForm } from '../../services/participant';
+import { GetParticipantVisibility, UpdateParticipantForm } from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
@@ -52,6 +53,13 @@ function EditParticipantDialog({
     defaultValues: originalFormValues,
   });
   const { handleSubmit } = formMethods;
+
+  useEffect(() => {
+    (async () => {
+      const isVisibile = await GetParticipantVisibility(participant.id);
+      formMethods.reset({ ...originalFormValues, visible: isVisibile });
+    })();
+  }, [participant.id]);
 
   return (
     <Dialog

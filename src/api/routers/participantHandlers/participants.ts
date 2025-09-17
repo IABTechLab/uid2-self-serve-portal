@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { Participant } from '../../entities/Participant';
 import {
   getAllParticipants,
+  getParticipantVisibility,
   ParticipantRequest,
   updateParticipant,
   updatePrimaryContact,
@@ -50,4 +51,14 @@ export const handleUpdatePrimaryContact = async (req: UserParticipantRequest, re
 
   await updatePrimaryContact(participant.id, userId, req);
   return res.sendStatus(204);
+};
+
+export const handleGetParticipantVisibility = async (req: ParticipantRequest, res: Response) => {
+  const visible = await getParticipantVisibility(req);
+
+  if (visible === null) {
+    return res.status(404).json({ error: 'Participant has no siteId' });
+  }
+
+  return res.status(200).json({ visible });
 };

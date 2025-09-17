@@ -8,6 +8,7 @@ import {
   handleCompleteRecommendations,
   handleGetAllParticipants,
   handleGetParticipant,
+  handleGetParticipantVisibility,
   handleUpdateParticipant,
   handleUpdatePrimaryContact,
 } from './participantHandlers/participants';
@@ -60,6 +61,7 @@ export function createParticipantsRouter() {
   participantsRouter.use('/:participantId', verifyAndEnrichParticipant, enrichCurrentUser);
 
   participantsRouter.get('/:participantId', handleGetParticipant);
+  participantsRouter.get('/:participantId/visibility', handleGetParticipantVisibility);
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
   participantsRouter.put('/:participantId', handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
