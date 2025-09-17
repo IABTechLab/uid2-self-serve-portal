@@ -347,12 +347,6 @@ export const setSiteVisibility = async (
   return response.data;
 };
 
-// export const getSiteVisibility = async (siteId: number, traceId: TraceId): Promise<boolean> => {
-//   const client = createTracedClient(traceId);
-//   const response = await client.get<AdminSiteDTO>(`/api/site/${siteId}`);
-//   return response.data.visible;
-// };
-
 export const createApiKey = async (
   name: string,
   roles: string[],

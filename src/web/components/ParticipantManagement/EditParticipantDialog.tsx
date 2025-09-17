@@ -56,9 +56,10 @@ function EditParticipantDialog({
 
   useEffect(() => {
     (async () => {
-      const isVisibile = await GetParticipantVisibility(participant.id);
-      formMethods.reset({ ...originalFormValues, visible: isVisibile });
+      const isVisible = await GetParticipantVisibility(participant.id);
+      formMethods.reset({ ...originalFormValues, visible: isVisible });
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participant.id]);
 
   return (
