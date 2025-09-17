@@ -67,7 +67,7 @@ export function createParticipantsRouter() {
   participantsRouter.get('/:participantId', handleGetParticipant);
   participantsRouter.get('/:participantId/visibility', handleGetParticipantVisibility);
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
-  participantsRouter.put('/:participantId', handleUpdateParticipant);
+  participantsRouter.put('/:participantId', isUid2SupportCheck, handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
   participantsRouter.put(
     '/:participantId/primaryContact',

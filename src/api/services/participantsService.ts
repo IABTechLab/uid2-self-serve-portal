@@ -275,7 +275,7 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     });
     const types = await getParticipantTypesByIds(participantTypeIds);
     setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
-    if (visible !== undefined && participant.siteId !== undefined) {
+    if (visible !== undefined && participant.siteId !== undefined) { // add check for super user here using user request
       await setSiteVisibility(participant.siteId, visible, traceId);
     }
   });

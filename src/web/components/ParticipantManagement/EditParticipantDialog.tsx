@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { GetParticipantVisibility, UpdateParticipantForm } from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
@@ -35,6 +36,8 @@ function EditParticipantDialog({
     await onEditParticipant(formData, participant);
     onOpenChange();
   };
+  const { LoggedInUser } = useContext(CurrentUserContext);
+  const isSuperUser = LoggedInUser?.user?.isSuperUser;
 
   const contact = getPrimaryContactInformation(participant);
   const originalFormValues: UpdateParticipantForm = {
@@ -87,10 +90,16 @@ function EditParticipantDialog({
             rules={{ required: 'Please specify Participant Types.' }}
           />
           <TextInput inputName='siteId' label='Site ID' disabled className='site-id-input' />
-          <div className='visibility-checkbox'>
-            <FormStyledCheckbox name='visible' control={formMethods.control} className='checkbox' />
-            <span className='checkbox-text'>Set as visible to other shared participants</span>
-          </div>
+          {isSuperUser && (
+            <div className='visibility-checkbox'>
+              <FormStyledCheckbox
+                name='visible'
+                control={formMethods.control}
+                className='checkbox'
+              />
+              <span className='checkbox-text'>Set as visible to other shared participants</span>
+            </div>
+          )}
           <MultiCheckboxInput
             inputName='apiRoles'
             label='API Permissions'
