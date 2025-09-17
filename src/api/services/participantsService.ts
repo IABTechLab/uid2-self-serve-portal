@@ -12,7 +12,13 @@ import { User, UserDTO } from '../entities/User';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { getRoleNamesByIds } from '../helpers/apiHelper';
 import { getTraceId, TraceId } from '../helpers/loggingHelpers';
-import { getSharingList, setSiteClientTypes, setSiteVisibility, updateSharingList } from './adminServiceClient';
+import {
+  getSharingList,
+  getSiteVisibility,
+  setSiteClientTypes,
+  setSiteVisibility,
+  updateSharingList,
+} from './adminServiceClient';
 import {
   ClientType,
   mapClientTypeIdsToAdminEnums,
@@ -271,6 +277,8 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
     if (visible !== undefined && participant.siteId !== undefined) {
       await setSiteVisibility(participant.siteId, visible, traceId);
+      const visibility = await getSiteVisibility(participant.siteId, traceId);
+      console.log(visibility);
     }
   });
 };

@@ -45,7 +45,7 @@ function EditParticipantDialog({
     contactFirstName: contact.firstName,
     contactLastName: contact.lastName,
     contactEmail: contact.email,
-    visible: participant.visible ?? true,
+    visible: true,
   };
 
   const formMethods = useForm<UpdateParticipantForm>({

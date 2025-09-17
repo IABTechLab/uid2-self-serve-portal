@@ -114,5 +114,4 @@ export type ParticipantDTO = Omit<
   apiRoles?: ApiRoleDTO[];
   users?: ModelObjectOpt<User>[];
   primaryContact?: ModelObjectOpt<User>;
-  visible?: boolean;
 };
