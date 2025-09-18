@@ -1,13 +1,20 @@
+import { useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
-import { UpdateParticipantForm } from '../../services/participant';
+import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
+import {
+  GetParticipantVisibility,
+  SetParticipantVisibility,
+  UpdateParticipantForm,
+} from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { MultiCheckboxInput } from '../Input/MultiCheckboxInput';
+import { FormStyledCheckbox } from '../Input/StyledCheckbox';
 import { TextInput } from '../Input/TextInput';
 import { validateEditCrmAgreementNumber } from './AddParticipantDialogHelper';
 import { getPrimaryContactInformation } from './EditParticipantDialogHelpers';
@@ -29,12 +36,13 @@ function EditParticipantDialog({
   participantTypes,
   onOpenChange,
 }: EditParticipantDialogProps) {
-  const onSubmit = async (formData: UpdateParticipantForm) => {
-    await onEditParticipant(formData, participant);
-    onOpenChange();
-  };
-
+  const { LoggedInUser } = useContext(CurrentUserContext);
+  const isSuperUser = LoggedInUser?.user?.isSuperUser;
   const contact = getPrimaryContactInformation(participant);
+
+  const [disableVisibilityCheckbox, setDisableVisibilityCheckbox] = useState<boolean>(
+    !participant.siteId
+  );
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
@@ -44,12 +52,37 @@ function EditParticipantDialog({
     contactFirstName: contact.firstName,
     contactLastName: contact.lastName,
     contactEmail: contact.email,
+    visible: participant.siteId ? true : null,
+  };
+
+  const onSubmit = async (formData: UpdateParticipantForm) => {
+    await onEditParticipant(formData, participant);
+
+    if (isSuperUser) {
+      await SetParticipantVisibility(formData, participant.id);
+    }
+
+    onOpenChange();
   };
 
   const formMethods = useForm<UpdateParticipantForm>({
     defaultValues: originalFormValues,
   });
   const { handleSubmit } = formMethods;
+
+  useEffect(() => {
+    if (!participant.siteId) return;
+    (async () => {
+      try {
+        const isVisible = await GetParticipantVisibility(participant.id);
+        formMethods.reset({ ...originalFormValues, visible: isVisible });
+      } catch {
+        formMethods.reset({ ...originalFormValues, visible: null });
+        setDisableVisibilityCheckbox(true);
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participant.id]);
 
   return (
     <Dialog
@@ -75,7 +108,23 @@ function EditParticipantDialog({
             }))}
             rules={{ required: 'Please specify Participant Types.' }}
           />
-          <TextInput inputName='siteId' label='Site ID' disabled />
+          <TextInput inputName='siteId' label='Site ID' disabled className='site-id-input' />
+          {isSuperUser && (
+            <div className='input-wrapper'>
+              <div className='visibility-label'>Visibility</div>
+              <div className='visibility-checkbox'>
+                <FormStyledCheckbox
+                  name='visible'
+                  control={formMethods.control}
+                  className='checkbox'
+                  disabled={disableVisibilityCheckbox}
+                />
+                <span className='checkbox-text'>
+                  Set as visible to other participants for sharing
+                </span>
+              </div>
+            </div>
+          )}
           <MultiCheckboxInput
             inputName='apiRoles'
             label='API Permissions'

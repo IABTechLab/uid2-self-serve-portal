@@ -1,5 +1,6 @@
 .edit-participant-dialog {
   max-height: calc(100vh - 10px);
+  overflow-y: auto;
 
   .contact-name {
     display: flex;
@@ -8,5 +9,16 @@
     .input-wrapper {
       width: 45%;
     }
+  }
+  
+  .visibility-label {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .visibility-checkbox {
+    display: flex;
+    align-items: center;
   }
 }

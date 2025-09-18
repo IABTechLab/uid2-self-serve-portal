@@ -124,6 +124,7 @@ export type UpdateParticipantForm = {
   contactFirstName: string;
   contactLastName: string;
   contactEmail: string;
+  visible?: boolean | null;
 };
 
 export type AddParticipantForm = {
@@ -150,6 +151,28 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
     await axios.put(`/participants/${participantId}`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not update participant');
+  }
+}
+
+export async function SetParticipantVisibility(
+  formData: UpdateParticipantForm,
+  participantId: number
+) {
+  try {
+    await axios.put(`/participants/${participantId}/visibility`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not set participant visibility');
+  }
+}
+
+export async function GetParticipantVisibility(participantId: number): Promise<boolean> {
+  try {
+    const result = await axios.get<{ visible: boolean }>(
+      `/participants/${participantId}/visibility`
+    );
+    return result.data.visible;
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not get participant visibility');
   }
 }
 
