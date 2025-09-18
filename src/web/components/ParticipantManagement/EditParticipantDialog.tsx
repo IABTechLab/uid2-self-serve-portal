@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ApiRoleDTO } from '../../../api/entities/ApiRole';
@@ -39,6 +39,10 @@ function EditParticipantDialog({
   const { LoggedInUser } = useContext(CurrentUserContext);
   const isSuperUser = LoggedInUser?.user?.isSuperUser;
   const contact = getPrimaryContactInformation(participant);
+
+  const [disableVisibilityCheckbox, setDisableVisibilityCheckbox] = useState<boolean>(
+    !participant.siteId
+  );
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
     participantTypes: participant.types ? participant.types.map((pType) => pType.id) : [],
@@ -69,8 +73,13 @@ function EditParticipantDialog({
   useEffect(() => {
     if (!participant.siteId) return;
     (async () => {
-      const isVisible = await GetParticipantVisibility(participant.id);
-      formMethods.reset({ ...originalFormValues, visible: isVisible });
+      try {
+        const isVisible = await GetParticipantVisibility(participant.id);
+        formMethods.reset({ ...originalFormValues, visible: isVisible });
+      } catch {
+        formMethods.reset({ ...originalFormValues, visible: null });
+        setDisableVisibilityCheckbox(true);
+      }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [participant.id]);
@@ -106,7 +115,7 @@ function EditParticipantDialog({
                 name='visible'
                 control={formMethods.control}
                 className='checkbox'
-                disabled={!participant.siteId}
+                disabled={disableVisibilityCheckbox}
               />
               <span className='checkbox-text'>Set as visible to other shared participants</span>
             </div>
