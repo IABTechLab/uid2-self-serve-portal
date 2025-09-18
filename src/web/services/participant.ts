@@ -303,5 +303,3 @@ export async function UpdatePrimaryContact(participantId: number, newPrimaryCont
     throw backendError(e, 'Could not update primary contact');
   }
 }
-
-
