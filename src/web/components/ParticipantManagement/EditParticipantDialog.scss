@@ -1,5 +1,6 @@
 .edit-participant-dialog {
   max-height: calc(100vh - 10px);
+  overflow-y: auto;
 
   .contact-name {
     display: flex;
@@ -19,6 +20,5 @@
   .visibility-checkbox {
     display: flex;
     align-items: center;
-
   }
 }
