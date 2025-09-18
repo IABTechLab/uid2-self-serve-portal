@@ -48,7 +48,7 @@ function EditParticipantDialog({
     contactFirstName: contact.firstName,
     contactLastName: contact.lastName,
     contactEmail: contact.email,
-    visible: true,
+    visible: participant.siteId ? true : null,
   };
 
   const onSubmit = async (formData: UpdateParticipantForm) => {
@@ -67,6 +67,7 @@ function EditParticipantDialog({
   const { handleSubmit } = formMethods;
 
   useEffect(() => {
+    if (!participant.siteId) return;
     (async () => {
       const isVisible = await GetParticipantVisibility(participant.id);
       formMethods.reset({ ...originalFormValues, visible: isVisible });
@@ -105,6 +106,7 @@ function EditParticipantDialog({
                 name='visible'
                 control={formMethods.control}
                 className='checkbox'
+                disabled={!participant.siteId}
               />
               <span className='checkbox-text'>Set as visible to other shared participants</span>
             </div>
