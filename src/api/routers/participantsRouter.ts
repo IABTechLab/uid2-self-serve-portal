@@ -3,7 +3,6 @@ import express from 'express';
 import { verifyAndEnrichParticipant } from '../middleware/participantsMiddleware';
 import {
   isAdminOrUid2SupportCheck,
-  isSuperUserCheck,
   isUid2SupportCheck,
 } from '../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../middleware/usersMiddleware';

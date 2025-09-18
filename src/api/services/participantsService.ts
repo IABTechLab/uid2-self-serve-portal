@@ -30,6 +30,7 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
+import { isSuperUser } from '../middleware/userRoleMiddleware';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -252,6 +253,10 @@ export const updateParticipant = async (participant: Participant, req: UserParti
   } = updateParticipantSchema.parse(req.body);
   const { user } = req;
   const traceId = getTraceId(req);
+  let superUser = false;
+  if (user) {
+    superUser = await isSuperUser(user?.email);
+  }
 
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
@@ -275,7 +280,7 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     });
     const types = await getParticipantTypesByIds(participantTypeIds);
     setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
-    if (visible !== undefined && participant.siteId !== undefined) { // add check for super user here using user request
+    if (visible !== undefined && participant.siteId !== undefined && superUser) {
       await setSiteVisibility(participant.siteId, visible, traceId);
     }
   });
