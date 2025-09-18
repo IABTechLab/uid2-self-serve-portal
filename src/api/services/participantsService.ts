@@ -30,7 +30,6 @@ import {
 } from './auditTrailService';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
-import { isSuperUser } from '../middleware/userRoleMiddleware';
 
 export interface ParticipantRequest extends Request {
   participant?: Participant;
@@ -249,14 +248,9 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     participantTypes: participantTypeIds,
     participantName,
     crmAgreementNumber,
-    visible,
   } = updateParticipantSchema.parse(req.body);
   const { user } = req;
   const traceId = getTraceId(req);
-  let superUser = false;
-  if (user) {
-    superUser = await isSuperUser(user?.email);
-  }
 
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
@@ -280,10 +274,22 @@ export const updateParticipant = async (participant: Participant, req: UserParti
     });
     const types = await getParticipantTypesByIds(participantTypeIds);
     setSiteClientTypes({ siteId: participant.siteId, types }, traceId);
-    if (visible !== undefined && participant.siteId !== undefined && superUser) {
-      await setSiteVisibility(participant.siteId, visible, traceId);
-    }
   });
+};
+
+const visibilityOnlySchema = z.object({
+  visible: z.boolean(),
+});
+export const setParticipantVisibility = async (
+  participant: Participant,
+  req: UserParticipantRequest
+) => {
+  const { visible } = visibilityOnlySchema.parse(req.body);
+  const traceId = getTraceId(req);
+
+  if (visible !== undefined && participant.siteId !== undefined) {
+    await setSiteVisibility(participant.siteId, visible, traceId);
+  }
 };
 
 export const getParticipantVisibility = async (req: ParticipantRequest) => {

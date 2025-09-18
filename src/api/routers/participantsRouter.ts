@@ -3,6 +3,7 @@ import express from 'express';
 import { verifyAndEnrichParticipant } from '../middleware/participantsMiddleware';
 import {
   isAdminOrUid2SupportCheck,
+  isSuperUserCheck,
   isUid2SupportCheck,
 } from '../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../middleware/usersMiddleware';
@@ -12,6 +13,7 @@ import {
   handleGetAllParticipants,
   handleGetParticipant,
   handleGetParticipantVisibility,
+  handleSetParticipantVisibility,
   handleUpdateParticipant,
   handleUpdatePrimaryContact,
 } from './participantHandlers/participants';
@@ -65,6 +67,7 @@ export function createParticipantsRouter() {
 
   participantsRouter.get('/:participantId', handleGetParticipant);
   participantsRouter.get('/:participantId/visibility', handleGetParticipantVisibility);
+  participantsRouter.put('/:participantId/visibility', isSuperUserCheck, handleSetParticipantVisibility);
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
   participantsRouter.put('/:participantId', isUid2SupportCheck, handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);

@@ -6,6 +6,7 @@ import {
   getAllParticipants,
   getParticipantVisibility,
   ParticipantRequest,
+  setParticipantVisibility,
   updateParticipant,
   updatePrimaryContact,
   UserParticipantRequest,
@@ -17,6 +18,19 @@ export const handleUpdateParticipant = async (req: UserParticipantRequest, res: 
     return res.status(404).send('Unable to find participant');
   }
   await updateParticipant(participant, req);
+  return res.sendStatus(200);
+};
+
+export const handleSetParticipantVisibility = async (
+  req: UserParticipantRequest,
+  res: Response
+) => {
+  const { participant } = req;
+  if (!participant) {
+    return res.status(404).send('Unable to find participant');
+  }
+
+  await setParticipantVisibility(participant, req);
   return res.sendStatus(200);
 };
 

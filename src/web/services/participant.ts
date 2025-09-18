@@ -154,6 +154,17 @@ export async function UpdateParticipant(formData: UpdateParticipantForm, partici
   }
 }
 
+export async function SetParticipantVisibility(
+  formData: UpdateParticipantForm,
+  participantId: number
+) {
+  try {
+    await axios.put(`/participants/${participantId}/visibility`, formData);
+  } catch (e: unknown) {
+    throw backendError(e, 'Could not set participant visibility');
+  }
+}
+
 export async function CompleteRecommendations(participantId: number): Promise<ParticipantDTO> {
   try {
     await axios.put<ParticipantDTO>(`/participants/${participantId}/completeRecommendations`);

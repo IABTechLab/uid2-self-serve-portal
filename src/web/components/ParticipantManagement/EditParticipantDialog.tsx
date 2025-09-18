@@ -5,7 +5,11 @@ import { ApiRoleDTO } from '../../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { ParticipantTypeDTO } from '../../../api/entities/ParticipantType';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
-import { GetParticipantVisibility, UpdateParticipantForm } from '../../services/participant';
+import {
+  GetParticipantVisibility,
+  SetParticipantVisibility,
+  UpdateParticipantForm,
+} from '../../services/participant';
 import { sortApiRoles } from '../../utils/apiRoles';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
@@ -32,13 +36,8 @@ function EditParticipantDialog({
   participantTypes,
   onOpenChange,
 }: EditParticipantDialogProps) {
-  const onSubmit = async (formData: UpdateParticipantForm) => {
-    await onEditParticipant(formData, participant);
-    onOpenChange();
-  };
   const { LoggedInUser } = useContext(CurrentUserContext);
   const isSuperUser = LoggedInUser?.user?.isSuperUser;
-
   const contact = getPrimaryContactInformation(participant);
   const originalFormValues: UpdateParticipantForm = {
     apiRoles: participant.apiRoles ? participant.apiRoles.map((apiRole) => apiRole.id) : [],
@@ -50,6 +49,16 @@ function EditParticipantDialog({
     contactLastName: contact.lastName,
     contactEmail: contact.email,
     visible: true,
+  };
+
+  const onSubmit = async (formData: UpdateParticipantForm) => {
+    await onEditParticipant(formData, participant);
+
+    if (isSuperUser) {
+      await SetParticipantVisibility(formData, participant.id);
+    }
+
+    onOpenChange();
   };
 
   const formMethods = useForm<UpdateParticipantForm>({
