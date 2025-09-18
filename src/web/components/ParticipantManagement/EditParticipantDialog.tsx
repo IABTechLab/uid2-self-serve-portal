@@ -110,14 +110,19 @@ function EditParticipantDialog({
           />
           <TextInput inputName='siteId' label='Site ID' disabled className='site-id-input' />
           {isSuperUser && (
-            <div className='visibility-checkbox'>
-              <FormStyledCheckbox
-                name='visible'
-                control={formMethods.control}
-                className='checkbox'
-                disabled={disableVisibilityCheckbox}
-              />
-              <span className='checkbox-text'>Set as visible to other shared participants</span>
+            <div className='input-wrapper'>
+              <div className='visibility-label'>Visibility</div>
+              <div className='visibility-checkbox'>
+                <FormStyledCheckbox
+                  name='visible'
+                  control={formMethods.control}
+                  className='checkbox'
+                  disabled={disableVisibilityCheckbox}
+                />
+                <span className='checkbox-text'>
+                  Set as visible to other participants for sharing
+                </span>
+              </div>
             </div>
           )}
           <MultiCheckboxInput

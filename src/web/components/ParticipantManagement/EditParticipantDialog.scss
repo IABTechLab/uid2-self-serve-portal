@@ -9,9 +9,14 @@
       width: 45%;
     }
   }
+  
+  .visibility-label {
+    font-weight: 600;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
 
   .visibility-checkbox {
-    margin-top: 1rem;
     display: flex;
     align-items: center;
 
