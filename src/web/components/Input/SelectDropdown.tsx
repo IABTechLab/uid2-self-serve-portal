@@ -103,7 +103,7 @@ export function SelectDropdown<TValue>({
           {filteredOptions.length > 0 ? (
             filteredOptions.map(checkboxItem)
           ) : (
-            <div className='select-dropdown-checkbox-item no-results'>No participants found</div>
+            <div className='select-dropdown-checkbox-item'>No participants found</div>
           )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
