@@ -28,7 +28,7 @@
   }
 
   &-search {
-    padding: 6px 8px;
+    padding: 0px 8px;
     background-color: var(--theme-background);
     position: sticky;
     top: 0;
@@ -41,9 +41,14 @@
       outline: none;
     }
 
-    .table-search-bar-icon {
-      right: 10px;
+    .table-search-bar-container {
+      border-bottom: 1px  solid var(--theme-action);
+
+      .table-search-bar-icon {
+        right: 10px;
+      }
     }
+
   }
 
   &-checkbox-item {
