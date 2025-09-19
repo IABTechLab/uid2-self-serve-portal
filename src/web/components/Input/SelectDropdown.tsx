@@ -100,8 +100,6 @@ export function SelectDropdown<TValue>({
               placeholder='Search participants'
             />
           </div>
-
-          {/* Options */}
           {filteredOptions.length > 0 ? (
             filteredOptions.map(checkboxItem)
           ) : (
