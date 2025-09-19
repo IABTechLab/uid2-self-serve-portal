@@ -3,6 +3,8 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
 import { useCallback, useEffect, useState } from 'react';
 
+import TableSearchBar from '../Search/TableSearchBar';
+
 import './SelectDropdown.scss';
 
 export type SelectOption<TValue> = {
@@ -33,6 +35,7 @@ export function SelectDropdown<TValue>({
 }: SelectDropdownProps<TValue>) {
   const [selectedItem, setSelectedItem] = useState<SelectOption<TValue>>();
   const [open, setOpen] = useState<boolean>(false);
+  const [filterText, setFilterText] = useState<string>('');
 
   const onOptionToggle = useCallback(
     (id: TValue) => {
@@ -57,6 +60,11 @@ export function SelectDropdown<TValue>({
       setSelectedItem(options.find((option) => option.id === updatedValue.id));
     }
   }, [updatedValue, selectedItem, options]);
+
+  const filteredOptions =
+    filterText.trim() === ''
+      ? options
+      : options.filter((opt) => opt.name.toLowerCase().includes(filterText.toLowerCase()));
 
   const checkboxItem = useCallback(
     (option: SelectOption<TValue>) => {
@@ -85,7 +93,18 @@ export function SelectDropdown<TValue>({
           {open ? <FontAwesomeIcon icon='chevron-up' /> : <FontAwesomeIcon icon='chevron-down' />}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content className='select-dropdown-content' sideOffset={10} align='start'>
-          {options.map(checkboxItem)}
+          <div className='select-dropdown-search'>
+            <TableSearchBar
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+              placeholder='Search participants'
+            />
+          </div>
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map(checkboxItem)
+          ) : (
+            <div className='select-dropdown-checkbox-item'>No participants found</div>
+          )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </div>
