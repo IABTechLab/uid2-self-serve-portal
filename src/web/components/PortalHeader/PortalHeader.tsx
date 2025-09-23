@@ -39,11 +39,12 @@ export function PortalHeader({
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const user = LoggedInUser?.user;
+  
   const { environment } = GetClientConfig();
   const getEnvLabel = (env: string): string | null => {
     switch (env) {
       case 'prod':
-        return null; // no label in production
+        return null;
       case 'integ':
         return 'Integration';
       case 'test':
@@ -55,7 +56,6 @@ export function PortalHeader({
     }
   };
   const environmentLabel = getEnvLabel(environment);
-  console.log(environmentLabel);
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
