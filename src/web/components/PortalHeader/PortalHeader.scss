@@ -12,6 +12,50 @@
   .title {
     flex-grow: 1;
     padding: 20px 20px 15px 0;
+
+    .logo-with-env {
+      display: flex;
+      align-items: center;
+      
+      .env-label {
+        display: inline-block;
+        margin-left: 12px;
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: bold;
+        border-radius: 4px;
+        background-color: #e0e0e0;
+        color: #333;
+        margin-bottom: 5px; // update this
+      
+        // Optional: change color per environment
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          margin-right: 6px;
+          border-radius: 50%;
+          background-color: #999;
+        }
+      
+        // Custom colors per environment
+        &[data-env='Integration'] {
+          background-color: #d1ecf1;
+          color: #0c5460;
+        }
+      
+        &[data-env='Testing'] {
+          background-color: #fff3cd;
+          color: #856404;
+        }
+      
+        &[data-env='Local Environment'] {
+          background-color: #f8d7da;
+          color: #721c24;
+        }
+      }
+    }
   }
 
   .profile-dropdown-button {

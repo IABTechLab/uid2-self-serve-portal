@@ -17,6 +17,7 @@ import { AuditTrailRoute } from '../../screens/auditTrailScreen';
 import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
+import { GetClientConfig } from '../../services/environmentVariables';
 import { getPathWithParticipant } from '../../utils/urlHelpers';
 import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
@@ -38,6 +39,23 @@ export function PortalHeader({
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const user = LoggedInUser?.user;
+  const { environment } = GetClientConfig();
+  const getEnvLabel = (env: string): string | null => {
+    switch (env) {
+      case 'prod':
+        return null; // no label in production
+      case 'integ':
+        return 'Integration';
+      case 'test':
+        return 'Testing';
+      case 'dev':
+        return 'Local Environment';
+      default:
+        return env;
+    }
+  };
+  const environmentLabel = getEnvLabel(environment);
+  console.log(environmentLabel);
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
@@ -65,13 +83,16 @@ export function PortalHeader({
   return (
     <header className='portal-header'>
       <div className='title'>
-        <Link data-testid='title-link' to={`/participant/${participant?.id}/home`}>
-          <img
-            src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
-            alt='UID2 logo'
-            className='uid2-logo'
-          />
-        </Link>
+        <div className='logo-with-env'>
+          <Link data-testid='title-link' to={`/participant/${participant?.id}/home`}>
+            <img
+              src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
+              alt='UID2 logo'
+              className='uid2-logo'
+            />
+          </Link>
+          {environmentLabel && <span className='env-label'>{environmentLabel}</span>}
+        </div>
       </div>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger className='profile-dropdown-button'>
