@@ -26,20 +26,8 @@
         border-radius: 4px;
         background-color: #e0e0e0;
         color: #333;
-        margin-bottom: 5px; // update this
+        margin-bottom: 5px; // update this to be dynamic with page size
       
-        // Optional: change color per environment
-        &::before {
-          content: '';
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          margin-right: 6px;
-          border-radius: 50%;
-          background-color: #999;
-        }
-      
-        // Custom colors per environment
         &[data-env='Integration'] {
           background-color: #d1ecf1;
           color: #0c5460;

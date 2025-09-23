@@ -91,7 +91,11 @@ export function PortalHeader({
               className='uid2-logo'
             />
           </Link>
-          {environmentLabel && <span className='env-label'>{environmentLabel}</span>}
+          {environmentLabel && (
+            <span className='env-label' data-env={environmentLabel}>
+              {environmentLabel}
+            </span>
+          )}
         </div>
       </div>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
