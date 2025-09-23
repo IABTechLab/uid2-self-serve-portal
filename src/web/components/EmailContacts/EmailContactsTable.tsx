@@ -31,8 +31,8 @@ function EmailContactsTableContent({
   const sortedEmailContacts = sortData(emailContacts);
 
   return (
-    <div className='business-contacts-table-container'>
-      <table className='business-contacts-table'>
+    <div className='email-contacts-table-container'>
+      <table className='email-contacts-table'>
         <thead>
           <tr>
             <SortableTableHeader<EmailContactResponse>
