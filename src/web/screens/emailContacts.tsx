@@ -2,7 +2,7 @@ import { Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
-import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
+import BusinessContactsTable from '../components/EmailContacts/EmailContactsTable';
 import { Loading } from '../components/Core/Loading/Loading';
 import { SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';

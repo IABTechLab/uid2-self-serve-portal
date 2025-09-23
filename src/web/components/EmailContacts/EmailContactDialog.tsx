@@ -1,30 +1,30 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { EmailContactForm, EmailContactResponse } from '../../services/participant';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { SelectInput } from '../Input/SelectInput';
 import { TextInput } from '../Input/TextInput';
 
-type BusinessContactDialogProps = Readonly<{
-  onFormSubmit: (formData: BusinessContactForm) => Promise<void>;
+type EmailContactDialogProps = Readonly<{
+  onFormSubmit: (formData: EmailContactForm) => Promise<void>;
   onOpenChange: () => void;
-  contact?: BusinessContactResponse;
+  contact?: EmailContactResponse;
 }>;
 
-function BusinessContactDialog({
+function EmailContactDialog({
   onFormSubmit,
   onOpenChange,
   contact,
-}: BusinessContactDialogProps) {
-  const formMethods = useForm<BusinessContactForm>({
+}: EmailContactDialogProps) {
+  const formMethods = useForm<EmailContactForm>({
     defaultValues: contact,
   });
   const { handleSubmit } = formMethods;
 
-  const onSubmit = async (formData: BusinessContactForm) => {
+  const onSubmit = async (formData: EmailContactForm) => {
     await onFormSubmit(formData);
     onOpenChange();
   };
@@ -68,4 +68,4 @@ function BusinessContactDialog({
   );
 }
 
-export default BusinessContactDialog;
+export default EmailContactDialog;

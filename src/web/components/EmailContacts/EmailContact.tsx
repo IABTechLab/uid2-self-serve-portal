@@ -1,22 +1,22 @@
 import { useState } from 'react';
 
-import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { EmailContactForm, EmailContactResponse } from '../../services/participant';
 import ActionButton from '../Core/Buttons/ActionButton';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { InlineMessage } from '../Core/InlineMessages/InlineMessage';
-import BusinessContactDialog from './BusinessContactDialog';
+import EmailContactDialog from './EmailContactDialog';
 
-type DeleteBusinessContactDialogProps = Readonly<{
-  contact: BusinessContactResponse;
+type DeleteEmailContactDialogProps = Readonly<{
+  contact: EmailContactResponse;
   onRemoveContact: () => Promise<void>;
   onOpenChange: () => void;
 }>;
 
-function DeleteBusinessContactDialog({
+function DeleteEmailContactDialog({
   contact,
   onRemoveContact,
   onOpenChange,
-}: DeleteBusinessContactDialogProps) {
+}: DeleteEmailContactDialogProps) {
   const handleRemove = async () => {
     await onRemoveContact();
     onOpenChange();
@@ -40,44 +40,44 @@ function DeleteBusinessContactDialog({
   );
 }
 
-type BusinessContactProps = Readonly<{
-  contact: BusinessContactResponse;
+type EmailContactProps = Readonly<{
+  contact: EmailContactResponse;
   onRemoveEmailContact: (id: number) => Promise<void>;
-  onUpdateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
+  onUpdateEmailContact: (id: number, form: EmailContactForm) => Promise<void>;
 }>;
 
-function BusinessContact({
+function EmailContact({
   contact,
   onRemoveEmailContact,
   onUpdateEmailContact,
-}: BusinessContactProps) {
+}: EmailContactProps) {
   const [errorMessage, setErrorMessage] = useState<string>();
-  const [showEditBusinessDialog, setShowEditBusinessDialog] = useState<boolean>(false);
-  const [showDeleteBusinessContactDialog, setShowDeleteBusinessContactDialog] =
+  const [showEditEmailContactDialog, setShowEditEmailContactDialog] = useState<boolean>(false);
+  const [showDeleteEmailContactDialog, setShowDeleteEmailContactDialog] =
     useState<boolean>(false);
 
   const setErrorInfo = (e: Error) => {
     setErrorMessage(e.message);
   };
 
-  const onOpenChangeDeleteBusinessContactDialog = () => {
-    setShowDeleteBusinessContactDialog(!showDeleteBusinessContactDialog);
+  const onOpenChangeDeleteEmailContactDialog = () => {
+    setShowDeleteEmailContactDialog(!showDeleteEmailContactDialog);
   };
 
-  const onOpenChangeEditBusinessContactDialog = () => {
-    setShowEditBusinessDialog(!showEditBusinessDialog);
+  const onOpenChangeEditEmailContactDialog = () => {
+    setShowEditEmailContactDialog(!showEditEmailContactDialog);
   };
 
   const handleRemoveEmailContact = async () => {
     try {
       await onRemoveEmailContact(contact.id);
-      onOpenChangeDeleteBusinessContactDialog();
+      onOpenChangeDeleteEmailContactDialog();
     } catch (e) {
       setErrorInfo(e as Error);
     }
   };
 
-  const handleUpdateEmailContact = async (formData: BusinessContactForm) => {
+  const handleUpdateEmailContact = async (formData: EmailContactForm) => {
     try {
       await onUpdateEmailContact(contact.id, formData);
     } catch (e) {
@@ -94,21 +94,21 @@ function BusinessContact({
         <div className='action-cell'>
           {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
           <div>
-            <ActionButton onClick={onOpenChangeEditBusinessContactDialog} icon='pencil' />
-            {showEditBusinessDialog && (
-              <BusinessContactDialog
+            <ActionButton onClick={onOpenChangeEditEmailContactDialog} icon='pencil' />
+            {showEditEmailContactDialog && (
+              <EmailContactDialog
                 onFormSubmit={handleUpdateEmailContact}
                 contact={contact}
-                onOpenChange={onOpenChangeEditBusinessContactDialog}
+                onOpenChange={onOpenChangeEditEmailContactDialog}
               />
             )}
 
-            <ActionButton onClick={onOpenChangeDeleteBusinessContactDialog} icon='trash-can' />
-            {showDeleteBusinessContactDialog && (
-              <DeleteBusinessContactDialog
+            <ActionButton onClick={onOpenChangeDeleteEmailContactDialog} icon='trash-can' />
+            {showDeleteEmailContactDialog && (
+              <DeleteEmailContactDialog
                 onRemoveContact={handleRemoveEmailContact}
                 contact={contact}
-                onOpenChange={onOpenChangeDeleteBusinessContactDialog}
+                onOpenChange={onOpenChangeDeleteEmailContactDialog}
               />
             )}
           </div>
@@ -118,4 +118,4 @@ function BusinessContact({
   );
 }
 
-export default BusinessContact;
+export default EmailContact;

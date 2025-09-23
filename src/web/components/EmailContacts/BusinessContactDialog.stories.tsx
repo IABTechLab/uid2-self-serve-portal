@@ -2,7 +2,7 @@ import type { Meta } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import BusinessContactDialog from './BusinessContactDialog';
+import BusinessContactDialog from './EmailContactDialog';
 
 const meta: Meta<typeof BusinessContactDialog> = {
   component: BusinessContactDialog,

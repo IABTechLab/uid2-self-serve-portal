@@ -1,49 +1,49 @@
 import { useState } from 'react';
 
 import { SortableProvider, useSortable } from '../../contexts/SortableTableProvider';
-import { BusinessContactForm, BusinessContactResponse } from '../../services/participant';
+import { EmailContactForm, EmailContactResponse } from '../../services/participant';
 import { SortableTableHeader } from '../Core/Tables/SortableTableHeader';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
-import BusinessContact from './BusinessContact';
-import BusinessContactDialog from './BusinessContactDialog';
+import EmailContact from './EmailContact';
+import EmailContactDialog from './EmailContactDialog';
 
-import './BusinessContactsTable.scss';
+import './EmailContactsTable.scss';
 
-type BusinessContactsTableProps = Readonly<{
-  businessContacts: BusinessContactResponse[];
+type EmailContactsTableProps = Readonly<{
+  emailContacts: EmailContactResponse[];
   onRemoveEmailContact: (id: number) => Promise<void>;
-  onUpdateEmailContact: (id: number, form: BusinessContactForm) => Promise<void>;
-  onAddEmailContact: (form: BusinessContactForm) => Promise<void>;
+  onUpdateEmailContact: (id: number, form: EmailContactForm) => Promise<void>;
+  onAddEmailContact: (form: EmailContactForm) => Promise<void>;
 }>;
 
-function BusinessContactsTableContent({
-  businessContacts,
+function EmailContactsTableContent({
+  emailContacts,
   onRemoveEmailContact,
   onUpdateEmailContact,
   onAddEmailContact,
-}: BusinessContactsTableProps) {
-  const [showBusinessContactDialog, setShowBusinessContactDialog] = useState<boolean>(false);
-  const onOpenChangeBusinessContactDialog = () => {
-    setShowBusinessContactDialog(!showBusinessContactDialog);
+}: EmailContactsTableProps) {
+  const [showEmailContactDialog, setShowEmailContactDialog] = useState<boolean>(false);
+  const onOpenChangeEmailContactDialog = () => {
+    setShowEmailContactDialog(!showEmailContactDialog);
   };
 
-  const { sortData } = useSortable<BusinessContactResponse>();
-  const sortedBusinessContacts = sortData(businessContacts);
+  const { sortData } = useSortable<EmailContactResponse>();
+  const sortedEmailContacts = sortData(emailContacts);
 
   return (
     <div className='business-contacts-table-container'>
       <table className='business-contacts-table'>
         <thead>
           <tr>
-            <SortableTableHeader<BusinessContactResponse>
+            <SortableTableHeader<EmailContactResponse>
               sortKey='name'
               header='Email Group Name'
             />
-            <SortableTableHeader<BusinessContactResponse>
+            <SortableTableHeader<EmailContactResponse>
               sortKey='emailAlias'
               header='Email Alias'
             />
-            <SortableTableHeader<BusinessContactResponse>
+            <SortableTableHeader<EmailContactResponse>
               sortKey='contactType'
               header='Contact Type'
             />
@@ -51,8 +51,8 @@ function BusinessContactsTableContent({
           </tr>
         </thead>
         <tbody>
-          {sortedBusinessContacts.map((e) => (
-            <BusinessContact
+          {sortedEmailContacts.map((e) => (
+            <EmailContact
               key={e.id}
               contact={e}
               onRemoveEmailContact={onRemoveEmailContact}
@@ -62,7 +62,7 @@ function BusinessContactsTableContent({
         </tbody>
       </table>
 
-      {!businessContacts.length && (
+      {!emailContacts.length && (
         <TableNoDataPlaceholder
           icon={<img src='/email-icon.svg' alt='email-icon' />}
           title='No Email Contacts'
@@ -71,23 +71,23 @@ function BusinessContactsTableContent({
         </TableNoDataPlaceholder>
       )}
 
-      <button className='small-button' type='button' onClick={onOpenChangeBusinessContactDialog}>
+      <button className='small-button' type='button' onClick={onOpenChangeEmailContactDialog}>
         Add Email Contact
       </button>
-      {showBusinessContactDialog && (
-        <BusinessContactDialog
+      {showEmailContactDialog && (
+        <EmailContactDialog
           onFormSubmit={onAddEmailContact}
-          onOpenChange={onOpenChangeBusinessContactDialog}
+          onOpenChange={onOpenChangeEmailContactDialog}
         />
       )}
     </div>
   );
 }
 
-export default function BusinessContactsTable(props: BusinessContactsTableProps) {
+export default function EmailContactsTable(props: EmailContactsTableProps) {
   return (
     <SortableProvider>
-      <BusinessContactsTableContent {...props} />
+      <EmailContactsTableContent {...props} />
     </SortableProvider>
   );
 }

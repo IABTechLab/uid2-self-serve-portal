@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import BusinessContactsTable from './BusinessContactsTable';
+import BusinessContactsTable from './EmailContactsTable';
 
 const meta: Meta<typeof BusinessContactsTable> = {
   title: 'Business Contacts/Business Contacts Table',
