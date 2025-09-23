@@ -39,7 +39,6 @@ export function PortalHeader({
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
   const user = LoggedInUser?.user;
-  
   const { environment } = GetClientConfig();
   const getEnvLabel = (env: string): string | null => {
     switch (env) {
