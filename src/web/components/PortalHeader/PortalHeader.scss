@@ -16,18 +16,18 @@
     .logo-with-env {
       display: flex;
       align-items: center;
+      gap: 8px;
 
       .env-label {
         display: inline-block;
-        // display: inline-flex;
-        // align-items: center;
         padding: 4px 8px;
         font-size: 12px;
         font-weight: bold;
         border-radius: 4px;
         background-color: #e0e0e0;
         color: #333;
-        margin-bottom: 5px; // update this to be dynamic with page size
+        margin-bottom: 5px;
+        margin-left: 5px;
 
         &::before {
           content: '';
