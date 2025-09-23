@@ -1,15 +1,15 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import BusinessContact from './EmailContact';
+import EmailContact from './EmailContact';
 
-const meta: Meta<typeof BusinessContact> = {
-  title: 'Business Contacts/Business Contact Item',
-  component: BusinessContact,
+const meta: Meta<typeof EmailContact> = {
+  title: 'Email Contacts/Email Contact Item',
+  component: EmailContact,
 };
 
 export default meta;
-type Story = StoryObj<typeof BusinessContact>;
+type Story = StoryObj<typeof EmailContact>;
 
 export const Default: Story = {
   args: {
