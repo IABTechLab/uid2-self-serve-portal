@@ -2,14 +2,14 @@ import { Suspense, useContext } from 'react';
 import { useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
-import BusinessContactsTable from '../components/BusinessContacts/BusinessContactsTable';
 import { Loading } from '../components/Core/Loading/Loading';
 import { SuccessToast } from '../components/Core/Popups/Toast';
 import { ScreenContentContainer } from '../components/Core/ScreenContentContainer/ScreenContentContainer';
+import EmailContactsTable from '../components/EmailContacts/EmailContactsTable';
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddEmailContact,
-  BusinessContactForm,
+  EmailContactForm,
   GetEmailContacts,
   RemoveEmailContact,
   UpdateEmailContact,
@@ -27,7 +27,7 @@ const loader = makeParticipantLoader((participantId) => {
   return defer({ emailContacts });
 });
 
-export function BusinessContacts() {
+export function EmailContacts() {
   const data = useLoaderData<typeof loader>();
   const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
@@ -44,7 +44,7 @@ export function BusinessContacts() {
     }
   };
 
-  const handleUpdateEmailContact = async (contactId: number, formData: BusinessContactForm) => {
+  const handleUpdateEmailContact = async (contactId: number, formData: EmailContactForm) => {
     try {
       const response = await UpdateEmailContact(contactId, formData, participant!.id);
       if (response.status === 200) {
@@ -56,7 +56,7 @@ export function BusinessContacts() {
     }
   };
 
-  const handleAddEmailContact = async (formData: BusinessContactForm) => {
+  const handleAddEmailContact = async (formData: EmailContactForm) => {
     try {
       const response = await AddEmailContact(formData, participant!.id);
       if (response.status === 201) {
@@ -69,18 +69,18 @@ export function BusinessContacts() {
   };
 
   return (
-    <div className='portal-business-contact'>
+    <div className='portal-email-contact'>
       <h1>Email Contacts</h1>
       <p className='heading-details'>
         View and manage email contacts. We’ll send information about the latest updates and releases
         for UID2.
       </p>
       <ScreenContentContainer>
-        <Suspense fallback={<Loading message='Loading business contacts...' />}>
+        <Suspense fallback={<Loading message='Loading email contacts...' />}>
           <AwaitTypesafe resolve={data.emailContacts}>
             {(emailContacts) => (
-              <BusinessContactsTable
-                businessContacts={emailContacts}
+              <EmailContactsTable
+                emailContacts={emailContacts}
                 onRemoveEmailContact={handleRemoveEmailContact}
                 onUpdateEmailContact={handleUpdateEmailContact}
                 onAddEmailContact={handleAddEmailContact}
@@ -95,7 +95,7 @@ export function BusinessContacts() {
 
 export const EmailContactsRoute: PortalRoute = {
   description: 'Email Contacts',
-  element: <BusinessContacts />,
+  element: <EmailContacts />,
   errorElement: <RouteErrorBoundary />,
   path: '/participant/:participantId/emailContacts',
   loader,

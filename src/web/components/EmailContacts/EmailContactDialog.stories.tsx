@@ -2,15 +2,15 @@ import type { Meta } from '@storybook/react-webpack5';
 import { useState } from 'react';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import BusinessContactDialog from './BusinessContactDialog';
+import EmailContactDialog from './EmailContactDialog';
 
-const meta: Meta<typeof BusinessContactDialog> = {
-  component: BusinessContactDialog,
-  title: 'Business Contacts/Business Contacts Dialog',
+const meta: Meta<typeof EmailContactDialog> = {
+  component: EmailContactDialog,
+  title: 'Email Contacts/Email Contacts Dialog',
 };
 export default meta;
 
-export const WithoutBusinessContact = () => {
+export const WithoutEmailContact = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -19,7 +19,7 @@ export const WithoutBusinessContact = () => {
         Open Dialog
       </button>
       {isOpen && (
-        <BusinessContactDialog
+        <EmailContactDialog
           onOpenChange={() => setIsOpen(!isOpen)}
           onFormSubmit={(formData) =>
             Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`))
@@ -30,7 +30,7 @@ export const WithoutBusinessContact = () => {
   );
 };
 
-export const WithBusinessContact = () => {
+export const WithEmailContact = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -39,7 +39,7 @@ export const WithBusinessContact = () => {
         Open Dialog
       </button>
       {isOpen && (
-        <BusinessContactDialog
+        <EmailContactDialog
           onOpenChange={() => setIsOpen(!isOpen)}
           onFormSubmit={(formData) =>
             Promise.resolve(console.log(`contact from submit with ${JSON.stringify(formData)}`))

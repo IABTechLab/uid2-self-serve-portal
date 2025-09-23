@@ -1,19 +1,19 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { ContactType } from '../../../api/entities/BusinessContact';
-import BusinessContactsTable from './BusinessContactsTable';
+import EmailContactsTable from './EmailContactsTable';
 
-const meta: Meta<typeof BusinessContactsTable> = {
-  title: 'Business Contacts/Business Contacts Table',
-  component: BusinessContactsTable,
+const meta: Meta<typeof EmailContactsTable> = {
+  title: 'Email Contacts/Email Contacts Table',
+  component: EmailContactsTable,
 };
 
 export default meta;
-type Story = StoryObj<typeof BusinessContactsTable>;
+type Story = StoryObj<typeof EmailContactsTable>;
 
-export const WithoutBusinessContacts: Story = {
+export const WithoutEmailContacts: Story = {
   args: {
-    businessContacts: [],
+    emailContacts: [],
     onRemoveEmailContact: (id) => Promise.resolve(console.log(`Delete contact id: ${id}`)),
     onUpdateEmailContact: (id, form) =>
       Promise.resolve(console.log(`Update contact id: ${id} with ${JSON.stringify(form)}`)),
@@ -22,10 +22,10 @@ export const WithoutBusinessContacts: Story = {
   },
 };
 
-export const WithBusinessContacts: Story = {
+export const WithEmailContacts: Story = {
   args: {
-    ...WithoutBusinessContacts.args,
-    businessContacts: [
+    ...WithoutEmailContacts.args,
+    emailContacts: [
       {
         id: 1,
         name: 'Business Team',
@@ -46,7 +46,7 @@ export const WithBusinessContacts: Story = {
 
 export const WithDeleteError: Story = {
   args: {
-    ...WithBusinessContacts.args,
+    ...WithEmailContacts.args,
     onRemoveEmailContact: (id) => Promise.reject(console.log(`Failed to delete contact id: ${id}`)),
   },
 };
