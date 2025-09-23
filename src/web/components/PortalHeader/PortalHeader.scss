@@ -28,19 +28,40 @@
         color: #333;
         margin-bottom: 5px; // update this to be dynamic with page size
       
-        &[data-env='Integration'] {
-          background-color: #d1ecf1;
-          color: #0c5460;
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          margin-right: 6px;
+          border-radius: 50%;
         }
-      
-        &[data-env='Testing'] {
-          background-color: #fff3cd;
-          color: #856404;
+
+        &.integration {
+          background-color: var(--theme-env-label-bg-integration);
+          color: var(--theme-env-label-text-integration);
+
+          &::before {
+            background-color: var(--theme-env-label-circle-integration);
+          }
         }
-      
-        &[data-env='Local Environment'] {
-          background-color: #f8d7da;
-          color: #721c24;
+
+        &.testing {
+          background-color: var(--theme-env-label-bg-testing);
+          color: var(--theme-env-label-text-testing);
+
+          &::before {
+            background-color: var(--theme-env-label-circle-testing);
+          }
+        }
+
+        &.local-environment {
+          background-color: var(--theme-env-label-bg-local);
+          color: var(--theme-env-label-text-local);
+
+          &::before {
+            background-color: var(--theme-env-label-circle-local);
+          }
         }
       }
     }

@@ -91,7 +91,7 @@ export function PortalHeader({
             />
           </Link>
           {environmentLabel && (
-            <span className='env-label' data-env={environmentLabel}>
+            <span className={`env-label ${environmentLabel?.toLowerCase().replace(/\s/g, '-')}`}>
               {environmentLabel}
             </span>
           )}
