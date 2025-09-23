@@ -244,15 +244,15 @@ export async function UpdateSharingTypes(
   }
 }
 
-export type BusinessContactResponse = z.infer<typeof BusinessContactSchema>;
+export type EmailContactResponse = z.infer<typeof BusinessContactSchema>;
 
-export type BusinessContactForm = {
+export type EmailContactForm = {
   name: string;
   emailAlias: string;
   contactType: string;
 };
 
-export async function AddEmailContact(formData: BusinessContactForm, participantId: number) {
+export async function AddEmailContact(formData: EmailContactForm, participantId: number) {
   try {
     return await axios.post(`/participants/${participantId}/businessContacts`, formData);
   } catch (e: unknown) {
@@ -262,7 +262,7 @@ export async function AddEmailContact(formData: BusinessContactForm, participant
 
 export async function GetEmailContacts(participantId: number) {
   try {
-    const result = await axios.get<BusinessContactResponse[]>(
+    const result = await axios.get<EmailContactResponse[]>(
       `/participants/${participantId}/businessContacts`
     );
     return result.data;
@@ -281,7 +281,7 @@ export async function RemoveEmailContact(contactId: number, participantId: numbe
 
 export async function UpdateEmailContact(
   contactId: number,
-  formData: BusinessContactForm,
+  formData: EmailContactForm,
   participantId: number
 ) {
   try {
