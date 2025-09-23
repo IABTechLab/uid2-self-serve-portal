@@ -9,7 +9,7 @@ import { ScreenContentContainer } from '../components/Core/ScreenContentContaine
 import { ParticipantContext } from '../contexts/ParticipantProvider';
 import {
   AddEmailContact,
-  BusinessContactForm,
+  EmailContactForm,
   GetEmailContacts,
   RemoveEmailContact,
   UpdateEmailContact,
@@ -44,7 +44,7 @@ export function BusinessContacts() {
     }
   };
 
-  const handleUpdateEmailContact = async (contactId: number, formData: BusinessContactForm) => {
+  const handleUpdateEmailContact = async (contactId: number, formData: EmailContactForm) => {
     try {
       const response = await UpdateEmailContact(contactId, formData, participant!.id);
       if (response.status === 200) {
@@ -56,7 +56,7 @@ export function BusinessContacts() {
     }
   };
 
-  const handleAddEmailContact = async (formData: BusinessContactForm) => {
+  const handleAddEmailContact = async (formData: EmailContactForm) => {
     try {
       const response = await AddEmailContact(formData, participant!.id);
       if (response.status === 201) {
