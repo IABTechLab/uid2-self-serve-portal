@@ -7,7 +7,7 @@ import {
   isUid2SupportCheck,
 } from '../middleware/userRoleMiddleware';
 import { enrichCurrentUser } from '../middleware/usersMiddleware';
-import { createBusinessContactsRouter } from './businessContactsRouter';
+import { createEmailContactsRouter } from './emailContactsRouter';
 import {
   handleCompleteRecommendations,
   handleGetAllParticipants,
@@ -120,8 +120,8 @@ export function createParticipantsRouter() {
   const participantUsersRouter = createParticipantUsersRouter();
   participantsRouter.use('/:participantId/users', participantUsersRouter);
 
-  const businessContactsRouter = createBusinessContactsRouter();
-  participantsRouter.use('/:participantId/businessContacts', businessContactsRouter);
+  const emailContactsRouter = createEmailContactsRouter();
+  participantsRouter.use('/:participantId/emailContacts', emailContactsRouter);
 
-  return { router: participantsRouter, businessContactsRouter };
+  return { router: participantsRouter, emailContactsRouter };
 }

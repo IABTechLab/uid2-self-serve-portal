@@ -1,6 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { ContactType } from '../../../api/entities/BusinessContact';
+import { ContactType } from '../../../api/entities/EmailContact';
 import { EmailContactForm, EmailContactResponse } from '../../services/participant';
 import { validateEmail } from '../../utils/textHelpers';
 import FormSubmitButton from '../Core/Buttons/FormSubmitButton';
@@ -14,13 +14,9 @@ type EmailContactDialogProps = Readonly<{
   contact?: EmailContactResponse;
 }>;
 
-function EmailContactDialog({
-  onFormSubmit,
-  onOpenChange,
-  contact,
-}: EmailContactDialogProps) {
+function EmailContactDialog({ onFormSubmit, onOpenChange, contact }: EmailContactDialogProps) {
   const formMethods = useForm<EmailContactForm>({
-    defaultValues: contact,
+    defaultValues: contact as EmailContactForm | undefined,
   });
   const { handleSubmit } = formMethods;
 

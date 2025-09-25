@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
 import { ParticipantDTO } from '../../api/entities/Participant';
-import { BusinessContactSchema } from '../../api/entities/Schemas';
+import { EmailContactSchema } from '../../api/entities/Schemas';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
 import { backendError } from '../utils/apiError';
@@ -244,7 +244,7 @@ export async function UpdateSharingTypes(
   }
 }
 
-export type EmailContactResponse = z.infer<typeof BusinessContactSchema>;
+export type EmailContactResponse = z.infer<typeof EmailContactSchema>;
 
 export type EmailContactForm = {
   name: string;
@@ -254,7 +254,7 @@ export type EmailContactForm = {
 
 export async function AddEmailContact(formData: EmailContactForm, participantId: number) {
   try {
-    return await axios.post(`/participants/${participantId}/businessContacts`, formData);
+    return await axios.post(`/participants/${participantId}/emailContacts`, formData);
   } catch (e: unknown) {
     throw backendError(e, 'Could not add email contact');
   }
@@ -263,7 +263,7 @@ export async function AddEmailContact(formData: EmailContactForm, participantId:
 export async function GetEmailContacts(participantId: number) {
   try {
     const result = await axios.get<EmailContactResponse[]>(
-      `/participants/${participantId}/businessContacts`
+      `/participants/${participantId}/emailContacts`
     );
     return result.data;
   } catch (e: unknown) {
@@ -273,7 +273,7 @@ export async function GetEmailContacts(participantId: number) {
 
 export async function RemoveEmailContact(contactId: number, participantId: number) {
   try {
-    return await axios.delete(`/participants/${participantId}/businessContacts/${contactId}`);
+    return await axios.delete(`/participants/${participantId}/emailContacts/${contactId}`);
   } catch (e: unknown) {
     throw backendError(e, 'Could not delete email contact');
   }
@@ -286,7 +286,7 @@ export async function UpdateEmailContact(
 ) {
   try {
     return await axios.put(
-      `/participants/${participantId}/businessContacts/${contactId}`,
+      `/participants/${participantId}/emailContacts/${contactId}`,
       formData
     );
   } catch (e: unknown) {
