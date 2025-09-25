@@ -22,13 +22,13 @@ export const hasEmailContactAccess = async (
   const emailContact = await EmailContact.query().findById(contactId);
 
   if (!emailContact) {
-    return res.status(404).send([{ message: 'The business contact cannot be found.' }]);
+    return res.status(404).send([{ message: 'The email contact cannot be found.' }]);
   }
 
   if (emailContact.participantId !== participant!.id) {
     return res
       .status(403)
-      .send([{ message: 'You do not have permission to that business contact.' }]);
+      .send([{ message: 'You do not have permission to that email contact.' }]);
   }
 
   req.emailContact = emailContact;

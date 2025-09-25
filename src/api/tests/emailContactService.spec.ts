@@ -6,7 +6,7 @@ import { EmailContactRequest } from '../services/emailContactsService';
 import { mockEmailContact, mockParticipant, mockUser } from './queryMocks';
 import useTestServer, { api, routers } from './utils';
 
-describe('Business Contact Service Tests', () => {
+describe('Email Contact Service Tests', () => {
   const withToken = useTestServer();
 
   beforeAll(() => {
