@@ -16,7 +16,7 @@ type EmailContactDialogProps = Readonly<{
 
 function EmailContactDialog({ onFormSubmit, onOpenChange, contact }: EmailContactDialogProps) {
   const formMethods = useForm<EmailContactForm>({
-    defaultValues: contact,
+    defaultValues: contact as EmailContactForm | undefined,
   });
   const { handleSubmit } = formMethods;
 
