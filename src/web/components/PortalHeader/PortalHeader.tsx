@@ -40,21 +40,23 @@ export function PortalHeader({
   const { LoggedInUser } = useContext(CurrentUserContext);
   const user = LoggedInUser?.user;
   const { environment } = GetClientConfig();
-  const getEnvLabel = (env: string): string | null => {
-    switch (env) {
-      case 'prod':
-        return null;
-      case 'integ':
-        return 'Integration';
-      case 'test':
-        return 'Testing';
-      case 'dev':
-        return 'Local Environment';
-      default:
-        return env;
-    }
-  };
-  const environmentLabel = getEnvLabel(environment);
+  let environmentLabel: string | null;
+  switch (environment) {
+    case 'prod':
+      environmentLabel = null;
+      break;
+    case 'integ':
+      environmentLabel = 'Integration';
+      break;
+    case 'test':
+      environmentLabel = 'Testing';
+      break;
+    case 'dev':
+      environmentLabel = 'Local Environment';
+      break;
+    default:
+      environmentLabel = environment;
+  }
 
   const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
