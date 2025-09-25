@@ -1,36 +1,36 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-import { BusinessContact } from '../entities/BusinessContact';
+import { EmailContact } from '../entities/EmailContact';
 import { Participant } from '../entities/Participant';
 
-export interface BusinessContactRequest extends Request {
+export interface EmailContactRequest extends Request {
   participant?: Participant;
-  businessContact?: BusinessContact;
+  emailContact?: EmailContact;
 }
 
 const contactIdSchema = z.object({
   contactId: z.string(),
 });
-export const hasBusinessContactAccess = async (
-  req: BusinessContactRequest,
+export const hasEmailContactAccess = async (
+  req: EmailContactRequest,
   res: Response,
   next: NextFunction
 ) => {
   const { participant } = req;
   const { contactId } = contactIdSchema.parse(req.params);
-  const businessContact = await BusinessContact.query().findById(contactId);
+  const emailContact = await EmailContact.query().findById(contactId);
 
-  if (!businessContact) {
+  if (!emailContact) {
     return res.status(404).send([{ message: 'The business contact cannot be found.' }]);
   }
 
-  if (businessContact.participantId !== participant!.id) {
+  if (emailContact.participantId !== participant!.id) {
     return res
       .status(403)
       .send([{ message: 'You do not have permission to that business contact.' }]);
   }
 
-  req.businessContact = businessContact;
+  req.emailContact = emailContact;
   return next();
 };

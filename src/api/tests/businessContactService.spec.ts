@@ -1,19 +1,19 @@
-import { jest } from "@jest/globals";
+import { jest } from '@jest/globals';
 import request, { Request } from 'supertest';
 
-import { ContactType } from '../entities/BusinessContact';
-import { BusinessContactRequest } from '../services/businessContactsService';
-import { mockBusinessContact, mockParticipant, mockUser } from './queryMocks';
+import { ContactType } from '../entities/EmailContact';
+import { EmailContactRequest } from '../services/emailContactsService';
+import { mockEmailContact, mockParticipant, mockUser } from './queryMocks';
 import useTestServer, { api, routers } from './utils';
 
 describe('Business Contact Service Tests', () => {
   const withToken = useTestServer();
 
   beforeAll(() => {
-    routers!.participantsRouter.businessContactsRouter.get(
+    routers!.participantsRouter.emailContactsRouter.get(
       '/:contactId',
-      (req: BusinessContactRequest, res) => {
-        res.status(200).json(req.businessContact);
+      (req: EmailContactRequest, res) => {
+        res.status(200).json(req.emailContact);
       }
     );
   });
@@ -22,12 +22,12 @@ describe('Business Contact Service Tests', () => {
     jest.restoreAllMocks();
   });
 
-  describe('hasBusinessContactAccess middleware', () => {
-    it('should allow access when business contact belongs to participant', async () => {
+  describe('hasEmailContactAccess middleware', () => {
+    it('should allow access when email contact belongs to participant', async () => {
       mockUser();
       mockParticipant();
-      mockBusinessContact();
-      const req: Request = request(api).get('/api/participants/1/businessContacts/1');
+      mockEmailContact();
+      const req: Request = request(api).get('/api/participants/1/emailContacts/1');
       const res = await withToken(req);
 
       expect(res.statusCode).toBe(200);
@@ -40,28 +40,28 @@ describe('Business Contact Service Tests', () => {
       });
     });
 
-    it('should deny access when business contact does not belong to participant', async () => {
+    it('should deny access when email contact does not belong to participant', async () => {
       mockUser();
       mockParticipant();
-      mockBusinessContact({ participantId: 2 });
+      mockEmailContact({ participantId: 2 });
 
-      const req: Request = request(api).get('/api/participants/1/businessContacts/1');
+      const req: Request = request(api).get('/api/participants/1/emailContacts/1');
       const res = await withToken(req);
 
       expect(res.statusCode).toBe(403);
-      expect(res.body[0].message).toBe('You do not have permission to that business contact.');
+      expect(res.body[0].message).toBe('You do not have permission to that email contact.');
     });
 
-    it('should throw error when business contact does not exist', async () => {
+    it('should throw error when email contact does not exist', async () => {
       mockUser();
       mockParticipant();
-      mockBusinessContact(null);
+      mockEmailContact(null);
 
-      const req: Request = request(api).get('/api/participants/1/businessContacts/1');
+      const req: Request = request(api).get('/api/participants/1/emailContacts/1');
       const res = await withToken(req);
 
       expect(res.statusCode).toBe(404);
-      expect(res.body[0].message).toBe('The business contact cannot be found.');
+      expect(res.body[0].message).toBe('The email contact cannot be found.');
     });
   });
 });

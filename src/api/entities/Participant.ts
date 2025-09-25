@@ -2,7 +2,7 @@ import { Model, RelationMappings } from 'objection';
 
 import { ApiRole, ApiRoleDTO } from './ApiRole.ts';
 import { BaseModel } from './BaseModel.ts';
-import { BusinessContact } from './BusinessContact.ts';
+import { EmailContact } from './EmailContact.ts';
 import { ModelObjectOpt } from './ModelObjectOpt.ts';
 import { ParticipantType, ParticipantTypeDTO } from './ParticipantType.ts';
 import { User, UserDTO } from './User.ts';
@@ -50,12 +50,12 @@ export class Participant extends BaseModel {
           to: 'users.id',
         },
       },
-      businessContacts: {
+      emailContacts: {
         relation: Model.HasManyRelation,
-        modelClass: () => BusinessContact,
+        modelClass: () => EmailContact,
         join: {
           from: 'participants.id',
-          to: 'businessContacts.participantId',
+          to: 'emailContacts.participantId',
         },
       },
       approver: {
@@ -103,6 +103,7 @@ export class Participant extends BaseModel {
   declare currentUserRoleIds?: number[];
   declare participantToUserRoles?: UserToParticipantRole[];
   declare primaryContact?: User;
+  declare emailContacts?: EmailContact[];
 }
 
 // TODO: Can ModelObjectOpt do relationships automatically?

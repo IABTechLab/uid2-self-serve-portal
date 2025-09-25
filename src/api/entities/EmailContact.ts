@@ -8,22 +8,22 @@ export enum ContactType {
   Technical = 'Technical',
 }
 
-export class BusinessContact extends BaseModel {
+export class EmailContact extends BaseModel {
   static get tableName() {
-    return 'businessContacts';
+    return 'emailContacts';
   }
   static get relationMappings(): RelationMappings {
-		return {
-			participant: {
-				relation: Model.BelongsToOneRelation,
-				modelClass: () => Participant,
-				join: {
-					from: 'businessContacts.participantId',
-					to: 'participants.id',
-				},
-			},
-		};
-  };
+    return {
+      participant: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: () => Participant,
+        join: {
+          from: 'emailContacts.participantId',
+          to: 'participants.id',
+        },
+      },
+    };
+  }
 
   declare id: number;
   declare name: string;
