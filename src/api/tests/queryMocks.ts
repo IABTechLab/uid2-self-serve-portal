@@ -1,7 +1,7 @@
 import { jest } from '@jest/globals';
 import { QueryBuilder } from 'objection';
 
-import { ContactType,EmailContact } from '../entities/EmailContact';
+import { ContactType, EmailContact } from '../entities/EmailContact';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
 

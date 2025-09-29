@@ -12,6 +12,7 @@ export interface EmailContactRequest extends Request {
 const contactIdSchema = z.object({
   contactId: z.string(),
 });
+
 export const hasEmailContactAccess = async (
   req: EmailContactRequest,
   res: Response,
@@ -26,9 +27,7 @@ export const hasEmailContactAccess = async (
   }
 
   if (emailContact.participantId !== participant!.id) {
-    return res
-      .status(403)
-      .send([{ message: 'You do not have permission to that email contact.' }]);
+    return res.status(403).send([{ message: 'You do not have permission to that email contact.' }]);
   }
 
   req.emailContact = emailContact;
