@@ -1,7 +1,7 @@
-import { jest } from "@jest/globals";
+import { jest } from '@jest/globals';
 import { QueryBuilder } from 'objection';
 
-import { BusinessContact, ContactType } from '../entities/BusinessContact';
+import { ContactType, EmailContact } from '../entities/EmailContact';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
 
@@ -87,10 +87,10 @@ export const mockUserOnce = (user: PartialUserOrNull | PartialUserOrNull[] = {})
   );
 };
 
-export const mockBusinessContact = (businessContact: Partial<BusinessContact> | null = {}) => {
-  jest.spyOn(BusinessContact, 'query').mockReturnValueOnce(
-    QueryBuilder.forClass(BusinessContact).resolve(
-      businessContact === null
+export const mockEmailContact = (emailContact: Partial<EmailContact> | null = {}) => {
+  jest.spyOn(EmailContact, 'query').mockReturnValueOnce(
+    QueryBuilder.forClass(EmailContact).resolve(
+      emailContact === null
         ? undefined
         : {
             id: 1,
@@ -98,7 +98,7 @@ export const mockBusinessContact = (businessContact: Partial<BusinessContact> | 
             emailAlias: 'Test.contact@test.com',
             contactType: ContactType.Business,
             participantId: 1,
-            ...businessContact,
+            ...emailContact,
           }
     )
   );

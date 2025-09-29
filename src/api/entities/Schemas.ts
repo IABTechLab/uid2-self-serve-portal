@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { ContactType } from './BusinessContact.ts';
+import { ContactType } from './EmailContact.ts';
 import { UserJobFunction } from './User.ts';
 
 export const ApiRoleSchema = z.object({
@@ -10,7 +10,7 @@ export const ApiRoleSchema = z.object({
   order: z.number(),
 });
 
-export const BusinessContactSchema = z.object({
+export const EmailContactSchema = z.object({
   id: z.number(),
   name: z.string(),
   emailAlias: z.string(),
@@ -29,8 +29,8 @@ export const UserSchema = z.object({
 });
 
 export const ParticipantTypeSchema = z.object({
-	id: z.number(),
-	typeName: z.string().optional(),
+  id: z.number(),
+  typeName: z.string().optional(),
 });
 
 export const ParticipantSchema = z.object({
