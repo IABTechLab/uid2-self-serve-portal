@@ -1,9 +1,10 @@
 .select-dropdown {
   .select-dropdown-content {
     max-height: 400px;
-    overflow: auto;
     border-radius: 5px;
     border: 1px solid var(--theme-border);
+    display: flex;
+    flex-direction: column;
   }
 
   & > button {
@@ -28,11 +29,9 @@
   }
 
   &-search {
-    padding: 0px 8px;
+    padding: 8px;
     background-color: var(--theme-background);
-    position: sticky;
-    top: 0;
-    z-index: 1;
+    flex-shrink: 0; /* Prevent search area from shrinking */
 
     input {
       width: 100%;
@@ -48,6 +47,12 @@
         right: 10px;
       }
     }
+  }
+
+  &-list {
+    flex: 1; /* Take remaining space */
+    overflow-y: auto; /* Only this section scrolls */
+    min-height: 0; /* Allow flex item to shrink below content size */
   }
 
   &-checkbox-item {
