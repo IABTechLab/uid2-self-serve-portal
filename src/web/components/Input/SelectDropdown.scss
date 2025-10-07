@@ -31,7 +31,7 @@
   &-search {
     padding: 0px 13px 0px 8px;
     background-color: var(--theme-background);
-    flex-shrink: 0; /* Prevent search area from shrinking */
+    flex-shrink: 0;
 
     input {
       width: 100%;
@@ -50,9 +50,9 @@
   }
 
   &-list {
-    flex: 1; /* Take remaining space */
-    overflow-y: auto; /* Only this section scrolls */
-    min-height: 0; /* Allow flex item to shrink below content size */
+    flex: 1; 
+    overflow-y: auto; 
+    min-height: 0; 
   }
 
   &-checkbox-item {
