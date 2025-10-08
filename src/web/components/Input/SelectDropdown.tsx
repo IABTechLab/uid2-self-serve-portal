@@ -100,11 +100,13 @@ export function SelectDropdown<TValue>({
               placeholder='Search participants'
             />
           </div>
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map(checkboxItem)
-          ) : (
-            <div className='select-dropdown-checkbox-item'>No participants found</div>
-          )}
+          <div className='select-dropdown-list'>
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map(checkboxItem)
+            ) : (
+              <div className='select-dropdown-checkbox-item'>No participants found</div>
+            )}
+          </div>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </div>
