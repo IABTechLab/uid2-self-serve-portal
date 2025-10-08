@@ -9,6 +9,8 @@ export interface EmailContactRequest extends Request {
   emailContact?: EmailContact;
 }
 
+// testing trivy scan with test pr
+
 const contactIdSchema = z.object({
   contactId: z.string(),
 });
