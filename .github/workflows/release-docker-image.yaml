@@ -50,7 +50,7 @@ jobs:
           name: patched-package
           path: package.json
 
-  publishForApiUi:
+  buildImage:
     name: Build & Publish API/UI Image
     runs-on: ubuntu-latest
     needs: [incrementVersionNumber, buildApi]
