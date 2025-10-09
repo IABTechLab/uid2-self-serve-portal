@@ -92,18 +92,10 @@ jobs:
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+      - name: Vulnerability Scan
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
         with:
-          image-ref: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
+          scan_type: 'fs'
 
   publishForDBMigration:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
