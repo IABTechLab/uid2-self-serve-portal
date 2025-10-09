@@ -12,15 +12,18 @@ on:
           - Patch
           - Snapshot
         required: true
+  pull_request:
 
 jobs:
   incrementVersionNumber:
+    if: github.event_name == 'workflow_dispatch'
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@v2
     with:
       release_type: ${{ inputs.release_type }}
     secrets: inherit
 
   buildApi:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     needs: incrementVersionNumber
     steps:
@@ -54,25 +57,33 @@ jobs:
     name: Build & Publish API/UI Image
     runs-on: ubuntu-latest
     needs: [incrementVersionNumber, buildApi]
+    if: always() && (needs.incrementVersionNumber.result == 'success' || github.event_name == 'pull_request')
     permissions:
       contents: write
       packages: write
-      security-events: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download built API files
+      - name: Download built API files (release only)
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/download-artifact@v4
         with:
           name: api-dist
           path: api-dist/
 
-      - name: Download patched package.json
+      - name: Download patched package.json (release only)
+        if: github.event_name == 'workflow_dispatch'
         uses: actions/download-artifact@v4
         with:
           name: patched-package
           path: .
+
+      - name: Build API for PR
+        if: github.event_name == 'pull_request'
+        run: |
+          npm ci
+          npm run build-api
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -84,7 +95,8 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image for API/UI
+      - name: Build and push Docker image for API/UI (release)
+        if: github.event_name == 'workflow_dispatch'
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -92,20 +104,31 @@ jobs:
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
+      - name: Build Docker image for API/UI (PR - no push)
+        if: github.event_name == 'pull_request'
+        uses: docker/build-push-action@v5
         with:
-          image-ref: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          context: .
+          file: Dockerfile_ssportal
+          push: false
+          tags: ghcr.io/iabtechlab/uid2-ssportal:pr-${{ github.event.number }}
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        if: always()
+      - name: Vulnerability Scan (release)
+        if: github.event_name == 'workflow_dispatch'
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
         with:
-          sarif_file: 'trivy-results.sarif'
+          scan_type: 'image'
+          image_ref: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
+
+      - name: Vulnerability Scan (PR)
+        if: github.event_name == 'pull_request'
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
+        with:
+          scan_type: 'image'
+          image_ref: ghcr.io/iabtechlab/uid2-ssportal:pr-${{ github.event.number }}
 
   publishForDBMigration:
+    if: github.event_name == 'workflow_dispatch'
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
     needs: incrementVersionNumber
     with:
@@ -119,6 +142,7 @@ jobs:
     secrets: inherit
 
   publishForKeycloak:
+    if: github.event_name == 'workflow_dispatch'
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
     needs: incrementVersionNumber
     with:
