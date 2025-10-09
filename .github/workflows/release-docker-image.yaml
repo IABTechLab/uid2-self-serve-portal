@@ -95,8 +95,7 @@ jobs:
       - name: Vulnerability Scan
         uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
         with:
-          scan_type: 'image'
-          image_ref: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
+          scan_type: 'fs'
 
   publishForDBMigration:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
