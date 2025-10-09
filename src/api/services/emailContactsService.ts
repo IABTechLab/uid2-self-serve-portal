@@ -9,6 +9,8 @@ export interface EmailContactRequest extends Request {
   emailContact?: EmailContact;
 }
 
+//
+
 const contactIdSchema = z.object({
   contactId: z.string(),
 });
