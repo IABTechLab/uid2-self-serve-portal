@@ -92,7 +92,7 @@ jobs:
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
 
-  trivy-scan:
+  buildImage:
     needs: [publishForApiUi]
     runs-on: ubuntu-latest
     permissions:
