@@ -25,4 +25,14 @@ jobs:
       - run: npm run build-api --if-present
 
   trivy-scan:
-    uses: IABTechLab/uid2-self-serve-portal/.github/workflows/trivy-scan.yml@main
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Vulnerability Scan
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
+        with:
+          scan_type: 'fs'
