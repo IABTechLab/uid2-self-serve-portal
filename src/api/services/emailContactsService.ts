@@ -13,8 +13,6 @@ const contactIdSchema = z.object({
   contactId: z.string(),
 });
 
-// testing
-
 export const hasEmailContactAccess = async (
   req: EmailContactRequest,
   res: Response,

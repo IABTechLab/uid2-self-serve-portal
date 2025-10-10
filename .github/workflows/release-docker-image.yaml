@@ -91,11 +91,8 @@ jobs:
           file: Dockerfile_ssportal
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
-
-      - name: Vulnerability Scan
-        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
-        with:
-          scan_type: 'fs'
+      - name: Trivy Scan
+        uses: ./.github/workflows/trivy-scan.yml
 
   publishForDBMigration:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
