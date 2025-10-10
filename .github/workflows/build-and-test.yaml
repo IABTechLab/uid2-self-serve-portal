@@ -23,5 +23,6 @@ jobs:
       - run: npm run build --if-present
       - run: npm test
       - run: npm run build-api --if-present
-      - name: Trivy Scan
-        uses: ./.github/workflows/trivy-scan.yml
+
+  trivy-scan:
+    uses: IABTechLab/uid2-self-serve-portal/.github/workflows/trivy-scan.yml@main

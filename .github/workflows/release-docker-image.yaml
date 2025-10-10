@@ -91,8 +91,10 @@ jobs:
           file: Dockerfile_ssportal
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
-      - name: Trivy Scan
-        uses: ./.github/workflows/trivy-scan.yml
+
+  trivy-scan:
+    needs: [publishForApiUi]
+    uses: IABTechLab/uid2-self-serve-portal/.github/workflows/trivy-scan.yml@main
 
   publishForDBMigration:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
