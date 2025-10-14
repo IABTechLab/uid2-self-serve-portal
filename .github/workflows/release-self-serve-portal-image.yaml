@@ -90,6 +90,14 @@ jobs:
           file: Dockerfile_ssportal
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
+      - name: Vulnerability scan
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
+        with:
+          publish_vulnerabilities: true
+          failure_severity: CRITICAL
+          scan_severity: CRITICAL,HIGH
+          image_ref: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
+          scan_type: image
 
   publishForDBMigration:
     uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v2
@@ -116,18 +124,3 @@ jobs:
       docker_image_name: iabtechlab/uid2-ssportal-keycloak
       docker_registry: ghcr.io
     secrets: inherit
-
-  buildImage:
-    name: Vulnerability Scan
-    needs: [publishForApiUi]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Vulnerability Scan
-        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
-        with:
-          scan_type: 'fs'
