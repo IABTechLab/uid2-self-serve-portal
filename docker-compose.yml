@@ -27,7 +27,7 @@ services:
       retries: 5
   keycloak:
     container_name: uid2_selfserve_keycloak
-    image: quay.io/keycloak/keycloak:24.0.0
+    image: quay.io/keycloak/keycloak:26.0.7
     environment:
       KC_DB: mssql
       KC_DB_URL: jdbc:sqlserver://database:1433;DatabaseName=keycloak;encrypt=true;trustServerCertificate=true;
