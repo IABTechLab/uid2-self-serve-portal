@@ -40,11 +40,10 @@ interface TestContextProviderProps extends PropsWithChildren {
 }
 
 // Mock OIDC config for tests
-// eslint-disable-next-line camelcase
 const mockOidcConfig = {
   authority: 'http://localhost:8080/realms/test',
-  client_id: 'test-client',
-  redirect_uri: 'http://localhost:3000',
+  client_id: 'test-client', // eslint-disable-line camelcase
+  redirect_uri: 'http://localhost:3000', // eslint-disable-line camelcase
 };
 
 export function TestContextProvider({

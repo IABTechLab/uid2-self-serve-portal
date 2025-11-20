@@ -11,7 +11,7 @@ function PortalErrorComponent(props: Readonly<RenderedErrorProps>) {
 
   const auth = useAuth();
   const logout = useCallback(() => {
-    auth.removeUser();
+    auth.signoutRedirect();
   }, [auth]);
 
   return (

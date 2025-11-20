@@ -52,7 +52,7 @@ export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const auth = useAuth();
   const logout = useCallback(() => {
-    auth.removeUser();
+    auth.signoutRedirect();
   }, [auth]);
 
   const setDarkMode = (darkMode: boolean) => {

@@ -17,18 +17,18 @@ jest.mock('react-oidc-context', () => ({
 describe('Error boundary', () => {
   let authMock: jest.SpyInstance;
   beforeEach(() => {
-    // eslint-disable-next-line camelcase
     authMock = jest.spyOn(oidc, 'useAuth').mockImplementation(
       () =>
         ({
           isAuthenticated: true,
           isLoading: false,
           user: {
-            access_token: 'mock-token',
+            access_token: 'mock-token', // eslint-disable-line camelcase
             profile: {},
           },
           removeUser: jest.fn(),
           signinRedirect: jest.fn(),
+          signoutRedirect: jest.fn(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         }) as any
     );

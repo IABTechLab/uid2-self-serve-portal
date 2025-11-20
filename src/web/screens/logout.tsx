@@ -7,7 +7,7 @@ import './home.scss';
 
 function Logout() {
   const auth = useAuth();
-  auth.removeUser();
+  auth.signoutRedirect();
   return <h1>Logging out...</h1>;
 }
 export const LogoutRoute: PortalRoute = {

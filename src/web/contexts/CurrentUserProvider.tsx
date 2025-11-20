@@ -25,8 +25,20 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
   const loadUser = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Get profile from OIDC user object
-      const profile = auth.user?.profile || {};
+      // Map OIDC profile claims to Keycloak profile format
+      const oidcProfile = auth.user?.profile as {
+        email?: string;
+        given_name?: string;
+        family_name?: string;
+        preferred_username?: string;
+        sub?: string;
+      };
+      const profile = {
+        email: oidcProfile?.email,
+        firstName: oidcProfile?.given_name,
+        lastName: oidcProfile?.family_name,
+        username: oidcProfile?.preferred_username || oidcProfile?.sub,
+      };
       const { user, isLocked } = await GetLoggedInUserAccount();
       SetLoggedInUser({
         profile,
