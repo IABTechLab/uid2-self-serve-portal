@@ -1,30 +1,41 @@
-import * as cloak from '@react-keycloak/web';
 import { render, screen } from '@testing-library/react';
 import * as axios from 'axios';
+import * as oidc from 'react-oidc-context';
 
 import { mockBackendError } from '../../testHelpers/errorMocks';
-import * as keycloakMocks from '../../testHelpers/keycloakMocks';
 import { App } from '../App';
 import * as Loading from '../components/Core/Loading/Loading';
 import { CurrentUserProvider } from '../contexts/CurrentUserProvider';
 import { PortalErrorBoundary } from './PortalErrorBoundary';
 
-// Needed to enable spying on useKeyCloak
-jest.mock('@react-keycloak/web', () => ({
+// Needed to enable spying on useAuth
+jest.mock('react-oidc-context', () => ({
   __esModule: true,
-  ...jest.requireActual('@react-keycloak/web'),
+  ...jest.requireActual('react-oidc-context'),
 }));
 
 describe('Error boundary', () => {
-  let kcMock: jest.SpyInstance;
+  let authMock: jest.SpyInstance;
   beforeEach(() => {
-    kcMock = jest
-      .spyOn(cloak, 'useKeycloak')
-      .mockImplementation(() => keycloakMocks.mockAuthenticatedKeycloak());
+    // eslint-disable-next-line camelcase
+    authMock = jest.spyOn(oidc, 'useAuth').mockImplementation(
+      () =>
+        ({
+          isAuthenticated: true,
+          isLoading: false,
+          user: {
+            access_token: 'mock-token',
+            profile: {},
+          },
+          removeUser: jest.fn(),
+          signinRedirect: jest.fn(),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        }) as any
+    );
   });
 
   afterEach(() => {
-    kcMock.mockRestore();
+    authMock.mockRestore();
   });
 
   it('does not show error boundary when there are no errors', () => {

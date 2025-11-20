@@ -1,14 +1,12 @@
-import { AuthClientTokens } from '@react-keycloak/core';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import { useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import { AuthProvider, AuthProviderProps, useAuth } from 'react-oidc-context';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 
 import { App } from './web/App';
 import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
 import { initializeFaro } from './web/initializeFaro';
-import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
 import { reportWebVitals } from './web/reportWebVitals';
 import { Routes } from './web/screens/routes';
@@ -38,24 +36,65 @@ const router = createBrowserRouter([
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
-function Root() {
-  const onUpdateToken = useCallback((tokens: AuthClientTokens) => {
-    if (tokens.token) {
-      setAuthToken(tokens.token);
+interface KeycloakConfig {
+  realm: string;
+  'auth-server-url': string;
+  resource: string;
+}
+
+// Component to handle token updates
+function TokenHandler() {
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (auth.user?.access_token) {
+      setAuthToken(auth.user.access_token);
       revalidateIfLoaderError(router);
     }
+  }, [auth.user?.access_token]);
+
+  return null;
+}
+
+function Root() {
+  const [oidcConfig, setOidcConfig] = useState<AuthProviderProps | null>(null);
+
+  useEffect(() => {
+    // Fetch Keycloak config from API
+    fetch('/api/keycloak-config')
+      .then((res) => res.json())
+      .then((config: KeycloakConfig) => {
+        const authServerUrl = config['auth-server-url'];
+        const { realm } = config;
+        const clientId = config.resource;
+
+        setOidcConfig({
+          authority: `${authServerUrl}/realms/${realm}`,
+          client_id: clientId, // eslint-disable-line camelcase
+          redirect_uri: window.location.origin, // eslint-disable-line camelcase
+          post_logout_redirect_uri: window.location.origin, // eslint-disable-line camelcase
+          automaticSilentRenew: true, // Automatically refresh tokens
+          onSigninCallback: () => {
+            // Remove OIDC params from URL after signin
+            window.history.replaceState({}, document.title, window.location.pathname);
+          },
+        });
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('Failed to load Keycloak config:', error);
+      });
   }, []);
 
+  if (!oidcConfig) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <ReactKeycloakProvider
-      authClient={keycloak}
-      initOptions={{
-        checkLoginIframe: false,
-      }}
-      onTokens={onUpdateToken}
-    >
+    <AuthProvider {...oidcConfig}>
+      <TokenHandler />
       <RouterProvider router={router} />
-    </ReactKeycloakProvider>
+    </AuthProvider>
   );
 }
 root.render(<Root />);

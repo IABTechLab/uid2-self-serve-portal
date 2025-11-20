@@ -1,14 +1,14 @@
-import { useKeycloak } from '@react-keycloak/web';
+import { useAuth } from 'react-oidc-context';
 
 type PrivateRouteProps = {
   children: JSX.Element;
 };
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
 
-  if (!keycloak?.authenticated) {
-    keycloak?.login({ redirectUri: window.location.origin });
+  if (!auth.isAuthenticated && !auth.isLoading) {
+    auth.signinRedirect();
   }
 
-  return keycloak?.authenticated ? children : null;
+  return auth.isAuthenticated ? children : null;
 }

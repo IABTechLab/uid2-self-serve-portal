@@ -1,16 +1,11 @@
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import Keycloak from 'keycloak-js';
 import { PropsWithChildren } from 'react';
+import { AuthProvider } from 'react-oidc-context';
 import { BrowserRouter } from 'react-router-dom';
 
 import { ParticipantDTO } from '../api/entities/Participant';
 import { UserWithParticipantRoles } from '../api/services/usersService';
 import { CurrentUserContext, UserContextWithSetter } from '../web/contexts/CurrentUserProvider';
 import { ParticipantContext, ParticipantWithSetter } from '../web/contexts/ParticipantProvider';
-
-export const createTestKeycloakInstance = () => {
-  return new Keycloak();
-};
 
 export const createUserContextValue = (user: UserWithParticipantRoles): UserContextWithSetter => ({
   LoggedInUser: {
@@ -44,19 +39,27 @@ interface TestContextProviderProps extends PropsWithChildren {
   userContextValue?: UserContextWithSetter;
 }
 
+// Mock OIDC config for tests
+// eslint-disable-next-line camelcase
+const mockOidcConfig = {
+  authority: 'http://localhost:8080/realms/test',
+  client_id: 'test-client',
+  redirect_uri: 'http://localhost:3000',
+};
+
 export function TestContextProvider({
   children,
   participantContextValue,
   userContextValue,
 }: TestContextProviderProps) {
   return (
-    <ReactKeycloakProvider authClient={createTestKeycloakInstance()}>
+    <AuthProvider {...mockOidcConfig}>
       <ParticipantContext.Provider value={participantContextValue ?? defaultParticipantContext}>
         <CurrentUserContext.Provider value={userContextValue ?? defaultUserContext}>
           <BrowserRouter>{children}</BrowserRouter>
         </CurrentUserContext.Provider>
       </ParticipantContext.Provider>
-    </ReactKeycloakProvider>
+    </AuthProvider>
   );
 }
 

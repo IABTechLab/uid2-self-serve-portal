@@ -1,5 +1,5 @@
-import { useKeycloak } from '@react-keycloak/web';
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
 
 import { Loading } from '../components/Core/Loading/Loading';
 import { GetLoggedInUserAccount, UserAccount } from '../services/userAccount';
@@ -17,7 +17,7 @@ export const CurrentUserContext = createContext<UserContextWithSetter>({
 });
 
 function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const { keycloak } = useKeycloak();
+  const auth = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const throwError = useAsyncThrowError();
@@ -25,7 +25,8 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
   const loadUser = useCallback(async () => {
     setIsLoading(true);
     try {
-      const profile = await keycloak.loadUserProfile();
+      // Get profile from OIDC user object
+      const profile = auth.user?.profile || {};
       const { user, isLocked } = await GetLoggedInUserAccount();
       SetLoggedInUser({
         profile,
@@ -37,15 +38,15 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
     } finally {
       setIsLoading(false);
     }
-  }, [keycloak, throwError]);
+  }, [auth.user, throwError]);
 
   useEffect(() => {
-    if (keycloak.token) {
+    if (auth.user?.access_token) {
       loadUser();
     } else {
       setIsLoading(false);
     }
-  }, [SetLoggedInUser, loadUser, keycloak.token]);
+  }, [SetLoggedInUser, loadUser, auth.user?.access_token]);
 
   const userContext = useMemo(
     () => ({

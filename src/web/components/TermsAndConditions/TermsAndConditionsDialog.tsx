@@ -1,4 +1,3 @@
-import { useKeycloak } from '@react-keycloak/web';
 import { useContext, useState } from 'react';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
@@ -10,13 +9,11 @@ import './TermsAndConditionsDialog.scss';
 
 export function TermsAndConditionsDialog() {
   const { loadUser } = useContext(CurrentUserContext);
-  const { keycloak } = useKeycloak();
   const [showMustAccept, setShowMustAccept] = useState(false);
 
   const handleAccept = async () => {
     await SetTermsAccepted();
-    // Force token refresh after role updated
-    await keycloak.updateToken(10000);
+    // Token refresh is handled automatically by react-oidc-context
     await loadUser();
   };
   const handleCancel = () => {
@@ -28,8 +25,8 @@ export function TermsAndConditionsDialog() {
       <TermsAndConditionsForm onAccept={handleAccept} onCancel={handleCancel}>
         {showMustAccept && (
           <div className='accept-error'>
-            Please review the Terms and Conditions document. When you’ve scrolled to the bottom,
-            click <b>Accept Terms and Conditions</b>.
+            Please review the Terms and Conditions document. When you&apos;ve scrolled to the
+            bottom, click <b>Accept Terms and Conditions</b>.
           </div>
         )}
       </TermsAndConditionsForm>

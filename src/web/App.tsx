@@ -1,5 +1,5 @@
-import { useKeycloak } from '@react-keycloak/web';
 import { StrictMode, useCallback, useContext } from 'react';
+import { useAuth } from 'react-oidc-context';
 import { Outlet } from 'react-router-dom';
 
 import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
@@ -50,10 +50,10 @@ function AppContent() {
 
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const { keycloak, initialized } = useKeycloak();
+  const auth = useAuth();
   const logout = useCallback(() => {
-    keycloak?.logout();
-  }, [keycloak]);
+    auth.removeUser();
+  }, [auth]);
 
   const setDarkMode = (darkMode: boolean) => {
     if (darkMode) {
@@ -70,7 +70,7 @@ export function App() {
       ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`
       : undefined;
 
-  if (!initialized) return <Loading />;
+  if (auth.isLoading) return <Loading />;
   return (
     <StrictMode>
       <PortalErrorBoundary>
