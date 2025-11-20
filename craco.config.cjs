@@ -7,6 +7,15 @@ module.exports = {
         test: /\.ts$/,
         include: path.resolve(__dirname, 'src/api'),
       });
+      
+      // For modules that are still in CommonJS 
+      webpackConfig.module.rules.push({
+        test: /\.m?js$/,
+        resolve: {
+          fullySpecified: false,
+        },
+      });
+
       webpackConfig.resolve = {
         ...webpackConfig.resolve,
         fallback: {
