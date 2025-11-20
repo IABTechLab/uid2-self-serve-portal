@@ -1,4 +1,3 @@
-import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
 import { PropsWithChildren } from 'react';
 import { BrowserRouter } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ParticipantDTO } from '../api/entities/Participant';
 import { UserWithParticipantRoles } from '../api/services/usersService';
 import { CurrentUserContext, UserContextWithSetter } from '../web/contexts/CurrentUserProvider';
+import { KeycloakProvider } from '../web/contexts/KeycloakProvider';
 import { ParticipantContext, ParticipantWithSetter } from '../web/contexts/ParticipantProvider';
 
 export const createTestKeycloakInstance = () => {
@@ -54,13 +54,13 @@ export function TestContextProvider({
   userContextValue,
 }: TestContextProviderProps) {
   return (
-    <ReactKeycloakProvider authClient={createTestKeycloakInstance()}>
+    <KeycloakProvider authClient={createTestKeycloakInstance()}>
       <ParticipantContext.Provider value={participantContextValue ?? defaultParticipantContext}>
         <CurrentUserContext.Provider value={userContextValue ?? defaultUserContext}>
           <BrowserRouter>{children}</BrowserRouter>
         </CurrentUserContext.Provider>
       </ParticipantContext.Provider>
-    </ReactKeycloakProvider>
+    </KeycloakProvider>
   );
 }
 

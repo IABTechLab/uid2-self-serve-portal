@@ -1,14 +1,12 @@
-import { useKeycloak } from '@react-keycloak/web';
-import Keycloak from 'keycloak-js';
-
+import { useKeycloak } from '../contexts/KeycloakProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './home.scss';
 
 function Logout() {
-  const { keycloak } = useKeycloak() as { keycloak: Keycloak };
-  keycloak?.logout();
+  const { keycloak } = useKeycloak();
+  keycloak.logout();
   return <h1>Logging out...</h1>;
 }
 export const LogoutRoute: PortalRoute = {
