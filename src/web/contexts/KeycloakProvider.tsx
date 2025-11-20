@@ -2,6 +2,12 @@ import Keycloak from 'keycloak-js';
 import log from 'loglevel';
 import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 
+export interface KeycloakTokens {
+  token?: string;
+  idToken?: string;
+  refreshToken?: string;
+}
+
 interface KeycloakContextValue {
   keycloak: Keycloak;
   initialized: boolean;
@@ -13,7 +19,7 @@ interface KeycloakProviderProps {
   children: ReactNode;
   authClient: Keycloak;
   initOptions?: Keycloak.KeycloakInitOptions;
-  onTokens?: (tokens: { token?: string; idToken?: string; refreshToken?: string }) => void;
+  onTokens?: (tokens: KeycloakTokens) => void;
 }
 
 export function KeycloakProvider({

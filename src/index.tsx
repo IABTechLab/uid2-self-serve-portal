@@ -5,7 +5,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { App } from './web/App';
 import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
-import { KeycloakProvider } from './web/contexts/KeycloakProvider';
+import { KeycloakProvider, KeycloakTokens } from './web/contexts/KeycloakProvider';
 import { initializeFaro } from './web/initializeFaro';
 import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
@@ -38,15 +38,12 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 function Root() {
-  const onUpdateToken = useCallback(
-    (tokens: { token?: string; idToken?: string; refreshToken?: string }) => {
-      if (tokens.token) {
-        setAuthToken(tokens.token);
-        revalidateIfLoaderError(router);
-      }
-    },
-    []
-  );
+  const onUpdateToken = useCallback((tokens: KeycloakTokens) => {
+    if (tokens.token) {
+      setAuthToken(tokens.token);
+      revalidateIfLoaderError(router);
+    }
+  }, []);
 
   return (
     <KeycloakProvider
