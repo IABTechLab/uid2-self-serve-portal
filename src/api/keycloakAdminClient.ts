@@ -4,7 +4,7 @@ import { SSP_KK_AUDIENCE, SSP_KK_AUTH_SERVER_URL, SSP_KK_REALM, SSP_KK_SECRET } 
 
 let KcAdminClientClass: typeof KeycloakAdminClient | null = null;
 
-// dynamic import of KcAdminClient required by keycloak-admin-client version 26.4.5
+// dynamic import of KcAdminClient required by keycloak-admin-client version 26.1.3
 const loadKcAdminClient = async () => {
 	KcAdminClientClass ??= (await import('@keycloak/keycloak-admin-client')).default;
 };
