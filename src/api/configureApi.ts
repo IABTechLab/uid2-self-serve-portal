@@ -25,6 +25,7 @@ import {
 } from './envars';
 import { getAuditLoggingMiddleware } from './helpers/auditLogging';
 import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
+import { getKcAdminClient } from './keycloakAdminClient';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participantsRouter';
@@ -172,15 +173,43 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   });
 
   router.get('/keycloak-config', async (_req, res) => {
-    // TODO: More robust health check information
-    res.json({
-      realm: SSP_KK_REALM,
-      'auth-server-url': SSP_KK_AUTH_SERVER_URL,
-      'ssl-required': SSP_KK_SSL_REQUIRED,
-      resource: SSP_KK_SSL_RESOURCE,
-      'public-client': SSP_KK_SSL_PUBLIC_CLIENT,
-      'confidential-port': SSP_KK_SSL_CONFIDENTIAL_PORT,
-    });
+    try {
+      // Fetch realm settings to get SSO Session Idle timeout
+      const kcAdminClient = await getKcAdminClient();
+      const realmSettings = await kcAdminClient.realms.findOne({ realm: SSP_KK_REALM });
+
+      const ssoSessionIdleTimeoutSeconds = realmSettings?.ssoSessionIdleTimeout;
+      const ssoSessionIdleTimeoutMinutes = ssoSessionIdleTimeoutSeconds
+        ? Math.floor(ssoSessionIdleTimeoutSeconds / 60)
+        : 30;
+
+      logger.info('Keycloak realm settings fetched', {
+        ssoSessionIdleTimeoutSeconds,
+        ssoSessionIdleTimeoutMinutes,
+      });
+
+      res.json({
+        realm: SSP_KK_REALM,
+        'auth-server-url': SSP_KK_AUTH_SERVER_URL,
+        'ssl-required': SSP_KK_SSL_REQUIRED,
+        resource: SSP_KK_SSL_RESOURCE,
+        'public-client': SSP_KK_SSL_PUBLIC_CLIENT,
+        'confidential-port': SSP_KK_SSL_CONFIDENTIAL_PORT,
+        'sso-session-idle-timeout-minutes': ssoSessionIdleTimeoutMinutes,
+      });
+    } catch (error) {
+      logger.error('Failed to fetch Keycloak realm settings, using default', error);
+      // Fall back to config without session timeout if admin API fails
+      res.json({
+        realm: SSP_KK_REALM,
+        'auth-server-url': SSP_KK_AUTH_SERVER_URL,
+        'ssl-required': SSP_KK_SSL_REQUIRED,
+        resource: SSP_KK_SSL_RESOURCE,
+        'public-client': SSP_KK_SSL_PUBLIC_CLIENT,
+        'confidential-port': SSP_KK_SSL_CONFIDENTIAL_PORT,
+        'sso-session-idle-timeout-minutes': 30, // Default to 30 minutes
+      });
+    }
   });
 
   router.all('/*', (req, res) => {
