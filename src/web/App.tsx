@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import Keycloak from 'keycloak-js';
 import { StrictMode, useCallback, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -50,7 +51,7 @@ function AppContent() {
 
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const { keycloak, initialized } = useKeycloak();
+  const { keycloak, initialized } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);
