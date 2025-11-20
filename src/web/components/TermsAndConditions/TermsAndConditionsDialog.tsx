@@ -13,7 +13,6 @@ export function TermsAndConditionsDialog() {
 
   const handleAccept = async () => {
     await SetTermsAccepted();
-    // Token refresh is handled automatically by react-oidc-context
     await loadUser();
   };
   const handleCancel = () => {

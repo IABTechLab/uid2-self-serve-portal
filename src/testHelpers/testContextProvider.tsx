@@ -39,7 +39,6 @@ interface TestContextProviderProps extends PropsWithChildren {
   userContextValue?: UserContextWithSetter;
 }
 
-// Mock OIDC config for tests
 const mockOidcConfig = {
   authority: 'http://localhost:8080/realms/test',
   client_id: 'test-client', // eslint-disable-line camelcase
