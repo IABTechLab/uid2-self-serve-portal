@@ -1,6 +1,6 @@
 import Keycloak from 'keycloak-js';
 import log from 'loglevel';
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 export interface KeycloakTokens {
   token?: string;
@@ -22,6 +22,14 @@ interface KeycloakProviderProps {
   onTokens?: (tokens: KeycloakTokens) => void;
 }
 
+function getTokensFromKeycloak(keycloak: Keycloak): KeycloakTokens {
+  return {
+    token: keycloak.token,
+    idToken: keycloak.idToken,
+    refreshToken: keycloak.refreshToken,
+  };
+}
+
 export function KeycloakProvider({
   children,
   authClient,
@@ -29,49 +37,55 @@ export function KeycloakProvider({
   onTokens,
 }: KeycloakProviderProps) {
   const [initialized, setInitialized] = useState(false);
+  const refreshFailureCount = useRef(0);
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout | undefined;
+
     authClient
       .init(initOptions)
       .then((authenticated) => {
         setInitialized(true);
 
-        if (authenticated && onTokens) {
-          onTokens({
-            token: authClient.token,
-            idToken: authClient.idToken,
-            refreshToken: authClient.refreshToken,
-          });
-        }
-
-        // Set up token refresh
         if (authenticated) {
-          // Update tokens every 5 seconds if needed
-          const interval = setInterval(() => {
+          // Send initial tokens
+          if (onTokens) {
+            onTokens(getTokensFromKeycloak(authClient));
+          }
+
+          // Automatic token refresh: check every 5s, refresh if expiring in < 30s
+          intervalId = setInterval(() => {
             authClient
-              .updateToken(70)
+              .updateToken(30)
               .then((refreshed) => {
                 if (refreshed && onTokens) {
-                  onTokens({
-                    token: authClient.token,
-                    idToken: authClient.idToken,
-                    refreshToken: authClient.refreshToken,
-                  });
+                  onTokens(getTokensFromKeycloak(authClient));
                 }
+                refreshFailureCount.current = 0; // Reset failure count on success
               })
-              .catch(() => {
-                // Token refresh failed, user needs to re-authenticate
-                authClient.login();
+              .catch((error) => {
+                refreshFailureCount.current += 1;
+                log.warn('Token refresh failed', error);
+
+                // Only force re-login after multiple failures
+                if (refreshFailureCount.current >= 3) {
+                  log.error('Multiple token refresh failures, forcing re-authentication');
+                  authClient.login();
+                }
               });
           }, 5000);
-
-          return () => clearInterval(interval);
         }
       })
       .catch((error) => {
         log.error('Keycloak initialization failed', error);
         setInitialized(true);
       });
+
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
   }, [authClient, initOptions, onTokens]);
 
   const contextValue = useMemo(
