@@ -1,7 +1,7 @@
+import { useKeycloak } from '@react-keycloak/web';
 import { useCallback } from 'react';
 
 import { ErrorView } from '../components/Core/ErrorView/ErrorView';
-import { useKeycloak } from '../contexts/KeycloakProvider';
 import { errorHandler, RenderedErrorProps } from './errorHandler';
 
 import './PortalErrorBoundary.scss';
@@ -11,7 +11,7 @@ function PortalErrorComponent(props: Readonly<RenderedErrorProps>) {
 
   const { keycloak } = useKeycloak();
   const logout = useCallback(() => {
-    keycloak.logout();
+    keycloak?.logout();
   }, [keycloak]);
 
   return (

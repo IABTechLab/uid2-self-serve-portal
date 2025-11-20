@@ -1,7 +1,7 @@
+import { useKeycloak } from '@react-keycloak/web';
 import { useContext, useState } from 'react';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
-import { useKeycloak } from '../../contexts/KeycloakProvider';
 import { SetTermsAccepted } from '../../services/userAccount';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { TermsAndConditionsForm } from './TermsAndConditions';

@@ -1,3 +1,5 @@
+import { AuthClientTokens } from '@react-keycloak/core';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { useCallback } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
@@ -5,7 +7,6 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { App } from './web/App';
 import { setAuthToken } from './web/axios';
 import { CurrentUserProvider } from './web/contexts/CurrentUserProvider';
-import { KeycloakProvider, KeycloakTokens } from './web/contexts/KeycloakProvider';
 import { initializeFaro } from './web/initializeFaro';
 import keycloak from './web/Keycloak';
 import { configureLogging } from './web/logging';
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 function Root() {
-  const onUpdateToken = useCallback((tokens: KeycloakTokens) => {
+  const onUpdateToken = useCallback((tokens: AuthClientTokens) => {
     if (tokens.token) {
       setAuthToken(tokens.token);
       revalidateIfLoaderError(router);
@@ -46,7 +47,7 @@ function Root() {
   }, []);
 
   return (
-    <KeycloakProvider
+    <ReactKeycloakProvider
       authClient={keycloak}
       initOptions={{
         checkLoginIframe: false,
@@ -54,7 +55,7 @@ function Root() {
       onTokens={onUpdateToken}
     >
       <RouterProvider router={router} />
-    </KeycloakProvider>
+    </ReactKeycloakProvider>
   );
 }
 root.render(<Root />);

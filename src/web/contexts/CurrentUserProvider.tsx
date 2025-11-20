@@ -1,9 +1,9 @@
+import { useKeycloak } from '@react-keycloak/web';
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Loading } from '../components/Core/Loading/Loading';
 import { GetLoggedInUserAccount, UserAccount } from '../services/userAccount';
 import { useAsyncThrowError } from '../utils/errorHandler';
-import { useKeycloak } from './KeycloakProvider';
 
 export type UserContextWithSetter = {
   LoggedInUser: UserAccount | null;
