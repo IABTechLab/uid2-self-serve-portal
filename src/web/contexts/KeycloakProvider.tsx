@@ -41,9 +41,7 @@ export function KeycloakProvider({
     }
   }, [authClient, onTokens]);
 
-  // Setup Keycloak event handlers
   const setupKeycloakHandlers = useCallback(() => {
-    // Create local reference to avoid ESLint no-param-reassign
     const keycloak = authClient;
     // Set up token refresh
     keycloak.onTokenExpired = () => {
@@ -58,7 +56,6 @@ export function KeycloakProvider({
       });
     };
 
-    // Handle authentication events
     keycloak.onAuthSuccess = () => {
       setAuthenticated(true);
       handleTokens();
@@ -72,7 +69,6 @@ export function KeycloakProvider({
       setAuthenticated(false);
     };
 
-    // Handle refresh token expiry (session timeout)
     keycloak.onAuthRefreshError = () => {
       setAuthenticated(false);
     };
@@ -89,7 +85,6 @@ export function KeycloakProvider({
           handleTokens();
         }
 
-        // Setup all event handlers
         setupKeycloakHandlers();
       } catch (error) {
         setInitialized(true);
@@ -108,7 +103,7 @@ export function KeycloakProvider({
     const checkSessionValidity = async () => {
       checkCount++;
 
-      // Every 10th check (every 30 seconds), test with a lightweight API call
+      // Every 30 seconds, check if token is still valid (every 10th check)
       if (checkCount % 10 === 0 && authClient.token) {
         try {
           const response = await fetch('/api/keycloak-config', {
