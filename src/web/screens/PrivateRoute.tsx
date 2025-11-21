@@ -1,11 +1,10 @@
-import { useKeycloak } from '@react-keycloak/web';
-import type Keycloak from 'keycloak-js';
+import { useKeycloak } from '../contexts/KeycloakProvider';
 
 type PrivateRouteProps = {
   children: JSX.Element;
 };
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
+  const { keycloak } = useKeycloak();
 
   if (!keycloak?.authenticated) {
     keycloak?.login({ redirectUri: window.location.origin });
