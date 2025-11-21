@@ -58,10 +58,11 @@ export function KeycloakProvider({
           authClient.updateToken(30).then((refreshed) => {
             if (refreshed) {
               handleTokens();
+            } else {
+              setAuthenticated(false);
             }
           }).catch(() => {
-            // eslint-disable-next-line no-console
-            console.warn('Failed to refresh token');
+            setAuthenticated(false);
           });
         };
 
@@ -81,15 +82,60 @@ export function KeycloakProvider({
         authClient.onAuthLogout = () => {
           setAuthenticated(false);
         };
+
+        // Handle refresh token expiry (session timeout)
+        // eslint-disable-next-line no-param-reassign
+        authClient.onAuthRefreshError = () => {
+          setAuthenticated(false);
+        };
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error('Keycloak initialization failed:', error);
         setInitialized(true);
       }
     };
 
     initKeycloak();
   }, [authClient, initOptions, handleTokens]);
+
+  // Session timeout detection
+  useEffect(() => {
+    if (!initialized || !authenticated) return;
+
+    let checkCount = 0;
+
+    const checkSessionValidity = async () => {
+      checkCount++;
+
+      // Every 10th check (every 30 seconds), test with a lightweight API call
+      if (checkCount % 10 === 0 && authClient.token) {
+        try {
+          const response = await fetch('/api/keycloak-config', {
+            method: 'HEAD',
+            headers: {
+              'Authorization': `Bearer ${authClient.token}`,
+            },
+          });
+
+          if (response.status === 401 || response.status === 403) {
+            setAuthenticated(false);
+            return;
+          }
+        } catch (error) {
+          setAuthenticated(false);
+          return;
+        }
+      }
+
+      // Sync React state with Keycloak state
+      const keycloakAuth = authClient.authenticated || false;
+      if (keycloakAuth !== authenticated) {
+        setAuthenticated(keycloakAuth);
+      }
+    };
+
+    const interval = setInterval(checkSessionValidity, 3000);
+
+    return () => clearInterval(interval);
+  }, [authClient, initialized, authenticated]);
 
   const contextValue: KeycloakContextValue = useMemo(() => ({
     keycloak: authClient,

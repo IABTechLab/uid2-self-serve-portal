@@ -4,11 +4,11 @@ type PrivateRouteProps = {
   children: JSX.Element;
 };
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  const { keycloak } = useKeycloak();
+  const { keycloak, authenticated } = useKeycloak();
 
-  if (!keycloak?.authenticated) {
+  if (!authenticated) {
     keycloak?.login({ redirectUri: window.location.origin });
   }
 
-  return keycloak?.authenticated ? children : null;
+  return authenticated ? children : null;
 }
