@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
 import { useContext, useState } from 'react';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
@@ -10,14 +11,12 @@ import './TermsAndConditionsDialog.scss';
 
 export function TermsAndConditionsDialog() {
   const { loadUser } = useContext(CurrentUserContext);
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { keycloak } = useKeycloak();
+  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   const [showMustAccept, setShowMustAccept] = useState(false);
 
   const handleAccept = async () => {
     await SetTermsAccepted();
     // Force token refresh after role updated
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await keycloak.updateToken(10000);
     await loadUser();
   };

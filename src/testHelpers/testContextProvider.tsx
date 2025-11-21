@@ -9,7 +9,6 @@ import { CurrentUserContext, UserContextWithSetter } from '../web/contexts/Curre
 import { ParticipantContext, ParticipantWithSetter } from '../web/contexts/ParticipantProvider';
 
 export const createTestKeycloakInstance = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
   return new Keycloak();
 };
 
@@ -51,7 +50,6 @@ export function TestContextProvider({
   userContextValue,
 }: TestContextProviderProps) {
   return (
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
     <ReactKeycloakProvider authClient={createTestKeycloakInstance()}>
       <ParticipantContext.Provider value={participantContextValue ?? defaultParticipantContext}>
         <CurrentUserContext.Provider value={userContextValue ?? defaultUserContext}>

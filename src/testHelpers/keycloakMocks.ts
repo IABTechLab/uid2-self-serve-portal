@@ -10,7 +10,6 @@ export function mockAuthenticatedKeycloak() {
   };
   const realmAccess = { roles: ['user'] };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const authClient = {
     authenticated: true,
     hasRealmRole(_ignored: string) {
@@ -26,13 +25,11 @@ export function mockAuthenticatedKeycloak() {
     logout: () => Promise.resolve(),
     updateToken: () => Promise.resolve(true),
     idToken: token,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     profile: userProfile,
     realm: 'TestRealm',
     realmAccess,
     refreshToken: token,
     token,
   } as Keycloak;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   return { initialized: true, keycloak: authClient };
 }

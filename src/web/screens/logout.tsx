@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
 
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -6,9 +7,7 @@ import { PortalRoute } from './routeUtils';
 import './home.scss';
 
 function Logout() {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { keycloak } = useKeycloak();
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   keycloak?.logout();
   return <h1>Logging out...</h1>;
 }

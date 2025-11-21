@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Loading } from '../components/Core/Loading/Loading';
@@ -17,8 +18,7 @@ export const CurrentUserContext = createContext<UserContextWithSetter>({
 });
 
 function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { keycloak } = useKeycloak();
+  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const throwError = useAsyncThrowError();
@@ -26,10 +26,8 @@ function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
   const loadUser = useCallback(async () => {
     setIsLoading(true);
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
       const profile = await keycloak.loadUserProfile();
       const { user, isLocked } = await GetLoggedInUserAccount();
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       SetLoggedInUser({
         profile,
         user,

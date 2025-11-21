@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
 import { useCallback } from 'react';
 
 import { ErrorView } from '../components/Core/ErrorView/ErrorView';
@@ -9,10 +10,8 @@ import './PortalErrorBoundary.scss';
 function PortalErrorComponent(props: Readonly<RenderedErrorProps>) {
   const { errorId, errorHash } = props;
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { keycloak } = useKeycloak();
+  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   const logout = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     keycloak?.logout();
   }, [keycloak]);
 
