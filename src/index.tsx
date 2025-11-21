@@ -47,6 +47,7 @@ function Root() {
   }, []);
 
   return (
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
     <ReactKeycloakProvider
       authClient={keycloak}
       initOptions={{

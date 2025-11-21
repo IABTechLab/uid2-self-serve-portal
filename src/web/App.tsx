@@ -50,8 +50,10 @@ function AppContent() {
 
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { keycloak, initialized } = useKeycloak();
   const logout = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     keycloak?.logout();
   }, [keycloak]);
 
@@ -76,6 +78,7 @@ export function App() {
       <PortalErrorBoundary>
         <ParticipantProvider>
           <div className='app'>
+            {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
             <PortalHeader
               email={LoggedInUser?.profile?.email}
               fullName={fullName}

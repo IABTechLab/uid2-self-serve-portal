@@ -9,8 +9,10 @@ import './PortalErrorBoundary.scss';
 function PortalErrorComponent(props: Readonly<RenderedErrorProps>) {
   const { errorId, errorHash } = props;
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { keycloak } = useKeycloak();
   const logout = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     keycloak?.logout();
   }, [keycloak]);
 

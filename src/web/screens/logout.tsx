@@ -6,7 +6,9 @@ import { PortalRoute } from './routeUtils';
 import './home.scss';
 
 function Logout() {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { keycloak } = useKeycloak();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   keycloak?.logout();
   return <h1>Logging out...</h1>;
 }

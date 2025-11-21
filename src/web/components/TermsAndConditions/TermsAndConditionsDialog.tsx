@@ -10,12 +10,14 @@ import './TermsAndConditionsDialog.scss';
 
 export function TermsAndConditionsDialog() {
   const { loadUser } = useContext(CurrentUserContext);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { keycloak } = useKeycloak();
   const [showMustAccept, setShowMustAccept] = useState(false);
 
   const handleAccept = async () => {
     await SetTermsAccepted();
     // Force token refresh after role updated
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await keycloak.updateToken(10000);
     await loadUser();
   };
