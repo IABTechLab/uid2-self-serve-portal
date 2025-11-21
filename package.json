@@ -142,7 +142,7 @@
       "\\.s?css": "<rootDir>/src/testHelpers/styleMock.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!(axios|typescript-cookie))"
+      "node_modules/(?!(axios|typescript-cookie|keycloak-js))"
     ]
   },
   "nodemonConfig": {
