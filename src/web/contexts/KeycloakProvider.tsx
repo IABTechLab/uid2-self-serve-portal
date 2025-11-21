@@ -41,6 +41,43 @@ export function KeycloakProvider({
     }
   }, [authClient, onTokens]);
 
+  // Setup Keycloak event handlers
+  const setupKeycloakHandlers = useCallback(() => {
+    // Create local reference to avoid ESLint no-param-reassign
+    const keycloak = authClient;
+    // Set up token refresh
+    keycloak.onTokenExpired = () => {
+      keycloak.updateToken(30).then((refreshed) => {
+        if (refreshed) {
+          handleTokens();
+        } else {
+          setAuthenticated(false);
+        }
+      }).catch(() => {
+        setAuthenticated(false);
+      });
+    };
+
+    // Handle authentication events
+    keycloak.onAuthSuccess = () => {
+      setAuthenticated(true);
+      handleTokens();
+    };
+
+    keycloak.onAuthError = () => {
+      setAuthenticated(false);
+    };
+
+    keycloak.onAuthLogout = () => {
+      setAuthenticated(false);
+    };
+
+    // Handle refresh token expiry (session timeout)
+    keycloak.onAuthRefreshError = () => {
+      setAuthenticated(false);
+    };
+  }, [authClient, handleTokens]);
+
   useEffect(() => {
     const initKeycloak = async () => {
       try {
@@ -52,49 +89,15 @@ export function KeycloakProvider({
           handleTokens();
         }
 
-        // Set up token refresh
-        // eslint-disable-next-line no-param-reassign
-        authClient.onTokenExpired = () => {
-          authClient.updateToken(30).then((refreshed) => {
-            if (refreshed) {
-              handleTokens();
-            } else {
-              setAuthenticated(false);
-            }
-          }).catch(() => {
-            setAuthenticated(false);
-          });
-        };
-
-        // Handle authentication events
-        // eslint-disable-next-line no-param-reassign
-        authClient.onAuthSuccess = () => {
-          setAuthenticated(true);
-          handleTokens();
-        };
-
-        // eslint-disable-next-line no-param-reassign
-        authClient.onAuthError = () => {
-          setAuthenticated(false);
-        };
-
-        // eslint-disable-next-line no-param-reassign
-        authClient.onAuthLogout = () => {
-          setAuthenticated(false);
-        };
-
-        // Handle refresh token expiry (session timeout)
-        // eslint-disable-next-line no-param-reassign
-        authClient.onAuthRefreshError = () => {
-          setAuthenticated(false);
-        };
+        // Setup all event handlers
+        setupKeycloakHandlers();
       } catch (error) {
         setInitialized(true);
       }
     };
 
     initKeycloak();
-  }, [authClient, initOptions, handleTokens]);
+  }, [authClient, initOptions, handleTokens, setupKeycloakHandlers]);
 
   // Session timeout detection
   useEffect(() => {
