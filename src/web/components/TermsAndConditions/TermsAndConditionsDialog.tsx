@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
 import { useContext, useState } from 'react';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
@@ -10,7 +11,7 @@ import './TermsAndConditionsDialog.scss';
 
 export function TermsAndConditionsDialog() {
   const { loadUser } = useContext(CurrentUserContext);
-  const { keycloak } = useKeycloak();
+  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   const [showMustAccept, setShowMustAccept] = useState(false);
 
   const handleAccept = async () => {

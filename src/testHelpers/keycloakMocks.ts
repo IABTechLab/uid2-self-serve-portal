@@ -10,7 +10,7 @@ export function mockAuthenticatedKeycloak() {
   };
   const realmAccess = { roles: ['user'] };
 
-  const authClient: Keycloak = {
+  const authClient = {
     authenticated: true,
     hasRealmRole(_ignored: string) {
       return true;
@@ -21,6 +21,9 @@ export function mockAuthenticatedKeycloak() {
     loadUserProfile() {
       return Promise.resolve(userProfile);
     },
+    login: () => Promise.resolve(),
+    logout: () => Promise.resolve(),
+    updateToken: () => Promise.resolve(true),
     idToken: token,
     profile: userProfile,
     realm: 'TestRealm',

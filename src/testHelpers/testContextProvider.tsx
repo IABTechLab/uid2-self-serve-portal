@@ -9,7 +9,11 @@ import { CurrentUserContext, UserContextWithSetter } from '../web/contexts/Curre
 import { ParticipantContext, ParticipantWithSetter } from '../web/contexts/ParticipantProvider';
 
 export const createTestKeycloakInstance = () => {
-  return new Keycloak();
+  return new Keycloak({
+    url: 'http://localhost:8080',
+    realm: 'test',
+    clientId: 'test-client'
+  });
 };
 
 export const createUserContextValue = (user: UserWithParticipantRoles): UserContextWithSetter => ({

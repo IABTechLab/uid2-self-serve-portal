@@ -1,4 +1,5 @@
 import { useKeycloak } from '@react-keycloak/web';
+import type Keycloak from 'keycloak-js';
 import { createContext, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Loading } from '../components/Core/Loading/Loading';
@@ -17,7 +18,7 @@ export const CurrentUserContext = createContext<UserContextWithSetter>({
 });
 
 function CurrentUserProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const { keycloak } = useKeycloak();
+  const { keycloak } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [LoggedInUser, SetLoggedInUser] = useState<UserAccount | null>(null);
   const throwError = useAsyncThrowError();
