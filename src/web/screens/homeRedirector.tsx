@@ -18,9 +18,31 @@ export function HomeRedirector() {
       ) ?? {}) as UserIdParticipantId;
       const lastSelectedParticipantId = user ? lastSelectedParticipantIds[user.id] : undefined;
 
-      const currentParticipant = lastSelectedParticipantId
-        ? await GetSelectedParticipant(lastSelectedParticipantId)
-        : await GetUsersDefaultParticipant();
+      let currentParticipant;
+      
+      // Try to validate access to localStorage participant first
+      if (lastSelectedParticipantId && user) {
+        try {
+          // Check if user still has access to this participant
+          const userHasAccess = user.participants?.some(p => p.id === lastSelectedParticipantId);
+          if (userHasAccess) {
+            currentParticipant = await GetSelectedParticipant(lastSelectedParticipantId);
+          } else {
+            // Clear invalid localStorage entry
+            delete lastSelectedParticipantIds[user.id];
+            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          }
+        } catch (error) {
+          // If GetSelectedParticipant fails, clear the invalid entry and fall back
+          delete lastSelectedParticipantIds[user.id];
+          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+        }
+      }
+      
+      // Fall back to default participant if no valid cached participant
+      if (!currentParticipant) {
+        currentParticipant = await GetUsersDefaultParticipant();
+      }
 
       navigate(`/participant/${currentParticipant.id}/home`);
     };

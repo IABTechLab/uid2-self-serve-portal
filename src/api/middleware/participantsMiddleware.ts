@@ -22,8 +22,18 @@ export const verifyAndEnrichParticipant = async (
     .findById(participantId)
     .withGraphFetched('[types, primaryContact]');
 
+  if (!participant) {
+    return res.status(404).json({
+      message: 'The participant cannot be found.',
+      errorHash: traceId,
+    });
+  }
+
   if (!(await canUserAccessParticipant(userEmail, participantId, traceId))) {
-    participant = undefined;
+    return res.status(403).json({
+      message: 'You do not have access to this participant.',
+      errorHash: traceId,
+    });
   }
 
   req.participant = participant;
