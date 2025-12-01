@@ -43,7 +43,6 @@ export function HomeRedirector() {
       if (currentParticipant) {
         navigate(`/participant/${currentParticipant.id}/home`);
       }
-      // If no participant available, let App.tsx handle showing the "no participants" message
     };
     if (!participantId) {
       loadParticipant();

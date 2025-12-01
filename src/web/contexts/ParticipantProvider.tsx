@@ -12,7 +12,6 @@ import { useParams } from 'react-router-dom';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
 import { GetSelectedParticipant, GetUsersDefaultParticipant } from '../services/participant';
-import { ApiError } from '../utils/apiError';
 import { useAsyncThrowError } from '../utils/errorHandler';
 import { parseParticipantId } from '../utils/urlHelpers';
 import { CurrentUserContext } from './CurrentUserProvider';
@@ -76,27 +75,25 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
       }
     } catch (e: unknown) {
       // If participant loading fails, try to fall back to default participant
-      if (e instanceof ApiError) {
-        try {
-          if (user) {
-            const lastSelectedParticipantIds = (JSON.parse(
-              localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
-            ) ?? {}) as UserIdParticipantId;
-            delete lastSelectedParticipantIds[user.id];
-            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+      try {
+        if (user) {
+          const lastSelectedParticipantIds = (JSON.parse(
+            localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+          ) ?? {}) as UserIdParticipantId;
+          delete lastSelectedParticipantIds[user.id];
+          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
 
-            const defaultParticipant = await GetUsersDefaultParticipant();
-            if (defaultParticipant) {
-              setParticipant(defaultParticipant);
-              lastSelectedParticipantIds[user.id] = defaultParticipant.id;
-              localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
-            } else {
-              setParticipant(null);
-            }
+          const defaultParticipant = await GetUsersDefaultParticipant();
+          if (defaultParticipant) {
+            setParticipant(defaultParticipant);
+            lastSelectedParticipantIds[user.id] = defaultParticipant.id;
+            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          } else {
+            setParticipant(null);
           }
-        } catch (fallbackError) {
-          throwError(e);
         }
+      } catch (fallbackError) {
+        if (e instanceof Error) throwError(e);
       }
     } finally {
       setIsLoading(false);
