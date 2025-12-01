@@ -19,7 +19,7 @@ export function HomeRedirector() {
       const lastSelectedParticipantId = user ? lastSelectedParticipantIds[user.id] : undefined;
 
       let currentParticipant;
-      
+
       // Try to validate access to localStorage participant first
       if (lastSelectedParticipantId && user) {
         try {
@@ -38,7 +38,7 @@ export function HomeRedirector() {
           localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
         }
       }
-      
+
       // Fall back to default participant if no valid cached participant
       if (!currentParticipant) {
         currentParticipant = await GetUsersDefaultParticipant();

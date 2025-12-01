@@ -18,7 +18,7 @@ export const verifyAndEnrichParticipant = async (
   const traceId = getTraceId(req);
   const userEmail = req.auth?.payload?.email as string;
 
-  let participant = await Participant.query()
+  const participant = await Participant.query()
     .findById(participantId)
     .withGraphFetched('[types, primaryContact]');
 

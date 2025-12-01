@@ -53,7 +53,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
         ) ?? {}) as UserIdParticipantId;
 
         let currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
-        
+
         // Validate that user has access to the requested participant
         if (currentParticipantId && !user.participants?.some(p => p.id === currentParticipantId)) {
           // Clear invalid localStorage entry and fall back to default
@@ -84,7 +84,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             // Clear the invalid entry that caused the error
             delete lastSelectedParticipantIds[user.id];
             localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
-            
+
             // Try to load default participant as fallback
             const defaultParticipant = await GetUsersDefaultParticipant();
             setParticipant(defaultParticipant);
