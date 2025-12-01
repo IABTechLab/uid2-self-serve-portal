@@ -52,11 +52,10 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
         ) ?? {}) as UserIdParticipantId;
 
-        let currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
+        let currentParticipantId: number | undefined = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
 
-        // Validate that user has access to the requested participant
+        // validate user has access to the requested participant, clear local storage if not
         if (currentParticipantId && !user.participants?.some(p => p.id === currentParticipantId)) {
-          // Clear invalid localStorage entry and fall back to default
           delete lastSelectedParticipantIds[user.id];
           localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
           currentParticipantId = undefined;
