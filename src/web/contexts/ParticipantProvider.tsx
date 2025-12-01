@@ -12,6 +12,7 @@ import { useParams } from 'react-router-dom';
 import { ParticipantDTO } from '../../api/entities/Participant';
 import { Loading } from '../components/Core/Loading/Loading';
 import { GetSelectedParticipant, GetUsersDefaultParticipant } from '../services/participant';
+import { ApiError } from '../utils/apiError';
 import { useAsyncThrowError } from '../utils/errorHandler';
 import { parseParticipantId } from '../utils/urlHelpers';
 import { CurrentUserContext } from './CurrentUserProvider';
@@ -93,7 +94,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           }
         }
       } catch (fallbackError) {
-        if (e instanceof Error) throwError(e);
+        if (e instanceof ApiError) throwError(e);
       }
     } finally {
       setIsLoading(false);
