@@ -66,11 +66,13 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           : await GetUsersDefaultParticipant();
 
         setParticipant(p);
-        lastSelectedParticipantIds[user.id] = p.id;
-        localStorage.setItem(
-          'lastSelectedParticipantIds',
-          JSON.stringify(lastSelectedParticipantIds)
-        );
+        if (p) {
+          lastSelectedParticipantIds[user.id] = p.id;
+          localStorage.setItem(
+            'lastSelectedParticipantIds',
+            JSON.stringify(lastSelectedParticipantIds)
+          );
+        }
       }
     } catch (e: unknown) {
       // If participant loading fails, try to fall back to default participant
@@ -80,18 +82,19 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             const lastSelectedParticipantIds = (JSON.parse(
               localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
             ) ?? {}) as UserIdParticipantId;
-            // Clear the invalid entry that caused the error
             delete lastSelectedParticipantIds[user.id];
             localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
 
-            // Try to load default participant as fallback
             const defaultParticipant = await GetUsersDefaultParticipant();
-            setParticipant(defaultParticipant);
-            lastSelectedParticipantIds[user.id] = defaultParticipant.id;
-            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+            if (defaultParticipant) {
+              setParticipant(defaultParticipant);
+              lastSelectedParticipantIds[user.id] = defaultParticipant.id;
+              localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+            } else {
+              setParticipant(null);
+            }
           }
         } catch (fallbackError) {
-          // If even the fallback fails, throw the original error
           throwError(e);
         }
       }
