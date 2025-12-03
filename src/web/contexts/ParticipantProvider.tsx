@@ -61,13 +61,13 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           currentParticipantId = undefined;
         }
 
-        const p = currentParticipantId
+        const currentParticipant = currentParticipantId
           ? await GetSelectedParticipant(currentParticipantId)
           : await GetUsersDefaultParticipant();
 
-        setParticipant(p);
-        if (p) {
-          lastSelectedParticipantIds[user.id] = p.id;
+        setParticipant(currentParticipant);
+        if (currentParticipant) {
+          lastSelectedParticipantIds[user.id] = currentParticipant.id;
           localStorage.setItem(
             'lastSelectedParticipantIds',
             JSON.stringify(lastSelectedParticipantIds)
