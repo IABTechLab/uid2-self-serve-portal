@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { SideNav } from '../components/Navigation/SideNav';
-import { TermsAndConditionsDialog } from '../components/TermsAndConditions/TermsAndConditionsDialog';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
@@ -61,7 +60,7 @@ function Dashboard() {
         superUserMenu={superUserMenu}
       />
       <div className='dashboard-content'>
-        {!LoggedInUser?.user?.acceptedTerms ? <TermsAndConditionsDialog /> : <Outlet />}
+        <Outlet />
       </div>
     </div>
   );

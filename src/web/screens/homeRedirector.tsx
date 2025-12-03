@@ -18,11 +18,31 @@ export function HomeRedirector() {
       ) ?? {}) as UserIdParticipantId;
       const lastSelectedParticipantId = user ? lastSelectedParticipantIds[user.id] : undefined;
 
-      const currentParticipant = lastSelectedParticipantId
-        ? await GetSelectedParticipant(lastSelectedParticipantId)
-        : await GetUsersDefaultParticipant();
+      let currentParticipant;
 
-      navigate(`/participant/${currentParticipant.id}/home`);
+      if (lastSelectedParticipantId && user) {
+        try {
+          // Check if user still has access to this participant
+          const userHasAccess = user.participants?.some(p => p.id === lastSelectedParticipantId);
+          if (userHasAccess) {
+            currentParticipant = await GetSelectedParticipant(lastSelectedParticipantId);
+          } else {
+            delete lastSelectedParticipantIds[user.id];
+            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          }
+        } catch (error) {
+          delete lastSelectedParticipantIds[user.id];
+          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+        }
+      }
+
+      if (!currentParticipant) {
+        currentParticipant = await GetUsersDefaultParticipant();
+      }
+
+      if (currentParticipant) {
+        navigate(`/participant/${currentParticipant.id}/home`);
+      }
     };
     if (!participantId) {
       loadParticipant();
