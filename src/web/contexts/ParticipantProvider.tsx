@@ -52,21 +52,50 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
         ) ?? {}) as UserIdParticipantId;
 
-        const currentParticipantId = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
+        let currentParticipantId: number | undefined = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
 
-        const p = currentParticipantId
+        // validate user has access to the requested participant, clear local storage if not
+        if (currentParticipantId && !user.participants?.some(p => p.id === currentParticipantId)) {
+          delete lastSelectedParticipantIds[user.id];
+          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          currentParticipantId = undefined;
+        }
+
+        const currentParticipant = currentParticipantId
           ? await GetSelectedParticipant(currentParticipantId)
           : await GetUsersDefaultParticipant();
 
-        setParticipant(p);
-        lastSelectedParticipantIds[user.id] = p.id;
-        localStorage.setItem(
-          'lastSelectedParticipantIds',
-          JSON.stringify(lastSelectedParticipantIds)
-        );
+        setParticipant(currentParticipant);
+        if (currentParticipant) {
+          lastSelectedParticipantIds[user.id] = currentParticipant.id;
+          localStorage.setItem(
+            'lastSelectedParticipantIds',
+            JSON.stringify(lastSelectedParticipantIds)
+          );
+        }
       }
     } catch (e: unknown) {
-      if (e instanceof ApiError) throwError(e);
+      // If participant loading fails, try to fall back to default participant
+      try {
+        if (user) {
+          const lastSelectedParticipantIds = (JSON.parse(
+            localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
+          ) ?? {}) as UserIdParticipantId;
+          delete lastSelectedParticipantIds[user.id];
+          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+
+          const defaultParticipant = await GetUsersDefaultParticipant();
+          if (defaultParticipant) {
+            setParticipant(defaultParticipant);
+            lastSelectedParticipantIds[user.id] = defaultParticipant.id;
+            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          } else {
+            setParticipant(null);
+          }
+        }
+      } catch (fallbackError) {
+        if (e instanceof ApiError) throwError(e);
+      }
     } finally {
       setIsLoading(false);
     }

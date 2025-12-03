@@ -9,6 +9,7 @@ import { LockedUserView } from './components/Navigation/LockedUserView';
 import { NoParticipantAccessView } from './components/Navigation/NoParticipantAccessView';
 import { PortalHeader } from './components/PortalHeader/PortalHeader';
 import { UpdatesTour } from './components/SiteTour/UpdatesTour';
+import { TermsAndConditionsDialog } from './components/TermsAndConditions/TermsAndConditionsDialog';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { useKeycloak } from './contexts/KeycloakProvider';
@@ -32,6 +33,11 @@ function AppContent() {
   if (LoggedInUser?.user?.participants!.length === 0) {
     return <ErrorView message='You do not have access to any participants.' />;
   }
+
+  if (LoggedInUser?.user && !LoggedInUser.user.acceptedTerms) {
+    return <TermsAndConditionsDialog />;
+  }
+
   if (LoggedInUser && !participant) {
     return <NoParticipantAccessView user={LoggedInUser?.user} />;
   }

@@ -57,7 +57,7 @@
     <div class="content">
       <div class="header">
         <a href="${properties.applicationURL}">
-          <img src="${properties.applicationURL}/uid2-logo.png" alt="UID2 logo" class="logo"/>
+          <img src="${properties.applicationURL}/uid2-logo-email.png" alt="UID2 logo" class="logo"/>
         </a>
       </div>
       <#nested>
