@@ -1,4 +1,3 @@
-import * as cloak from '@react-keycloak/web';
 import { render, screen } from '@testing-library/react';
 import * as axios from 'axios';
 
@@ -7,20 +6,24 @@ import * as keycloakMocks from '../../testHelpers/keycloakMocks';
 import { App } from '../App';
 import * as Loading from '../components/Core/Loading/Loading';
 import { CurrentUserProvider } from '../contexts/CurrentUserProvider';
+import * as KeycloakProvider from '../contexts/KeycloakProvider';
 import { PortalErrorBoundary } from './PortalErrorBoundary';
 
-// Needed to enable spying on useKeyCloak
-jest.mock('@react-keycloak/web', () => ({
+// Needed to enable spying on useKeycloak
+jest.mock('../contexts/KeycloakProvider', () => ({
   __esModule: true,
-  ...jest.requireActual('@react-keycloak/web'),
+  ...jest.requireActual('../contexts/KeycloakProvider'),
 }));
 
 describe('Error boundary', () => {
   let kcMock: jest.SpyInstance;
   beforeEach(() => {
     kcMock = jest
-      .spyOn(cloak, 'useKeycloak')
-      .mockImplementation(() => keycloakMocks.mockAuthenticatedKeycloak());
+      .spyOn(KeycloakProvider, 'useKeycloak')
+      .mockImplementation(() => ({
+        ...keycloakMocks.mockAuthenticatedKeycloak(),
+        authenticated: true,
+      }));
   });
 
   afterEach(() => {

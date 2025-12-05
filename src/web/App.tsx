@@ -1,5 +1,3 @@
-import { useKeycloak } from '@react-keycloak/web';
-import type Keycloak from 'keycloak-js';
 import { StrictMode, useCallback, useContext } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -14,6 +12,7 @@ import { UpdatesTour } from './components/SiteTour/UpdatesTour';
 import { TermsAndConditionsDialog } from './components/TermsAndConditions/TermsAndConditionsDialog';
 import { configureFontAwesomeLibrary } from './configureFontAwesomeLibrary';
 import { CurrentUserContext } from './contexts/CurrentUserProvider';
+import { useKeycloak } from './contexts/KeycloakProvider';
 import { ParticipantContext, ParticipantProvider } from './contexts/ParticipantProvider';
 import { HomeRedirector } from './screens/homeRedirector';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
@@ -57,7 +56,7 @@ function AppContent() {
 
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const { keycloak, initialized } = useKeycloak() as { keycloak: Keycloak; initialized: boolean };
+  const { keycloak, initialized } = useKeycloak();
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);
