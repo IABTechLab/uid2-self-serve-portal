@@ -240,6 +240,7 @@
     "resolve-url-loader": "5.0.0",
     "storybook": "$storybook",
     "form-data": "^4.0.4",
-    "glob": "^11.1.0"
+    "glob": "^11.1.0",
+    "jws": "^4.0.1"
   }
 }
