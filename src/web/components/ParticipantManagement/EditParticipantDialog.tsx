@@ -75,7 +75,7 @@ function EditParticipantDialog({
     (async () => {
       try {
         const isVisible = await GetParticipantVisibility(participant.id);
-        formMethods.reset({ ...originalFormValues, visible: isVisible });
+        formMethods.reset({ ...originalFormValues, visible: isVisible ?? true });
       } catch {
         formMethods.reset({ ...originalFormValues, visible: null });
         setDisableVisibilityCheckbox(true);
