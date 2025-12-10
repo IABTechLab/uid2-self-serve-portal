@@ -52,7 +52,7 @@ function EditParticipantDialog({
     contactFirstName: contact.firstName,
     contactLastName: contact.lastName,
     contactEmail: contact.email,
-    visible: participant.siteId ? true : null,
+    visible: participant.siteId ? true : false,
   };
 
   const onSubmit = async (formData: UpdateParticipantForm) => {
@@ -77,7 +77,7 @@ function EditParticipantDialog({
         const isVisible = await GetParticipantVisibility(participant.id);
         formMethods.reset({ ...originalFormValues, visible: isVisible ?? true });
       } catch {
-        formMethods.reset({ ...originalFormValues, visible: null });
+        formMethods.reset({ ...originalFormValues, visible: false });
         setDisableVisibilityCheckbox(true);
       }
     })();
