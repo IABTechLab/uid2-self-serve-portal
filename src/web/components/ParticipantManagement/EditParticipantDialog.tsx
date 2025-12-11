@@ -52,7 +52,7 @@ function EditParticipantDialog({
     contactFirstName: contact.firstName,
     contactLastName: contact.lastName,
     contactEmail: contact.email,
-    visible: !!participant.siteId,
+    visible: null,
   };
 
   const onSubmit = async (formData: UpdateParticipantForm) => {
