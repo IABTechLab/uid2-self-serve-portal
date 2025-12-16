@@ -37,8 +37,10 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: D3velopmentP0
       SSP_WEB_HOST: http://localhost:3000
+      KC_HEALTH_ENABLED: true
     ports:
       - 18080:8080
+      - 19000:9000
       - 19990:9990
     depends_on:
       database:
