@@ -1,7 +1,6 @@
 name: Release Docker Image - Scan
 run-name: ${{ inputs.release_type == 'Snapshot' && 'Publish Pre-release' || format('Release {0}', inputs.release_type)}} Self Serve Portal Image by @${{ github.actor }}
 on:
-  pull_request:
   workflow_dispatch:
 
 jobs:
