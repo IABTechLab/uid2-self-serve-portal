@@ -52,12 +52,19 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
           localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
         ) ?? {}) as UserIdParticipantId;
 
-        let currentParticipantId: number | undefined = parsedParticipantId ?? lastSelectedParticipantIds[user.id];
+        let currentParticipantId: number | undefined =
+          parsedParticipantId ?? lastSelectedParticipantIds[user.id];
 
         // validate user has access to the requested participant, clear local storage if not
-        if (currentParticipantId && !user.participants?.some(p => p.id === currentParticipantId)) {
+        if (
+          currentParticipantId &&
+          !user.participants?.some((p) => p.id === currentParticipantId)
+        ) {
           delete lastSelectedParticipantIds[user.id];
-          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          localStorage.setItem(
+            'lastSelectedParticipantIds',
+            JSON.stringify(lastSelectedParticipantIds)
+          );
           currentParticipantId = undefined;
         }
 
@@ -82,13 +89,19 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
             localStorage.getItem('lastSelectedParticipantIds') ?? '{}'
           ) ?? {}) as UserIdParticipantId;
           delete lastSelectedParticipantIds[user.id];
-          localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+          localStorage.setItem(
+            'lastSelectedParticipantIds',
+            JSON.stringify(lastSelectedParticipantIds)
+          );
 
           const defaultParticipant = await GetUsersDefaultParticipant();
           if (defaultParticipant) {
             setParticipant(defaultParticipant);
             lastSelectedParticipantIds[user.id] = defaultParticipant.id;
-            localStorage.setItem('lastSelectedParticipantIds', JSON.stringify(lastSelectedParticipantIds));
+            localStorage.setItem(
+              'lastSelectedParticipantIds',
+              JSON.stringify(lastSelectedParticipantIds)
+            );
           } else {
             setParticipant(null);
           }
@@ -102,7 +115,7 @@ function ParticipantProvider({ children }: Readonly<{ children: ReactNode }>) {
   }, [user, parsedParticipantId, throwError]);
 
   useEffect(() => {
-    if (!participant || parsedParticipantId !== participant?.id) {
+    if (!participant || (parsedParticipantId && parsedParticipantId !== participant?.id)) {
       loadParticipant();
     }
   }, [participant, parsedParticipantId, loadParticipant]);
