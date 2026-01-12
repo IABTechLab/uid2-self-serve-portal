@@ -109,7 +109,6 @@ export const getSiteNamesForAuditLog = async (
   siteIds: number[],
   traceId: TraceId
 ): Promise<string[]> => {
-  // Get participants that have these siteIds
   const participants = await Participant.query()
     .whereIn('siteId', siteIds)
     .select('siteId', 'name');

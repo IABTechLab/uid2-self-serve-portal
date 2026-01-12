@@ -51,14 +51,14 @@ export const handleAddSharingPermission = async (req: UserParticipantRequest, re
   }
 
   // Resolve siteIds to participant/site names for audit log
-  const sharingNames = await getSiteNamesForAuditLog(newParticipantSites, traceId);
+  const newParticipantNames = await getSiteNamesForAuditLog(newParticipantSites, traceId);
 
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.UpdateSharingPermissions,
     {
       action: AuditAction.Add,
-      sharingPermissions: sharingNames,
+      sharingPermissions: newParticipantNames,
       siteId: participant.siteId,
     },
     participant!.id
@@ -86,14 +86,14 @@ export const handleRemoveSharingPermission = async (req: UserParticipantRequest,
   }
 
   // Resolve siteIds to participant/site names for audit log
-  const sharingNames = await getSiteNamesForAuditLog(sharingSitesToRemove, traceId);
+  const sharingSiteNamesToRemove = await getSiteNamesForAuditLog(sharingSitesToRemove, traceId);
 
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.UpdateSharingPermissions,
     {
       action: AuditAction.Delete,
-      sharingPermissions: sharingNames,
+      sharingPermissions: sharingSiteNamesToRemove,
       siteId: participant.siteId,
     },
     participant!.id
