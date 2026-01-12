@@ -101,6 +101,48 @@ export const getParticipantsBySiteIds = async (siteIds: number[]) => {
   return Participant.query().whereIn('siteId', siteIds).withGraphFetched('types');
 };
 
+/**
+ * Get participant/site names for a list of siteIds.
+ * Uses participant name if available, falls back to Admin site name.
+ */
+export const getSiteNamesForAuditLog = async (
+  siteIds: number[],
+  traceId: TraceId
+): Promise<string[]> => {
+  // Get participants that have these siteIds
+  const participants = await Participant.query()
+    .whereIn('siteId', siteIds)
+    .select('siteId', 'name');
+
+  const participantMap = new Map(
+    participants.map((p) => [p.siteId, p.name])
+  );
+
+  // For siteIds without a participant, fetch from Admin
+  const missingSiteIds = siteIds.filter((id) => !participantMap.has(id));
+
+  if (missingSiteIds.length > 0) {
+    // Fetch site names from Admin for sites without participants
+    const adminSitePromises = missingSiteIds.map(async (siteId) => {
+      try {
+        const site = await getSite(siteId, traceId);
+        return { siteId, name: site.name };
+      } catch {
+        // If Admin lookup fails, use siteId as fallback
+        return { siteId, name: `Site ${siteId}` };
+      }
+    });
+
+    const adminSites = await Promise.all(adminSitePromises);
+    adminSites.forEach(({ siteId, name }) => {
+      participantMap.set(siteId, name);
+    });
+  }
+
+  // Return names in the same order as input siteIds
+  return siteIds.map((id) => participantMap.get(id) ?? `Site ${id}`);
+};
+
 export const addSharingParticipants = async (
   participantSiteId: number,
   siteIds: number[],

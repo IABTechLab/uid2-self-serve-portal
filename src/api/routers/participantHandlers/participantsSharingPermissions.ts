@@ -13,6 +13,7 @@ import {
 import {
   addSharingParticipants,
   deleteSharingParticipants,
+  getSiteNamesForAuditLog,
   ParticipantRequest,
   UpdateSharingTypes,
   UserParticipantRequest,
@@ -49,12 +50,15 @@ export const handleAddSharingPermission = async (req: UserParticipantRequest, re
     return siteIdNotSetError(req, res);
   }
 
+  // Resolve siteIds to participant/site names for audit log
+  const sharingNames = await getSiteNamesForAuditLog(newParticipantSites, traceId);
+
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.UpdateSharingPermissions,
     {
       action: AuditAction.Add,
-      sharingPermissions: newParticipantSites,
+      sharingPermissions: sharingNames,
       siteId: participant.siteId,
     },
     participant!.id
@@ -81,12 +85,15 @@ export const handleRemoveSharingPermission = async (req: UserParticipantRequest,
     return siteIdNotSetError(req, res);
   }
 
+  // Resolve siteIds to participant/site names for audit log
+  const sharingNames = await getSiteNamesForAuditLog(sharingSitesToRemove, traceId);
+
   const auditTrailInsertObject = constructAuditTrailObject(
     user!,
     AuditTrailEvents.UpdateSharingPermissions,
     {
       action: AuditAction.Delete,
-      sharingPermissions: sharingSitesToRemove,
+      sharingPermissions: sharingNames,
       siteId: participant.siteId,
     },
     participant!.id
