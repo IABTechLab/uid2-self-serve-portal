@@ -122,13 +122,11 @@ export const getSiteNamesForAuditLog = async (
   const missingSiteIds = siteIds.filter((id) => !participantMap.has(id));
 
   if (missingSiteIds.length > 0) {
-    // Fetch site names from Admin for sites without participants
     const adminSitePromises = missingSiteIds.map(async (siteId) => {
       try {
         const site = await getSite(siteId, traceId);
         return { siteId, name: site.name };
       } catch {
-        // If Admin lookup fails, use siteId as fallback
         return { siteId, name: `Site ${siteId}` };
       }
     });
@@ -139,7 +137,6 @@ export const getSiteNamesForAuditLog = async (
     });
   }
 
-  // Return names in the same order as input siteIds
   return siteIds.map((id) => participantMap.get(id) ?? `Site ${id}`);
 };
 

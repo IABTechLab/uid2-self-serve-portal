@@ -48,10 +48,8 @@ export const getPrettyAuditDetails = (eventData: unknown) => {
       // Handle both old format (siteIds as numbers) and new format (names as strings)
       const sharingData = val as (string | number)[];
       if (sharingData.length > 0 && typeof sharingData[0] === 'number') {
-        // Old format: array of siteIds - display as "Site ID: X, Y, Z"
         val = `Site IDs: ${sharingData.join(', ')}`;
       } else {
-        // New format: array of participant/site names
         val = sharingData.join(', ');
       }
     }
