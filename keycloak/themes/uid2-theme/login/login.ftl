@@ -64,15 +64,9 @@
             </div>
             </#if>
 
-            <#if realm.resetPasswordAllowed>
-            <div id="kc-forgot-password-group" class="${properties.kcFormOptionsWrapperClass!}" style="display: none;">
-                <span><a tabindex="4" href="${url.loginResetCredentialsUrl}">${msg("doForgotPassword")}</a></span>
-            </div>
-            </#if>
-
             <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
                 <input 
-                    tabindex="5" 
+                    tabindex="4" 
                     class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" 
                     name="login" 
                     id="kc-login" 
@@ -81,8 +75,14 @@
                 />
             </div>
 
+            <#if realm.resetPasswordAllowed>
+            <div id="kc-forgot-password-group" class="${properties.kcFormOptionsWrapperClass!}" style="display: none;">
+                <span><a tabindex="5" href="${url.loginResetCredentialsUrl}">${msg("doForgotPassword")}</a></span>
+            </div>
+            </#if>
+
             <div id="kc-back-button-group" class="${properties.kcFormOptionsWrapperClass!}" style="display: none;">
-                <span><a tabindex="6" href="javascript:void(0);" onclick="hidePasswordField(); return false;">Change Email</a></span>
+                <span><a tabindex="6" href="javascript:void(0);" onclick="hidePasswordField(); return false;"><span style="color: #666;">←</span> Back to Previous Page</a></span>
             </div>
         </form>
 
@@ -123,7 +123,6 @@
                     console.log('SSO domain detected:', emailDomain, '- SSO redirect will be implemented by IdP configuration');
                 }
 
-                // Show password field and related elements
                 document.getElementById('kc-password-group').style.display = 'block';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
                 if (rememberMeGroup) {
@@ -148,7 +147,6 @@
             }
 
             function hidePasswordField() {
-                // Hide password field and related elements
                 document.getElementById('kc-password-group').style.display = 'none';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
                 if (rememberMeGroup) {
