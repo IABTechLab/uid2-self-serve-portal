@@ -101,6 +101,32 @@ export const getParticipantsBySiteIds = async (siteIds: number[]) => {
   return Participant.query().whereIn('siteId', siteIds).withGraphFetched('types');
 };
 
+/**
+ * Get participant names for a list of siteIds.
+ * Uses participant name if available, falls back to participant ID.
+ */
+export const getSiteNamesForAuditLog = async (
+  siteIds: number[],
+  _traceId: TraceId
+): Promise<string[]> => {
+  const participants = await Participant.query()
+    .whereIn('siteId', siteIds)
+    .whereNotNull('siteId')
+    .select('siteId', 'name', 'id');
+
+  const participantMap = new Map<number, string>();
+  participants.forEach((p) => {
+    if (p.siteId) {
+      // Use participant name if available, otherwise use participant ID
+      const displayName = p.name || `Participant ${p.id}`;
+      participantMap.set(p.siteId, displayName);
+    }
+  });
+
+  // For siteIds without a participant (participant was deleted), use Site ID as fallback
+  return siteIds.map((id) => participantMap.get(id) ?? `Site ${id}`);
+};
+
 export const addSharingParticipants = async (
   participantSiteId: number,
   siteIds: number[],
