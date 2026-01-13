@@ -90,11 +90,10 @@
             let passwordShown = false;
 
             // SSO domain configuration
-            // TODO: Configure this array 
+            // TODO: Configure this array
+            // Example: ['thetradedesk.com', 'unifiedid.com']
             const ssoDomains = [
                 // Add domains that should route to SSO IdP here
-                // 'thetradedesk.com',
-                // 'unifiedid.com'
             ];
 
             function handleFormSubmit(event) {
@@ -117,9 +116,10 @@
             }
 
             function showPasswordField(email) {
-                // Extract domain from email and check if in the SSO domains array
+                // Extract domain from email
                 const emailDomain = email.split('@')[1]?.toLowerCase();
                 
+                // Check if email domain is in the SSO domains array
                 if (emailDomain && ssoDomains.includes(emailDomain)) {
                     // TODO: Implement SSO redirect to IdP here
 
