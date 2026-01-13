@@ -116,17 +116,13 @@
             }
 
             function showPasswordField(email) {
-                // Extract domain from email
+                // Check if email domain is in the SSO domains array and handle reroutes
                 const emailDomain = email.split('@')[1]?.toLowerCase();
-                
-                // Check if email domain is in the SSO domains array
                 if (emailDomain && ssoDomains.includes(emailDomain)) {
                     // TODO: Implement SSO redirect to IdP here
-
                     console.log('SSO domain detected:', emailDomain, '- SSO redirect will be implemented by IdP configuration');
                 }
 
-                // If email does not fall into one of the rerouting subsets 
                 // Show password field and related elements
                 document.getElementById('kc-password-group').style.display = 'block';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
@@ -138,19 +134,14 @@
                     forgotPasswordGroup.style.display = 'block';
                 }
                 
-                // Show back button
                 document.getElementById('kc-back-button-group').style.display = 'block';
-
-                // Change button text to "Log In"
                 const submitButton = document.getElementById('kc-login');
                 submitButton.value = 'Log In';
 
-                // Focus on password field
                 const passwordInput = document.getElementById('password');
                 passwordInput.focus();
                 passwordInput.required = true;
 
-                // Disable email field
                 document.getElementById('username').readOnly = true;
 
                 passwordShown = true;
@@ -167,20 +158,16 @@
                 if (forgotPasswordGroup) {
                     forgotPasswordGroup.style.display = 'none';
                 }
-                
-                // Hide back button
+
                 document.getElementById('kc-back-button-group').style.display = 'none';
 
-                // Change button text back to "Next"
                 const submitButton = document.getElementById('kc-login');
                 submitButton.value = 'Next';
 
-                // Clear and enable email field
                 const emailInput = document.getElementById('username');
                 emailInput.readOnly = false;
                 emailInput.focus();
 
-                // Clear password field
                 const passwordInput = document.getElementById('password');
                 passwordInput.value = '';
                 passwordInput.required = false;

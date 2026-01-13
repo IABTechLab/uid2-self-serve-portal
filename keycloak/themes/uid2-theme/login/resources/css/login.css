@@ -246,6 +246,10 @@ div.kc-logo-text {
   font-size: 18px;
 }
 
+#kc-forgot-password-group a {
+  font-size: 14px;
+}
+
 #kc-back-button-group a:hover {
   color: #000 !important;
   text-decoration: underline;
