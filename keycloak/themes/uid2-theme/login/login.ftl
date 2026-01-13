@@ -122,9 +122,8 @@
                 
                 if (emailDomain && ssoDomains.includes(emailDomain)) {
                     // TODO: Implement SSO redirect to IdP here
-                    // Placeholder for SSO redirect logic
+
                     console.log('SSO domain detected:', emailDomain, '- SSO redirect will be implemented by IdP configuration');
-                    // For now, fall through to password entry until SSO is configured
                 }
 
                 // If email does not fall into one of the rerouting subsets 
