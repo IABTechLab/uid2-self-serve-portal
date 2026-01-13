@@ -80,10 +80,22 @@
                     value="${msg("doNext")}"
                 />
             </div>
+
+            <div id="kc-back-button-group" class="${properties.kcFormOptionsWrapperClass!}" style="display: none;">
+                <span><a tabindex="6" href="javascript:void(0);" onclick="hidePasswordField(); return false;">Change Email</a></span>
+            </div>
         </form>
 
         <script>
             let passwordShown = false;
+
+            // SSO domain configuration
+            // TODO: Configure this array 
+            const ssoDomains = [
+                // Add domains that should route to SSO IdP here
+                // 'thetradedesk.com',
+                // 'unifiedid.com'
+            ];
 
             function handleFormSubmit(event) {
                 const emailInput = document.getElementById('username');
@@ -108,12 +120,11 @@
                 // Extract domain from email
                 const emailDomain = email.split('@')[1]?.toLowerCase();
                 
-                // Check if email is from The Trade Desk domain
-                if (emailDomain === 'thetradedesk.com') {
-                    // TODO: Manager will implement SSO redirect to IdP here
-                    // This will be handled by the IdP configuration ticket
+                // Check if email domain is in the SSO domains array
+                if (emailDomain && ssoDomains.includes(emailDomain)) {
+                    // TODO: Implement SSO redirect to IdP here
                     // Placeholder for SSO redirect logic
-                    console.log('The Trade Desk email detected - SSO redirect will be implemented by IdP configuration');
+                    console.log('SSO domain detected:', emailDomain, '- SSO redirect will be implemented by IdP configuration');
                     // For now, fall through to password entry until SSO is configured
                 }
 
@@ -127,6 +138,9 @@
                 if (forgotPasswordGroup) {
                     forgotPasswordGroup.style.display = 'block';
                 }
+                
+                // Show back button
+                document.getElementById('kc-back-button-group').style.display = 'block';
 
                 // Change button text to "Log In"
                 const submitButton = document.getElementById('kc-login');
@@ -141,6 +155,38 @@
                 document.getElementById('username').readOnly = true;
 
                 passwordShown = true;
+            }
+
+            function hidePasswordField() {
+                // Hide password field and related elements
+                document.getElementById('kc-password-group').style.display = 'none';
+                const rememberMeGroup = document.getElementById('kc-remember-me-group');
+                if (rememberMeGroup) {
+                    rememberMeGroup.style.display = 'none';
+                }
+                const forgotPasswordGroup = document.getElementById('kc-forgot-password-group');
+                if (forgotPasswordGroup) {
+                    forgotPasswordGroup.style.display = 'none';
+                }
+                
+                // Hide back button
+                document.getElementById('kc-back-button-group').style.display = 'none';
+
+                // Change button text back to "Next"
+                const submitButton = document.getElementById('kc-login');
+                submitButton.value = 'Next';
+
+                // Clear and enable email field
+                const emailInput = document.getElementById('username');
+                emailInput.readOnly = false;
+                emailInput.focus();
+
+                // Clear password field
+                const passwordInput = document.getElementById('password');
+                passwordInput.value = '';
+                passwordInput.required = false;
+
+                passwordShown = false;
             }
         </script>
     </#if>
