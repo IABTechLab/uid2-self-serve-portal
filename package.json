@@ -46,7 +46,7 @@
     "@types/react": "^18.2.54",
     "@types/react-dom": "^18.2.18",
     "@types/validator": "^13.11.10",
-    "axios": "^1.8.2",
+    "axios": "^1.12.0",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "body-parser": "^1.20.3",
     "braces": "^3.0.3",
@@ -95,7 +95,7 @@
     "url-pattern": "^1.0.3",
     "utility-types": "^3.11.0",
     "uuid": "^9.0.1",
-    "validator": "^13.12.0",
+    "validator": "^13.15.22",
     "web-vitals": "^2.1.4",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
@@ -243,6 +243,8 @@
     "postcss": "^8.4.21",
     "svgo": "3.2.0",
     "resolve-url-loader": "5.0.0",
-    "storybook": "$storybook"
+    "storybook": "$storybook",
+    "jws": "^4.0.1",
+    "qs": "^6.14.1"
   }
 }
