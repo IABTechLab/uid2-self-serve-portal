@@ -123,7 +123,7 @@ export const getSiteNamesForAuditLog = async (
     }
   });
 
-  // For siteIds without a participant, use Site ID as fallback
+  // For siteIds without a participant (participant was deleted), use Site ID as fallback
   return siteIds.map((id) => participantMap.get(id) ?? `Site ${id}`);
 };
 
