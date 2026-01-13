@@ -105,7 +105,7 @@
                     return false;
                 }
 
-                // If password field is not shown yet, show it instead of submitting
+                // Show password if not shown
                 if (!passwordShown) {
                     event.preventDefault();
                     showPasswordField(email);
@@ -117,10 +117,9 @@
             }
 
             function showPasswordField(email) {
-                // Extract domain from email
+                // Extract domain from email and check if in the SSO domains array
                 const emailDomain = email.split('@')[1]?.toLowerCase();
                 
-                // Check if email domain is in the SSO domains array
                 if (emailDomain && ssoDomains.includes(emailDomain)) {
                     // TODO: Implement SSO redirect to IdP here
                     // Placeholder for SSO redirect logic
@@ -128,6 +127,7 @@
                     // For now, fall through to password entry until SSO is configured
                 }
 
+                // If email does not fall into one of the rerouting subsets 
                 // Show password field and related elements
                 document.getElementById('kc-password-group').style.display = 'block';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
