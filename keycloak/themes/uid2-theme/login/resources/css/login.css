@@ -236,6 +236,31 @@ div.kc-logo-text {
   display: flex;
 }
 
+#kc-forgot-password-group {
+  text-align: center;
+}
+
+#kc-forgot-password-group a {
+  font-size: 18px;
+}
+
+#kc-back-button-group {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+#kc-back-button-group a {
+  color: #666 !important;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+#kc-back-button-group a:hover {
+  color: #000 !important;
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
 .login-pf-page .login-pf-signup a {
   margin: 0;
 }
