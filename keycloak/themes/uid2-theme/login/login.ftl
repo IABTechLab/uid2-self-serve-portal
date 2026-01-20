@@ -3,7 +3,7 @@
     <#if section = "header">
         ${msg("loginAccountTitle")}
     <#elseif section = "form">
-        <form id="kc-form-login" class="${properties.kcFormClass!}" onsubmit="return handleFormSubmit(event);" action="${url.loginAction}" method="post">
+        <form id="kc-form-login" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post" onsubmit="return handleEmailSubmit(event);">
             <div class="${properties.kcFormGroupClass!}">
                 <div class="${properties.kcLabelWrapperClass!}">
                     <label for="username" class="${properties.kcLabelClass!}">${msg("email")}</label>
@@ -67,7 +67,7 @@
             <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
                 <input 
                     tabindex="4" 
-                    class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" 
+                    class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" 
                     name="login" 
                     id="kc-login" 
                     type="submit" 
@@ -90,13 +90,14 @@
             let passwordShown = false;
 
             // SSO domain configuration
-            // TODO: Configure this array
-            // Example: ['thetradedesk.com', 'unifiedid.com']
+            // Domains that should route to SSO IdP
             const ssoDomains = [
-                // Add domains that should route to SSO IdP here
+                'unifiedid.com'
             ];
 
-            function handleFormSubmit(event) {
+            function handleEmailSubmit(event) {
+                event.preventDefault();
+                
                 const emailInput = document.getElementById('username');
                 const email = emailInput.value.trim();
                 
@@ -104,9 +105,33 @@
                     return false;
                 }
 
+                // Check if email domain requires SSO
+                const emailDomain = email.split('@')[1]?.toLowerCase();
+                
+                if (emailDomain && ssoDomains.includes(emailDomain)) {
+                    // For SSO domains, redirect to OAuth authorization endpoint with kc_idp_hint
+                    // This is where Identity Provider Redirector checks for the hint
+                    const currentUrl = new URL(window.location.href);
+                    const pathParts = currentUrl.pathname.split('/');
+                    const realmIndex = pathParts.indexOf('realms');
+                    const realmName = realmIndex >= 0 && pathParts[realmIndex + 1] ? pathParts[realmIndex + 1] : 'self-serve-portal';
+                    
+                    // Build OAuth authorization endpoint URL
+                    // Note: Using string concatenation instead of template literals to avoid FreeMarker conflicts
+                    const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/' + realmName + '/protocol/openid-connect/auth';
+                    
+                    // Preserve existing query parameters (client_id, redirect_uri, etc.)
+                    const existingParams = new URLSearchParams(currentUrl.search);
+                    existingParams.set('kc_idp_hint', 'okta');
+                    existingParams.set('login_hint', email);
+                    
+                    const redirectUrl = authBaseUrl + '?' + existingParams.toString();
+                    window.location.href = redirectUrl;
+                    return false;
+                }
+
                 // Show password if not shown
                 if (!passwordShown) {
-                    event.preventDefault();
                     showPasswordField(email);
                     return false;
                 }
@@ -116,13 +141,6 @@
             }
 
             function showPasswordField(email) {
-                // Check if email domain is in the SSO domains array and handle reroutes
-                const emailDomain = email.split('@')[1]?.toLowerCase();
-                if (emailDomain && ssoDomains.includes(emailDomain)) {
-                    // TODO: Implement SSO redirect to IdP here
-                    console.log('SSO domain detected:', emailDomain, '- SSO redirect will be implemented by IdP configuration');
-                }
-
                 document.getElementById('kc-password-group').style.display = 'block';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
                 if (rememberMeGroup) {
