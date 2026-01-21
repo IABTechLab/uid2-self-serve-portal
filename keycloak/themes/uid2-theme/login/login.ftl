@@ -90,16 +90,16 @@
             let passwordShown = false;
 
             function handleEmailSubmit(event) {
-                event.preventDefault();
-                
                 const emailInput = document.getElementById('username');
                 const email = emailInput.value.trim().toLowerCase();
                 
                 if (!email) {
+                    event.preventDefault();
                     return false;
                 }
 
                 if (email.includes('@unifiedid.com')) {
+                    event.preventDefault();
                     const currentUrl = new URL(window.location.href);
                     const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/self-serve-portal/protocol/openid-connect/auth';
                     const existingParams = new URLSearchParams(currentUrl.search);
@@ -110,12 +110,14 @@
                     return false;
                 }
 
-                // Handle normal login
+                // Handle normal login - show password field first
                 if (!passwordShown) {
+                    event.preventDefault();
                     showPasswordField(email);
                     return false;
                 }
 
+                // Password shown, allow form submission
                 return true;
             }
 
