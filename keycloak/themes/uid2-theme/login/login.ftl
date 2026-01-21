@@ -89,38 +89,24 @@
         <script>
             let passwordShown = false;
 
-            // SSO domain configuration
-            // Domains that should route to SSO IdP
-            const ssoDomains = [
-                'unifiedid.com'
-            ];
-
             function handleEmailSubmit(event) {
                 event.preventDefault();
                 
                 const emailInput = document.getElementById('username');
-                const email = emailInput.value.trim();
+                const email = emailInput.value.trim().toLowerCase();
                 
                 if (!email) {
                     return false;
                 }
 
-                const emailDomain = email.split('@')[1]?.toLowerCase();
-                
-                if (emailDomain && ssoDomains.includes(emailDomain)) {
+                if (email.includes('@unifiedid.com')) {
                     const currentUrl = new URL(window.location.href);
-                    const pathParts = currentUrl.pathname.split('/');
-                    const realmIndex = pathParts.indexOf('realms');
-                    const realmName = realmIndex >= 0 && pathParts[realmIndex + 1] ? pathParts[realmIndex + 1] : 'self-serve-portal';
-                    
-                    // Build OAuth authorization endpoint URL with existing query parameters (client_id, redirect_uri, etc.)
-                    const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/' + realmName + '/protocol/openid-connect/auth';
+                    const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/self-serve-portal/protocol/openid-connect/auth';
                     const existingParams = new URLSearchParams(currentUrl.search);
                     existingParams.set('kc_idp_hint', 'okta');
                     existingParams.set('login_hint', email);
                     
-                    const redirectUrl = authBaseUrl + '?' + existingParams.toString();
-                    window.location.href = redirectUrl;
+                    window.location.href = authBaseUrl + '?' + existingParams.toString();
                     return false;
                 }
 
