@@ -89,12 +89,12 @@
         <script>
             let passwordShown = false;
 
-            // SSO domain configuration
-            // TODO: Configure this array
-            // Example: ['thetradedesk.com', 'unifiedid.com']
-            const ssoDomains = [
-                // Add domains that should route to SSO IdP here
-            ];
+            // SSO domain to IdP alias mapping
+            // Key: email domain (lowercase), Value: Keycloak IdP alias
+            const ssoDomainsToIdp = {
+                'unifiedid.com': 'okta-unifiedid',
+                'thetradedesk.com': 'microsoft-entra-id'
+            };
 
             function handleFormSubmit(event) {
                 const emailInput = document.getElementById('username');
@@ -104,7 +104,15 @@
                     return false;
                 }
 
-                // Show password if not shown
+                // Check for SSO redirect before showing password
+                const emailDomain = email.split('@')[1]?.toLowerCase();
+                if (emailDomain && ssoDomainsToIdp[emailDomain]) {
+                    event.preventDefault();
+                    redirectToIdp(ssoDomainsToIdp[emailDomain], email);
+                    return false;
+                }
+
+                // Show password if not shown (for non-SSO domains)
                 if (!passwordShown) {
                     event.preventDefault();
                     showPasswordField(email);
@@ -115,13 +123,26 @@
                 return true;
             }
 
-            function showPasswordField(email) {
-                // Check if email domain is in the SSO domains array and handle reroutes
-                const emailDomain = email.split('@')[1]?.toLowerCase();
-                if (emailDomain && ssoDomains.includes(emailDomain)) {
-                    // TODO: Implement SSO redirect to IdP here
-                    console.log('SSO domain detected:', emailDomain, '- SSO redirect will be implemented by IdP configuration');
+            function redirectToIdp(idpAlias, loginHint) {
+                // Build the IdP redirect URL using Keycloak's kc_idp_hint parameter
+                const currentUrl = new URL(window.location.href);
+                const params = new URLSearchParams(currentUrl.search);
+                
+                // Preserve existing parameters and add IdP hint
+                params.set('kc_idp_hint', idpAlias);
+                
+                // Optionally pass login_hint so Okta pre-fills the email
+                if (loginHint) {
+                    params.set('login_hint', loginHint);
                 }
+                
+                // Redirect to the same auth endpoint with IdP hint
+                currentUrl.search = params.toString();
+                window.location.href = currentUrl.toString();
+            }
+
+            function showPasswordField(email) {
+                // No longer need SSO check here - it's handled in handleFormSubmit
 
                 document.getElementById('kc-password-group').style.display = 'block';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
