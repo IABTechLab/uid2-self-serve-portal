@@ -105,22 +105,16 @@
                     return false;
                 }
 
-                // Check if email domain requires SSO
                 const emailDomain = email.split('@')[1]?.toLowerCase();
                 
                 if (emailDomain && ssoDomains.includes(emailDomain)) {
-                    // For SSO domains, redirect to OAuth authorization endpoint with kc_idp_hint
-                    // This is where Identity Provider Redirector checks for the hint
                     const currentUrl = new URL(window.location.href);
                     const pathParts = currentUrl.pathname.split('/');
                     const realmIndex = pathParts.indexOf('realms');
                     const realmName = realmIndex >= 0 && pathParts[realmIndex + 1] ? pathParts[realmIndex + 1] : 'self-serve-portal';
                     
-                    // Build OAuth authorization endpoint URL
-                    // Note: Using string concatenation instead of template literals to avoid FreeMarker conflicts
+                    // Build OAuth authorization endpoint URL with existing query parameters (client_id, redirect_uri, etc.)
                     const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/' + realmName + '/protocol/openid-connect/auth';
-                    
-                    // Preserve existing query parameters (client_id, redirect_uri, etc.)
                     const existingParams = new URLSearchParams(currentUrl.search);
                     existingParams.set('kc_idp_hint', 'okta');
                     existingParams.set('login_hint', email);
@@ -130,13 +124,12 @@
                     return false;
                 }
 
-                // Show password if not shown
+                // Handle normal login
                 if (!passwordShown) {
                     showPasswordField(email);
                     return false;
                 }
 
-                // If password is shown, allow normal form submission
                 return true;
             }
 
