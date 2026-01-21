@@ -3,7 +3,7 @@
     <#if section = "header">
         ${msg("loginAccountTitle")}
     <#elseif section = "form">
-        <form id="kc-form-login" class="${properties.kcFormClass!}" onsubmit="return handleFormSubmit(event);" action="${url.loginAction}" method="post">
+        <form id="kc-form-login" class="${properties.kcFormClass!}" action="${url.loginAction}" method="post" onsubmit="return handleEmailSubmit(event);">
             <div class="${properties.kcFormGroupClass!}">
                 <div class="${properties.kcLabelWrapperClass!}">
                     <label for="username" class="${properties.kcLabelClass!}">${msg("email")}</label>
@@ -67,7 +67,7 @@
             <div id="kc-form-buttons" class="${properties.kcFormGroupClass!}">
                 <input 
                     tabindex="4" 
-                    class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" 
+                    class="${properties.kcButtonClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonPrimaryClass!} ${properties.kcButtonBlockClass!} ${properties.kcButtonLargeClass!}" 
                     name="login" 
                     id="kc-login" 
                     type="submit" 
@@ -89,61 +89,46 @@
         <script>
             let passwordShown = false;
 
-            // SSO domain to IdP alias mapping
-            // Key: email domain (lowercase), Value: Keycloak IdP alias
-            const ssoDomainsToIdp = {
-                'unifiedid.com': 'okta-unifiedid',
-                'thetradedesk.com': 'microsoft-entra-id'
-            };
-
-            function handleFormSubmit(event) {
+            function handleEmailSubmit(event) {
                 const emailInput = document.getElementById('username');
-                const email = emailInput.value.trim();
+                const email = emailInput.value.trim().toLowerCase();
                 
                 if (!email) {
-                    return false;
-                }
-
-                // Check for SSO redirect before showing password
-                const emailDomain = email.split('@')[1]?.toLowerCase();
-                if (emailDomain && ssoDomainsToIdp[emailDomain]) {
                     event.preventDefault();
-                    redirectToIdp(ssoDomainsToIdp[emailDomain], email);
                     return false;
                 }
 
-                // Show password if not shown (for non-SSO domains)
+                let idpHint = null;
+                if (email.includes('@unifiedid.com')) {
+                    idpHint = 'okta';
+                } else if (email.includes('@thetradedesk.com')) {
+                    idpHint = 'microsoft-entra-id';
+                }
+
+                if (idpHint) {
+                    event.preventDefault();
+                    const currentUrl = new URL(window.location.href);
+                    const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/self-serve-portal/protocol/openid-connect/auth';
+                    const existingParams = new URLSearchParams(currentUrl.search);
+                    existingParams.set('kc_idp_hint', idpHint);
+                    existingParams.set('login_hint', email);
+                    
+                    window.location.href = authBaseUrl + '?' + existingParams.toString();
+                    return false;
+                }
+
+                // Handle normal login - show password field first
                 if (!passwordShown) {
                     event.preventDefault();
                     showPasswordField(email);
                     return false;
                 }
 
-                // If password is shown, allow normal form submission
+                // Password shown, allow form submission
                 return true;
             }
 
-            function redirectToIdp(idpAlias, loginHint) {
-                // Build the IdP redirect URL using Keycloak's kc_idp_hint parameter
-                const currentUrl = new URL(window.location.href);
-                const params = new URLSearchParams(currentUrl.search);
-                
-                // Preserve existing parameters and add IdP hint
-                params.set('kc_idp_hint', idpAlias);
-                
-                // Optionally pass login_hint so Okta pre-fills the email
-                if (loginHint) {
-                    params.set('login_hint', loginHint);
-                }
-                
-                // Redirect to the same auth endpoint with IdP hint
-                currentUrl.search = params.toString();
-                window.location.href = currentUrl.toString();
-            }
-
             function showPasswordField(email) {
-                // No longer need SSO check here - it's handled in handleFormSubmit
-
                 document.getElementById('kc-password-group').style.display = 'block';
                 const rememberMeGroup = document.getElementById('kc-remember-me-group');
                 if (rememberMeGroup) {
