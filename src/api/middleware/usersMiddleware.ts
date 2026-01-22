@@ -1,11 +1,30 @@
 import { NextFunction, Response } from 'express';
 import { z } from 'zod';
 
-import { User } from '../entities/User';
+import { User, UserJobFunction } from '../entities/User';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
 import { isSuperUser, isUid2Support } from './userRoleMiddleware';
+
+// Helper to check if email is a UID2 internal email
+const isUid2InternalEmail = (email: string) => email.toLowerCase().endsWith('@unifiedid.com');
+
+// Create a new @unifiedid.com user in the portal database from Keycloak token data
+const createUid2InternalUser = async (
+  email: string,
+  firstName: string,
+  lastName: string
+): Promise<User> => {
+  const newUser = await User.query().insert({
+    email,
+    firstName: firstName || 'UID2',
+    lastName: lastName || 'Support',
+    jobFunction: UserJobFunction.Engineering,
+    acceptedTerms: true,
+  });
+  return newUser;
+};
 
 export const isUserBelongsToParticipant = async (
   email: string,
@@ -42,7 +61,16 @@ export const canUserAccessParticipant = async (
 
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserByEmail(userEmail);
+  let user = await findUserByEmail(userEmail);
+
+  // Auto-create @unifiedid.com users if they don't exist in the portal database
+  if (!user && isUid2InternalEmail(userEmail)) {
+    const firstName = (req.auth?.payload?.given_name as string) || '';
+    const lastName = (req.auth?.payload?.family_name as string) || '';
+    await createUid2InternalUser(userEmail, firstName, lastName);
+    user = await findUserByEmail(userEmail);
+  }
+
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
