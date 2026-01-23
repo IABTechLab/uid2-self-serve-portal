@@ -16,13 +16,12 @@ export const verifyAndEnrichParticipant = async (
 ) => {
   const { participantId } = participantIdSchema.parse(req.params);
   const traceId = getTraceId(req);
-  const userEmail = req.auth?.payload?.email as string;
 
   const participant = await Participant.query()
     .findById(participantId)
     .withGraphFetched('[types, primaryContact]');
 
-  if (!participant || !(await canUserAccessParticipant(userEmail, participantId, traceId))) {
+  if (!participant || !(await canUserAccessParticipant(req, participantId, traceId))) {
     return res.status(403).json({
       message: 'You do not have access to this participant.',
       errorHash: traceId,

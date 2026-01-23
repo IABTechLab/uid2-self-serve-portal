@@ -1,11 +1,34 @@
-import { Handler } from 'express';
+import { Handler, Request } from 'express';
 
 import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
-export const isUid2Support = async (userEmail: string) => {
+export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
+
+// TBU to group role from JWT token after keycloak updates
+export const isSuperUser = (req: Request) => {
+  const userEmail = req.auth?.payload?.email as string;
+  return isUid2InternalEmail(userEmail);
+};
+
+export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
+  if (!isSuperUser(req)) {
+    return res.status(403).json({
+      message: 'Unauthorized. You do not have the necessary permissions.',
+      errorHash: req.headers.traceId,
+    });
+  }
+  next();
+};
+
+// TBU to group role from JWT token after keycloak updates
+export const isUid2Support = async (req: Request) => {
+  if (isSuperUser(req)) {
+    return true;
+  }
+  const userEmail = req.auth?.payload?.email as string;
   const user = await findUserByEmail(userEmail);
   const userWithUid2SupportRole = await UserToParticipantRole.query()
     .where('userId', user!.id)
@@ -15,26 +38,7 @@ export const isUid2Support = async (userEmail: string) => {
 };
 
 export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
-  if (!(await isUid2Support(req.auth?.payload?.email as string))) {
-    return res.status(403).json({
-      message: 'Unauthorized. You do not have the necessary permissions.',
-      errorHash: req.headers.traceId,
-    });
-  }
-  next();
-};
-
-export const isSuperUser = async (userEmail: string) => {
-  const user = await findUserByEmail(userEmail);
-  const userWithSuperUserRole = await UserToParticipantRole.query()
-    .where('userId', user!.id)
-    .andWhere('userRoleId', UserRoleId.SuperUser)
-    .first();
-  return !!userWithSuperUserRole;
-};
-
-export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
-  if (!(await isSuperUser(req.auth?.payload?.email as string))) {
+  if (!(await isUid2Support(req))) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
       errorHash: req.headers.traceId,
@@ -44,13 +48,17 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
 };
 
 export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
+  if (isSuperUser(req)) {
+    return next();
+  }
+
   const { participant } = req;
   const userEmail = req.auth?.payload.email as string;
   const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
   const userIsAdminOrUid2Support =
     userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) ||
-    (await isUid2Support(userEmail));
+    (await isUid2Support(req));
   if (!userIsAdminOrUid2Support) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',

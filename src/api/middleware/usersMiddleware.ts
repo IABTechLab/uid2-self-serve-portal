@@ -1,11 +1,28 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
-import { User } from '../entities/User';
+import { User, UserJobFunction } from '../entities/User';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
-import { UserParticipantRequest } from '../services/participantsService';
+import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
-import { isSuperUser, isUid2Support } from './userRoleMiddleware';
+import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
+
+type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
+
+const createUid2InternalUser = async (
+  email: string,
+  firstName: string,
+  lastName: string
+): Promise<User> => {
+  const newUser = await User.query().insert({
+    email,
+    firstName,
+    lastName,
+    jobFunction: UserJobFunction.Engineering,
+    acceptedTerms: true,
+  });
+  return newUser;
+};
 
 export const isUserBelongsToParticipant = async (
   email: string,
@@ -30,37 +47,47 @@ export const isUserBelongsToParticipant = async (
 };
 
 export const canUserAccessParticipant = async (
-  requestingUserEmail: string,
+  req: Request,
   participantId: number,
   traceId: TraceId
 ) => {
-  return (
-    (await isUid2Support(requestingUserEmail)) ||
-    (await isUserBelongsToParticipant(requestingUserEmail, participantId, traceId))
-  );
+  if (isSuperUser(req) || (await isUid2Support(req))) {
+    return true;
+  }
+  const requestingUserEmail = req.auth?.payload?.email as string;
+  return isUserBelongsToParticipant(requestingUserEmail, participantId, traceId);
 };
 
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
   const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserByEmail(userEmail);
+  let user = await findUserByEmail(userEmail);
+
+  if (!user && isUid2InternalEmail(userEmail)) {
+    const firstName = req.auth?.payload?.given_name as string;
+    const lastName = req.auth?.payload?.family_name as string;
+    await createUid2InternalUser(userEmail, firstName, lastName);
+    user = await findUserByEmail(userEmail);
+  }
+
   if (!user) {
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
   if (user.locked) {
     return res.status(403).send([{ message: 'Unauthorized.' }]);
   }
-  req.user = user;
-  return next();
-};
 
-export const enrichUserWithSupportRoles = async (user: User) => {
-  const userIsUid2Support = await isUid2Support(user.email);
-  const userIsSuperUser = await isSuperUser(user.email);
-  return {
-    ...user,
-    isUid2Support: userIsUid2Support,
-    isSuperUser: userIsSuperUser,
-  };
+  // Enrich user with support roles and participants
+  const enrichedUser = user as UserWithSupportRoles;
+  enrichedUser.isUid2Support = await isUid2Support(req);
+  enrichedUser.isSuperUser = isSuperUser(req);
+
+  // SuperUsers and UID2Support have access to all participants
+  if (enrichedUser.isSuperUser || enrichedUser.isUid2Support) {
+    enrichedUser.participants = await getAllParticipants();
+  }
+
+  req.user = enrichedUser;
+  return next();
 };
 
 const userIdSchema = z.object({
@@ -94,9 +121,8 @@ export const verifyAndEnrichUser = async (
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
 
-  const requestingUserEmail = req.auth?.payload?.email as string;
   const canRequestingUserAccessParticipant = await canUserAccessParticipant(
-    requestingUserEmail,
+    req,
     participant!.id,
     traceId
   );
