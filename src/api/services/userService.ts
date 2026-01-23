@@ -31,9 +31,6 @@ export const UpdateUserRoleIdSchema = z.object({
 export const KeycloakRequestSchema = z.object({ email: z.string() });
 
 export const getCurrentUser = async (req: UserRequest) => {
-  // req.user is already enriched by enrichCurrentUser middleware with:
-  // - isUid2Support, isSuperUser flags
-  // - all participants (for @unifiedid.com and UID2Support users)
   const user = req.user!;
   user.participants = user.participants?.sort((a, b) => a.name.localeCompare(b.name));
   return user;
