@@ -23,7 +23,7 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
   next();
 };
 
-  // assign uid2 support if user is developer or developer-elevated in okta
+// assign uid2 support if user is developer or developer-elevated in okta
 export const isUid2Support = async (req: Request) => {
   const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
   if (isSuperUser(req) || oktaGroups.includes('developer')) {
