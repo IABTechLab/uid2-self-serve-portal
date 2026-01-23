@@ -8,11 +8,27 @@ import { findUserByEmail } from '../services/usersService';
 export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
 
 // TBU to group role from JWT token after keycloak updates
-export const isUid2Support = async (req: Request) => {
+export const isSuperUser = (req: Request) => {
   const userEmail = req.auth?.payload?.email as string;
-  if (isUid2InternalEmail(userEmail)) {
+  return isUid2InternalEmail(userEmail);
+};
+
+export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
+  if (!isSuperUser(req)) {
+    return res.status(403).json({
+      message: 'Unauthorized. You do not have the necessary permissions.',
+      errorHash: req.headers.traceId,
+    });
+  }
+  next();
+};
+
+// TBU to group role from JWT token after keycloak updates
+export const isUid2Support = async (req: Request) => {
+  if (isSuperUser(req)) {
     return true;
   }
+  const userEmail = req.auth?.payload?.email as string;
   const user = await findUserByEmail(userEmail);
   const userWithUid2SupportRole = await UserToParticipantRole.query()
     .where('userId', user!.id)
@@ -23,22 +39,6 @@ export const isUid2Support = async (req: Request) => {
 
 export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
   if (!(await isUid2Support(req))) {
-    return res.status(403).json({
-      message: 'Unauthorized. You do not have the necessary permissions.',
-      errorHash: req.headers.traceId,
-    });
-  }
-  next();
-};
-
-// TBU to group role from JWT token after keycloak updates
-export const isSuperUser = (req: Request) => {
-  const userEmail = req.auth?.payload?.email as string;
-  return isUid2InternalEmail(userEmail);
-};
-
-export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
-  if (!isSuperUser(req)) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
       errorHash: req.headers.traceId,
