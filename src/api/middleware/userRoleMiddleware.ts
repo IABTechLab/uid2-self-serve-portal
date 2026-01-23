@@ -30,6 +30,7 @@ export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, 
   next();
 };
 
+// TBU to group role from JWT token after keycloak updates
 export const isSuperUser = (req: Request) => {
   const userEmail = req.auth?.payload?.email as string;
   return isUid2InternalEmail(userEmail);
