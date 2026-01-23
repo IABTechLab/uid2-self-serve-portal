@@ -1,14 +1,14 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { User, UserJobFunction } from '../entities/User';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
-import { UserParticipantRequest } from '../services/participantsService';
+import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
-import { isSuperUser, isUid2Support } from './userRoleMiddleware';
+import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
 
-// Helper to check if email is a UID2 internal email
-const isUid2InternalEmail = (email: string) => email.toLowerCase().endsWith('@unifiedid.com');
+// Extended user type with support role flags
+type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
 
 // Create a new @unifiedid.com user in the portal database from Keycloak token data
 const createUid2InternalUser = async (
@@ -49,14 +49,16 @@ export const isUserBelongsToParticipant = async (
 };
 
 export const canUserAccessParticipant = async (
-  requestingUserEmail: string,
+  req: Request,
   participantId: number,
   traceId: TraceId
 ) => {
-  return (
-    (await isUid2Support(requestingUserEmail)) ||
-    (await isUserBelongsToParticipant(requestingUserEmail, participantId, traceId))
-  );
+  const requestingUserEmail = req.auth?.payload?.email as string;
+  // SuperUsers and UID2Support have access to all participants
+  if (isSuperUser(req) || (await isUid2Support(requestingUserEmail))) {
+    return true;
+  }
+  return isUserBelongsToParticipant(requestingUserEmail, participantId, traceId);
 };
 
 export const enrichCurrentUser = async (req: UserRequest, res: Response, next: NextFunction) => {
@@ -77,18 +79,19 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   if (user.locked) {
     return res.status(403).send([{ message: 'Unauthorized.' }]);
   }
-  req.user = user;
-  return next();
-};
 
-export const enrichUserWithSupportRoles = async (user: User) => {
-  const userIsUid2Support = await isUid2Support(user.email);
-  const userIsSuperUser = await isSuperUser(user.email);
-  return {
-    ...user,
-    isUid2Support: userIsUid2Support,
-    isSuperUser: userIsSuperUser,
-  };
+  // Enrich user with support roles and participants
+  const enrichedUser = user as UserWithSupportRoles;
+  enrichedUser.isUid2Support = await isUid2Support(userEmail);
+  enrichedUser.isSuperUser = isSuperUser(req);
+
+  // SuperUsers and UID2Support get all participants
+  if (enrichedUser.isSuperUser || enrichedUser.isUid2Support) {
+    enrichedUser.participants = await getAllParticipants();
+  }
+
+  req.user = enrichedUser;
+  return next();
 };
 
 const userIdSchema = z.object({
@@ -122,9 +125,8 @@ export const verifyAndEnrichUser = async (
     return res.status(404).send([{ message: 'The user cannot be found.' }]);
   }
 
-  const requestingUserEmail = req.auth?.payload?.email as string;
   const canRequestingUserAccessParticipant = await canUserAccessParticipant(
-    requestingUserEmail,
+    req,
     participant!.id,
     traceId
   );

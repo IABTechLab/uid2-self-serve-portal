@@ -8,7 +8,6 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { getTraceId } from '../helpers/loggingHelpers';
 import { mapClientTypeToParticipantType } from '../helpers/siteConvertingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
-import { enrichUserWithSupportRoles } from '../middleware/usersMiddleware';
 import { getSite } from './adminServiceClient';
 import { getApiRoles } from './apiKeyService';
 import {
@@ -16,7 +15,7 @@ import {
   performAsyncOperationWithAuditTrail,
 } from './auditTrailService';
 import { removeApiParticipantMemberRole, updateUserProfile } from './kcUsersService';
-import { getAllParticipants, UserParticipantRequest } from './participantsService';
+import { UserParticipantRequest } from './participantsService';
 import { findUserByEmail, UserRequest } from './usersService';
 
 const updateUserSchema = z.object({
@@ -32,17 +31,12 @@ export const UpdateUserRoleIdSchema = z.object({
 export const KeycloakRequestSchema = z.object({ email: z.string() });
 
 export const getCurrentUser = async (req: UserRequest) => {
-  const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserByEmail(userEmail);
-  const userWithSupportRoles = await enrichUserWithSupportRoles(user!);
-  if (userWithSupportRoles.isUid2Support) {
-    const allParticipants = await getAllParticipants();
-    userWithSupportRoles.participants = allParticipants;
-  }
-  userWithSupportRoles.participants = userWithSupportRoles?.participants?.sort((a, b) =>
-    a.name.localeCompare(b.name)
-  );
-  return userWithSupportRoles;
+  // req.user is already enriched by enrichCurrentUser middleware with:
+  // - isUid2Support, isSuperUser flags
+  // - all participants (for @unifiedid.com and UID2Support users)
+  const user = req.user!;
+  user.participants = user.participants?.sort((a, b) => a.name.localeCompare(b.name));
+  return user;
 };
 
 export const getDefaultParticipant = async (req: UserRequest) => {

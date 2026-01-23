@@ -1,11 +1,18 @@
-import { Handler } from 'express';
+import { Handler, Request } from 'express';
 
 import { UserRoleId } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
+// Helper to check if email is a UID2 internal email
+export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
+
 export const isUid2Support = async (userEmail: string) => {
+  // @unifiedid.com users automatically have UID2 Support access
+  if (isUid2InternalEmail(userEmail)) {
+    return true;
+  }
   const user = await findUserByEmail(userEmail);
   const userWithUid2SupportRole = await UserToParticipantRole.query()
     .where('userId', user!.id)
@@ -24,17 +31,13 @@ export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, 
   next();
 };
 
-export const isSuperUser = async (userEmail: string) => {
-  const user = await findUserByEmail(userEmail);
-  const userWithSuperUserRole = await UserToParticipantRole.query()
-    .where('userId', user!.id)
-    .andWhere('userRoleId', UserRoleId.SuperUser)
-    .first();
-  return !!userWithSuperUserRole;
+export const isSuperUser = (req: Request) => {
+  const userEmail = req.auth?.payload?.email as string;
+  return isUid2InternalEmail(userEmail);
 };
 
 export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
-  if (!(await isSuperUser(req.auth?.payload?.email as string))) {
+  if (!isSuperUser(req)) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
       errorHash: req.headers.traceId,
@@ -46,6 +49,10 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
 export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
   const { participant } = req;
   const userEmail = req.auth?.payload.email as string;
+  // SuperUsers have admin-level access
+  if (isSuperUser(req)) {
+    return next();
+  }
   const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
   const userIsAdminOrUid2Support =
