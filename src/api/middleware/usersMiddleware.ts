@@ -51,10 +51,10 @@ export const canUserAccessParticipant = async (
   participantId: number,
   traceId: TraceId
 ) => {
-  const requestingUserEmail = req.auth?.payload?.email as string;
-  if (isSuperUser(req) || (await isUid2Support(requestingUserEmail))) {
+  if (isSuperUser(req) || (await isUid2Support(req))) {
     return true;
   }
+  const requestingUserEmail = req.auth?.payload?.email as string;
   return isUserBelongsToParticipant(requestingUserEmail, participantId, traceId);
 };
 
@@ -78,7 +78,7 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
 
   // Enrich user with support roles and participants
   const enrichedUser = user as UserWithSupportRoles;
-  enrichedUser.isUid2Support = await isUid2Support(userEmail);
+  enrichedUser.isUid2Support = await isUid2Support(req);
   enrichedUser.isSuperUser = isSuperUser(req);
 
   // SuperUsers and UID2Support have access to all participants

@@ -7,8 +7,9 @@ import { findUserByEmail } from '../services/usersService';
 
 export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
 
-export const isUid2Support = async (userEmail: string) => {
-  // TBU to superuser check after UID2Support logic is updated
+// TBU to group role from JWT token after keycloak updates
+export const isUid2Support = async (req: Request) => {
+  const userEmail = req.auth?.payload?.email as string;
   if (isUid2InternalEmail(userEmail)) {
     return true;
   }
@@ -21,7 +22,7 @@ export const isUid2Support = async (userEmail: string) => {
 };
 
 export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
-  if (!(await isUid2Support(req.auth?.payload?.email as string))) {
+  if (!(await isUid2Support(req))) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
       errorHash: req.headers.traceId,
@@ -57,7 +58,7 @@ export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
   const userIsAdminOrUid2Support =
     userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) ||
-    (await isUid2Support(userEmail));
+    (await isUid2Support(req));
   if (!userIsAdminOrUid2Support) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',
