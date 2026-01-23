@@ -7,10 +7,8 @@ import { getAllParticipants, UserParticipantRequest } from '../services/particip
 import { findUserByEmail, UserRequest } from '../services/usersService';
 import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
 
-// Extended user type with support role flags
 type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
 
-// Create a new @unifiedid.com user in the portal database from Keycloak token data
 const createUid2InternalUser = async (
   email: string,
   firstName: string,
@@ -18,8 +16,8 @@ const createUid2InternalUser = async (
 ): Promise<User> => {
   const newUser = await User.query().insert({
     email,
-    firstName: firstName || 'UID2',
-    lastName: lastName || 'Support',
+    firstName,
+    lastName,
     jobFunction: UserJobFunction.Engineering,
     acceptedTerms: true,
   });
@@ -54,7 +52,6 @@ export const canUserAccessParticipant = async (
   traceId: TraceId
 ) => {
   const requestingUserEmail = req.auth?.payload?.email as string;
-  // SuperUsers and UID2Support have access to all participants
   if (isSuperUser(req) || (await isUid2Support(requestingUserEmail))) {
     return true;
   }
@@ -65,10 +62,9 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   const userEmail = req.auth?.payload?.email as string;
   let user = await findUserByEmail(userEmail);
 
-  // Auto-create @unifiedid.com users if they don't exist in the portal database
   if (!user && isUid2InternalEmail(userEmail)) {
-    const firstName = (req.auth?.payload?.given_name as string) || '';
-    const lastName = (req.auth?.payload?.family_name as string) || '';
+    const firstName = req.auth?.payload?.given_name as string;
+    const lastName = req.auth?.payload?.family_name as string;
     await createUid2InternalUser(userEmail, firstName, lastName);
     user = await findUserByEmail(userEmail);
   }
@@ -85,7 +81,7 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   enrichedUser.isUid2Support = await isUid2Support(userEmail);
   enrichedUser.isSuperUser = isSuperUser(req);
 
-  // SuperUsers and UID2Support get all participants
+  // SuperUsers and UID2Support have access to all participants
   if (enrichedUser.isSuperUser || enrichedUser.isUid2Support) {
     enrichedUser.participants = await getAllParticipants();
   }

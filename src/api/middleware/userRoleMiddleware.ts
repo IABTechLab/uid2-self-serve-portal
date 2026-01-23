@@ -5,11 +5,10 @@ import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
-// Helper to check if email is a UID2 internal email
 export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
 
 export const isUid2Support = async (userEmail: string) => {
-  // @unifiedid.com users automatically have UID2 Support access
+  // TBU to superuser check after UID2Support logic is updated
   if (isUid2InternalEmail(userEmail)) {
     return true;
   }
@@ -47,12 +46,12 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
 };
 
 export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
-  const { participant } = req;
-  const userEmail = req.auth?.payload.email as string;
-  // SuperUsers have admin-level access
   if (isSuperUser(req)) {
     return next();
   }
+
+  const { participant } = req;
+  const userEmail = req.auth?.payload.email as string;
   const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
   const userIsAdminOrUid2Support =
