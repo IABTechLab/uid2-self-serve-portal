@@ -9,8 +9,8 @@ export const isUid2InternalEmail = (email: string) => email.toLowerCase().includ
 
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
-  const groups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
-  return groups.includes('developer-elevated');
+  const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
+  return oktaGroups.includes('developer-elevated');
 };
 
 export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
@@ -23,10 +23,10 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
   next();
 };
 
-// TBU to group role from JWT token after keycloak updates
-export const isUid2Support = async (req: Request) => {
   // assign uid2 support if user is developer or developer-elevated in okta
-  if (isSuperUser(req) ||(req.auth?.payload?.groups as string[] | undefined)?.includes('developer')) {
+export const isUid2Support = async (req: Request) => {
+  const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
+  if (isSuperUser(req) || oktaGroups.includes('developer')) {
     return true;
   }
 
