@@ -7,10 +7,10 @@ import { findUserByEmail } from '../services/usersService';
 
 export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
 
-// TBU to group role from JWT token after keycloak updates
+// assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
-  const userEmail = req.auth?.payload?.email as string;
-  return isUid2InternalEmail(userEmail);
+  const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
+  return oktaGroups.includes('developer-elevated');
 };
 
 export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
@@ -23,11 +23,13 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
   next();
 };
 
-// TBU to group role from JWT token after keycloak updates
+// assign uid2 support if user is developer or developer-elevated in okta
 export const isUid2Support = async (req: Request) => {
-  if (isSuperUser(req)) {
+  const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
+  if (isSuperUser(req) || oktaGroups.includes('developer')) {
     return true;
   }
+
   const userEmail = req.auth?.payload?.email as string;
   const user = await findUserByEmail(userEmail);
   const userWithUid2SupportRole = await UserToParticipantRole.query()
