@@ -2,6 +2,7 @@ import express, { Response } from 'express';
 
 import { EmailContact } from '../entities/EmailContact';
 import { EmailContactSchema } from '../entities/Schemas';
+import { isAdminOrUid2SupportCheck } from '../middleware/userRoleMiddleware';
 import { EmailContactRequest, hasEmailContactAccess } from '../services/emailContactsService';
 import { ParticipantRequest } from '../services/participantsService';
 
@@ -43,11 +44,11 @@ export function createEmailContactsRouter() {
   const emailContactsRouter = express.Router();
 
   emailContactsRouter.get('/', handleGetEmailContacts);
-  emailContactsRouter.post('/', handleCreateEmailContact);
+  emailContactsRouter.post('/', isAdminOrUid2SupportCheck, handleCreateEmailContact);
 
-  emailContactsRouter.use('/:contactId', hasEmailContactAccess);
-  emailContactsRouter.delete('/:contactId', handleDeleteEmailContact);
-  emailContactsRouter.put('/:contactId', handleUpdateEmailContact);
+  emailContactsRouter.use('/:contactId', isAdminOrUid2SupportCheck, hasEmailContactAccess);
+  emailContactsRouter.delete('/:contactId', isAdminOrUid2SupportCheck, handleDeleteEmailContact);
+  emailContactsRouter.put('/:contactId', isAdminOrUid2SupportCheck, handleUpdateEmailContact);
 
   return emailContactsRouter;
 }

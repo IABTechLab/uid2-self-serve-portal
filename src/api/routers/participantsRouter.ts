@@ -57,17 +57,25 @@ import { createParticipantUsersRouter } from './participantUsersRouter';
 export function createParticipantsRouter() {
   const participantsRouter = express.Router();
 
-  participantsRouter.get('/signed', handleGetSignedParticipants);
+  participantsRouter.get('/signed', isSuperUserCheck, handleGetSignedParticipants);
 
   participantsRouter.get('/allParticipants', isUid2SupportCheck, handleGetAllParticipants);
 
-  participantsRouter.put('/', handleCreateParticipant);
+  participantsRouter.put('/', isUid2SupportCheck, handleCreateParticipant);
 
   participantsRouter.use('/:participantId', verifyAndEnrichParticipant, enrichCurrentUser);
 
   participantsRouter.get('/:participantId', handleGetParticipant);
-  participantsRouter.get('/:participantId/visibility', handleGetParticipantVisibility);
-  participantsRouter.put('/:participantId/visibility', isSuperUserCheck, handleSetParticipantVisibility);
+  participantsRouter.get(
+    '/:participantId/visibility',
+    isUid2SupportCheck,
+    handleGetParticipantVisibility
+  );
+  participantsRouter.put(
+    '/:participantId/visibility',
+    isSuperUserCheck,
+    handleSetParticipantVisibility
+  );
   participantsRouter.get('/:participantId/apiRoles', handleGetParticipantApiRoles);
   participantsRouter.put('/:participantId', isUid2SupportCheck, handleUpdateParticipant);
   participantsRouter.put('/:participantId/completeRecommendations', handleCompleteRecommendations);
