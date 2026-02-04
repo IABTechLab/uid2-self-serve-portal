@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { User, UserJobFunction } from '../entities/User';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
+import { getKcAdminClient } from '../keycloakAdminClient';
+import { assignApiParticipantMemberRole } from '../services/kcUsersService';
 import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
 import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
@@ -21,6 +23,11 @@ const createUid2InternalUser = async (
     jobFunction: UserJobFunction.Engineering,
     acceptedTerms: true,
   });
+
+  // Assign api-participant-member role in Keycloak for new internal users
+  const kcAdminClient = await getKcAdminClient();
+  await assignApiParticipantMemberRole(kcAdminClient, email);
+
   return newUser;
 };
 
