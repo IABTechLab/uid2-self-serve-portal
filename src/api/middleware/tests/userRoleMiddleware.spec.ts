@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 import { NextFunction, Response } from 'express';
 import { Knex } from 'knex';
 
@@ -10,7 +10,11 @@ import {
   createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
 import { UserRoleId } from '../../entities/UserRole';
-import { isAdminOrUid2SupportCheck, isUid2SupportCheck } from '../userRoleMiddleware';
+import {
+  isAdminOrUid2SupportCheck,
+  isSuperUserCheck,
+  isUid2SupportCheck,
+} from '../userRoleMiddleware';
 
 describe('User Role Middleware Tests', () => {
   let knex: Knex;
@@ -43,6 +47,32 @@ describe('User Role Middleware Tests', () => {
       const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
 
       await isUid2SupportCheck(userParticipantRequest, res, next);
+
+      expect(res.status).toHaveBeenCalledWith(403);
+      expect(next).not.toHaveBeenCalled();
+    });
+  });
+  describe('SuperUser check', () => {
+    it('should call next if requesting user has the SuperUser role', async () => {
+      const participant = await createParticipant(knex, {});
+      const user = await createUser({
+        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.SuperUser }],
+      });
+      const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
+
+      await isSuperUserCheck(userParticipantRequest, res, next);
+
+      expect(res.status).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+    });
+    it('should return 403 if requesting user does not have SuperUser role', async () => {
+      const participant = await createParticipant(knex, {});
+      const user = await createUser({
+        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.UID2Support }],
+      });
+      const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
+
+      await isSuperUserCheck(userParticipantRequest, res, next);
 
       expect(res.status).toHaveBeenCalledWith(403);
       expect(next).not.toHaveBeenCalled();
