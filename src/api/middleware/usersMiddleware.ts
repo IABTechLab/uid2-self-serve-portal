@@ -3,25 +3,11 @@ import { z } from 'zod';
 
 import { User, UserJobFunction } from '../entities/User';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
-import { getKcAdminClient } from '../keycloakAdminClient';
-import {
-  API_PARTICIPANT_MEMBER_ROLE_NAME,
-  assignApiParticipantMemberRole,
-} from '../services/kcUsersService';
 import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
 import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
 
 type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
-
-// Check if the user already has the api-participant-member role from the JWT token
-const hasApiParticipantMemberRole = (req: Request): boolean => {
-  const resourceAccess = req.auth?.payload?.resource_access as
-    | Record<string, { roles?: string[] }>
-    | undefined;
-  const roles = resourceAccess?.self_serve_portal_apis?.roles || [];
-  return roles.includes(API_PARTICIPANT_MEMBER_ROLE_NAME);
-};
 
 const createUid2InternalUser = async (
   email: string,
@@ -87,12 +73,6 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   }
   if (user.locked) {
     return res.status(403).send([{ message: 'Unauthorized.' }]);
-  }
-
-  // Assign api-participant-member role to internal users if they don't already have it
-  if (isUid2InternalEmail(userEmail) && !hasApiParticipantMemberRole(req)) {
-    const kcAdminClient = await getKcAdminClient();
-    await assignApiParticipantMemberRole(kcAdminClient, userEmail);
   }
 
   // Enrich user with support roles and participants
