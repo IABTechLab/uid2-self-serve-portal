@@ -14,14 +14,13 @@ const createUid2InternalUser = async (
   firstName: string,
   lastName: string
 ): Promise<User> => {
-  const newUser = await User.query().insert({
+  return User.query().insert({
     email,
     firstName,
     lastName,
     jobFunction: UserJobFunction.Engineering,
     acceptedTerms: true,
   });
-  return newUser;
 };
 
 export const isUserBelongsToParticipant = async (
