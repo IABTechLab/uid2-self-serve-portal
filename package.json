@@ -44,7 +44,7 @@
     "@types/react": "^18.2.54",
     "@types/react-dom": "^18.2.18",
     "@types/validator": "^13.11.10",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "body-parser": "^1.20.3",
     "braces": "^3.0.3",
     "clsx": "^1.2.1",
