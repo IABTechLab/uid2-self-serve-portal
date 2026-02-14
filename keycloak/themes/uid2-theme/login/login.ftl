@@ -98,12 +98,19 @@
                     return false;
                 }
 
+                let idpHint = null;
                 if (email.includes('@unifiedid.com')) {
+                    idpHint = 'okta';
+                } else if (email.includes('@thetradedesk.com')) {
+                    idpHint = 'microsoft-entra-id';
+                }
+
+                if (idpHint) {
                     event.preventDefault();
                     const currentUrl = new URL(window.location.href);
                     const authBaseUrl = currentUrl.protocol + '//' + currentUrl.host + '/realms/self-serve-portal/protocol/openid-connect/auth';
                     const existingParams = new URLSearchParams(currentUrl.search);
-                    existingParams.set('kc_idp_hint', 'okta');
+                    existingParams.set('kc_idp_hint', idpHint);
                     existingParams.set('login_hint', email);
                     
                     window.location.href = authBaseUrl + '?' + existingParams.toString();
