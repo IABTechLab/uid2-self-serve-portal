@@ -1,7 +1,6 @@
 import { Handler, Request } from 'express';
 
 import { UserRoleId } from '../entities/UserRole';
-import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
@@ -24,19 +23,14 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
 };
 
 // assign uid2 support if user is developer or developer-elevated in okta
+// assign uid2 support if user has prod-uid2.0-support in Microsoft Entra ID
 export const isUid2Support = async (req: Request) => {
-  const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
-  if (isSuperUser(req) || oktaGroups.includes('developer')) {
+  const authGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
+  if (isSuperUser(req) || authGroups.includes('developer') || authGroups.includes('prod-uid2.0-support')) {
     return true;
   }
 
-  const userEmail = req.auth?.payload?.email as string;
-  const user = await findUserByEmail(userEmail);
-  const userWithUid2SupportRole = await UserToParticipantRole.query()
-    .where('userId', user!.id)
-    .andWhere('userRoleId', UserRoleId.UID2Support)
-    .first();
-  return !!userWithUid2SupportRole;
+  return false;
 };
 
 export const isUid2SupportCheck: Handler = async (req: ParticipantRequest, res, next) => {
