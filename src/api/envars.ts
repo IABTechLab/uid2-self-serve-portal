@@ -42,3 +42,12 @@ export const SSP_OKTA_CLIENT_SECRET = process.env.SSP_OKTA_CLIENT_SECRET ?? erro
 export const SSP_OKTA_AUTH_DISABLED = process.env.SSP_OKTA_AUTH_DISABLED ?? 'false';
 export const SSP_ADMIN_SERVICE_BASE_URL =
   process.env.SSP_ADMIN_SERVICE_BASE_URL ?? 'http://localhost:8089';
+
+/**
+ * Comma-separated OIDC group names or IDs that grant UID2 Support when present in the JWT.
+ * Default preserves Okta behavior (developer, developer-elevated). Add the Entra ID SSO
+ * group name or object ID here so users in that group get UID2 Support.
+ */
+export const SSP_UID2_SUPPORT_OIDC_GROUPS =
+  process.env.SSP_UID2_SUPPORT_OIDC_GROUPS ?? 'developer,developer-elevated';
+
