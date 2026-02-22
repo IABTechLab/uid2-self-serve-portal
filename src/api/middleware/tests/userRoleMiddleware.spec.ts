@@ -27,7 +27,7 @@ describe('User Role Middleware Tests', () => {
     ({ res } = createResponseObject());
   });
   describe('UID2 Support check', () => {
-    it('should call next if requesting user has UID2 support role', async () => {
+    it('should call next if requesting user has UID2 Support role', async () => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
         participantToRoles: [{ participantId: participant.id }],
@@ -44,7 +44,7 @@ describe('User Role Middleware Tests', () => {
       expect(res.status).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalled();
     });
-    it('should return 403 if requesting user does not have UID2 support role', async () => {
+    it('should return 403 if requesting user does not have UID2 Support role', async () => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
         participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.Admin }],

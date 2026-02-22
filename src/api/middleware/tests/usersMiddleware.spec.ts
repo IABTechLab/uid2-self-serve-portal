@@ -34,7 +34,7 @@ describe('User Middleware Tests', () => {
     expect(res.status).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
-  it('should call next if requesting user is UID2 support from auth groups, even if requesting user does not belong to participant', async () => {
+  it('should call next if requesting user is UID2 support, even if requesting user does not belong to participant', async () => {
     const requestorParticipant = await createParticipant(knex, {});
     const targetParticipant = await createParticipant(knex, {});
     const uid2SupportUser = await createUser({
