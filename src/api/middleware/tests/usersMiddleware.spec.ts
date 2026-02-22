@@ -9,7 +9,6 @@ import {
   createUser,
   createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
-import { UserRoleId } from '../../entities/UserRole';
 import { verifyAndEnrichUser } from '../usersMiddleware';
 
 describe('User Middleware Tests', () => {
@@ -39,9 +38,7 @@ describe('User Middleware Tests', () => {
     const requestorParticipant = await createParticipant(knex, {});
     const targetParticipant = await createParticipant(knex, {});
     const uid2SupportUser = await createUser({
-      participantToRoles: [
-        { participantId: requestorParticipant.id, userRoleId: UserRoleId.UID2Support },
-      ],
+      participantToRoles: [{ participantId: requestorParticipant.id }],
     });
     const targetUser = await createUser({
       participantToRoles: [{ participantId: targetParticipant.id }],
@@ -49,7 +46,8 @@ describe('User Middleware Tests', () => {
     const userParticipantRequest = createUserParticipantRequest(
       uid2SupportUser.email,
       targetParticipant,
-      targetUser.id
+      targetUser.id,
+      ['prod-uid2.0-support']
     );
 
     await verifyAndEnrichUser(userParticipantRequest, res, next);

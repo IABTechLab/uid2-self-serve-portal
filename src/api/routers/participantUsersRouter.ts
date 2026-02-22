@@ -19,15 +19,6 @@ const handleUpdateUser = async (req: UserRequest, res: Response) => {
       .send([{ message: 'You do not have permission to unassign the Admin role from yourself.' }]);
     return;
   }
-  if (
-    userRoleData.userRoleId === UserRoleId.UID2Support ||
-    userRoleData.userRoleId === UserRoleId.SuperUser
-  ) {
-    res
-      .status(403)
-      .send([{ message: 'Unauthorized. You do not have permission to update to this role.' }]);
-    return;
-  }
   await updateUser(req);
   return res.sendStatus(200);
 };
