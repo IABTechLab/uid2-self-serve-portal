@@ -4,12 +4,16 @@ import { UserRoleId } from '../entities/UserRole';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
+export const uid2SupportRole = 'prod-uid2.0-support';
+export const developerRole = 'developer';
+export const developerElevatedRole = 'developer-elevated';
+
 export const isUid2InternalEmail = (email: string) => email.toLowerCase().includes('@unifiedid.com');
 
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
   const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
-  return oktaGroups.includes('developer-elevated');
+  return oktaGroups.includes(developerElevatedRole);
 };
 
 export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
@@ -26,7 +30,7 @@ export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, ne
 // assign uid2 support if user has prod-uid2.0-support in Microsoft Entra ID
 export const isUid2Support = async (req: Request) => {
   const authGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
-  if (isSuperUser(req) || authGroups.includes('developer') || authGroups.includes('prod-uid2.0-support')) {
+  if (isSuperUser(req) || authGroups.includes(developerRole) || authGroups.includes(uid2SupportRole)) {
     return true;
   }
 

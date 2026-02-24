@@ -10,6 +10,7 @@ import {
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
 import { verifyAndEnrichParticipant } from '../participantsMiddleware';
+import { uid2SupportRole } from '../userRoleMiddleware';
 
 describe('Participant Middleware Tests', () => {
   let knex: Knex;
@@ -43,7 +44,7 @@ describe('Participant Middleware Tests', () => {
     const participantRequest = createParticipantRequest(
       uid2SupportUser.email,
       secondParticipant.id,
-      ['prod-uid2.0-support']
+      [uid2SupportRole]
     );
 
     await verifyAndEnrichParticipant(participantRequest, res, next);

@@ -11,9 +11,11 @@ import {
 } from '../../../testHelpers/apiTestHelpers';
 import { UserRoleId } from '../../entities/UserRole';
 import {
+  developerElevatedRole,
   isAdminOrUid2SupportCheck,
   isSuperUserCheck,
   isUid2SupportCheck,
+  uid2SupportRole,
 } from '../userRoleMiddleware';
 
 describe('User Role Middleware Tests', () => {
@@ -36,7 +38,7 @@ describe('User Role Middleware Tests', () => {
         user.email,
         participant,
         user.id,
-        ['prod-uid2.0-support']
+        [uid2SupportRole]
       );
 
       await isUid2SupportCheck(userParticipantRequest, res, next);
@@ -67,7 +69,7 @@ describe('User Role Middleware Tests', () => {
         user.email,
         participant,
         user.id,
-        ['developer-elevated']
+       [developerElevatedRole]
       );
 
       await isSuperUserCheck(userParticipantRequest, res, next);
@@ -84,7 +86,7 @@ describe('User Role Middleware Tests', () => {
         user.email,
         participant,
         user.id,
-        ['prod-uid2.0-support']
+        [uid2SupportRole]
       );
 
       await isSuperUserCheck(userParticipantRequest, res, next);
@@ -115,7 +117,7 @@ describe('User Role Middleware Tests', () => {
         user.email,
         participant,
         user.id,
-        ['prod-uid2.0-support']
+        [uid2SupportRole]
       );
 
       await isAdminOrUid2SupportCheck(userParticipantRequest, res, next);

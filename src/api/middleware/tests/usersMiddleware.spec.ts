@@ -9,6 +9,7 @@ import {
   createUser,
   createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
+import { uid2SupportRole } from '../userRoleMiddleware';
 import { verifyAndEnrichUser } from '../usersMiddleware';
 
 describe('User Middleware Tests', () => {
@@ -47,7 +48,7 @@ describe('User Middleware Tests', () => {
       uid2SupportUser.email,
       targetParticipant,
       targetUser.id,
-      ['prod-uid2.0-support']
+      [uid2SupportRole]
     );
 
     await verifyAndEnrichUser(userParticipantRequest, res, next);
