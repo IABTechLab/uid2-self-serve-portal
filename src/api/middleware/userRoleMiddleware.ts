@@ -33,6 +33,7 @@ export const isUid2Support = async (req: Request) => {
   if (isSuperUser(req) || authGroups.includes(developerRole) || authGroups.includes(uid2SupportRole)) {
     return true;
   }
+
   return false;
 };
 
@@ -50,11 +51,14 @@ export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest
   if (isSuperUser(req)) {
     return next();
   }
+
   const { participant } = req;
   const userEmail = req.auth?.payload.email as string;
   const user = await findUserByEmail(userEmail);
   const userParticipant = user?.participants?.find((item) => item.id === participant?.id);
-  const userIsAdminOrUid2Support = userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) || (await isUid2Support(req));
+  const userIsAdminOrUid2Support =
+    userParticipant?.currentUserRoleIds?.includes(UserRoleId.Admin) ||
+    (await isUid2Support(req));
   if (!userIsAdminOrUid2Support) {
     return res.status(403).json({
       message: 'Unauthorized. You do not have the necessary permissions.',

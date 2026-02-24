@@ -35,7 +35,7 @@ export type UserWithParticipantRoles = UserDTO & {
 
 export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
 
-const isUid2InternalEmail = (email: string) => email.toLowerCase().endsWith('@thetradedesk.com');
+const isTTDInternal = (email: string) => email.toLowerCase().endsWith('@thetradedesk.com');
 
 const simplifyUserParticipantRoles = (user: User) => {
   return (
@@ -153,7 +153,7 @@ export const createAndInviteKeycloakUser = async (
   const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
   await assignApiParticipantMemberRole(kcAdminClient, email);
 
-  if (!isUid2InternalEmail(email)) {
+  if (!isTTDInternal(email)) {
     await sendInviteEmailToNewUser(kcAdminClient, newUser);
   }
 };
@@ -169,7 +169,7 @@ const addAndInviteUserToParticipant = async (
     participantId: participant.id,
     userRoleId,
   });
-  if (!isUid2InternalEmail(existingUser.email)) {
+  if (!isTTDInternal(existingUser.email)) {
     sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
   }
 };
