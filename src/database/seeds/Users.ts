@@ -91,7 +91,7 @@ export async function seed(knex: Knex): Promise<void> {
     newUsers.map((user: UserType) => ({
       userId: user.id,
       participantId,
-      userRoleId: UserRoleId.UID2Support,
+      userRoleId: UserRoleId.Admin,
     }))
   );
 }

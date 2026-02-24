@@ -11,9 +11,11 @@ import {
 } from '../../../testHelpers/apiTestHelpers';
 import { UserRoleId } from '../../entities/UserRole';
 import {
+  developerElevatedRole,
   isAdminOrUid2SupportCheck,
   isSuperUserCheck,
   isUid2SupportCheck,
+  uid2SupportRole,
 } from '../userRoleMiddleware';
 
 describe('User Role Middleware Tests', () => {
@@ -27,12 +29,17 @@ describe('User Role Middleware Tests', () => {
     ({ res } = createResponseObject());
   });
   describe('UID2 Support check', () => {
-    it('should call next if requesting user has the UID2 Support role', async () => {
+    it('should call next if requesting user has UID2 Support role', async () => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
-        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.UID2Support }],
+        participantToRoles: [{ participantId: participant.id }],
       });
-      const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
+      const userParticipantRequest = createUserParticipantRequest(
+        user.email,
+        participant,
+        user.id,
+        [uid2SupportRole]
+      );
 
       await isUid2SupportCheck(userParticipantRequest, res, next);
 
@@ -56,9 +63,14 @@ describe('User Role Middleware Tests', () => {
     it('should call next if requesting user has the SuperUser role', async () => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
-        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.SuperUser }],
+        participantToRoles: [{ participantId: participant.id }],
       });
-      const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
+      const userParticipantRequest = createUserParticipantRequest(
+        user.email,
+        participant,
+        user.id,
+       [developerElevatedRole]
+      );
 
       await isSuperUserCheck(userParticipantRequest, res, next);
 
@@ -68,9 +80,14 @@ describe('User Role Middleware Tests', () => {
     it('should return 403 if requesting user does not have SuperUser role', async () => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
-        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.UID2Support }],
+        participantToRoles: [{ participantId: participant.id }],
       });
-      const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
+      const userParticipantRequest = createUserParticipantRequest(
+        user.email,
+        participant,
+        user.id,
+        [uid2SupportRole]
+      );
 
       await isSuperUserCheck(userParticipantRequest, res, next);
 
@@ -79,15 +96,29 @@ describe('User Role Middleware Tests', () => {
     });
   });
   describe('Admin Role or UID2 Support check', () => {
-    it.each([
-      { role: UserRoleId.Admin, description: 'Admin Role for the participant' },
-      { role: UserRoleId.UID2Support, description: 'UID2 support role' },
-    ])('should call next if requesting user has $description', async ({ role }) => {
+    it('should call next if requesting user has Admin role for the participant', async () => {
       const participant = await createParticipant(knex, {});
       const user = await createUser({
-        participantToRoles: [{ participantId: participant.id, userRoleId: role }],
+        participantToRoles: [{ participantId: participant.id, userRoleId: UserRoleId.Admin }],
       });
       const userParticipantRequest = createUserParticipantRequest(user.email, participant, user.id);
+
+      await isAdminOrUid2SupportCheck(userParticipantRequest, res, next);
+
+      expect(res.status).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+    });
+    it('should call next if requesting user has UID2 support role', async () => {
+      const participant = await createParticipant(knex, {});
+      const user = await createUser({
+        participantToRoles: [{ participantId: participant.id }],
+      });
+      const userParticipantRequest = createUserParticipantRequest(
+        user.email,
+        participant,
+        user.id,
+        [uid2SupportRole]
+      );
 
       await isAdminOrUid2SupportCheck(userParticipantRequest, res, next);
 
