@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
-import { UserRoleId } from '../../../api/entities/UserRole';
 import { GetUserParticipants } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { Loading } from '../Core/Loading/Loading';
@@ -36,15 +35,7 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
         <Loading message='Loading participants...' />
       ) : (
         <div>
-          {user.userToParticipantRoles?.find(
-            (role) => role.userRoleId === UserRoleId.UID2Support
-          ) ? (
-            <div>This user has the UID2 support role and has admin access to all participants.</div>
-          ) : (
-            <div>
-              <UserParticipantsTable user={user} userParticipants={userParticipants ?? []} />
-            </div>
-          )}
+          <UserParticipantsTable user={user} userParticipants={userParticipants ?? []} />
         </div>
       )}
     </Dialog>

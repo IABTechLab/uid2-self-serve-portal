@@ -113,7 +113,6 @@ export const updateUser = async (req: UserParticipantRequest) => {
       await UserToParticipantRole.query(trx)
         .where('participantId', participant!.id)
         .where('userId', user!.id)
-        .whereNot('userRoleId', UserRoleId.UID2Support)
         .del();
 
       await Promise.all([
