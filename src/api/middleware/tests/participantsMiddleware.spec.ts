@@ -9,8 +9,8 @@ import {
   createResponseObject,
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
-import { UserRoleId } from '../../entities/UserRole';
 import { verifyAndEnrichParticipant } from '../participantsMiddleware';
+import { uid2SupportRole } from '../userRoleMiddleware';
 
 describe('Participant Middleware Tests', () => {
   let knex: Knex;
@@ -39,13 +39,12 @@ describe('Participant Middleware Tests', () => {
     const firstParticipant = await createParticipant(knex, {});
     const secondParticipant = await createParticipant(knex, {});
     const uid2SupportUser = await createUser({
-      participantToRoles: [
-        { participantId: firstParticipant.id, userRoleId: UserRoleId.UID2Support },
-      ],
+      participantToRoles: [{ participantId: firstParticipant.id }],
     });
     const participantRequest = createParticipantRequest(
       uid2SupportUser.email,
-      secondParticipant.id
+      secondParticipant.id,
+      [uid2SupportRole]
     );
 
     await verifyAndEnrichParticipant(participantRequest, res, next);

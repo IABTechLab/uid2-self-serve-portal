@@ -27,12 +27,14 @@ export function createResponseObject() {
 
 export const createParticipantRequest = (
   email: string,
-  participantId: string | number
+  participantId: string | number,
+  groups?: string[]
 ): ParticipantRequest => {
   return {
     auth: {
       payload: {
         email,
+        ...(groups !== undefined && { groups }),
       },
     },
     params: {
@@ -44,12 +46,14 @@ export const createParticipantRequest = (
 export const createUserParticipantRequest = (
   requestingUserEmail: string,
   requestingParticipant: Participant,
-  targetUserId: number
+  targetUserId: number,
+  groups?: string[]
 ): UserParticipantRequest => {
   return {
     auth: {
       payload: {
         email: requestingUserEmail,
+        ...(groups !== undefined && { groups }),
       },
     },
     participant: requestingParticipant,
