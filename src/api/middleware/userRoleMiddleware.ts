@@ -8,8 +8,6 @@ export const uid2SupportRole = 'prod-uid2.0-support';
 export const developerRole = 'developer';
 export const developerElevatedRole = 'developer-elevated';
 
-export const isUid2InternalEmail = (email: string) => email.toLowerCase().endsWith('@unifiedid.com');
-
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
   const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
