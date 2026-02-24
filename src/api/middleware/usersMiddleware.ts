@@ -19,7 +19,7 @@ const createUid2InternalUser = async (
     firstName,
     lastName,
     jobFunction: UserJobFunction.Engineering,
-    acceptedTerms: true,
+    acceptedTerms: false,
   });
 };
 
