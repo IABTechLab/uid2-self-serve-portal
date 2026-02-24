@@ -4,6 +4,11 @@ import { UserRoleId } from '../entities/UserRole';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
 
+export const isUid2InternalEmail = (email: string) => {
+  const lowerEmail = email.toLowerCase();
+  return lowerEmail.endsWith('@unifiedid.com') || lowerEmail.endsWith('@thetradedesk.com');
+};
+
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
   const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];

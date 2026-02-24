@@ -15,6 +15,11 @@ import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
+const isUid2InternalEmail = (email: string) => {
+  const lowerEmail = email.toLowerCase();
+  return lowerEmail.endsWith('@unifiedid.com') || lowerEmail.endsWith('@thetradedesk.com');
+};
+
 type TeamMemberProps = Readonly<{
   existingTeamMembers: UserWithParticipantRoles[];
   person: UserWithParticipantRoles;
@@ -134,7 +139,7 @@ function TeamMember({
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-            {person.acceptedTerms || (
+            {!person.acceptedTerms && !isUid2InternalEmail(person.email) && (
               <button
                 type='button'
                 className={clsx('invite-button', {

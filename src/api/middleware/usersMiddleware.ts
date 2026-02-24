@@ -5,9 +5,7 @@ import { User, UserJobFunction } from '../entities/User';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
-import { isSuperUser, isUid2Support } from './userRoleMiddleware';
-
-const isUid2EngineerEmail = (email: string) => email.toLowerCase().endsWith('@unifiedid.com');
+import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
 
 type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
 
@@ -63,7 +61,7 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   const userEmail = req.auth?.payload?.email as string;
   let user = await findUserByEmail(userEmail);
 
-  if (!user && isUid2EngineerEmail(userEmail)) {
+  if (!user && isUid2InternalEmail(userEmail)) {
     const firstName = req.auth?.payload?.given_name as string;
     const lastName = req.auth?.payload?.family_name as string;
     await createUid2InternalUser(userEmail, firstName, lastName);

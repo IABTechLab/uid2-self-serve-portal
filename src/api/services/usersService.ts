@@ -33,9 +33,9 @@ export type UserWithParticipantRoles = UserDTO & {
   currentParticipantUserRoles?: UserRoleDTO[];
 };
 
-export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
+import { isUid2InternalEmail } from '../middleware/userRoleMiddleware';
 
-const isUid2InternalEmail = (email: string) => email.toLowerCase().endsWith('@thetradedesk.com');
+export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
 
 const simplifyUserParticipantRoles = (user: User) => {
   return (
