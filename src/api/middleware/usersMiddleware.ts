@@ -9,9 +9,13 @@ import { isSuperUser, isUid2Support } from './userRoleMiddleware';
 
 type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
 
-const isUid2EngineerEmail = (email: string) => email.toLowerCase().endsWith('@unifiedid.com');
+export const isUid2Engineer = (email: string) =>
+  email.toLowerCase().endsWith('@unifiedid.com');
 
-const createUid2InternalUser = async (
+export const isTTDInternal = (email: string) =>
+  email.toLowerCase().endsWith('@thetradedesk.com');
+
+const createUid2EngineerUser = async (
   email: string,
   firstName: string,
   lastName: string
@@ -63,10 +67,10 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   const userEmail = req.auth?.payload?.email as string;
   let user = await findUserByEmail(userEmail);
 
-  if (!user && isUid2EngineerEmail(userEmail)) {
+  if (!user && isUid2Engineer(userEmail)) {
     const firstName = req.auth?.payload?.given_name as string;
     const lastName = req.auth?.payload?.family_name as string;
-    await createUid2InternalUser(userEmail, firstName, lastName);
+    await createUid2EngineerUser(userEmail, firstName, lastName);
     user = await findUserByEmail(userEmail);
   }
 

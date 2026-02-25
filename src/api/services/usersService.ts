@@ -6,6 +6,7 @@ import { UserRole, UserRoleDTO } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { TraceId } from '../helpers/loggingHelpers';
+import { isTTDInternal } from '../middleware/usersMiddleware';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';
@@ -34,8 +35,6 @@ export type UserWithParticipantRoles = UserDTO & {
 };
 
 export type UserPartialDTO = Omit<UserDTO, 'id' | 'acceptedTerms'>;
-
-const isTTDInternal = (email: string) => email.toLowerCase().endsWith('@thetradedesk.com');
 
 const simplifyUserParticipantRoles = (user: User) => {
   return (

@@ -15,9 +15,10 @@ import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
 
+/** Internal = unifiedid or tradedesk; frontend cannot import middleware (pulls Node/backend into bundle). */
 const isUid2InternalEmail = (email: string) => {
-  const lowerEmail = email.toLowerCase();
-  return lowerEmail.endsWith('@unifiedid.com') || lowerEmail.endsWith('@thetradedesk.com');
+  const lower = email.toLowerCase();
+  return lower.endsWith('@unifiedid.com') || lower.endsWith('@thetradedesk.com');
 };
 
 type TeamMemberProps = Readonly<{
