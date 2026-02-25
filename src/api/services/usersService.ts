@@ -5,7 +5,7 @@ import { User, UserDTO } from '../entities/User';
 import { UserRole, UserRoleDTO } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
-import { isTTDInternal } from '../helpers/internalEmailHelpers';
+import { isUid2Internal } from '../helpers/internalEmailHelpers';
 import { TraceId } from '../helpers/loggingHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { createEmailService } from './emailService';
@@ -152,7 +152,7 @@ export const createAndInviteKeycloakUser = async (
   const newUser = await createNewUser(kcAdminClient, firstName, lastName, email);
   await assignApiParticipantMemberRole(kcAdminClient, email);
 
-  if (!isTTDInternal(email)) {
+  if (!isUid2Internal(email)) {
     await sendInviteEmailToNewUser(kcAdminClient, newUser);
   }
 };
@@ -168,7 +168,7 @@ const addAndInviteUserToParticipant = async (
     participantId: participant.id,
     userRoleId,
   });
-  if (!isTTDInternal(existingUser.email)) {
+  if (!isUid2Internal(existingUser.email)) {
     sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
   }
 };

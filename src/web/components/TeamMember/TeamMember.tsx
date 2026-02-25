@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useContext, useState } from 'react';
 
-import { isUid2InternalEmail } from '../../../api/helpers/internalEmailHelpers';
+import { isUid2Internal } from '../../../api/helpers/internalEmailHelpers';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { UpdateTeamMemberForm } from '../../services/userAccount';
@@ -135,7 +135,7 @@ function TeamMember({
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-            {!person.acceptedTerms && !isUid2InternalEmail(person.email) && (
+            {!person.acceptedTerms && !isUid2Internal(person.email) && (
               <button
                 type='button'
                 className={clsx('invite-button', {
