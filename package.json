@@ -258,6 +258,8 @@
     "@isaacs/brace-expansion": "^5.0.1",
     "workbox-webpack-plugin": {
       "webpack-sources": "2.3.1"
-    }
+    },
+    "@jest/schemas": "29.6.3",
+    "eslint-visitor-keys": "4.2.0"
   }
 }
