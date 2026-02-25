@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import log from 'loglevel';
 import { useCallback, useContext, useState } from 'react';
 
+import { isUid2InternalEmail } from '../../../api/helpers/internalEmailHelpers';
 import { UserWithParticipantRoles } from '../../../api/services/usersService';
 import { ParticipantContext } from '../../contexts/ParticipantProvider';
 import { UpdateTeamMemberForm } from '../../services/userAccount';
@@ -14,11 +15,6 @@ import { SuccessToast } from '../Core/Popups/Toast';
 import { Tooltip } from '../Core/Tooltip/Tooltip';
 import TeamMemberDialog from './TeamMemberDialog';
 import TeamMemberRemoveConfirmationDialog from './TeamMemberRemoveDialog';
-
-const isUid2InternalEmail = (email: string) => {
-  const lower = email.toLowerCase();
-  return lower.endsWith('@unifiedid.com') || lower.endsWith('@thetradedesk.com');
-};
 
 type TeamMemberProps = Readonly<{
   existingTeamMembers: UserWithParticipantRoles[];
