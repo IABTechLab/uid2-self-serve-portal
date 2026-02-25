@@ -6,7 +6,7 @@ import { UserRole, UserRoleDTO } from '../entities/UserRole';
 import { UserToParticipantRole } from '../entities/UserToParticipantRole';
 import { SSP_WEB_BASE_URL } from '../envars';
 import { TraceId } from '../helpers/loggingHelpers';
-import { isTTDInternal } from '../middleware/usersMiddleware';
+import { isTTDInternal } from '../helpers/internalEmailHelpers';
 import { getKcAdminClient } from '../keycloakAdminClient';
 import { createEmailService } from './emailService';
 import { EmailArgs } from './emailTypes';

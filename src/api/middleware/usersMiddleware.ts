@@ -2,18 +2,13 @@ import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { User, UserJobFunction } from '../entities/User';
+import { isUid2Engineer } from '../helpers/internalEmailHelpers';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
 import { isSuperUser, isUid2Support } from './userRoleMiddleware';
 
 type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
-
-export const isUid2Engineer = (email: string) =>
-  email.toLowerCase().endsWith('@unifiedid.com');
-
-export const isTTDInternal = (email: string) =>
-  email.toLowerCase().endsWith('@thetradedesk.com');
 
 const createUid2EngineerUser = async (
   email: string,
