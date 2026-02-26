@@ -25,7 +25,16 @@ export const extractLocationFromPath = (path: string) => {
   return match ? match[1] : path.replace(/^\/?:?participantId\/?/, '');
 };
 
+const PARTICIPANT_PATH_REGEX = /^\/?participant\/[^/]+\/?(.*)$/;
+
 export function getPathWithParticipant(path: string, participantId: string | number | undefined) {
-  const location = extractLocationFromPath(path);
+  if (participantId === undefined || participantId === null) {
+    return path;
+  }
+  const match = PARTICIPANT_PATH_REGEX.exec(path);
+  if (!match) {
+    return path;
+  }
+  const location = (match[1] ?? '').replace(/^\//, '');
   return `/participant/${participantId}/${location}`;
 }
