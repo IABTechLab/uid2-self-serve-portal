@@ -2,14 +2,15 @@ import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 
 import { User, UserJobFunction } from '../entities/User';
+import { isUid2Engineer } from '../helpers/internalEmailHelpers';
 import { getLoggers, getTraceId, TraceId } from '../helpers/loggingHelpers';
 import { getAllParticipants, UserParticipantRequest } from '../services/participantsService';
 import { findUserByEmail, UserRequest } from '../services/usersService';
-import { isSuperUser, isUid2InternalEmail, isUid2Support } from './userRoleMiddleware';
+import { isSuperUser, isUid2Support } from './userRoleMiddleware';
 
 type UserWithSupportRoles = User & { isUid2Support: boolean; isSuperUser: boolean };
 
-const createUid2InternalUser = async (
+const createUid2EngineerUser = async (
   email: string,
   firstName: string,
   lastName: string
@@ -19,7 +20,7 @@ const createUid2InternalUser = async (
     firstName,
     lastName,
     jobFunction: UserJobFunction.Engineering,
-    acceptedTerms: true,
+    acceptedTerms: false,
   });
 };
 
@@ -61,10 +62,10 @@ export const enrichCurrentUser = async (req: UserRequest, res: Response, next: N
   const userEmail = req.auth?.payload?.email as string;
   let user = await findUserByEmail(userEmail);
 
-  if (!user && isUid2InternalEmail(userEmail)) {
+  if (!user && isUid2Engineer(userEmail)) {
     const firstName = req.auth?.payload?.given_name as string;
     const lastName = req.auth?.payload?.family_name as string;
-    await createUid2InternalUser(userEmail, firstName, lastName);
+    await createUid2EngineerUser(userEmail, firstName, lastName);
     user = await findUserByEmail(userEmail);
   }
 
