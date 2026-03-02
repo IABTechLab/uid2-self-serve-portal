@@ -1,7 +1,7 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { developerElevatedRole, uid2SupportRole } from '../../../api/middleware/userRoleMiddleware';
+import { developerElevatedRole, uid2SupportRole } from '../../../api/helpers/apiHelper';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
