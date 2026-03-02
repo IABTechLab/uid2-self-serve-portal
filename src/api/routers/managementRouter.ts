@@ -1,8 +1,10 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { getKcAdminClient } from '../keycloakAdminClient';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { GetUserAuditTrail } from '../services/auditTrailService';
+import { getElevatedRoleByEmail } from '../services/kcUsersService';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
 import { getUserParticipants, ParticipantRequest } from '../services/participantsService';
 
@@ -20,7 +22,22 @@ const handleGetUserAuditTrail = async (req: ParticipantRequest, res: Response) =
 const handleGetUserParticipants = async (req: ParticipantRequest, res: Response) => {
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
   const participants = await getUserParticipants(userId);
-  return res.status(200).json(participants ?? []);
+  const list = participants ?? [];
+
+  let elevatedRole: 'SuperUser' | 'UID2 Support' | null = null;
+  if (list.length === 0) {
+    const user = await getUserById(userId);
+    if (user?.email) {
+      try {
+        const kcAdminClient = await getKcAdminClient();
+        elevatedRole = await getElevatedRoleByEmail(kcAdminClient, user.email);
+      } catch {
+        // Keycloak unavailable or user not found; keep elevatedRole null
+      }
+    }
+  }
+
+  return res.status(200).json({ participants: list, elevatedRole });
 };
 
 const handleChangeUserLock = async (req: ParticipantRequest, res: Response) => {

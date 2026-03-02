@@ -6,6 +6,42 @@ import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
+// Same group names as userRoleMiddleware (from JWT payload / Keycloak attributes.groups)
+const developerElevatedRole = 'developer-elevated';
+const developerRole = 'developer';
+const uid2SupportRole = 'prod-uid2.0-support';
+
+export type ElevatedRole = 'SuperUser' | 'UID2 Support';
+
+/**
+ * Resolves elevated role from Keycloak user attributes (key "groups"), not realm Groups.
+ * Used when the viewed user has no portal participants but may have SuperUser/UID2 Support in IdP.
+ */
+export const getElevatedRoleByEmail = async (
+  kcAdminClient: KeycloakAdminClient,
+  email: string
+): Promise<ElevatedRole | null> => {
+  const users = await queryKeycloakUsersByEmail(kcAdminClient, email);
+  if (!users.length) return null;
+
+  const attrs = users[0].attributes;
+  const groupsRaw = attrs?.groups;
+  const groups: string[] = Array.isArray(groupsRaw)
+    ? groupsRaw
+    : typeof groupsRaw === 'string'
+      ? [groupsRaw]
+      : [];
+
+  if (groups.includes(developerElevatedRole)) return 'SuperUser';
+  if (
+    groups.includes(developerRole) ||
+    groups.includes(uid2SupportRole)
+  ) {
+    return 'UID2 Support';
+  }
+  return null;
+};
+
 export const queryKeycloakUsersByEmail = async (
   kcAdminClient: KeycloakAdminClient,
   email: string

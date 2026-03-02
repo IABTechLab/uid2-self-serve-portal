@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
-import { GetUserParticipants } from '../../services/participant';
+import { ElevatedRole, GetUserParticipants } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { Loading } from '../Core/Loading/Loading';
 import UserParticipantsTable from './UserPartcipantsTable';
@@ -14,12 +14,14 @@ type UserParticipantsDialogProps = Readonly<{
 
 function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogProps) {
   const [userParticipants, setUserParticipants] = useState<ParticipantDTO[]>();
+  const [elevatedRole, setElevatedRole] = useState<ElevatedRole | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getParticipants = async () => {
-      const participants = await GetUserParticipants(user.id);
+      const { participants, elevatedRole: role } = await GetUserParticipants(user.id);
       setUserParticipants(participants);
+      setElevatedRole(role);
       setIsLoading(false);
     };
     getParticipants();
@@ -35,7 +37,11 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
         <Loading message='Loading participants...' />
       ) : (
         <div>
-          <UserParticipantsTable user={user} userParticipants={userParticipants ?? []} />
+          <UserParticipantsTable
+            user={user}
+            userParticipants={userParticipants ?? []}
+            elevatedRole={elevatedRole}
+          />
         </div>
       )}
     </Dialog>

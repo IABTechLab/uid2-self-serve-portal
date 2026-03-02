@@ -1,6 +1,7 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
+import { ElevatedRole } from '../../services/participant';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
@@ -20,12 +21,27 @@ function UserParticipantRow({ participantName, roleName }: UserParticipantRowPro
   );
 }
 
-type UserParticipantsTableProps = Readonly<{
+export type UserParticipantsTableProps = Readonly<{
   user: UserDTO;
   userParticipants: ParticipantDTO[];
+  elevatedRole?: ElevatedRole | null;
 }>;
 
-function UserParticipantsTableComponent({ user, userParticipants }: UserParticipantsTableProps) {
+function getEmptyParticipantsMessage(elevatedRole: ElevatedRole | null | undefined): string {
+  if (elevatedRole === 'SuperUser') {
+    return 'This user has SuperUser role and has access to all participants.';
+  }
+  if (elevatedRole === 'UID2 Support') {
+    return 'This user has UID2 Support role and has access to all participants.';
+  }
+  return 'This user does not belong to any participant.';
+}
+
+function UserParticipantsTableComponent({
+  user,
+  userParticipants,
+  elevatedRole,
+}: UserParticipantsTableProps) {
   return (
     <div className='users-participants-table-container'>
       <table className='users-participants-table'>
@@ -52,7 +68,7 @@ function UserParticipantsTableComponent({ user, userParticipants }: UserParticip
           icon={<img src='/document.svg' alt='email-icon' />}
           title='No Participants'
         >
-          <span>This user does not belong to any participant.</span>
+          <span>{getEmptyParticipantsMessage(elevatedRole)}</span>
         </TableNoDataPlaceholder>
       )}
     </div>
