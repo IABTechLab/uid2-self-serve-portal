@@ -44,9 +44,16 @@ export async function GetAllParticipants() {
   }
 }
 
-export async function GetUserParticipants(userId: number) {
+export type ElevatedRole = 'SuperUser' | 'UID2 Support';
+
+export type GetUserParticipantsResponse = {
+  participants: ParticipantDTO[];
+  elevatedRole: ElevatedRole | null;
+};
+
+export async function GetUserParticipants(userId: number): Promise<GetUserParticipantsResponse> {
   try {
-    const result = await axios.get<ParticipantDTO[]>(`/manage/${userId}/participants`, {
+    const result = await axios.get<GetUserParticipantsResponse>(`/manage/${userId}/participants`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;
