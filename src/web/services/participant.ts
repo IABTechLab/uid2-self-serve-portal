@@ -44,11 +44,9 @@ export async function GetAllParticipants() {
   }
 }
 
-export type ElevatedRole = 'SuperUser' | 'UID2 Support';
-
 export type GetUserParticipantsResponse = {
   participants: ParticipantDTO[];
-  elevatedRole: ElevatedRole | null;
+  elevatedRole: string | null;
 };
 
 export async function GetUserParticipants(userId: number): Promise<GetUserParticipantsResponse> {

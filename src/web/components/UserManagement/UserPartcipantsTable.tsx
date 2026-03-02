@@ -1,8 +1,8 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
+import { developerElevatedRole, uid2SupportRole } from '../../../api/middleware/userRoleMiddleware';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
-import { ElevatedRole } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
 import './UserParticipantsTable.scss';
@@ -24,14 +24,14 @@ function UserParticipantRow({ participantName, roleName }: UserParticipantRowPro
 export type UserParticipantsTableProps = Readonly<{
   user: UserDTO;
   userParticipants: ParticipantDTO[];
-  elevatedRole?: ElevatedRole | null;
+  elevatedRole: string | null;
 }>;
 
-function getEmptyParticipantsMessage(elevatedRole: ElevatedRole | null | undefined): string {
-  if (elevatedRole === 'SuperUser') {
+function getEmptyParticipantsMessage(elevatedRole:string | null): string {
+  if (elevatedRole === developerElevatedRole) {
     return 'This user has SuperUser role and has access to all participants.';
   }
-  if (elevatedRole === 'UID2 Support') {
+  if (elevatedRole === uid2SupportRole) {
     return 'This user has UID2 Support role and has access to all participants.';
   }
   return 'This user does not belong to any participant.';
