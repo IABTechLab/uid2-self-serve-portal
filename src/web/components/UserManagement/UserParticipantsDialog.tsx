@@ -19,9 +19,9 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
 
   useEffect(() => {
     const getParticipants = async () => {
-      const { participants, elevatedRole: role } = await GetUserParticipants(user.id);
+      const { participants, elevatedRole } = await GetUserParticipants(user.id);
       setUserParticipants(participants);
-      setElevatedRole(role);
+      setElevatedRole(elevatedRole);
       setIsLoading(false);
     };
     getParticipants();
