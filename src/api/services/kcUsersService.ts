@@ -7,7 +7,7 @@ import {
   developerElevatedRole,
   developerRole,
   uid2SupportRole,
-} from '../middleware/userRoleMiddleware';
+} from '../helpers/apiHelper.ts';
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
