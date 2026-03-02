@@ -260,6 +260,7 @@
       "webpack-sources": "2.3.1"
     },
     "@jest/schemas": "29.6.3",
-    "eslint-visitor-keys": "4.2.0"
+    "eslint-visitor-keys": "4.2.0",
+    "serialize-javascript": "^7.0.3"
   }
 }
