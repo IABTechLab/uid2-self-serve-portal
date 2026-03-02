@@ -44,7 +44,6 @@ function UserParticipantsTableComponent({
 }: UserParticipantsTableProps) {
   const elevatedRoleMessage = getElevatedRoleMessage(elevatedRole);
 
-  if (elevatedRoleMessage) {
     return elevatedRoleMessage ? (
       <div className='users-participants-table-container'>
         <span>{elevatedRoleMessage}</span>
@@ -79,7 +78,6 @@ function UserParticipantsTableComponent({
       )}
     </div>;
   }
-}
 
 export default function UserParticipantsTable(props: UserParticipantsTableProps) {
   return (
