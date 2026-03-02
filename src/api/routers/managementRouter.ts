@@ -24,7 +24,7 @@ const handleGetUserParticipants = async (req: ParticipantRequest, res: Response)
   const participants = await getUserParticipants(userId);
   const list = participants ?? [];
 
-  let elevatedRole: 'SuperUser' | 'UID2 Support' | null = null;
+  let elevatedRole = null;
   if (list.length === 0) {
     const user = await getUserById(userId);
     if (user?.email) {
