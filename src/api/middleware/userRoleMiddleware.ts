@@ -13,7 +13,7 @@ import { findUserByEmail } from '../services/usersService';
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
   const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
-  return true;
+  return oktaGroups.includes(developerElevatedRole);
 };
 
 export const isSuperUserCheck: Handler = async (req: ParticipantRequest, res, next) => {
