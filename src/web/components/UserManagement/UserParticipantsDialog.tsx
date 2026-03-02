@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
-import {  GetUserParticipants } from '../../services/participant';
+import { GetUserParticipants } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { Loading } from '../Core/Loading/Loading';
 import UserParticipantsTable from './UserPartcipantsTable';
