@@ -13,6 +13,26 @@ const uid2SupportRole = 'prod-uid2.0-support';
 
 export type ElevatedRole = 'SuperUser' | 'UID2 Support';
 
+export const queryKeycloakUsersByEmail = async (
+  kcAdminClient: KeycloakAdminClient,
+  email: string
+) => {
+  return kcAdminClient.users.find({
+    email,
+    extract: true,
+  });
+};
+
+function toGroupsArray(groupsRaw: unknown): string[] {
+  if (Array.isArray(groupsRaw)) {
+    return groupsRaw.filter((g): g is string => typeof g === 'string');
+  }
+  if (typeof groupsRaw === 'string') {
+    return [groupsRaw];
+  }
+  return [];
+}
+
 /**
  * Resolves elevated role from Keycloak user attributes (key "groups"), not realm Groups.
  * Used when the viewed user has no portal participants but may have SuperUser/UID2 Support in IdP.
@@ -25,12 +45,7 @@ export const getElevatedRoleByEmail = async (
   if (!users.length) return null;
 
   const attrs = users[0].attributes;
-  const groupsRaw = attrs?.groups;
-  const groups: string[] = Array.isArray(groupsRaw)
-    ? groupsRaw
-    : typeof groupsRaw === 'string'
-      ? [groupsRaw]
-      : [];
+  const groups = toGroupsArray(attrs?.groups);
 
   if (groups.includes(developerElevatedRole)) return 'SuperUser';
   if (
@@ -40,16 +55,6 @@ export const getElevatedRoleByEmail = async (
     return 'UID2 Support';
   }
   return null;
-};
-
-export const queryKeycloakUsersByEmail = async (
-  kcAdminClient: KeycloakAdminClient,
-  email: string
-) => {
-  return kcAdminClient.users.find({
-    email,
-    extract: true,
-  });
 };
 
 export const doesUserExistInKeycloak = async (

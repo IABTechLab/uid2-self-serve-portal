@@ -1,8 +1,8 @@
 import { ParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
-import { ElevatedRole } from '../../services/participant';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
+import { ElevatedRole } from '../../services/participant';
 import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
 import './UserParticipantsTable.scss';
