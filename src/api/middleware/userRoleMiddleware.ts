@@ -7,8 +7,9 @@ import {
   uid2SupportRole,
 } from '../helpers/apiHelper';
 import { ParticipantRequest } from '../services/participantsService';
-export { developerElevatedRole, developerRole, uid2SupportRole } from '../helpers/apiHelper';
 import { findUserByEmail } from '../services/usersService';
+
+export { developerElevatedRole, developerRole, uid2SupportRole } from '../helpers/apiHelper';
 
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
