@@ -29,7 +29,7 @@ export type UserParticipantsTableProps = Readonly<{
 
 function getEmptyParticipantsMessage(elevatedRole:string | null): string {
   if (elevatedRole === developerElevatedRole) {
-    return 'This user has SuperUser role and has access to all participants.';
+    return 'This user has Super User role and has access to all participants.';
   }
   if (elevatedRole === uid2SupportRole) {
     return 'This user has UID2 Support role and has access to all participants.';
