@@ -23,17 +23,12 @@ const handleGetUserParticipants = async (req: ParticipantRequest, res: Response)
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
   const participants = await getUserParticipants(userId);
   const list = participants ?? [];
-
   let elevatedRole = null;
   if (list.length === 0) {
     const user = await getUserById(userId);
     if (user?.email) {
-      try {
-        const kcAdminClient = await getKcAdminClient();
-        elevatedRole = await getElevatedRoleByEmail(kcAdminClient, user.email);
-      } catch {
-        // Keycloak unavailable or user not found; keep elevatedRole null
-      }
+      const kcAdminClient = await getKcAdminClient();
+      elevatedRole = await getElevatedRoleByEmail(kcAdminClient, user.email);
     }
   }
 

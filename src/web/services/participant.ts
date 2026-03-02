@@ -44,7 +44,7 @@ export async function GetAllParticipants() {
   }
 }
 
-export type GetUserParticipantsResponse = {
+type GetUserParticipantsResponse = {
   participants: ParticipantDTO[];
   elevatedRole: string | null;
 };
