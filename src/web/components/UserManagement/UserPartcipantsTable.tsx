@@ -21,7 +21,7 @@ function UserParticipantRow({ participantName, roleName }: UserParticipantRowPro
   );
 }
 
-export type UserParticipantsTableProps = Readonly<{
+type UserParticipantsTableProps = Readonly<{
   user: UserDTO;
   userParticipants: ParticipantDTO[];
   elevatedRole: string | null;
