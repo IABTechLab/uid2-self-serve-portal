@@ -3,7 +3,6 @@ import { UserDTO } from '../../../api/entities/User';
 import { UserRoleId } from '../../../api/entities/UserRole';
 import { developerElevatedRole, uid2SupportRole } from '../../../api/helpers/apiHelper';
 import { SortableProvider } from '../../contexts/SortableTableProvider';
-import { TableNoDataPlaceholder } from '../Core/Tables/TableNoDataPlaceholder';
 
 import './UserParticipantsTable.scss';
 
@@ -27,14 +26,14 @@ type UserParticipantsTableProps = Readonly<{
   elevatedRole: string | null;
 }>;
 
-function getEmptyParticipantsMessage(elevatedRole:string | null): string {
+function getElevatedRoleMessage(elevatedRole: string | null): string | null {
   if (elevatedRole === developerElevatedRole) {
     return 'This user has Super User role and has access to all participants.';
   }
   if (elevatedRole === uid2SupportRole) {
     return 'This user has UID2 Support role and has access to all participants.';
   }
-  return 'This user does not belong to any participant.';
+  return null;
 }
 
 function UserParticipantsTableComponent({
@@ -42,6 +41,16 @@ function UserParticipantsTableComponent({
   userParticipants,
   elevatedRole,
 }: UserParticipantsTableProps) {
+  const elevatedRoleMessage = getElevatedRoleMessage(elevatedRole);
+
+  if (elevatedRoleMessage) {
+    return (
+      <div className='users-participants-table-container'>
+        <span>{elevatedRoleMessage}</span>
+      </div>
+    );
+  }
+
   return (
     <div className='users-participants-table-container'>
       <table className='users-participants-table'>
@@ -52,25 +61,15 @@ function UserParticipantsTableComponent({
           </tr>
         </thead>
         <tbody>
-          {user.userToParticipantRoles?.map((role) => {
-            return (
-              <UserParticipantRow
-                key={role.participantId}
-                participantName={userParticipants.find((p) => p.id === role.participantId)?.name}
-                roleName={UserRoleId[role.userRoleId]}
-              />
-            );
-          })}
+          {user.userToParticipantRoles?.map((role) => (
+            <UserParticipantRow
+              key={role.participantId}
+              participantName={userParticipants.find((p) => p.id === role.participantId)?.name}
+              roleName={UserRoleId[role.userRoleId]}
+            />
+          ))}
         </tbody>
       </table>
-      {userParticipants.length === 0 && (
-        <TableNoDataPlaceholder
-          icon={<img src='/document.svg' alt='email-icon' />}
-          title='No Participants'
-        >
-          <span>{getEmptyParticipantsMessage(elevatedRole)}</span>
-        </TableNoDataPlaceholder>
-      )}
     </div>
   );
 }

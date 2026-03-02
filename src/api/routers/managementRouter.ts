@@ -23,13 +23,12 @@ const handleGetUserParticipants = async (req: ParticipantRequest, res: Response)
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
   const participants = await getUserParticipants(userId);
   const list = participants ?? [];
-  let elevatedRole = null;
-  if (list.length === 0) {
-    const user = await getUserById(userId);
-    if (user?.email) {
-      const kcAdminClient = await getKcAdminClient();
-      elevatedRole = await getElevatedRoleByEmail(kcAdminClient, user.email);
-    }
+
+  let elevatedRole: string | null = null;
+  const user = await getUserById(userId);
+  if (user?.email) {
+    const kcAdminClient = await getKcAdminClient();
+    elevatedRole = await getElevatedRoleByEmail(kcAdminClient, user.email);
   }
 
   return res.status(200).json({ participants: list, elevatedRole });
