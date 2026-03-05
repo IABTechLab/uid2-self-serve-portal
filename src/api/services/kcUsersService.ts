@@ -39,7 +39,7 @@ export const getElevatedRoleByEmail = async (
   if (!users.length) return null;
 
   const attrs = users[0].attributes;
-  const groups = toGroupsArray(attrs?.groups);
+  const groups = toGroupsArray(attrs?.groups ?? attrs?.['okta-groups']);
 
   if (groups.includes(developerElevatedRole)) return developerElevatedRole;
   if (groups.includes(developerRole) || groups.includes(uid2SupportRole)) {
