@@ -10,7 +10,7 @@ import {
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
 import { verifyAndEnrichParticipant } from '../participantsMiddleware';
-import { uid2SupportRole } from '../userRoleMiddleware';
+import { uid2SupportRole } from '../../helpers/apiHelper';
 
 describe('Participant Middleware Tests', () => {
   let knex: Knex;
