@@ -42,7 +42,7 @@ describe('setAuthToken', () => {
 
   it('ejects the previous interceptor when called again', () => {
     setAuthToken('first-token');
-    const firstInterceptorId = useSpy.mock.results[0].value;
+    const firstInterceptorId = useSpy.mock.results[0].value as number;
     setAuthToken('second-token');
     expect(ejectSpy).toHaveBeenCalledWith(firstInterceptorId);
   });
