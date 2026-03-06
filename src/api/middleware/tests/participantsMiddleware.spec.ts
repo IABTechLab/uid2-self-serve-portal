@@ -9,8 +9,8 @@ import {
   createResponseObject,
   createUser,
 } from '../../../testHelpers/apiTestHelpers';
-import { verifyAndEnrichParticipant } from '../participantsMiddleware';
 import { uid2SupportRole } from '../../helpers/apiHelper';
+import { verifyAndEnrichParticipant } from '../participantsMiddleware';
 
 describe('Participant Middleware Tests', () => {
   let knex: Knex;

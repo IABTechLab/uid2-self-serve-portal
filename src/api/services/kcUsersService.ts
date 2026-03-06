@@ -31,7 +31,7 @@ function toGroupsArray(groupsRaw: unknown): string[] {
   return [];
 }
 
-export const getElevatedRoleByEmail = async (
+export const getElevatedRole = async (
   kcAdminClient: KeycloakAdminClient,
   email: string
 ): Promise<string | null> => {
