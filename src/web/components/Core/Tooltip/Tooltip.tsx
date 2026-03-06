@@ -27,15 +27,19 @@ export function Tooltip({
     <div className={clsx('tooltip', className)}>
       <TooltipPrimitive.Provider delayDuration={delayDuration ?? DEFAULT_DELAY_DURATION}>
         <TooltipPrimitive.Root>
-          <TooltipPrimitive.Trigger className='tooltip-trigger' type='button'>
-            {trigger ?? (
+          {trigger ? (
+            <TooltipPrimitive.Trigger asChild>
+              <span className='tooltip-trigger'>{trigger}</span>
+            </TooltipPrimitive.Trigger>
+          ) : (
+            <TooltipPrimitive.Trigger className='tooltip-trigger' type='button'>
               <FontAwesomeIcon
                 icon='circle-info'
                 data-testid='tooltip-info-icon'
                 className='default-trigger'
               />
-            )}
-          </TooltipPrimitive.Trigger>
+            </TooltipPrimitive.Trigger>
+          )}
           <TooltipPrimitive.Content side={side} align={align} className='tooltip-content'>
             {children}
             <TooltipPrimitive.Arrow className='tooltip-arrow' />
