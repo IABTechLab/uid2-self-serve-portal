@@ -14,12 +14,15 @@ type UserParticipantsDialogProps = Readonly<{
 
 function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogProps) {
   const [userParticipants, setUserParticipants] = useState<ParticipantDTO[]>();
+  const [elevatedRole, setElevatedRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getParticipants = async () => {
-      const participants = await GetUserParticipants(user.id);
+      const { participants, elevatedRole: elevatedRoleFromKeycloak } =
+        await GetUserParticipants(user.id);
       setUserParticipants(participants);
+      setElevatedRole(elevatedRoleFromKeycloak);
       setIsLoading(false);
     };
     getParticipants();
@@ -35,7 +38,11 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
         <Loading message='Loading participants...' />
       ) : (
         <div>
-          <UserParticipantsTable user={user} userParticipants={userParticipants ?? []} />
+          <UserParticipantsTable
+            user={user}
+            userParticipants={userParticipants ?? []}
+            elevatedRole={elevatedRole}
+          />
         </div>
       )}
     </Dialog>

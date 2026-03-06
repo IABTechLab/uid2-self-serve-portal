@@ -1,8 +1,10 @@
 import express, { Response } from 'express';
 import { z } from 'zod';
 
+import { getKcAdminClient } from '../keycloakAdminClient';
 import { isSuperUserCheck } from '../middleware/userRoleMiddleware';
 import { GetUserAuditTrail } from '../services/auditTrailService';
+import { getElevatedRole } from '../services/kcUsersService';
 import { getAllUsersList, getUserById, updateUserLock } from '../services/managementService';
 import { getUserParticipants, ParticipantRequest } from '../services/participantsService';
 
@@ -20,7 +22,15 @@ const handleGetUserAuditTrail = async (req: ParticipantRequest, res: Response) =
 const handleGetUserParticipants = async (req: ParticipantRequest, res: Response) => {
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
   const participants = await getUserParticipants(userId);
-  return res.status(200).json(participants ?? []);
+
+  let elevatedRole: string | null = null;
+  const user = await getUserById(userId);
+  if (user?.email) {
+    const kcAdminClient = await getKcAdminClient();
+    elevatedRole = await getElevatedRole(kcAdminClient, user.email);
+  }
+
+  return res.status(200).json({ participants, elevatedRole });
 };
 
 const handleChangeUserLock = async (req: ParticipantRequest, res: Response) => {

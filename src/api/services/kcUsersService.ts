@@ -3,6 +3,11 @@ import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/re
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars.ts';
+import {
+  developerElevatedRole,
+  developerRole,
+  uid2SupportRole,
+} from '../helpers/apiHelper.ts';
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
@@ -14,6 +19,33 @@ export const queryKeycloakUsersByEmail = async (
     email,
     extract: true,
   });
+};
+
+function toGroupsArray(groupsRaw: unknown): string[] {
+  if (Array.isArray(groupsRaw)) {
+    return groupsRaw.filter((g): g is string => typeof g === 'string');
+  }
+  if (typeof groupsRaw === 'string') {
+    return [groupsRaw];
+  }
+  return [];
+}
+
+export const getElevatedRole = async (
+  kcAdminClient: KeycloakAdminClient,
+  email: string
+): Promise<string | null> => {
+  const users = await queryKeycloakUsersByEmail(kcAdminClient, email);
+  if (!users.length) return null;
+
+  const attrs = users[0].attributes;
+  const groups = toGroupsArray(attrs?.groups ?? attrs?.['okta-groups']);
+
+  if (groups.includes(developerElevatedRole)) return developerElevatedRole;
+  if (groups.includes(developerRole) || groups.includes(uid2SupportRole)) {
+    return uid2SupportRole;
+  }
+  return null;
 };
 
 export const doesUserExistInKeycloak = async (
