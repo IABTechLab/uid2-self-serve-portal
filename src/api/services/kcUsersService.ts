@@ -21,16 +21,6 @@ export const queryKeycloakUsersByEmail = async (
   });
 };
 
-function toGroupsArray(groupsRaw: unknown): string[] {
-  if (Array.isArray(groupsRaw)) {
-    return groupsRaw.filter((g): g is string => typeof g === 'string');
-  }
-  if (typeof groupsRaw === 'string') {
-    return [groupsRaw];
-  }
-  return [];
-}
-
 export const getElevatedRole = async (
   kcAdminClient: KeycloakAdminClient,
   email: string
@@ -39,7 +29,7 @@ export const getElevatedRole = async (
   if (!users.length) return null;
 
   const attrs = users[0].attributes;
-  const groups = toGroupsArray(attrs?.groups ?? attrs?.['okta-groups']);
+  let groups = attrs?.groups ?? attrs?.['okta-groups'] ?? [];
 
   if (groups.includes(developerElevatedRole)) return developerElevatedRole;
   if (groups.includes(developerRole) || groups.includes(uid2SupportRole)) {
