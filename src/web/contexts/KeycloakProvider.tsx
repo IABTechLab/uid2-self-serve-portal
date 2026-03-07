@@ -94,43 +94,26 @@ export function KeycloakProvider({
     initKeycloak();
   }, [authClient, initOptions, handleTokens, setupKeycloakHandlers]);
 
-  // Session timeout detection
+  // Session timeout detection — catches server-side invalidation that Keycloak events may not surface
   useEffect(() => {
     if (!initialized || !authenticated) return;
 
-    let checkCount = 0;
-
     const checkSessionValidity = async () => {
-      checkCount++;
-
-      // Every 30 seconds, check if token is still valid (every 10th check)
-      if (checkCount % 10 === 0 && authClient.token) {
-        try {
-          const response = await fetch('/api/keycloak-config', {
-            method: 'HEAD',
-            headers: {
-              'Authorization': `Bearer ${authClient.token}`,
-            },
-          });
-
-          if (response.status === 401 || response.status === 403) {
-            setAuthenticated(false);
-            return;
-          }
-        } catch (error) {
+      if (!authClient.token) return;
+      try {
+        const response = await fetch('/api/keycloak-config', {
+          method: 'HEAD',
+          headers: { 'Authorization': `Bearer ${authClient.token}` },
+        });
+        if (response.status === 401 || response.status === 403) {
           setAuthenticated(false);
-          return;
         }
-      }
-
-      // Sync React state with Keycloak state
-      const keycloakAuth = authClient.authenticated || false;
-      if (keycloakAuth !== authenticated) {
-        setAuthenticated(keycloakAuth);
+      } catch {
+        // Network error — don't log out, Keycloak event handlers manage auth state
       }
     };
 
-    const interval = setInterval(checkSessionValidity, 3000);
+    const interval = setInterval(checkSessionValidity, 30000);
 
     return () => clearInterval(interval);
   }, [authClient, initialized, authenticated]);

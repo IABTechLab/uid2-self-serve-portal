@@ -32,7 +32,7 @@ function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogPr
     <Dialog
       title={`Participants List for ${user.firstName} ${user.lastName}`}
       onOpenChange={onOpenChange}
-      closeButtonText='Cancel'
+      closeButtonText='Close'
     >
       {isLoading ? (
         <Loading message='Loading participants...' />
