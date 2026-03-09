@@ -10,12 +10,11 @@ import {
   createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
 import { UserRoleId } from '../../entities/UserRole';
+import { developerElevatedRole, uid2SupportRole } from '../../helpers/apiHelper';
 import {
-  developerElevatedRole,
   isAdminOrUid2SupportCheck,
   isSuperUserCheck,
   isUid2SupportCheck,
-  uid2SupportRole,
 } from '../userRoleMiddleware';
 
 describe('User Role Middleware Tests', () => {

@@ -1,3 +1,7 @@
+export const developerElevatedRole = 'developer-elevated';
+export const developerRole = 'developer';
+export const uid2SupportRole = 'prod-uid2.0-support';
+
 export function getRoleNamesByIds(ids: number[]) {
   const names: string[] = ids.map((item) => {
     switch (item) {
