@@ -9,7 +9,7 @@ import {
   createUser,
   createUserParticipantRequest,
 } from '../../../testHelpers/apiTestHelpers';
-import { uid2SupportRole } from '../userRoleMiddleware';
+import { uid2SupportRole } from '../../helpers/apiHelper';
 import { verifyAndEnrichUser } from '../usersMiddleware';
 
 describe('User Middleware Tests', () => {

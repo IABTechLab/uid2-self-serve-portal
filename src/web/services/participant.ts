@@ -44,9 +44,14 @@ export async function GetAllParticipants() {
   }
 }
 
-export async function GetUserParticipants(userId: number) {
+type GetUserParticipantsResponse = {
+  participants: ParticipantDTO[];
+  elevatedRole: string | null;
+};
+
+export async function GetUserParticipants(userId: number): Promise<GetUserParticipantsResponse> {
   try {
-    const result = await axios.get<ParticipantDTO[]>(`/manage/${userId}/participants`, {
+    const result = await axios.get<GetUserParticipantsResponse>(`/manage/${userId}/participants`, {
       validateStatus: (status) => status === 200,
     });
     return result.data;

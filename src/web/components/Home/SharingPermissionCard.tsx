@@ -42,7 +42,7 @@ function SharingPermissionCard({
       ) : (
         <div className='no-sharing-permissions-banner'>
           <Banner
-            message='You do not have access to this feature. To get access, please contact Support.'
+            message='Use of sharing requires an API key or client-side key pair.  Please reach out to our support team for assistance.'
             type='Info'
             fitContent
           />
