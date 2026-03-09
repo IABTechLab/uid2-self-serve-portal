@@ -3,11 +3,7 @@ import { RequiredActionAlias } from '@keycloak/keycloak-admin-client/lib/defs/re
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 
 import { SSP_KK_API_CLIENT_ID, SSP_KK_SSL_RESOURCE, SSP_WEB_BASE_URL } from '../envars.ts';
-import {
-  developerElevatedRole,
-  developerRole,
-  uid2SupportRole,
-} from '../helpers/apiHelper.ts';
+import { developerElevatedRole, developerRole, uid2SupportRole } from '../helpers/apiHelper.ts';
 
 export const API_PARTICIPANT_MEMBER_ROLE_NAME = 'api-participant-member';
 
@@ -29,11 +25,11 @@ export const getElevatedRole = async (
   if (!users.length) return null;
 
   const attrs = users[0].attributes as Record<string, string[] | string> | undefined;
-  const groupsRaw = attrs?.groups ?? attrs?.['okta-groups'] ?? [];
-  const groups: string[] = Array.isArray(groupsRaw) ? groupsRaw : [groupsRaw];
+  const groups = attrs?.groups ?? attrs?.['okta-groups'] ?? [];
+  const groupsFormatted: string[] = Array.isArray(groups) ? groups : [groups];
 
-  if (groups.includes(developerElevatedRole)) return developerElevatedRole;
-  if (groups.includes(developerRole) || groups.includes(uid2SupportRole)) {
+  if (groupsFormatted.includes(developerElevatedRole)) return developerElevatedRole;
+  if (groupsFormatted.includes(developerRole) || groupsFormatted.includes(uid2SupportRole)) {
     return uid2SupportRole;
   }
   return null;
