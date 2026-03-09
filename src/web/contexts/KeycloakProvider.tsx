@@ -1,5 +1,14 @@
 import type Keycloak from 'keycloak-js';
-import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import log from 'loglevel';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 export interface AuthClientTokens {
   token?: string;
@@ -26,7 +35,7 @@ export function KeycloakProvider({
   children,
   authClient,
   initOptions = {},
-  onTokens
+  onTokens,
 }: KeycloakProviderProps) {
   const [initialized, setInitialized] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
@@ -45,15 +54,18 @@ export function KeycloakProvider({
     const keycloak = authClient;
     // Set up token refresh
     keycloak.onTokenExpired = () => {
-      keycloak.updateToken(30).then((refreshed) => {
-        if (refreshed) {
-          handleTokens();
-        } else {
+      keycloak
+        .updateToken(30)
+        .then((refreshed) => {
+          if (refreshed) {
+            handleTokens();
+          } else {
+            setAuthenticated(false);
+          }
+        })
+        .catch(() => {
           setAuthenticated(false);
-        }
-      }).catch(() => {
-        setAuthenticated(false);
-      });
+        });
     };
 
     keycloak.onAuthSuccess = () => {
@@ -94,7 +106,7 @@ export function KeycloakProvider({
     initKeycloak();
   }, [authClient, initOptions, handleTokens, setupKeycloakHandlers]);
 
-  // Session timeout detection — catches server-side invalidation that Keycloak events may not surface
+  // Session timeout detection
   useEffect(() => {
     if (!initialized || !authenticated) return;
 
@@ -103,13 +115,13 @@ export function KeycloakProvider({
       try {
         const response = await fetch('/api/keycloak-config', {
           method: 'HEAD',
-          headers: { 'Authorization': `Bearer ${authClient.token}` },
+          headers: { Authorization: `Bearer ${authClient.token}` },
         });
         if (response.status === 401 || response.status === 403) {
           setAuthenticated(false);
         }
-      } catch {
-        // Network error — don't log out, Keycloak event handlers manage auth state
+      } catch (error) {
+        log.error('Session validity check failed:', error);
       }
     };
 
@@ -118,17 +130,16 @@ export function KeycloakProvider({
     return () => clearInterval(interval);
   }, [authClient, initialized, authenticated]);
 
-  const contextValue: KeycloakContextValue = useMemo(() => ({
-    keycloak: authClient,
-    initialized,
-    authenticated,
-  }), [authClient, initialized, authenticated]);
-
-  return (
-    <KeycloakContext.Provider value={contextValue}>
-      {children}
-    </KeycloakContext.Provider>
+  const contextValue: KeycloakContextValue = useMemo(
+    () => ({
+      keycloak: authClient,
+      initialized,
+      authenticated,
+    }),
+    [authClient, initialized, authenticated]
   );
+
+  return <KeycloakContext.Provider value={contextValue}>{children}</KeycloakContext.Provider>;
 }
 
 export function useKeycloak(): KeycloakContextValue {
