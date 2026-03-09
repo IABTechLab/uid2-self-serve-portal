@@ -28,8 +28,9 @@ export const getElevatedRole = async (
   const users = await queryKeycloakUsersByEmail(kcAdminClient, email);
   if (!users.length) return null;
 
-  const attrs = users[0].attributes;
-  let groups = attrs?.groups ?? attrs?.['okta-groups'] ?? [];
+  const attrs = users[0].attributes as Record<string, string[] | string> | undefined;
+  const groupsRaw = attrs?.groups ?? attrs?.['okta-groups'] ?? [];
+  const groups: string[] = Array.isArray(groupsRaw) ? groupsRaw : [groupsRaw];
 
   if (groups.includes(developerElevatedRole)) return developerElevatedRole;
   if (groups.includes(developerRole) || groups.includes(uid2SupportRole)) {
