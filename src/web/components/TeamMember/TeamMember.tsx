@@ -135,7 +135,8 @@ function TeamMember({
         <td className='action'>
           <div className='action-cell' data-testid='action-cell'>
             {!!errorMessage && <InlineMessage message={errorMessage} type='Error' />}
-            {!person.acceptedTerms && !isUid2Internal(person.email) && (
+            {!person.acceptedTerms &&
+              (!isUid2Internal(person.email) || window.location.hostname === 'localhost') && (
               <button
                 type='button'
                 className={clsx('invite-button', {
