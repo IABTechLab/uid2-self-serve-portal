@@ -1,5 +1,6 @@
 import { Handler, Request } from 'express';
 
+import { SSP_IS_DEVELOPMENT } from '../envars';
 import { UserRoleId } from '../entities/UserRole';
 import {
   developerElevatedRole,
@@ -12,6 +13,7 @@ import { findUserByEmail } from '../services/usersService';
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
   const oktaGroups = (req.auth?.payload?.groups as string[] | undefined) ?? [];
+  if (SSP_IS_DEVELOPMENT && oktaGroups.includes(developerRole)) return true;
   return oktaGroups.includes(developerElevatedRole);
 };
 
