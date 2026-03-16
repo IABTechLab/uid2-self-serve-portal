@@ -594,7 +594,7 @@
       "lastName": "User",
       "email": "test_user@example.com",
       "attributes": {
-        "okta-groups": ["prod-uid2.0-support"]
+        "groups": ["prod-uid2.0-support"]
       },
       "credentials": [
         {
@@ -1001,7 +1001,7 @@
       "protocolMappers": [
         {
           "id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
-          "name": "groups",
+          "name": "okta-groups",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-attribute-mapper",
           "consentRequired": false,
@@ -1009,6 +1009,22 @@
             "multivalued": "true",
             "userinfo.token.claim": "true",
             "user.attribute": "okta-groups",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "d4e5f6a7-b8c9-0123-defa-456789012345",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "user.attribute": "groups",
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "groups",
