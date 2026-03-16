@@ -239,11 +239,7 @@ The following steps describe the minimal steps required to successfully log in t
 1. Choose a password
 1. Log into the Self Service Portal (http://localhost:3000/)
 
-> **Note:** `sample_user@example.com` is pre-configured with superuser access and `test_user@example.com` with uid2support access. SSO is not supported in local development — all users log in with a password regardless of email domain.
->
-> To change a user's access level, go to the [Keycloak admin console](http://localhost:18080/admin) → switch to the **self-serve-portal** realm (top-left dropdown) → **Users** → select the user → **Attributes** tab → set `okta-groups` to `developer-elevated` (superuser) or `developer` (uid2support), or remove the attribute for standard access.
->
-> For details on access levels and how authentication works in production, see the [UID2 Self-Serve Portal Access & Authentication Guide](https://thetradedesk.atlassian.net/wiki/spaces/UID2/pages/1206911393/UID2+Self-Serve+Portal+Access+Authentication+Guide).
+> **Note:** SSO is not supported in local development — all users log in with a password regardless of email domain. The two test users have different access levels preconfigured. For details on adjusting access levels locally, refer to internal documentation.
 
 #### Notes for Mac OSX Development:
 
