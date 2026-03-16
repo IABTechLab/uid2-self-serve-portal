@@ -594,7 +594,7 @@
       "lastName": "User",
       "email": "test_user@example.com",
       "attributes": {
-        "okta-groups": ["developer"]
+        "okta-groups": ["prod-uid2.0-support"]
       },
       "credentials": [
         {

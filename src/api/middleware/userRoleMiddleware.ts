@@ -1,7 +1,7 @@
 import { Handler, Request } from 'express';
 
-import { SSP_IS_DEVELOPMENT } from '../envars';
 import { UserRoleId } from '../entities/UserRole';
+import { SSP_IS_DEVELOPMENT } from '../envars';
 import {
   developerElevatedRole,
   developerRole,
