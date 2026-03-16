@@ -99,10 +99,9 @@
                 }
 
                 let idpHint = null;
-                const isLocal = window.location.hostname === 'localhost';
-                if (!isLocal && email.includes('@unifiedid.com')) {
+                if (email.includes('@unifiedid.com')) {
                     idpHint = 'okta';
-                } else if (!isLocal && email.includes('@thetradedesk.com')) {
+                } else if (email.includes('@thetradedesk.com')) {
                     idpHint = 'microsoft-entra-id';
                 }
 

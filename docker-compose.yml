@@ -37,25 +37,20 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: D3velopmentP0
       SSP_WEB_HOST: http://localhost:3000
+      KEYCLOAK_OKTA_IDP_CLIENT_ID: ${KEYCLOAK_OKTA_IDP_CLIENT_ID}
+      KEYCLOAK_OKTA_IDP_CLIENT_SECRET: ${KEYCLOAK_OKTA_IDP_CLIENT_SECRET}
+    entrypoint: ["/bin/bash", "/opt/keycloak/start.sh"]
     ports:
       - 18080:8080
       - 19990:9990
     depends_on:
       database:
         condition: service_healthy
-    command:
-      - start-dev
-      - --import-realm
-      - --spi-theme-static-max-age=-1
-      - --spi-theme-cache-themes=false
-      - --spi-theme-cache-templates=false
-      - --health-enabled=true
-      - --metrics-enabled=true
-      - --spi-connections-jpa-legacy-migration-strategy=update
     volumes:
-      - ./keycloak/realm:/opt/keycloak/data/import
+      - ./keycloak/realm:/opt/keycloak/realm-source
       - ./keycloak/themes:/opt/keycloak/themes
       - ./keycloak/data:/opt/keycloak/data
+      - ./keycloak/start.sh:/opt/keycloak/start.sh
 
   mailhog:
     image: mailhog/mailhog
