@@ -103,6 +103,19 @@ The portal uses [Keycloak](https://www.keycloak.org/) as the identity and access
 
 ### Keycloak setup
 
+#### Okta IdP credentials
+
+Keycloak uses Okta as an identity provider. Before starting, add the following to your `.env` file:
+
+```
+KEYCLOAK_OKTA_IDP_CLIENT_ID=<value>
+KEYCLOAK_OKTA_IDP_CLIENT_SECRET=<value>
+```
+
+Get these values from the Okta Admin console under the Applications tab — the app name is **UID2 Self Serve Portal Local - Okta IdP**.
+
+#### Starting Keycloak
+
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
 
 #### Keycloak admin console
@@ -238,6 +251,8 @@ The following steps describe the minimal steps required to successfully log in t
 1. Open the email and Click `Reset Password`
 1. Choose a password
 1. Log into the Self Service Portal (http://localhost:3000/)
+
+> **Note:** `sample_user@example.com` is pre-configured with superuser access and `test_user@example.com` with uid2support access. To change a user's access level, go to the [Keycloak admin console](http://localhost:18080/admin) → switch to the **self-serve-portal** realm (top-left dropdown) → **Users** → select the user → **Attributes** tab → set `okta-groups` to `developer-elevated` for superuser access, or set `groups` to `prod-uid2.0-support` for uid2support access, or remove the attribute for standard access.
 
 #### Notes for Mac OSX Development:
 

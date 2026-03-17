@@ -125,6 +125,24 @@
         "clientRole": false,
         "containerId": "1d50b28b-a002-4976-9b26-550d68fb8d8e",
         "attributes": {}
+      },
+      {
+        "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        "name": "developer",
+        "description": "UID2 Support role for local development",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "1d50b28b-a002-4976-9b26-550d68fb8d8e",
+        "attributes": {}
+      },
+      {
+        "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        "name": "developer-elevated",
+        "description": "Super User role for local development",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "1d50b28b-a002-4976-9b26-550d68fb8d8e",
+        "attributes": {}
       }
     ],
     "client": {
@@ -575,6 +593,9 @@
       "firstName": "Test",
       "lastName": "User",
       "email": "test_user@example.com",
+      "attributes": {
+        "groups": ["prod-uid2.0-support"]
+      },
       "credentials": [
         {
           "id": "0b03b694-e141-44b4-803c-e94c5e8ed449",
@@ -586,7 +607,7 @@
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
-      "realmRoles": ["default-roles-self-serve-portal"],
+      "realmRoles": ["default-roles-self-serve-portal", "developer"],
       "clientRoles": {
         "self_serve_portal_apis": ["api-participant-member"]
       },
@@ -603,6 +624,9 @@
       "firstName": "Sample",
       "lastName": "User",
       "email": "sample_user@example.com",
+      "attributes": {
+        "okta-groups": ["developer-elevated"]
+      },
       "credentials": [
         {
           "id": "0b03b694-e141-44b4-803c-e94c5e8ed448",
@@ -614,7 +638,7 @@
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
-      "realmRoles": ["default-roles-self-serve-portal"],
+      "realmRoles": ["default-roles-self-serve-portal", "developer-elevated"],
       "clientRoles": {
         "self_serve_portal_apis": ["api-participant-member"]
       },
@@ -974,6 +998,40 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+          "name": "okta-groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "user.attribute": "okta-groups",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "d4e5f6a7-b8c9-0123-defa-456789012345",
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "user.attribute": "groups",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
+            "jsonType.label": "String"
+          }
+        }
+      ],
       "defaultClientScopes": ["web-origins", "acr", "profile", "roles", "email"],
       "optionalClientScopes": ["address", "phone", "offline_access", "microprofile-jwt"]
     }
@@ -1518,8 +1576,103 @@
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
-  "identityProviders": [],
-  "identityProviderMappers": [],
+  "identityProviders": [
+    {
+      "alias": "okta",
+      "displayName": "Okta",
+      "providerId": "oidc",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": true,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "hideOnLogin": true,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "authorizationUrl": "https://uid2.okta.com/oauth2/default/v1/authorize",
+        "tokenUrl": "https://uid2.okta.com/oauth2/default/v1/token",
+        "userInfoUrl": "https://uid2.okta.com/oauth2/default/v1/userinfo",
+        "logoutUrl": "https://uid2.okta.com/oauth2/default/v1/logout",
+        "jwksUrl": "https://uid2.okta.com/oauth2/default/v1/keys",
+        "issuer": "https://uid2.okta.com/oauth2/default",
+        "clientAuthMethod": "client_secret_basic",
+        "clientId": "__KEYCLOAK_OKTA_IDP_CLIENT_ID__",
+        "clientSecret": "__KEYCLOAK_OKTA_IDP_CLIENT_SECRET__",
+        "defaultScope": "openid profile email",
+        "validateSignature": "true",
+        "useJwksUrl": "true",
+        "pkceEnabled": "false",
+        "syncMode": "FORCE",
+        "sendIdTokenHint": "true"
+      }
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "name": "firstName",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "identityProviderAlias": "okta",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "firstName",
+        "claim": "given_name"
+      }
+    },
+    {
+      "name": "lastName",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "identityProviderAlias": "okta",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "lastName",
+        "claim": "family_name"
+      }
+    },
+    {
+      "name": "email",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "identityProviderAlias": "okta",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "email",
+        "claim": "email"
+      }
+    },
+    {
+      "name": "groups",
+      "identityProviderMapper": "oidc-user-attribute-idp-mapper",
+      "identityProviderAlias": "okta",
+      "config": {
+        "syncMode": "INHERIT",
+        "user.attribute": "okta-groups",
+        "claim": "groups"
+      }
+    },
+    {
+      "name": "developer-to-api-participant-member",
+      "identityProviderMapper": "oidc-advanced-role-idp-mapper",
+      "identityProviderAlias": "okta",
+      "config": {
+        "syncMode": "FORCE",
+        "claims": "[{\"key\":\"groups\",\"value\":\"^developer$\"}]",
+        "are.claim.values.regex": "true",
+        "role": "self_serve_portal_apis.api-participant-member"
+      }
+    },
+    {
+      "name": "developer-elevated-to-api-participant-member",
+      "identityProviderMapper": "oidc-advanced-role-idp-mapper",
+      "identityProviderAlias": "okta",
+      "config": {
+        "syncMode": "FORCE",
+        "claims": "[{\"key\":\"groups\",\"value\":\"^developer-elevated$\"}]",
+        "are.claim.values.regex": "true",
+        "role": "self_serve_portal_apis.api-participant-member"
+      }
+    }
+  ],
   "components": {
     "org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy": [
       {
