@@ -103,6 +103,19 @@ The portal uses [Keycloak](https://www.keycloak.org/) as the identity and access
 
 ### Keycloak setup
 
+#### Okta IdP credentials
+
+Keycloak uses Okta as an identity provider. Before starting, add the following to your `.env` file:
+
+```
+KEYCLOAK_OKTA_IDP_CLIENT_ID=<value>
+KEYCLOAK_OKTA_IDP_CLIENT_SECRET=<value>
+```
+
+Get these values from the Okta Admin console under the Applications tab — the app name is **UID2 Self Serve Portal Local - Okta IdP**.
+
+#### Starting Keycloak
+
 - Start database and Keycloak server by running `docker compose up -d`. Now Keycloak will be up and running, and the realm will be configured
 
 #### Keycloak admin console
