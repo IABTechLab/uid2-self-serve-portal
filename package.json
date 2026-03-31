@@ -61,7 +61,7 @@
     "express-winston": "^4.2.0",
     "form-data": "^4.0.4",
     "fuse.js": "^6.6.2",
-    "handlebars": "^4.7.8",
+    "handlebars": "^4.7.9",
     "inter-ui": "^3.19.3",
     "jest-mock": "^30.0.2",
     "keycloak": "^1.2.0",
@@ -261,6 +261,8 @@
     },
     "@jest/schemas": "29.6.3",
     "eslint-visitor-keys": "4.2.0",
-    "serialize-javascript": "^7.0.3"
+    "serialize-javascript": "^7.0.3",
+    "path-to-regexp@0": "0.1.13",
+    "picomatch": "^2.3.2"
   }
 }
