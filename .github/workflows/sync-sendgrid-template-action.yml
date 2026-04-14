@@ -15,14 +15,14 @@ jobs:
         uses: actions/checkout@v4
       - name: SendGrid sync
         id: sendgrid_sync
-        uses: nanopx/action-sendgrid-sync@0.5.2
+        uses: nanopx/action-sendgrid-sync@296bf7c0b1a003037400895b6a109cf946115249 # 0.5.2
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           sendgridApiKey: ${{ secrets.SENDGRID_API_KEY }}
           templatesDir: 'emailTemplates/'
           forceSyncAll: '${{ inputs.FORCE_SYNC_ALL }}'
       - name: Write template id mapping
-        uses: DamianReeves/write-file-action@master
+        uses: DamianReeves/write-file-action@1d019960841941be46b139298996df6f139cc7a4 # master
         with:
           path: src/api/templateIdMapping.json
           contents: ${{ steps.sendgrid_sync.outputs.sendgridTemplateIdMapping }}
@@ -32,7 +32,7 @@ jobs:
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
         id: extract_branch
       - name: Commit & Push
-        uses: actions-js/push@master
+        uses: actions-js/push@5a7cbd780d82c0c937b5977586e641b2fd94acc5 # master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ steps.extract_branch.outputs.branch }}
