@@ -14,7 +14,7 @@ on:
 
 jobs:
   incrementVersionNumber:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@sch-UID2-6742-update-node20-actions
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-increase-version-number.yaml@v3
     with:
       release_type: ${{ inputs.release_type }}
       merge_environment: ${{ github.ref_protected && 'ci-auto-merge' || '' }}
@@ -92,7 +92,7 @@ jobs:
           push: true
           tags: ghcr.io/iabtechlab/uid2-ssportal:${{ needs.incrementVersionNumber.outputs.image_tag }}
       - name: Vulnerability scan
-        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@sch-UID2-6742-update-node20-actions
+        uses: IABTechLab/uid2-shared-actions/actions/vulnerability_scan@v3
         with:
           publish_vulnerabilities: true
           failure_severity: CRITICAL
@@ -101,7 +101,7 @@ jobs:
           scan_type: image
 
   publishForDBMigration:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@sch-UID2-6742-update-node20-actions
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v3
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
@@ -114,7 +114,7 @@ jobs:
     secrets: inherit
 
   publishForKeycloak:
-    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@sch-UID2-6742-update-node20-actions
+    uses: IABTechLab/uid2-shared-actions/.github/workflows/shared-publish-to-docker-versioned.yaml@v3
     needs: incrementVersionNumber
     with:
       new_version: ${{ needs.incrementVersionNumber.outputs.new_version }}
