@@ -3,15 +3,19 @@ import { useContext, useState } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserProvider';
 import { useKeycloak } from '../../contexts/KeycloakProvider';
 import { SetTermsAccepted } from '../../services/userAccount';
+import { useIdentityConfig } from '../../utils/identity';
 import { Dialog } from '../Core/Dialog/Dialog';
 import { TermsAndConditionsForm } from './TermsAndConditions';
 
 import './TermsAndConditionsDialog.scss';
 
 export function TermsAndConditionsDialog() {
+  const { isEuid } = useIdentityConfig();
   const { loadUser } = useContext(CurrentUserContext);
   const { keycloak } = useKeycloak();
   const [showMustAccept, setShowMustAccept] = useState(false);
+
+  if (isEuid) return null;
 
   const handleAccept = async () => {
     await SetTermsAccepted();
