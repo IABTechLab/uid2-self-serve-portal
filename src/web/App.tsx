@@ -1,4 +1,4 @@
-import { StrictMode, useCallback, useContext } from 'react';
+import { StrictMode, useCallback, useContext, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { EnvironmentBanner } from './components/Core/Banner/EnvironmentBanner';
@@ -15,10 +15,17 @@ import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { useKeycloak } from './contexts/KeycloakProvider';
 import { ParticipantContext, ParticipantProvider } from './contexts/ParticipantProvider';
 import { HomeRedirector } from './screens/homeRedirector';
+import {
+  fetchIdentityConfig,
+  IdentityConfig,
+  IdentityConfigProvider,
+} from './utils/identity';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
+
+type RawIdentityConfig = Omit<IdentityConfig, 'isUid2' | 'isEuid'>;
 
 configureFontAwesomeLibrary();
 
@@ -57,6 +64,10 @@ function AppContent() {
 export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { keycloak, initialized } = useKeycloak();
+  const [identityConfig, setIdentityConfig] = useState<RawIdentityConfig | null>(null);
+  useEffect(() => {
+    fetchIdentityConfig().then(setIdentityConfig);
+  }, []);
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);
@@ -76,23 +87,25 @@ export function App() {
       ? `${LoggedInUser?.profile.firstName ?? ''} ${LoggedInUser?.profile.lastName ?? ''}`
       : undefined;
 
-  if (!initialized) return <Loading />;
+  if (!initialized || !identityConfig) return <Loading />;
   return (
-    <StrictMode>
-      <PortalErrorBoundary>
-        <ParticipantProvider>
-          <div className='app'>
-            <PortalHeader
-              email={LoggedInUser?.profile?.email}
-              fullName={fullName}
-              setDarkMode={setDarkMode}
-              logout={logout}
-            />
-            <AppContent />
-            <ToastContainerWrapper />
-          </div>
-        </ParticipantProvider>
-      </PortalErrorBoundary>
-    </StrictMode>
+    <IdentityConfigProvider value={identityConfig}>
+      <StrictMode>
+        <PortalErrorBoundary>
+          <ParticipantProvider>
+            <div className='app'>
+              <PortalHeader
+                email={LoggedInUser?.profile?.email}
+                fullName={fullName}
+                setDarkMode={setDarkMode}
+                logout={logout}
+              />
+              <AppContent />
+              <ToastContainerWrapper />
+            </div>
+          </ParticipantProvider>
+        </PortalErrorBoundary>
+      </StrictMode>
+    </IdentityConfigProvider>
   );
 }
