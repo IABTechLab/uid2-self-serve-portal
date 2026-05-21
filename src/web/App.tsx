@@ -28,6 +28,13 @@ import './App.scss';
 
 configureFontAwesomeLibrary();
 
+function AppDocumentTitle({ productName }: Readonly<{ productName: string }>) {
+  useEffect(() => {
+    document.title = `${productName} Portal`;
+  }, [productName]);
+  return null;
+}
+
 function AppContent() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { participant } = useContext(ParticipantContext);
@@ -97,6 +104,7 @@ export function App() {
       <StrictMode>
         <PortalErrorBoundary>
           <ParticipantProvider>
+            <AppDocumentTitle productName={identityConfig.productName} />
             <div className='app'>
               <PortalHeader
                 email={LoggedInUser?.profile?.email}

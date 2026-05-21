@@ -16,6 +16,7 @@ import {
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -28,6 +29,7 @@ const loader = makeParticipantLoader((participantId) => {
 });
 
 export function EmailContacts() {
+  const { productName } = useIdentityConfig();
   const data = useLoaderData<typeof loader>();
   const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
@@ -73,7 +75,7 @@ export function EmailContacts() {
       <h1>Email Contacts</h1>
       <p className='heading-details'>
         View and manage email contacts. We’ll send information about the latest updates and releases
-        for UID2.
+        for {productName}.
       </p>
       <ScreenContentContainer>
         <Suspense fallback={<Loading message='Loading email contacts...' />}>

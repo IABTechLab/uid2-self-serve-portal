@@ -1,8 +1,10 @@
+import { useIdentityConfig } from '../../utils/identity';
 import { Card } from '../Core/Card/Card';
 
 import './DocumentationCard.scss';
 
 function DocumentationCard() {
+  const { productName } = useIdentityConfig();
   return (
     <Card className='document-card'>
       <img src='/document.svg' alt='document' width='50px' />
@@ -10,7 +12,7 @@ function DocumentationCard() {
         <h2>Documentation</h2>
         <span>Check out documentation for implementation resources</span>
         <a href='https://unifiedid.com/docs/category/uid2-portal' target='_blank' rel='noreferrer'>
-          UID2 Portal Documentation
+          {productName} Portal Documentation
         </a>
         <a
           href='https://unifiedid.com/docs/overviews/overview-publishers'

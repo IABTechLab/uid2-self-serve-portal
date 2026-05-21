@@ -39,7 +39,7 @@ export function PortalHeader({
 }: Readonly<PortalHeaderProps>) {
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
-  const { isEuid } = useIdentityConfig();
+  const { isEuid, productName } = useIdentityConfig();
   const user = LoggedInUser?.user;
   const { environment } = GetClientConfig();
   let environmentLabel: string | null;
@@ -92,7 +92,7 @@ export function PortalHeader({
           <Link data-testid='title-link' to={`/participant/${participant?.id}/home`}>
             <img
               src={darkToggleState ? '/uid2-logo-darkmode.svg' : '/uid2-logo.svg'}
-              alt='UID2 logo'
+              alt={`${productName} logo`}
               className='uid2-logo'
             />
           </Link>
