@@ -36,7 +36,7 @@ const loader = makeParticipantLoader((participantId) => {
 });
 
 function ApiKeyManagement() {
-  const { productName } = useIdentityConfig();
+  const { productName, docsBaseUrl } = useIdentityConfig();
   const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
   const data = useLoaderData<typeof loader>();
   const { participant } = useContext(ParticipantContext);
@@ -86,7 +86,7 @@ function ApiKeyManagement() {
         <a
           target='_blank'
           className='outside-link'
-          href='https://unifiedid.com/docs/portal/api-keys'
+          href={`${docsBaseUrl}/portal/api-keys`}
           rel='noreferrer'
         >
           managing and rotating API keys

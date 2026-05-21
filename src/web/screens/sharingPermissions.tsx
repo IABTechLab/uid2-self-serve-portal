@@ -66,7 +66,7 @@ function SharingPermissionPageContainer({ children }: Readonly<{ children: React
 }
 
 function SharingPermissions() {
-  const { isEuid } = useIdentityConfig();
+  const { isEuid, docsBaseUrl } = useIdentityConfig();
   const data = useLoaderData<typeof loader>();
   const reloader = useRevalidator();
   const { participant, setParticipant } = useContext(ParticipantContext);
@@ -147,7 +147,7 @@ function SharingPermissions() {
                     <a
                       className='outside-link'
                       target='_blank'
-                      href='https://unifiedid.com/docs/portal/sharing-permissions'
+                      href={`${docsBaseUrl}/portal/sharing-permissions`}
                       rel='noreferrer'
                     >
                       Sharing Permissions

@@ -40,7 +40,7 @@ export type SideNavProps = Readonly<{
   superUserMenu: PortalRoute[];
 }>;
 export function SideNav({ standardMenu, uid2SupportMenu, superUserMenu }: SideNavProps) {
-  const { productName } = useIdentityConfig();
+  const { productName, docsBaseUrl } = useIdentityConfig();
   return (
     <NavigationMenu className='side-nav'>
       <NavigationMenuList className='main-nav'>
@@ -71,7 +71,7 @@ export function SideNav({ standardMenu, uid2SupportMenu, superUserMenu }: SideNa
           <a
             target='_blank'
             className='outside-link'
-            href='https://unifiedid.com/docs/category/uid2-portal'
+            href={`${docsBaseUrl}/category/uid2-portal`}
             rel='noreferrer'
           >
             {productName} Portal Documentation
