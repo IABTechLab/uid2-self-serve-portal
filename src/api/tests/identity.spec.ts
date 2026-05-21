@@ -5,7 +5,11 @@ import { docsBaseUrl, isEuid, isUid2, keycloakRealm, productName } from '../iden
 describe('identity helper', () => {
   const originalIdentity = process.env.SSP_PORTAL_IDENTITY;
   afterEach(() => {
-    process.env.SSP_PORTAL_IDENTITY = originalIdentity;
+    if (originalIdentity === undefined) {
+      delete process.env.SSP_PORTAL_IDENTITY;
+    } else {
+      process.env.SSP_PORTAL_IDENTITY = originalIdentity;
+    }
   });
 
   describe('when SSP_PORTAL_IDENTITY is UID2 (default)', () => {
