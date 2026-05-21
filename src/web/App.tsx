@@ -15,17 +15,16 @@ import { CurrentUserContext } from './contexts/CurrentUserProvider';
 import { useKeycloak } from './contexts/KeycloakProvider';
 import { ParticipantContext, ParticipantProvider } from './contexts/ParticipantProvider';
 import { HomeRedirector } from './screens/homeRedirector';
+import { useAsyncThrowError } from './utils/errorHandler';
 import {
   fetchIdentityConfig,
-  IdentityConfig,
   IdentityConfigProvider,
+  RawIdentityConfig,
 } from './utils/identity';
 import { PortalErrorBoundary } from './utils/PortalErrorBoundary';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './App.scss';
-
-type RawIdentityConfig = Omit<IdentityConfig, 'isUid2' | 'isEuid'>;
 
 configureFontAwesomeLibrary();
 
@@ -65,9 +64,14 @@ export function App() {
   const { LoggedInUser } = useContext(CurrentUserContext);
   const { keycloak, initialized } = useKeycloak();
   const [identityConfig, setIdentityConfig] = useState<RawIdentityConfig | null>(null);
+  const throwError = useAsyncThrowError();
   useEffect(() => {
-    fetchIdentityConfig().then(setIdentityConfig);
-  }, []);
+    fetchIdentityConfig()
+      .then(setIdentityConfig)
+      .catch((e: unknown) => {
+        if (e instanceof Error) throwError(e);
+      });
+  }, [throwError]);
   const logout = useCallback(() => {
     keycloak?.logout();
   }, [keycloak]);

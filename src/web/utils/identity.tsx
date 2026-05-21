@@ -9,14 +9,14 @@ export type IdentityConfig = {
   isEuid: boolean;
 };
 
-type RawConfig = Omit<IdentityConfig, 'isUid2' | 'isEuid'>;
+export type RawIdentityConfig = Omit<IdentityConfig, 'isUid2' | 'isEuid'>;
 
 const IdentityContext = createContext<IdentityConfig | null>(null);
 
 function IdentityConfigProvider({
   value,
   children,
-}: Readonly<{ value: RawConfig; children: ReactNode }>) {
+}: Readonly<{ value: RawIdentityConfig; children: ReactNode }>) {
   const enriched = useMemo<IdentityConfig>(
     () => ({
       ...value,
@@ -34,10 +34,10 @@ function useIdentityConfig(): IdentityConfig {
   return ctx;
 }
 
-async function fetchIdentityConfig(): Promise<RawConfig> {
+async function fetchIdentityConfig(): Promise<RawIdentityConfig> {
   const res = await fetch('/api/config');
   if (!res.ok) throw new Error(`/api/config returned ${res.status}`);
-  return res.json() as Promise<RawConfig>;
+  return res.json() as Promise<RawIdentityConfig>;
 }
 
 export { fetchIdentityConfig, IdentityConfigProvider, useIdentityConfig };

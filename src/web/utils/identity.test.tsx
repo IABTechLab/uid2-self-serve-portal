@@ -1,11 +1,9 @@
 import { renderHook } from '@testing-library/react';
 import { ReactNode } from 'react';
 
-import { IdentityConfigProvider, useIdentityConfig } from './identity';
+import { IdentityConfigProvider, RawIdentityConfig, useIdentityConfig } from './identity';
 
-type RawConfig = Parameters<typeof IdentityConfigProvider>[0]['value'];
-
-function wrap(config: RawConfig) {
+function wrap(config: RawIdentityConfig) {
   return function Wrapper({ children }: Readonly<{ children: ReactNode }>) {
     return <IdentityConfigProvider value={config}>{children}</IdentityConfigProvider>;
   };
