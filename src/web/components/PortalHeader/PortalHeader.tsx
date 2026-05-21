@@ -18,6 +18,7 @@ import { EmailContactsRoute } from '../../screens/emailContacts';
 import { ParticipantInformationRoute } from '../../screens/participantInformation';
 import { TeamMembersRoute } from '../../screens/teamMembers';
 import { GetClientConfig } from '../../services/environmentVariables';
+import { useIdentityConfig } from '../../utils/identity';
 import { getPathWithParticipant } from '../../utils/urlHelpers';
 import { isUserAdminOrSupport } from '../../utils/userRoleHelpers';
 
@@ -38,6 +39,7 @@ export function PortalHeader({
 }: Readonly<PortalHeaderProps>) {
   const { participant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const { isEuid } = useIdentityConfig();
   const user = LoggedInUser?.user;
   const { environment } = GetClientConfig();
   let environmentLabel: string | null;
@@ -58,7 +60,9 @@ export function PortalHeader({
       environmentLabel = environment;
   }
 
-  const routes = [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
+  const routes = isEuid
+    ? [ParticipantInformationRoute, EmailContactsRoute]
+    : [ParticipantInformationRoute, TeamMembersRoute, EmailContactsRoute];
 
   if (user && participant && isUserAdminOrSupport(user, participant.id)) {
     routes.push(AuditTrailRoute);
