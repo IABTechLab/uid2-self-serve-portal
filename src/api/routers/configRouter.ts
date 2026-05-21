@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { currentIdentity, productName, docsBaseUrl, logoAsset } from '../identity';
+
+import { currentIdentity, docsBaseUrl, logoAsset, productName } from '../identity';
 
 export const configRouter = Router();
 
