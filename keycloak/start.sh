@@ -6,6 +6,7 @@ PROCESSED=/tmp/realm-export.json
 cp /opt/keycloak/realm-source/realm-export.json "$PROCESSED"
 sed -i "s|__KEYCLOAK_OKTA_IDP_CLIENT_ID__|${KEYCLOAK_OKTA_IDP_CLIENT_ID}|g" "$PROCESSED"
 sed -i "s|__KEYCLOAK_OKTA_IDP_CLIENT_SECRET__|${KEYCLOAK_OKTA_IDP_CLIENT_SECRET}|g" "$PROCESSED"
+sed -i "s|__SSP_KK_CLIENT_SECRET__|${SSP_KK_SECRET}|g" "$PROCESSED"
 
 # Always overwrite the realm so restarts pick up config changes
 /opt/keycloak/bin/kc.sh import --file "$PROCESSED" --override true
