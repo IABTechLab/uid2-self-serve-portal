@@ -39,6 +39,7 @@ services:
       SSP_WEB_HOST: http://localhost:3000
       KEYCLOAK_OKTA_IDP_CLIENT_ID: ${KEYCLOAK_OKTA_IDP_CLIENT_ID}
       KEYCLOAK_OKTA_IDP_CLIENT_SECRET: ${KEYCLOAK_OKTA_IDP_CLIENT_SECRET}
+      SSP_KK_SECRET: ${SSP_KK_SECRET}
     entrypoint: ["/bin/bash", "/opt/keycloak/start.sh"]
     ports:
       - 18080:8080
