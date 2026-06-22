@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if [ -z "${SSP_KK_SECRET}" ]; then
+  echo "ERROR: SSP_KK_SECRET is empty; refusing to import realm with a blank client secret." >&2
+  exit 1
+fi
+
 # Process realm-export.json into a temp file so the source is never modified
 PROCESSED=/tmp/realm-export.json
 cp /opt/keycloak/realm-source/realm-export.json "$PROCESSED"
