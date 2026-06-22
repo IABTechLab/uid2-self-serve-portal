@@ -9,7 +9,8 @@ USER root
 RUN chmod -R 775 /opt/keycloak/data/import
 USER keycloak
 
-ENTRYPOINT sed -i -E "s#http://localhost:[0-9]*#$SSP_WEB_HOST#g" opt/keycloak/data/import/realm-export.json && \
+ENTRYPOINT [ -n "$SSP_KK_SECRET" ] || { echo "ERROR: SSP_KK_SECRET is empty; refusing to start with a blank client secret." >&2; exit 1; } && \
+sed -i -E "s#http://localhost:[0-9]*#$SSP_WEB_HOST#g" opt/keycloak/data/import/realm-export.json && \
 sed -i "s#__KEYCLOAK_OKTA_IDP_CLIENT_ID__#$KEYCLOAK_OKTA_IDP_CLIENT_ID#g" opt/keycloak/data/import/realm-export.json && \
 sed -i "s#__KEYCLOAK_OKTA_IDP_CLIENT_SECRET__#$KEYCLOAK_OKTA_IDP_CLIENT_SECRET#g" opt/keycloak/data/import/realm-export.json && \
 sed -i "s#__SSP_KK_CLIENT_SECRET__#$SSP_KK_SECRET#g" opt/keycloak/data/import/realm-export.json && \
