@@ -6,3 +6,17 @@ CVE-2026-25646 exp:2026-09-02
 # and the core libz library used by the JRE is unaffected. The zlib maintainer disputes this CVE.
 # See: UID2-6704
 CVE-2026-22184 exp:2026-09-09
+
+# --- Residual HIGH CVEs bundled in the upstream Keycloak image. Already on the latest stable
+# Keycloak, so only fixable by a future upstream release (not by us). Short expiry to auto-
+# resurface. Note: the portal Keycloak is internet-facing, so these are NOT network-mitigated.
+# See: UID2-7391 (Keycloak bump) / UID2-7390 (image scan)
+# jackson-databind
+CVE-2026-54513 exp:2026-09-29
+CVE-2026-54512 exp:2026-09-29
+# mssql-jdbc (Keycloak DB driver)
+CVE-2025-59250 exp:2026-09-29
+# java-21-openjdk, JVM-internal
+CVE-2026-22020 exp:2026-09-29
+CVE-2025-66293 exp:2026-09-29
+# --- end Keycloak residual ---
