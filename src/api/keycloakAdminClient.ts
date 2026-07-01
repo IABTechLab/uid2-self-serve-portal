@@ -17,8 +17,12 @@ export const getKcAdminClient = async () => {
 		}
   }
 
+	// Strip any trailing slash: keycloak-admin-client builds the token URL as
+	// `${baseUrl}/realms/...`, so a trailing slash yields a non-normalized `//realms/...`
+	// path that Keycloak 26.6.3+ rejects with `missingNormalization` (keycloak-js
+	// normalizes this for us on the frontend, but the admin client does not).
 	const kcClient = new KcAdminClientClass({
-    baseUrl: SSP_KK_AUTH_SERVER_URL,
+    baseUrl: SSP_KK_AUTH_SERVER_URL.replace(/\/+$/, ''),
     realmName: SSP_KK_REALM,
   });
 
