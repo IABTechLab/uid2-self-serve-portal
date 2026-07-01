@@ -2,8 +2,14 @@ FROM node:20-alpine
 ENV NODE_ENV production
 WORKDIR /usr/src/app
 
+## Patch OS packages (e.g. libcrypto3/libssl3) to remediate HIGH/CRITICAL CVEs
+RUN apk update && apk upgrade --no-cache
+
+## Upgrade the bundled npm CLI: the version shipped in node:20-alpine bundles vulnerable
+## copies of tar/glob/minimatch/cross-spawn. Newer npm bundles patched versions.
+RUN npm install -g npm@11.18.0
+
 ## Install and configure nginx
-RUN apk update
 RUN apk add nginx
 COPY nginx.conf /etc/nginx/http.d/default.conf
 RUN nginx -t 
@@ -20,6 +26,12 @@ COPY craco.config.cjs ./craco.config.cjs
 ENV CRACO_CONFIG=craco.config.cjs
 
 RUN npm run build
+
+# Drop devDependencies from the final image: the SPA is already built into static
+# assets and the API runs from pre-compiled JS (api-dist), so only production deps
+# are needed at runtime. This removes the build-toolchain packages that carry
+# HIGH-severity CVEs (storybook, rollup, svgo, node-tar, etc.).
+RUN npm prune --omit=dev
 
 COPY api-dist/ api-dist/
 COPY src/api/*.json api-dist/api/

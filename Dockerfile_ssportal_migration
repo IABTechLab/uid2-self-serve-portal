@@ -2,10 +2,21 @@ FROM node:20-alpine
 ENV NODE_ENV production
 WORKDIR /usr/src/app
 
+# Patch OS packages (e.g. libcrypto3/libssl3) to remediate HIGH/CRITICAL CVEs
+RUN apk update && apk upgrade --no-cache
+
+# Upgrade the bundled npm CLI: the version shipped in node:20-alpine bundles vulnerable
+# copies of tar/glob/minimatch/cross-spawn. Newer npm bundles patched versions.
+# (npm remains available at runtime for the `npm run knex:migrate:latest` entrypoint.)
+RUN npm install -g npm@11.18.0
+
 # Copy the relevant files for migration neeeds
 COPY *.js *.ts *json .npmrc ./
 COPY src/api/envars.ts ./src/api/
 COPY src/database/migrations/* ./src/database/migrations/
 
-# The image set ENV production, but we need the dev deps to build, so install with prod false
-RUN npm ci --production=false
+# Install production dependencies only. The migration entrypoint runs TypeScript
+# migrations via ts-node + cross-env, which are declared as production dependencies,
+# so --omit=dev keeps them while excluding the SPA build toolchain (storybook, rollup,
+# svgo, node-tar, etc.) whose HIGH-severity CVEs are not on this one-shot job's path.
+RUN npm ci --omit=dev
