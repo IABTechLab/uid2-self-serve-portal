@@ -22,4 +22,4 @@ exec /opt/keycloak/bin/kc.sh start-dev \
   --spi-theme-cache-templates=false \
   --health-enabled=true \
   --metrics-enabled=true \
-  --spi-connections-jpa-legacy-migration-strategy=update
+  --spi-connections-jpa-quarkus-migration-strategy=update
