@@ -23,6 +23,7 @@ import {
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -35,6 +36,7 @@ const loader = makeParticipantLoader((participantId) => {
 });
 
 function ApiKeyManagement() {
+  const { productName, docsBaseUrl } = useIdentityConfig();
   const [showKeyCreationDialog, setShowKeyCreationDialog] = useState<boolean>(false);
   const data = useLoaderData<typeof loader>();
   const { participant } = useContext(ParticipantContext);
@@ -84,7 +86,7 @@ function ApiKeyManagement() {
         <a
           target='_blank'
           className='outside-link'
-          href='https://unifiedid.com/docs/portal/api-keys'
+          href={`${docsBaseUrl}/portal/api-keys`}
           rel='noreferrer'
         >
           managing and rotating API keys
@@ -92,7 +94,7 @@ function ApiKeyManagement() {
         .
       </p>
       <div>
-        For an implementation option that generates UID2 tokens on the client side, go to{' '}
+        For an implementation option that generates {productName} tokens on the client side, go to{' '}
         <NavLink
           to={`/participant/${participant?.id}/clientSideIntegration`}
           className='outside-link'

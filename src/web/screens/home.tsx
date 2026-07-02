@@ -15,6 +15,7 @@ import { CurrentUserContext } from '../contexts/CurrentUserProvider';
 import { GetEmailContacts, GetParticipantApiKeys, GetSharingList } from '../services/participant';
 import { getAllSites } from '../services/site';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -80,6 +81,7 @@ const loader = makeParticipantLoader((participantId) =>
 
 function Home() {
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const { productName } = useIdentityConfig();
   const data = useLoaderData<typeof loader>();
 
   return (
@@ -91,7 +93,7 @@ function Home() {
             <div>
               {!hasEmailContacts && (
                 <Banner
-                  message='Please add your email contacts to stay up to date on all UID2 updates.'
+                  message={`Please add your email contacts to stay up to date on all ${productName} updates.`}
                   type='Info'
                   fitContent
                 />
