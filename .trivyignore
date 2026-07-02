@@ -19,4 +19,10 @@ CVE-2025-59250 exp:2026-09-29
 # java-21-openjdk, JVM-internal
 CVE-2026-22020 exp:2026-09-29
 CVE-2025-66293 exp:2026-09-29
+# libacl / libattr - local symlink-traversal privilege escalation in the RHEL 9 base of the
+# upstream Keycloak image. No fixed package published upstream yet; requires a local attacker
+# who can plant symlinks and a privileged process running getfattr/setfacl over them - not
+# reachable over the network. Fixable only by a future upstream Keycloak/RHEL base release.
+CVE-2026-54369 exp:2026-09-30
+CVE-2026-54371 exp:2026-09-30
 # --- end Keycloak residual ---
