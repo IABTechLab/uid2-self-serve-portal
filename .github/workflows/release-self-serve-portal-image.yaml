@@ -111,6 +111,8 @@ jobs:
       docker_file: Dockerfile_ssportal_migration
       docker_image_name: iabtechlab/uid2-ssportal-migration
       docker_registry: ghcr.io
+      vulnerability_severity: CRITICAL
+      vulnerability_exception_ticket: https://thetradedesk.atlassian.net/browse/UID2-7422
     secrets: inherit
 
   publishForKeycloak:
