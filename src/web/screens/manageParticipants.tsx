@@ -21,6 +21,7 @@ import {
 } from '../services/participant';
 import { GetAllParticipantTypes } from '../services/participantType';
 import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
@@ -35,6 +36,7 @@ const loader = makeLoader(() => {
 });
 
 function ManageParticipants() {
+  const { productName } = useIdentityConfig();
   const [showAddParticipantsDialog, setShowAddParticipantsDialog] = useState<boolean>(false);
   const { participant, setParticipant } = useContext(ParticipantContext);
   const { LoggedInUser } = useContext(CurrentUserContext);
@@ -80,7 +82,7 @@ function ManageParticipants() {
       <div className='manage-participants-header'>
         <div className='manage-participants-header-left'>
           <h1>Manage Participants</h1>
-          <p className='heading-details'>View and manage UID2 Portal participants.</p>
+          <p className='heading-details'>View and manage {productName} Portal participants.</p>
         </div>
         <div className='manage-participants-header-right'>
           <button type='button' onClick={onOpenChangeAddParticipantDialog}>

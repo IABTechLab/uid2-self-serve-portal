@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 import { ReactNode, Suspense, useContext } from 'react';
-import { useRevalidator } from 'react-router-dom';
+import { Navigate, useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
@@ -22,6 +22,7 @@ import {
 } from '../services/participant';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -65,9 +66,12 @@ function SharingPermissionPageContainer({ children }: Readonly<{ children: React
 }
 
 function SharingPermissions() {
+  const { isEuid, docsBaseUrl } = useIdentityConfig();
   const data = useLoaderData<typeof loader>();
   const reloader = useRevalidator();
   const { participant, setParticipant } = useContext(ParticipantContext);
+
+  if (isEuid) return <Navigate to='/' replace />;
 
   const handleSaveSharingType = async (selectedTypes: ClientType[]) => {
     try {
@@ -143,7 +147,7 @@ function SharingPermissions() {
                     <a
                       className='outside-link'
                       target='_blank'
-                      href='https://unifiedid.com/docs/portal/sharing-permissions'
+                      href={`${docsBaseUrl}/portal/sharing-permissions`}
                       rel='noreferrer'
                     >
                       Sharing Permissions
@@ -199,6 +203,7 @@ function SharingPermissions() {
 }
 
 export const SharingPermissionsRoute: PortalRoute = {
+  id: 'SharingPermissions',
   description: 'Sharing Permissions',
   element: <SharingPermissions />,
   errorElement: <RouteErrorBoundary />,

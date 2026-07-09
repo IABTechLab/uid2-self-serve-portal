@@ -1,5 +1,5 @@
 import { Suspense, useContext } from 'react';
-import { useRevalidator } from 'react-router-dom';
+import { Navigate, useRevalidator } from 'react-router-dom';
 import { defer, useLoaderData } from 'react-router-typesafe';
 
 import { Loading } from '../components/Core/Loading/Loading';
@@ -19,6 +19,7 @@ import {
 } from '../services/userAccount';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
@@ -29,10 +30,13 @@ const loader = makeParticipantLoader((participantId) => {
 });
 
 function TeamMembers() {
+  const { isEuid } = useIdentityConfig();
   const { LoggedInUser, loadUser } = useContext(CurrentUserContext);
   const data = useLoaderData<typeof loader>();
   const { participant, loadParticipant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
+
+  if (isEuid) return <Navigate to='/' replace />;
 
   const handleAddTeamMember = async (formData: InviteTeamMemberForm) => {
     try {
@@ -121,6 +125,7 @@ function TeamMembers() {
 }
 
 export const TeamMembersRoute: PortalRoute = {
+  id: 'TeamMembers',
   description: 'Manage Team Members',
   element: <TeamMembers />,
   errorElement: <RouteErrorBoundary />,
