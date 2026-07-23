@@ -25,4 +25,11 @@ CVE-2025-66293 exp:2026-09-29
 # reachable over the network. Fixable only by a future upstream Keycloak/RHEL base release.
 CVE-2026-54369 exp:2026-09-30
 CVE-2026-54371 exp:2026-09-30
+# jackson-core async parser maxNumberLength bypass (incomplete fix for GHSA-72hv-8253-57qq) -
+# bundled in keycloak-admin-cli in the Keycloak image; not reachable (synchronous ObjectMapper
+# only). See: UID2-7557
+GHSA-r7wm-3cxj-wff9 exp:2026-09-29
+# postgresql JDBC driver (Keycloak DB driver); connects only to our managed first-party Postgres.
+# See: UID2-7559
+CVE-2026-54291 exp:2026-09-29
 # --- end Keycloak residual ---
