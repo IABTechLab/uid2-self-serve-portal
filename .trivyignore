@@ -32,4 +32,19 @@ GHSA-r7wm-3cxj-wff9 exp:2026-09-29
 # postgresql JDBC driver (Keycloak DB driver); connects only to our managed first-party Postgres.
 # See: UID2-7559
 CVE-2026-54291 exp:2026-09-29
+# Netty (io.netty.netty-codec / netty-codec-http / netty-codec-haproxy 4.1.135.Final) bundled in the
+# upstream Keycloak 26.6.4 image (opt/keycloak/lib). These CVEs are dated 2026-07 and no Keycloak
+# release yet ships the fixed Netty 4.1.136.Final, so they are only fixable by a future upstream
+# release, not by us. NOTE: Keycloak 26.7.0 is now available - the base-image bump (which should also
+# pull the fixed Netty/OpenJDK) is tracked under UID2-7391; suppress here until that lands.
+# See: UID2-7571 / UID2-7572 / UID2-7573 / UID2-7574 (netty), UID2-7575 (netty-codec-haproxy)
+CVE-2026-55831 exp:2026-09-29
+CVE-2026-55833 exp:2026-09-29
+CVE-2026-56745 exp:2026-09-29
+CVE-2026-59901 exp:2026-09-29
+CVE-2026-55851 exp:2026-09-29
+# java-21-openjdk-headless (RHEL 9 base of the upstream Keycloak image) - Oracle CPU 2026-07 jar
+# handling hardening. Fixable only by a future upstream Keycloak/RHEL base release (see UID2-7391).
+# See: UID2-7579
+CVE-2026-47063 exp:2026-09-29
 # --- end Keycloak residual ---
