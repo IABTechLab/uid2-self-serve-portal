@@ -43,6 +43,13 @@ CVE-2026-55833 exp:2026-09-29
 CVE-2026-56745 exp:2026-09-29
 CVE-2026-59901 exp:2026-09-29
 CVE-2026-55851 exp:2026-09-29
+# netty-codec-http2 4.1.135.Final - HTTP/2 DATA-frame ByteBuf leak (OOM DoS). Not reachable: the
+# vulnerable DelegatingDecompressorFrameListener is installed only when HTTP/2 request decompression
+# is on (Vert.x VertxHttp2ConnectionHandler.onSettingsRead), and it is off - Quarkus
+# enable-decompression defaults false, is build-time only, and we set it nowhere. Verified against
+# keycloak:26.6.4: a gzip+Content-Encoding request body is NOT decompressed (positive control: same
+# image rebuilt with the flag on does decompress). See: UID2-7612
+CVE-2026-56819 exp:2026-09-29
 # java-21-openjdk-headless (RHEL 9 base of the upstream Keycloak image) - Oracle CPU 2026-07 jar
 # handling hardening. Fixable only by a future upstream Keycloak/RHEL base release (see UID2-7391).
 # See: UID2-7579
