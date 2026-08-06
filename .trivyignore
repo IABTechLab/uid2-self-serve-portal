@@ -55,3 +55,10 @@ CVE-2026-56819 exp:2026-09-29
 # See: UID2-7579
 CVE-2026-47063 exp:2026-09-29
 # --- end Keycloak residual ---
+
+# CVE-2026-69152 — brace-expansion (npm) (HIGH).
+# Not exploitable here: package.json overrides brace-expansion@1=1.1.16, @5=5.0.8, plus
+# @isaacs/brace-expansion override. craco/React frontend + tsx/nodemon dev API; no
+# minimatch/glob/brace-expansion references in src. Reached only via build/lint/test tooling.
+# See: UID2-7619
+CVE-2026-69152 exp:2026-09-06
