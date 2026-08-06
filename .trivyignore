@@ -55,3 +55,11 @@ CVE-2026-56819 exp:2026-09-29
 # See: UID2-7579
 CVE-2026-47063 exp:2026-09-29
 # --- end Keycloak residual ---
+
+# CVE-2026-18446 — fast-uri (npm) (HIGH).
+# Not exploitable here: package.json:273 pins fast-uri ^3.1.4 in overrides; lock resolves
+# node_modules/fast-uri 3.1.4 transitively under ajv instances (webpack plugins, eslint, table,
+# objection). No direct fast-uri import in source; used only for ajv JSON-schema $ref
+# resolution, not host-policy URL parsing.
+# See: UID2-7633
+CVE-2026-18446 exp:2026-09-06
