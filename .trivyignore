@@ -69,3 +69,29 @@ CVE-2026-18446 exp:2026-11-06
 # unrelated package)
 # See: UID2-7619
 CVE-2026-69152 exp:2026-11-06
+
+# CVE-2026-40983 — io.micrometer:micrometer-core (bundled in Keycloak image) (HIGH).
+# Not exploitable here: micrometer-core-1.16.3.jar is bundled by the Keycloak base image
+# (Dockerfile_keycloak -> quay.io/keycloak/keycloak:26.6.4); not a declared dependency (no
+# match in package.json/package-lock.json). CVE is in Micrometer gRPC server instrumentation.
+# Keycloak is a Quarkus HTTP/HTTPS OIDC server started with --metrics-enabled=true exposing a
+# Prometheus HTTP endpoint; it runs no gRPC server and registers no Micrometer gRPC
+# interceptor. No 'grpc' reference anywhere in repo; compose exposes only HTTP ports 8080/9990.
+# See: UID2-7655
+CVE-2026-40983 exp:2026-11-11
+
+# CVE-2026-40984 — io.micrometer:micrometer-core (transitive via micrometer-registry-
+# prometheus/-jmx); micrometer-jetty11/12 not present (HIGH).
+# Not exploitable here: Node app (Dockerfile_ssportal FROM node:20-alpine); no micrometer in
+# package.json/code. Only Java-adjacent artifact is third-party
+# quay.io/keycloak/keycloak:26.6.4 (Quarkus), which also instruments HTTP via Vert.x, not
+# micrometer Jetty/servlet binders
+# See: UID2-7662
+CVE-2026-40984 exp:2026-11-11
+
+# GHSA-5p4m-2wfm-xmqj — js-yaml (3.15.0 and 4.3.0, transitive npm dependency) (HIGH).
+# Not exploitable here: 3.15.0 (hoisted) and 4.3.0 (node_modules/eslint, @eslint/eslintrc) are
+# dev:true, pulled by eslint and jest coverage tooling; grep of src/ and server/ finds zero
+# YAML parsing; overrides pin the affected versions but only affect dev tooling
+# See: UID2-7659
+GHSA-5p4m-2wfm-xmqj exp:2026-11-11
