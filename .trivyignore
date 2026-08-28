@@ -95,3 +95,14 @@ CVE-2026-40984 exp:2026-11-11
 # YAML parsing; overrides pin the affected versions but only affect dev tooling
 # See: UID2-7659
 GHSA-5p4m-2wfm-xmqj exp:2026-11-11
+
+# CVE-2026-11822 / CVE-2026-11824 — sqlite-libs (RHEL 9.8 base image of Dockerfile_keycloak ->
+# quay.io/keycloak/keycloak:26.6.4) (HIGH). Not exploitable here: Keycloak connects to MSSQL
+# (KC_DB: mssql in docker-compose.yml), not sqlite, and has no JNI bindings calling into the
+# native sqlite-libs RPM; the FTS5/heap-overflow attack path requires an app that invokes
+# SQLite's engine directly. The repo's only sqlite reference is the npm better-sqlite3
+# devDependency, used solely by Jest .spec.ts tests with an in-memory (:memory:) DB in the
+# unrelated Node app container (Dockerfile_ssportal).
+# See: UID2-7781
+CVE-2026-11822 exp:2026-09-28
+CVE-2026-11824 exp:2026-09-28
