@@ -106,3 +106,17 @@ GHSA-5p4m-2wfm-xmqj exp:2026-11-11
 # See: UID2-7781
 CVE-2026-11822 exp:2026-09-28
 CVE-2026-11824 exp:2026-09-28
+
+# CVE-2026-73088 — browserslist (HIGH).
+# Not exploitable here: package.json browserslist is production/development query arrays;
+# browserslist pulled in transitively by webpack@^4.28.1/react-scripts/autoprefixer; no
+# browserslist-stats.json, no --stats in scripts, no opts.stats
+# See: UID2-7802
+CVE-2026-73088 exp:2026-12-02
+
+# CVE-2026-73089 — browserslist (HIGH).
+# Not exploitable here: package-lock.json:11572 browserslist@4.28.1; project uses react-
+# scripts@5 + webpack + storybook. browserslist is build/dev tooling only, driven by the static
+# browserslist config field; no long-lived process feeds attacker-influenced query values.
+# See: UID2-7803
+CVE-2026-73089 exp:2026-12-02
