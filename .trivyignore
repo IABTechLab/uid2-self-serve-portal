@@ -120,3 +120,48 @@ CVE-2026-73088 exp:2026-12-02
 # browserslist config field; no long-lived process feeds attacker-influenced query values.
 # See: UID2-7803
 CVE-2026-73089 exp:2026-12-02
+
+# CVE-2026-73231 — @faker-js/faker (HIGH).
+# Not exploitable here: @faker-js/faker imported only in *.spec.ts/*.spec.tsx/*.stories.tsx and
+# the two test-only modules src/testHelpers/dataMocks.ts and src/testHelpers/apiTestHelpers.ts
+# (which are imported solely by spec/story files). grep for 'helpers.fake' / '.fake(' across
+# src/ returns no matches; all calls use safe generators (person.firstName, internet.email,
+# string.uuid, helpers.arrayElement, number.int, datatype.boolean). Dockerfile_ssportal builds
+# the SPA via 'craco build' and runs the API from the pre-compiled api-dist bundle, neither of
+# which include test/story files.
+# See: UID2-7811
+CVE-2026-73231 exp:2026-12-03
+
+# CVE-2026-75899 — fast-uri (HIGH).
+# Not exploitable here: package-lock.json resolves fast-uri 3.1.4 at node_modules/fast-uri,
+# declared as ^3.0.1 by multiple ajv instances (@pmmmwh/react-refresh-webpack-plugin>ajv, ajv-
+# formats>ajv, etc. — craco/webpack build tooling). Express backend source imports no fast-uri
+# and performs no normalize/resolve on untrusted URIs; package.json entry is an overrides pin.
+# See: UID2-7812
+CVE-2026-75899 exp:2026-12-03
+
+# CVE-2026-75931 — fast-uri (HIGH).
+# Not exploitable here: package-lock.json has a single node_modules/fast-uri@3.1.4, sourced
+# transitively from ajv (react-scripts/webpack build tooling); overrides pin in package.json.
+# No fastify (count 0) and no direct fast-uri/ajv import in source. React app; fast-uri never
+# invoked on untrusted references at runtime.
+# See: UID2-7813
+CVE-2026-75931 exp:2026-12-03
+
+# CVE-2026-75975 — fast-uri (HIGH).
+# Not exploitable here: fast-uri@3.1.4 (node_modules/fast-uri) pulled transitively by ajv
+# instances belonging to webpack, eslint-webpack-plugin, css/terser/mini-css plugins, workbox-
+# build, and objection ORM. overrides ^3.1.4. No .js/.ts source imports fast-uri; ajv is used
+# for JSON Schema validation of internal data, not to normalize attacker-controlled URLs for
+# SSRF.
+# See: UID2-7814
+CVE-2026-75975 exp:2026-12-03
+
+# CVE-2026-76172 — fast-uri (HIGH).
+# Not exploitable here: Top-level node_modules/fast-uri@3.1.4 plus ~13 ajv copies (webpack,
+# react-scripts, objection ORM, eslint, babel-loader, etc.). No source file imports fast-uri or
+# ajv. objection/ajv validate developer-defined model schemas; fast-uri is used for $ref URI
+# parsing, not for resolving attacker-controlled URLs feeding a redirect/allowlist/SSRF
+# decision.
+# See: UID2-7815
+CVE-2026-76172 exp:2026-12-03
