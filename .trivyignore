@@ -43,6 +43,12 @@ CVE-2026-55833 exp:2026-09-29
 CVE-2026-56745 exp:2026-09-29
 CVE-2026-59901 exp:2026-09-29
 CVE-2026-55851 exp:2026-09-29
+# CVE-2026-75595 (io.netty.netty-handler 4.1.136.Final, CRITICAL). The UID2-7391 bump to
+# 26.7.2 fixed the netty-codec CVEs above but netty-handler itself is still 4.1.136.Final.
+# Checked quay.io/keycloak/keycloak:26.7.3 (latest available as of 2026-09-10) via docker —
+# it still bundles netty-handler 4.1.136.Final, so no upstream fix exists yet.
+# See: UID2-7850
+CVE-2026-75595 exp:2026-10-10
 # netty-codec-http2 4.1.135.Final - HTTP/2 DATA-frame ByteBuf leak (OOM DoS). Not reachable: the
 # vulnerable DelegatingDecompressorFrameListener is installed only when HTTP/2 request decompression
 # is on (Vert.x VertxHttp2ConnectionHandler.onSettingsRead), and it is off - Quarkus
@@ -95,6 +101,18 @@ CVE-2026-40984 exp:2026-11-11
 # YAML parsing; overrides pin the affected versions but only affect dev tooling
 # See: UID2-7659
 GHSA-5p4m-2wfm-xmqj exp:2026-11-11
+
+# CVE-2026-84375 — js-yaml (HIGH), same non-exploitable path as GHSA-5p4m-2wfm-xmqj above
+# (eslint/Jest coverage tooling only, no runtime YAML parsing in src/).
+# See: UID2-7851
+CVE-2026-84375 exp:2026-10-10
+
+# GHSA-2x7j-588g-ccc2 — nodemailer 9.0.1 (HIGH), quadratic-time-complexity DoS in addressparser.
+# Not exploitable in production: src/api/services/emailService.ts routes all production email
+# through SendGrid; nodemailer (src/api/services/nodemailerService.ts) only runs when
+# NODE_ENV != production, against a local dev SMTP catcher.
+# See: UID2-7853
+GHSA-2x7j-588g-ccc2 exp:2026-10-10
 
 # CVE-2026-11822 / CVE-2026-11824 — sqlite-libs (RHEL 9.8 base image of Dockerfile_keycloak ->
 # quay.io/keycloak/keycloak:26.6.4) (HIGH). Not exploitable here: Keycloak connects to MSSQL
