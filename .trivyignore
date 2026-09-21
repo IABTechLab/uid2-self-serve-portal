@@ -193,5 +193,5 @@ CVE-2026-76172 exp:2026-12-03
 # Keycloak's builtIn 'clients' flow definition (line 2144) and is bound to no client. No
 # truststore, mTLS, --https-client-auth, name-constrained CA, or X.509 client-cert auth is
 # configured anywhere in the Dockerfile or realm.
-# See: [TICKET]
+# See: UID2-7921
 CVE-2026-8763 exp:2026-12-21
