@@ -183,3 +183,15 @@ CVE-2026-75975 exp:2026-12-03
 # decision.
 # See: UID2-7815
 CVE-2026-76172 exp:2026-12-03
+
+# CVE-2026-8763 — org.bouncycastle:bcprov-jdk18on (CRITICAL).
+# Not exploitable here: Scan target is the keycloak image built by Dockerfile_keycloak (FROM
+# quay.io/keycloak/keycloak:26.7.2); bcprov-jdk18on-1.84 ships inside that base image, not
+# declared by the repo. The bundled realm (keycloak/realm/realm-export.json) authenticates via
+# OIDC to Okta and uses clientAuthenticatorType=client-secret for all 8 clients; tls-client-
+# certificate-bound-access-tokens=false. The client-x509 authenticator appears only inside
+# Keycloak's builtIn 'clients' flow definition (line 2144) and is bound to no client. No
+# truststore, mTLS, --https-client-auth, name-constrained CA, or X.509 client-cert auth is
+# configured anywhere in the Dockerfile or realm.
+# See: [TICKET]
+CVE-2026-8763 exp:2026-12-21
