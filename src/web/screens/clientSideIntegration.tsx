@@ -26,6 +26,7 @@ import {
 } from '../services/keyPairService';
 import { handleErrorToast } from '../utils/apiError';
 import { AwaitTypesafe, resolveAll } from '../utils/AwaitTypesafe';
+import { useIdentityConfig } from '../utils/identity';
 import { makeParticipantLoader } from '../utils/loaderHelpers';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { separateStringsList, sortStringsAlphabetically } from '../utils/textHelpers';
@@ -54,6 +55,7 @@ const loader = makeParticipantLoader((participantId) => {
 });
 
 function ClientSideIntegration() {
+  const { docsBaseUrl } = useIdentityConfig();
   const data = useLoaderData<typeof loader>();
   const { participant } = useContext(ParticipantContext);
   const reloader = useRevalidator();
@@ -158,7 +160,7 @@ function ClientSideIntegration() {
         <a
           className='outside-link'
           target='_blank'
-          href='https://unifiedid.com/docs/portal/client-side-integration'
+          href={`${docsBaseUrl}/portal/client-side-integration`}
           rel='noreferrer'
         >
           Client-Side Integration
