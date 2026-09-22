@@ -184,6 +184,14 @@ CVE-2026-75975 exp:2026-12-03
 # See: UID2-7815
 CVE-2026-76172 exp:2026-12-03
 
+# CVE-2026-13506 — org.bouncycastle:bcprov-jdk18on (bundled inside the
+# quay.io/keycloak/keycloak:26.7.2 base image) (HIGH). KNOWN EXPLOITABLE, ACCEPTED RISK — not a
+# 'not exploitable' suppression.
+# Awaiting upstream fix. See the ticket below for the assessment.
+# Accepted since 2026-09-22, renewed 0 time(s). Re-examine on expiry.
+# See: UID2-7939
+CVE-2026-13506 exp:2026-10-06
+
 # CVE-2026-8763 — org.bouncycastle:bcprov-jdk18on (CRITICAL).
 # Not exploitable here: Scan target is the keycloak image built by Dockerfile_keycloak (FROM
 # quay.io/keycloak/keycloak:26.7.2); bcprov-jdk18on-1.84 ships inside that base image, not
@@ -195,3 +203,23 @@ CVE-2026-76172 exp:2026-12-03
 # configured anywhere in the Dockerfile or realm.
 # See: UID2-7921
 CVE-2026-8763 exp:2026-12-21
+
+# CVE-2026-86145 — pcre2 (RHEL 9.8 base-image OS library in the upstream Keycloak image)
+# (HIGH).
+# Not exploitable here: Scan target is Dockerfile_keycloak -> quay.io/keycloak/keycloak:26.7.2
+# (RHEL 9.8 base); pcre2 10.40-6.el9 is a native OS library from that base image. grep for
+# 'pcre' across the entire repo (package.json, package-lock.json, Dockerfiles, nginx.conf,
+# source) returns zero matches, so it is not a declared dependency. Keycloak is a pure-
+# Java/Quarkus service that does regex via java.util.regex on the JVM and links no native
+# libpcre2 binding/JNI wrapper.
+# See: UID2-7940
+CVE-2026-86145 exp:2026-12-22
+
+# CVE-2026-89161 — pcre2 (libpcre2, RedHat UBI base image of the Keycloak container) (HIGH).
+# Not exploitable here: Dockerfile_keycloak:1 FROM quay.io/keycloak/keycloak:26.7.2 (UBI 9.8);
+# pcre2 is a transitive OS library, never referenced in repo (grep -ri pcre across repo = 0
+# hits outside node_modules). Entrypoint (lines 12-17) invokes only sed -i -E (glibc POSIX ERE,
+# not PCRE) and kc.sh; no grep -P. Keycloak is a Java/Quarkus app that does regex via
+# java.util.regex, not native libpcre2, so pcre2_jit_match is never called.
+# See: UID2-7941
+CVE-2026-89161 exp:2026-12-22
