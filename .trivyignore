@@ -183,3 +183,49 @@ CVE-2026-75975 exp:2026-12-03
 # decision.
 # See: UID2-7815
 CVE-2026-76172 exp:2026-12-03
+
+# CVE-2026-13506 — org.bouncycastle:bcprov-jdk18on (HIGH).
+# Not exploitable here: Structural parse of keycloak/realm/realm-export.json: all 8 clients are
+# protocol=openid-connect with clientAuthenticatorType=client-secret; zero SAML clients; only
+# identityProvider is 'oidc' (Okta); registrationAllowed=false; sslRequired=external. The
+# 'saml-role-list' mapper, 'saml ecp' flow, and 'client-x509' authenticator tier 1 cited are
+# Keycloak's stock built-in realm defaults bound to no client, not live flows. Keycloak 26.7.2
+# pom.xml pins FIPS BouncyCastle (bcfips 2.1.2 / bctls-fips 2.1.22) as its provider; the
+# flagged bcprov-jdk18on-1.84.jar is a non-FIPS transitive artifact in the third-party base
+# image. RedHat security data (access.redhat.com) rates the CVE Important but does not list Red
+# Hat Build of Keycloak/RHSSO in package_state (only out-of-scope Fuse 7 / EAP 7).
+# See: [TICKET]
+CVE-2026-13506 exp:2026-12-22
+
+# CVE-2026-86145 — pcre2 (RHEL 9.8 base-image OS library in the upstream Keycloak image)
+# (HIGH).
+# Not exploitable here: Scan target is Dockerfile_keycloak -> quay.io/keycloak/keycloak:26.7.2
+# (RHEL 9.8 base); pcre2 10.40-6.el9 is a native OS library from that base image. grep for
+# 'pcre' across the entire repo (package.json, package-lock.json, Dockerfiles, nginx.conf,
+# source) returns zero matches, so it is not a declared dependency. Keycloak is a pure-
+# Java/Quarkus service that does regex via java.util.regex on the JVM and links no native
+# libpcre2 binding/JNI wrapper.
+# See: [TICKET]
+CVE-2026-86145 exp:2026-12-22
+
+# CVE-2026-8763 — org.bouncycastle:bcprov-jdk18on (CRITICAL).
+# Not exploitable here: bcprov-jdk18on-1.84.jar comes from the stock
+# quay.io/keycloak/keycloak:26.7.2 base image (Dockerfile_keycloak:1); repo declares no
+# BouncyCastle. The CVE's name-constraints validation path is exercised only during X.509 cert-
+# chain validation (mTLS / client-cert auth). realm-export.json:887 sets tls-client-
+# certificate-bound-access-tokens=false; no KC_HTTPS*, no truststore, no https-client-auth, and
+# no .jks/.p12/.pem in docker-compose.yml, Dockerfile_keycloak, start.sh or the realm. The
+# client-x509 authenticator (realm-export.json:2144) and SAML entries are Keycloak built-in
+# defaults, not wired to an HTTPS+truststore flow. Federated login is OIDC to Okta via client
+# secret (oidc-* mappers, KEYCLOAK_OKTA_IDP_CLIENT_SECRET), not certificate-based.
+# See: UID2-7921
+CVE-2026-8763 exp:2026-12-22
+
+# CVE-2026-89161 — pcre2 (libpcre2, RedHat UBI base image of the Keycloak container) (HIGH).
+# Not exploitable here: Dockerfile_keycloak:1 FROM quay.io/keycloak/keycloak:26.7.2 (UBI 9.8);
+# pcre2 is a transitive OS library, never referenced in repo (grep -ri pcre across repo = 0
+# hits outside node_modules). Entrypoint (lines 12-17) invokes only sed -i -E (glibc POSIX ERE,
+# not PCRE) and kc.sh; no grep -P. Keycloak is a Java/Quarkus app that does regex via
+# java.util.regex, not native libpcre2, so pcre2_jit_match is never called.
+# See: [TICKET]
+CVE-2026-89161 exp:2026-12-22
