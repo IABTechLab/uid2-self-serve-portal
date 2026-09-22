@@ -184,6 +184,14 @@ CVE-2026-75975 exp:2026-12-03
 # See: UID2-7815
 CVE-2026-76172 exp:2026-12-03
 
+# CVE-2026-13506 — org.bouncycastle:bcprov-jdk18on (bundled inside the
+# quay.io/keycloak/keycloak:26.7.2 base image) (HIGH). KNOWN EXPLOITABLE, ACCEPTED RISK — not a
+# 'not exploitable' suppression.
+# Awaiting upstream fix. See the ticket below for the assessment.
+# Accepted since 2026-09-22, renewed 0 time(s). Re-examine on expiry.
+# See: UID2-7939
+CVE-2026-13506 exp:2026-10-06
+
 # CVE-2026-8763 — org.bouncycastle:bcprov-jdk18on (CRITICAL).
 # Not exploitable here: Scan target is the keycloak image built by Dockerfile_keycloak (FROM
 # quay.io/keycloak/keycloak:26.7.2); bcprov-jdk18on-1.84 ships inside that base image, not
