@@ -223,3 +223,8 @@ CVE-2026-86145 exp:2026-12-22
 # java.util.regex, not native libpcre2, so pcre2_jit_match is never called.
 # See: UID2-7941
 CVE-2026-89161 exp:2026-12-22
+
+# CVE-2026-84939 — org.freemarker:freemarker (CRITICAL). Not exploitable here.
+# See the ticket below for the assessment.
+# See: [TICKET]
+CVE-2026-84939 exp:2026-12-28
