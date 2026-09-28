@@ -226,5 +226,5 @@ CVE-2026-89161 exp:2026-12-22
 
 # CVE-2026-84939 — org.freemarker:freemarker (CRITICAL). Not exploitable here.
 # See the ticket below for the assessment.
-# See: [TICKET]
+# See: UID2-7969
 CVE-2026-84939 exp:2026-12-28
