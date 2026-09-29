@@ -17,7 +17,7 @@ CVE-2026-54512 exp:2026-09-29
 # CVE-2025-59250 — com.microsoft.sqlserver:mssql-jdbc (HIGH). Already patched; scanner finding
 # does not apply to the installed version.
 # See the ticket below for the assessment.
-# See: [TICKET]
+# See: UID2-7986
 CVE-2025-59250 exp:2026-12-29
 # java-21-openjdk, JVM-internal
 CVE-2026-22020 exp:2026-09-29
