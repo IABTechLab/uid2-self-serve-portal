@@ -231,3 +231,9 @@ CVE-2026-89161 exp:2026-12-22
 # See the ticket below for the assessment.
 # See: UID2-7969
 CVE-2026-84939 exp:2026-12-28
+
+# CVE-2026-84292 — fast-uri (HIGH). Vulnerable code path is not reachable in this
+# configuration.
+# See the ticket below for the assessment.
+# See: [TICKET]
+CVE-2026-84292 exp:2026-12-30
