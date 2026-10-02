@@ -235,5 +235,5 @@ CVE-2026-84939 exp:2026-12-28
 # GHSA-v53p-9fqp-m79j — nodemailer (HIGH). Required attack preconditions are absent in this
 # configuration.
 # See the ticket below for the assessment.
-# See: [TICKET]
+# See: UID2-8016
 GHSA-v53p-9fqp-m79j exp:2027-01-02
