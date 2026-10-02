@@ -13,6 +13,7 @@ import { EmailArgs } from './emailTypes';
 import {
   assignApiParticipantMemberRole,
   createNewUser,
+  doesUserExistInKeycloak,
   sendInviteEmailToNewUser,
 } from './kcUsersService';
 
@@ -168,9 +169,7 @@ const addAndInviteUserToParticipant = async (
     participantId: participant.id,
     userRoleId,
   });
-  if (!isUid2Internal(existingUser.email)) {
-    sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
-  }
+  sendInviteEmailToExistingUser(participant.name, existingUser, traceId);
 };
 
 const createUserInPortal = async (
@@ -207,8 +206,19 @@ export const inviteUserToParticipant = async (
     }
   } else {
     const { firstName, lastName, email } = userPartial;
-    await createAndInviteKeycloakUser(firstName, lastName, email);
+    const kcAdminClient = await getKcAdminClient();
+    const isExistingKcUser = await doesUserExistInKeycloak(kcAdminClient, email);
+    if (!isExistingKcUser) {
+      await createAndInviteKeycloakUser(firstName, lastName, email);
+    } else {
+      await assignApiParticipantMemberRole(kcAdminClient, email);
+    }
     const newUser = await createUserInPortal(userPartial, participant!.id, userRoleId);
+    // KC-existing users (e.g. SSO users) and internal users don't receive the KC password-setup
+    // email from createAndInviteKeycloakUser, so send the "invited to org" email instead.
+    if (isExistingKcUser || isUid2Internal(email)) {
+      sendInviteEmailToExistingUser(participant.name, newUser, traceId);
+    }
     return newUser;
   }
 };
