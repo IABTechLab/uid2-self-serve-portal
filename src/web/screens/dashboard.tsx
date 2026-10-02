@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import { SideNav } from '../components/Navigation/SideNav';
 import { CurrentUserContext } from '../contexts/CurrentUserProvider';
+import { useIdentityConfig } from '../utils/identity';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { ApiKeyManagementRoute } from './apiKeyManagement';
 import { AuditTrailRoute } from './auditTrailScreen';
@@ -18,6 +19,16 @@ import { SharingPermissionsRoute } from './sharingPermissions';
 import { TeamMembersRoute } from './teamMembers';
 
 import './dashboard.scss';
+
+// Routes that are hidden from the EUID portal UI. The corresponding screens
+// still register a redirect-to-home guard so direct URL navigation can't
+// reach them either.
+const HIDDEN_ON_EUID = new Set(['SharingPermissions', 'TeamMembers', 'SelfReinvite']);
+
+function visibleRoutes(routes: PortalRoute[], isEuid: boolean): PortalRoute[] {
+  if (!isEuid) return routes;
+  return routes.filter((r) => !r.id || !HIDDEN_ON_EUID.has(r.id));
+}
 
 export const StandardRoutes: PortalRoute[] = [
   HomeRoute,
@@ -43,8 +54,9 @@ export const DashboardRoutes: PortalRoute[] = [
 
 const standardMenu = StandardRoutes.filter((r) => r.description);
 
-function Dashboard() {
+export function Dashboard() {
   const { LoggedInUser } = useContext(CurrentUserContext);
+  const { isEuid } = useIdentityConfig();
   const uid2SupportMenu = LoggedInUser?.user?.isUid2Support
     ? Uid2SupportRoutes.filter((r) => r.description)
     : [];
@@ -55,7 +67,7 @@ function Dashboard() {
   return (
     <div className='app-panel'>
       <SideNav
-        standardMenu={standardMenu}
+        standardMenu={visibleRoutes(standardMenu, isEuid)}
         uid2SupportMenu={uid2SupportMenu}
         superUserMenu={superUserMenu}
       />

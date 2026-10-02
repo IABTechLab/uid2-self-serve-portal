@@ -13,8 +13,16 @@ import {
 } from '../../../testHelpers/testContextProvider';
 import { UserContextWithSetter } from '../../contexts/CurrentUserProvider';
 import { ParticipantWithSetter } from '../../contexts/ParticipantProvider';
+import { IdentityConfigProvider, RawIdentityConfig } from '../../utils/identity';
 import { PortalHeader } from './PortalHeader';
 import * as stories from './PortalHeader.stories';
+
+const uid2Config: RawIdentityConfig = {
+  identity: 'UID2',
+  productName: 'UID2',
+  docsBaseUrl: 'https://unifiedid.com/docs/intro',
+  logo: { light: '/uid2-logo.svg', dark: '/uid2-logo-darkmode.svg' },
+};
 
 const { InvalidEmailAddress, NoEmailAddress } = stories;
 
@@ -27,7 +35,9 @@ const renderPortalHeaderWithContext = (
       userContextValue={userContextValue}
       participantContextValue={participantContextValue}
     >
-      <PortalHeader email='test@example.com' fullName='Test Name' logout={() => {}} />
+      <IdentityConfigProvider value={uid2Config}>
+        <PortalHeader email='test@example.com' fullName='Test Name' logout={() => {}} />
+      </IdentityConfigProvider>
     </TestContextProviderWithoutKeycloak>
   );
 };
@@ -36,7 +46,9 @@ describe('Portal Header tests', () => {
   it('when an invalid email address is provided, a home link is still displayed', async () => {
     render(
       <MemoryRouter>
-        <PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} />
+        <IdentityConfigProvider value={uid2Config}>
+          <PortalHeader {...InvalidEmailAddress.args} fullName='test' logout={() => {}} />
+        </IdentityConfigProvider>
       </MemoryRouter>
     );
     const link = screen.getByRole('link');
@@ -46,12 +58,14 @@ describe('Portal Header tests', () => {
   it('when no email is provided, the dropdown text shows that there is no logged in user', async () => {
     render(
       <MemoryRouter>
-        <PortalHeader
-          {...NoEmailAddress.args}
-          email={undefined}
-          fullName={undefined}
-          logout={() => {}}
-        />
+        <IdentityConfigProvider value={uid2Config}>
+          <PortalHeader
+            {...NoEmailAddress.args}
+            email={undefined}
+            fullName={undefined}
+            logout={() => {}}
+          />
+        </IdentityConfigProvider>
       </MemoryRouter>
     );
     const button = screen.getByRole('button');

@@ -26,6 +26,7 @@ import {
 import { getAuditLoggingMiddleware } from './helpers/auditLogging';
 import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
 import makeMetricsApiMiddleware from './middleware/metrics';
+import { configRouter } from './routers/configRouter';
 import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
@@ -46,11 +47,13 @@ const BYPASS_AUTH_PATHS = [
   { url: `${BASE_REQUEST_PATH}/health`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/keycloak-config`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/config`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/users/selfResendInvitation`, method: 'POST' },
 ];
 
 const BYPASS_CLAIM_PATHS = [
   { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
+  { url: `${BASE_REQUEST_PATH}/config`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/participantTypes`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/participants`, method: 'POST' },
   { url: `${BASE_REQUEST_PATH}/users/current`, method: 'GET' },
@@ -145,6 +148,7 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   router.use('/participants', routers.participantsRouter.router);
   router.use('/sites', routers.sitesRouter);
   router.use('/manage', routers.managementRouter);
+  router.use('/config', configRouter);
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });

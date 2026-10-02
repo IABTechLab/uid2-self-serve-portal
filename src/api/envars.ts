@@ -9,6 +9,8 @@ export const SSP_APP_NAME = process.env.SSP_APP_NAME ?? 'uid2-ssportal';
 export const SSP_IS_PRODUCTION = process.env.NODE_ENV === 'production';
 export const SSP_IS_DEVELOPMENT = !SSP_IS_PRODUCTION;
 export const SERVICE_INSTANCE_ID_PREFIX = process.env.SERVICE_INSTANCE_ID_PREFIX ?? '';
+// Portal identity (controls UID2 vs EUID branding/behaviour)
+export const SSP_PORTAL_IDENTITY = process.env.SSP_PORTAL_IDENTITY ?? 'UID2';
 
 // Keycloak Config
 export const SSP_KK_AUDIENCE = process.env.SSP_KK_AUDIENCE ?? errorMessage;

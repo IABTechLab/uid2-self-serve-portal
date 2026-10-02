@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Navigate } from 'react-router-dom';
 
 import { Banner } from '../components/Core/Banner/Banner';
 import FormSubmitButton from '../components/Core/Buttons/FormSubmitButton';
 import { TextInput } from '../components/Input/TextInput';
 import { SelfResendInvitation, SelfResendInvitationForm } from '../services/userAccount';
 import { handleErrorToast } from '../utils/apiError';
+import { useIdentityConfig } from '../utils/identity';
 import { RouteErrorBoundary } from '../utils/RouteErrorBoundary';
 import { PortalRoute } from './routeUtils';
 
 import './selfReinvite.scss';
 
 function SelfReinvite() {
+  const { isEuid } = useIdentityConfig();
   const [showSuccessBanner, setShowSuccessBanner] = useState(false);
   const queryParams = new URLSearchParams(window.location.search);
   const emailParam = queryParams.get('email');
@@ -19,6 +22,8 @@ function SelfReinvite() {
     defaultValues: { email: emailParam ?? undefined },
   });
   const { handleSubmit } = formMethods;
+
+  if (isEuid) return <Navigate to='/' replace />;
 
   const onSubmit = async (formData: SelfResendInvitationForm) => {
     try {
@@ -50,6 +55,7 @@ function SelfReinvite() {
 }
 
 export const SelfReinviteRoute: PortalRoute = {
+  id: 'SelfReinvite',
   description: 'Self Re-invite',
   element: <SelfReinvite />,
   errorElement: <RouteErrorBoundary />,
