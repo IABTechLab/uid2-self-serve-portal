@@ -237,3 +237,12 @@ CVE-2026-84939 exp:2026-12-28
 # See the ticket below for the assessment.
 # See: UID2-8016
 GHSA-v53p-9fqp-m79j exp:2027-01-02
+
+# CVE-2026-93687 — braces (HIGH). Vulnerable code path is not reachable in this configuration.
+# See: UID2-8026
+CVE-2026-93687 exp:2027-01-06
+
+# CVE-2026-103111 — pcre2, pcre2-syntax (HIGH). Vulnerable code path is not reachable in this
+# configuration.
+# See: UID2-8033
+CVE-2026-103111 exp:2027-01-06
