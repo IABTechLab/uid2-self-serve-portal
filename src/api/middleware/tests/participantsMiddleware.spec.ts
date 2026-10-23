@@ -52,7 +52,7 @@ describe('Participant Middleware Tests', () => {
     expect(res.status).not.toHaveBeenCalled();
     expect(next).toHaveBeenCalled();
   });
-  it('should return 404 if participant is not found', async () => {
+  it('should return 403 if participant is not found', async () => {
     const relatedParticipant = await createParticipant(knex, {});
     const relatedUser = await createUser({
       participantToRoles: [{ participantId: relatedParticipant.id }],
@@ -65,7 +65,8 @@ describe('Participant Middleware Tests', () => {
 
     await verifyAndEnrichParticipant(participantRequest, res, next);
     expect(participantRequest.participant).toBeUndefined();
-    expect(next).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(next).not.toHaveBeenCalled();
   });
   it('should return 403 if user does not have access to participant', async () => {
     const firstParticipant = await createParticipant(knex, {});
@@ -82,6 +83,7 @@ describe('Participant Middleware Tests', () => {
     await verifyAndEnrichParticipant(participantRequest, res, next);
 
     expect(participantRequest.participant).toBeUndefined();
-    expect(next).toHaveBeenCalled();
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(next).not.toHaveBeenCalled();
   });
 });

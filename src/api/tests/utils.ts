@@ -1,14 +1,33 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import 'reflect-metadata';
 
+import { jest } from '@jest/globals';
 import { Server } from 'http';
 import { createHttpTerminator, HttpTerminator } from 'http-terminator';
-import tokenRequester from 'keycloak-request-token';
 import { Request } from 'supertest';
 
-import { configureAndStartApi } from '../configureApi';
+import { TestConfigure } from '../../database/TestSelfServeDatabase';
+import type { configureAndStartApi as ConfigureAndStartApi } from '../configureApi';
+
+// Token verification is replaced so the tests do not need a running Keycloak.
+const actualJwtBearer = jest.requireActual<object>('express-oauth2-jwt-bearer');
+jest.mock('express-oauth2-jwt-bearer', () => ({
+  ...actualJwtBearer,
+  auth: () => (req: { auth?: unknown }, _res: unknown, next: () => void) => {
+    req.auth = {
+      payload: {
+        email: 'test_user@example.com',
+        /* eslint-disable camelcase */
+        resource_access: { self_serve_portal_apis: { roles: ['api-participant-member'] } },
+        /* eslint-enable camelcase */
+      },
+    };
+    next();
+  },
+}));
+
+const { configureAndStartApi }: { configureAndStartApi: typeof ConfigureAndStartApi } =
+  await import('../configureApi');
 
 /**
  * WARN: This leaves open time_wait connections after the test suite has finished running.
@@ -24,7 +43,6 @@ export let routers: ReturnType<typeof configureAndStartApi>['routers'] | null = 
 let terminator: HttpTerminator | null = null;
 
 function useTestServer() {
-  let token = '';
   afterAll(async () => {
     if (api === null || terminator === null) throw Error('Server was not configured!');
     terminator.terminate();
@@ -32,21 +50,14 @@ function useTestServer() {
     terminator = null;
   });
   beforeAll(async () => {
+    await TestConfigure();
     const serverDetails = configureAndStartApi(false, 6541);
     api = serverDetails.server;
     routers = serverDetails.routers;
     terminator = createHttpTerminator({ server: api });
-
-    token = await tokenRequester(process.env.SSP_KK_AUTH_SERVER_URL, {
-      username: 'test_user@example.com',
-      password: '123456',
-      grant_type: 'password', // eslint-disable-line camelcase
-      client_id: 'self_serve_portal_web', // eslint-disable-line camelcase
-      realmName: 'self-serve-portal',
-    });
   });
   function withToken(apiRequest: Request) {
-    return apiRequest.set('Authorization', `Bearer ${token}`);
+    return apiRequest.set('Authorization', 'Bearer test-token');
   }
   return withToken;
 }

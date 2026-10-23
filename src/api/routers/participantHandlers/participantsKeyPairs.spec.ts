@@ -6,7 +6,7 @@ import { setupServer } from 'msw/node';
 
 import { createResponseObject } from '../../../testHelpers/apiTestHelpers';
 import { Participant } from '../../entities/Participant';
-import { SSP_ADMIN_SERVICE_BASE_URL } from '../../envars';
+import { SSP_ADMIN_SERVICE_BASE_URL, SSP_OKTA_AUTH_SERVER_URL } from '../../envars';
 import { KeyPairDTO } from '../../services/adminServiceHelpers';
 import { ParticipantRequest } from '../../services/participantsService';
 import { handleGetParticipantKeyPairs } from './participantsKeyPairs';
@@ -58,6 +58,9 @@ const disabledKeyPair: KeyPairDTO[] = [
 ];
 
 const handlers = [
+  http.post(`${SSP_OKTA_AUTH_SERVER_URL}/v1/token`, () => {
+    return HttpResponse.json({ access_token: 'test-token', expires_in: 3600 }); // eslint-disable-line camelcase
+  }),
   http.get(
     `${SSP_ADMIN_SERVICE_BASE_URL}/api/v2/sites/${noKeyPairsSiteId}/client-side-keypairs`,
     () => {
@@ -96,7 +99,7 @@ function createMockResponse(): Response {
 }
 
 describe('Get participant key pairs', () => {
-  beforeAll(() => server.listen());
+  beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
 
