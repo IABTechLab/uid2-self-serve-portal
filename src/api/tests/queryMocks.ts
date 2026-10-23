@@ -1,9 +1,16 @@
 import { jest } from '@jest/globals';
-import { QueryBuilder } from 'objection';
+import { Model, ModelClass, QueryBuilder } from 'objection';
 
 import { ContactType, EmailContact } from '../entities/EmailContact';
 import { Participant } from '../entities/Participant';
 import { User } from '../entities/User';
+import { UserRoleId } from '../entities/UserRole';
+
+// The mocked result already holds the related rows, so skip the real graph fetch.
+const resolveWithoutGraphFetch = <M extends Model>(modelClass: ModelClass<M>, value: unknown) =>
+  QueryBuilder.forClass(modelClass)
+    .resolve(value as M)
+    .onBuild((builder) => builder.clearWithGraph());
 
 type PartialParticipantOrNull = Partial<Participant> | null;
 export const mockParticipant = (
@@ -14,8 +21,8 @@ export const mockParticipant = (
   const spy = jest.spyOn(Participant, 'query');
 
   participants.forEach((p) =>
-    spy.mockReturnValue(
-      QueryBuilder.forClass(Participant).resolve(
+    spy.mockImplementation(() =>
+      resolveWithoutGraphFetch(Participant,
         p === null
           ? undefined
           : {
@@ -40,8 +47,8 @@ export const mockUser = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => 
   const users = Array.isArray(user) ? user : [user];
   const spy = jest.spyOn(User, 'query');
   users.forEach((u) =>
-    spy.mockReturnValue(
-      QueryBuilder.forClass(User).resolve(
+    spy.mockImplementation(() =>
+      resolveWithoutGraphFetch(User,
         u === null
           ? undefined
           : {
@@ -53,6 +60,7 @@ export const mockUser = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => 
                   id: 1,
                   name: 'Test Participant',
                   allowSharing: true,
+                  participantToUserRoles: [{ userId: 1, userRoleId: UserRoleId.Admin }],
                   types: [
                     {
                       id: 1,
@@ -61,25 +69,6 @@ export const mockUser = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => 
                   ],
                 },
               ],
-              ...u,
-            }
-      )
-    )
-  );
-};
-
-export const mockUserOnce = (user: PartialUserOrNull | PartialUserOrNull[] = {}) => {
-  const users = Array.isArray(user) ? user : [user];
-  const spy = jest.spyOn(User, 'query');
-  users.forEach((u) =>
-    spy.mockReturnValueOnce(
-      QueryBuilder.forClass(User).resolve(
-        u === null
-          ? undefined
-          : {
-              id: 1,
-              email: 'test_user@example.com',
-              name: 'Test User',
               ...u,
             }
       )
