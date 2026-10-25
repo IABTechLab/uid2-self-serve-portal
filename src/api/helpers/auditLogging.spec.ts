@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import winston from 'winston';
 
+import { SSP_APP_NAME } from '../envars';
 import { auditTraceFormat, convertToSnakeCase, extractConfiguredFields } from './auditLogging';
 
 describe('audit log format', () => {
@@ -35,7 +36,7 @@ describe('audit log format', () => {
     const expectedAuditLog = {
       timestamp: '2025-05-12T05:21:36.948Z',
       logType: 'audit',
-      source: 'ssportal-dev',
+      source: SSP_APP_NAME,
       status: 304,
       method: 'GET',
       endpoint: '/api/participants/7/apiRoles',
@@ -234,7 +235,7 @@ describe('actual winston logging', () => {
     const expectedLogEntry = {
       timestamp: '2025-05-12T05:21:36.948Z',
       logType: 'audit',
-      source: 'ssportal-dev',
+      source: SSP_APP_NAME,
       status: 304,
       method: 'GET',
       endpoint: '/api/participants/7/apiRoles',
