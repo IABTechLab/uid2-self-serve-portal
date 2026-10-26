@@ -259,3 +259,11 @@ CVE-2026-111755 exp:2027-04-21
 # CVE-2026-111756 — follow-redirects (HIGH). Not vulnerable.
 # See: UID2-8120
 CVE-2026-111756 exp:2027-04-21
+
+# CVE-2026-91415 — java-21-openjdk-headless (HIGH). Not vulnerable.
+# See: UID2-8166
+CVE-2026-91415 exp:2027-04-26
+
+# CVE-2026-109869 — undici (HIGH). Not vulnerable.
+# See: UID2-8177
+CVE-2026-109869 exp:2027-10-26
