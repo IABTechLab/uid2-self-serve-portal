@@ -1,4 +1,4 @@
-FROM quay.io/keycloak/keycloak:26.7.5
+FROM quay.io/keycloak/keycloak:26.8.1-1
 
 ENV KC_TRANSACTION_XA_ENABLED 'false'
 
