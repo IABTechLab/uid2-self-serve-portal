@@ -271,3 +271,7 @@ CVE-2026-109869 exp:2027-10-26
 # CVE-2026-91403 — java-21-openjdk-headless (HIGH). Not vulnerable.
 # See: UID2-8174
 CVE-2026-91403 exp:2027-04-27
+
+# CVE-2026-102554 — guava (HIGH). Not vulnerable.
+# See: UID2-8213
+CVE-2026-102554 exp:2027-04-28
