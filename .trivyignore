@@ -275,3 +275,11 @@ CVE-2026-91403 exp:2027-04-27
 # CVE-2026-102554 — guava (HIGH). Not vulnerable.
 # See: UID2-8213
 CVE-2026-102554 exp:2027-04-28
+
+# CVE-2026-109383 — undici (HIGH). Not vulnerable.
+# See: UID2-8218
+CVE-2026-109383 exp:2027-10-29
+
+# CVE-2026-87018 — undici (HIGH). Not vulnerable.
+# See: UID2-8219
+CVE-2026-87018 exp:2027-10-29
