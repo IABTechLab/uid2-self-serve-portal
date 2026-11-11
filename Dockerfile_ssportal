@@ -38,4 +38,5 @@ COPY src/api/*.json api-dist/api/
 COPY api-dist/knexfile.js ./knexfile.js
 
 EXPOSE 80
+EXPOSE 9082
 CMD nginx -g 'pid /tmp/nginx.pid;' & node api-dist/api/api.js

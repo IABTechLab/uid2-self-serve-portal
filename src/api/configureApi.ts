@@ -6,7 +6,6 @@ import cors from 'cors';
 import type { ErrorRequestHandler } from 'express';
 import express from 'express';
 import { auth, claimCheck, JWTPayload } from 'express-oauth2-jwt-bearer';
-import promClient from 'prom-client';
 import { v4 as uuid } from 'uuid';
 
 import { ApiRole } from './entities/ApiRole';
@@ -25,6 +24,7 @@ import {
 } from './envars';
 import { getAuditLoggingMiddleware } from './helpers/auditLogging';
 import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
+import { startMetricsServer } from './metricsServer';
 import makeMetricsApiMiddleware from './middleware/metrics';
 import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participantsRouter';
@@ -34,6 +34,9 @@ import { API_PARTICIPANT_MEMBER_ROLE_NAME } from './services/kcUsersService';
 
 const BASE_REQUEST_PATH = '/api';
 
+// Port named `prometheus` in the Kubernetes deployment; the metrics agent scrapes it directly.
+const DEFAULT_METRICS_PORT = 9082;
+
 type BypassPath = {
   url: string;
   method: string;
@@ -42,7 +45,6 @@ type BypassPath = {
 const BYPASS_AUTH_PATHS = [
   { url: `/favicon.ico`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/`, method: 'GET' },
-  { url: `${BASE_REQUEST_PATH}/metrics`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/health`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/keycloak-config`, method: 'GET' },
   { url: `${BASE_REQUEST_PATH}/envars`, method: 'GET' },
@@ -70,7 +72,11 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath
   } as express.Handler;
 }
 
-export function configureAndStartApi(useMetrics: boolean = true, portNumber: number = 6540) {
+export function configureAndStartApi(
+  useMetrics: boolean = true,
+  portNumber: number = 6540,
+  metricsPort: number = DEFAULT_METRICS_PORT
+) {
   const app = express();
   const routers = {
     rootRouter: express.Router(),
@@ -148,11 +154,6 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   router.get('/health', async (_req, res) => {
     // TODO: More robust health check information
     res.json({ node: process.version });
-  });
-
-  router.get('/metrics', async (_req, res) => {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.end(await promClient.register.metrics());
   });
 
   router.get('/participantTypes', async (_req, res) => {
@@ -239,5 +240,6 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   const server = app.listen(port, () => {
     logger.info(`Listening on port ${port}.`);
   });
-  return { server, routers };
+  const metricsServer = useMetrics ? startMetricsServer(logger, metricsPort) : null;
+  return { server, metricsServer, routers };
 }

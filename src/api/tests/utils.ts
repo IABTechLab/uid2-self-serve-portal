@@ -40,21 +40,38 @@ const { configureAndStartApi }: { configureAndStartApi: typeof ConfigureAndStart
 export let api: Server | null = null;
 // eslint-disable-next-line import/no-mutable-exports
 export let routers: ReturnType<typeof configureAndStartApi>['routers'] | null = null;
+// eslint-disable-next-line import/no-mutable-exports
+export let metricsServer: Server | null = null;
 let terminator: HttpTerminator | null = null;
+let metricsTerminator: HttpTerminator | null = null;
 
-function useTestServer() {
+/**
+ * @param useMetrics When true, the metrics middleware is mounted and the metrics server is started on a
+ * random free port (see `metricsServer`).
+ */
+function useTestServer(useMetrics: boolean = false) {
   afterAll(async () => {
     if (api === null || terminator === null) throw Error('Server was not configured!');
     terminator.terminate();
+    metricsTerminator?.terminate();
     api = null;
+    metricsServer = null;
     terminator = null;
+    metricsTerminator = null;
   });
   beforeAll(async () => {
     await TestConfigure();
-    const serverDetails = configureAndStartApi(false, 6541);
+    const serverDetails = configureAndStartApi(useMetrics, 6541, 0);
     api = serverDetails.server;
     routers = serverDetails.routers;
     terminator = createHttpTerminator({ server: api });
+    if (serverDetails.metricsServer) {
+      metricsServer = serverDetails.metricsServer;
+      metricsTerminator = createHttpTerminator({ server: metricsServer });
+      await new Promise((resolve) => {
+        metricsServer?.once('listening', resolve);
+      });
+    }
   });
   function withToken(apiRequest: Request) {
     return apiRequest.set('Authorization', 'Bearer test-token');
