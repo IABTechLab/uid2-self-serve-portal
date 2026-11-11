@@ -24,4 +24,10 @@ describe('Errors from endpoints do not crash the api', () => {
     const res = await withToken(req);
     expect(res.statusCode).toBe(200);
   });
+
+  test('does not expose prometheus metrics through the api', async () => {
+    const req: Request = request(api).get('/api/metrics');
+    const res = await withToken(req);
+    expect(res.statusCode).toBe(404);
+  });
 });
