@@ -34,6 +34,9 @@ import { API_PARTICIPANT_MEMBER_ROLE_NAME } from './services/kcUsersService';
 
 const BASE_REQUEST_PATH = '/api';
 
+// Port named `prometheus` in the Kubernetes deployment; the metrics agent scrapes it directly.
+const DEFAULT_METRICS_PORT = 9082;
+
 type BypassPath = {
   url: string;
   method: string;
@@ -69,7 +72,11 @@ function bypassHandlerForPaths(middleware: express.Handler, ...paths: BypassPath
   } as express.Handler;
 }
 
-export function configureAndStartApi(useMetrics: boolean = true, portNumber: number = 6540) {
+export function configureAndStartApi(
+  useMetrics: boolean = true,
+  portNumber: number = 6540,
+  metricsPort: number = DEFAULT_METRICS_PORT
+) {
   const app = express();
   const routers = {
     rootRouter: express.Router(),
@@ -233,6 +240,6 @@ export function configureAndStartApi(useMetrics: boolean = true, portNumber: num
   const server = app.listen(port, () => {
     logger.info(`Listening on port ${port}.`);
   });
-  const metricsServer = useMetrics ? startMetricsServer(logger) : null;
+  const metricsServer = useMetrics ? startMetricsServer(logger, metricsPort) : null;
   return { server, metricsServer, routers };
 }
