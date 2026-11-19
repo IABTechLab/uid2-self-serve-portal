@@ -139,6 +139,12 @@ module.exports = {
       },
     },
     {
+      files: ['src/api/jest.polyfills.ts', 'src/api/tests/**', 'src/setupTests.ts', 'src/testHelpers/**'],
+      rules: {
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+      },
+    },
+    {
       files: ['*.stories.*'],
       rules: {
         'import/no-extraneous-dependencies': 'off',
