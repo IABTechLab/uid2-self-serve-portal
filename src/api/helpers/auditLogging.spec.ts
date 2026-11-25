@@ -1,8 +1,15 @@
 import { jest } from '@jest/globals';
+import { EventEmitter } from 'events';
+import { ServerResponse } from 'http';
 import winston from 'winston';
 
 import { SSP_APP_NAME } from '../envars';
-import { auditTraceFormat, convertToSnakeCase, extractConfiguredFields } from './auditLogging';
+import {
+  auditTraceFormat,
+  convertToSnakeCase,
+  extractConfiguredFields,
+  getAuditLoggingMiddleware,
+} from './auditLogging';
 
 describe('audit log format', () => {
   it('should format audit log correctly for a GET request', () => {
@@ -246,5 +253,60 @@ describe('actual winston logging', () => {
     } as const;
     expect(logEntry).toMatchObject(convertToSnakeCase(expectedLogEntry));
     jest.useRealTimers();
+  });
+});
+
+describe('privilege level in audit log', () => {
+  const buildInfo = (privilegeLevel?: string) =>
+    ({
+      timestamp: '2025-05-12T05:21:36.948Z',
+      level: 'info',
+      message: 'Audit log entry',
+      meta: {
+        req: { headers: {}, method: 'GET', path: '/api/health', ip: '::1', privilegeLevel },
+        res: { statusCode: 200 },
+      },
+    } as unknown as winston.Logform.TransformableInfo);
+
+  const privilegeLevelOf = (info: winston.Logform.TransformableInfo) => {
+    const result = auditTraceFormat.transform(info) as { message: string };
+    return (JSON.parse(result.message) as { privilege_level?: string }).privilege_level;
+  };
+
+  it.each(['superuser', 'uid2-support', 'standard'])('logs %s', (level) => {
+    expect(privilegeLevelOf(buildInfo(level))).toBe(level);
+  });
+
+  it('omits the privilege level when none is set on the request', () => {
+    expect(privilegeLevelOf(buildInfo())).toBeUndefined();
+  });
+});
+
+describe('privilege level through the audit logging middleware', () => {
+  it('includes the privilege level set on the request', () => {
+    const logged: string[] = [];
+    const logSpy = jest
+      .spyOn(winston.transports.Console.prototype, 'log')
+      .mockImplementation((...args: unknown[]) => {
+        logged.push((args[0] as Record<symbol, string>)[Symbol.for('message')]);
+        (args[1] as (() => void) | undefined)?.();
+      });
+    const req = {
+      headers: {},
+      method: 'GET',
+      url: '/api/x',
+      path: '/api/x',
+      query: {},
+      ip: '::1',
+      privilegeLevel: 'uid2-support',
+    };
+    const res = new EventEmitter() as unknown as ServerResponse;
+    res.statusCode = 200;
+    (res as unknown as { end: () => void }).end = () => undefined;
+    getAuditLoggingMiddleware()(req as never, res as never, () => undefined);
+    (res as unknown as { end: () => void }).end();
+    logSpy.mockRestore();
+    expect(logged).toHaveLength(1);
+    expect(JSON.parse(logged[0])).toMatchObject({ 'privilege_level': 'uid2-support' });
   });
 });

@@ -2,6 +2,7 @@ import expressWinston from 'express-winston';
 import winston, { Logform } from 'winston';
 
 import { SSP_APP_NAME } from '../envars';
+import type { PrivilegeLevel } from '../types/privilegeLevel';
 
 interface RequestMeta {
   req: {
@@ -16,6 +17,7 @@ interface RequestMeta {
     query?: Record<string, unknown>;
     body?: unknown;
     ip?: string;
+    privilegeLevel?: PrivilegeLevel;
   };
   res: {
     statusCode?: number;
@@ -223,6 +225,7 @@ export const createAuditLogData = (
     logType: 'audit',
     source: SSP_APP_NAME,
     status: meta?.res?.statusCode ?? 0,
+    privilegeLevel: meta?.req?.privilegeLevel,
     method: meta?.req?.method ?? '',
     endpoint: path,
     traceId,
@@ -271,6 +274,6 @@ export const getAuditLoggingMiddleware = () =>
     winstonInstance: auditLogger,
     expressFormat: true,
     meta: true,
-    requestWhitelist: ['body', 'headers', 'query', 'method', 'path', 'ip'],
+    requestWhitelist: ['body', 'headers', 'query', 'method', 'path', 'ip', 'privilegeLevel'],
     responseWhitelist: ['statusCode'],
   });

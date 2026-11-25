@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import { NextFunction, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Knex } from 'knex';
 
 import { TestConfigure } from '../../../database/TestSelfServeDatabase';
@@ -15,6 +15,7 @@ import {
   isAdminOrUid2SupportCheck,
   isSuperUserCheck,
   isUid2SupportCheck,
+  setPrivilegeLevel,
 } from '../userRoleMiddleware';
 
 describe('User Role Middleware Tests', () => {
@@ -136,5 +137,36 @@ describe('User Role Middleware Tests', () => {
       expect(res.status).toHaveBeenCalledWith(403);
       expect(next).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe('setPrivilegeLevel', () => {
+  const run = async (groups?: string[]) => {
+    const req = { auth: groups ? { payload: { groups } } : undefined } as unknown as Request;
+    const next = jest.fn() as unknown as NextFunction;
+    await setPrivilegeLevel(req, {} as Response, next);
+    expect(next).toHaveBeenCalledTimes(1);
+    return req.privilegeLevel;
+  };
+
+  it('sets superuser for developer-elevated', async () => {
+    expect(await run([developerElevatedRole])).toBe('superuser');
+  });
+
+  it('sets uid2-support for the support group', async () => {
+    expect(await run([uid2SupportRole])).toBe('uid2-support');
+  });
+
+  it('sets superuser when the user is in both groups', async () => {
+    expect(await run([uid2SupportRole, developerElevatedRole])).toBe('superuser');
+  });
+
+  it('sets standard otherwise', async () => {
+    expect(await run(['some-other-group'])).toBe('standard');
+    expect(await run([])).toBe('standard');
+  });
+
+  it('leaves the level unset when the request was not authenticated', async () => {
+    expect(await run()).toBeUndefined();
   });
 });

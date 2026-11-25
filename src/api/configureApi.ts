@@ -11,6 +11,7 @@ import { v4 as uuid } from 'uuid';
 import { ApiRole } from './entities/ApiRole';
 import { ParticipantType } from './entities/ParticipantType';
 import {
+  SSP_BEHIND_LOAD_BALANCER,
   SSP_IS_DEVELOPMENT,
   SSP_KK_AUDIENCE,
   SSP_KK_AUTH_SERVER_URL,
@@ -26,6 +27,7 @@ import { getAuditLoggingMiddleware } from './helpers/auditLogging';
 import { getErrorLoggingMiddleware, getLoggers, getTraceId } from './helpers/loggingHelpers';
 import { startMetricsServer } from './metricsServer';
 import makeMetricsApiMiddleware from './middleware/metrics';
+import { setPrivilegeLevel } from './middleware/userRoleMiddleware';
 import { createManagementRouter } from './routers/managementRouter';
 import { createParticipantsRouter } from './routers/participantsRouter';
 import { createSitesRouter } from './routers/sitesRouter';
@@ -78,6 +80,9 @@ export function configureAndStartApi(
   metricsPort: number = DEFAULT_METRICS_PORT
 ) {
   const app = express();
+  if (SSP_BEHIND_LOAD_BALANCER) {
+    app.set('trust proxy', 1);
+  }
   const routers = {
     rootRouter: express.Router(),
     participantsRouter: createParticipantsRouter(),
@@ -117,6 +122,8 @@ export function configureAndStartApi(
       ...BYPASS_AUTH_PATHS
     )
   );
+
+  app.use(setPrivilegeLevel);
 
   type Claim = JWTPayload & {
     resource_access?: {
