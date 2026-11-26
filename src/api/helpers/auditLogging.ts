@@ -38,6 +38,7 @@ interface Actor {
   id: string;
   sub: string;
   roles: string[];
+  privilegeLevel?: PrivilegeLevel;
 }
 
 interface NoActor {
@@ -192,6 +193,7 @@ const extractActor = (userInfo: UserInfo | null, meta?: RequestMeta): Actor | No
 				id: userInfo.email,
 				sub: userInfo.sub,
 				roles: userInfo.roles,
+				privilegeLevel: meta?.req?.privilegeLevel,
 			};
 		}
 		return {
@@ -225,7 +227,6 @@ export const createAuditLogData = (
     logType: 'audit',
     source: SSP_APP_NAME,
     status: meta?.res?.statusCode ?? 0,
-    privilegeLevel: meta?.req?.privilegeLevel,
     method: meta?.req?.method ?? '',
     endpoint: path,
     traceId,

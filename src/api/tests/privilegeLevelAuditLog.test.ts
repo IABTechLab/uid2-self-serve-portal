@@ -4,10 +4,21 @@ import winston from 'winston';
 
 import useTestServer, { api } from './utils';
 
-type AuditEntry = { log_type?: string; endpoint?: string; privilege_level?: string };
+type AuditEntry = { log_type?: string; endpoint?: string; actor: string };
+
+// Token verification is mocked in the test server, so an unsigned token with a decodable
+// payload is enough for the audit log to record the user as the actor.
+const encode = (part: Record<string, unknown>) =>
+  Buffer.from(JSON.stringify(part)).toString('base64url');
+const userToken = `Bearer ${encode({ alg: 'none' })}.${encode({
+  sub: 'user-sub',
+  email: 'test_user@example.com',
+})}.`;
+
+const actorOf = (entry: AuditEntry) => JSON.parse(entry.actor) as Record<string, unknown>;
 
 describe('privilege level in audit logs from the running api', () => {
-  const withToken = useTestServer();
+  useTestServer();
   let auditEntries: AuditEntry[];
 
   beforeEach(() => {
@@ -38,13 +49,15 @@ describe('privilege level in audit logs from the running api', () => {
     return matching[0];
   };
 
-  it('logs the privilege level for an authenticated request', async () => {
-    await withToken(request(api).get('/api/route-that-does-not-exist'));
-    expect(auditEntryFor('/api/route-that-does-not-exist').privilege_level).toBe('standard');
+  it('logs the privilege level on the actor for an authenticated request', async () => {
+    await request(api).get('/api/route-that-does-not-exist').set('Authorization', userToken);
+    const actor = actorOf(auditEntryFor('/api/route-that-does-not-exist'));
+    expect(actor.privilege_level).toBe('standard');
+    expect(actor.email).toBe('test_user@example.com');
   });
 
   it('omits the privilege level for a path that bypasses authentication', async () => {
     await request(api).get('/api/health');
-    expect(auditEntryFor('/api/health').privilege_level).toBeUndefined();
+    expect(actorOf(auditEntryFor('/api/health'))).not.toHaveProperty('privilege_level');
   });
 });
