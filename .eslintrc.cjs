@@ -130,14 +130,9 @@ module.exports = {
         objectLiteralTypeAssertions: 'allow',
       },
     ],
+    '@typescript-eslint/no-floating-promises': ['error'],
   },
   overrides: [
-    {
-      files: ['*.spec.*', '*.test.*'],
-      rules: {
-        '@typescript-eslint/no-floating-promises': ['error'],
-      },
-    },
     {
       files: ['src/api/jest.polyfills.ts', 'src/api/tests/**', 'src/setupTests.ts', 'src/testHelpers/**'],
       rules: {
