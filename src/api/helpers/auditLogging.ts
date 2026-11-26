@@ -2,6 +2,7 @@ import expressWinston from 'express-winston';
 import winston, { Logform } from 'winston';
 
 import { SSP_APP_NAME } from '../envars';
+import type { PrivilegeLevel } from '../types/privilegeLevel';
 
 interface RequestMeta {
   req: {
@@ -16,6 +17,7 @@ interface RequestMeta {
     query?: Record<string, unknown>;
     body?: unknown;
     ip?: string;
+    privilegeLevel?: PrivilegeLevel;
   };
   res: {
     statusCode?: number;
@@ -36,6 +38,7 @@ interface Actor {
   id: string;
   sub: string;
   roles: string[];
+  privilegeLevel?: PrivilegeLevel;
 }
 
 interface NoActor {
@@ -190,6 +193,7 @@ const extractActor = (userInfo: UserInfo | null, meta?: RequestMeta): Actor | No
 				id: userInfo.email,
 				sub: userInfo.sub,
 				roles: userInfo.roles,
+				privilegeLevel: meta?.req?.privilegeLevel,
 			};
 		}
 		return {
@@ -271,6 +275,6 @@ export const getAuditLoggingMiddleware = () =>
     winstonInstance: auditLogger,
     expressFormat: true,
     meta: true,
-    requestWhitelist: ['body', 'headers', 'query', 'method', 'path', 'ip'],
+    requestWhitelist: ['body', 'headers', 'query', 'method', 'path', 'ip', 'privilegeLevel'],
     responseWhitelist: ['statusCode'],
   });

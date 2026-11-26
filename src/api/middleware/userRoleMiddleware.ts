@@ -9,6 +9,7 @@ import {
 } from '../helpers/apiHelper';
 import { ParticipantRequest } from '../services/participantsService';
 import { findUserByEmail } from '../services/usersService';
+import type { PrivilegeLevel } from '../types/privilegeLevel';
 
 // assign super user if user is developer-elevated in okta
 export const isSuperUser = (req: Request) => {
@@ -69,5 +70,20 @@ export const isAdminOrUid2SupportCheck: Handler = async (req: ParticipantRequest
       errorHash: req.headers.traceId,
     });
   }
+  next();
+};
+
+const getPrivilegeLevel = async (req: Request): Promise<PrivilegeLevel> => {
+  if (isSuperUser(req)) return 'superuser';
+  if (await isUid2Support(req)) return 'uid2-support';
+  return 'standard';
+};
+
+export const setPrivilegeLevel: Handler = async (req, res, next) => {
+  // Paths that bypass the auth middleware have no verified token, so no level applies.
+  if (!req.auth) {
+    return next();
+  }
+  req.privilegeLevel = await getPrivilegeLevel(req);
   next();
 };
