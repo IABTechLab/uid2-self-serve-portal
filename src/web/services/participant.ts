@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { ApiRoleDTO } from '../../api/entities/ApiRole';
-import { ParticipantDTO } from '../../api/entities/Participant';
+import { ParticipantDTO, UserParticipantDTO } from '../../api/entities/Participant';
 import { EmailContactSchema } from '../../api/entities/Schemas';
 import { SignedParticipantDTO } from '../../api/entities/SignedParticipant';
 import { ApiKeyDTO, ClientType, SharingListResponse } from '../../api/services/adminServiceHelpers';
@@ -45,7 +45,7 @@ export async function GetAllParticipants() {
 }
 
 type GetUserParticipantsResponse = {
-  participants: ParticipantDTO[];
+  participants: UserParticipantDTO[];
   elevatedRole: string | null;
 };
 
