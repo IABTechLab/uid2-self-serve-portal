@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ParticipantDTO } from '../../../api/entities/Participant';
+import { UserParticipantDTO } from '../../../api/entities/Participant';
 import { UserDTO } from '../../../api/entities/User';
 import { GetUserParticipants } from '../../services/participant';
 import { Dialog } from '../Core/Dialog/Dialog';
@@ -13,7 +13,7 @@ type UserParticipantsDialogProps = Readonly<{
 }>;
 
 function UserParticipantsDialog({ user, onOpenChange }: UserParticipantsDialogProps) {
-  const [userParticipants, setUserParticipants] = useState<ParticipantDTO[]>();
+  const [userParticipants, setUserParticipants] = useState<UserParticipantDTO[]>();
   const [elevatedRole, setElevatedRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 

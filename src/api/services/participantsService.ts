@@ -89,7 +89,9 @@ export const getAllParticipants = async (): Promise<Participant[]> => {
     .withGraphFetched('[apiRoles, approver, types, users, primaryContact]');
 };
 
-export const getUserParticipants = async (userId: number): Promise<Participant[]> => {
+export const getUserParticipants = async (
+  userId: number
+): Promise<Pick<Participant, 'id' | 'name' | 'participantToUserRoles'>[]> => {
   return Participant.query()
     .select('id', 'name')
     .whereExists(Participant.relatedQuery('participantToUserRoles').where('userId', userId))

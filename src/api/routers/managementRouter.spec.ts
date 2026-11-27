@@ -90,11 +90,13 @@ describe('#handleGetUserParticipants', () => {
     const participant = await createParticipant(knex, {});
     const user = await createUser({});
     await addRole(user.id, participant.id);
+    jest.mocked(getElevatedRole).mockClear();
     const { res, send, status } = createResponseObject();
 
     await handleGetUserParticipants(requestFor(999999), res);
 
     expect(status).toHaveBeenLastCalledWith(404);
     expect(send).toHaveBeenLastCalledWith([{ message: 'The user cannot be found.' }]);
+    expect(getElevatedRole).not.toHaveBeenCalled();
   });
 });

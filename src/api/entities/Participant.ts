@@ -116,3 +116,5 @@ export type ParticipantDTO = Omit<
   users?: ModelObjectOpt<User>[];
   primaryContact?: ModelObjectOpt<User>;
 };
+
+export type UserParticipantDTO = Pick<ParticipantDTO, 'id' | 'name' | 'participantToUserRoles'>;
