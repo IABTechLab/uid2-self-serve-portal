@@ -91,6 +91,7 @@ export const getAllParticipants = async (): Promise<Participant[]> => {
 
 export const getUserParticipants = async (userId: number): Promise<Participant[]> => {
   return Participant.query()
+    .whereExists(Participant.relatedQuery('participantToUserRoles').where('userId', userId))
     .withGraphFetched('participantToUserRoles')
     .modifyGraph('participantToUserRoles', (row) => {
       row.where('userId', userId);

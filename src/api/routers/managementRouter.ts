@@ -19,13 +19,17 @@ const handleGetUserAuditTrail = async (req: ParticipantRequest, res: Response) =
   return res.status(200).json(auditTrail ?? []);
 };
 
-const handleGetUserParticipants = async (req: ParticipantRequest, res: Response) => {
+export const handleGetUserParticipants = async (req: ParticipantRequest, res: Response) => {
   const { userId } = z.object({ userId: z.coerce.number() }).parse(req.params);
+  const user = await getUserById(userId);
+  if (!user) {
+    res.status(404).send([{ message: 'The user cannot be found.' }]);
+    return;
+  }
   const participants = await getUserParticipants(userId);
 
   let elevatedRole: string | null = null;
-  const user = await getUserById(userId);
-  if (user?.email) {
+  if (user.email) {
     const kcAdminClient = await getKcAdminClient();
     elevatedRole = await getElevatedRole(kcAdminClient, user.email);
   }
